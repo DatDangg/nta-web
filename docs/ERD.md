@@ -5,7 +5,7 @@
 
 ## Source of truth
 
-1. **Migration files** — versioned, đã commit (tool: `.context/project-config.md` → `migrations.tool`).
+1. **Migration files** — versioned, đã commit (tool: `.context/project-config.md` → `db_tool`).
 2. **Schema file** — vd `prisma/schema.prisma` / `drizzle/schema.ts` / model files trong `source_roots`.
 3. **Generated inventory** — `docs/generated/` (chạy lại, không sửa tay).
 
@@ -13,29 +13,29 @@
 
 ## Database
 
-**Type:** PostgreSQL / MySQL / MongoDB / SQLite
-**ORM:** Prisma / Drizzle / TypeORM / Mongoose
+**Type:** none (v1 — website content-driven)
+**ORM:** none
+**Ghi chú:** `.context/project-config.md` → `db_tool: none`, `migration_required: false`.
+
+> NTA Website v1 **không cần DB**: nội dung (trang, giải pháp, sản phẩm, case study, blog) nằm ở
+> file nội dung trong repo (MDX / JSON / TS) và render SSG/SSR. Form liên hệ forward qua email/API
+> bên thứ ba (xem Open Questions trong BRD) — chưa cần lưu DB.
 
 ## Entity overview
 
-> Chỉ mô tả **mục đích + quan hệ**; cột/kiểu/index chi tiết lấy từ schema file.
-
 | Entity | Mục đích | Quan hệ chính |
 |--------|----------|---------------|
-| User | Tài khoản đăng nhập | has many `<Entity2>` |
-| `<Entity2>` | ... | belongs to User |
-| `<Entity3>` | ... | ... |
+| Solution | Giải pháp (doanh nghiệp: CRM/HRM/LMS/DentGo; AI: BoxAI/Flycam/Custom) | thuộc 1 Category; has many CaseStudy (liên quan) |
+| Product | App AI (Music, Hair-style) | has many Screenshot |
+| CaseStudy | Dự án tiêu biểu (Óc Eo, phòng khám…) | thuộc 1 Solution/Category; has many Image |
+| Post | Bài blog/tin tức | has many Tag |
+| ContactSubmission | Dữ liệu form liên hệ (transient, forward) | — |
 
-## Relationships
+> v1: các entity này nằm dưới dạng **file nội dung tĩnh** (không phải bảng DB).
+> Khi bổ sung CMS/DB ở phase sau, chuyển sang schema thật và cập nhật file này.
 
-```
-User ─── has many ──→ <Entity2>
-<Entity2> ─── belongs to ──→ User
-<Entity2> ─── has many ──→ <Entity3>
-```
+## Nếu thêm DB ở phase sau
 
-## Notes (business rules dữ liệu)
-
-- Soft delete? (`deleted_at`) — nếu có, ghi rõ ở đây.
-- Archival / retention policy.
-- Index đặc biệt: mô tả **lý do**; định nghĩa index nằm ở migration/schema.
+- Khai `db_tool` (`prisma` | `drizzle` | `other`) + `migration_required: true` trong `.context/project-config.md`.
+- Migration phải versioned + committed; tuân thủ migration gate (xem `project-config.md` → mục DB/migration).
+- `staging_db` phải khác `prod_db`.

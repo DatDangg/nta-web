@@ -19,49 +19,51 @@ Development: http://localhost:3000/api
 Production:  https://<domain>/api
 ```
 
+## Phạm vi API (NTA Website v1)
+
+Website v1 là **content-driven, không có đăng nhập người dùng**. API tối giản:
+
+| Method | Endpoint | Mục đích | Auth |
+|--------|----------|----------|------|
+| POST | `/api/contact` | Nhận form liên hệ (tên, email, SĐT, nội dung) | công khai + rate-limit |
+| GET | `/api/health` | Health check cho Cloud Run / uptime | công khai |
+| GET | `/api/posts` | Danh sách bài blog (nếu cần động; v1 có thể là static) | công khai |
+| GET | `/api/case-studies` | Danh sách case study (nếu cần động) | công khai |
+
+> Hầu hết nội dung (trang tĩnh, giải pháp, sản phẩm, case study) render **SSG/SSR** từ file nội dung
+> trong repo — không cần API riêng. Chỉ form liên hệ + health là bắt buộc.
+
 ## Authentication
 
-`Authorization: Bearer <JWT>` — chi tiết hardening: `skills/security/jwt-security.md`.
+Không có auth người dùng ở v1. Chi tiết hardening form/rate-limit: `skills/security/`.
 
-## Response contract (bất biến)
+### POST /api/contact — request
 
-Mọi response đi qua helper chung `ok()` / `fail()` (không viết tay `res.json()`):
-
-```typescript
-// Success
-{ "success": true, "data": <payload> }
-
-// Error
-{ "success": false, "error": "<message>", "details": [...] }
+```jsonc
+{
+  "name": "string (bắt buộc, 2–100 ký tự)",
+  "email": "string (bắt buộc, định dạng email)",
+  "phone": "string (tuỳ chọn, 9–15 số)",
+  "message": "string (bắt buộc, 10–2000 ký tự)",
+  "honeypot": "" // trường ẩn chống spam — phải rỗng
+}
 ```
 
-## Endpoint overview
+### POST /api/contact — response
 
-> Bảng dưới chỉ liệt kê **nhóm endpoint**; request/response chi tiết lấy từ code + `src/shared/types/api.ts`.
+```jsonc
+// 200 OK
+{ "status": "ok" }
+// 400 — lỗi validate
+{ "status": "error", "errors": { "email": "Email không hợp lệ" } }
+// 429 — quá nhiều request
+{ "status": "error", "message": "Vui lòng thử lại sau." }
+```
 
-| Nhóm | Ví dụ | Auth | Ghi chú |
-|------|-------|------|---------|
-| Auth | `POST /auth/register`, `POST /auth/login`, `POST /auth/refresh` | public/refresh | rate-limit chặt (`skills/security/*`) |
-| Users | `GET/POST /users`, `GET/PUT/DELETE /users/:id` | required | `:id` phải verify ownership — BOLA/IDOR |
-| <Resource> | `...` | ... | ... |
+### GET /api/health — response
 
-## Error codes
+```jsonc
+{ "status": "ok", "timestamp": "2026-10-07T15:00:00.000Z" }
+```
 
-| Code | Meaning |
-|------|---------|
-| 400 | Bad Request — validation failed |
-| 401 | Unauthorized — missing/invalid token |
-| 403 | Forbidden — insufficient permissions |
-| 404 | Not Found |
-| 409 | Conflict — duplicate resource |
-| 429 | Too Many Requests — rate limited |
-| 500 | Internal Server Error |
-
-## Rate limiting (policy)
-
-- Auth endpoints: 10 req/phút/IP
-- API endpoints: 100 req/phút/user
-
-## Webhooks (nếu có)
-
-> Payload shape lấy từ code publisher, không copy tay vào đây.
+> Chi tiết route/validation thật ở `src/app/api/**` khi code được dựng — **code là source of truth**.

@@ -1,47 +1,52 @@
-# Design Specification
+# Design Specification — NTA Website
 
-> Paste Figma links, design notes, or upload screenshots.
-> Agent will extract design tokens and screen specs from this file.
+> Design notes cho website NTA. Agent extract design tokens + screen specs từ file này.
+> ⚠️ Chưa có Figma/brand chính thức — bảng dưới là **đề xuất tạm (dark tech theme)**, sẽ cập nhật khi có brand kit.
 
 ---
 
 ## Design References
 
-**Figma Link:** [https://figma.com/file/...]
-**Design Tool:** Figma / Sketch / Adobe XD / Other
+**Figma Link:** _(chưa có — cập nhật sau)_
+**Design Tool:** Figma (dự kiến)
 
 **Reference Images:**
-- [Attach screenshots or paste image URLs]
+- _(chưa có — anh gửi screenshot tham chiếu nếu muốn hướng khác)_
 
 ---
 
 ## Brand & Visual Identity
 
-### Color Palette
+### Color Palette (đề xuất — dark tech)
 
 | Token | Value | Usage |
 |-------|-------|-------|
-| Primary | #000000 | Buttons, links, CTAs |
-| Secondary | #000000 | Supporting elements |
-| Background | #ffffff | Page background |
-| Surface | #f5f5f5 | Cards, panels |
-| Text Primary | #111111 | Headings, body |
-| Text Secondary | #666666 | Labels, captions |
-| Border | #e0e0e0 | Dividers, inputs |
-| Error | #ef4444 | Error states |
-| Success | #10b981 | Success states |
-| Warning | #f59e0b | Warning states |
+| Primary | `#00D4FF` | CTA, link, accent (cyan tech) |
+| Secondary | `#7C3AED` | Gradient, highlight phụ (violet) |
+| Background | `#0A0E1A` | Nền trang (dark navy) |
+| Surface | `#141A2A` | Card, panel |
+| Surface Alt | `#1E2638` | Hover, header sticky |
+| Text Primary | `#F5F7FA` | Heading, body |
+| Text Secondary | `#94A3B8` | Label, caption |
+| Border | `#263041` | Divider, viền input |
+| Error | `#EF4444` | Trạng thái lỗi |
+| Success | `#10B981` | Trạng thái thành công |
+| Warning | `#F59E0B` | Cảnh báo |
+
+> Gradient chủ đạo: `linear-gradient(135deg, #00D4FF 0%, #7C3AED 100%)`.
 
 ### Typography
 
 | Token | Font | Size | Weight | Usage |
 |-------|------|------|--------|-------|
-| Heading 1 | | 36px | 700 | Page titles |
-| Heading 2 | | 24px | 600 | Section titles |
-| Heading 3 | | 20px | 600 | Card titles |
-| Body | | 16px | 400 | Body text |
-| Small | | 14px | 400 | Labels, captions |
-| XSmall | | 12px | 400 | Meta, hints |
+| Heading 1 | Inter / system | 48–64px (clamp) | 700 | Hero title |
+| Heading 2 | Inter | 32–40px | 700 | Section title |
+| Heading 3 | Inter | 22–24px | 600 | Card title |
+| Body | Inter | 16–18px | 400 | Nội dung |
+| Small | Inter | 14px | 400 | Label, caption |
+| XSmall | Inter | 12px | 400 | Meta, hint |
+
+Font stack: `Inter, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif` (hỗ trợ tiếng Việt).
 
 ### Spacing Scale
 
@@ -54,35 +59,76 @@
 | xl | 32px |
 | 2xl | 48px |
 | 3xl | 64px |
+| 4xl | 96px |
 
 ### Border Radius
 
 | Token | Value | Usage |
 |-------|-------|-------|
-| sm | 4px | Inputs, tags |
-| md | 8px | Cards |
-| lg | 12px | Modals |
-| full | 9999px | Pills, avatars |
+| sm | 4px | Input, tag |
+| md | 8px | Card |
+| lg | 16px | Section card, modal |
+| full | 9999px | Pill, avatar, badge |
 
 ---
 
 ## Screen Inventory
 
-List all screens and their key UI elements:
+### Screen: Trang chủ
+- **Route:** `/`
+- **Layout:** Full width; hero → 3 mảng → sản phẩm → case study → CTA
+- **Components:** Header sticky, Hero (title + subtitle + 2 CTA), SolutionCards ×3, ProductGrid, CaseStudyHighlight, CTABanner, Footer
+- **States:** Default, Loading (nếu fetch), Error
+- **Notes:** Hiệu ứng subtle (fade/slide-in) khi scroll; ảnh hero tối ưu.
 
-### Screen: [Name] (e.g. Login)
-- **Route:** `/login`
-- **Layout:** [Centered / Full width / Split]
-- **Components:** Logo, Email input, Password input, Submit button, Forgot password link
-- **States:** Default, Loading, Error
-- **Notes:** [Any special behavior]
+### Screen: Về NTA
+- **Route:** `/about`
+- **Layout:** Full width, các section xếp dọc
+- **Components:** PageHeader, MissionBlock, CapabilityGrid, TeamGrid, MilestoneTimeline, PartnerLogos, CTABanner
+- **States:** Default
+- **Notes:** Timeline milestones theo mốc năm; logo đối tác dạng grayscale → màu khi hover.
 
-### Screen: [Name] (e.g. Dashboard)
-- **Route:** `/dashboard`
-- **Layout:**
-- **Components:**
-- **States:**
-- **Notes:**
+### Screen: Giải pháp Doanh nghiệp (tổng quan)
+- **Route:** `/solutions/enterprise`
+- **Components:** PageHeader, SolutionIntro, SolutionGrid (CRM/HRM/LMS/DentGo), CTABanner
+
+### Screen: Chi tiết giải pháp doanh nghiệp
+- **Route:** `/solutions/enterprise/[slug]` (`crm` | `hrm` | `lms` | `dentgo`)
+- **Components:** PageHeader, FeatureList, BenefitList, ScreenshotSection, RelatedSolutions, CTAForm
+- **States:** Default, 404 (slug sai)
+
+### Screen: Giải pháp AI (tổng quan)
+- **Route:** `/solutions/ai`
+- **Components:** PageHeader, SolutionIntro, SolutionGrid (BoxAI / Flycam / AI tùy chỉnh), CaseStudyTeaser, CTABanner
+
+### Screen: Chi tiết giải pháp AI
+- **Route:** `/solutions/ai/[slug]` (`boxai` | `flycam` | `custom-ai`)
+- **Components:** PageHeader, FeatureList, UseCases, CaseStudyLink, CTAForm
+
+### Screen: Sản phẩm App
+- **Route:** `/products`
+- **Components:** PageHeader, AppCard (Music app, Hair-style AI), ScreenshotCarousel, DownloadLinks, CTABanner
+
+### Screen: Case Study (danh sách)
+- **Route:** `/case-studies`
+- **Components:** PageHeader, FilterBar (theo mảng), CaseStudyGrid, Pagination
+
+### Screen: Case Study (chi tiết)
+- **Route:** `/case-studies/[slug]`
+- **Components:** PageHeader, MetaBar (khách hàng, lĩnh vực, năm), ChallengeBlock, SolutionBlock, ResultBlock (số liệu), ImageGallery, RelatedStudies, CTA
+
+### Screen: Tin tức / Blog
+- **Route:** `/blog` + `/blog/[slug]`
+- **Components:** PageHeader, PostList, PostCard, Pagination; detail: ArticleHeader, ArticleBody, ShareBar, RelatedPosts
+
+### Screen: Liên hệ
+- **Route:** `/contact`
+- **Components:** PageHeader, ContactForm (tên, email, SĐT, nội dung), ContactInfo (hotline/email/địa chỉ), MapEmbed, OfficeHours
+- **States:** Default, Validating, Submitting, Success, Error
+
+### Screen: 404
+- **Route:** `*`
+- **Components:** NotFoundMessage, HomeLink, SearchHint
 
 ---
 
@@ -90,27 +136,30 @@ List all screens and their key UI elements:
 
 | Component | Variants | Notes |
 |-----------|----------|-------|
-| Button | Primary, Secondary, Danger, Ghost | Sizes: sm, md, lg |
-| Input | Default, Error, Disabled | With/without label |
-| Card | Default, Hoverable, Selected | |
-| Modal | Small, Medium, Large | |
-| Table | Basic, Sortable, Paginated | |
-| Badge | Info, Success, Warning, Error | |
+| Button | Primary, Secondary, Ghost, Outline | Sizes: sm/md/lg; dark theme |
+| Input / Textarea | Default, Focus, Error, Disabled | Có label + helper/error text |
+| Card | SolutionCard, ProductCard, CaseStudyCard, PostCard | Hover lift nhẹ |
+| Section | Default, Alternate (surface), Accent | Padding responsive |
+| Modal | Small, Medium | Dùng cho chi tiết nhanh nếu cần |
+| Badge | Info, Success, Warning, Error | Tag lĩnh vực/danh mục |
+| Timeline | Milestones | Cho trang Về NTA |
+| Nav | Desktop, Mobile (hamburger + drawer) | Sticky, active state |
+| Breadcrumb | Default | Cho trang con |
 
 ---
 
 ## Design Style
 
-- **Overall feel:** [Minimal / Modern / Corporate / Playful]
-- **Color scheme:** [Light / Dark / Both]
-- **UI Library:** [shadcn/ui / MUI / Tailwind only / Custom]
-- **Animation level:** [None / Subtle / Rich]
+- **Overall feel:** Modern / Tech / Corporate tin cậy
+- **Color scheme:** Dark (dark tech theme); có thể bổ sung light sau
+- **UI Library:** Tailwind CSS (cân nhắc shadcn/ui cho form/nav)
+- **Animation level:** Subtle — fade/slide-in khi scroll, hover lift, no heavy motion
 
 ---
 
 ## Responsive Breakpoints (Mobile-First)
 
-> **MANDATORY:** Đọc `skills/responsive-web/SKILL.md` + `skills/responsive-web/responsive.md` trước khi thiết kế responsive. Skill chứa kỹ thuật cụ thể (container queries, fluid typography, checklist gate).
+> **MANDATORY:** Đọc `skills/responsive-web/SKILL.md` + `skills/responsive-web/responsive.md` trước khi thiết kế responsive.
 
 | Breakpoint | Width | Tailwind | Target |
 |------------|-------|----------|--------|
@@ -122,22 +171,51 @@ List all screens and their key UI elements:
 | 2xl | ≥ 1536px | `2xl:` | Large screens |
 
 **Nguyên tắc:**
-- **Mobile-first**: viết base styles cho mobile → dùng `min-width` media query (Tailwind `sm:`/`md:`/...) để enhance cho màn hình lớn hơn.
-- **Content-based breakpoints**: đặt breakpoint nơi content cần thay đổi, không theo thiết bị cụ thể.
+- **Mobile-first**: viết base styles cho mobile → `min-width` để enhance.
+- **Content-based breakpoints**.
 - **Ưu tiên fluid** (`clamp()`, `rem`, `%`, `fr`, `vw`) hơn fixed `px`.
-- **Container queries** cho component-level responsive (độc lập viewport).
+- **Container queries** cho component-level responsive.
 
 ## Responsive Behavior (BẮT BUỘC cho mỗi screen)
 
-Với TỪNG screen trong Screen Inventory, khai báo rõ responsive behavior:
+### Screen: Trang chủ
+- **Mobile (< 640px):** nav hamburger, hero stack dọc (title → subtitle → CTA full-width), 3 solution card xếp 1 cột, product grid 1–2 cột.
+- **Tablet (≥ 768px):** hero 2 cột (text | ảnh), solution card 2–3 cột, product grid 2 cột.
+- **Desktop (≥ 1024px):** nav ngang đầy đủ, hero 2 cột rộng, solution 3 cột, product 3–4 cột.
+- **Large (≥ 1280px):** max-width container ~1280px, spacing 4xl, hero ảnh lớn hơn.
 
-```markdown
-### Screen: [Name]
-- **Mobile (< 640px):** [layout mobile — stack dọc, hamburger nav, cột đơn, ...]
-- **Tablet (≥ 768px):** [layout tablet — 2 cột, sidebar xuất hiện, ...]
-- **Desktop (≥ 1024px):** [layout desktop — full grid, nav ngang, ...]
-- **Large (≥ 1280px):** [layout large — tối đa columns, nới spacing, ...]
-```
+### Screen: Về NTA
+- **Mobile:** mọi block 1 cột; timeline dọc; team 1–2 cột.
+- **Tablet:** capability grid 2 cột; team 2–3 cột.
+- **Desktop:** capability 3 cột; timeline ngang; partner logos 4–6/cột.
+- **Large:** container max-width, spacing rộng.
 
-Không được bỏ trống mục này — Review sẽ FAIL nếu thiếu.
+### Screen: Chi tiết giải pháp ([slug])
+- **Mobile:** 1 cột; ảnh full-width; CTA cuối sticky-bottom tuỳ chọn.
+- **Tablet:** 2 cột (nội dung | ảnh minh hoạ).
+- **Desktop:** 2 cột rộng + sidebar "giải pháp liên quan".
+- **Large:** nội dung giới hạn ~720px cho dễ đọc.
 
+### Screen: Case Study (chi tiết)
+- **Mobile:** 1 cột; meta bar stack dọc; gallery 1 cột.
+- **Tablet:** meta bar ngang; gallery 2 cột.
+- **Desktop:** 2 cột (nội dung | gallery); related 3 cột.
+- **Large:** container rộng, gallery 3 cột.
+
+### Screen: Blog (list + detail)
+- **Mobile:** list 1 cột; detail 1 cột, chữ 16–18px.
+- **Tablet:** list 2 cột; detail ~680px.
+- **Desktop:** list 3 cột + sidebar; detail ~720px.
+- **Large:** list 3–4 cột.
+
+### Screen: Liên hệ
+- **Mobile:** form 1 cột trên, info dưới; map full-width.
+- **Tablet:** form | info 2 cột; map full-width.
+- **Desktop:** 2 cột (form 60% | info+map 40%).
+- **Large:** container max-width, spacing rộng.
+
+### Screen: Header / Footer
+- **Mobile:** header hamburger + drawer; footer 1 cột (accordion nhóm link tuỳ chọn).
+- **Tablet:** footer 2 cột.
+- **Desktop:** header nav ngang; footer 4 cột.
+- **Large:** footer 4–5 cột, container max-width.

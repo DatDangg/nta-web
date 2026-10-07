@@ -9,18 +9,20 @@
 ## Config
 
 ```yaml
-project: <tên dự án>
+project: NTA Website
 output_language: vi            # vi | en — ngôn ngữ cho docs/summary
 
 # ── Git ──
-target_branch: <target_branch> # default staging-direct: current branch phải là branch này khi commit/push PASS; chưa điền = hỏi user
-forbidden_branch: main         # cấm push trực tiếp (opencode.jsonc hard-deny main/ref main)
-branch_pattern: "<target_branch>" # default staging-direct; feature/<slug>|bug/<slug> chỉ khi user yêu cầu feature branch
-auto_push_after_pass: false    # ⚠️ KHÔNG phải "tự commit": commit sau PASS luôn BẮT BUỘC. Flag này chỉ = AUTO-PUSH: true = tự `git push origin <target_branch>` sau PASS; false = chỉ commit local, chờ user yêu cầu rõ.
+target_branch: main            # project mới, chưa có remote — brainstorm xác nhận lại khi tạo repo
+forbidden_branch: main         # ⚠️ brainstorm sẽ đổi nếu tạo feature branch; hiện chưa có remote
+branch_pattern: "main"         # default staging-direct
+auto_push_after_pass: false    # chỉ commit local, chờ user yêu cầu rõ mới push
 
 # ── Package / source ──
-package_manager: <none|pnpm|npm|yarn|bun>  # none/chưa điền = không hardcode lệnh
-source_roots: []               # ví dụ: [src] hoặc [apps, packages]; [] nếu chưa có app code
+package_manager: none          # chưa có app code — brainstorm/spec-init sẽ chốt (dự kiến npm + Next.js)
+source_roots: []               # ví dụ: [src] — điền khi dựng app
+# ── Stack dự kiến (chốt khi /start) ──
+# Next.js (App Router) + TypeScript + Tailwind CSS
 
 # ── Verify commands (null/placeholder = skip, no app configured) ──
 web_typecheck_command: null
@@ -29,26 +31,26 @@ api_typecheck_command: null
 api_lint_command: null
 test_command: null
 install_command: null
-lint_command: null          # generic alias if web/api split does not apply
-typecheck_command: null     # generic alias if web/api split does not apply
+lint_command: null           # generic alias if web/api split does not apply
+typecheck_command: null      # generic alias if web/api split does not apply
 build_command: null
 migration_command: null     # only used when db_tool != none and migration_required: true
 
 # ── Database ──
 db_tool: none                  # none | prisma | drizzle | other
-migration_required: false      # true nếu cần migration versioned (chỉ khi db_tool != none)
+migration_required: false      # v1 website content-driven, không cần DB
 staging_db: <env var staging, vd DATABASE_URL_STAGING>   # TÊN ENV VAR, không phải connection string/secret
 prod_db: <env var production, vd DATABASE_URL_PROD>       # TÊN ENV VAR; phải khác staging_db
 destructive_migration_policy: HIGH_RISK_MIGRATION
 
 # ── Deploy / CI-CD (từ brainstorm; secret nằm ở .env.local) ──
-deploy_platform: <vercel|railway|docker-vps|skip>
-ci_cd: <github-actions|gitlab-ci|skip>
+deploy_platform: other         # ⚠️ thực tế = gcp-cloud-run (menu brainstorm chưa có option này)
+ci_cd: github-actions          # dự kiến
 
 # ── Monitoring ──
 monitor_enabled: false         # true | false
-otel_service_name: <tên service trong telemetry>
-otel_env: <production|staging>
+otel_service_name: nta-web
+otel_env: production
 ```
 
 ### DB / migration
@@ -112,5 +114,5 @@ ui:
 ```yaml
 secrets:
   source: env                    # chỉ đọc từ env; KHÔNG hardcode/commit
-  required: [DATABASE_URL, JWT_SECRET]
+  required: [CONTACT_FORM_TARGET]  # v1 không cần JWT/DATABASE_URL
 ```

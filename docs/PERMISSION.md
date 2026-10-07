@@ -2,38 +2,40 @@
 
 > ⚠️ Phải **sync với code thật** (model `Role` + seed + middleware guard). Nếu lệch → code thắng.
 > Cách sync: đọc seed/quyền trong code + chạy `check_commands.docs_inventory`, rồi cập nhật file này.
-> Source of truth: model/enum Role, seed data, và middleware guard trong `source_roots`.
 
 ## Roles
 
 | Role | Mô tả | Nguồn (code) |
 |------|-------|--------------|
-| `USER` | Người dùng thường | `<seed/enum path>` |
-| `ADMIN` | Quản trị | `<seed/enum path>` |
-| ... | ... | ... |
+| `VISITOR` | Khách công khai — xem nội dung + gửi form liên hệ | không có auth (public) |
+| `ADMIN` | Quản trị nội dung (blog/case study) — **chưa có ở v1** | _(phase sau)_ |
+
+> NTA Website v1 **không có đăng nhập người dùng**. Toàn bộ nội dung công khai.
 
 ## Guard order (thứ tự middleware trên route)
 
 > Thứ tự quan trọng: auth → role → ownership → rate-limit → handler.
 
-1. `authenticate` — verify token, gắn `req.user` (401 nếu thiếu/sai).
-2. `authorize(role)` — check role (403 nếu thiếu quyền).
-3. `checkOwnership` — BOLA/IDOR: `:id` phải thuộc `req.user` (hoặc admin) — `skills/security/bola-idor.md`.
-4. `rateLimit` — login/resource-heavy endpoints.
-5. handler — validate input (schema) trước business logic.
+Với website tĩnh + 1 endpoint công khai:
+
+1. **`rateLimit`** — chỉ áp cho `POST /api/contact` (chống spam/flood).
+2. **`validate(schema)`** — validate body form (name/email/phone/message) trước business logic.
+3. **`honeypot`** — trường ẩn phải rỗng; nếu có giá trị → coi là bot, trả 200 giả (không gửi).
+4. **handler** — forward email/lưu tạm, trả `{ status: "ok" }`.
+
+Các route còn lại (trang nội dung) không cần guard — render tĩnh/SSR công khai.
 
 ## Route ↔ permission matrix
 
-> Điền từ code; đây là bảng **overview** để review, không phải nguồn thực thi.
+| Route | Method | Ai được truy cập | Guard |
+|-------|--------|------------------|-------|
+| `/` và mọi trang nội dung | GET | Tất cả (public) | — |
+| `/api/health` | GET | Tất cả (public) | — |
+| `/api/contact` | POST | Tất cả (public) | rateLimit + validate + honeypot |
+| `/api/posts`, `/api/case-studies` | GET | Tất cả (public) | — |
 
-| Route | Method | Auth | Role | Ownership |
-|-------|--------|------|------|-----------|
-| `/auth/login` | POST | no | — | — |
-| `/users` | GET | yes | ADMIN | — |
-| `/users/:id` | GET/PUT/DELETE | yes | USER/ADMIN | self hoặc ADMIN |
-| ... | ... | ... | ... | ... |
+## Ghi chú bảo mật
 
-## Ghi chú sync
-
-- Khi thêm/sửa role hoặc guard → cập nhật file này **trong cùng task**.
-- Không hardcode role string rải rác; dùng enum/hằng chung.
+- Không lộ secret ra client: biến `NEXT_PUBLIC_*` chỉ dùng cho giá trị công khai.
+- Secret (token mail/API) để ở Secret Manager / env server — xem `.devops/templates/gcp-cloud-run.md` mục 4.
+- Chi tiết hardening: `skills/security/` (nếu bật).
