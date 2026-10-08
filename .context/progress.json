@@ -1,6 +1,23 @@
 {
-  "mode": "maintenance",
-  "activeWorkItem": null,
-  "features": [],
+  "mode": "feature",
+  "activeWorkItem": { "type": "feature", "slug": "nta-website" },
+  "features": [
+    {
+      "slug": "nta-website",
+      "title": "NTA Website — initial build (SPECIFICATIONS.md 1.0.0, 27 req)",
+      "type": "ADDITIVE",
+      "status": "planned",
+      "currentPhase": 0,
+      "totalLayers": 5,
+      "currentLayer": 0,
+      "completedTasks": [],
+      "inProgressTask": null,
+      "tasks": [],
+      "specVersion": "1.0.0",
+      "planDir": "tasks/nta-website/",
+      "layerPlanDiagram": "docs/diagrams/layer-plan.html",
+      "lastUpdated": "2026-10-08"
+    }
+  ],
   "bugs": []
 }

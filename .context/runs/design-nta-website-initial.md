@@ -7,19 +7,20 @@ workItem: design/nta-website
 phaseTask: initial
 step: design
 agent: design
-status: awaiting                    # design xong — chờ user confirm tokens (checkpoint bước 3)
+status: done
 attempt: 0
 interrupted: true                   # lần gọi 1 bị server restart cắt (redo, không tăng attempt)
-updatedAt: 2026-10-08T15:50:00+07:00
+updatedAt: 2026-10-08T15:55:00+07:00
 filesTouched: []
 filesNew: [skills/nextjs/design-tokens.md, .context/design-spec.md]
 evidence:
   reportPath: .context/design-spec.md
   round: 0
   verdict: null                     # chờ user confirm
-next: "⏸ CHECKPOINT: user confirm design tokens → commit → bước 4 Graph (/graph subagent)"
+next: "DONE — commit 050ee09 (tokens+screen specs) → bước 4 Graph"
 loopSignal: none
-approvals: []
+approvals:
+  - {gate: design_tokens_confirmed, at: 2026-10-08T15:55:00+07:00, ok: true}   # user reply "ok"
 batchQueue: []
 ```
 

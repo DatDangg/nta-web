@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NTA Website — Layer Plan</title>
+<style>
+  :root {
+    --bg: #f5f5f7; --surface: #ffffff; --ink: #1d1d1f; --ink-2: #515154;
+    --border: #d2d2d7; --primary: #0071e3; --primary-ink: #ffffff;
+    --accent-bg: #eaf3ff; --checkpoint: #b25000; --checkpoint-bg: #fff4e5;
+    --shadow: 0 1px 3px rgba(0,0,0,.08);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #111113; --surface: #1d1d1f; --ink: #f5f5f7; --ink-2: #a1a1a6;
+      --border: #3a3a3c; --primary: #2997ff; --primary-ink: #000000;
+      --accent-bg: #16283f; --checkpoint: #ffab70; --checkpoint-bg: #3a2a14;
+      --shadow: 0 1px 3px rgba(0,0,0,.5);
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 32px 16px; background: var(--bg); color: var(--ink);
+    font: 15px/1.55 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Inter, sans-serif;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; }
+  header h1 { font-size: 26px; margin: 0 0 6px; letter-spacing: -.02em; }
+  header p { color: var(--ink-2); margin: 0 0 4px; font-size: 14px; }
+  .note {
+    background: var(--checkpoint-bg); border: 1px solid var(--checkpoint); color: var(--checkpoint);
+    border-radius: 10px; padding: 10px 14px; font-size: 13px; margin: 16px 0 28px;
+  }
+  .layer {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+    padding: 18px 20px; box-shadow: var(--shadow);
+  }
+  .layer h2 { font-size: 17px; margin: 0 0 4px; letter-spacing: -.01em; }
+  .layer .goal { color: var(--ink-2); font-size: 13.5px; margin: 0 0 14px; }
+  .tasks { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 10px; }
+  .task {
+    border: 1px solid var(--border); border-left: 3px solid var(--primary);
+    background: var(--accent-bg); border-radius: 10px; padding: 10px 12px;
+  }
+  .task .id { font-size: 11.5px; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: .04em; }
+  .task .name { font-size: 14px; font-weight: 600; margin: 2px 0 4px; }
+  .task .meta { font-size: 12px; color: var(--ink-2); }
+  .task .refs { display: inline-block; font-size: 11px; background: var(--surface); border: 1px solid var(--border); border-radius: 999px; padding: 1px 8px; margin-top: 6px; }
+  .arrow { text-align: center; font-size: 22px; color: var(--primary); line-height: 1; padding: 6px 0; user-select: none; }
+  .checkpoint {
+    display: flex; align-items: center; gap: 10px; justify-content: center;
+    background: var(--checkpoint-bg); border: 1.5px dashed var(--checkpoint); color: var(--checkpoint);
+    border-radius: 999px; padding: 8px 18px; font-size: 13.5px; font-weight: 600;
+    width: fit-content; margin: 0 auto;
+  }
+  .legend { margin-top: 26px; font-size: 12.5px; color: var(--ink-2); display: flex; gap: 18px; flex-wrap: wrap; }
+  .legend span::before { content: "● "; color: var(--primary); }
+  .legend .cp::before { content: "⏸ "; color: var(--checkpoint); }
+  footer { margin-top: 18px; font-size: 12px; color: var(--ink-2); }
+  @media print { body { background: #fff; } .layer { break-inside: avoid; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>NTA Website — Layer Plan (initial build)</h1>
+    <p>5 layers · 24 tasks · 1 task = 1 commit · dependency order Layer 0 → 4</p>
+    <p>Spec: SPECIFICATIONS.md 1.0.0 (R-01…R-27) · Design: .context/design-spec.md (13 screens)</p>
+  </header>
+
+  <div class="note">
+    ⚠️ <strong>Layer-plan diagram:</strong> archify <em>skipped</em> — package chưa cài trong môi trường
+    (<code>npx archify doctor</code> non-zero, ghi nhận ở <code>.context/design-spec.md</code> §3;
+    cài qua <code>npx skills add tt-a1i/archify</code> + restart nếu muốn vẽ lại bằng archify).
+    Diagram đơn giản tự viết theo quy định best-effort của <code>.agent/graph.md</code> (không chặn graph).
+  </div>
+
+  <!-- Layer 0 -->
+  <section class="layer">
+    <h2>Layer 0 — Foundation</h2>
+    <p class="goal">Scaffold Next.js 15 + TS + Tailwind, i18n plumbing (next-intl, locale routes), content schema/MDX pipeline + sample content VI/EN, CI/env files (generate, không push).</p>
+    <div class="tasks">
+      <div class="task"><div class="id">task-01</div><div class="name">Scaffold Next.js + scripts verify</div><div class="meta">package.json đúng script lint/typecheck/build · src/ structure · SHARED_FOUNDATION</div><span class="refs">Tech Stack · check_commands</span></div>
+      <div class="task"><div class="id">task-02</div><div class="name">i18n plumbing (next-intl)</div><div class="meta">middleware · [locale] group · messages skeleton VI/EN · hreflang helper</div><span class="refs">R-20</span></div>
+      <div class="task"><div class="id">task-03</div><div class="name">Content schema + MDX pipeline + loaders</div><div class="meta">5 entity types · getAll/getBySlug · generateStaticParams helpers</div><span class="refs">R-16 · R-15 · R-26</span></div>
+      <div class="task"><div class="id">task-04</div><div class="name">Sample content v1 (VI/EN) 9 nhóm trang</div><div class="meta">4+3 solutions · 2 products · ≥2 case (BR-004) · ≥3 posts · about · home</div><span class="refs">R-26 · R-07 · R-08 · BR-003/004</span></div>
+      <div class="task"><div class="id">task-05</div><div class="name">Git/CI files + env example</div><div class="meta">ci.yml (lint/typecheck/build) · CONTACT_FORM_TARGET · KHÔNG push</div><span class="refs">R-19 · R-27 · ci_cd</span></div>
+    </div>
+  </section>
+  <div class="arrow">↓</div>
+  <div class="checkpoint">⏸ Checkpoint — user duyệt Layer 0 trước khi mở Layer 1</div>
+  <div class="arrow">↓</div>
+
+  <!-- Layer 1 -->
+  <section class="layer">
+    <h2>Layer 1 — Core layout &amp; shared components</h2>
+    <p class="goal">Design tokens vào Tailwind theme, app shell Header/Footer (STRICT — shared nav), card library, interactive components, trang 404.</p>
+    <div class="tasks">
+      <div class="task"><div class="id">task-01</div><div class="name">Tokens → theme + Button/Section/Badge</div><div class="meta">globals.css tokens · primitives · focus ring · reduced-motion</div><span class="refs">R-23 · R-24</span></div>
+      <div class="task"><div class="id">task-02</div><div class="name">App shell — layout + Header + Footer</div><div class="meta">sticky nav · dropdown · drawer focus-trap · lang toggle · footer 4 cột · BR-001 · REVIEW: STRICT</div><span class="refs">R-11 · R-20 · R-24</span></div>
+      <div class="task"><div class="id">task-03</div><div class="name">PageHeader/Breadcrumb/CTABanner + card family</div><div class="meta">SolutionCard/ProductCard/AppCard/CaseStudyCard/PostCard · 1 focus/card</div><span class="refs">R-02 · R-05…R-09 · R-24</span></div>
+      <div class="task"><div class="id">task-04</div><div class="name">Reveal/FilterBar/Pagination/Skeleton/EmptyState</div><div class="meta">motion 400ms once · aria-pressed · deep link ?page=&amp;filter=</div><span class="refs">R-08 · R-09 · R-24</span></div>
+      <div class="task"><div class="id">task-05</div><div class="name">404 not-found (Screen 13)</div><div class="meta">2 locale · catch-all · noindex · HomeLink + SearchHint</div><span class="refs">R-12</span></div>
+    </div>
+  </section>
+  <div class="arrow">↓</div>
+  <div class="checkpoint">⏸ Checkpoint — user duyệt Layer 1 trước khi mở Layer 2</div>
+  <div class="arrow">↓</div>
+
+  <!-- Layer 2 -->
+  <section class="layer">
+    <h2>Layer 2 — Content pages (7 tasks, song song được)</h2>
+    <p class="goal">9 nhóm trang SSG theo 13 screen specs — mỗi task 1 nhóm trang, compose component Layer 1 + content Layer 0.</p>
+    <div class="tasks">
+      <div class="task"><div class="id">task-01</div><div class="name">Trang chủ / (Screen 1)</div><div class="meta">Hero 2 CTA · 3 SolutionCard · product strip snap · case highlight · CTABanner</div><span class="refs">R-01 · R-02 · R-03</span></div>
+      <div class="task"><div class="id">task-02</div><div class="name">Về NTA /about (Screen 2)</div><div class="meta">5 khối · timeline ngang lg · logos grayscale→màu</div><span class="refs">R-04</span></div>
+      <div class="task"><div class="id">task-03</div><div class="name">Giải pháp DN + 4 slug (Screens 3–4)</div><div class="meta">generateStaticParams crm/hrm/lms/dentgo · sidebar sticky · slug sai → 404</div><span class="refs">R-05</span></div>
+      <div class="task"><div class="id">task-04</div><div class="name">Giải pháp AI + 3 slug (Screens 5–6)</div><div class="meta">boxai/flycam/custom-ai · UseCases · CaseStudyLink · 404</div><span class="refs">R-06</span></div>
+      <div class="task"><div class="id">task-05</div><div class="name">Sản phẩm /products (Screen 7)</div><div class="meta">AppCard ×2 · carousel · badge "Sắp ra mắt" empty state</div><span class="refs">R-07</span></div>
+      <div class="task"><div class="id">task-06</div><div class="name">Case study list + detail (Screens 8–9)</div><div class="meta">FilterBar client · pagination ?page · MetaBar/Challenge/Solution/Result · ≥2 case</div><span class="refs">R-08 · BR-004</span></div>
+      <div class="task"><div class="id">task-07</div><div class="name">Blog list + detail MDX (Screens 10–11)</div><div class="meta">PostCard grid · prose 720px · ShareBar · related · 404</div><span class="refs">R-09 · R-16</span></div>
+    </div>
+  </section>
+  <div class="arrow">↓</div>
+  <div class="checkpoint">⏸ Checkpoint — user duyệt Layer 2 trước khi mở Layer 3</div>
+  <div class="arrow">↓</div>
+
+  <!-- Layer 3 -->
+  <section class="layer">
+    <h2>Layer 3 — API &amp; form</h2>
+    <p class="goal">API contract chống spam (REVIEW: STRICT) + form states đầy đủ + CTAForm tích hợp 7 trang giải pháp.</p>
+    <div class="tasks">
+      <div class="task"><div class="id">task-01</div><div class="name">/api/health + /api/contact · REVIEW: STRICT</div><div class="meta">rateLimit → validate → honeypot → forward CONTACT_FORM_TARGET · 200/400/429 · secret server-only</div><span class="refs">R-13 · R-14 · R-18 · R-19</span></div>
+      <div class="task"><div class="id">task-02</div><div class="name">Trang /contact + ContactForm 6 states</div><div class="meta">Default/Validating/Submitting/Success/400/429/5xx · a11y form · map iframe</div><span class="refs">R-10 · BR-002</span></div>
+      <div class="task"><div class="id">task-03</div><div class="name">CTAForm compact → 7 trang giải pháp</div><div class="meta">tái dùng useContactForm · 4 enterprise + 3 AI detail pages</div><span class="refs">R-05 · R-06 · R-10</span></div>
+    </div>
+  </section>
+  <div class="arrow">↓</div>
+  <div class="checkpoint">⏸ Checkpoint — user duyệt Layer 3 trước khi mở Layer 4</div>
+  <div class="arrow">↓</div>
+
+  <!-- Layer 4 -->
+  <section class="layer">
+    <h2>Layer 4 — SEO / perf / a11y + deploy config</h2>
+    <p class="goal">Chốt chất lượng Lighthouse ≥ 90 + gate a11y WCAG 2.1 AA + sinh file deploy Cloud Run (KHÔNG deploy — chờ approve ở /start bước 6).</p>
+    <div class="tasks">
+      <div class="task"><div class="id">task-01</div><div class="name">SEO — sitemap/robots/JSON-LD/OG + llms.txt</div><div class="meta">metadata audit · hreflang · Organization/WebSite/Breadcrumb/Article · ai-friendly-web gate</div><span class="refs">R-21 · R-20</span></div>
+      <div class="task"><div class="id">task-02</div><div class="name">Performance — next/image + Lighthouse ≥90</div><div class="meta">priority/lazy · font VN subset · bundle · CLS &lt; 0.1 · LCP &lt; 2.5s</div><span class="refs">R-22</span></div>
+      <div class="task"><div class="id">task-03</div><div class="name">A11y sweep WCAG 2.1 AA + responsive 3 bp</div><div class="meta">keyboard/contrast/headings/reduced-motion · 375/768/1280 · frontend-checklist gate</div><span class="refs">R-24 · R-23</span></div>
+      <div class="task"><div class="id">task-04</div><div class="name">Deploy config Cloud Run (generate)</div><div class="meta">Dockerfile standalone · deploy.yml draft · runbook · KHÔNG deploy/push</div><span class="refs">R-27 · R-14 · R-19</span></div>
+    </div>
+  </section>
+  <div class="arrow">↓</div>
+  <div class="checkpoint">⏸ Checkpoint cuối — spec-publisher (test-scope handoff) + user approve deploy (/start bước 6)</div>
+
+  <div class="legend">
+    <span>Task (1 task = 1 commit)</span>
+    <span class="cp">Human checkpoint — Layer N+1 chỉ unlock khi Layer N PASS + user duyệt</span>
+  </div>
+
+  <footer>
+    Generated by agent <strong>graph</strong> (.agent/graph.md, /start bước 4) · 2026-10-08 ·
+    Tasks: <code>tasks/nta-website/layer-{N}-task-{NN}.md</code> · Progress: <code>.context/progress.json</code>
+  </footer>
+</div>
+</body>
+</html>
