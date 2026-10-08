@@ -7,7 +7,7 @@ workItem: devops/nta-website
 phaseTask: step-6-vps-deploy
 step: devops
 agent: null
-status: blocked                     # CI/CD VPS xong; chờ DNS (HTTPS/certbot) + form target
+status: blocked                     # CI/CD VPS xong + preview qua IP; chờ DNS (HTTPS/certbot) + form target
 attempt: 0
 interrupted: false
 updatedAt: 2026-10-09T02:35:00+07:00
@@ -40,3 +40,4 @@ blockedReason: "DNS A record (PA Vietnam) — cần cho HTTPS/public"
 - 2026-10-09 DNS: user thêm A record ở panel PA Vietnam + báo "Lưu thành công" nhưng zone authoritative KHÔNG nhận (SOA serial 2026100803 không đổi, NSEC bitmap apex không có A). → lỗi phía PA. User chọn gác domain lại.
 - 2026-10-09 sinh files deploy VPS + commit `4c34b9b` push. Clone /opt/nta-web trên VPS → `docker compose up -d --build` OK. Container healthy, health check + routes 200, canonical đúng. status=blocked chờ DNS (HTTPS) + runner token.
 - 2026-10-09 cài self-hosted runner (`/opt/actions-runner-nta-web`, v2.338.0, label `nta-web`, RUNNER_ALLOW_RUNASROOT=1), service active. Push test `b2d883c` → job Succeeded. Chuẩn hoá deploy từ runner workspace, bỏ `/opt/nta-web`; push `ec1420d` → container tạo lại từ workspace, healthy, health OK. CI/CD end-to-end OK.
+- 2026-10-09 thêm nginx vhost **tạm** `/etc/nginx/sites-available/nta-web-preview.conf` (server_name 187.52.119.50 → proxy 127.0.0.1:3005) để preview qua IP. Verify ngoài: http://187.52.119.50/ = 200, title NTA, /api/health ok. ⚠️ XOÁ file này khi domain live (đã có `deploy/nginx/ntasolution.vn.conf` trong repo cho bản thật).
