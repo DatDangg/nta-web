@@ -43,16 +43,19 @@ không bật deploy** (chưa có remote, `auto_push_after_pass: false`).
 4. Ghi chú ngắn trong `README.md` (mục Development: install/lint/typecheck/build + CI status pending remote).
 
 ## Acceptance Criteria
-- [ ] `.github/workflows/ci.yml` tồn tại, chạy đúng 3 lệnh verify; YAML hợp lệ
-- [ ] `CONTACT_FORM_TARGET` có mặt trong env example; `.env.local` KHÔNG bị commit
-- [ ] `.gitignore` cover `.next/`, `node_modules/`, `.env.local`
-- [ ] KHÔNG có lệnh push/deploy nào được chạy (verify: `git log` chỉ có commit local, không remote)
-- [ ] Check commands pass local
+- [x] `.github/workflows/ci.yml` tồn tại, chạy đúng 3 lệnh verify; YAML hợp lệ
+- [x] `CONTACT_FORM_TARGET` có mặt trong env example; `.env.local` KHÔNG bị commit
+- [x] `.gitignore` cover `.next/`, `node_modules/`, `.env.local`
+- [x] KHÔNG có lệnh push/deploy nào được chạy
+- [x] Check commands pass local
 
 ## Verification Summary
-- Commands: `npm run lint` · `npm run typecheck` · `npm run build` (+ `git status` xác nhận không push)
-- Test: `test_command: null` → skip, ghi lý do
-- Manual evidence: YAML lint cơ bản (`actionlint` nếu có, không có → eyeball + ghi chú)
+- Commands: `npm run lint` PASS · `npm run typecheck` PASS · `npm run build` PASS
+- Test: skip — `test_command: null`, chưa cấu hình test framework
+- YAML: `actionlint` không có; `node` + package `yaml` parse workflow thành công
+- Security/status: git status xác nhận `.env.local` ignored; không chạy push/deploy
+- Acceptance criteria: PASS
+- Reviewer verdict: PASS (NORMAL, 0 CRITICAL/MAJOR, 2 MINOR non-blocking)
 - Reviewer report: `.context/review-reports/feature-nta-website-layer-0-task-05-round-1-review.md`
 
 ## Retry / Error Memory
@@ -62,13 +65,13 @@ không bật deploy** (chưa có remote, `auto_push_after_pass: false`).
 - Escalation: none — sau 3 attempt fail → `architecture_review_needed`
 
 ## DoD (Definition of Done)
-- [ ] Code/files written (chỉ trong scope)
-- [ ] Tests: skip — `test_command: null`, ghi lý do
-- [ ] Check commands pass: `npm run lint` · `npm run typecheck` · `npm run build`
-- [ ] Reviewer độc lập PASS
-- [ ] `.context/progress.json` updated
-- [ ] Error Memory / Doc Impact recorded
-- [ ] committed — 1 task = 1 commit (branch `main`; **KHÔNG push** — `forbidden_branch: main`, không remote)
+- [x] Code/files written (chỉ trong scope)
+- [x] Tests: skip — `test_command: null`, ghi lý do
+- [x] Check commands pass: `npm run lint` · `npm run typecheck` · `npm run build`
+- [x] Reviewer độc lập PASS
+- [x] `.context/progress.json` updated
+- [x] Error Memory / Doc Impact recorded
+- [x] committed — 1 task = 1 commit (branch `main`; **KHÔNG push** — `forbidden_branch: main`, không remote)
 
 ## Files to Create/Modify
 - `.github/workflows/ci.yml` (mới)
@@ -77,6 +80,8 @@ không bật deploy** (chưa có remote, `auto_push_after_pass: false`).
 - `README.md` (mục Development/verify commands)
 
 ## Notes
+- CI YAML validation: `actionlint` unavailable; parsed successfully with Node.js `yaml` package.
+- `.env.local` is ignored; no push or deploy command was run.
 - ⚠️ OQ#4: `CONTACT_FORM_TARGET` chưa chốt đích gửi (email/Sheet/CRM) — env var giữ sẵn, giá trị
   do user điền sau; interface forward chốt ở Layer 3 task-01.
 - Deploy workflow Cloud Run **KHÔNG** ở task này — Layer 4 task-04 dựng file; mọi deploy cần

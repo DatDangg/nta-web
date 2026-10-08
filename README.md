@@ -36,6 +36,17 @@
 
 ## Getting Started
 
+## Development
+
+```bash
+npm ci
+npm run lint
+npm run typecheck
+npm run build
+```
+
+CI status: **pending remote** (GitHub Actions workflow is configured; it will run after the repository is connected to GitHub).
+
 ### New project
 
 ```bash
