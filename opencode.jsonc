@@ -50,6 +50,11 @@
       "git push*+main*": "deny",
       "git push*refs/heads/main*": "deny",
 
+      // --- [LOCAL 09/10/2026] Remote đã có + user duyệt push main → mở allow hẹp sau deny main
+      //     (last-match-wins). Đặt TRƯỚC force/delete deny để vẫn chặn force push main.
+      "git push origin main": "allow",
+      "git push -u origin main": "allow",
+
       // --- Cấm force push ---
       "git push --force*": "deny",
       "git push*--force*": "deny",

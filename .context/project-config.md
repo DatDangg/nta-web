@@ -15,8 +15,8 @@ project: NTA Website
 output_language: vi            # vi | en — ngôn ngữ cho docs/summary
 
 # ── Git ──
-target_branch: main            # ✅ chốt 08/10/2026 — staging-direct trên main; có remote sẽ chốt lại (/brainstorm git)
-forbidden_branch: main         # ✅ chốt 08/10/2026 — cấm push (chưa có remote); muốn push main → /brainstorm git đổi trước
+target_branch: main            # ✅ cập nhật 09/10/2026 — staging-direct trên main; remote: git@github.com:DatDangg/nta-web.git
+forbidden_branch: none         # ✅ cập nhật 09/10/2026 — remote đã có, user duyệt push main (trước cấm khi chưa có remote)
 branch_pattern: "main"         # default staging-direct
 auto_push_after_pass: false    # ✅ chốt 08/10/2026 — chỉ commit local, push khi user yêu cầu rõ
 

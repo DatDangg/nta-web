@@ -26,8 +26,13 @@
 | Field | Giá trị |
 |---|---|
 | `target_branch` | `main` |
-| `forbidden_branch` | `main` (giữ — cấm push khi chưa có remote; muốn push main → `/brainstorm git` đổi trước) |
+| `forbidden_branch` | ~~`main`~~ → **`none`** (cập nhật 09/10/2026: remote `origin` đã có, user duyệt push main) |
 | `auto_push_after_pass` | `false` |
+
+#### Cập nhật 09/10/2026 — `/brainstorm git` (sau initial build)
+
+- Remote thực tế: `git@github.com:DatDangg/nta-web.git` (origin; SSH key hiện tại = tài khoản `DatDangg`), local `main` ahead 45 commit → **đã push 09/10/2026**.
+- User chọn **push thẳng `main`** → `forbidden_branch: main → none`; mở allow hẹp `git push origin main` trong `opencode.jsonc` (vẫn chặn force/delete).
 
 ### Nhóm 5 — Models per role (user tự nhập — override đề xuất)
 
