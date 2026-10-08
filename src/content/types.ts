@@ -8,6 +8,9 @@ export interface Solution {
   benefits: string[];
   category: 'enterprise' | 'ai';
   useCases?: string[];
+  image?: string;
+  screenshots?: string[];
+  relatedCases?: string[];
 }
 
 export interface Product {
@@ -29,6 +32,7 @@ export interface CaseStudy {
   challenge: string;
   solution: string;
   result: string;
+  metrics?: { value: string; label: string }[];
   gallery: { src: string; alt: string }[];
   related: string[];
 }

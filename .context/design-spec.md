@@ -113,7 +113,7 @@ File component ≤ 300 dòng, function ≤ 50 dòng → tách sub-component khi 
 2. **3 mảng giải pháp**: grid 3 `SolutionCard` — mỗi card có **ảnh thật** + `h3` + 1 dòng mô tả + link
    "Tìm hiểu thêm". KHÔNG 3 card icon+heading+text y hệt (anti-slop). Card `rounded-lg`, hover lift.
 3. **Sản phẩm tiêu biểu**: **horizontal scroll-snap strip** (khác family với grid phía trên),
-   ≥3–4 `ProductCard` (ảnh screenshot app + tên + 1 dòng), snap `sm:mandatory`, nút mũi tên desktop.
+    ≥2 `ProductCard` (ảnh screenshot app + tên + 1 dòng), khớp 2 app thật hiện có; ẩn section khi không có sản phẩm, snap `sm:mandatory`, nút mũi tên desktop.
 4. **Case study nổi bật**: split 1 lần duy nhất (ảnh trái | text phải): tên dự án, 1 kết quả số thật, link.
 5. **CTABanner accent**: full-width nền `primary`, text inverse, 1 CTA (button trắng, chữ `primary`).
 
@@ -291,12 +291,12 @@ Cards: "BoxAI" · "Flycam / Drone" · "AI tùy chỉnh" (EN "Custom AI").
 **Route:** `/solutions/ai/[slug]` (`boxai|flycam|custom-ai`) — R-06
 
 **Layout:** PageHeader + Breadcrumb · FeatureList · UseCases (grid 2–3 cột, mỗi case 1 dòng + số liệu thật nếu có) ·
-CaseStudyLink (block nổi, link tới `/case-studies/{slug}` tương ứng, vd "Óc Eo") · CTAForm (compact).
+CaseStudyLink (block nổi, link tới `/case-studies/{slug}` tương ứng khi `Solution.relatedCases` có dữ liệu, vd "Óc Eo") · CTAForm (compact).
 
 **Components:** PageHeader, Breadcrumb, FeatureList, UseCases, CaseStudyLink, CTAForm, Badge.
 
 **States:** Default · **404 slug sai → Screen 13** · Loading: skeleton · Error: form inline ·
-Empty: không có case study → ẩn CaseStudyLink (KHÔNG hiện card rỗng).
+Empty: `Solution.relatedCases` vắng/rỗng → ẩn CaseStudyLink (KHÔNG hiện card rỗng); liên kết case study là tùy chọn.
 
 **Responsive:**
 | bp | Behavior |
@@ -394,7 +394,7 @@ announce (`role="status"`); card link bọc cả khối; Pagination `<nav aria-l
 
 **Layout:** PageHeader (tên dự án) + Breadcrumb · **MetaBar** (Khách hàng · Lĩnh vực · Năm — dạng definition
 list, KHÔNG middle-dot liền mạch) · ChallengeBlock → SolutionBlock → ResultBlock (số liệu thật, số lớn
-`display` + label; 3–4 chỉ số tối đa) · ImageGallery · RelatedStudies (3 card) · CTABanner (alt).
+`display` + label từ `CaseStudy.metrics` (số liệu thật, tối đa 3–4 chỉ số; chưa có số liệu thật thì không hiển thị chỉ số) · ImageGallery · RelatedStudies (3 card) · CTABanner (alt).
 Không hiển thị thông tin khách hàng chưa được phép (BR-004).
 
 **Components:** PageHeader, Breadcrumb, MetaBar, ChallengeBlock, SolutionBlock, ResultBlock, ImageGallery,

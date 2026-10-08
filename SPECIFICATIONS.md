@@ -56,7 +56,7 @@ Nguồn: `BRIEF.md:15-16`, `docs/BRD.md:51,167` (quyết định ngày 08/10/202
   `[cần xác nhận]` dưới SSG (không fetch) liệu có cần Loading/Error state — chốt khi implement.
 - **R-02:** Khối 3 mảng giải pháp (Doanh nghiệp / AI / App AI) — 3 card, điều hướng đúng trang, có hover state.
   `[reverse-engineered from docs]` — nguồn: `docs/BRD.md:69-71` (FR-002)
-- **R-03:** Khối sản phẩm tiêu biểu (≥ 3–4 sản phẩm) + CTA cuối trang nổi bật.
+- **R-03:** Khối sản phẩm tiêu biểu (≥ 2 sản phẩm tiêu biểu) + CTA cuối trang nổi bật; hiện có 2 app thật theo R-07, section ẩn khi không có sản phẩm.
   `[reverse-engineered from docs]` — nguồn: `docs/BRD.md:73-75` (FR-003)
 
 ### Module 2 — Về NTA `/about`
@@ -73,7 +73,7 @@ Nguồn: `BRIEF.md:15-16`, `docs/BRD.md:51,167` (quyết định ngày 08/10/202
 ### Module 4 — Giải pháp AI
 
 - **R-06:** Trang tổng quan `/solutions/ai` + trang con `/solutions/ai/[slug]`
-  (`boxai` | `flycam` | `custom-ai`); mỗi giải pháp có mô tả + case study liên quan (vd Óc Eo).
+  (`boxai` | `flycam` | `custom-ai`); mỗi giải pháp có mô tả + case study liên quan nếu có dữ liệu (tùy chọn).
   `[reverse-engineered from docs]` — nguồn: `docs/BRD.md:88-90` (FR-030), `docs/DESIGN.md:101-107`
 
 ### Module 5 — Sản phẩm App
@@ -123,9 +123,8 @@ Base URL: dev `http://localhost:3000/api` · prod `https://ntasolution.vn/api` �
   - `[cần xác nhận]` rate-limit threshold (request/window) chưa doc nào định nghĩa — `docs/API_SPEC.md:60`
 - **R-14:** `GET /api/health` — `{status:"ok",timestamp}` cho Cloud Run / uptime.
   `[reverse-engineered from docs]` — nguồn: `docs/API_SPEC.md:63-67`
-- **R-15:** `GET /api/posts`, `GET /api/case-studies` — danh sách động (tuỳ chọn; v1 có thể static).
-  `[reverse-engineered from docs]` — nguồn: `docs/API_SPEC.md:30-31`
-- `[cần xác nhận]` R-15 có cần API động ở v1 hay render static (`docs/API_SPEC.md:33-34`)
+- **R-15:** Không dựng `GET /api/posts` hoặc `GET /api/case-studies` trong v1; nội dung được render từ file tĩnh trong repo.
+  API danh sách động nằm ngoài phạm vi v1. Nguồn ban đầu: `docs/API_SPEC.md:30-31` (tùy chọn).
 
 ## Database Schema
 
