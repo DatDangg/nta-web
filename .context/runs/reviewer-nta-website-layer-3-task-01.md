@@ -7,7 +7,7 @@ workItem: reviewer/nta-website
 phaseTask: layer-3-task-01
 step: reviewer
 agent: reviewer
-status: running                       # round 2 (write-ahead) — builder fix MAJOR rate-limit bypass
+status: done                       # round 2 (write-ahead) — builder fix MAJOR rate-limit bypass
 attempt: 0
 interrupted: false
 updatedAt: 2026-10-09T19:08:00+07:00

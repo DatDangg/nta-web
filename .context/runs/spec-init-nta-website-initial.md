@@ -7,7 +7,7 @@ workItem: spec-init/nta-website
 phaseTask: initial
 step: spec_validator
 agent: spec-validator
-status: running
+status: done
 attempt: 0
 interrupted: false
 updatedAt: 2026-10-08T14:20:00+07:00

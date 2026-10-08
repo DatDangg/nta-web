@@ -7,7 +7,7 @@ workItem: reviewer/nta-website
 phaseTask: layer-3-task-02
 step: reviewer
 agent: reviewer
-status: running                       # write-ahead reviewer (NORMAL; escalate STRICT nếu lệch contract)
+status: done                       # write-ahead reviewer (NORMAL; escalate STRICT nếu lệch contract)
 attempt: 0
 interrupted: false
 updatedAt: 2026-10-09T19:58:00+07:00

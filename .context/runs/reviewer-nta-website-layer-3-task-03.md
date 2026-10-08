@@ -7,7 +7,7 @@ workItem: reviewer/nta-website
 phaseTask: layer-3-task-03
 step: reviewer
 agent: reviewer
-status: running                       # write-ahead reviewer (NORMAL; check diff scope chặt)
+status: done                       # write-ahead reviewer (NORMAL; check diff scope chặt)
 attempt: 0
 interrupted: false
 updatedAt: 2026-10-09T20:58:00+07:00

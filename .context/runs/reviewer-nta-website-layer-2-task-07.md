@@ -7,7 +7,7 @@ workItem: reviewer/nta-website
 phaseTask: layer-2-task-07
 step: reviewer
 agent: reviewer
-status: running                       # round 2 (write-ahead) — builder fix MAJOR-1/2/3 + SSG rework xong
+status: done                       # round 2 (write-ahead) — builder fix MAJOR-1/2/3 + SSG rework xong
 attempt: 0
 interrupted: false
 updatedAt: 2026-10-09T15:56:00+07:00

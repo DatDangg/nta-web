@@ -7,7 +7,7 @@ workItem: reviewer/nta-website
 phaseTask: layer-1-task-05
 step: reviewer
 agent: reviewer
-status: running                      # write-ahead reviewer round 2 — cancel sẽ rerun reviewer
+status: done                      # write-ahead reviewer round 2 — cancel sẽ rerun reviewer
 attempt: 1
 interrupted: false
 updatedAt: 2026-10-09T04:56:00+07:00
