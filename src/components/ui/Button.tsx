@@ -1,6 +1,6 @@
 import type { ButtonHTMLAttributes } from 'react';
 
-type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'outline';
+type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'outline' | 'inverse';
 type ButtonSize = 'sm' | 'md' | 'lg';
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
@@ -13,6 +13,7 @@ const variantStyles: Record<ButtonVariant, string> = {
   secondary: 'border border-transparent bg-background-alt text-text-primary hover:border-strong hover:bg-border',
   ghost: 'bg-transparent text-primary-active hover:bg-background-alt',
   outline: 'border border-border bg-transparent text-primary-active hover:bg-background-alt',
+  inverse: 'bg-surface text-text-primary hover:bg-surface-sunken',
 };
 
 export function buttonStyles(variant: ButtonVariant = 'primary', size: ButtonSize = 'md') {
