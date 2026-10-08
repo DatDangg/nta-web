@@ -17,7 +17,7 @@ export function AppCard({ product, imageAlt, media, downloadLinks = null }: AppC
     <div className="rounded-lg p-5 md:p-8">
       <div className="grid gap-6 md:grid-cols-2 md:items-center">
         {media ?? (image ? <Image alt={imageAlt} className={cardImageClass} height={600} sizes="(min-width: 1024px) 50vw, 100vw" src={image} width={960} /> : <div aria-hidden="true" className={cardImageClass} />)}
-        <Link aria-label={product.title} className={cardLinkClass} href="/products">
+        <Link className={cardLinkClass} href="/products">
           <h2 className="text-h2 font-semibold leading-tight">{product.title}</h2>
         <p className="mt-3 text-text-secondary">{product.description}</p>
         {product.features && product.features.length > 0 && (

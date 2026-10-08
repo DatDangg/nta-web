@@ -15,7 +15,7 @@ export function PostCard({ post, imageAlt }: PostCardProps) {
   const locale = useLocale() as Locale;
 
   return (
-    <Link aria-label={post.title} className={`${cardLinkClass} p-4`} href={`/blog/${post.slug}`}>
+    <Link className={`${cardLinkClass} p-4`} href={`/blog/${post.slug}`}>
       <Image alt={imageAlt} className={cardImageWideClass} height={540} sizes={cardImageSizes} src={post.cover} width={960} />
       <div className="mt-5 flex flex-wrap items-center justify-between gap-3"><Badge>{post.category}</Badge><time className="text-sm text-text-secondary" dateTime={post.date}>{formatPostDate(post.date, locale)}</time></div>
       <h3 className="mt-4 text-h3 font-semibold leading-tight">{post.title}</h3>

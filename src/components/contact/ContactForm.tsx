@@ -36,11 +36,10 @@ export function ContactForm() {
 
   const hasFieldErrors = Object.keys(state.errors).length > 0;
   return <form aria-busy={state.status === 'submitting'} className="grid gap-6" noValidate onSubmit={handleSubmit}>
-    {state.status === 'error' && <div ref={summaryRef} tabIndex={-1} role="alert" className="rounded-sm border border-error-ink p-4 text-error-ink">
+    {(state.status === 'error' || state.status === 'rate-limit') && <div ref={summaryRef} tabIndex={-1} role="alert" className="rounded-sm border border-error-ink p-4 text-error-ink">
       <p>{state.summary}</p>
-      {hasFieldErrors && <ul className="mt-2 list-inside list-disc">{FIELDS.filter((field) => state.errors[field]).map((field) => <li key={field}><a className="underline" href={`#${fieldIds[field]}`}>{t(`labels.${field}`)}</a></li>)}</ul>}
+      {state.status === 'error' && hasFieldErrors && <ul className="mt-2 list-inside list-disc">{FIELDS.filter((field) => state.errors[field]).map((field) => <li key={field}><a className="underline" href={`#${fieldIds[field]}`}>{t(`labels.${field}`)}</a></li>)}</ul>}
     </div>}
-    {state.status === 'rate-limit' && <p role="alert" className="rounded-sm border border-error-ink p-4 text-error-ink">{state.summary}</p>}
     <Input id={fieldIds.name} autoComplete="name" required minLength={2} maxLength={100} label={t('labels.name')} helper={t('helpers.name')} error={state.errors.name} value={state.values.name} onBlur={() => state.validateField('name')} onChange={(event) => state.updateField('name', event.target.value)} />
     <Input id={fieldIds.email} autoComplete="email" required type="email" label={t('labels.email')} helper={t('helpers.email')} error={state.errors.email} value={state.values.email} onBlur={() => state.validateField('email')} onChange={(event) => state.updateField('email', event.target.value)} />
     <Input id={fieldIds.phone} autoComplete="tel" type="tel" inputMode="numeric" label={t('labels.phone')} helper={t('helpers.phone')} error={state.errors.phone} value={state.values.phone} onBlur={() => state.validateField('phone')} onChange={(event) => state.updateField('phone', event.target.value)} />

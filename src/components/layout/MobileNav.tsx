@@ -36,7 +36,7 @@ export function MobileNav() {
 
   return <>
     <button aria-controls="mobile-navigation" aria-expanded={open} aria-label={open ? t('closeMenu') : t('openMenu')} className="flex size-11 items-center justify-center rounded-full lg:hidden" onClick={() => setOpen(!open)} ref={trigger} type="button"><span aria-hidden="true" className="text-2xl">{open ? '×' : '☰'}</span></button>
-    <div aria-hidden={!open} className={`fixed inset-0 z-drawer lg:hidden ${open ? '' : 'pointer-events-none'}`}>
+    <div aria-hidden={!open} className={`fixed inset-0 z-drawer overflow-hidden lg:hidden ${open ? '' : 'pointer-events-none'}`}>
       <button aria-label={t('closeMenu')} className={`absolute inset-0 bg-overlay transition-opacity duration-base ${open ? 'opacity-100' : 'opacity-0'}`} onClick={() => { setOpen(false); trigger.current?.focus(); }} tabIndex={-1} type="button" />
       <div aria-label={t('label')} aria-modal="true" className={`absolute inset-y-0 right-0 flex w-[min(22rem,88vw)] flex-col bg-background p-6 shadow-md transition-transform duration-base ${open ? 'translate-x-0' : 'translate-x-full'}`} id="mobile-navigation" inert={open ? undefined : true} ref={panel} role="dialog">
         <div className="mb-6 flex justify-end"><button aria-label={t('closeMenu')} className="min-h-11 min-w-11 rounded-full" onClick={() => { setOpen(false); trigger.current?.focus(); }} type="button">×</button></div>

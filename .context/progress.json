@@ -10,7 +10,7 @@
       "currentPhase": 0,
       "totalLayers": 5,
       "currentLayer": 4,
-      "completedTasks": ["layer-0-task-01", "layer-0-task-02", "layer-0-task-03", "layer-0-task-04", "layer-0-task-05", "layer-0-task-06", "layer-1-task-01", "layer-1-task-02", "layer-1-task-03", "layer-1-task-04", "layer-1-task-05", "fix-layer1-dead-links-phase-1-task-01", "layer-2-task-01", "layer-2-task-02", "layer-2-task-03", "layer-2-task-04", "layer-2-task-05", "layer-2-task-06", "layer-2-task-07", "fix-blog-list-date-format-phase-1-task-01", "layer-3-task-01", "layer-3-task-02", "layer-3-task-03", "layer-4-task-01", "layer-4-task-02"],
+      "completedTasks": ["layer-0-task-01", "layer-0-task-02", "layer-0-task-03", "layer-0-task-04", "layer-0-task-05", "layer-0-task-06", "layer-1-task-01", "layer-1-task-02", "layer-1-task-03", "layer-1-task-04", "layer-1-task-05", "fix-layer1-dead-links-phase-1-task-01", "layer-2-task-01", "layer-2-task-02", "layer-2-task-03", "layer-2-task-04", "layer-2-task-05", "layer-2-task-06", "layer-2-task-07", "fix-blog-list-date-format-phase-1-task-01", "layer-3-task-01", "layer-3-task-02", "layer-3-task-03", "layer-4-task-01", "layer-4-task-02", "layer-4-task-03"],
       "inProgressTask": null,
       "tasks": [
         {
@@ -222,12 +222,21 @@
           "reviewResult": "PASS",
           "reviewReport": ".context/review-reports/feature-nta-website-layer-4-task-02-round-1-review.md",
           "note": "Performance: next/font Inter (subset latin+vietnamese, display swap) + next.config images avif/webp + MDX ArticleImage next/image (fallback raw img có lý do). r1 STRICT PASS (0 CRITICAL/MAJOR, 3 MINOR non-blocking). Perf trace 3 trang = 0 longTasks; Lighthouse perf score + LCP/CLS = Blocked (môi trường không có perf benchmark, task cho phép). Residual MINOR: MDX sizes 100vw vs body 720px (latent, content all SVG); alt='' default."
+        },
+        {
+          "id": "layer-4-task-03",
+          "layer": 4,
+          "status": "done",
+          "reviewLevel": "STRICT",
+          "reviewResult": "PASS",
+          "reviewReport": ".context/review-reports/feature-nta-website-layer-4-task-03-round-1-review.md",
+          "note": "Accessibility sweep WCAG 2.1 AA (R-24) + responsive spot-check (R-23). Builder subagent incomplete (chỉ 3 carry-forward contact) → primary tiếp quản. Fix: (1) i18n regression m-L3-4 — server message VI-hardcoded không rò ra /en, dùng messages localized, form/honeypot → summary; (2) heading h1→h3 skip ở 4 list page → sr-only h2 + aria-labelledby; (3) m-L3-3 map grid lg (col-start-2 row-start-2) khớp design S12 base/md/lg; (4) contrast text-primary→text-primary-active (footer LanguageToggle, SolutionCard); (5) WCAG 2.5.3 label-in-name — bỏ aria-label 5 card link; (6) 404 horizontal overflow do MobileNav translate-x-full → wrapper overflow-hidden. r1 STRICT PASS (0 CRITICAL/MAJOR, 4 MINOR non-blocking). Lighthouse a11y 1.0/0 fail trên 11 route (trước 0.96); overflow 0/11. Residual: không render chính xác 375/768/1280 (tool thiếu viewport emulation); text-primary còn 4.31:1 ở link ngoài node axe flag."
         }
       ],
       "specVersion": "1.0.1",
       "planDir": "tasks/nta-website/",
       "layerPlanDiagram": "docs/diagrams/layer-plan.html",
-      "lastUpdated": "2026-10-10T00:25:00+07:00"
+      "lastUpdated": "2026-10-10T01:50:00+07:00"
     }
   ],
   "bugs": []

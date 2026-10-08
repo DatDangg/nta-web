@@ -10,6 +10,31 @@ export type ContactMessages = Record<ContactField, string> & {
   summary: string;
 };
 
+type ContactApiErrors = Partial<Record<ContactField | 'form' | 'honeypot', string>>;
+
+// Server error strings (src/lib/api/contact-schema.ts) are Vietnamese-only; the UI is localized,
+// so we read only *which* fields the server flagged and render the localized message for them.
+function readServerErrors(payload: unknown): ContactApiErrors {
+  if (typeof payload !== 'object' || payload === null || !('errors' in payload)) return {};
+  const apiErrors = payload.errors;
+  if (typeof apiErrors !== 'object' || apiErrors === null) return {};
+  const errors: ContactApiErrors = {};
+  for (const [field, message] of Object.entries(apiErrors)) {
+    if (typeof message !== 'string') continue;
+    switch (field) {
+      case 'name':
+      case 'email':
+      case 'phone':
+      case 'message':
+      case 'form':
+      case 'honeypot':
+        errors[field] = message;
+        break;
+    }
+  }
+  return errors;
+}
+
 const EMPTY_VALUES: ContactValues = { name: '', email: '', phone: '', message: '', honeypot: '' };
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_PATTERN = /^\d{9,15}$/;
@@ -82,13 +107,11 @@ export function useContactForm(messages: ContactMessages, fields: readonly Conta
         setStatus('rate-limit');
         return;
       }
-      if (response.status === 400 && typeof payload === 'object' && payload !== null && 'errors' in payload) {
-        const apiErrors = payload.errors;
+      if (response.status === 400) {
+        const apiErrors = readServerErrors(payload);
         const fieldErrors: Partial<Record<ContactField, string>> = {};
-        if (typeof apiErrors === 'object' && apiErrors !== null) {
-          for (const field of fields) {
-            if (field in apiErrors) fieldErrors[field] = messages[field];
-          }
+        for (const field of fields) {
+          if (apiErrors[field]) fieldErrors[field] = messages[field];
         }
         setErrors(fieldErrors);
         setSummary(Object.keys(fieldErrors).length ? messages.summary : messages.sendError);

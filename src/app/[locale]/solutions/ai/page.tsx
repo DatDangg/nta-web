@@ -46,8 +46,9 @@ export default async function AiSolutionsPage({ params }: { params: Promise<{ lo
     <>
       <JsonLd data={createBreadcrumbJsonLd([{ name: locale === 'en' ? 'Home' : 'Trang chủ', path: locale === 'en' ? '/en' : '/' }, { name: t('title'), path: `${locale === 'en' ? '/en' : ''}/solutions/ai` }])} />
       <PageHeader breadcrumbs={[{ label: t('title') }]} description={t('description')} title={t('title')} variant="centered" />
-      <section aria-label={t('title')} className="bg-background-alt py-12 md:py-16 xl:py-24">
+      <section aria-labelledby="ai-solutions-list-title" className="bg-background-alt py-12 md:py-16 xl:py-24">
         <div className="mx-auto w-full max-w-container px-4 sm:px-6 lg:px-8">
+          <h2 className="sr-only" id="ai-solutions-list-title">{t('title')}</h2>
           <ul className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {solutions.map((solution, index) => (
               <li className={solutions.length === 3 && index === 2 ? 'md:col-span-2 lg:col-span-1' : ''} key={solution.slug}>

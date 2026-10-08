@@ -15,11 +15,11 @@ export function SolutionCard({ solution, imageAlt, href, imageSrc }: SolutionCar
   const t = useTranslations('common.cta');
   const image = imageSrc ?? solution.image ?? solution.screenshots?.[0];
   return (
-    <Link aria-label={`${solution.title}, ${t('learnMore')}`} className={`${cardLinkClass} p-4`} href={href ?? `/solutions/${solution.category}/${solution.slug}`}>
+    <Link className={`${cardLinkClass} p-4`} href={href ?? `/solutions/${solution.category}/${solution.slug}`}>
       {image ? <HomeImage alt={imageAlt} className={cardImageClass} sizes={cardImageSizes} src={image} /> : <div aria-hidden="true" className={cardImageClass} />}
       <h3 className="mt-5 text-h3 font-semibold leading-tight">{solution.title}</h3>
       <p className="mt-2 line-clamp-2 text-text-secondary">{solution.description}</p>
-      <span aria-hidden="true" className="mt-4 inline-flex min-h-11 items-center gap-2 text-primary">{t('learnMore')} <span className="motion-safe:transition-transform motion-safe:group-hover:translate-x-1">→</span></span>
+      <span aria-hidden="true" className="mt-4 inline-flex min-h-11 items-center gap-2 text-primary-active">{t('learnMore')} <span className="motion-safe:transition-transform motion-safe:group-hover:translate-x-1">→</span></span>
     </Link>
   );
 }

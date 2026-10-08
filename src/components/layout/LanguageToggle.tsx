@@ -11,9 +11,9 @@ export function LanguageToggle() {
 
   return (
     <div aria-label="Language" className="flex items-center gap-1 text-sm" role="group">
-      <Link aria-current={locale === 'vi' ? 'true' : undefined} className={`flex min-h-11 min-w-11 items-center justify-center ${locale === 'vi' ? 'font-semibold text-primary' : 'text-text-secondary'}`} href={localizedPath} locale="vi">VI</Link>
+      <Link aria-current={locale === 'vi' ? 'true' : undefined} className={`flex min-h-11 min-w-11 items-center justify-center ${locale === 'vi' ? 'font-semibold text-primary-active' : 'text-text-secondary'}`} href={localizedPath} locale="vi">VI</Link>
       <span aria-hidden="true" className="text-border-strong">|</span>
-      <Link aria-current={locale === 'en' ? 'true' : undefined} className={`flex min-h-11 min-w-11 items-center justify-center ${locale === 'en' ? 'font-semibold text-primary' : 'text-text-secondary'}`} href={localizedPath} locale="en">EN</Link>
+      <Link aria-current={locale === 'en' ? 'true' : undefined} className={`flex min-h-11 min-w-11 items-center justify-center ${locale === 'en' ? 'font-semibold text-primary-active' : 'text-text-secondary'}`} href={localizedPath} locale="en">EN</Link>
     </div>
   );
 }
