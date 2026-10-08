@@ -68,6 +68,19 @@
     "previousProducts": "Sản phẩm trước",
     "nextProducts": "Sản phẩm tiếp theo"
   },
+  "solutions": {
+    "enterprise": {
+      "title": "Giải pháp Doanh nghiệp",
+      "description": "Bộ giải pháp quản trị giúp doanh nghiệp chuẩn hóa vận hành, nhân sự, đào tạo và nghiệp vụ.",
+      "ctaTitle": "Cùng tìm giải pháp phù hợp",
+      "ctaDescription": "Trao đổi với đội ngũ NTA về mục tiêu và nhu cầu số hóa của tổ chức.",
+      "featuresTitle": "Tính năng nổi bật",
+      "benefitsTitle": "Lợi ích",
+      "screenshotsTitle": "Hình ảnh giải pháp",
+      "relatedTitle": "Giải pháp liên quan",
+      "imageAlt": "Minh họa giải pháp {title}"
+    }
+  },
   "about": {
     "title": "Về NTA",
     "description": "Tìm hiểu về NTA, đội ngũ phát triển giải pháp doanh nghiệp, trí tuệ nhân tạo và ứng dụng di động thực tế cho tổ chức tại Việt Nam.",

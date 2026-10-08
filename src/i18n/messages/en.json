@@ -68,6 +68,19 @@
     "previousProducts": "Previous products",
     "nextProducts": "Next products"
   },
+  "solutions": {
+    "enterprise": {
+      "title": "Enterprise Solutions",
+      "description": "A management suite that standardizes operations, HR, training and business workflows.",
+      "ctaTitle": "Find the right solution together",
+      "ctaDescription": "Talk with the NTA team about your organization’s goals and digital needs.",
+      "featuresTitle": "Key features",
+      "benefitsTitle": "Benefits",
+      "screenshotsTitle": "Solution screenshots",
+      "relatedTitle": "Related solutions",
+      "imageAlt": "Illustration of {title} solution"
+    }
+  },
   "about": {
     "title": "About NTA",
     "description": "Learn about NTA, a team developing practical enterprise, artificial intelligence and mobile app solutions for organizations across Vietnam.",
