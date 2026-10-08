@@ -67,8 +67,8 @@ Không thêm route / requirement mới.
   - `grep "'/solutions'" src/` → chỉ `Header.tsx:52` (prefix match), MobileNav none
   - `grep '"/privacy"' src/` → none
   - plan docs: `layer-2-task-01.md:26,43` + `layer-0-task-04.md:43` = "≥2"; `:91` note ratify
-- Reviewer verdict: **PASS** (STRICT) — `.context/review-reports/feature-fix-layer1-dead-links-phase-1-task-01-round-1-review.md`
-  - ⚠️ report ghi rõ là **inline self-review** (env chặn spawn reviewer độc lập; user đã chấp nhận).
+- Reviewer verdict: **PASS** (STRICT) — round-1 inline self-review (env depth limit) được thay bằng
+  **independent reviewer round 2 PASS (STRICT)**: `.context/review-reports/feature-fix-layer1-dead-links-phase-1-task-01-round-2-independent-review.md`
 - Spec re-check: **PASS** (4/4 gap MED đóng) — `.context/review-reports/feature-fix-layer1-dead-links-phase-1-round-1-review-spec.md`
 
 ## Retry / Error Memory
@@ -81,7 +81,7 @@ Không thêm route / requirement mới.
 - [x] Code + plan docs written (chỉ trong scope)
 - [x] Tests: skip — `test_command: null`, chưa cấu hình test framework
 - [x] Check commands pass: `npm run lint` · `npm run typecheck` · `npm run build`
-- [x] Reviewer PASS (⚠️ inline self-review — env depth limit; user chấp nhận)
+- [x] Reviewer PASS (STRICT) — independent reviewer round 2 (thay thế inline self-review round 1 do env depth limit)
 - [x] `.context/progress.json` updated
 - [x] Error Memory / Doc Impact recorded (plan-doc reconcile; no API/schema change)
 - [x] committed — 1 task = 1 commit (branch `main`, KHÔNG push)

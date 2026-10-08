@@ -107,15 +107,15 @@
           "status": "done",
           "reviewLevel": "STRICT",
           "reviewResult": "PASS",
-          "reviewReport": ".context/review-reports/feature-fix-layer1-dead-links-phase-1-task-01-round-1-review.md",
+          "reviewReport": ".context/review-reports/feature-fix-layer1-dead-links-phase-1-task-01-round-2-independent-review.md",
           "changeRequest": "spec/changes/archive/2026-10-09-fix-layer1-dead-links.md",
-          "note": "MODIFY post-build (Gap 1-4 layer-1 phase review). Reviewer was inline self-review (env subagent depth limit); spec re-check inline PASS."
+          "note": "MODIFY post-build (Gap 1-4 layer-1 phase review). Round-1 was inline self-review (env subagent depth limit); primary re-ran independent reviewer round 2 → PASS STRICT. spec re-check inline PASS."
         }
       ],
       "specVersion": "1.0.0",
       "planDir": "tasks/nta-website/",
       "layerPlanDiagram": "docs/diagrams/layer-plan.html",
-      "lastUpdated": "2026-10-09T06:30:00+07:00"
+      "lastUpdated": "2026-10-09T06:40:00+07:00"
     }
   ],
   "bugs": []
