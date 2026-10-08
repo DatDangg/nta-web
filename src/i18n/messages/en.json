@@ -67,5 +67,21 @@
     "ctaDescription": "Talk with the NTA team about your organization’s goals and digital needs.",
     "previousProducts": "Previous products",
     "nextProducts": "Next products"
+  },
+  "about": {
+    "title": "About NTA",
+    "description": "Learn about NTA, a team developing practical enterprise, artificial intelligence and mobile app solutions for organizations across Vietnam.",
+    "missionTitle": "Our mission",
+    "capabilitiesTitle": "Capabilities",
+    "teamTitle": "Our team",
+    "milestonesTitle": "Our journey",
+    "partnersTitle": "Partners",
+    "ctaTitle": "Find the right solution together",
+    "ctaDescription": "Talk with the NTA team about your organization’s goals and digital needs.",
+    "team": {
+      "consulting": { "name": "Consulting team", "role": "Solutions consulting" },
+      "product": { "name": "Product team", "role": "Product development" }
+    },
+    "imageFallback": "NTA team photo"
   }
 }

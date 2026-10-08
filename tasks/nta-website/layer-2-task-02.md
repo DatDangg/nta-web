@@ -43,33 +43,33 @@ TeamGrid · MilestoneTimeline · PartnerLogos (grayscale→màu) · CTABanner.
 4. Reveal section; messages key `about.*`.
 
 ## Acceptance Criteria
-- [ ] Đủ 5 khối + PageHeader + CTABanner (7 section), thứ tự đúng design
-- [ ] Timeline semantic `<ol>`, horizontal ở lg; logos grayscale hover + alt text
-- [ ] Empty: 0 logo/milestone → section ẩn (không để trống)
-- [ ] ≥4 layout family, không 3 section liên tiếp cùng family
-- [ ] Responsive khớp bảng Screen 2 (375/768/1280)
-- [ ] Metadata 2 locale + hreflang; check commands pass
+- [x] Đủ 5 khối + PageHeader + CTABanner (7 section), thứ tự đúng design
+- [x] Timeline semantic `<ol>`, horizontal ở lg; logos grayscale hover + alt text
+- [x] Empty: 0 logo/milestone → section ẩn (không để trống)
+- [x] ≥4 layout family, không 3 section liên tiếp cùng family
+- [x] Responsive khớp bảng Screen 2 (375/768/1280) — reviewer responsive gate: no FAIL
+- [x] Metadata 2 locale + hreflang; check commands pass
 
 ## Verification Summary
-- Commands: `npm run lint` · `npm run typecheck` · `npm run build`
-- Test: `test_command: null` → skip, ghi lý do
-- Manual evidence: dev `/about` + `/en/about` — 3 bp, logo hover, timeline đổi orientation
-- Reviewer report: `.context/review-reports/feature-nta-website-layer-2-task-02-round-1-review.md`
+- Commands: `npm run lint` · `npm run typecheck` · `npm run build` — PASS (primary re-run sau reviewer r2; `/vi/about` + `/en/about` SSG)
+- Test: `test_command: null` → skip, chưa có test framework
+- Manual evidence: reviewer dùng code + CSS math (không self-run browser); logo hover/timeline orientation chưa verify browser thật (partners rỗng)
+- Reviewer report: `.context/review-reports/feature-nta-website-layer-2-task-02-round-2-review.md` (r1 FAIL EN desc 164 > 160 → fix → **r2 PASS**, NORMAL)
 
 ## Retry / Error Memory
-- Attempt: 0
-- Last failure type: n/a
-- Error memory entry: none
+- Attempt: 2 (r1 FAIL MAJOR EN meta description 164 chars + MINOR dead href branch/background alt → fix → r2 PASS)
+- Last failure type: MAJOR acceptance-criterion (SEO description length 150–160)
+- Error memory entry: none (pattern đã rõ, không lặp lại cần ghi)
 - Escalation: none — sau 3 attempt fail → `architecture_review_needed`
 
 ## DoD (Definition of Done)
-- [ ] Code written (chỉ trong scope)
-- [ ] Tests: skip — `test_command: null`, ghi lý do
-- [ ] Check commands pass: `npm run lint` · `npm run typecheck` · `npm run build`
-- [ ] Reviewer độc lập PASS
-- [ ] `.context/progress.json` updated
-- [ ] Error Memory / Doc Impact recorded
-- [ ] committed — 1 task = 1 commit (branch `main`, KHÔNG push)
+- [x] Code written (chỉ trong scope)
+- [x] Tests: skip — `test_command: null`, ghi lý do
+- [x] Check commands pass: `npm run lint` · `npm run typecheck` · `npm run build`
+- [x] Reviewer độc lập PASS (r2 NORMAL)
+- [x] `.context/progress.json` updated
+- [x] Error Memory / Doc Impact recorded (NO_DOC_IMPACT)
+- [x] committed — 1 task = 1 commit (branch `main`, KHÔNG push)
 
 ## Files to Create/Modify
 - `src/app/[locale]/about/page.tsx`

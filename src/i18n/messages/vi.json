@@ -67,5 +67,21 @@
     "ctaDescription": "Trao đổi với đội ngũ NTA về mục tiêu và nhu cầu số hóa của tổ chức.",
     "previousProducts": "Sản phẩm trước",
     "nextProducts": "Sản phẩm tiếp theo"
+  },
+  "about": {
+    "title": "Về NTA",
+    "description": "Tìm hiểu về NTA, đội ngũ phát triển giải pháp doanh nghiệp, trí tuệ nhân tạo và ứng dụng di động thực tế cho tổ chức tại Việt Nam.",
+    "missionTitle": "Sứ mệnh của chúng tôi",
+    "capabilitiesTitle": "Năng lực",
+    "teamTitle": "Đội ngũ",
+    "milestonesTitle": "Hành trình phát triển",
+    "partnersTitle": "Đối tác",
+    "ctaTitle": "Cùng tìm giải pháp phù hợp",
+    "ctaDescription": "Trao đổi với đội ngũ NTA về mục tiêu và nhu cầu số hóa của tổ chức.",
+    "team": {
+      "consulting": { "name": "Đội ngũ tư vấn", "role": "Tư vấn giải pháp" },
+      "product": { "name": "Đội ngũ sản phẩm", "role": "Phát triển sản phẩm" }
+    },
+    "imageFallback": "Ảnh đội ngũ NTA"
   }
 }
