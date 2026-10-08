@@ -40,7 +40,7 @@ trong `.context/design-spec.md` — để mọi page task ở Layer 2 chỉ vi�
 4. **Blog:** ≥3 bài VI/EN (frontmatter: title, date, category, excerpt, cover) — body đủ dài
    để test prose rendering.
 5. **About:** mission, 4 capabilities, team (placeholder role), milestones, partners (logo null-safe).
-6. **Home data:** 3 mảng card, sản phẩm tiêu biểu ≥3, case highlight 1.
+6. **Home data:** 3 mảng card, sản phẩm tiêu biểu ≥2, case highlight 1.
 7. Đặt `public/images/` placeholder đúng aspect ratio (hoặc SVG/gradient placeholder) — alt text mô tả.
 
 ## Acceptance Criteria
@@ -88,7 +88,7 @@ trong `.context/design-spec.md` — để mọi page task ở Layer 2 chỉ vi�
 
 ## Notes
 - MINOR 5: featured product chỉ giữ 2 app có thật, thêm slug để Layer 2 link theo product route; Screen 1 cho phép ẩn strip nếu <1, không thêm BoxAI vào product.
-- Home product strip giữ 2 sản phẩm thật theo R-07, không thêm sản phẩm giả. Layer 2 phải render strip 2 item và degrade gracefully (arrow/dots nếu không phù hợp); design owner cần ratify lựa chọn 2 vs ≥3 cho Screen 1.
+- Home product strip giữ 2 sản phẩm thật theo R-07, không thêm sản phẩm giả. Layer 2 phải render strip 2 item và degrade gracefully (arrow/dots nếu không phù hợp); đã ratify (layer-0-task-06 G2) R-03 cho Screen 1 = **≥2** (khớp `SPECIFICATIONS.md:59`).
 - MINOR 7: cả hai case thuộc bucket `enterprise`; `sector` giữ lĩnh vực cụ thể và `client` giữ nhãn khách hàng đã ẩn danh cho MetaBar.
 - Home cards có 3 mảng theo thiết kế: Doanh nghiệp, AI, Ứng dụng AI. Tổng hợp overview riêng để loader solution chỉ đọc đúng 7 slug chi tiết.
 - OQ#1–3: chưa có logo, thông tin liên hệ hoặc nội dung thật được xác nhận; dùng wordmark/placeholder hoặc copy mẫu, không khẳng định số liệu. Download URL của cả hai app là `null`.

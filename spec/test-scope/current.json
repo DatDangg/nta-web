@@ -1,40 +1,46 @@
 {
   "specVersion": "1.0.0",
-  "scopeVersion": 1,
-  "generatedAt": "2026-10-08T14:15:00+07:00",
-  "trigger": "initial-build",
-  "workItem": "reverse-spec-from-docs",
-  "specRefs": [
-    "R-01", "R-02", "R-03", "R-04", "R-05", "R-06", "R-07", "R-08",
-    "R-09", "R-10", "R-11", "R-12", "R-13", "R-14", "R-15", "R-16",
-    "R-17", "R-18", "R-19", "R-20", "R-21", "R-22", "R-23", "R-24",
-    "R-25", "R-26", "R-27"
-  ],
+  "scopeVersion": 2,
+  "generatedAt": "2026-10-09T06:25:00+07:00",
+  "trigger": "feature-update",
+  "workItem": "fix-layer1-dead-links",
+  "specRefs": ["R-03", "R-05", "R-06", "R-07", "R-11"],
   "changed": {
     "files": [
-      "SPECIFICATIONS.md",
+      "src/components/cards/ProductCard.tsx",
+      "src/components/cards/AppCard.tsx",
+      "src/components/layout/MobileNav.tsx",
+      "src/components/layout/Footer.tsx",
+      "tasks/nta-website/layer-2-task-01.md",
+      "tasks/nta-website/layer-0-task-04.md",
+      "spec/updates/2026-10-09-fix-layer1-dead-links.md",
       "spec/CHANGELOG.md",
-      "spec/updates/2026-10-08-reverse-spec.md",
-      "spec/test-scope/current.json",
-      ".context/spec-notes.md"
+      "spec/test-scope/current.json"
     ],
-    "modules": [
-      "home", "about", "solutions-enterprise", "solutions-ai", "products",
-      "case-studies", "blog", "contact", "nav-footer",
-      "api", "i18n", "seo", "performance", "accessibility", "security", "deploy"
-    ]
+    "modules": ["nav-footer", "home", "products"]
   },
   "impact": {
-    "direct": ["(toàn bộ website — chưa có code, spec là nền tảng cho initial build)"],
-    "dependents": [],
-    "regression": []
+    "direct": [
+      "MobileNav drawer: bỏ link cha /solutions, giữ label nhóm + 2 sub-link enterprise/ai",
+      "Footer: bỏ link /privacy, giữ dòng copyright",
+      "ProductCard/AppCard: link target đổi sang /products"
+    ],
+    "dependents": [
+      "Layer-2 home ProductStrip (mount ProductCard)",
+      "Layer-2 /products page (mount AppCard)"
+    ],
+    "regression": [
+      "Header desktop solutions dropdown",
+      "Footer 4-col + copyright + social + language toggle",
+      "Mobile drawer focus-trap / Esc / active route"
+    ]
   },
   "acceptance": [
-    "9 nhóm trang hiển thị đúng theo BRD FR-001…FR-080 (docs/BRD.md:48)",
-    "POST /api/contact validate + rate-limit + honeypot theo docs/API_SPEC.md:40-61",
-    "Lighthouse Performance/SEO >= 90, LCP < 2.5s (docs/BRD.md:30,123)",
-    "Song ngữ VI/EN toggle, route /en/... (docs/BRD.md:130)",
-    "[cần xác nhận] nội dung thật (hotline, logo, brand color) chưa có"
+    "ProductCard/AppCard không render href tới /products/[slug]",
+    "MobileNav không có link /solutions; còn 2 sub-link /solutions/enterprise, /solutions/ai",
+    "Footer không có link /privacy; dòng copyright còn",
+    "layer-2-task-01.md + layer-0-task-04.md khớp R-03 = ≥2",
+    "npm run lint · npm run typecheck · npm run build PASS"
   ],
-  "risk": "high"
+  "risk": "low"
 }

@@ -23,7 +23,7 @@ strip sản phẩm scroll-snap, case study highlight (split 1 lần), CTABanner 
 ## Scope (spec refs)
 - **R-01:** Hero tagline + 2 CTA responsive đúng breakpoint
 - **R-02:** 3 card mảng giải pháp (Doanh nghiệp/AI/App AI), hover state, điều hướng đúng trang
-- **R-03:** sản phẩm tiêu biểu ≥3–4 + CTA cuối trang nổi bật
+- **R-03:** sản phẩm tiêu biểu ≥2 + CTA cuối trang nổi bật
 - **R-21/R-20:** metadata + hreflang/OG per page (baseline ở đây, audit tổng ở Layer 4)
 - **R-23/R-24:** responsive table Screen 1 + a11y (h1 duy nhất, strip keyboard-scroll)
 - Design: Screen 1 (§2) — copy VI/EN đã chốt trong design-spec
@@ -40,7 +40,7 @@ strip sản phẩm scroll-snap, case study highlight (split 1 lần), CTABanner 
      (primary "Liên hệ tư vấn" + outline "Xem giải pháp" — canonical), ảnh hero `priority`,
      layout stack → 2 cột md (55/45) theo bp table.
    - `SolutionGridHome`: 3 `SolutionCard` (ảnh thật + h3 + 1 dòng + link) — không 3 card icon y hệt.
-   - `ProductStrip`: horizontal scroll-snap, ≥3 `ProductCard`, `role="region"` + `tabindex=0`,
+   - `ProductStrip`: horizontal scroll-snap, ≥2 `ProductCard`, `role="region"` + `tabindex=0`,
      arrow desktop, swipe mobile; strip <1 → ẩn section.
    - `CaseStudyHighlight`: split 1 lần duy nhất (ảnh trái/text phải), 1 số liệu thật, link.
    - `CTABanner variant="primary"` accent cuối trang.

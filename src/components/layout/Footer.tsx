@@ -22,7 +22,7 @@ export function Footer() {
         </div>
         <div className="mt-12 flex flex-col gap-6 border-t border-border pt-8 sm:flex-row sm:items-center sm:justify-between">
           <div><p className="mb-3 max-w-sm text-sm text-text-secondary">{t('ctaText')}</p><Link className={buttonStyles('primary', 'sm')} href="/contact">{common('contact')}</Link></div>
-          <div className="text-sm text-text-secondary"><p>{t('copyright')}</p><Link className="mt-2 inline-block hover:text-primary" href="/privacy">{t('privacy')}</Link></div>
+          <div className="text-sm text-text-secondary"><p>{t('copyright')}</p></div>
         </div>
       </div>
     </footer>
