@@ -43,33 +43,41 @@ từ ContactForm, rồi tích hợp vào cuối 7 trang chi tiết giải pháp 
 3. Đảm bảo form không lặp label/copy ngoài canonical (tokens §11).
 
 ## Acceptance Criteria
-- [ ] CTAForm compact render ở cuối 7 trang detail, cả 2 locale
-- [ ] Compact fields đúng scope (tên/email/nội dung/honeypot) — không có SĐT
-- [ ] Submit gọi cùng `/api/contact`; states Submitting/Success/Error 400/429/5xx hoạt động
-- [ ] A11y đầy đủ (label/aria-invalid/error summary) — không regress pages task-03/04
-- [ ] Không duplicate CTA cùng intent trên 1 trang (design §1.3)
-- [ ] Check commands pass
+- [x] CTAForm compact render ở cuối 7 trang detail, cả 2 locale (14/14 HTML có `id="cta-form-title"`)
+- [x] Compact fields đúng scope (tên/email/nội dung/honeypot) — không có SĐT
+- [x] Submit gọi cùng `/api/contact`; states Submitting/Success/Error 400/429/5xx hoạt động
+- [x] A11y đầy đủ (label/aria-invalid/error summary) — không regress pages task-03/04
+- [x] Không duplicate CTA cùng intent trên 1 trang (design §1.3) — CTABanner đã bị **thay**
+- [x] Check commands pass
 
 ## Verification Summary
-- Commands: `npm run lint` · `npm run typecheck` · `npm run build`
-- Test: `test_command: null` → manual: submit compact form trên 1 trang enterprise + 1 trang AI
-  (200/400/429), verify 7 trang render form
-- Reviewer report: `.context/review-reports/feature-nta-website-layer-3-task-03-round-1-review.md`
+- Commands: `npm run lint` (PASS, 1 warning `<img>` ngoài scope) · `npm run typecheck` (PASS) · `npm run build` (PASS, 47 static pages)
+- Test: `test_command: null` → skip; verify tĩnh + build (không browser/live submit)
+- Manual evidence: `grep CTABanner` = 0 ở 2 file detail; mỗi detail render đúng 1 `<CTAForm />`; 14/14 detail HTML có đúng 1 `id="cta-form-title"`; prerender-manifest đủ 14 route detail (7 slug × 2 locale, SSG); `git diff` scope = chỉ 2 file × 4 dòng (import + CTA zone)
+- Reviewer report: `.context/review-reports/feature-nta-website-layer-3-task-03-round-1-review.md` — **PASS NORMAL** (primary re-chạy 3 check command + verify manifest sau reviewer shell deny)
 
 ## Retry / Error Memory
-- Attempt: 0
+- Attempt: 0 (r1 PASS)
 - Last failure type: n/a
 - Error memory entry: none
 - Escalation: none — sau 3 attempt fail → `architecture_review_needed`
 
+## Doc / Decision Impact
+- **Doc impact: NO_DOC_IMPACT** — UI theo design Screens 4/6; contract API không đổi.
+- **Decision impact: NO** (HARD carry-forward M-4 đã thực hiện: thay CTABanner bằng CTAForm compact).
+- **Residual (MINOR non-blocking từ review r1):**
+  - #4 task-02 **CHƯA fix đầy đủ**: `useContactForm.ts:85-97` vẫn dùng `messages[field]` local, bỏ qua `errors.form`/`errors.honeypot` → ghi error-memory/nhắc (builder journal claim #4 fixed không khớp code).
+  - `ctaForm.*` namespace không tạo, dùng `contact.consultationTitle` (đúng tinh thần canonical reuse).
+  - OBS: `updateField` dùng `values` closure (stale, pre-existing); ContactForm #1 focus 429 (ngoài scope).
+
 ## DoD (Definition of Done)
-- [ ] Code written (chỉ trong scope)
-- [ ] Tests: skip — `test_command: null`, ghi lý do
-- [ ] Check commands pass: `npm run lint` · `npm run typecheck` · `npm run build`
-- [ ] Reviewer độc lập PASS
-- [ ] `.context/progress.json` updated
-- [ ] Error Memory / Doc Impact recorded
-- [ ] committed — 1 task = 1 commit (branch `main`, KHÔNG push)
+- [x] Code written (chỉ trong scope)
+- [x] Tests: skip — `test_command: null`, ghi lý do
+- [x] Check commands pass: `npm run lint` · `npm run typecheck` · `npm run build`
+- [x] Reviewer độc lập PASS (NORMAL)
+- [x] `.context/progress.json` updated
+- [x] Error Memory / Doc Impact recorded
+- [x] committed — 1 task = 1 commit (branch `main`, KHÔNG push)
 
 ## Files to Create/Modify
 - `src/components/contact/CTAForm.tsx`

@@ -14,18 +14,18 @@ const EMPTY_VALUES: ContactValues = { name: '', email: '', phone: '', message: '
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_PATTERN = /^\d{9,15}$/;
 
-function validate(values: ContactValues, messages: ContactMessages): Partial<Record<ContactField, string>> {
+function validate(values: ContactValues, messages: ContactMessages, fields: readonly ContactField[]): Partial<Record<ContactField, string>> {
   const errors: Partial<Record<ContactField, string>> = {};
   const name = values.name.trim();
   const message = values.message.trim();
-  if (name.length < 2 || name.length > 100) errors.name = messages.name;
-  if (!EMAIL_PATTERN.test(values.email.trim())) errors.email = messages.email;
-  if (values.phone && !PHONE_PATTERN.test(values.phone)) errors.phone = messages.phone;
-  if (message.length < 10 || message.length > 2000) errors.message = messages.message;
+  if (fields.includes('name') && (name.length < 2 || name.length > 100)) errors.name = messages.name;
+  if (fields.includes('email') && !EMAIL_PATTERN.test(values.email.trim())) errors.email = messages.email;
+  if (fields.includes('phone') && values.phone && !PHONE_PATTERN.test(values.phone)) errors.phone = messages.phone;
+  if (fields.includes('message') && (message.length < 10 || message.length > 2000)) errors.message = messages.message;
   return errors;
 }
 
-export function useContactForm(messages: ContactMessages) {
+export function useContactForm(messages: ContactMessages, fields: readonly ContactField[] = ['name', 'email', 'phone', 'message']) {
   const [values, setValues] = useState<ContactValues>(EMPTY_VALUES);
   const [errors, setErrors] = useState<Partial<Record<ContactField, string>>>({});
   const [status, setStatus] = useState<'default' | 'validating' | 'submitting' | 'success' | 'rate-limit' | 'error'>('default');
@@ -34,21 +34,31 @@ export function useContactForm(messages: ContactMessages) {
   function updateField(field: keyof ContactValues, value: string) {
     setValues((current) => ({ ...current, [field]: value }));
     if (field !== 'honeypot') {
-      const fieldError = validate({ ...values, [field]: value }, messages)[field];
-      setErrors((current) => ({ ...current, [field]: fieldError }));
+      const fieldError = validate({ ...values, [field]: value }, messages, fields)[field];
+      setErrors((current) => {
+        const next = { ...current };
+        if (fieldError) next[field] = fieldError;
+        else delete next[field];
+        return next;
+      });
     }
   }
 
   function validateForm() {
-    const nextErrors = validate(values, messages);
+    const nextErrors = validate(values, messages, fields);
     setErrors(nextErrors);
     setStatus('validating');
     return Object.keys(nextErrors).length === 0;
   }
 
   function validateField(field: ContactField) {
-    const fieldError = validate(values, messages)[field];
-    setErrors((current) => ({ ...current, [field]: fieldError }));
+    const fieldError = validate(values, messages, fields)[field];
+    setErrors((current) => {
+      const next = { ...current };
+      if (fieldError) next[field] = fieldError;
+      else delete next[field];
+      return next;
+    });
     setStatus('validating');
   }
 
@@ -76,12 +86,12 @@ export function useContactForm(messages: ContactMessages) {
         const apiErrors = payload.errors;
         const fieldErrors: Partial<Record<ContactField, string>> = {};
         if (typeof apiErrors === 'object' && apiErrors !== null) {
-          for (const field of ['name', 'email', 'phone', 'message'] as const) {
+          for (const field of fields) {
             if (field in apiErrors) fieldErrors[field] = messages[field];
           }
         }
         setErrors(fieldErrors);
-        setSummary(messages.summary);
+        setSummary(Object.keys(fieldErrors).length ? messages.summary : messages.sendError);
         setStatus('error');
         return;
       }

@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 import { CaseStudyLink } from '@/components/solutions/CaseStudyLink';
 import { FeatureList } from '@/components/solutions/FeatureList';
 import { UseCases } from '@/components/solutions/UseCases';
-import { CTABanner } from '@/components/shared/CTABanner';
+import { CTAForm } from '@/components/contact/CTAForm';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { getCaseStudyBySlug } from '@/lib/content/case-studies';
 import { getSolutionBySlug } from '@/lib/content/solutions';
@@ -51,7 +51,7 @@ export default async function AiSolutionDetailPage({ params }: { params: Promise
         </div>
       </div>
       <CaseStudyLink caseStudy={relatedCase} linkLabel={t('caseStudyLink')} title={t('relatedCaseTitle')} />
-      <CTABanner description={t('ctaDescription')} title={t('ctaTitle')} variant="alt" />
+      <CTAForm />
     </>
   );
 }

@@ -5,7 +5,7 @@ import { BenefitList } from '@/components/solutions/BenefitList';
 import { FeatureList } from '@/components/solutions/FeatureList';
 import { RelatedSolutions } from '@/components/solutions/RelatedSolutions';
 import { ScreenshotSection } from '@/components/solutions/ScreenshotSection';
-import { CTABanner } from '@/components/shared/CTABanner';
+import { CTAForm } from '@/components/contact/CTAForm';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { getAllSolutions, getSolutionBySlug } from '@/lib/content/solutions';
 import { enterpriseSlugs, getEnterpriseStaticParams, isEnterpriseSlug, isLocale } from '@/lib/content/slug';
@@ -66,7 +66,7 @@ export default async function EnterpriseSolutionDetailPage({ params }: { params:
           <RelatedSolutions solutions={relatedSolutions} title={t('relatedTitle')} />
         </div>
       </div>
-      <CTABanner description={t('ctaDescription')} title={t('ctaTitle')} variant="alt" />
+      <CTAForm />
     </>
   );
 }
