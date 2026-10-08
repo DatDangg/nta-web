@@ -12,16 +12,26 @@
 | Port nội bộ | `127.0.0.1:3005` → container `8080` |
 | Reverse proxy | nginx sẵn có (80/443) + certbot |
 | Domain | `ntasolution.vn` (+ `www`) — ⏳ DNS A record chưa publish (PA Vietnam) |
-| Deploy | GitHub Actions self-hosted runner (label `nta-web`) |
+| Deploy | GitHub Actions self-hosted runner (label `nta-web`), deploy từ runner workspace |
+| Deploy dir (thực tế) | `/opt/actions-runner-nta-web/_work/nta-web/nta-web` (workspace của runner) |
 
-## 1. Deploy thủ công (lần đầu / khi chưa có runner)
+## 1. Deploy tự động (chuẩn)
+
+Push lên `main` (hoặc chạy tay workflow `Deploy (VPS)`) → self-hosted runner:
+`docker compose build` → `up -d` → health check `127.0.0.1:3005/api/health`.
+
+Deploy diễn ra **tại workspace của runner** (giống pattern `ismartschool` trên server này).
+Không cần clone cố định; container project name = `nta-web`.
+
+## 1b. Deploy thủ công (fallback khi runner chết)
 
 ```sh
 ssh root@187.52.119.50
-git clone https://github.com/DatDangg/nta-web.git /opt/nta-web
-cd /opt/nta-web
+git clone https://github.com/DatDangg/nta-web.git /opt/nta-web-manual
+cd /opt/nta-web-manual
 NEXT_PUBLIC_SITE_URL=https://ntasolution.vn docker compose up -d --build
 curl -fsS http://127.0.0.1:3005/api/health    # {"status":"ok",...}
+# LƯU Ý: cùng project name "nta-web" + container_name "nta-web" → sẽ thay container đang chạy.
 ```
 
 ## 2. Deploy tự động (self-hosted runner)

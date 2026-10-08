@@ -54,7 +54,7 @@ ci_cd: github-actions          # ✅ chốt 08/10/2026 — dùng self-hosted run
 vps_host: 187.52.119.50        # ✅ VPS Ubuntu 24.04; shared: ismartschool/crm-dhp/tmfoods — CHỈ thêm container mới
 vps_user: root
 vps_port: 22                   # SSH key auth (key hiện tại trên máy dev)
-vps_deploy_dir: /opt/nta-web
+vps_deploy_dir: /opt/actions-runner-nta-web/_work/nta-web/nta-web   # workspace self-hosted runner (CI deploy); manual fallback: clone bất kỳ
 domain: ntasolution.vn         # ⏳ DNS A record chưa publish trên PA Vietnam (chặn HTTPS/certbot)
 internal_port: 3005            # host 127.0.0.1:3005 → container 8080; nginx proxy
 
