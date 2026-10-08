@@ -10,10 +10,13 @@ import type { Locale } from '@/content/types';
 import { getAllCaseStudies } from '@/lib/content/case-studies';
 import { getAllSolutions } from '@/lib/content/solutions';
 import { aiSlugs } from '@/lib/content/slug';
+import { JsonLd } from '@/components/seo/JsonLd';
+import { createBreadcrumbJsonLd } from '@/lib/seo/jsonld';
+import { createLocaleAlternates, localizedPath } from '@/lib/seo';
 
 const overviewMetadata: Record<Locale, Metadata> = {
-  vi: { title: 'Giải pháp AI | NTA', description: 'Các giải pháp trí tuệ nhân tạo của NTA, từ trợ lý nội bộ đến phân tích hình ảnh và AI tùy chỉnh.' },
-  en: { title: 'AI Solutions | NTA', description: 'NTA artificial intelligence solutions, from internal assistants to image analysis and custom AI.' },
+  vi: { title: 'Giải pháp AI | NTA', description: 'Các giải pháp trí tuệ nhân tạo của NTA, từ trợ lý nội bộ, phân tích hình ảnh đến AI tùy chỉnh, giúp doanh nghiệp khai thác dữ liệu và tự động hóa vận hành.' },
+  en: { title: 'AI Solutions | NTA', description: 'NTA artificial intelligence solutions, from internal assistants and image analysis to custom AI, help businesses harness data and automate operations.' },
 };
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
@@ -21,7 +24,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   if (locale !== 'vi' && locale !== 'en') notFound();
   return {
     ...overviewMetadata[locale],
-    alternates: { languages: { vi: 'https://ntasolution.vn/solutions/ai', en: 'https://ntasolution.vn/en/solutions/ai', 'x-default': 'https://ntasolution.vn/solutions/ai' } },
+    alternates: { canonical: localizedPath(locale, 'solutions/ai'), ...createLocaleAlternates('solutions/ai') },
   };
 }
 
@@ -41,6 +44,7 @@ export default async function AiSolutionsPage({ params }: { params: Promise<{ lo
 
   return (
     <>
+      <JsonLd data={createBreadcrumbJsonLd([{ name: locale === 'en' ? 'Home' : 'Trang chủ', path: locale === 'en' ? '/en' : '/' }, { name: t('title'), path: `${locale === 'en' ? '/en' : ''}/solutions/ai` }])} />
       <PageHeader breadcrumbs={[{ label: t('title') }]} description={t('description')} title={t('title')} variant="centered" />
       <section aria-label={t('title')} className="bg-background-alt py-12 md:py-16 xl:py-24">
         <div className="mx-auto w-full max-w-container px-4 sm:px-6 lg:px-8">

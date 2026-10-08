@@ -9,6 +9,9 @@ import { PageHeader } from '@/components/shared/PageHeader';
 import { getCaseStudyBySlug } from '@/lib/content/case-studies';
 import { getSolutionBySlug } from '@/lib/content/solutions';
 import { getAiStaticParams, isAiSlug, isLocale } from '@/lib/content/slug';
+import { JsonLd } from '@/components/seo/JsonLd';
+import { createBreadcrumbJsonLd } from '@/lib/seo/jsonld';
+import { createLocaleAlternates, localizedPath } from '@/lib/seo';
 
 const brandNames = { boxai: 'BoxAI', flycam: 'Flycam', 'custom-ai': 'Custom AI' };
 
@@ -25,7 +28,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   return {
     title: `${brandNames[slug]} | NTA`,
     description: solution.description,
-    alternates: { languages: { vi: `https://ntasolution.vn${path}`, en: `https://ntasolution.vn/en${path}`, 'x-default': `https://ntasolution.vn${path}` } },
+    alternates: { canonical: localizedPath(locale, path), ...createLocaleAlternates(path) },
   };
 }
 
@@ -43,6 +46,7 @@ export default async function AiSolutionDetailPage({ params }: { params: Promise
 
   return (
     <>
+      <JsonLd data={createBreadcrumbJsonLd([{ name: locale === 'en' ? 'Home' : 'Trang chủ', path: locale === 'en' ? '/en' : '/' }, { name: t('title'), path: `${locale === 'en' ? '/en' : ''}/solutions/ai` }, { name: solution.title, path: `${locale === 'en' ? '/en' : ''}/solutions/ai/${slug}` }])} />
       <PageHeader breadcrumbs={[{ label: t('title'), href: '/solutions/ai' }, { label: solution.title }]} description={solution.description} title={t('detailTitle', { title: solution.title })} />
       <div className="mx-auto w-full max-w-container px-4 sm:px-6 lg:px-8">
         <div className="min-w-0 xl:max-w-[720px]">

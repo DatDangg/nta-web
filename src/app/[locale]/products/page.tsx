@@ -9,11 +9,14 @@ import { PageHeader } from '@/components/shared/PageHeader';
 import { Reveal } from '@/components/ui/Reveal';
 import type { Locale, Product } from '@/content/types';
 import { getAllProducts } from '@/lib/content/products';
+import { JsonLd } from '@/components/seo/JsonLd';
+import { createBreadcrumbJsonLd } from '@/lib/seo/jsonld';
+import { createLocaleAlternates, localizedPath } from '@/lib/seo';
 
 const productSlugs = ['music-app', 'hair-style-ai'];
 const pageMetadata: Record<Locale, Metadata> = {
-  vi: { title: 'Sản phẩm App | NTA', description: 'Khám phá các ứng dụng di động do NTA phát triển, từ trải nghiệm âm nhạc hỗ trợ bởi AI đến thử kiểu tóc với AI.' },
-  en: { title: 'Apps | NTA', description: 'Explore NTA mobile apps, from AI-assisted music experiences to trying different hairstyles with AI.' },
+  vi: { title: 'Sản phẩm App | NTA', description: 'Khám phá các ứng dụng di động do NTA phát triển, từ trải nghiệm âm nhạc hỗ trợ bởi AI đến thử kiểu tóc với AI, mang lại trải nghiệm số thực tế cho người dùng.' },
+  en: { title: 'Apps | NTA', description: 'Explore NTA mobile apps, from AI-assisted music experiences to trying different hairstyles with AI, delivering practical digital experiences for everyday users.' },
 };
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
@@ -21,7 +24,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   if (locale !== 'vi' && locale !== 'en') notFound();
   return {
     ...pageMetadata[locale],
-    alternates: { languages: { vi: 'https://ntasolution.vn/products', en: 'https://ntasolution.vn/en/products', 'x-default': 'https://ntasolution.vn/products' } },
+    alternates: { canonical: localizedPath(locale, 'products'), ...createLocaleAlternates('products') },
   };
 }
 
@@ -40,6 +43,7 @@ export default async function ProductsPage({ params }: { params: Promise<{ local
 
   return (
     <>
+      <JsonLd data={createBreadcrumbJsonLd([{ name: locale === 'en' ? 'Home' : 'Trang chủ', path: locale === 'en' ? '/en' : '/' }, { name: t('title'), path: `${locale === 'en' ? '/en' : ''}/products` }])} />
       <PageHeader breadcrumbs={[{ label: t('title') }]} description={t('intro')} title={t('title')} variant="centered" />
       <section aria-label={t('title')} className="bg-background-alt py-12 md:py-16 xl:py-24">
         <div className="mx-auto grid w-full max-w-container grid-cols-1 gap-6 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">

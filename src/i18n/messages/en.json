@@ -139,7 +139,7 @@
   "blog": {
     "title": "Blog",
     "intro": "News and insights from NTA on digital solutions, AI and digital transformation.",
-    "metadataDescription": "Explore NTA news, expert perspectives and insights on digital solutions, artificial intelligence and digital transformation, with practical technology trends and ideas for organizations and businesses.",
+    "metadataDescription": "Explore NTA news, expert perspectives and practical insights on digital solutions, artificial intelligence and digital transformation for organizations.",
     "empty": "No posts yet. Check back soon.",
     "home": "Go to home",
     "imageAlt": "Cover image for {title}",

@@ -8,10 +8,13 @@ import { Reveal } from '@/components/ui/Reveal';
 import { solutionOverview } from '@/content/solutions/overview';
 import type { Locale } from '@/content/types';
 import { getAllSolutions } from '@/lib/content/solutions';
+import { JsonLd } from '@/components/seo/JsonLd';
+import { createBreadcrumbJsonLd } from '@/lib/seo/jsonld';
+import { createLocaleAlternates, localizedPath } from '@/lib/seo';
 
 const pageMetadata: Record<Locale, Metadata> = {
-  vi: { title: 'Giải pháp Doanh nghiệp | NTA', description: 'Các giải pháp quản trị khách hàng, nhân sự, đào tạo và vận hành nha khoa dành cho doanh nghiệp.' },
-  en: { title: 'Enterprise Solutions | NTA', description: 'Customer, HR, learning and dental operations solutions for businesses.' },
+  vi: { title: 'Giải pháp Doanh nghiệp | NTA', description: 'Các giải pháp quản trị khách hàng, nhân sự, đào tạo và vận hành nha khoa toàn diện của NTA giúp doanh nghiệp chuẩn hóa quy trình và tăng hiệu suất vận hành.' },
+  en: { title: 'Enterprise Solutions | NTA', description: 'NTA enterprise solutions for customer management, HR, learning and dental operations help businesses standardize processes and improve operational efficiency.' },
 };
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
@@ -19,7 +22,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   if (locale !== 'vi' && locale !== 'en') notFound();
   return {
     ...pageMetadata[locale],
-    alternates: { languages: { vi: 'https://ntasolution.vn/solutions/enterprise', en: 'https://ntasolution.vn/en/solutions/enterprise', 'x-default': 'https://ntasolution.vn/solutions/enterprise' } },
+    alternates: { canonical: localizedPath(locale, 'solutions/enterprise'), ...createLocaleAlternates('solutions/enterprise') },
   };
 }
 
@@ -32,6 +35,7 @@ export default async function EnterpriseSolutionsPage({ params }: { params: Prom
 
   return (
     <>
+      <JsonLd data={createBreadcrumbJsonLd([{ name: locale === 'en' ? 'Home' : 'Trang chủ', path: locale === 'en' ? '/en' : '/' }, { name: t('title'), path: `${locale === 'en' ? '/en' : ''}/solutions/enterprise` }])} />
       <PageHeader breadcrumbs={[{ label: t('title') }]} description={t('description')} title={t('title')} variant="centered" />
       <section aria-label={t('title')} className="bg-background-alt py-12 md:py-16 xl:py-24">
         <div className="mx-auto w-full max-w-container px-4 sm:px-6 lg:px-8">

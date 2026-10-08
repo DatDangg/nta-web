@@ -9,8 +9,9 @@ import { mdxComponents } from '@/components/mdx';
 import type { Locale } from '@/content/types';
 import { getAllPosts, getPostBySlug } from '@/lib/content/posts';
 import { RenderMdx } from '@/lib/content/render-mdx';
-
-const origin = 'https://ntasolution.vn';
+import { JsonLd } from '@/components/seo/JsonLd';
+import { createArticleJsonLd, createBreadcrumbJsonLd } from '@/lib/seo/jsonld';
+import { createLocaleAlternates, localizedPath, BASE_URL } from '@/lib/seo';
 
 export async function generateStaticParams({ params }: { params: { locale: string } }) {
   if (params.locale !== 'vi' && params.locale !== 'en') return [];
@@ -22,12 +23,10 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   if (locale !== 'vi' && locale !== 'en') notFound();
   const post = await getPostBySlug(locale, slug);
   if (!post) notFound();
-  const canonical = `${origin}${locale === 'en' ? '/en' : ''}/blog/${slug}`;
   return {
     title: `${post.title} | NTA`,
     description: post.excerpt,
-    alternates: { canonical, languages: { vi: `${origin}/blog/${slug}`, en: `${origin}/en/blog/${slug}`, 'x-default': `${origin}/blog/${slug}` } },
-    openGraph: { images: [post.cover] },
+    alternates: { canonical: localizedPath(locale, `blog/${slug}`), ...createLocaleAlternates(`blog/${slug}`) },
   };
 }
 
@@ -39,10 +38,11 @@ export default async function BlogPostPage({ params }: { params: Promise<{ local
   if (!post) notFound();
   const related = posts.filter((candidate) => candidate.slug !== post.slug && candidate.category === post.category).slice(0, 3);
   const author = 'author' in post && typeof post.author === 'string' ? { name: post.author } : undefined;
-  const structuredData = { '@context': 'https://schema.org', '@type': 'Article', headline: post.title, datePublished: post.date, ...(author ? { author: { '@type': 'Person', name: author.name } } : {}), ...(post.cover ? { image: post.cover } : {}) };
+  const structuredData = { ...createArticleJsonLd({ title: post.title, url: localizedPath(locale, `blog/${slug}`), date: post.date, image: `${BASE_URL}/images/og-default.png` }), ...(author ? { author: { '@type': 'Person', name: author.name } } : {}) };
 
   return (
     <>
+      <JsonLd data={createBreadcrumbJsonLd([{ name: locale === 'en' ? 'Home' : 'Trang chủ', path: locale === 'en' ? '/en' : '/' }, { name: locale === 'en' ? 'Blog' : 'Blog', path: `${locale === 'en' ? '/en' : ''}/blog` }, { name: post.title, path: `${locale === 'en' ? '/en' : ''}/blog/${slug}` }])} />
       <article>
         <ArticleHeader locale={locale} post={post} />
         <div className="mx-auto max-w-[720px] px-4">
@@ -50,7 +50,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ local
             <RenderMdx components={mdxComponents} source={post.body} />
           </div>
         </div>
-        <div className="my-10"><ShareBar pageUrl={`${origin}${locale === 'en' ? '/en' : ''}/blog/${slug}`} /></div>
+        <div className="my-10"><ShareBar pageUrl={localizedPath(locale, `blog/${slug}`)} /></div>
       </article>
       <RelatedPosts posts={related} />
       <CTABanner description={t('ctaDescription')} title={t('ctaTitle')} variant="alt" />

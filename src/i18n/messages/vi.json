@@ -139,7 +139,7 @@
   "blog": {
     "title": "Tin tức",
     "intro": "Tin tức và chia sẻ từ NTA về giải pháp số, AI và chuyển đổi số.",
-    "metadataDescription": "Khám phá tin tức, góc nhìn chuyên môn và chia sẻ từ NTA về giải pháp số, trí tuệ nhân tạo và chuyển đổi số, cùng những xu hướng công nghệ hữu ích cho doanh nghiệp Việt Nam.",
+    "metadataDescription": "Khám phá tin tức, góc nhìn chuyên môn và chia sẻ thực tế từ NTA về giải pháp số, trí tuệ nhân tạo và chuyển đổi số hữu ích cho các doanh nghiệp Việt Nam.",
     "empty": "Chưa có bài viết nào. Hãy quay lại sau.",
     "home": "Về trang chủ",
     "imageAlt": "Ảnh bìa bài viết {title}",

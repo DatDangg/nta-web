@@ -11,6 +11,9 @@ import { CTABanner } from '@/components/shared/CTABanner';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { getAllCaseStudies, getCaseStudyBySlug } from '@/lib/content/case-studies';
 import { isLocale } from '@/lib/content/slug';
+import { JsonLd } from '@/components/seo/JsonLd';
+import { createBreadcrumbJsonLd } from '@/lib/seo/jsonld';
+import { createLocaleAlternates, localizedPath } from '@/lib/seo';
 
 export async function generateStaticParams() {
   return (await getAllCaseStudies('vi')).map(({ slug }) => ({ slug }));
@@ -25,7 +28,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   return {
     title: `${study.title} | Case Study | NTA`,
     description: study.result,
-    alternates: { languages: { vi: `https://ntasolution.vn${path}`, en: `https://ntasolution.vn/en${path}`, 'x-default': `https://ntasolution.vn${path}` } },
+    alternates: { canonical: localizedPath(locale, path), ...createLocaleAlternates(path) },
   };
 }
 
@@ -40,8 +43,8 @@ export default async function CaseStudyDetailPage({ params }: { params: Promise<
     return item ? [item] : [];
   });
   const jsonLd = {
-    '@context': 'https://schema.org', '@type': 'Article', additionalType: 'https://schema.org/CreativeWork',
-    headline: study.title, description: study.result, inLanguage: locale,
+    '@context': 'https://schema.org', '@type': 'Article',
+    headline: study.title, description: study.result, inLanguage: locale === 'en' ? 'en-US' : 'vi-VN',
     author: { '@type': 'Organization', name: 'NTA' }, publisher: { '@type': 'Organization', name: 'NTA' },
   };
   const labels = {
@@ -50,6 +53,7 @@ export default async function CaseStudyDetailPage({ params }: { params: Promise<
   const cta = await getTranslations('solutions.ai');
 
   return <>
+    <JsonLd data={createBreadcrumbJsonLd([{ name: locale === 'en' ? 'Home' : 'Trang chủ', path: locale === 'en' ? '/en' : '/' }, { name: t('title'), path: `${locale === 'en' ? '/en' : ''}/case-studies` }, { name: study.title, path: `${locale === 'en' ? '/en' : ''}/case-studies/${slug}` }])} />
     <PageHeader breadcrumbs={[{ label: t('title'), href: '/case-studies' }, { label: study.title }]} description={study.result} title={study.title} />
     <script dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }} type="application/ld+json" />
     <div className="mx-auto w-full max-w-container px-4 sm:px-6 lg:px-8">

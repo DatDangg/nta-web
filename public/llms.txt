@@ -1,0 +1,14 @@
+# NTA Solution
+
+> NTA develops digital transformation, enterprise software, AI solutions, and mobile applications for businesses and public organizations in Vietnam.
+
+## Useful links
+- [Home](https://ntasolution.vn/): Overview of NTA's technology solutions.
+- [Enterprise solutions](https://ntasolution.vn/solutions/enterprise): Software solutions for business operations.
+- [AI solutions](https://ntasolution.vn/solutions/ai): Applied AI services and products.
+- [Products](https://ntasolution.vn/products): NTA mobile applications.
+- [Case studies](https://ntasolution.vn/case-studies): Selected customer projects.
+- [About NTA](https://ntasolution.vn/about): Company information.
+- [Blog](https://ntasolution.vn/blog): Articles on technology and digital transformation.
+- [Contact](https://ntasolution.vn/contact): Contact NTA.
+- [English home](https://ntasolution.vn/en): English-language pages.

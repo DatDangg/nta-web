@@ -8,6 +8,7 @@ import { SolutionGridHome } from '@/components/home/SolutionGridHome';
 import { CTABanner } from '@/components/shared/CTABanner';
 import { getHomeContent } from '@/content/home';
 import type { Locale } from '@/content/types';
+import { createLocaleAlternates, localizedPath } from '@/lib/seo';
 
 const homeMetadata: Record<Locale, { title: string; description: string }> = {
   vi: {
@@ -26,15 +27,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const metadata = homeMetadata[locale];
 
   return {
-    title: { default: metadata.title, template: '%s | NTA' },
+    title: metadata.title,
     description: metadata.description,
-    alternates: {
-      languages: {
-        vi: 'https://ntasolution.vn/',
-        en: 'https://ntasolution.vn/en',
-        'x-default': 'https://ntasolution.vn/',
-      },
-    },
+    alternates: { canonical: localizedPath(locale), ...createLocaleAlternates('') },
   };
 }
 

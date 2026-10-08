@@ -9,6 +9,9 @@ import { CTAForm } from '@/components/contact/CTAForm';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { getAllSolutions, getSolutionBySlug } from '@/lib/content/solutions';
 import { enterpriseSlugs, getEnterpriseStaticParams, isEnterpriseSlug, isLocale } from '@/lib/content/slug';
+import { JsonLd } from '@/components/seo/JsonLd';
+import { createBreadcrumbJsonLd } from '@/lib/seo/jsonld';
+import { createLocaleAlternates, localizedPath } from '@/lib/seo';
 
 type EnterpriseSlug = (typeof enterpriseSlugs)[number];
 
@@ -35,7 +38,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   return {
     title: metadataTitle,
     description: solution.description,
-    alternates: { languages: { vi: `https://ntasolution.vn${path}`, en: `https://ntasolution.vn/en${path}`, 'x-default': `https://ntasolution.vn${path}` } },
+    alternates: { canonical: localizedPath(locale, path), ...createLocaleAlternates(path) },
   };
 }
 
@@ -55,6 +58,7 @@ export default async function EnterpriseSolutionDetailPage({ params }: { params:
 
   return (
     <>
+      <JsonLd data={createBreadcrumbJsonLd([{ name: locale === 'en' ? 'Home' : 'Trang chủ', path: locale === 'en' ? '/en' : '/' }, { name: t('title'), path: `${locale === 'en' ? '/en' : ''}/solutions/enterprise` }, { name: solution.title, path: `${locale === 'en' ? '/en' : ''}/solutions/enterprise/${slug}` }])} />
       <PageHeader breadcrumbs={[{ label: t('title'), href: '/solutions/enterprise' }, { label: solution.title }]} description={solution.description} title={solution.title} />
       <div className="mx-auto grid w-full max-w-container grid-cols-1 gap-10 px-4 sm:px-6 lg:grid-cols-[minmax(0,1fr)_18.75rem] lg:px-8 xl:gap-16">
         <div className="min-w-0 xl:max-w-[720px]">

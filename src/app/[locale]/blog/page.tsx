@@ -9,8 +9,9 @@ import { BlogFilter } from '@/components/blog/BlogFilter';
 import { PostCard } from '@/components/cards/PostCard';
 import { getAllPosts } from '@/lib/content/posts';
 import type { Locale } from '@/content/types';
-
-const origin = 'https://ntasolution.vn';
+import { JsonLd } from '@/components/seo/JsonLd';
+import { createBreadcrumbJsonLd } from '@/lib/seo/jsonld';
+import { createLocaleAlternates, localizedPath } from '@/lib/seo';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
@@ -19,7 +20,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   return {
     title: `${t('title')} | NTA`,
     description: t('metadataDescription'),
-    alternates: { canonical: locale === 'vi' ? `${origin}/blog` : `${origin}/en/blog`, languages: { vi: `${origin}/blog`, en: `${origin}/en/blog`, 'x-default': `${origin}/blog` } },
+    alternates: { canonical: localizedPath(locale, 'blog'), ...createLocaleAlternates('blog') },
   };
 }
 
@@ -31,6 +32,7 @@ export default async function BlogPage({ params }: { params: Promise<{ locale: s
   const firstPagePosts = posts.slice(0, 9);
   return (
     <>
+      <JsonLd data={createBreadcrumbJsonLd([{ name: locale === 'en' ? 'Home' : 'Trang chủ', path: locale === 'en' ? '/en' : '/' }, { name: t('title'), path: `${locale === 'en' ? '/en' : ''}/blog` }])} />
       <PageHeader breadcrumbs={[{ label: t('title') }]} description={t('intro')} title={t('title')} variant="centered" />
       <section aria-label={t('title')} className="bg-background-alt py-12 md:py-16 xl:py-24">
         {posts.length === 0 ? (

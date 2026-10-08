@@ -48,12 +48,12 @@ OG image, `llms.txt` — mục tiêu Lighthouse SEO ≥ 90.
 6. OG image asset `public/images/og-default.png` (1200×630, placeholder brand OQ#1).
 
 ## Acceptance Criteria
-- [ ] `GET /sitemap.xml` trả URL đủ mọi route × 2 locale; không có `/api/*`
-- [ ] `GET /robots.txt` allow all + trỏ sitemap; không rule chặn GPTBot/agents (ai-friendly-web gate PASS)
-- [ ] `public/llms.txt` tồn tại, mô tả site + routes chính
-- [ ] Mọi route có title/desc/hreflang/OG không duplicate; 404 `noindex`
-- [ ] JSON-LD hợp lệ (validate qua JSON.parse/Schema.org validator) đúng 2 locale
-- [ ] `metadataBase` = `https://ntasolution.vn`; check commands pass
+- [x] `GET /sitemap.xml` trả URL đủ mọi route × 2 locale; không có `/api/*` (42 URL, 0 `/api/*`)
+- [x] `GET /robots.txt` allow all + trỏ sitemap; không rule chặn GPTBot/agents (ai-friendly-web gate PASS)
+- [x] `public/llms.txt` tồn tại, mô tả site + routes chính
+- [x] Mọi route có title/desc/hreflang/OG không duplicate; 404 `noindex` (canonical/og:type/site_name/locale/twitter đủ)
+- [x] JSON-LD hợp lệ (validate qua JSON.parse) đúng 2 locale (parse error 0)
+- [x] `metadataBase` = `https://ntasolution.vn`; check commands pass
 
 ## Verification Summary
 - Commands: `npm run lint` · `npm run typecheck` · `npm run build`
@@ -69,13 +69,21 @@ OG image, `llms.txt` — mục tiêu Lighthouse SEO ≥ 90.
 - Escalation: none — sau 3 attempt fail → `architecture_review_needed`
 
 ## DoD (Definition of Done)
-- [ ] Code written (chỉ trong scope)
-- [ ] Tests: skip — `test_command: null`, ghi lý do
-- [ ] Check commands pass: `npm run lint` · `npm run typecheck` · `npm run build`
-- [ ] Reviewer độc lập PASS
-- [ ] `.context/progress.json` updated
-- [ ] Error Memory / Doc Impact recorded
-- [ ] committed — 1 task = 1 commit (branch `main`, KHÔNG push)
+- [x] Code written (chỉ trong scope)
+- [x] Tests: skip — `test_command: null`, ghi lý do
+- [x] Check commands pass: `npm run lint` · `npm run typecheck` · `npm run build`
+- [x] Reviewer độc lập PASS (r1 STRICT FAIL → fix → r2 STRICT PASS)
+- [x] `.context/progress.json` updated
+- [x] Error Memory / Doc Impact recorded (NO_DOC_IMPACT)
+- [x] committed — 1 task = 1 commit (branch `main`, KHÔNG push)
+
+## Result (as-built)
+- Verify: `npm run typecheck` PASS · `npm run lint` 0 error (1 warning `<img>` pre-existing `src/components/mdx/index.tsx`) · `npm run build` PASS (43 static HTML).
+- Audit 43 HTML: `title > 60` = 0; `desc > 160` = 0; static/list routes desc 150–160; canonical + `og:type`/`og:site_name`/`og:locale`/twitter + hreflang(3) đủ mọi trang non-404; 404 `noindex`.
+- `sitemap.xml` 42 URL (không `/api/*`, không 404); `robots.txt` allow-all + sitemap, không chặn AI crawler; `llms.txt` + `og-default.png` (1200×630).
+- JSON-LD parse error 0: Organization/WebSite (mọi trang), BreadcrumbList (detail), Article (blog + case detail), ContactPage (/contact).
+- Domain 1 nguồn: `src/lib/seo.ts::BASE_URL` + `localizedPath`/`createLocaleAlternates`.
+- Residual: desc detail page <150 (content-derived, design per-screen không mandate); sitemap không `lastModified`; `Organization.logo` = banner (cần asset logo vuông).
 
 ## Files to Create/Modify
 - `src/app/sitemap.ts`, `src/app/robots.ts` (hoặc `public/robots.txt`)

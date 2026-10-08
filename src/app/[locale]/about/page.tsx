@@ -10,6 +10,9 @@ import { CTABanner } from '@/components/shared/CTABanner';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { getAboutData } from '@/lib/content/about';
 import type { Locale } from '@/content/types';
+import { JsonLd } from '@/components/seo/JsonLd';
+import { createBreadcrumbJsonLd } from '@/lib/seo/jsonld';
+import { createLocaleAlternates, localizedPath } from '@/lib/seo';
 
 const aboutMetadata: Record<Locale, { title: string; description: string }> = {
   vi: {
@@ -29,13 +32,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   return {
     title: metadata.title,
     description: metadata.description,
-    alternates: {
-      languages: {
-        vi: 'https://ntasolution.vn/about',
-        en: 'https://ntasolution.vn/en/about',
-        'x-default': 'https://ntasolution.vn/about',
-      },
-    },
+    alternates: { canonical: localizedPath(locale, 'about'), ...createLocaleAlternates('about') },
   };
 }
 
@@ -58,6 +55,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
 
   return (
     <>
+      <JsonLd data={createBreadcrumbJsonLd([{ name: locale === 'en' ? 'Home' : 'Trang chủ', path: locale === 'en' ? '/en' : '/' }, { name: t('title'), path: `${locale === 'en' ? '/en' : ''}/about` }])} />
       <PageHeader breadcrumbs={[{ label: t('title') }]} description={t('description')} title={t('title')} variant="centered" />
       <MissionBlock mission={about.mission} title={t('missionTitle')} />
       <CapabilityGrid capabilities={about.capabilities} title={t('capabilitiesTitle')} />
