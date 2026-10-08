@@ -1,0 +1,54 @@
+# DRAFT: generated only; do not run until GCP/WIF variables and deployment are approved.
+# Manual trigger only — intentionally no push/tag auto-trigger (no automatic deploy).
+name: Deploy (Cloud Run)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}
+  REGION: asia-southeast1
+  AR_REPO: ${{ vars.GCP_ARTIFACT_REGISTRY_REPOSITORY }}
+  SERVICE: ${{ vars.GCP_CLOUD_RUN_SERVICE }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Authenticate to Google Cloud (Workload Identity Federation)
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.GCP_DEPLOY_SERVICE_ACCOUNT }}
+      - name: Set up gcloud
+        uses: google-github-actions/setup-gcloud@v2
+      - name: Build and push image
+        env:
+          IMAGE: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.AR_REPO }}/${{ env.SERVICE }}:${{ github.sha }}
+        run: |
+          gcloud auth configure-docker "${REGION}-docker.pkg.dev" --quiet
+          docker build --tag "$IMAGE" .
+          docker push "$IMAGE"
+      - name: Deploy Cloud Run service
+        env:
+          IMAGE: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.AR_REPO }}/${{ env.SERVICE }}:${{ github.sha }}
+        run: |
+          gcloud run deploy "$SERVICE" \
+            --image "$IMAGE" \
+            --project "$PROJECT_ID" \
+            --region "$REGION" \
+            --max-instances 3 \
+            --min-instances 0 \
+            --allow-unauthenticated \
+            --port 8080 \
+            --set-secrets "CONTACT_FORM_TARGET=CONTACT_FORM_TARGET:latest"
+      - name: Verify health endpoint
+        run: |
+          SERVICE_URL="$(gcloud run services describe "$SERVICE" --project "$PROJECT_ID" --region "$REGION" --format='value(status.url)')"
+          curl --fail --show-error --silent "$SERVICE_URL/api/health"

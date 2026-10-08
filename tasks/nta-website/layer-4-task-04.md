@@ -51,13 +51,12 @@ Dockerfile standalone + `.dockerignore` + GitHub Actions deploy workflow (genera
 5. `next.config.ts`: `output: 'standalone'` (nếu task này chưa có từ trước).
 
 ## Acceptance Criteria
-- [ ] `Dockerfile` + `.dockerignore` build được local (`docker build` — nếu môi trường có Docker;
-      không có → ghi `Blocked` + review tĩnh, không claim pass)
-- [ ] Deploy workflow YAML hợp lệ, **KHÔNG** trigger push tự động; không secret hardcode trong YAML
-- [ ] Runbook đủ: prerequisite, deploy, env vars, health verify (`/api/health`), rollback, domain/SSL
-- [ ] `next.config.ts` `output: 'standalone'` + `npm run build` vẫn PASS
-- [ ] KHÔNG deploy/push nào được thực thi trong task (verify `git status`/`git log` local)
-- [ ] Check commands pass
+- [x] `Dockerfile` + `.dockerignore` build local — `docker build` **Blocked** (môi trường không có `docker`); bù bằng static review + chạy trực tiếp `.next/standalone/server.js` (`/api/health` 200, `/` 200)
+- [x] Deploy workflow YAML hợp lệ (parse OK), **KHÔNG** trigger push tự động (chỉ `workflow_dispatch`); không secret hardcode
+- [x] Runbook đủ: prerequisite, build/push, deploy, env vars, health verify (`/api/health`), rollback, domain/SSL (R-19)
+- [x] `next.config.ts` `output: 'standalone'` + `npm run build` PASS (`.next/standalone/server.js` sinh ra)
+- [x] KHÔNG deploy/push nào được thực thi trong task (`git status`/`git log` local; deploy.yml chỉ là draft)
+- [x] Check commands pass
 
 ## Verification Summary
 - Commands: `npm run lint` · `npm run typecheck` · `npm run build` (+ `docker build` nếu có Docker)
@@ -72,13 +71,21 @@ Dockerfile standalone + `.dockerignore` + GitHub Actions deploy workflow (genera
 - Escalation: none — sau 3 attempt fail → `architecture_review_needed`
 
 ## DoD (Definition of Done)
-- [ ] Code/files written (chỉ trong scope — generate config, KHÔNG deploy)
-- [ ] Tests: skip — `test_command: null`, ghi lý do
-- [ ] Check commands pass: `npm run lint` · `npm run typecheck` · `npm run build`
-- [ ] Reviewer độc lập PASS
-- [ ] `.context/progress.json` updated
-- [ ] Error Memory / Doc Impact recorded
-- [ ] committed — 1 task = 1 commit (branch `main`; **KHÔNG push, KHÔNG deploy**)
+- [x] Code/files written (chỉ trong scope — generate config, KHÔNG deploy)
+- [x] Tests: skip — `test_command: null`, ghi lý do
+- [x] Check commands pass: `npm run lint` · `npm run typecheck` · `npm run build`
+- [x] Reviewer độc lập PASS (NORMAL, round 1; 0 CRITICAL/MAJOR, 3 MINOR non-blocking)
+- [x] `.context/progress.json` updated
+- [x] Error Memory / Doc Impact recorded — **DOC_IMPACT** (runbook mới `docs/runbook/deploy-cloud-run.md`)
+- [x] committed — 1 task = 1 commit (branch `main`; KHÔNG push, KHÔNG deploy)
+
+## Close-out / Residual (round 1 — PASS)
+- **Doc impact: DOC_IMPACT** — thêm `docs/runbook/deploy-cloud-run.md`. Không đổi contract/schema/behavior; `docs/INDEX.md` không liệt runbook (auto-classify) → không sửa.
+- **MINOR non-blocking (carry-forward → xử lý ở `/start` bước 6 khi deploy thật):**
+  - m-L4T4-1 `deploy.yml`/runbook chưa pin `--platform linux/amd64` (rủi ro khi build từ máy ARM).
+  - m-L4T4-2 `NEXT_PUBLIC_SITE_URL` là build-time inline, chưa truyền build-arg (hiện vô hại — fallback = domain prod).
+  - m-L4T4-3 `--set-secrets ...:latest` dùng version unpinned.
+- **Blocked:** `docker build` chưa chạy được (no docker); reviewer shell deny → lint/typecheck/build/docker verify tĩnh (primary đã verify thật: build PASS + standalone runtime 200).
 
 ## Files to Create/Modify
 - `Dockerfile`, `.dockerignore`
