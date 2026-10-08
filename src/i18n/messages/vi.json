@@ -34,5 +34,19 @@
     "ctaText": "Trao đổi cùng đội ngũ NTA về nhu cầu của bạn.",
     "copyright": "© NTA. Bảo lưu mọi quyền.",
     "privacy": "Chính sách bảo mật"
+  },
+  "interactive": {
+    "filter": {
+      "groupLabel": "Lọc theo mảng",
+      "options": { "all": "Tất cả", "enterprise": "Doanh nghiệp", "ai": "AI", "app-ai": "App AI" },
+      "resultCount": "{count, plural, =0 {Không có kết quả} other {Có # kết quả}}"
+    },
+    "pagination": {
+      "label": "Phân trang",
+      "previous": "Trước",
+      "next": "Tiếp",
+      "page": "Trang {page}"
+    },
+    "empty": { "message": "Không tìm thấy nội dung phù hợp", "clearFilter": "Xóa bộ lọc" }
   }
 }

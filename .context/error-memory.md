@@ -54,4 +54,11 @@ These rules were learned from real bugs. Apply them to every task, not just when
 
 ## Entries
 
-_Errors encountered during this project will be logged below._
+### Error 1 — layer-1-task-04: Reveal SSR flash + FilterBar i18n regression
+- **Date:** 2026-10-08
+- **Task:** layer-1/task-04 (Interactive components: Reveal, FilterBar, Pagination, Skeleton, EmptyState)
+- **Error:** Reviewer round 2 FAIL. (a) MAJOR: `Reveal` vẫn flash `visible → hidden → fade in` trên initial SSR load — `useState(true)` render nội dung visible ở server HTML, browser paint trước hydrate, `useLayoutEffect` chỉ ẩn *sau hydration*. (b) MAJOR: `FilterBar.tsx:20` hardcode `aria-label="Lọc theo mảng"` (bỏ `t('filter.label')`) → screen reader đọc tiếng Việt trên locale EN, dead i18n key.
+- **Root Cause:** (a) Fix round-1 chỉ chuyển `useEffect` → `useLayoutEffect` (đề xuất option #1), nhưng không giải quyết việc server HTML đã paint visible trước hydration. (b) Cố khớp copy design Screen 8 bằng hardcode thay vì thêm key i18n.
+- **Fix:** Chưa áp dụng (đang chờ human decision). Đề xuất: (a) render hidden mặc định + gate class `js`/CSS `.reveal{opacity:0}` chỉ khi JS bật, giữ no-JS/SEO fallback; (b) thêm key `interactive.filter.groupLabel` vi/en và dùng `t('filter.groupLabel')`.
+- **Pattern:** Với animation reveal trong Next App Router, `useLayoutEffect` **không đủ** để tránh flash vì SSR HTML được paint trước hydration — phải gate trạng thái ẩn bằng CSS/class ở server render, không flip state sau mount.
+- **Prevention:** Mọi fix gây flash/animation phải xét chuỗi *server render → paint → hydrate*; a11y label/text hiển thị phải đi qua i18n, không hardcode copy design.

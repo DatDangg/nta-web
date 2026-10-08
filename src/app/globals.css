@@ -76,6 +76,22 @@
   box-shadow: 0 0 0 4px var(--color-focus);
 }
 
+.reveal-item {
+  transition: opacity 400ms cubic-bezier(0.16, 1, 0.3, 1), transform 400ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html.js .reveal:not(.revealed) .reveal-item {
+  opacity: 0;
+  transform: translateY(16px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.js .reveal:not(.revealed) .reveal-item {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

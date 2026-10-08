@@ -25,6 +25,7 @@ export default async function LocaleLayout({
   return (
     <html lang={locale}>
       <body>
+        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
         <NextIntlClientProvider messages={messages}>
           <a className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-modal focus:rounded-full focus:bg-background focus:px-4 focus:py-3 focus:text-primary" href="#main">
             {locale === 'vi' ? 'Bỏ qua tới nội dung' : 'Skip to content'}
