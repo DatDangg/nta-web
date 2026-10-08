@@ -46,15 +46,15 @@ một nơi tra cứu hồ sơ năng lực, case study và thông tin liên hệ 
 
 ### In Scope
 - 9 nhóm trang: Trang chủ, Về NTA, Giải pháp Doanh nghiệp (+4 trang con), Giải pháp AI (+case study), Sản phẩm App, Case Study, Tin tức/Blog, Liên hệ, Footer.
-- UI responsive mobile-first, dark tech theme.
+- UI responsive mobile-first, **light minimal theme kiểu Apple**.
 - SEO cơ bản: meta/OG per page, sitemap, robots, JSON-LD.
+- **Song ngữ Việt/Anh (i18n)**: mặc định VI, toggle EN, route `/en/...`.
 - Form liên hệ (lưu/forward, có chống spam).
-- Deploy Google Cloud Run (asia-southeast1).
+- Deploy Google Cloud Run (asia-southeast1), domain `ntasolution.vn`.
 
 ### Out of Scope
 - Hệ thống đăng nhập / CMS quản trị phức tạp (có thể bổ sung sau).
 - E-commerce / thanh toán.
-- Đa ngôn ngữ đầy đủ (EN) ở phiên bản đầu — xem Open Questions.
 - Tính năng nghiệp vụ của các sản phẩm (CRM/HRM/LMS/DentGo…).
 
 ---
@@ -127,7 +127,7 @@ một nơi tra cứu hồ sơ năng lực, case study và thông tin liên hệ 
 | Availability | ≥ 99.5% (Cloud Run SLA) |
 | Accessibility | WCAG 2.1 AA — contrast, keyboard, alt text, semantic HTML |
 | Responsive | Mobile-first, 4 breakpoint (375 / 768 / 1280 / 1536) |
-| Language | Tiếng Việt (mặc định) |
+| Language | Song ngữ Việt/Anh — mặc định VI, toggle EN; hreflang + localized meta |
 
 ---
 
@@ -163,16 +163,14 @@ một nơi tra cứu hồ sơ năng lực, case study và thông tin liên hệ 
 ## Assumptions
 
 - Nội dung chi tiết (mô tả sản phẩm, case study) sẽ được điền dần sau; v1 dùng nội dung mẫu hợp lý.
-- Chưa có logo/brand color chính thức → tạm dùng dark tech theme.
-- Domain: dùng `*.run.app` trước, gắn domain riêng sau.
+- Chưa có logo/brand color chính thức → tạm dùng palette neutral light kiểu Apple, dễ thay sau.
+- Domain chính thức: **`ntasolution.vn`** (gắn vào Cloud Run sau khi anh cấp quyền DNS).
 
 ---
 
 ## Open Questions
 
 - [ ] Logo NTA (file/svg) và bảng màu thương hiệu chính thức?
-- [ ] Domain chính thức (vd `nta.vn`)? Ai quản lý DNS?
-- [ ] Có cần song ngữ Việt/Anh không, hay chỉ tiếng Việt?
 - [ ] Hotline / email / địa chỉ thật để hiển thị?
 - [ ] Danh sách sản phẩm & case study ưu tiên đưa lên trước?
 - [ ] Form liên hệ gửi về đâu (email nào / CRM / Google Sheet)?

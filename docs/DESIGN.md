@@ -1,7 +1,8 @@
 # Design Specification — NTA Website
 
 > Design notes cho website NTA. Agent extract design tokens + screen specs từ file này.
-> ⚠️ Chưa có Figma/brand chính thức — bảng dưới là **đề xuất tạm (dark tech theme)**, sẽ cập nhật khi có brand kit.
+> ⚠️ Chưa có Figma/brand chính thức — bảng dưới là **đề xuất tạm (light minimal kiểu Apple)**, sẽ cập nhật khi có brand kit.
+> ✅ Đã chốt (08/10/2026): phong cách **simple nhưng ấn tượng kiểu Apple** — sáng, nhiều whitespace, typography lớn, animation subtle.
 
 ---
 
@@ -17,23 +18,23 @@
 
 ## Brand & Visual Identity
 
-### Color Palette (đề xuất — dark tech)
+### Color Palette (đề xuất — light minimal Apple)
 
 | Token | Value | Usage |
 |-------|-------|-------|
-| Primary | `#00D4FF` | CTA, link, accent (cyan tech) |
-| Secondary | `#7C3AED` | Gradient, highlight phụ (violet) |
-| Background | `#0A0E1A` | Nền trang (dark navy) |
-| Surface | `#141A2A` | Card, panel |
-| Surface Alt | `#1E2638` | Hover, header sticky |
-| Text Primary | `#F5F7FA` | Heading, body |
-| Text Secondary | `#94A3B8` | Label, caption |
-| Border | `#263041` | Divider, viền input |
-| Error | `#EF4444` | Trạng thái lỗi |
-| Success | `#10B981` | Trạng thái thành công |
-| Warning | `#F59E0B` | Cảnh báo |
+| Primary | `#0071E3` | CTA, link, accent (Apple blue) |
+| Primary Hover | `#0077ED` | Hover CTA/link |
+| Background | `#FFFFFF` | Nền trang (trắng) |
+| Background Alt | `#F5F5F7` | Section xen kẽ (xám nhạt Apple) |
+| Surface | `#FFFFFF` | Card, panel |
+| Text Primary | `#1D1D1F` | Heading, body (gần đen) |
+| Text Secondary | `#6E6E73` | Label, caption (xám) |
+| Border | `#D2D2D7` | Divider, viền input |
+| Error | `#FF3B30` | Trạng thái lỗi |
+| Success | `#34C759` | Trạng thái thành công |
+| Warning | `#FF9500` | Cảnh báo |
 
-> Gradient chủ đạo: `linear-gradient(135deg, #00D4FF 0%, #7C3AED 100%)`.
+> Gradient chủ đạo (nếu dùng): `linear-gradient(180deg, #FFFFFF 0%, #F5F5F7 100%)` — rất nhẹ, không lòe loẹt.
 
 ### Typography
 
@@ -46,7 +47,7 @@
 | Small | Inter | 14px | 400 | Label, caption |
 | XSmall | Inter | 12px | 400 | Meta, hint |
 
-Font stack: `Inter, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif` (hỗ trợ tiếng Việt).
+Font stack: `-apple-system, BlinkMacSystemFont, "SF Pro Display", Inter, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif` (SF Pro trước cho vibe Apple, Inter fallback hỗ trợ tiếng Việt).
 
 ### Spacing Scale
 
@@ -136,7 +137,7 @@ Font stack: `Inter, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, 
 
 | Component | Variants | Notes |
 |-----------|----------|-------|
-| Button | Primary, Secondary, Ghost, Outline | Sizes: sm/md/lg; dark theme |
+| Button | Primary, Secondary, Ghost, Outline | Sizes: sm/md/lg; light theme, bo tròn nhẹ, không shadow nặng |
 | Input / Textarea | Default, Focus, Error, Disabled | Có label + helper/error text |
 | Card | SolutionCard, ProductCard, CaseStudyCard, PostCard | Hover lift nhẹ |
 | Section | Default, Alternate (surface), Accent | Padding responsive |
@@ -150,10 +151,11 @@ Font stack: `Inter, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, 
 
 ## Design Style
 
-- **Overall feel:** Modern / Tech / Corporate tin cậy
-- **Color scheme:** Dark (dark tech theme); có thể bổ sung light sau
+- **Overall feel:** Apple-like — clean, minimal, sang trọng, tin cậy
+- **Color scheme:** Light (trắng + xám trung tính); contrast cao cho doanh nghiệp nhà nước lẫn tư nhân
 - **UI Library:** Tailwind CSS (cân nhắc shadcn/ui cho form/nav)
-- **Animation level:** Subtle — fade/slide-in khi scroll, hover lift, no heavy motion
+- **Animation level:** Subtle — fade/slide-in nhẹ khi scroll, hover mượt, không heavy motion, không confetti/effect rườm rà
+- **Signature Apple-style elements:** heading to đậm (48-96px hero), nội dung trung tâm, section xen kẽ trắng/#F5F5F7, card tròn (border-radius lg), ảnh lớn, ít đường kẻ
 
 ---
 

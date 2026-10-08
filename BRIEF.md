@@ -11,6 +11,9 @@ Website giới thiệu năng lực, sản phẩm và giải pháp của công ty
 
 Mục tiêu: trang giới thiệu (marketing/showcase) hướng B2B — giúp khách doanh nghiệp & cơ quan
 nhà nước hiểu năng lực NTA, xem case study tiêu biểu (vd Óc Eo), và liên hệ/tư vấn.
+
+> ✅ Đã chốt (08/10/2026): **Domain `ntasolution.vn`** · **Song ngữ VI/EN** (i18n, mặc định VI có toggle EN) ·
+> Đối tượng **cả nhà nước lẫn tư nhân** · Phong cách **minimal ấn tượng kiểu Apple** (light, nhiều whitespace, typography lớn).
 **Không** phải hệ thống nghiệp vụ có đăng nhập — đây là website giới thiệu (content-driven).
 
 ## Target Users
@@ -36,11 +39,11 @@ nhà nước hiểu năng lực NTA, xem case study tiêu biểu (vd Óc Eo), v�
 - **Responsive:** mobile-first, đủ 4 breakpoint (375 / 768 / 1280+), đúng luật `skills/responsive-web`.
 - **Accessibility:** WCAG 2.1 AA — contrast, keyboard nav, alt text, semantic HTML.
 - **Security:** HTTPS only; form liên hệ có rate-limit + chống spam; không lộ secret.
-- **Language:** tiếng Việt là chính (EN có thể bổ sung sau — xem Open Questions).
-- **Deploy:** Google Cloud Run, region `asia-southeast1`, scale-to-zero.
+- **Language:** song ngữ Việt/Anh (i18n `next-intl` hoặc `next-i18n`; mặc định VI, toggle EN; `/en/...` routes).
+- **Deploy:** Google Cloud Run `asia-southeast1`, scale-to-zero; domain `ntasolution.vn` (gắn sau khi có DNS).
 
 ## Notes
-- Stack đề xuất: **Next.js (App Router) + TypeScript + Tailwind CSS**, theme **dark tech**.
+- Stack đề xuất: **Next.js (App Router) + TypeScript + Tailwind CSS**, theme **light minimal kiểu Apple**.
 - Ảnh/diagram: dùng skill `archify` cho sơ đồ kiến trúc nếu cần.
 - Deploy doc: `.devops/templates/gcp-cloud-run.md`.
 - Dàn ý & context đầy đủ: `memory/projects/nta-website.md` (workspace Eve).
