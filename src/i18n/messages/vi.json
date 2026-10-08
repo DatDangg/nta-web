@@ -1,0 +1,14 @@
+{
+  "common": {
+    "siteName": "NTA Website"
+  },
+  "nav": {
+    "home": "Trang chủ"
+  },
+  "footer": {
+    "copyright": "© NTA"
+  },
+  "cta": {
+    "contact": "Liên hệ"
+  }
+}

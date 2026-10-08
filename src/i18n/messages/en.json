@@ -1,0 +1,14 @@
+{
+  "common": {
+    "siteName": "NTA Website"
+  },
+  "nav": {
+    "home": "Home"
+  },
+  "footer": {
+    "copyright": "© NTA"
+  },
+  "cta": {
+    "contact": "Contact"
+  }
+}

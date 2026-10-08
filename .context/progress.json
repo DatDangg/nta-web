@@ -10,7 +10,7 @@
       "currentPhase": 0,
       "totalLayers": 5,
       "currentLayer": 0,
-      "completedTasks": ["layer-0-task-01"],
+      "completedTasks": ["layer-0-task-01", "layer-0-task-02"],
       "inProgressTask": null,
       "tasks": [
         {
@@ -20,6 +20,14 @@
           "reviewLevel": "NORMAL",
           "reviewResult": "PASS",
           "reviewReport": ".context/review-reports/feature-nta-website-layer-0-task-01-round-1-review.md"
+        },
+        {
+          "id": "layer-0-task-02",
+          "layer": 0,
+          "status": "done",
+          "reviewLevel": "STRICT",
+          "reviewResult": "PASS",
+          "reviewReport": ".context/review-reports/feature-nta-website-layer-0-task-02-round-1-review.md"
         }
       ],
       "specVersion": "1.0.0",

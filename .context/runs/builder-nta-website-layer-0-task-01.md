@@ -17,7 +17,7 @@ evidence:
   reportPath: null                   # chưa có report; reviewer sẽ sinh ở bước sau
   round: 0
   verdict: awaiting_review
-next: "Chạy reviewer độc lập round 1 cho layer-0-task-01"
+next: "DONE — close-out + commit 51b75e0; task-01 hoàn tất, chuyển task layer-0-task-02"
 loopSignal: none
 approvals:
   - {gate: layer_plan_approved, at: 2026-10-08T17:05:00+07:00, ok: true}

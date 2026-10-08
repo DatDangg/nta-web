@@ -30,8 +30,9 @@ messages skeleton VI/EN và hreflang helpers — để mọi page task sau chỉ
 
 ## Description
 1. Cài `next-intl` (đ duy nhất cho i18n — có lý do trong spec).
-2. `src/i18n/routing.ts`: `locales: ['vi','en']`, `defaultLocale: 'vi'`, `localePrefix: 'never'`
-   (`/` = VI, `/en/...` = EN — đúng design).
+2. `src/i18n/routing.ts`: `locales: ['vi','en']`, `defaultLocale: 'vi'`, `localePrefix: 'as-needed'`
+   (`/` = VI, `/en/...` = EN — đúng design). *(Deviation so với bản nháp `'never'`: `'never'` không sinh
+   prefix `/en` → dùng `'as-needed'`; xem Notes.)*
 3. `src/middleware.ts`: next-intl middleware (detect → redirect `/en` ↔ `/`).
 4. `src/i18n/request.ts` + `src/app/[locale]/layout.tsx`: provider `NextIntlClientProvider`,
    `generateStaticParams` cho 2 locale, `html lang` theo locale (vi/en), import messages.
@@ -41,18 +42,18 @@ messages skeleton VI/EN và hreflang helpers — để mọi page task sau chỉ
 7. Helper hreflang/alternates (`src/lib/seo.ts` tối giản) — dùng lại ở Layer 4.
 
 ## Acceptance Criteria
-- [ ] `/` render VI, `/en` render EN; refresh/redirect không loop
-- [ ] `generateStaticParams` sinh `vi` + `en`; `npm run build` build 2 locale tĩnh
-- [ ] `messages/vi.json` + `en.json` tồn tại, đủ namespace cơ bản; không có key thiếu bản dịch
-- [ ] `hreflang` alternates (`vi`, `en`, `x-default: vi`) render đúng qua helper
-- [ ] Route group cũ (`src/app/page.tsx` trực tiếp) không còn trùng với `[locale]` group
-- [ ] Check commands pass
+- [x] `/` render VI, `/en` render EN; refresh/redirect không loop (dev smoke: `/`=Trang chủ 200, `/en`=Home 200)
+- [x] `generateStaticParams` sinh `vi` + `en`; `npm run build` build 2 locale tĩnh (build output `/vi` + `/en`)
+- [x] `messages/vi.json` + `en.json` tồn tại, đủ namespace cơ bản (common/nav/footer/cta); không có key thiếu bản dịch
+- [x] `hreflang` alternates (`vi`, `en`, `x-default: vi`) sinh đúng qua helper `createLocaleAlternates` — *(helper hoàn thành; việc gọi vào page metadata defer Layer 2/4 theo thiết kế)*
+- [x] Route group cũ (`src/app/page.tsx` trực tiếp) không còn trùng với `[locale]` group (đã xóa `src/app/page.tsx`)
+- [x] Check commands pass
 
 ## Verification Summary
-- Commands: `npm install` · `npm run lint` · `npm run typecheck` · `npm run build`
-- Test: `test_command: null` → skip, ghi lý do
-- Manual evidence: `npm run dev` → `/` = VI, `/en` = EN, toggle không 404
-- Reviewer report: `.context/review-reports/feature-nta-website-layer-0-task-02-round-1-review.md`
+- Commands: `npm install` PASS · `npm run lint` PASS · `npm run typecheck` PASS · `npm run build` PASS (SSG `/vi` + `/en`)
+- Test: `test_command: null` → skip (v1 chưa có test framework)
+- Manual evidence: dev smoke `/` = `Trang chủ` (200), `/en` = `Home` (200), không redirect loop
+- Reviewer report: `.context/review-reports/feature-nta-website-layer-0-task-02-round-1-review.md` — Verdict **PASS** (STRICT, 0 CRITICAL/MAJOR)
 
 ## Retry / Error Memory
 - Attempt: 0
@@ -61,13 +62,13 @@ messages skeleton VI/EN và hreflang helpers — để mọi page task sau chỉ
 - Escalation: none — sau 3 attempt fail → `architecture_review_needed`
 
 ## DoD (Definition of Done)
-- [ ] Code written (chỉ trong scope)
-- [ ] Tests: skip — `test_command: null`, ghi lý do
-- [ ] Check commands pass: `npm run lint` · `npm run typecheck` · `npm run build`
-- [ ] Reviewer độc lập PASS
-- [ ] `.context/progress.json` updated
-- [ ] Error Memory / Doc Impact recorded (`no doc impact` nếu không đổi contract)
-- [ ] committed — 1 task = 1 commit (branch `main`, KHÔNG push)
+- [x] Code written (chỉ trong scope)
+- [x] Tests: skip — `test_command: null`, ghi lý do
+- [x] Check commands pass: `npm run lint` · `npm run typecheck` · `npm run build`
+- [x] Reviewer độc lập PASS (STRICT)
+- [x] `.context/progress.json` updated
+- [x] Error Memory / Doc Impact recorded (`NO_DOC_IMPACT`)
+- [x] committed — 1 task = 1 commit (branch `main`, KHÔNG push)
 
 ## Files to Create/Modify
 - `src/i18n/routing.ts`, `src/i18n/request.ts`, `src/i18n/messages/vi.json`, `src/i18n/messages/en.json`
@@ -82,3 +83,17 @@ messages skeleton VI/EN và hreflang helpers — để mọi page task sau chỉ
   **không có page-level loading/error**; task này chỉ dựng plumbing, không quyết state.
 - Middleware chỉ lo locale — KHÔNG thêm logic auth/guard (R-17: v1 không auth).
 - Nếu next-intl cần `i18n/request.ts` async config → giữ minimal, không prefetch thừa.
+- **Deviation:** dùng `localePrefix: 'as-needed'` thay vì `'never'`, vì `'never'` không sinh `/en`; R-20 và AC yêu cầu VI tại `/` và EN tại `/en`. `next-intl` v4.14.9; cấu hình Next plugin trỏ tới `src/i18n/request.ts`, routing định nghĩa locale/default/prefix, request config nạp messages tương ứng. Build SSG xuất `/vi` + `/en`; middleware rewrite mặc định `/` cho VI.
+- **Verify:** `npm install`, lint, typecheck, build và dev smoke check `/` (VI) + `/en` (EN) PASS. Test suite skip do `test_command: null` và chưa có test framework. `npm audit --audit-level=high` FAIL vì dependency tree hiện hữu có 9 high/3 moderate; remediation force sẽ nâng breaking Next/Tailwind nên không sửa ngoài scope. oxlint reported only pre-existing `next-env.d.ts` triple-slash warning.
+
+## Notes (close-out)
+- **Doc Impact: NO_DOC_IMPACT** (i18n đã mô tả trong SPECIFICATIONS.md R-20 + design §Architecture).
+- **Primary surgical fix** trước review: (1) `package.json` — builder tạo lặp key `next-intl` 2 lần → dedup còn 1;
+  (2) `.gitignore` — thêm `*.tsbuildinfo` (loại `tsconfig.tsbuildinfo` khỏi git).
+- **Residual risk / follow-up (không block PASS):**
+  1. Reviewer Finding MINOR: `src/lib/seo.ts` fallback base URL `https://ntasolution.vn` hardcode → nên dùng chung
+     hằng với `metadataBase` khi dựng metadata (Layer 2/4).
+  2. `npm audit` 9 high/3 moderate (ngoài `check_commands`) — follow-up ngoài Layer 0.
+  3. Helper hreflang chưa được page nào gọi (defer Layer 2/4 theo thiết kế).
+  4. eslint 8 EOL (kế thừa từ task-01).
+- ⚠️ Protocol: builder subagent tự ghi journal + task file (vi phạm "subagent KHÔNG ghi") — Primary reconcile.
