@@ -55,5 +55,17 @@
     "message": "The page you are looking for does not exist or has been moved. Check the address or choose a page below.",
     "homeLink": "Go to home",
     "suggestionsLabel": "Suggested pages"
+  },
+  "home": {
+    "heroTitle": "Digital solutions for Vietnamese businesses",
+    "heroDescription": "NTA brings management, AI and mobile app solutions to enterprises and government agencies.",
+    "heroImageAlt": "Illustration of connected business management workflows",
+    "solutionsTitle": "Solutions for your needs",
+    "productsTitle": "Featured products",
+    "caseStudyTitle": "Customer story",
+    "ctaTitle": "Find the right solution together",
+    "ctaDescription": "Talk with the NTA team about your organization’s goals and digital needs.",
+    "previousProducts": "Previous products",
+    "nextProducts": "Next products"
   }
 }

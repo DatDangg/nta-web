@@ -55,5 +55,17 @@
     "message": "Trang bạn tìm không tồn tại hoặc đã được di chuyển. Hãy kiểm tra lại địa chỉ hoặc chọn một trang bên dưới.",
     "homeLink": "Về trang chủ",
     "suggestionsLabel": "Gợi ý trang"
+  },
+  "home": {
+    "heroTitle": "Giải pháp số hóa cho doanh nghiệp Việt",
+    "heroDescription": "NTA mang giải pháp quản trị, trí tuệ nhân tạo và ứng dụng di động tới doanh nghiệp và cơ quan nhà nước.",
+    "heroImageAlt": "Minh họa quy trình quản trị doanh nghiệp được kết nối",
+    "solutionsTitle": "Giải pháp phù hợp với nhu cầu của bạn",
+    "productsTitle": "Sản phẩm tiêu biểu",
+    "caseStudyTitle": "Câu chuyện khách hàng",
+    "ctaTitle": "Cùng tìm giải pháp phù hợp",
+    "ctaDescription": "Trao đổi với đội ngũ NTA về mục tiêu và nhu cầu số hóa của tổ chức.",
+    "previousProducts": "Sản phẩm trước",
+    "nextProducts": "Sản phẩm tiếp theo"
   }
 }

@@ -62,3 +62,12 @@ These rules were learned from real bugs. Apply them to every task, not just when
 - **Fix:** Chưa áp dụng (đang chờ human decision). Đề xuất: (a) render hidden mặc định + gate class `js`/CSS `.reveal{opacity:0}` chỉ khi JS bật, giữ no-JS/SEO fallback; (b) thêm key `interactive.filter.groupLabel` vi/en và dùng `t('filter.groupLabel')`.
 - **Pattern:** Với animation reveal trong Next App Router, `useLayoutEffect` **không đủ** để tránh flash vì SSR HTML được paint trước hydration — phải gate trạng thái ẩn bằng CSS/class ở server render, không flip state sau mount.
 - **Prevention:** Mọi fix gây flash/animation phải xét chuỗi *server render → paint → hydrate*; a11y label/text hiển thị phải đi qua i18n, không hardcode copy design.
+
+### Error 2 — layer-2-task-01: shared card fork + dependency inversion
+- **Date:** 2026-10-09
+- **Task:** layer-2/task-01 (Trang chủ `/` Screen 1)
+- **Error:** Reviewer r1 FAIL (MAJOR): `SolutionGridHome`/`ProductStrip` tự dựng lại markup card thay vì dùng shared `SolutionCard`/`ProductCard` → style drift + duplicate. Fix1 chuyển sang dùng shared card nhưng reviewer r2 FAIL (MAJOR): để card hỗ trợ ảnh home, `src/components/cards/{SolutionCard,ProductCard}.tsx` (Layer 1) lại `import` `@/components/home/HomeImage` (Layer 2) → **dependency inversion** (shared phụ thuộc page module).
+- **Root Cause:** (1) Không tái dùng component shared đã có (vi phạm YAGNI/DRY, tạo style drift). (2) Khi cần custom hoá, kéo page-level module vào shared thay vì đưa phần dùng chung xuống đúng tầng.
+- **Fix:** Move `HomeImage` → `src/components/shared/HomeImage.tsx`; cards import từ `shared/`; xoá file cũ. r3 PASS.
+- **Pattern:** Hướng phụ thuộc component phải đi **từ tầng dưới lên** (page → shared/ui → lib), không bao giờ ngược lại. Shared/UI component KHÔNG được import từ `components/<page>/`.
+- **Prevention:** Trước khi tái dùng component shared, kiểm tầng phụ thuộc; nếu cần custom, mở rộng bằng props optional hoặc hạ helper xuống `shared/`/`ui/`, không hạ page module lên shared.
