@@ -109,5 +109,17 @@
       "product": { "name": "Product team", "role": "Product development" }
     },
     "imageFallback": "NTA team photo"
+  },
+  "products": {
+    "title": "Apps",
+    "intro": "NTA mobile apps bring AI-enabled experiences closer to everyday users.",
+    "screenshotAlt": "Screenshot of {title}",
+    "previousScreenshot": "Previous screenshot",
+    "nextScreenshot": "Next screenshot",
+    "carouselRoleDescription": "carousel",
+    "comingSoon": "Coming soon",
+    "download": "Download app",
+    "ctaTitle": "Find the right solution together",
+    "ctaDescription": "Talk with the NTA team about your organization’s goals and digital needs."
   }
 }

@@ -109,5 +109,17 @@
       "product": { "name": "Đội ngũ sản phẩm", "role": "Phát triển sản phẩm" }
     },
     "imageFallback": "Ảnh đội ngũ NTA"
+  },
+  "products": {
+    "title": "Sản phẩm app",
+    "intro": "Các ứng dụng di động của NTA mang trải nghiệm AI đến gần hơn với người dùng.",
+    "screenshotAlt": "Ảnh ứng dụng {title}",
+    "previousScreenshot": "Ảnh trước",
+    "nextScreenshot": "Ảnh tiếp theo",
+    "carouselRoleDescription": "băng chuyền",
+    "comingSoon": "Sắp ra mắt",
+    "download": "Tải ứng dụng",
+    "ctaTitle": "Cùng tìm giải pháp phù hợp",
+    "ctaDescription": "Trao đổi với đội ngũ NTA về mục tiêu và nhu cầu số hóa của tổ chức."
   }
 }

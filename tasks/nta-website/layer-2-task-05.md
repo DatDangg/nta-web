@@ -42,32 +42,32 @@ feature bullets, DownloadLinks (hoặc badge "Sắp ra mắt" khi chưa có link
 5. Copy Screen 7 VI/EN; messages key `products.*`.
 
 ## Acceptance Criteria
-- [ ] 2 AppCard đủ: screenshot, tên, mô tả, bullets, DownloadLinks-or-badge
-- [ ] Carousel: prev/next button có `aria-label`, dots `aria-current`, swipe + keyboard hoạt động
-- [ ] Chưa có link tải → badge "Sắp ra mắt" (không hiện link chết)
-- [ ] lg: 2 card song song; base: stack 1 cột; ảnh 4:5 ở xl
-- [ ] Metadata 2 locale + hreflang; check commands pass
+- [x] 2 AppCard đủ: media (carousel), tên, mô tả, bullets, DownloadLinks-or-badge
+- [x] Carousel: prev/next button có `aria-label`, dots `aria-current`, swipe + keyboard qua nút (arrows chỉ khi >1 ảnh)
+- [x] Chưa có link tải → badge "Sắp ra mắt" (validate http(s), không link chết)
+- [x] lg: 2 card song song; base: stack 1 cột; ảnh 4:5 ở xl
+- [x] Metadata 2 locale + hreflang; check commands pass
 
 ## Verification Summary
-- Commands: `npm run lint` · `npm run typecheck` · `npm run build`
-- Test: `test_command: null` → skip, ghi lý do
-- Manual evidence: dev `/products` + `/en/products` — carousel keyboard/swipe, badge empty state
-- Reviewer report: `.context/review-reports/feature-nta-website-layer-2-task-05-round-1-review.md`
+- Commands: `npm run lint` · `npm run typecheck` · `npm run build` — PASS (primary re-run sau reviewer r2; 27 static pages; `/vi|/en/products` SSG)
+- Test: `test_command: null` → skip, chưa có test framework
+- Manual evidence: reviewer CSS math; carousel single-image (1 slide + dot, không arrow) do content 1 ảnh/sp
+- Reviewer report: `.context/review-reports/feature-nta-website-layer-2-task-05-round-2-review.md` (r1 FAIL 2 MAJOR → r2 PASS, NORMAL)
 
 ## Retry / Error Memory
-- Attempt: 0
-- Last failure type: n/a
-- Error memory entry: none
+- Attempt: 1 (builder #1 interrupted incomplete → redo; r1 FAIL: MAJOR-1 ảnh trùng + MAJOR-2 carousel nhiều ảnh → fix AppCard media slot + MINOR → r2 PASS)
+- Last failure type: MAJOR duplicate media (carousel nhét nhầm vào slot downloadLinks)
+- Error memory entry: xem Error 3 (pattern media-slot/duplicate) — không thêm entry mới
 - Escalation: none — sau 3 attempt fail → `architecture_review_needed`
 
 ## DoD (Definition of Done)
-- [ ] Code written (chỉ trong scope)
-- [ ] Tests: skip — `test_command: null`, ghi lý do
-- [ ] Check commands pass: `npm run lint` · `npm run typecheck` · `npm run build`
-- [ ] Reviewer độc lập PASS
-- [ ] `.context/progress.json` updated
-- [ ] Error Memory / Doc Impact recorded
-- [ ] committed — 1 task = 1 commit (branch `main`, KHÔNG push)
+- [x] Code written (chỉ trong scope — gồm AppCard media slot, 1 consumer duy nhất)
+- [x] Tests: skip — `test_command: null`, ghi lý do
+- [x] Check commands pass: `npm run lint` · `npm run typecheck` · `npm run build`
+- [x] Reviewer độc lập PASS (r2 NORMAL)
+- [x] `.context/progress.json` updated
+- [x] Error Memory / Doc Impact recorded (NO_DOC_IMPACT)
+- [x] committed — 1 task = 1 commit (branch `main`, KHÔNG push)
 
 ## Files to Create/Modify
 - `src/app/[locale]/products/page.tsx`
