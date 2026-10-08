@@ -43,33 +43,37 @@ Chính thức hóa design tokens vào `globals.css`/Tailwind theme và dựng b�
 5. Motion foundation: `prefers-reduced-motion` → static global; reveal task-04 làm riêng.
 
 ## Acceptance Criteria
-- [ ] Token khớp `skills/nextjs/design-tokens.md` (màu, type, spacing, radius, focus, z-index)
-- [ ] `Button` đủ variant/size, contrast ≥4.5:1 (primary 4.7:1), focus ring thấy rõ trên mọi nền
-- [ ] `Section` render 3 variant nền xen kẽ; container đúng 1280px + padding theo bp
-- [ ] `Badge` không dùng màu làm kênh duy nhất (kèm chữ)
-- [ ] File ≤300 dòng, function ≤50 dòng (project-config ui rules)
-- [ ] Check commands pass
+- [x] Token khớp `skills/nextjs/design-tokens.md` (màu, type, spacing, radius, focus, z-index)
+- [x] `Button` đủ variant/size, contrast ≥4.5:1 (primary 4.7:1), focus ring thấy rõ trên mọi nền
+- [x] `Section` render 3 variant nền xen kẽ; container đúng 1280px + padding theo bp
+- [x] `Badge` không dùng màu làm kênh duy nhất (kèm chữ)
+- [x] File ≤300 dòng, function ≤50 dòng (project-config ui rules)
+- [x] Check commands pass
 
 ## Verification Summary
-- Commands: `npm run lint` · `npm run typecheck` · `npm run build`
-- Test: `test_command: null` → skip, ghi lý do
-- Manual evidence: trang demo/placeholder render Button × variant; keyboard tab thấy focus ring
-- Reviewer report: `.context/review-reports/feature-nta-website-layer-1-task-01-round-1-review.md`
+- Fix attempt 2: `npm run lint` PASS · `npm run typecheck` PASS · `npm run build` PASS.
+- Contrast evidence (Node WCAG sRGB relative luminance calculation): `#0066CC` on white **5.57:1**, on alt `#F5F5F7` **5.11:1**; primary white text on `#0071E3` **4.70:1**. This covers ghost/outline text across both light section backgrounds and primary CTA.
+- Focus treatment: all `:focus-visible` elements now receive a 2px white outline (2px offset) plus 4px `--color-focus` box-shadow. On `Section accent`, white outline contrasts with the blue surface; on white/alt surfaces, blue outer ring contrasts with the light surface.
+- Test: skip — `test_command: null`, repo chưa cấu hình test framework. Oxlint skip — no Oxlint config found.
+- Manual focus/hover smoke: not run; components are not mounted on current route. Runtime keyboard verification remains for integration smoke test.
+- Doc Impact: NO_DOC_IMPACT — presentation-only token/component adjustments.
+- Notes: `gradient-soft` moved to Tailwind `backgroundImage`; Inter loading remains deferred to app-shell integration with system font fallback.
+- Reviewer report: `.context/review-reports/feature-nta-website-layer-1-task-01-round-3-review.md` — Verdict **PASS** (NORMAL, 0 CRITICAL/MAJOR, 3 MINOR defer non-blocking; round 1+2 FAIL → fix)
 
 ## Retry / Error Memory
-- Attempt: 0
-- Last failure type: n/a
-- Error memory entry: none
+- Attempt: 2
+- Last failure type: reviewer round 2 — ghost text below AA on light surfaces; non-primary focus ring invisible on accent section.
+- Error memory entry: reviewer report `.context/review-reports/feature-nta-website-layer-1-task-01-round-2-review.md`; contrast calculation showed hover-blue used as body text, and focus styling depended on button variant rather than the surface context.
 - Escalation: none — sau 3 attempt fail → `architecture_review_needed`
 
 ## DoD (Definition of Done)
-- [ ] Code written (chỉ trong scope)
-- [ ] Tests: skip — `test_command: null`, ghi lý do
-- [ ] Check commands pass: `npm run lint` · `npm run typecheck` · `npm run build`
-- [ ] Reviewer độc lập PASS
-- [ ] `.context/progress.json` updated
-- [ ] Error Memory / Doc Impact recorded
-- [ ] committed — 1 task = 1 commit (branch `main`, KHÔNG push)
+- [x] Code written (chỉ trong scope)
+- [x] Tests: skip — `test_command: null`, ghi lý do
+- [x] Check commands pass: `npm run lint` · `npm run typecheck` · `npm run build`
+- [x] Reviewer độc lập PASS
+- [x] `.context/progress.json` updated
+- [x] Error Memory / Doc Impact recorded
+- [x] committed — 1 task = 1 commit (branch `main`, KHÔNG push)
 
 ## Files to Create/Modify
 - `src/app/globals.css`

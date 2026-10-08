@@ -9,8 +9,8 @@
       "status": "in_progress",
       "currentPhase": 0,
       "totalLayers": 5,
-      "currentLayer": 0,
-      "completedTasks": ["layer-0-task-01", "layer-0-task-02", "layer-0-task-03", "layer-0-task-04", "layer-0-task-05", "layer-0-task-06"],
+      "currentLayer": 1,
+      "completedTasks": ["layer-0-task-01", "layer-0-task-02", "layer-0-task-03", "layer-0-task-04", "layer-0-task-05", "layer-0-task-06", "layer-1-task-01"],
       "inProgressTask": null,
       "tasks": [
         {
@@ -60,12 +60,20 @@
           "reviewLevel": "STRICT",
           "reviewResult": "PASS",
           "reviewReport": ".context/review-reports/feature-nta-website-layer-0-task-06-round-1-review.md"
+        },
+        {
+          "id": "layer-1-task-01",
+          "layer": 1,
+          "status": "done",
+          "reviewLevel": "NORMAL",
+          "reviewResult": "PASS",
+          "reviewReport": ".context/review-reports/feature-nta-website-layer-1-task-01-round-3-review.md"
         }
       ],
       "specVersion": "1.0.0",
       "planDir": "tasks/nta-website/",
       "layerPlanDiagram": "docs/diagrams/layer-plan.html",
-      "lastUpdated": "2026-10-08T19:50:00+07:00"
+      "lastUpdated": "2026-10-08T21:45:00+07:00"
     }
   ],
   "bugs": []
