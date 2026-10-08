@@ -7,29 +7,33 @@ workItem: spec-validator/nta-website
 phaseTask: layer-0
 step: spec_validator
 agent: spec-validator
-status: awaiting                     # phase review FAIL (1 HIGH + ≥3 MEDIUM); chờ user checkpoint
+status: awaiting                     # phase review round 2 PASS; chờ user duyệt unlock Layer 1
 attempt: 0
 interrupted: false
-updatedAt: 2026-10-08T19:05:00+07:00
+updatedAt: 2026-10-08T20:05:00+07:00
 filesTouched: []
 filesNew: []
 evidence:
-  reportPath: .context/review-reports/feature-nta-website-layer-0-round-1-spec-review.md
-  round: 1
-  verdict: FAIL
-next: "CHECKPOINT user — Layer 0 phase review FAIL; quyết định fix gap / ratify spec trước khi unlock Layer 1"
+  reportPath: .context/review-reports/feature-nta-website-layer-0-round-2-spec-review.md
+  round: 2
+  verdict: PASS
+next: "CHECKPOINT user — Layer 0 PASS; chờ duyệt unlock Layer 1 (Navbar/Footer, ...)"
 loopSignal: none
 approvals:
   - {gate: layer_plan_approved, at: 2026-10-08T17:05:00+07:00, ok: true}
+  - {gate: layer0_contract_ratified, at: 2026-10-08T19:15:00+07:00, ok: true}
 batchQueue: []
 ```
 
 ## Notes / WIP reasoning
 
-- Layer 0 (5 task) hoàn tất: task-01 scaffold · task-02 i18n · task-03 content layer · task-04 sample content · task-05 CI/env. Tất cả reviewer PASS + commit (`4d47a82`).
-- Phase review: cross-check deliverable Layer 0 với SPECIFICATIONS.md / design-spec / ERD; phát hiện gap sớm trước khi unlock Layer 1.
+- Round 1 FAIL: G1 HIGH (CI order) + G2/G3/G4/G6 MED + LOW. User ratify contract.
+- Round 2 (task-06 đã fix + reviewer PASS STRICT, commit `c7c35c3`): verify G1–G9 resolved, không phát sinh conflict mới.
 
 ## History
 
-- 2026-10-08T18:55:00+07:00 journal created (write-ahead trước khi gọi spec-validator) — status=running
-- 2026-10-08T19:05:00+07:00 spec-validator phase review **FAIL** — 1 HIGH (G1 CI order) + ≥3 MEDIUM (G2 product count, G3 Solution↔case link, G4 Solution images, G6 case metrics) + LOW. next=user checkpoint.
+- 2026-10-08T18:55:00+07:00 round 1 journal — status=running
+- 2026-10-08T19:05:00+07:00 round 1 **FAIL** — 1 HIGH + ≥3 MED. next=user checkpoint
+- 2026-10-08T19:15:00+07:00 user ratify contract (G2/G3-G4/G6) → task-06 remediation
+- 2026-10-08T19:55:00+07:00 round 2 write-ahead (task-06 PASS + commit `c7c35c3`) — status=running
+- 2026-10-08T20:05:00+07:00 round 2 **PASS** — 9/9 gap resolved; 2 LOW observation (O1/O2) non-blocking → defer L2/L4. next=user checkpoint unlock Layer 1.
