@@ -1,6 +1,6 @@
 # .context/compressed-summary.md
 
-## Last compressed: 2026-10-09T18:05+07:00 (sau Layer 2 PASS round 2; 3 task kể từ compact trước)
+## Last compressed: 2026-10-09T22:05+07:00 (sau Layer 3 PASS; 3 task kể từ compact trước)
 
 > Source of truth cho resume các session sau. Đọc file này trước thay vì toàn bộ history.
 > Kèm: `.context/progress.json` (full), `.context/error-memory.md` (5 entry cuối), `.context/decisions.md` (full).
@@ -27,6 +27,10 @@
 - layer-2-task-07: Blog list + `[slug]` MDX detail Screens 10–11 — DONE (`830f7d9`, r1 FAIL 3 MAJOR → r2 PASS STRICT)
 - fix-blog-list-date-format-phase-1-task-01: MODIFY post-build fix C-L2-1 — DONE (`edb5c4f`, reviewer độc lập r2 PASS STRICT)
 - Layer-2 phase review: r1 FAIL (C-L2-1 + gaps) → r2 **PASS** (`26419d8`/`9823382`)
+- layer-3-task-01: API `GET /api/health` + `POST /api/contact` (guard R-18) — DONE (`6136d48`, r1 FAIL MAJOR rate-limit bypass XFF → r2 PASS STRICT)
+- layer-3-task-02: trang `/contact` Screen 12 + ContactForm 6 states + hook `useContactForm` — DONE (`66f461c`, r1 PASS NORMAL)
+- layer-3-task-03: CTAForm compact + thay CTABanner ở 7 solution detail (Screens 4/6) — DONE (`eddc5d7`, r1 PASS NORMAL)
+- Layer-3 phase review: **PASS** (`bcf5be9`)
 
 ### Key Decisions
 - Xem `.context/decisions.md` (full). Nổi bật: R-03 = ≥2 sản phẩm (ratified); v1 static content files, không API động; giữ `about.partners: []` chờ xác nhận; O1 (case-study metric) omit → render định tính.
@@ -46,22 +50,21 @@
 
 ### Current State
 - Phase: loop (initial build)
-- Current layer: **layer-3** (đã unlock); tasks: 01, 02, 03
-- Layers done: 0, 1, 2 (Layer 2 phase review r2 PASS) · Còn layer 3 (3 task), 4 (4 task)
-- Next task: **layer-3-task-01** — API `/api/health` + `/api/contact` (R-13/R-14/R-18/R-19; STRICT)
-- Build hiện tại: 43 static pages; verify commands trong `.context/project-config.md` = `npm run lint` · `npm run typecheck` · `npm run build` (test_command: null)
+- Current layer: **layer-4** (đã unlock); tasks: 01 (SEO), 02 (Perf), 03 (A11y sweep), 04 (Deploy config)
+- Layers done: 0, 1, 2, 3 (Layer 3 phase review PASS) · Còn layer 4 (4 task)
+- Next task: **layer-4-task-01** — SEO sitemap/robots/JSON-LD/metadata + llms.txt
+- Build hiện tại: 47 static pages; verify commands `.context/project-config.md` = `npm run lint` · `npm run typecheck` · `npm run build` (test_command: null)
 - Branch: `main` (staging-direct); push KHÔNG tự động (`forbidden_branch: main`, `auto_push_after_pass: false`)
 - Spec: `SPECIFICATIONS.md` **1.0.1** (27 req) · `spec/test-scope/current.json` scopeVersion 3
 
 ### Deferred / Non-blocking
-- **[HARD carry-forward L3 task-03]** phải **thay** `CTABanner` bằng `CTAForm` compact ở solution detail (enterprise/AI) — không render 2 CTA song song (design §1.3); source: Layer-2 M-4/C-L2-3.
+- **→ L4 task-03 (a11y/responsive sweep):** m-L3-1 (`ContactForm.tsx:19-22` focus 429 dead branch), m-L3-3 (`contact/page.tsx` map md không full-width), m-L3-4 (`useContactForm.ts:85-97` bỏ server error message + `errors.form/honeypot`).
+- **→ L4 task-01 (SEO):** JSON-LD ContactPage; JSON-LD BreadcrumbList/Service/Organization/WebSite; `robots.txt`/`sitemap.xml`/`llms.txt`; metadata `alternates` hardcode trên vài route; metadata description dài (En blog 190).
+- **→ L4 task-04 (deploy) RESIDUAL:** xác nhận GFE append **rightmost** XFF trên Cloud Run — nếu proxy KHÔNG append như giả định → MAJOR rate-limit mở lại. Rate-limit in-memory per-instance (không share khi scale ngang).
 - **[SOFT] M-2** related sections (RelatedStudies/RelatedSolutions/CaseStudyLink) luôn ẩn vì content chưa khai `related`/`relatedCases` → cần author content hoặc ratify R-08 optional.
-- **[SOFT] residual SSG pagination page-1-only** (chỉ page 1 trong static HTML) → Layer 4 SEO.
-- Layer-2 MINOR m-1..m-10: pagination scroll, `<header>` lặp, carousel aria, Footer thiếu link (Gap 5 L1), metadata description dài (En blog 190), BlogFilter nhận `body` (payload), origin/PAGE_SIZE hardcode trùng.
-- JSON-LD (BreadcrumbList/Service/Organization/WebSite) chưa render → Layer 4 SEO.
-- `robots.txt`/`sitemap.xml`/`llms.txt` → Layer 4 task-01.
-- Metadata `alternates` hardcode trên vài route (bỏ qua `createLocaleAlternates`) — defer Layer 4.
-- Layer-0 OQ: team/partner/logo placeholder; CONTACT_FORM_TARGET chưa chốt giá trị (OQ#4); rate-limit threshold `[cần xác nhận]` (đề xuất 5 req/10 phút/IP) — chốt khi làm L3 task-01.
+- **[SOFT] residual SSG pagination page-1-only** (chỉ page 1 trong static HTML) → L4 SEO cân nhắc.
+- Layer-2 MINOR khác: pagination scroll, `<header>` lặp, carousel aria, Footer thiếu link (Gap 5 L1), BlogFilter nhận `body` (payload), origin/PAGE_SIZE hardcode trùng.
+- Layer-0 OQ: team/partner/logo placeholder; CONTACT_FORM_TARGET chưa chốt giá trị (OQ#4); rate-limit đã chốt 5/10min (Decision 4).
 
 ### Anomalies noted
 - `usage()` / plugin `loop-guard` không có trong runtime → usage gate không kiểm được.
