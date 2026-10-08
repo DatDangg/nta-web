@@ -10,7 +10,7 @@
       "currentPhase": 0,
       "totalLayers": 5,
       "currentLayer": 4,
-      "completedTasks": ["layer-0-task-01", "layer-0-task-02", "layer-0-task-03", "layer-0-task-04", "layer-0-task-05", "layer-0-task-06", "layer-1-task-01", "layer-1-task-02", "layer-1-task-03", "layer-1-task-04", "layer-1-task-05", "fix-layer1-dead-links-phase-1-task-01", "layer-2-task-01", "layer-2-task-02", "layer-2-task-03", "layer-2-task-04", "layer-2-task-05", "layer-2-task-06", "layer-2-task-07", "fix-blog-list-date-format-phase-1-task-01", "layer-3-task-01", "layer-3-task-02", "layer-3-task-03", "layer-4-task-01"],
+      "completedTasks": ["layer-0-task-01", "layer-0-task-02", "layer-0-task-03", "layer-0-task-04", "layer-0-task-05", "layer-0-task-06", "layer-1-task-01", "layer-1-task-02", "layer-1-task-03", "layer-1-task-04", "layer-1-task-05", "fix-layer1-dead-links-phase-1-task-01", "layer-2-task-01", "layer-2-task-02", "layer-2-task-03", "layer-2-task-04", "layer-2-task-05", "layer-2-task-06", "layer-2-task-07", "fix-blog-list-date-format-phase-1-task-01", "layer-3-task-01", "layer-3-task-02", "layer-3-task-03", "layer-4-task-01", "layer-4-task-02"],
       "inProgressTask": null,
       "tasks": [
         {
@@ -213,12 +213,21 @@
           "reviewResult": "PASS",
           "reviewReport": ".context/review-reports/feature-nta-website-layer-4-task-01-round-2-review.md",
           "note": "SEO: sitemap/robots/llms.txt/og-default + JSON-LD (Organization/WebSite/BreadcrumbList/Article/ContactPage) + metadata audit. r1 STRICT FAIL (MAJOR-1 blog OG SVG + shallow-merge mất og tag; MAJOR-2 bỏ helper chung/hardcode domain) → fix (bỏ OG override; gom domain về src/lib/seo.ts BASE_URL+createLocaleAlternates/localizedPath; MINOR-1/2/4/5/6) → r2 STRICT PASS. Residual: desc detail <150 (content-derived), sitemap không lastModified, Organization.logo=banner (MINOR, cần asset logo vuông), Article image URL relative đã chỉnh absolute."
+        },
+        {
+          "id": "layer-4-task-02",
+          "layer": 4,
+          "status": "done",
+          "reviewLevel": "STRICT",
+          "reviewResult": "PASS",
+          "reviewReport": ".context/review-reports/feature-nta-website-layer-4-task-02-round-1-review.md",
+          "note": "Performance: next/font Inter (subset latin+vietnamese, display swap) + next.config images avif/webp + MDX ArticleImage next/image (fallback raw img có lý do). r1 STRICT PASS (0 CRITICAL/MAJOR, 3 MINOR non-blocking). Perf trace 3 trang = 0 longTasks; Lighthouse perf score + LCP/CLS = Blocked (môi trường không có perf benchmark, task cho phép). Residual MINOR: MDX sizes 100vw vs body 720px (latent, content all SVG); alt='' default."
         }
       ],
       "specVersion": "1.0.1",
       "planDir": "tasks/nta-website/",
       "layerPlanDiagram": "docs/diagrams/layer-plan.html",
-      "lastUpdated": "2026-10-09T23:45:00+07:00"
+      "lastUpdated": "2026-10-10T00:25:00+07:00"
     }
   ],
   "bugs": []

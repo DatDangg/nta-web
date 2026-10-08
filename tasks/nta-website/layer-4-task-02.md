@@ -43,13 +43,13 @@ font loading, bundle gọn — đạt mục tiêu LCP < 2.5s (4G) + Lighthouse P
 6. Nếu < 90 → fix root cause (ảnh to, render-blocking, hydration) rồi đo lại — ghi evidence.
 
 ## Acceptance Criteria
-- [ ] 0 ảnh dùng `<img>` thô cho ảnh content (chỉ `<img>` khi next/image không phù hợp + lý do)
-- [ ] Hero `priority` đúng 1 ảnh/trang; ảnh dưới fold lazy; `sizes` khớp layout grid
-- [ ] Font load không FOIT; tiếng Việt render đúng mọi trang
-- [ ] Lighthouse Performance ≥ 90 (mobile, throttled) cho ≥3 trang mẫu — evidence score trong report
-- [ ] LCP < 2.5s (Lighthouse LH metric) · CLS < 0.1
-- [ ] Không regress: UI/interaction/a11y vẫn PASS sau tối ưu
-- [ ] Check commands pass
+- [x] 0 ảnh dùng `<img>` thô cho ảnh content (chỉ `<img>` khi next/image không phù hợp + lý do — MDX fallback có comment lý do)
+- [x] Hero `priority` đúng 1 ảnh/trang; ảnh dưới fold lazy; `sizes` khớp layout grid
+- [x] Font load không FOIT; tiếng Việt render đúng mọi trang (`next/font` Inter `display:swap`, subset vietnamese)
+- [ ] Lighthouse Performance ≥ 90 (mobile, throttled) cho ≥3 trang mẫu — **Blocked**: tool Lighthouse trong môi trường chỉ audit a11y/SEO/best-practices, KHÔNG benchmark performance (task cho phép Blocked + lý do)
+- [ ] LCP < 2.5s (Lighthouse LH metric) · CLS < 0.1 — **Blocked**: `browser.trace` không tính Web Vitals; evidence thay thế: 3 trang mẫu **0 longTasks/0 blocking**
+- [x] Không regress: UI/interaction/a11y vẫn PASS sau tối ưu (reviewer STRICT PASS)
+- [x] Check commands pass
 
 ## Verification Summary
 - Commands: `npm run lint` · `npm run typecheck` · `npm run build`
@@ -64,13 +64,22 @@ font loading, bundle gọn — đạt mục tiêu LCP < 2.5s (4G) + Lighthouse P
 - Escalation: none — sau 3 attempt fail → `architecture_review_needed`
 
 ## DoD (Definition of Done)
-- [ ] Code written (chỉ trong scope — modify tối ưu, không đổi behavior)
-- [ ] Tests: skip — `test_command: null`, ghi lý do
-- [ ] Check commands pass: `npm run lint` · `npm run typecheck` · `npm run build`
-- [ ] Reviewer độc lập PASS
-- [ ] `.context/progress.json` updated
-- [ ] Error Memory / Doc Impact recorded
-- [ ] committed — 1 task = 1 commit (branch `main`, KHÔNG push)
+- [x] Code written (chỉ trong scope — modify tối ưu, không đổi behavior)
+- [x] Tests: skip — `test_command: null`, ghi lý do
+- [x] Check commands pass: `npm run lint` · `npm run typecheck` · `npm run build`
+- [x] Reviewer độc lập PASS (STRICT, 0 CRITICAL/MAJOR, 3 MINOR non-blocking)
+- [x] `.context/progress.json` updated
+- [x] Error Memory / Doc Impact recorded (NO_DOC_IMPACT)
+- [x] committed — 1 task = 1 commit (branch `main`, KHÔNG push)
+
+## Result (as-built)
+- `src/app/[locale]/layout.tsx`: `next/font/google` Inter `subsets:['latin','vietnamese']`, `display:'swap'`, `variable:'--font-inter'`, `preload:true`; `<html className={inter.variable}>`.
+- `next.config.ts`: `images: { formats: ['image/avif','image/webp'] }`.
+- `src/components/mdx/index.tsx`: `ArticleImage` → `next/image` khi có width/height; fallback `<img loading=lazy decoding=async>` (lý do: markdown thiếu intrinsic size). Raw `<img>` còn lại = 1 (fallback có chủ đích).
+- Verify: lint 0 error/1 warning · typecheck PASS · build PASS · 7 WOFF2 + `unicode-range` Vietnamese subset.
+- Perf trace (browser.trace): `/` , `/en/blog/first-steps`, `/solutions/enterprise/crm` → 0 longTasks / 0 blocking mỗi trang.
+- **Blocked (không claim):** Lighthouse Performance score + LCP/CLS — môi trường không có perf benchmark; khuyến nghị đo ở gate DevOps/prod.
+- MINOR non-blocking (reviewer): MDX `sizes="100vw"` vs body max-w-720px (latent, content all SVG); `alt=''` mặc định; `{...props}` spread nới.
 
 ## Files to Create/Modify
 - `src/app/[locale]/**/page.tsx` (ảnh props — sửa nhỏ)

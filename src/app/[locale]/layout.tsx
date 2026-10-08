@@ -7,6 +7,14 @@ import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { createOrganizationJsonLd, createWebSiteJsonLd } from '@/lib/seo/jsonld';
 import { BASE_URL } from '@/lib/seo';
+import { Inter } from 'next/font/google';
+
+const inter = Inter({
+  subsets: ['latin', 'vietnamese'],
+  display: 'swap',
+  variable: '--font-inter',
+  preload: true,
+});
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
@@ -39,7 +47,7 @@ export default async function LocaleLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale}>
+    <html lang={locale} className={inter.variable}>
       <body>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([
           createOrganizationJsonLd(), createWebSiteJsonLd(locale),

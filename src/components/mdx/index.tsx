@@ -1,7 +1,28 @@
 import type { ComponentProps } from 'react';
+import Image from 'next/image';
 
 function ArticleImage(props: ComponentProps<'img'>) {
-  return <img {...props} alt={props.alt ?? ''} loading={props.loading ?? 'lazy'} className="my-8 aspect-auto h-auto w-full rounded-md" />;
+  if (
+    typeof props.width === 'number' &&
+    typeof props.height === 'number' &&
+    typeof props.src === 'string'
+  ) {
+    return (
+      <Image
+        {...props}
+        alt={props.alt ?? ''}
+        height={props.height}
+        loading={props.loading ?? 'lazy'}
+        sizes="100vw"
+        src={props.src}
+        width={props.width}
+        className="my-8 aspect-auto h-auto w-full rounded-md"
+      />
+    );
+  }
+
+  // Markdown images without intrinsic dimensions cannot reserve layout space reliably with next/image.
+  return <img {...props} alt={props.alt ?? ''} loading={props.loading ?? 'lazy'} decoding="async" className="my-8 aspect-auto h-auto w-full rounded-md" />;
 }
 
 export const mdxComponents = {
