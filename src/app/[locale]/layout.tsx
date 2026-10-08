@@ -5,6 +5,10 @@ import { routing } from '@/i18n/routing';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 
+export const metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://ntasolution.vn'),
+};
+
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }

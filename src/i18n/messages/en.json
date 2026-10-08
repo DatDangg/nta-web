@@ -135,5 +135,21 @@
     "related": "Related case studies",
     "meta": { "client": "Client", "sector": "Sector", "year": "Year" },
     "categories": { "enterprise": "Enterprise", "ai": "AI", "app-ai": "AI apps" }
+  },
+  "blog": {
+    "title": "Blog",
+    "intro": "News and insights from NTA on digital solutions, AI and digital transformation.",
+    "metadataDescription": "Explore NTA news, expert perspectives and insights on digital solutions, artificial intelligence and digital transformation, with practical technology trends and ideas for organizations and businesses.",
+    "empty": "No posts yet. Check back soon.",
+    "home": "Go to home",
+    "imageAlt": "Cover image for {title}",
+    "share": "Share",
+    "shareFacebook": "Share this post on Facebook",
+    "shareLinkedIn": "Share this post on LinkedIn",
+    "copyLink": "Copy link",
+    "copied": "Copied",
+    "related": "Related posts",
+    "ctaTitle": "Find the right solution together",
+    "ctaDescription": "Talk with the NTA team about your organization's goals and digital needs."
   }
 }

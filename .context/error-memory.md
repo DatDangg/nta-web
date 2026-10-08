@@ -89,3 +89,12 @@ These rules were learned from real bugs. Apply them to every task, not just when
 - **Fix:** Cho `<Suspense>` một `fallback` là **default list render server** (filter=all, page 1) → static HTML có content + link; client `CaseStudyFilter` vẫn lo filter/pagination/deep-link sau hydration. Route giữ SSG (KHÔNG đọc `searchParams` ở server — sẽ thành dynamic).
 - **Pattern:** `useSearchParams`/query-param client state làm mất nội dung khỏi static HTML. Nội dung chính của trang SSG phải luôn render ở server; chỉ lớp tương tác (lọc/phân trang) là client, và **Suspense fallback phải là nội dung thật**, không rỗng.
 - **Prevention:** Với trang SSG có filter qua query: kiểm `.next/server/app/<route>.html` phải chứa card/link mặc định; nếu không → thêm fallback server-rendered (hoặc render list ở server, chỉ điều khiển UI bằng client).
+
+### Error 5 — layer-2-task-07: server `searchParams` opt-out khỏi SSG (mặt trái của Error 4)
+- **Date:** 2026-10-09
+- **Task:** layer-2/task-07 (Blog list Screen 10 + `[slug]` MDX detail Screen 11)
+- **Error:** Reviewer r1 FAIL ở MAJOR-1 (pagination `?page=` chưa cài). Builder fix bằng cách cho **server component** nhận `searchParams` rồi slice theo page → build vẫn báo `● SSG` nhưng `/vi/blog` + `/en/blog` **rớt khỏi `.next/prerender-manifest.json`** và `blog.html` (static HTML của list) **biến mất** → route thành dynamic (server-render on demand), vi phạm R-16 (SSG) + bài học task-06.
+- **Root Cause:** Đọc `searchParams` ở server component là Dynamic API → Next opt route ra khỏi prerender/SSG. Route table legend (`●`) gây hiểu nhầm; **nguồn xác thực là `prerender-manifest.json`, không phải ký hiệu route table**.
+- **Fix:** Chuyển sang pattern task-06: server render page 1 trong `<Suspense fallback={grid server-rendered}>` + client component (`BlogFilter`) đọc `useSearchParams` để phân trang. `blog.html` chứa lại 4 slug; route về SSG.
+- **Pattern:** Có **hai** cách phá SSG: (a) `useSearchParams` client-only → static HTML rỗng (Error 4); (b) `searchParams` ở server → route thành dynamic (Error 5). Cùng chủ đề "thêm tương tác query param vào trang SSG".
+- **Prevention:** Sau build, **luôn** verify `.next/prerender-manifest.json` chứa route đó + `grep` nội dung trong `.next/server/app/<route>.html`. Đừng tin ký hiệu `●` trên route table. Với list SSG cần `?page=`: server-render trang mặc định trong Suspense fallback, chỉ lớp pagination là client.

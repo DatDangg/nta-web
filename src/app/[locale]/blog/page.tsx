@@ -1,0 +1,50 @@
+import type { Metadata } from 'next';
+import { Suspense } from 'react';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { notFound } from 'next/navigation';
+import { Link } from '@/i18n/navigation';
+import { EmptyState } from '@/components/ui/EmptyState';
+import { PageHeader } from '@/components/shared/PageHeader';
+import { BlogFilter } from '@/components/blog/BlogFilter';
+import { PostCard } from '@/components/cards/PostCard';
+import { getAllPosts } from '@/lib/content/posts';
+import type { Locale } from '@/content/types';
+
+const origin = 'https://ntasolution.vn';
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  if (locale !== 'vi' && locale !== 'en') notFound();
+  const t = await getTranslations({ locale, namespace: 'blog' });
+  return {
+    title: `${t('title')} | NTA`,
+    description: t('metadataDescription'),
+    alternates: { canonical: locale === 'vi' ? `${origin}/blog` : `${origin}/en/blog`, languages: { vi: `${origin}/blog`, en: `${origin}/en/blog`, 'x-default': `${origin}/blog` } },
+  };
+}
+
+export default async function BlogPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  if (locale !== 'vi' && locale !== 'en') notFound();
+  setRequestLocale(locale);
+  const [t, posts] = await Promise.all([getTranslations('blog'), getAllPosts(locale as Locale)]);
+  const firstPagePosts = posts.slice(0, 9);
+  return (
+    <>
+      <PageHeader breadcrumbs={[{ label: t('title') }]} description={t('intro')} title={t('title')} variant="centered" />
+      <section aria-label={t('title')} className="bg-background-alt py-12 md:py-16 xl:py-24">
+        {posts.length === 0 ? (
+          <div className="mx-auto max-w-container px-4 sm:px-6 lg:px-8">
+            <EmptyState message={t('empty')} action={<Link className="mt-4 inline-flex min-h-11 items-center text-primary underline underline-offset-4" href="/">{t('home')}</Link>} />
+          </div>
+        ) : (
+          <div className="mx-auto w-full max-w-container px-4 sm:px-6 lg:px-8">
+            <Suspense fallback={<ul className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">{firstPagePosts.map((post) => <li key={post.slug}><PostCard imageAlt={t('imageAlt', { title: post.title })} post={post} /></li>)}</ul>}>
+              <BlogFilter imageAltTemplate={t('imageAlt', { title: '{title}' })} posts={posts} />
+            </Suspense>
+          </div>
+        )}
+      </section>
+    </>
+  );
+}

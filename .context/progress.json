@@ -10,7 +10,7 @@
       "currentPhase": 0,
       "totalLayers": 5,
       "currentLayer": 2,
-      "completedTasks": ["layer-0-task-01", "layer-0-task-02", "layer-0-task-03", "layer-0-task-04", "layer-0-task-05", "layer-0-task-06", "layer-1-task-01", "layer-1-task-02", "layer-1-task-03", "layer-1-task-04", "layer-1-task-05", "fix-layer1-dead-links-phase-1-task-01", "layer-2-task-01", "layer-2-task-02", "layer-2-task-03", "layer-2-task-04", "layer-2-task-05", "layer-2-task-06"],
+      "completedTasks": ["layer-0-task-01", "layer-0-task-02", "layer-0-task-03", "layer-0-task-04", "layer-0-task-05", "layer-0-task-06", "layer-1-task-01", "layer-1-task-02", "layer-1-task-03", "layer-1-task-04", "layer-1-task-05", "fix-layer1-dead-links-phase-1-task-01", "layer-2-task-01", "layer-2-task-02", "layer-2-task-03", "layer-2-task-04", "layer-2-task-05", "layer-2-task-06", "layer-2-task-07"],
       "inProgressTask": null,
       "tasks": [
         {
@@ -158,12 +158,21 @@
           "reviewLevel": "NORMAL",
           "reviewResult": "PASS",
           "reviewReport": ".context/review-reports/feature-nta-website-layer-2-task-06-round-2-review.md"
+        },
+        {
+          "id": "layer-2-task-07",
+          "layer": 2,
+          "status": "done",
+          "reviewLevel": "STRICT",
+          "reviewResult": "PASS",
+          "reviewReport": ".context/review-reports/feature-nta-website-layer-2-task-07-round-2-review.md",
+          "note": "Blog list (Screen 10) + [slug] MDX detail (Screen 11). Round-1 FAIL (3 MAJOR: pagination chưa cài; ShareBar đọc window khi render; thiếu metadataBase) → fix; builder fix lần 1 gây regression SSG (server searchParams → /blog rớt prerender-manifest) → rework pattern task-06 (Suspense fallback server + BlogFilter client) → round-2 PASS STRICT. MINOR non-blocking deferred (Error 5 logged)."
         }
       ],
       "specVersion": "1.0.0",
       "planDir": "tasks/nta-website/",
       "layerPlanDiagram": "docs/diagrams/layer-plan.html",
-      "lastUpdated": "2026-10-09T13:48:00+07:00"
+      "lastUpdated": "2026-10-09T16:10:00+07:00"
     }
   ],
   "bugs": []

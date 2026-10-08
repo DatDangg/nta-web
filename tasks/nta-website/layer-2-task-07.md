@@ -47,33 +47,37 @@ Render danh sách bài viết (PostCard grid + pagination + empty state) và tra
 4. RelatedPosts sort cùng category, loại bài hiện tại; messages key `blog.*`.
 
 ## Acceptance Criteria
-- [ ] List 2 locale: grid đúng bp, `<time>` hiển thị theo locale, pagination hoạt động
-- [ ] Chi tiết: MDX render đúng (heading, list, ảnh, link), prose ≤720px desktop
-- [ ] ShareBar: 3 nút có `aria-label`, copy-link toast `role="status"`
-- [ ] Slug sai → 404; 0 bài → empty state copy đúng design
-- [ ] Không `dangerouslySetInnerHTML` với input không qua pipeline MDX an toàn
-- [ ] Metadata/JSON-LD per post + hreflang; check commands pass
+- [x] List 2 locale: grid đúng bp, `<time>` hiển thị theo locale, pagination hoạt động — `BlogFilter` đọc `?page=`, slice 9, clamp; **route vẫn SSG** (`/vi/blog`+`/en/blog` trong prerender-manifest, `blog.html` có slug)
+- [x] Chi tiết: MDX render đúng (heading, list, ảnh, link), prose ≤720px desktop — `next-mdx-remote/rsc`, h1→h2, `max-w-[720px]`
+- [x] ShareBar: 3 nút có `aria-label`, copy-link toast `role="status"` — `role="group"` + `pageUrl` từ server
+- [x] Slug sai → 404; 0 bài → empty state copy đúng design
+- [x] Không `dangerouslySetInnerHTML` với input không qua pipeline MDX an toàn — chỉ JSON-LD đã escape `<`
+- [x] Metadata/JSON-LD per post + hreflang; check commands pass — `metadataBase` fixed, OG resolve `https://ntasolution.vn`
 
 ## Verification Summary
-- Commands: `npm run lint` · `npm run typecheck` · `npm run build`
-- Test: `test_command: null` → skip, ghi lý do
-- Manual evidence: ≥3 bài × 2 locale render đủ; copy-link toast; slug sai → 404; list rỗng → empty
-- Reviewer report: `.context/review-reports/feature-nta-website-layer-2-task-07-round-1-review.md`
+- Commands: `npm run lint` (PASS, 1 warning `<img>`) · `npm run typecheck` (PASS) · `npm run build` (PASS, 43 static pages)
+- Test: `test_command: null` → skip, no test framework
+- Manual evidence: `/vi/blog`+`/en/blog` trong `.next/prerender-manifest.json`; `vi/blog.html` chứa 4 slug; ShareBar static href nonempty; `og:image` = `https://ntasolution.vn/...`; canonical/hreflang 2 locale
+- Reviewer report: `.context/review-reports/feature-nta-website-layer-2-task-07-round-2-review.md` (round 1 FAIL → round 2 **PASS STRICT**)
 
 ## Retry / Error Memory
-- Attempt: 0
-- Last failure type: n/a
-- Error memory entry: none
+- Attempt: 1 (fix cycle; rework #2 chỉnh trong cùng cycle — không tính attempt mới)
+- Last failure type: MAJOR (pagination không cài; ShareBar hydration; thiếu metadataBase) → r1 FAIL; fix lần 1 gây regression SSG (server `searchParams`) → r2 PASS STRICT
+- Error memory entry: **Error 5** (server `searchParams` opt-out khỏi SSG — mặt trái của Error 4 task-06)
 - Escalation: none — sau 3 attempt fail → `architecture_review_needed`
 
+## Doc / Decision Impact
+- NO_DOC_IMPACT — Screens 10–11, R-09/R-16/R-21/R-24; không đổi API contract/schema/behavior tài liệu hoá.
+- Decision impact: NO.
+
 ## DoD (Definition of Done)
-- [ ] Code written (chỉ trong scope)
-- [ ] Tests: skip — `test_command: null`, ghi lý do
-- [ ] Check commands pass: `npm run lint` · `npm run typecheck` · `npm run build`
-- [ ] Reviewer độc lập PASS
-- [ ] `.context/progress.json` updated
-- [ ] Error Memory / Doc Impact recorded
-- [ ] committed — 1 task = 1 commit (branch `main`, KHÔNG push)
+- [x] Code written (chỉ trong scope)
+- [x] Tests: skip — `test_command: null`, ghi lý do
+- [x] Check commands pass: `npm run lint` · `npm run typecheck` · `npm run build`
+- [x] Reviewer độc lập PASS (round 2, STRICT)
+- [x] `.context/progress.json` updated
+- [x] Error Memory / Doc Impact recorded
+- [x] committed — 1 task = 1 commit (branch `main`, KHÔNG push)
 
 ## Files to Create/Modify
 - `src/app/[locale]/blog/page.tsx`
