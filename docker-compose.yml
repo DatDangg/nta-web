@@ -1,0 +1,32 @@
+# docker-compose.yml — NTA Website (Next.js standalone) trên VPS.
+#
+# Chạy: docker compose up -d --build
+# App bind 127.0.0.1:3005 (chỉ nội bộ) → nginx reverse proxy (HTTPS) đứng trước.
+#
+# Biến môi trường (đọc từ shell/.env, KHÔNG commit giá trị thật):
+#   NEXT_PUBLIC_SITE_URL   build-time, canonical URL (mặc định https://ntasolution.vn)
+#   CONTACT_FORM_TARGET    server-only, đích forward form (OQ#4 — có thể để trống tạm)
+#   HOST_PORT              port host (mặc định 3005)
+
+services:
+  nta-web:
+    build:
+      context: .
+      args:
+        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-https://ntasolution.vn}
+    image: nta-web:latest
+    container_name: nta-web
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${HOST_PORT:-3005}:8080"
+    environment:
+      NODE_ENV: production
+      PORT: "8080"
+      HOSTNAME: 0.0.0.0
+      CONTACT_FORM_TARGET: ${CONTACT_FORM_TARGET:-}
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:8080/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s

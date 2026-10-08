@@ -1,54 +1,46 @@
-# DRAFT: generated only; do not run until GCP/WIF variables and deployment are approved.
-# Manual trigger only — intentionally no push/tag auto-trigger (no automatic deploy).
-name: Deploy (Cloud Run)
+name: Deploy (VPS)
 
+# Chạy trên self-hosted GitHub Actions runner đã gắn với repo này (label: nta-web).
+# Trigger: push lên main, hoặc chạy tay (workflow_dispatch).
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+
+concurrency:
+  group: deploy-nta-web
+  cancel-in-progress: false
 
 permissions:
   contents: read
-  id-token: write
 
 env:
-  PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}
-  REGION: asia-southeast1
-  AR_REPO: ${{ vars.GCP_ARTIFACT_REGISTRY_REPOSITORY }}
-  SERVICE: ${{ vars.GCP_CLOUD_RUN_SERVICE }}
+  NEXT_PUBLIC_SITE_URL: https://ntasolution.vn
+  HOST_PORT: "3005"
+  CONTACT_FORM_TARGET: ${{ secrets.CONTACT_FORM_TARGET }}
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, nta-web]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Authenticate to Google Cloud (Workload Identity Federation)
-        uses: google-github-actions/auth@v2
-        with:
-          workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ vars.GCP_DEPLOY_SERVICE_ACCOUNT }}
-      - name: Set up gcloud
-        uses: google-github-actions/setup-gcloud@v2
-      - name: Build and push image
-        env:
-          IMAGE: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.AR_REPO }}/${{ env.SERVICE }}:${{ github.sha }}
+
+      - name: Build image
+        run: docker compose build
+
+      - name: Deploy (recreate)
+        run: docker compose up -d --remove-orphans
+
+      - name: Health check
         run: |
-          gcloud auth configure-docker "${REGION}-docker.pkg.dev" --quiet
-          docker build --tag "$IMAGE" .
-          docker push "$IMAGE"
-      - name: Deploy Cloud Run service
-        env:
-          IMAGE: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.AR_REPO }}/${{ env.SERVICE }}:${{ github.sha }}
-        run: |
-          gcloud run deploy "$SERVICE" \
-            --image "$IMAGE" \
-            --project "$PROJECT_ID" \
-            --region "$REGION" \
-            --max-instances 3 \
-            --min-instances 0 \
-            --allow-unauthenticated \
-            --port 8080 \
-            --set-secrets "CONTACT_FORM_TARGET=CONTACT_FORM_TARGET:latest"
-      - name: Verify health endpoint
-        run: |
-          SERVICE_URL="$(gcloud run services describe "$SERVICE" --project "$PROJECT_ID" --region "$REGION" --format='value(status.url)')"
-          curl --fail --show-error --silent "$SERVICE_URL/api/health"
+          for i in $(seq 1 12); do
+            if curl -fsS "http://127.0.0.1:${HOST_PORT}/api/health"; then
+              echo "health OK"
+              exit 0
+            fi
+            sleep 3
+          done
+          echo "health check FAILED"
+          docker compose logs --tail=80
+          exit 1

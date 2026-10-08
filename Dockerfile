@@ -7,6 +7,9 @@ COPY package.json package-lock.json ./
 RUN npm ci
 
 FROM base AS builder
+# NEXT_PUBLIC_* được inline lúc build (canonical URL/SEO) → phải truyền qua build-arg.
+ARG NEXT_PUBLIC_SITE_URL
+ENV NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN npm run build

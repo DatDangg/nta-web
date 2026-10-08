@@ -48,8 +48,15 @@ prod_db: null                  # db_tool: none → không áp dụng; nếu thê
 destructive_migration_policy: HIGH_RISK_MIGRATION
 
 # ── Deploy / CI-CD (từ brainstorm; secret nằm ở .env.local) ──
-deploy_platform: other         # ✅ thực tế = gcp-cloud-run (asia-southeast1, scale-to-zero) — menu brainstorm chưa có option
-ci_cd: github-actions          # ✅ chốt 08/10/2026
+deploy_platform: docker-vps    # ✅ cập nhật 09/10/2026 — VPS riêng 187.52.119.50 (shared server) + Docker + nginx + certbot (thay gcp-cloud-run)
+ci_cd: github-actions          # ✅ chốt 08/10/2026 — dùng self-hosted runner gắn repo DatDangg/nta-web (label nta-web)
+# ── VPS (khi deploy_platform: docker-vps) ──
+vps_host: 187.52.119.50        # ✅ VPS Ubuntu 24.04; shared: ismartschool/crm-dhp/tmfoods — CHỈ thêm container mới
+vps_user: root
+vps_port: 22                   # SSH key auth (key hiện tại trên máy dev)
+vps_deploy_dir: /opt/nta-web
+domain: ntasolution.vn         # ⏳ DNS A record chưa publish trên PA Vietnam (chặn HTTPS/certbot)
+internal_port: 3005            # host 127.0.0.1:3005 → container 8080; nginx proxy
 
 # ── Monitoring ──
 monitor_enabled: false         # true | false
