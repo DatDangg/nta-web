@@ -7,19 +7,20 @@ workItem: brainstorm/nta-website
 phaseTask: initial
 step: brainstorm
 agent: null                          # prompt-level (.agent/brainstorm.md) — primary tự thực thi
-status: awaiting
+status: done
 attempt: 0
 interrupted: false
-updatedAt: 2026-10-08T15:10:00+07:00
+updatedAt: 2026-10-08T15:15:00+07:00
 filesTouched: [spec/CHANGELOG.md, .context/spec-notes.md, .opencode/agent/builder.md, .opencode/agent/builder-strong.md, .opencode/agent/reviewer.md, .opencode/agent/spec-validator.md, .opencode/agent/change-request.md]
 filesNew: [spec/updates/2026-10-08-reverse-spec.md, spec/test-scope/current.json, .context/runs/spec-init-nta-website-initial.md, .context/runs/brainstorm-nta-website-initial.md, .context/review-reports/spec-validation.md, .context/review-reports/feature-nta-website-spec-round-1-spec.md, .context/review-reports/feature-nta-website-spec-round-2-spec.md, .context/doc-index.json, .context/brainstorm-log.md, docs/specs/2026-10-08-nta-website-design.md]
 evidence:
   reportPath: .context/review-reports/spec-validation.md   # round 2 PASS
   round: 2
   verdict: PASS
-next: "⏸ CHECKPOINT: user approve design doc → commit (spec+config+design) → bước 3 Design tokens (/design)"
+next: "DONE — commit ecf2c08 (spec+config+design) → bước 3 Design (/design subagent)"
 loopSignal: none
-approvals: []
+approvals:
+  - {gate: design_approved, at: 2026-10-08T15:15:00+07:00, ok: true}   # user reply "ok"
 batchQueue: []
 ```
 
