@@ -1,46 +1,43 @@
 {
-  "specVersion": "1.0.0",
-  "scopeVersion": 2,
-  "generatedAt": "2026-10-09T06:25:00+07:00",
+  "specVersion": "1.0.1",
+  "scopeVersion": 3,
+  "generatedAt": "2026-10-09T17:10:00+07:00",
   "trigger": "feature-update",
-  "workItem": "fix-layer1-dead-links",
-  "specRefs": ["R-03", "R-05", "R-06", "R-07", "R-11"],
+  "workItem": "fix-blog-list-date-format",
+  "specRefs": ["R-09"],
   "changed": {
     "files": [
-      "src/components/cards/ProductCard.tsx",
-      "src/components/cards/AppCard.tsx",
-      "src/components/layout/MobileNav.tsx",
-      "src/components/layout/Footer.tsx",
-      "tasks/nta-website/layer-2-task-01.md",
-      "tasks/nta-website/layer-0-task-04.md",
-      "spec/updates/2026-10-09-fix-layer1-dead-links.md",
+      "src/lib/format/date.ts",
+      "src/components/cards/PostCard.tsx",
+      "src/components/blog/ArticleHeader.tsx",
+      "SPECIFICATIONS.md",
+      "spec/updates/2026-10-09-fix-blog-list-date-format.md",
       "spec/CHANGELOG.md",
       "spec/test-scope/current.json"
     ],
-    "modules": ["nav-footer", "home", "products"]
+    "modules": ["blog"]
   },
   "impact": {
     "direct": [
-      "MobileNav drawer: bỏ link cha /solutions, giữ label nhóm + 2 sub-link enterprise/ai",
-      "Footer: bỏ link /privacy, giữ dòng copyright",
-      "ProductCard/AppCard: link target đổi sang /products"
+      "Blog list card (PostCard) hiển thị ngày theo locale: VI dd/mm/yyyy '08/10/2026', EN 'Oct 8, 2026'",
+      "Blog detail (ArticleHeader) dùng cùng nguồn format util (hành vi hiển thị không đổi)"
     ],
     "dependents": [
-      "Layer-2 home ProductStrip (mount ProductCard)",
-      "Layer-2 /products page (mount AppCard)"
+      "RelatedPosts (blog detail) mount PostCard",
+      "BlogFilter + blog/page.tsx SSG fallback mount PostCard"
     ],
     "regression": [
-      "Header desktop solutions dropdown",
-      "Footer 4-col + copyright + social + language toggle",
-      "Mobile drawer focus-trap / Esc / active route"
+      "Blog list SSG /vi/blog + /en/blog vẫn prerender",
+      "Blog detail /blog/[slug] (metadata, ShareBar, RelatedPosts) không đổi",
+      "CaseStudyCard year-only (design S8) không đổi"
     ]
   },
   "acceptance": [
-    "ProductCard/AppCard không render href tới /products/[slug]",
-    "MobileNav không có link /solutions; còn 2 sub-link /solutions/enterprise, /solutions/ai",
-    "Footer không có link /privacy; dòng copyright còn",
-    "layer-2-task-01.md + layer-0-task-04.md khớp R-03 = ≥2",
-    "npm run lint · npm run typecheck · npm run build PASS"
+    "Blog list VI hiển thị '08/10/2026' (dd/mm/yyyy), EN 'Oct 8, 2026'",
+    "Blog detail VI '08/10/2026', EN 'Oct 8, 2026' (không regression)",
+    "1 nguồn format dùng chung src/lib/format/date.ts; không còn dateStyle:'medium'",
+    "npm run lint · npm run typecheck · npm run build PASS; .next/prerender-manifest.json có /vi/blog",
+    "CaseStudyCard không đổi"
   ],
   "risk": "low"
 }

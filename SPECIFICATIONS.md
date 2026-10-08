@@ -1,6 +1,6 @@
 ---
-spec_version: 1.0.0
-updated_at: 2026-10-08
+spec_version: 1.0.1
+updated_at: 2026-10-09
 ---
 
 # SPECIFICATIONS.md — NTA Website
@@ -95,6 +95,9 @@ Nguồn: `BRIEF.md:15-16`, `docs/BRD.md:51,167` (quyết định ngày 08/10/202
   Priority: Medium (theo FR-060). `[reverse-engineered from docs]`
   — nguồn: `docs/BRD.md:103-105` (FR-060), `docs/DESIGN.md:121-123`
   - Empty state cho list chưa specify — `[cần xác nhận]` khi implement.
+  - Ngày hiển thị trên card blog **list** dùng **cùng format locale** với detail (design S11):
+    VI `dd/mm/yyyy` (`08/10/2026`), EN `Oct 8, 2026` — **1 nguồn util dùng chung**
+    (`src/lib/format/date.ts`). _(clarify 2026-10-09 — fix C-L2-1)_
 - `[cần xác nhận]` blog là static file hay cần CMS (Open Question — `docs/BRD.md:177`)
 
 ### Module 8 — Liên hệ
