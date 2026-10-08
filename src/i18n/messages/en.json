@@ -79,6 +79,19 @@
       "screenshotsTitle": "Solution screenshots",
       "relatedTitle": "Related solutions",
       "imageAlt": "Illustration of {title} solution"
+    },
+    "ai": {
+      "title": "AI Solutions",
+      "description": "AI applied to operations and customer experience, from internal assistants to custom computer vision.",
+      "detailTitle": "{title} for your business",
+      "featuresTitle": "Key features",
+      "useCasesTitle": "Use cases",
+      "caseStudyTitle": "Implementation story",
+      "relatedCaseTitle": "Related case study",
+      "caseStudyLink": "View case study",
+      "ctaTitle": "Find the right solution together",
+      "ctaDescription": "Talk with the NTA team about your organization’s goals and digital needs.",
+      "imageAlt": "Illustration of {title} solution"
     }
   },
   "about": {

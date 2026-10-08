@@ -79,6 +79,19 @@
       "screenshotsTitle": "Hình ảnh giải pháp",
       "relatedTitle": "Giải pháp liên quan",
       "imageAlt": "Minh họa giải pháp {title}"
+    },
+    "ai": {
+      "title": "Giải pháp AI",
+      "description": "Ứng dụng AI vào vận hành và trải nghiệm khách hàng, từ trợ lý nội bộ đến thị giác máy tính theo yêu cầu.",
+      "detailTitle": "{title} cho doanh nghiệp",
+      "featuresTitle": "Tính năng nổi bật",
+      "useCasesTitle": "Ứng dụng thực tế",
+      "caseStudyTitle": "Câu chuyện triển khai",
+      "relatedCaseTitle": "Case study liên quan",
+      "caseStudyLink": "Xem case study",
+      "ctaTitle": "Cùng tìm giải pháp phù hợp",
+      "ctaDescription": "Trao đổi với đội ngũ NTA về mục tiêu và nhu cầu số hóa của tổ chức.",
+      "imageAlt": "Minh họa giải pháp {title}"
     }
   },
   "about": {

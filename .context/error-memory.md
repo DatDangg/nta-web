@@ -71,3 +71,12 @@ These rules were learned from real bugs. Apply them to every task, not just when
 - **Fix:** Move `HomeImage` → `src/components/shared/HomeImage.tsx`; cards import từ `shared/`; xoá file cũ. r3 PASS.
 - **Pattern:** Hướng phụ thuộc component phải đi **từ tầng dưới lên** (page → shared/ui → lib), không bao giờ ngược lại. Shared/UI component KHÔNG được import từ `components/<page>/`.
 - **Prevention:** Trước khi tái dùng component shared, kiểm tầng phụ thuộc; nếu cần custom, mở rộng bằng props optional hoặc hạ helper xuống `shared/`/`ui/`, không hạ page module lên shared.
+
+### Error 3 — layer-2-task-04: content order không tất định + nested landmark
+- **Date:** 2026-10-09
+- **Task:** layer-2/task-04 (Solutions AI overview + 3 slug, Screens 5–6)
+- **Error:** Reviewer r1 FAIL (2 MAJOR): (a) `ai/page.tsx` lấy thứ tự card từ `getAllSolutions` → `loadMdxDirectory` dùng `readdir` **chưa sort** → order phụ thuộc filesystem; đồng thời `md:col-span-2` key theo slug `custom-ai` (giả định luôn ở vị trí 3) → layout 2+1 không đảm bảo. (b) `ai/[slug]/page.tsx` render `<main>` lồng trong `<main id="main">` của `layout.tsx` → nested main landmark (vi phạm HTML/WCAG, R-24).
+- **Root Cause:** (a) Tin vào order từ `readdir` (không đảm bảo) và gắn style theo slug thay vì vị trí. (b) Copy wrapper `<main>` từ nhầm thay vì theo pattern sibling enterprise (dùng `<div>`).
+- **Fix:** Sort theo canonical `aiSlugs`; key full-width theo `index === 2`; đổi `<main>` → `<div>`; dùng `getAiStaticParams()`; teaser id dùng `useId()`. r2 PASS.
+- **Pattern:** Order nội dung đọc từ filesystem (`readdir`/glob) KHÔNG tất định — luôn sort theo danh sách canonical trước khi render. Layout responsive phải key theo **vị trí** (index/nth-child), không theo slug/content value.
+- **Prevention:** Mọi trang list content phải sort tường minh theo thứ tự design; chỉ có **một** `<main>` (ở layout) — page chỉ dùng `<div>`/`<section>`.

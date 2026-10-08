@@ -44,33 +44,33 @@ Render overview `/solutions/ai` (3 card + CaseStudyTeaser) + 3 trang con `boxai|
 3. Copy theo design Screen 5/6 (VI/EN); messages key `solutions.ai.*`.
 
 ## Acceptance Criteria
-- [ ] Overview: 3 card + CaseStudyTeaser + CTABanner; không lặp layout family grid
-- [ ] 3 slug build tĩnh 2 locale; slug sai → 404
-- [ ] CaseStudyLink trỏ đúng route case study (vd Óc Eo); case null → ẩn block
-- [ ] UseCases semantic list; số liệu kèm mô tả text (a11y)
-- [ ] Responsive khớp bảng Screen 5/6; metadata/alternates riêng slug
-- [ ] Check commands pass
+- [x] Overview: 3 card + CaseStudyTeaser + CTABanner; không lặp layout family grid (2+1 keyed position)
+- [x] 3 slug build tĩnh 2 locale (`getAiStaticParams`); slug sai → `notFound()` (404)
+- [x] CaseStudyLink trỏ đúng route case study cùng locale; case null → ẩn block (content chưa khai relatedCases)
+- [x] UseCases semantic list; số liệu kèm mô tả text (a11y) — N/A, content AI không có số liệu
+- [x] Responsive khớp bảng Screen 5/6; metadata/alternates riêng slug (brand map)
+- [x] Check commands pass
 
 ## Verification Summary
-- Commands: `npm run lint` · `npm run typecheck` · `npm run build`
-- Test: `test_command: null` → skip, ghi lý do
-- Manual evidence: 4 URL × 2 locale + slug sai → 404; teaser/case-link click-through đúng
-- Reviewer report: `.context/review-reports/feature-nta-website-layer-2-task-04-round-1-review.md`
+- Commands: `npm run lint` · `npm run typecheck` · `npm run build` — PASS (primary re-run sau reviewer r2; 25 static pages; AI overview + 6 detail route SSG)
+- Test: `test_command: null` → skip, chưa có test framework
+- Manual evidence: reviewer CSS math; order 2+1 xác minh code (sort theo `aiSlugs` + position)
+- Reviewer report: `.context/review-reports/feature-nta-website-layer-2-task-04-round-2-review.md` (r1 FAIL 2 MAJOR → fix → **r2 PASS**, NORMAL)
 
 ## Retry / Error Memory
-- Attempt: 0
-- Last failure type: n/a
-- Error memory entry: none
+- Attempt: 1 (r1 FAIL: MAJOR-1 order readdir + 2+1 key theo slug; MAJOR-2 nested `<main>` → fix sort/position + `<div>` + MINOR-2/3 → r2 PASS)
+- Last failure type: MAJOR a11y/semantics + non-deterministic layout
+- Error memory entry: cân nhắc ghi "readdir không sort → order không tất định" (xem error-memory)
 - Escalation: none — sau 3 attempt fail → `architecture_review_needed`
 
 ## DoD (Definition of Done)
-- [ ] Code written (chỉ trong scope)
-- [ ] Tests: skip — `test_command: null`, ghi lý do
-- [ ] Check commands pass: `npm run lint` · `npm run typecheck` · `npm run build`
-- [ ] Reviewer độc lập PASS
-- [ ] `.context/progress.json` updated
-- [ ] Error Memory / Doc Impact recorded
-- [ ] committed — 1 task = 1 commit (branch `main`, KHÔNG push)
+- [x] Code written (chỉ trong scope)
+- [x] Tests: skip — `test_command: null`, ghi lý do
+- [x] Check commands pass: `npm run lint` · `npm run typecheck` · `npm run build`
+- [x] Reviewer độc lập PASS (r2 NORMAL)
+- [x] `.context/progress.json` updated
+- [x] Error Memory / Doc Impact recorded (NO_DOC_IMPACT)
+- [x] committed — 1 task = 1 commit (branch `main`, KHÔNG push)
 
 ## Files to Create/Modify
 - `src/app/[locale]/solutions/ai/page.tsx`
