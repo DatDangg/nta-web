@@ -80,3 +80,12 @@ These rules were learned from real bugs. Apply them to every task, not just when
 - **Fix:** Sort theo canonical `aiSlugs`; key full-width theo `index === 2`; đổi `<main>` → `<div>`; dùng `getAiStaticParams()`; teaser id dùng `useId()`. r2 PASS.
 - **Pattern:** Order nội dung đọc từ filesystem (`readdir`/glob) KHÔNG tất định — luôn sort theo danh sách canonical trước khi render. Layout responsive phải key theo **vị trí** (index/nth-child), không theo slug/content value.
 - **Prevention:** Mọi trang list content phải sort tường minh theo thứ tự design; chỉ có **một** `<main>` (ở layout) — page chỉ dùng `<div>`/`<section>`.
+
+### Error 4 — layer-2-task-06: `useSearchParams` de-opt → SSG HTML rỗng
+- **Date:** 2026-10-09
+- **Task:** layer-2/task-06 (Case Studies list + detail, Screens 8–9)
+- **Error:** Reviewer r1 FAIL (MAJOR): list page render toàn bộ filter/grid/pagination bên trong client component dùng `useSearchParams` (bọc `<Suspense>` với fallback rỗng). Kết quả: static HTML của `/vi|/en/case-studies` **không có** card/link nào (no-JS + crawler + AI crawler thấy list rỗng), dù build vẫn báo `● SSG`.
+- **Root Cause:** `useSearchParams` trong client component khiến subtree trong Suspense boundary bị render client-side; fallback (thứ được đưa vào static HTML) là rỗng.
+- **Fix:** Cho `<Suspense>` một `fallback` là **default list render server** (filter=all, page 1) → static HTML có content + link; client `CaseStudyFilter` vẫn lo filter/pagination/deep-link sau hydration. Route giữ SSG (KHÔNG đọc `searchParams` ở server — sẽ thành dynamic).
+- **Pattern:** `useSearchParams`/query-param client state làm mất nội dung khỏi static HTML. Nội dung chính của trang SSG phải luôn render ở server; chỉ lớp tương tác (lọc/phân trang) là client, và **Suspense fallback phải là nội dung thật**, không rỗng.
+- **Prevention:** Với trang SSG có filter qua query: kiểm `.next/server/app/<route>.html` phải chứa card/link mặc định; nếu không → thêm fallback server-rendered (hoặc render list ở server, chỉ điều khiển UI bằng client).

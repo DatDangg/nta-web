@@ -121,5 +121,19 @@
     "download": "Tải ứng dụng",
     "ctaTitle": "Cùng tìm giải pháp phù hợp",
     "ctaDescription": "Trao đổi với đội ngũ NTA về mục tiêu và nhu cầu số hóa của tổ chức."
+  },
+  "caseStudies": {
+    "title": "Case study",
+    "intro": "Các dự án số hóa được triển khai theo nhu cầu thực tế của từng tổ chức.",
+    "emptyMessage": "Chưa có case study trong mảng này.",
+    "clearFilter": "Xóa bộ lọc",
+    "imageAlt": "Hình ảnh case study {title}",
+    "challenge": "Thách thức",
+    "solution": "Giải pháp",
+    "result": "Kết quả",
+    "gallery": "Hình ảnh dự án",
+    "related": "Case study liên quan",
+    "meta": { "client": "Khách hàng", "sector": "Lĩnh vực", "year": "Năm" },
+    "categories": { "enterprise": "Doanh nghiệp", "ai": "AI", "app-ai": "App AI" }
   }
 }

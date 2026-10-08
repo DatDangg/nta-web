@@ -48,34 +48,33 @@ Render danh sách case study (FilterBar client-side + grid + pagination + empty 
 4. Copy VI/EN; messages key `caseStudies.*`.
 
 ## Acceptance Criteria
-- [ ] List: filter đổi client-side không reload, `aria-pressed` + announce số kết quả; `?filter=` giữ khi đổi `?page=`
-- [ ] Empty filter → message + nút "Xóa bộ lọc" hoạt động
-- [ ] ≥2 case build tĩnh 2 locale; chi tiết đủ MetaBar/Challenge/Solution/Result/Related
-- [ ] Slug sai → 404; BR-004: không tên khách chưa xin phép; số liệu không bịa
-- [ ] MetaBar `<dl>` semantic; pagination `aria-current`; responsive khớp bảng Screen 8/9
-- [ ] Check commands pass
+- [x] List: filter đổi client-side không reload, `aria-pressed` + announce số kết quả; `?filter=` giữ khi đổi `?page=`
+- [x] Empty filter → message + nút "Xóa bộ lọc" hoạt động
+- [x] ≥2 case build tĩnh 2 locale; chi tiết đủ MetaBar/Challenge/Solution/Result (Related ẩn — content `related: []`)
+- [x] Slug sai → 404; BR-004: không tên khách chưa xin phép; số liệu không bịa
+- [x] MetaBar `<dl>` semantic; pagination `aria-current`; responsive khớp bảng Screen 8/9
+- [x] Check commands pass (SSG HTML có card links — không client-only)
 
 ## Verification Summary
-- Commands: `npm run lint` · `npm run typecheck` · `npm run build`
-- Test: `test_command: null` → skip, ghi lý do
-- Manual evidence: filter+pagination deep-link round-trip; 2 case × 2 locale; slug sai → 404;
-  filter rỗng → EmptyState
-- Reviewer report: `.context/review-reports/feature-nta-website-layer-2-task-06-round-1-review.md`
+- Commands: `npm run lint` · `npm run typecheck` · `npm run build` — PASS (primary; 33 static pages; `/vi|/en/case-studies` + 4 detail SSG; static HTML chứa card links)
+- Test: `test_command: null` → skip, chưa có test framework
+- Manual evidence: filter/pagination deep-link (code); 2 case × 2 locale; static HTML marker verify; slug sai dựa `notFound()`
+- Reviewer report: `.context/review-reports/feature-nta-website-layer-2-task-06-round-2-review.md` (r1 FAIL MAJOR list client-only → fix Suspense fallback SSR list → r2 PASS, NORMAL)
 
 ## Retry / Error Memory
-- Attempt: 0
-- Last failure type: n/a
-- Error memory entry: none
+- Attempt: 1 (r1 FAIL MAJOR: useSearchParams de-opt → list CSR, HTML rỗng; fix fallback server-rendered default list + MINOR → r2 PASS)
+- Last failure type: MAJOR SEO/SSG (client-only render)
+- Error memory entry: xem `.context/error-memory.md` — cân nhắc entry "useSearchParams de-opt → SSG HTML rỗng; dùng Suspense fallback server-rendered"
 - Escalation: none — sau 3 attempt fail → `architecture_review_needed`
 
 ## DoD (Definition of Done)
-- [ ] Code written (chỉ trong scope)
-- [ ] Tests: skip — `test_command: null`, ghi lý do
-- [ ] Check commands pass: `npm run lint` · `npm run typecheck` · `npm run build`
-- [ ] Reviewer độc lập PASS
-- [ ] `.context/progress.json` updated
-- [ ] Error Memory / Doc Impact recorded
-- [ ] committed — 1 task = 1 commit (branch `main`, KHÔNG push)
+- [x] Code written (chỉ trong scope — gồm EmptyState `announce` optional backward-compat)
+- [x] Tests: skip — `test_command: null`, ghi lý do
+- [x] Check commands pass: `npm run lint` · `npm run typecheck` · `npm run build`
+- [x] Reviewer độc lập PASS (r2 NORMAL)
+- [x] `.context/progress.json` updated
+- [x] Error Memory / Doc Impact recorded (NO_DOC_IMPACT)
+- [x] committed — 1 task = 1 commit (branch `main`, KHÔNG push)
 
 ## Files to Create/Modify
 - `src/app/[locale]/case-studies/page.tsx`

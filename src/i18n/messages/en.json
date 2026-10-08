@@ -121,5 +121,19 @@
     "download": "Download app",
     "ctaTitle": "Find the right solution together",
     "ctaDescription": "Talk with the NTA team about your organization’s goals and digital needs."
+  },
+  "caseStudies": {
+    "title": "Case studies",
+    "intro": "Digital projects delivered to meet the practical needs of each organization.",
+    "emptyMessage": "No case studies in this category yet.",
+    "clearFilter": "Clear filters",
+    "imageAlt": "Case study image for {title}",
+    "challenge": "Challenge",
+    "solution": "Solution",
+    "result": "Result",
+    "gallery": "Project images",
+    "related": "Related case studies",
+    "meta": { "client": "Client", "sector": "Sector", "year": "Year" },
+    "categories": { "enterprise": "Enterprise", "ai": "AI", "app-ai": "AI apps" }
   }
 }
