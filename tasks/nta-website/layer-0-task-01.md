@@ -46,33 +46,33 @@ Dựng khung dự án Next.js (App Router) + TypeScript + Tailwind CSS tại rep
    `.gitignore` bổ sung `node_modules/`, `.next/` (file `.gitignore` sẵn có 48 bytes — append, không ghi đè mất nội dung).
 
 ## Acceptance Criteria
-- [ ] `npm install` chạy sạch (lockfile `package-lock.json` sinh ra — npm là package manager)
-- [ ] `npm run lint` PASS · `npm run typecheck` PASS · `npm run build` PASS
-- [ ] Script `lint`/`typecheck`/`build` đúng tên trong `package.json` (khớp `check_commands`)
-- [ ] Cấu trúc `src/` (app, components, content, i18n, lib) tồn tại; app build được trang placeholder
-- [ ] Tailwind breakpoints khớp R-23 (640/768/1024/1280/1536); không thêm shadcn/UI library ngoài Tailwind
-- [ ] File gốc của repo (AGENTS.md, README.md, scripts/, skills/, spec/) không bị xóa/ghi đè
+- [x] `npm install` chạy sạch (lockfile `package-lock.json` sinh ra — npm là package manager)
+- [x] `npm run lint` PASS · `npm run typecheck` PASS · `npm run build` PASS
+- [x] Script `lint`/`typecheck`/`build` đúng tên trong `package.json` (khớp `check_commands`)
+- [x] Cấu trúc `src/` (app, components, content, i18n, lib) tồn tại; app build được trang placeholder
+- [x] Tailwind breakpoints khớp R-23 (640/768/1024/1280/1536); không thêm shadcn/UI library ngoài Tailwind
+- [x] File gốc của repo (AGENTS.md, README.md, scripts/, skills/, spec/) không bị xóa/ghi đè
 
 ## Verification Summary
-- Commands (`.context/project-config.md`): `npm install` · `npm run lint` · `npm run typecheck` · `npm run build`
-- Test: `test_command: null` → skip, ghi lý do (v1 chưa có test framework)
-- Manual evidence: `npm run dev` → trang placeholder render tại `http://localhost:3000`
-- Reviewer report: `.context/review-reports/feature-nta-website-layer-0-task-01-round-1-review.md`
+- Commands (`.context/project-config.md`): `npm install` PASS · `npm run lint` PASS (`eslint .`) · `npm run typecheck` PASS · `npm run build` PASS (prerender `/`).
+- Test: `test_command: null` → skip, `v1 chưa có test framework`.
+- Manual evidence: chưa chạy `npm run dev` (residual); build artifact `.next/types/routes.d.ts` (`AppRoutes = "/"`) chứng minh route placeholder compile OK.
+- Reviewer report: `.context/review-reports/feature-nta-website-layer-0-task-01-round-1-review.md` — Verdict **PASS** (NORMAL, 0 CRITICAL/MAJOR).
 
 ## Retry / Error Memory
-- Attempt: 0
+- Attempt: 0 (lần gọi builder 1 bị interrupt do cancel — redo, không tính attempt)
 - Last failure type: n/a
-- Error memory entry: none (ghi vào `.context/error-memory.md` khi fail)
-- Escalation: none — sau 3 attempt fail → `architecture_review_needed`, dừng chờ review
+- Error memory entry: none (không có lỗi verify; `npm audit` không thuộc `check_commands`)
+- Escalation: none
 
 ## DoD (Definition of Done)
-- [ ] Code written (chỉ trong scope)
-- [ ] Tests: skip — `test_command: null` (v1 chưa có test framework), ghi lý do
-- [ ] Check commands pass: `npm run lint` · `npm run typecheck` · `npm run build`
-- [ ] Reviewer độc lập PASS
-- [ ] `.context/progress.json` updated
-- [ ] Error Memory updated (hoặc `n/a`), Doc Impact reconciled (hoặc `no doc impact`)
-- [ ] committed — **1 task = 1 commit** (branch `main`, KHÔNG push — `auto_push_after_pass: false`)
+- [x] Code written (chỉ trong scope)
+- [x] Tests: skip — `test_command: null` (v1 chưa có test framework), ghi lý do
+- [x] Check commands pass: `npm run lint` · `npm run typecheck` · `npm run build`
+- [x] Reviewer độc lập PASS
+- [x] `.context/progress.json` updated
+- [x] Error Memory updated (`n/a`), Doc Impact reconciled (`NO_DOC_IMPACT`)
+- [x] committed — **1 task = 1 commit** (branch `main`, KHÔNG push — `auto_push_after_pass: false`)
 
 ## Files to Create/Modify
 - `package.json`, `package-lock.json`, `tsconfig.json`, `next.config.ts`, `postcss.config.mjs` (+ Tailwind)
@@ -85,3 +85,18 @@ Dựng khung dự án Next.js (App Router) + TypeScript + Tailwind CSS tại rep
 - Không cài dependency thừa (ponytail/YAGNI) — mỗi package thêm phải có lý do ghi vào Notes/commit body.
 - Tailwind v4 (CSS-first) hay v3 (config file) → builder chọn theo version create-next-app mặc định còn
   hỗ trợ; ghi quyết định vào task Notes khi close-out.
+
+## Notes (close-out)
+- **Tailwind v3** (`^3.4.18`, resolve 3.4.19) + `tailwind.config.ts` khai `screens` 640/768/1024/1280/1536.
+- **Lint = `eslint .`** (không dùng `next lint`): task cho phép chọn 1; dùng `eslint .` + `.eslintrc.json`
+  (`next/core-web-vitals`), eslint-config-next có overrides `**/*.ts?(x)`.
+- **Next nâng `^15.5.27`** (từ 15.5.9) sau audit advisories; React 19.1.1.
+- **Doc Impact: NO_DOC_IMPACT** (stack đã ghi trong SPECIFICATIONS.md Tech Stack).
+- **Residual risk / follow-up (không block PASS):**
+  1. `npm audit --audit-level=high` FAIL (9 high/3 moderate) — KHÔNG thuộc `check_commands`; remediation gợi ý
+     breaking major (Next 16/Tailwind v4) → đề xuất task follow-up đánh giá CVE (ngoài Layer 0).
+  2. `next-env.d.ts` reference `.next/types/routes.d.ts` (gitignored) → nguy cơ TS6053 trên clean checkout
+     nếu chạy `typecheck` trước `build`; CI DevOps layer cần build-trước-typecheck.
+  3. `eslint@^8.57.1` EOL → cân nhắc migrate ESLint 9 flat config ở task riêng.
+  4. Chưa chạy `npm run dev` thủ công (build artifact đã chứng minh route OK).
+- ⚠️ Protocol: builder subagent tự ghi journal (vi phạm "subagent KHÔNG ghi") — Primary đã reconcile.

@@ -6,13 +6,22 @@
       "slug": "nta-website",
       "title": "NTA Website — initial build (SPECIFICATIONS.md 1.0.0, 27 req)",
       "type": "ADDITIVE",
-      "status": "planned",
+      "status": "in_progress",
       "currentPhase": 0,
       "totalLayers": 5,
       "currentLayer": 0,
-      "completedTasks": [],
+      "completedTasks": ["layer-0-task-01"],
       "inProgressTask": null,
-      "tasks": [],
+      "tasks": [
+        {
+          "id": "layer-0-task-01",
+          "layer": 0,
+          "status": "done",
+          "reviewLevel": "NORMAL",
+          "reviewResult": "PASS",
+          "reviewReport": ".context/review-reports/feature-nta-website-layer-0-task-01-round-1-review.md"
+        }
+      ],
       "specVersion": "1.0.0",
       "planDir": "tasks/nta-website/",
       "layerPlanDiagram": "docs/diagrams/layer-plan.html",
