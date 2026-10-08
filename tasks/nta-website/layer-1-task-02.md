@@ -47,36 +47,59 @@ và hoàn thiện messages VI/EN cho nav/footer/CTA.
    giữa các trang.
 
 ## Acceptance Criteria
-- [ ] Đủ landmark + skip-link; 1 `<h1>`/trang (layout không tự sinh h1)
-- [ ] Desktop ≥1024px: nav ngang đầy đủ + dropdown keyboard-operable (`aria-expanded`, Esc đóng)
-- [ ] Mobile <1024px: hamburger → drawer focus trap + Esc + trả focus; không trap tab ra ngoài
-- [ ] Sticky header không nhảy layout (content offset đúng 64/72px); backdrop-blur sau scroll
-- [ ] Active route hiển thị đúng ở cả 2 locale; lang toggle giữ path (VI ↔ EN)
-- [ ] Footer 4→2→1 cột theo bp; CTA BR-001 có mặt mọi trang
-- [ ] Messages VI/EN đủ key nav/footer, không key thiếu dịch
-- [ ] Check commands pass
+- [x] Đủ landmark + skip-link; 1 `<h1>`/trang (layout không tự sinh h1)
+- [x] Desktop ≥1024px: nav ngang đầy đủ + dropdown keyboard-operable (`aria-expanded`, Esc đóng)
+- [x] Mobile <1024px: hamburger → drawer focus trap + Esc + trả focus; không trap tab ra ngoài
+- [x] Sticky header không nhảy layout (content offset đúng 64/72px); backdrop-blur sau scroll
+- [x] Active route hiển thị đúng ở cả 2 locale; lang toggle giữ path (VI ↔ EN)
+- [x] Footer 4→2→1 cột theo bp; CTA BR-001 có mặt mọi trang
+- [x] Messages VI/EN đủ key nav/footer, không key thiếu dịch
+- [x] Check commands pass
 
 ## Verification Summary
-- Commands: `npm run lint` · `npm run typecheck` · `npm run build`
+- Fix attempt 1 commands: `npm run lint` PASS · `npm run typecheck` PASS · `npm run build` PASS
+- M1 evidence: `.next/static/css/e07a59b0494a37bf.css` contains
+  `.bg-background\/85{background-color:rgb(var(--color-background)/.85)}`; Tailwind emits the alpha utility.
+- Reviewer round 1 findings addressed: theme background token now supports alpha; CTA anchors use button styling
+  without nested buttons; the home page relies on the layout's single `main`; VI/EN `nav.home` translations added.
+- `npx oxlint`: skipped — no Oxlint configuration in the repository. No configured test command (`null`).
 - Test: `test_command: null` → skip, ghi lý do
-- Manual evidence: dev server — tab sequence (skip-link → nav → CTA), drawer mobile 375px,
-  lang toggle round-trip, active underline
-- Reviewer report: `.context/review-reports/feature-nta-website-layer-1-task-02-round-1-review.md`
+- Manual evidence: static inspection confirms localized `usePathname` active matching, locale switch
+  retains the current path, drawer 250ms transition/scrim/focus trap/Escape/focus restoration, and
+  scroll blur while retaining in-flow 64/72px header height. Browser smoke (375/768/1280, tab
+  sequence/interactions) not run: browser tool disconnected; dev server launch timed out and port
+  3000 belongs to an unknown process.
+- Reviewer report: `.context/review-reports/feature-nta-website-layer-1-task-02-round-2-review.md` — Verdict **PASS** (STRICT, 0 CRITICAL/MAJOR, 8 MINOR non-blocking; round 1 FAIL → fix)
+
+### Builder notes
+- Fix attempt 1: resolved M1–M4 above. Also changed drawer transitions to `duration-base`, replaced hardcoded
+  z-index utilities with configured tokens, and enlarged/localized the header home link. No source behavior beyond
+  reviewer findings and these directly related minor issues changed.
+- Implemented app landmarks, skip link, translated shared navigation/footer, locale toggle links,
+  and the mobile drawer with focus management.
+- Completed desktop active-route underline and keyboard dropdown with `aria-expanded`/Escape;
+  scroll-dependent backdrop blur does not change header flow height.
+- Mobile drawer includes 250ms slide, scrim, focus trap, Escape/click close, and trigger focus restore;
+  language controls are minimum 44px targets. Footer has responsive columns, CTA, legal, one SVG
+  social icon, locale toggle, and hotline/email placeholders. VI/EN message key sets are paired.
+- Browser smoke remains unverified because browser was unavailable.
+- Doc Impact: NO_DOC_IMPACT. Tests skipped because `test_command: null`.
 
 ## Retry / Error Memory
-- Attempt: 0
-- Last failure type: n/a
-- Error memory entry: none
+- Attempt: 1
+- Last failure type: reviewer STRICT round 1 — 4 MAJOR (M1 alpha background utility dropped; M2 nested interactive CTA;
+  M3 duplicate main landmark; M4 missing nav.home translation).
+- Error memory entry: none — reviewer report provided root cause and specific fix; fixes validated by configured checks.
 - Escalation: none — sau 3 attempt fail → `architecture_review_needed`
 
 ## DoD (Definition of Done)
-- [ ] Code written (chỉ trong scope)
-- [ ] Tests: skip — `test_command: null`, ghi lý do
-- [ ] Check commands pass: `npm run lint` · `npm run typecheck` · `npm run build`
-- [ ] Reviewer độc lập PASS (STRICT — shared navigation)
-- [ ] `.context/progress.json` updated
-- [ ] Error Memory / Doc Impact recorded
-- [ ] committed — 1 task = 1 commit (branch `main`, KHÔNG push)
+- [x] Code written (chỉ trong scope)
+- [x] Tests: skip — `test_command: null`, ghi lý do
+- [x] Check commands pass: `npm run lint` · `npm run typecheck` · `npm run build`
+- [x] Reviewer độc lập PASS (STRICT — shared navigation)
+- [x] `.context/progress.json` updated
+- [x] Error Memory / Doc Impact recorded
+- [x] committed — 1 task = 1 commit (branch `main`, KHÔNG push)
 
 ## Files to Create/Modify
 - `src/app/[locale]/layout.tsx` (mở rộng từ task-02 Layer 0)

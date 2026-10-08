@@ -15,7 +15,7 @@ const config: Config = {
         primary: 'var(--color-primary)',
         'primary-hover': 'var(--color-primary-hover)',
         'primary-active': 'var(--color-primary-active)',
-        background: 'var(--color-background)',
+        background: 'rgb(var(--color-background) / <alpha-value>)',
         'background-alt': 'var(--color-background-alt)',
         surface: 'var(--color-surface)',
         'surface-sunken': 'var(--color-surface-sunken)',

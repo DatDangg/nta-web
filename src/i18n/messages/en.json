@@ -1,14 +1,38 @@
 {
   "common": {
-    "siteName": "NTA Website"
+    "siteName": "NTA",
+    "cta": {
+      "contact": "Contact us",
+      "viewSolutions": "View solutions",
+      "learnMore": "Learn more",
+      "viewCaseStudies": "View case studies",
+      "submit": "Send request"
+    }
   },
   "nav": {
-    "home": "Home"
+    "label": "Main navigation",
+    "home": "Home",
+    "homeLabel": "NTA, home",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "solutions": "Solutions",
+    "enterprise": "Enterprise Solutions",
+    "ai": "AI Solutions",
+    "products": "Products",
+    "caseStudies": "Case studies",
+    "news": "News",
+    "about": "About NTA",
+    "contact": "Contact"
   },
   "footer": {
-    "copyright": "© NTA"
-  },
-  "cta": {
-    "contact": "Contact"
+    "aboutGroup": "About NTA",
+    "solutionsGroup": "Solutions",
+    "contentGroup": "Content",
+    "contactGroup": "Contact",
+    "hotline": "Hotline: Details to be announced",
+    "email": "Email: Details to be announced",
+    "ctaText": "Talk with the NTA team about your needs.",
+    "copyright": "© NTA. All rights reserved.",
+    "privacy": "Privacy policy"
   }
 }

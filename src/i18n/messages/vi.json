@@ -1,14 +1,38 @@
 {
   "common": {
-    "siteName": "NTA Website"
+    "siteName": "NTA",
+    "cta": {
+      "contact": "Liên hệ tư vấn",
+      "viewSolutions": "Xem giải pháp",
+      "learnMore": "Tìm hiểu thêm",
+      "viewCaseStudies": "Xem case study",
+      "submit": "Gửi yêu cầu"
+    }
   },
   "nav": {
-    "home": "Trang chủ"
+    "label": "Điều hướng chính",
+    "home": "Trang chủ",
+    "homeLabel": "NTA, trang chủ",
+    "openMenu": "Mở menu",
+    "closeMenu": "Đóng menu",
+    "solutions": "Giải pháp",
+    "enterprise": "Giải pháp Doanh nghiệp",
+    "ai": "Giải pháp AI",
+    "products": "Sản phẩm",
+    "caseStudies": "Case Study",
+    "news": "Tin tức",
+    "about": "Về NTA",
+    "contact": "Liên hệ"
   },
   "footer": {
-    "copyright": "© NTA"
-  },
-  "cta": {
-    "contact": "Liên hệ"
+    "aboutGroup": "Về NTA",
+    "solutionsGroup": "Giải pháp",
+    "contentGroup": "Nội dung",
+    "contactGroup": "Liên hệ",
+    "hotline": "Hotline: Đang cập nhật",
+    "email": "Email: Đang cập nhật",
+    "ctaText": "Trao đổi cùng đội ngũ NTA về nhu cầu của bạn.",
+    "copyright": "© NTA. Bảo lưu mọi quyền.",
+    "privacy": "Chính sách bảo mật"
   }
 }

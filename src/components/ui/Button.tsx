@@ -15,6 +15,10 @@ const variantStyles: Record<ButtonVariant, string> = {
   outline: 'border border-border bg-transparent text-primary-active hover:bg-background-alt',
 };
 
+export function buttonStyles(variant: ButtonVariant = 'primary', size: ButtonSize = 'md') {
+  return `inline-flex min-w-11 items-center justify-center rounded-full font-medium transition-[background-color,border-color,color,transform] duration-fast ease-out-expo active:scale-[0.98] ${variantStyles[variant]} ${sizeStyles[size]}`;
+}
+
 const sizeStyles: Record<ButtonSize, string> = {
   sm: 'min-h-11 px-4 text-sm',
   md: 'min-h-11 px-5 text-base',
@@ -31,7 +35,7 @@ export function Button({
   return (
     <button
       type={type}
-      className={`inline-flex min-w-11 items-center justify-center rounded-full font-medium transition-[background-color,border-color,color,transform] duration-fast ease-out-expo active:scale-[0.98] ${variantStyles[variant]} ${sizeStyles[size]} ${className}`.trim()}
+      className={`${buttonStyles(variant, size)} ${className}`.trim()}
       {...buttonProps}
     />
   );
