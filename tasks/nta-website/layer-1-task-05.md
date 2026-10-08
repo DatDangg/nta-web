@@ -42,40 +42,46 @@ giữ `status = 404` + `robots: noindex`.
 4. Messages key 404 (VI/EN).
 
 ## Acceptance Criteria
-- [ ] `/khong-ton-tai` và `/en/does-not-exist` render 404 với nội dung đúng locale, status 404
-- [ ] `/solutions/enterprise/sai-slug` → 404 (R-05), `/blog/sai` → 404 (R-09)
-- [ ] h1 duy nhất; message nêu rõ nguyên nhân + cách khắc phục; HomeLink + ≥3 gợi ý link
-- [ ] `robots: noindex` trong metadata; không JSON-LD
-- [ ] Header/Footer vẫn render; lang toggle từ 404 không 404 loop
-- [ ] Check commands pass
+- [x] `/khong-ton-tai` và `/en/does-not-exist` render 404 với nội dung đúng locale, status 404
+- [x] `/solutions/enterprise/sai-slug` → 404 (R-05), `/blog/sai` → 404 (R-09)
+- [x] h1 duy nhất; message nêu rõ nguyên nhân + cách khắc phục; HomeLink + ≥3 gợi ý link
+- [x] `robots: noindex` trong metadata; không JSON-LD
+- [x] Header/Footer vẫn render; lang toggle từ 404 không 404 loop
+- [x] Check commands pass
 
 ## Verification Summary
-- Commands: `npm run lint` · `npm run typecheck` · `npm run build`
-- Test: `test_command: null` → skip, ghi lý do
-- Manual evidence: `npm run dev` → truy cập 4 URL sai (2 locale + 2 slug), curl `-I` thấy 404
-- Reviewer report: `.context/review-reports/feature-nta-website-layer-1-task-05-round-1-review.md`
+- Commands: `npm run lint` · `npm run typecheck` · `npm run build` — PASS (builder + reviewer round 1 & 2)
+- Test: `test_command: null` → skip, chưa có test framework
+- Manual evidence: builder verify 4 URL sai (2 locale + 2 slug) → HTTP 404
+- Reviewer report: `.context/review-reports/feature-nta-website-layer-1-task-05-round-2-review.md` (round 1 FAIL → fix → round 2 **PASS**, STRICT)
 
 ## Retry / Error Memory
-- Attempt: 0
-- Last failure type: n/a
-- Error memory entry: none
+- Attempt: 1 (round 1 FAIL — MAJOR thiếu focus vào main → fix → round 2 PASS)
+- Last failure type: MAJOR a11y (requirement tường minh chưa implement)
+- Error memory entry: none (không phải lỗi tái diễn; đã ghi pattern vào task)
 - Escalation: none — sau 3 attempt fail → `architecture_review_needed`
 
 ## DoD (Definition of Done)
-- [ ] Code written (chỉ trong scope)
-- [ ] Tests: skip — `test_command: null`, ghi lý do
-- [ ] Check commands pass: `npm run lint` · `npm run typecheck` · `npm run build`
-- [ ] Reviewer độc lập PASS
-- [ ] `.context/progress.json` updated
-- [ ] Error Memory / Doc Impact recorded
-- [ ] committed — 1 task = 1 commit (branch `main`, KHÔNG push)
+- [x] Code written (chỉ trong scope)
+- [x] Tests: skip — `test_command: null`, ghi lý do
+- [x] Check commands pass: `npm run lint` · `npm run typecheck` · `npm run build`
+- [x] Reviewer độc lập PASS
+- [x] `.context/progress.json` updated
+- [x] Error Memory / Doc Impact recorded
+- [x] committed — 1 task = 1 commit (branch `main`, KHÔNG push)
 
 ## Files to Create/Modify
 - `src/app/[locale]/not-found.tsx`
+- `src/app/[locale]/layout.tsx` (main focus target: `tabIndex={-1}`)
 - `src/app/[locale]/[...rest]/page.tsx`
-- `src/components/shared/NotFoundMessage.tsx` (nếu tách)
+- `src/components/shared/FocusMain.tsx`
+- `src/components/shared/NotFoundMessage.tsx` (nếu tách) — không tách (primitive có sẵn đủ dùng)
 - `src/i18n/messages/{vi,en}.json` (404 keys)
 
 ## Notes
 - Khi Layer 2 thêm route mới → catch-all tự động lo (không sửa task này).
 - Focus vào main khi render (design: "focus auto/chuyển vào main") — không animate.
+- **Residual (defer được reviewer round 2 chấp thuận):** MINOR #2 — metadata nested `not-found.tsx`
+  (`generateMetadata`) chưa verify runtime `<title>` (Next chỉ bảo đảm cho root `app/not-found`);
+  `robots: noindex` vẫn đạt do Next auto-inject cho response 404. Theo dõi ở Layer 4 a11y/SEO sweep.
+- **Doc Impact: NO_DOC_IMPACT** — khớp R-12 + design Screen 13; không đổi API contract/schema/current-state doc.

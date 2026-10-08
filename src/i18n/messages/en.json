@@ -48,5 +48,12 @@
       "page": "Page {page}"
     },
     "empty": { "message": "No matching content found", "clearFilter": "Clear filters" }
+  },
+  "notFound": {
+    "title": "Page not found | NTA",
+    "heading": "Page not found",
+    "message": "The page you are looking for does not exist or has been moved. Check the address or choose a page below.",
+    "homeLink": "Go to home",
+    "suggestionsLabel": "Suggested pages"
   }
 }

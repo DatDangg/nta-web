@@ -31,7 +31,7 @@ export default async function LocaleLayout({
             {locale === 'vi' ? 'Bỏ qua tới nội dung' : 'Skip to content'}
           </a>
           <Header />
-          <main id="main">{children}</main>
+          <main id="main" tabIndex={-1}>{children}</main>
           <Footer />
         </NextIntlClientProvider>
       </body>

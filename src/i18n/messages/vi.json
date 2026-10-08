@@ -48,5 +48,12 @@
       "page": "Trang {page}"
     },
     "empty": { "message": "Không tìm thấy nội dung phù hợp", "clearFilter": "Xóa bộ lọc" }
+  },
+  "notFound": {
+    "title": "Không tìm thấy trang | NTA",
+    "heading": "Không tìm thấy trang",
+    "message": "Trang bạn tìm không tồn tại hoặc đã được di chuyển. Hãy kiểm tra lại địa chỉ hoặc chọn một trang bên dưới.",
+    "homeLink": "Về trang chủ",
+    "suggestionsLabel": "Gợi ý trang"
   }
 }
