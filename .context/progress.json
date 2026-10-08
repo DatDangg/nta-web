@@ -6,7 +6,7 @@
       "slug": "nta-website",
       "title": "NTA Website — initial build (SPECIFICATIONS.md 1.0.0, 27 req)",
       "type": "ADDITIVE",
-      "status": "in_progress",
+      "status": "done",
       "currentPhase": 0,
       "totalLayers": 5,
       "currentLayer": 4,
@@ -245,7 +245,11 @@
       "specVersion": "1.0.1",
       "planDir": "tasks/nta-website/",
       "layerPlanDiagram": "docs/diagrams/layer-plan.html",
-      "lastUpdated": "2026-10-10T02:25:00+07:00"
+      "initialBuildCompletedAt": "2026-10-10T03:15:00+07:00",
+      "specPublished": { "scopeVersion": 4, "trigger": "initial-build", "path": "spec/test-scope/current.json" },
+      "layer4PhaseReview": { "verdict": "PASS", "report": ".context/review-reports/feature-nta-website-layer-4-round-1-spec-review.md" },
+      "note": "Initial build hoàn tất: Layer 0..4 (totalLayers 5 = layer-plan 'Layer 0 → 4'). 27 req R-01..R-27 implemented. R-22 (Lighthouse Perf/LCP/CLS) + R-23 (viewport 375/768/1280) PARTIAL — đo ở gate DevOps/prod (bước 6). Chưa push (forbidden_branch main, auto_push false), chưa deploy.",
+      "lastUpdated": "2026-10-10T03:15:00+07:00"
     }
   ],
   "bugs": []
