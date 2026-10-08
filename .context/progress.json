@@ -9,7 +9,7 @@
       "status": "in_progress",
       "currentPhase": 0,
       "totalLayers": 5,
-      "currentLayer": 1,
+      "currentLayer": 2,
       "completedTasks": ["layer-0-task-01", "layer-0-task-02", "layer-0-task-03", "layer-0-task-04", "layer-0-task-05", "layer-0-task-06", "layer-1-task-01", "layer-1-task-02", "layer-1-task-03", "layer-1-task-04", "layer-1-task-05", "fix-layer1-dead-links-phase-1-task-01"],
       "inProgressTask": null,
       "tasks": [
@@ -115,7 +115,7 @@
       "specVersion": "1.0.0",
       "planDir": "tasks/nta-website/",
       "layerPlanDiagram": "docs/diagrams/layer-plan.html",
-      "lastUpdated": "2026-10-09T06:40:00+07:00"
+      "lastUpdated": "2026-10-09T07:00:00+07:00"
     }
   ],
   "bugs": []
