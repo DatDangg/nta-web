@@ -4,4 +4,4 @@
 
 | Version | Ngày | Loại | Thay đổi | Scope sinh |
 |---|---|---|---|---|
-| 1.0.0 | (ngày tạo) | — | Spec khởi tạo | — |
+| 1.0.0 | 2026-10-08 | initial | Reverse-engineer spec từ docs (chưa có code) — 27 req R-01…R-27 | initial-build |

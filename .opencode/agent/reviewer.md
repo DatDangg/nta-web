@@ -3,7 +3,7 @@ description: Reviewer độc lập — tìm defect trong code/test của 1 task 
 mode: subagent
 # model set ở /brainstorm (project-config.md models:) → models.reviewer (khác họ builder).
 # Để comment = kế thừa model chính.
-# model: <provider>/<model-khac-ho>
+model: opencode-go/deepseek-v4.1-flash
 temperature: 0.1
 steps: 30
 permission:
@@ -13,6 +13,10 @@ permission:
   bash:
     "*": deny
     # verify-commands:start — auto-generated từ .context/project-config.md (scripts/apply-verify-permissions.mjs)
+    "npm run typecheck": allow
+    "npm run lint": allow
+    "npm install": allow
+    "npm run build": allow
     # verify-commands:end
     "aislop *": allow
     "npx aislop*": allow

@@ -1,0 +1,18 @@
+{
+  "classifiedAt": "2026-10-08",
+  "confirmedBy": "user (brainstorm /start — 'Đúng theo docs/INDEX.md')",
+  "canonical": [
+    { "file": "docs/BRD.md", "type": "business_requirements" },
+    { "file": "docs/DESIGN.md", "type": "design_spec" },
+    { "file": "docs/API_SPEC.md", "type": "api_spec" },
+    { "file": "docs/ERD.md", "type": "database_schema" },
+    { "file": "docs/PERMISSION.md", "type": "business_rules" }
+  ],
+  "historical": [
+    { "file": "docs/diagrams/", "type": "diagrams" }
+  ],
+  "notes": [
+    "BRIEF.md (repo root) cũng được dùng làm nguồn spec-init — không nằm docs/ nên không classify ở đây.",
+    "docs/SPEC_VERSIONING.md + docs/smoke-tests/ chưa classify (m10 round 1) — ngoài phạm vi validate spec."
+  ]
+}

@@ -3,7 +3,7 @@ description: Spec Validator độc lập — cross-check spec/phase với requir
 mode: subagent
 # model set ở /brainstorm (project-config.md models:) → models.spec_validator (họ thứ 3).
 # Để comment = kế thừa model chính.
-# model: <provider>/<model-ho-thu-3>
+model: opencode-go/deepseek-v4.1-flash
 temperature: 0.1
 steps: 20
 permission:
@@ -13,6 +13,10 @@ permission:
   bash:
     "*": deny
     # verify-commands:start — auto-generated từ .context/project-config.md (scripts/apply-verify-permissions.mjs)
+    "npm run typecheck": allow
+    "npm run lint": allow
+    "npm install": allow
+    "npm run build": allow
     # verify-commands:end
     "pnpm *typecheck*": allow
     "pnpm *lint*": allow

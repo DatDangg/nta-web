@@ -5,6 +5,8 @@
 > Nếu field còn placeholder (`<...>`) hoặc `null` → coi như chưa cấu hình, phải **hỏi user**, không bịa.
 >
 > 💡 Chạy `/brainstorm` để điền/cập nhật. `/brainstorm <nhóm>` chỉ sửa 1 nhóm (vd `git`, `models`).
+>
+> ✅ Chốt lần đầu 2026-10-08 (brainstorm trong `/start`) — xem `.context/brainstorm-log.md`.
 
 ## Config
 
@@ -13,39 +15,41 @@ project: NTA Website
 output_language: vi            # vi | en — ngôn ngữ cho docs/summary
 
 # ── Git ──
-target_branch: main            # project mới, chưa có remote — brainstorm xác nhận lại khi tạo repo
-forbidden_branch: main         # ⚠️ brainstorm sẽ đổi nếu tạo feature branch; hiện chưa có remote
+target_branch: main            # ✅ chốt 08/10/2026 — staging-direct trên main; có remote sẽ chốt lại (/brainstorm git)
+forbidden_branch: main         # ✅ chốt 08/10/2026 — cấm push (chưa có remote); muốn push main → /brainstorm git đổi trước
 branch_pattern: "main"         # default staging-direct
-auto_push_after_pass: false    # chỉ commit local, chờ user yêu cầu rõ mới push
+auto_push_after_pass: false    # ✅ chốt 08/10/2026 — chỉ commit local, push khi user yêu cầu rõ
 
 # ── Package / source ──
-package_manager: none          # chưa có app code — brainstorm/spec-init sẽ chốt (dự kiến npm + Next.js)
-source_roots: []               # ví dụ: [src] — điền khi dựng app
-# ── Stack dự kiến (chốt khi /start) ──
-# Next.js (App Router) + TypeScript + Tailwind CSS
+package_manager: npm           # ✅ chốt 08/10/2026
+source_roots: [src]            # ✅ scaffold layer 0 (Next.js App Router) tạo src/
+# ── Stack đã chốt ──
+# Next.js (App Router) + TypeScript + Tailwind CSS — UI library: Tailwind only (không shadcn)
 
 # ── Verify commands (null/placeholder = skip, no app configured) ──
-web_typecheck_command: null
-web_lint_command: null
-api_typecheck_command: null
+# ⚠️ Các script dưới PHẢI được tạo trong package.json ở bước scaffold (layer 0):
+#    install/lint/typecheck/build — builder scaffold chịu trách nhiệm tạo đúng script này.
+web_typecheck_command: npm run typecheck
+web_lint_command: npm run lint
+api_typecheck_command: null    # không tách api — website Next.js đơn
 api_lint_command: null
-test_command: null
-install_command: null
-lint_command: null           # generic alias if web/api split does not apply
-typecheck_command: null      # generic alias if web/api split does not apply
-build_command: null
-migration_command: null     # only used when db_tool != none and migration_required: true
+test_command: null             # v1 chưa có test framework — sẽ chốt lại khi thêm test (/brainstorm <nhóm>)
+install_command: npm install
+lint_command: npm run lint     # generic alias (không split web/api)
+typecheck_command: npm run typecheck
+build_command: npm run build
+migration_command: null        # only used when db_tool != none and migration_required: true
 
 # ── Database ──
-db_tool: none                  # none | prisma | drizzle | other
+db_tool: none                  # none | prisma | drizzle | other ✅ chốt 08/10/2026
 migration_required: false      # v1 website content-driven, không cần DB
-staging_db: <env var staging, vd DATABASE_URL_STAGING>   # TÊN ENV VAR, không phải connection string/secret
-prod_db: <env var production, vd DATABASE_URL_PROD>       # TÊN ENV VAR; phải khác staging_db
+staging_db: null               # db_tool: none → không áp dụng
+prod_db: null                  # db_tool: none → không áp dụng; nếu thêm DB → phải khác staging_db
 destructive_migration_policy: HIGH_RISK_MIGRATION
 
 # ── Deploy / CI-CD (từ brainstorm; secret nằm ở .env.local) ──
-deploy_platform: other         # ⚠️ thực tế = gcp-cloud-run (menu brainstorm chưa có option này)
-ci_cd: github-actions          # dự kiến
+deploy_platform: other         # ✅ thực tế = gcp-cloud-run (asia-southeast1, scale-to-zero) — menu brainstorm chưa có option
+ci_cd: github-actions          # ✅ chốt 08/10/2026
 
 # ── Monitoring ──
 monitor_enabled: false         # true | false
@@ -74,15 +78,15 @@ otel_env: production
 
 ```yaml
 check_commands:
-  install: null             # alias of install_command
-  web_typecheck: null       # hoặc = web_typecheck_command
-  web_lint: null            # hoặc = web_lint_command
-  api_typecheck: null       # hoặc = api_typecheck_command
-  api_lint: null            # hoặc = api_lint_command
-  test: null                # hoặc = test_command
-  build: null               # hoặc = build_command
-  migration: null           # hoặc = migration_command khi migration_required=true
-  docs_inventory: null
+  install: npm install          # alias of install_command
+  web_typecheck: npm run typecheck   # = web_typecheck_command
+  web_lint: npm run lint        # = web_lint_command
+  api_typecheck: null           # không tách api
+  api_lint: null
+  test: null                    # = test_command (v1 chưa có test framework)
+  build: npm run build          # = build_command
+  migration: null               # = migration_command (db_tool: none)
+  docs_inventory: node scripts/generate-inventory.mjs
 ```
 
 ## Models per role
@@ -90,21 +94,22 @@ check_commands:
 > Model KHÔNG đọc từ `.env.local`. Khai ở đây rồi **bỏ comment + copy sang frontmatter** của từng file
 > `.opencode/agent/*.md`, rồi **restart opencode** (config không hot-reload).
 > Quy tắc: **builder ≠ reviewer** (khác họ provider) để lộ blind spot khác nhau.
+> ✅ Chốt 08/10/2026 (user tự nhập): builder = openai · reviewer/spec_validator/change_request = opencode-go.
 
 ```yaml
 models:
-  builder:        <provider>/<model-code-chinh>
-  builder_strong: <provider>/<model-manh-hon>     # chỉ dùng khi user yêu cầu rõ (§7 gate)
-  reviewer:       <provider>/<model-khac-ho>
-  spec_validator: <provider>/<model-ho-thu-3>     # họ thứ 3 nếu có
-  change_request: <provider>/<model-plan>          # ⭐ agent hậu-build (classify/spec/task) — cửa vào /change
+  builder:        openai/gpt-6-luna
+  builder_strong: openai/gpt-6-luna        # chỉ dùng khi user yêu cầu rõ (§7 gate) — tạm trùng builder
+  reviewer:       opencode-go/deepseek-v4.1-flash   # KHÁC họ builder ✅ (soft-rule spec_validator = họ thứ 3: user override chọn cùng họ reviewer)
+  spec_validator: opencode-go/deepseek-v4.1-flash
+  change_request: opencode-go/deepseek-v4.1-flash
 ```
 
 ## UI rules (nếu project có UI)
 
 ```yaml
 ui:
-  responsive_breakpoints: [375, 768, 1280]
+  responsive_breakpoints: [640, 768, 1024, 1280, 1536]  # ✅ C1 chốt 08/10/2026 — thang Tailwind DESIGN (base<640 là mobile mặc định)
   max_file_lines: 300
   max_function_lines: 50
 ```
@@ -114,5 +119,5 @@ ui:
 ```yaml
 secrets:
   source: env                    # chỉ đọc từ env; KHÔNG hardcode/commit
-  required: [CONTACT_FORM_TARGET]  # v1 không cần JWT/DATABASE_URL
+  required: [CONTACT_FORM_TARGET]  # ⚠️ OQ#4 chưa chốt hình thức forward — tên env var giữ sẵn; giá trị → .env.local khi chốt
 ```
