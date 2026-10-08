@@ -52,36 +52,40 @@ response 200/400/429 đúng contract API_SPEC, không lộ secret (R-19).
 4. Không route API nào khác (R-15 static — ghi chú trong Notes/close-out).
 
 ## Acceptance Criteria
-- [ ] `GET /api/health` → 200 `{status:"ok",timestamp}` (ISO string)
-- [ ] `POST /api/contact` hợp lệ → 200 `{status:"ok"}` + forward được gọi (mock target trong verify)
-- [ ] Thiếu/bất hợp lệ field → 400 với `errors` đúng từng field (4 case: name/email/phone/message)
-- [ ] Honeypot filled → 200 giả, KHÔNG gọi forward (verify bằng mock/log)
-- [ ] Quá ngưỡng rate-limit → 429 đúng shape; header không lộ internal
-- [ ] 5 lỗi → 500 không lộ chi tiết; `CONTACT_FORM_TARGET` chỉ đọc server-side (không xuất trong bundle client)
-- [ ] Guard đúng thứ tự R-18 (kiểm tra code order)
-- [ ] Check commands pass
+- [x] `GET /api/health` → 200 `{status:"ok",timestamp}` (ISO string) + `Cache-Control: no-store`
+- [x] `POST /api/contact` hợp lệ → 200 `{status:"ok"}` + forward được gọi (mock target trong verify)
+- [x] Thiếu/bất hợp lệ field → 400 với `errors` đúng từng field (4 case: name/email/phone/message)
+- [x] Honeypot filled → 200 giả, KHÔNG gọi forward (verify bằng mock); kể cả whitespace-only
+- [x] Quá ngưỡng rate-limit (5/10min/IP) → 429 đúng shape; đổi XFF bên trái KHÔNG thoát ngưỡng
+- [x] 500 không lộ chi tiết; `CONTACT_FORM_TARGET` chỉ đọc server-side (không xuất trong bundle client)
+- [x] Guard đúng thứ tự R-18 `rateLimit → validate → honeypot → forward` (kiểm tra code order)
+- [x] Check commands pass
 
 ## Verification Summary
-- Commands: `npm run lint` · `npm run typecheck` · `npm run build`
-- Test: `test_command: null` → curl/manual matrix (200/400/429/honeypot/500) + mock forward target;
-  ghi evidence vào review report
-- Reviewer report: `.context/review-reports/feature-nta-website-layer-3-task-01-round-1-review.md`
-- Review gates: `ocr review` (nếu cài) — CRITICAL → FAIL; secret scan tự review
+- Commands: `npm run lint` (PASS, 1 warning `<img>` ngoài scope) · `npm run typecheck` (PASS) · `npm run build` (PASS; route `/api/contact`+`/api/health`)
+- Test: `test_command: null` → skip; verify bằng curl matrix + mock `CONTACT_FORM_TARGET` (builder evidence); reviewer r2 verify tĩnh (shell deny)
+- Manual evidence: health 200 ISO + no-store; valid 200 (mock nhận); 400 ×4 field; non-JSON 400; honeypot (kể cả whitespace) → 200 KHÔNG forward; request 6 → 429 (kể cả đổi XFF trái/thiếu XFF); `GET /api/contact` → 405; mock 503 → 500 generic; secret grep client bundle clean
+- Reviewer report (round 2, PASS): `.context/review-reports/feature-nta-website-layer-3-task-01-round-2-review.md` (r1 FAIL MAJOR rate-limit bypass → r2 PASS STRICT)
 
 ## Retry / Error Memory
-- Attempt: 0
-- Last failure type: n/a
-- Error memory entry: none
+- Attempt: 1 (r1 FAIL: MAJOR rate-limit bypass qua `X-Forwarded-For` + 3 MINOR → fix → r2 PASS)
+- Last failure type: SECURITY (client-controlled XFF leftmost → rate-limit bypass)
+- Error memory entry: ghi vào `.context/error-memory.md` (Error 6 — trust boundary của proxy header)
 - Escalation: none — sau 3 attempt fail → `architecture_review_needed`
 
+## Doc / Decision Impact
+- **Doc impact: NO_DOC_IMPACT** — contract khớp `docs/API_SPEC.md` (không đổi shape/status).
+- **Decision impact: YES** — `.context/decisions.md` Decision 4 (rate-limit 5/10min/IP; `CONTACT_FORM_TARGET` server-only + mock verify).
+- Residual: rate-limit in-memory **per-instance** (không share khi scale ngang) → ghi residual Layer 4/Cloud Run; premise "GFE append rightmost XFF" cần xác nhận trên hạ tầng thật (Layer 4).
+
 ## DoD (Definition of Done)
-- [ ] Code written (chỉ trong scope)
-- [ ] Tests: skip — `test_command: null` (verify bằng curl matrix, ghi evidence)
-- [ ] Check commands pass: `npm run lint` · `npm run typecheck` · `npm run build`
-- [ ] Reviewer độc lập PASS (STRICT — API/security)
-- [ ] `.context/progress.json` updated
-- [ ] Error Memory / Doc Impact recorded (API_SPEC đối chiếu → có thể `no doc impact`)
-- [ ] committed — 1 task = 1 commit (branch `main`, KHÔNG push)
+- [x] Code written (chỉ trong scope)
+- [x] Tests: skip — `test_command: null` (verify curl matrix, ghi evidence)
+- [x] Check commands pass: `npm run lint` · `npm run typecheck` · `npm run build`
+- [x] Reviewer độc lập PASS (STRICT — API/security) round 2
+- [x] `.context/progress.json` updated
+- [x] Error Memory / Doc Impact recorded
+- [x] committed — 1 task = 1 commit (branch `main`, KHÔNG push)
 
 ## Files to Create/Modify
 - `src/app/api/health/route.ts`

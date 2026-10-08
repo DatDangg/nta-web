@@ -37,3 +37,11 @@
 - **Alternatives Considered:** Add placeholder partner identities/logos or claim independent verification had passed.
 - **Rationale:** Do not fabricate partners or overstate evidence.
 - **Consequences:** PartnerLogos remains hidden until confirmed data exists; shell-deny history remains documented.
+
+### Decision 4: Contact form rate-limit threshold + forward target handling (Layer 3 task-01)
+- **Date:** 2026-10-09
+- **Context:** Task-01 đánh dấu `[cần xác nhận]` cho ngưỡng rate-limit `POST /api/contact`; OQ#4 (`CONTACT_FORM_TARGET`) chưa có giá trị.
+- **Decision:** User chốt **rate-limit = 5 request / 10 phút / IP** (in-memory sliding window). `CONTACT_FORM_TARGET` đọc từ env server-only; verify local bằng **mock endpoint**, giá trị thật user điền `.env.local` sau.
+- **Alternatives Considered:** 3 req/10 min (chặt hơn) hoặc 10 req/10 min (lỏng hơn).
+- **Rationale:** Cân bằng chống spam với không chặn nhầm người dùng thật; giữ interface forward không đổi khi thay đích.
+- **Consequences:** Rate-limit in-memory là per-instance (không chính xác khi scale ngang) — ghi residual; cấm `NEXT_PUBLIC_CONTACT_FORM_TARGET` (R-19).

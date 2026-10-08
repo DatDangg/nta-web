@@ -10,7 +10,7 @@
       "currentPhase": 0,
       "totalLayers": 5,
       "currentLayer": 3,
-      "completedTasks": ["layer-0-task-01", "layer-0-task-02", "layer-0-task-03", "layer-0-task-04", "layer-0-task-05", "layer-0-task-06", "layer-1-task-01", "layer-1-task-02", "layer-1-task-03", "layer-1-task-04", "layer-1-task-05", "fix-layer1-dead-links-phase-1-task-01", "layer-2-task-01", "layer-2-task-02", "layer-2-task-03", "layer-2-task-04", "layer-2-task-05", "layer-2-task-06", "layer-2-task-07", "fix-blog-list-date-format-phase-1-task-01"],
+      "completedTasks": ["layer-0-task-01", "layer-0-task-02", "layer-0-task-03", "layer-0-task-04", "layer-0-task-05", "layer-0-task-06", "layer-1-task-01", "layer-1-task-02", "layer-1-task-03", "layer-1-task-04", "layer-1-task-05", "fix-layer1-dead-links-phase-1-task-01", "layer-2-task-01", "layer-2-task-02", "layer-2-task-03", "layer-2-task-04", "layer-2-task-05", "layer-2-task-06", "layer-2-task-07", "fix-blog-list-date-format-phase-1-task-01", "layer-3-task-01"],
       "inProgressTask": null,
       "tasks": [
         {
@@ -177,12 +177,21 @@
           "reviewReport": ".context/review-reports/feature-fix-blog-list-date-format-phase-1-task-01-round-2-review.md",
           "changeRequest": "spec/changes/archive/2026-10-09-fix-blog-list-date-format.md",
           "note": "MODIFY post-build (C-L2-1 MED layer-2 phase review). Thống nhất format ngày blog list = detail = design S11 qua util chung src/lib/format/date.ts (VI 08/10/2026, EN Oct 8, 2026). spec_version 1.0.0→1.0.1 (PATCH clarify R-09). Round-1 inline self-review (env subagent depth limit) → primary re-ran independent reviewer round 2 = PASS STRICT (C-L2-1 closed). Layer-2 spec-validator round 2 = PASS."
+        },
+        {
+          "id": "layer-3-task-01",
+          "layer": 3,
+          "status": "done",
+          "reviewLevel": "STRICT",
+          "reviewResult": "PASS",
+          "reviewReport": ".context/review-reports/feature-nta-website-layer-3-task-01-round-2-review.md",
+          "note": "API GET /api/health + POST /api/contact (guard R-18 rateLimit→validate→honeypot→forward). r1 FAIL STRICT (MAJOR rate-limit bypass qua XFF leftmost) → fix (rightmost + validate IP + shared fallback, prune, honeypot raw) → r2 PASS STRICT. Decision 4: rate-limit 5/10min/IP; CONTACT_FORM_TARGET server-only. Residual: in-memory per-instance; premise GFE rightmost cần xác nhận Layer 4. Error 6 logged."
         }
       ],
       "specVersion": "1.0.1",
       "planDir": "tasks/nta-website/",
       "layerPlanDiagram": "docs/diagrams/layer-plan.html",
-      "lastUpdated": "2026-10-09T18:05:00+07:00"
+      "lastUpdated": "2026-10-09T19:20:00+07:00"
     }
   ],
   "bugs": []

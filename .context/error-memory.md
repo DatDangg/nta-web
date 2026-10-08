@@ -98,3 +98,12 @@ These rules were learned from real bugs. Apply them to every task, not just when
 - **Fix:** Chuyển sang pattern task-06: server render page 1 trong `<Suspense fallback={grid server-rendered}>` + client component (`BlogFilter`) đọc `useSearchParams` để phân trang. `blog.html` chứa lại 4 slug; route về SSG.
 - **Pattern:** Có **hai** cách phá SSG: (a) `useSearchParams` client-only → static HTML rỗng (Error 4); (b) `searchParams` ở server → route thành dynamic (Error 5). Cùng chủ đề "thêm tương tác query param vào trang SSG".
 - **Prevention:** Sau build, **luôn** verify `.next/prerender-manifest.json` chứa route đó + `grep` nội dung trong `.next/server/app/<route>.html`. Đừng tin ký hiệu `●` trên route table. Với list SSG cần `?page=`: server-render trang mặc định trong Suspense fallback, chỉ lớp pagination là client.
+
+### Error 6 — layer-3-task-01: rate-limit bypass qua proxy header client kiểm soát
+- **Date:** 2026-10-09
+- **Task:** layer-3/task-01 (API `GET /api/health` + `POST /api/contact`)
+- **Error:** Reviewer STRICT r1 FAIL (MAJOR): `getClientIp` lấy token **trái nhất** của `X-Forwarded-For`. Client tự gửi header và đổi giá trị mỗi request → mỗi request vào bucket IP khác → **thoát ngưỡng rate-limit 5/10min**, vô hiệu control chống spam. Kèm 3 MINOR: map không evict (phình bộ nhớ); fallback `'unknown'` bucket; honeypot whitespace-only không bị trap.
+- **Root Cause:** Tin nhầm rằng entry đầu tiên của `X-Forwarded-For` là IP client tin cậy. Thực tế client có thể tự set XFF; proxy tin cậy (GCP GFE) **append** IP của nó vào **cuối** chuỗi → giá trị tin cậy là entry phải nhất, không phải trái nhất.
+- **Fix:** Lấy `x-forwarded-for` entry **phải nhất** (`.at(-1)`), validate bằng `isValidIpAddress` (IPv4/IPv6); thiếu/rác → **shared fallback bucket** (fail-closed, mọi request chung 1 bucket để không bypass, không key riêng). Thêm prune entry hết hạn; honeypot dùng raw `length > 0`. r2 PASS.
+- **Pattern:** Mọi giá trị từ header HTTP (XFF, X-Real-IP, Forwarded, User-Agent…) là **untrusted** — không dùng trực tiếp cho security/quota. Phải xác định theo **trust boundary** của proxy: dùng entry do proxy tin cậy thêm vào (thường phải nhất của XFF — GFE), validate format, và **fail-closed** khi thiếu (không fail-open).
+- **Prevention:** Control theo IP/rate-limit phải (1) nêu rõ trust assumption + platform, (2) validate IP, (3) thiếu/không hợp lệ → bucket chung bị giới hạn thay vì cho qua, (4) prune state. Verify: đổi XFF bên trái + giữ phải cố định → vẫn phải 429.
