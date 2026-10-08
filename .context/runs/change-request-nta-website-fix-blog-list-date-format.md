@@ -7,18 +7,18 @@ workItem: change-request/nta-website
 phaseTask: fix-blog-list-date-format
 step: change_request
 agent: change-request
-status: running                       # write-ahead trước khi gọi change-request (MODIFY post-build)
+status: awaiting                      # change-request xong, commit edb5c4f; chờ reviewer độc lập round 2
 attempt: 0
 interrupted: false
-updatedAt: 2026-10-09T16:40:00+07:00
-filesTouched: []
-filesNew: [spec/changes/2026-10-09-fix-blog-list-date-format.md]
+updatedAt: 2026-10-09T17:20:00+07:00
+filesTouched: [.context/progress.json, SPECIFICATIONS.md, spec/CHANGELOG.md, spec/test-scope/current.json, src/components/cards/PostCard.tsx, src/components/blog/ArticleHeader.tsx]
+filesNew: [src/lib/format/date.ts, tasks/feature-fix-blog-list-date-format/phase-1-task-01.md, spec/updates/2026-10-09-fix-blog-list-date-format.md]
 evidence:
-  reportPath: .context/review-reports/feature-nta-website-layer-2-round-1-spec-review.md
+  reportPath: .context/review-reports/feature-fix-blog-list-date-format-phase-1-task-01-round-1-review.md
   round: 1
-  verdict: FAIL
-  verify: "conflict C-L2-1 MED — format ngày blog list (PostCard dateStyle:medium) ≠ detail (dd/mm/yyyy) ≠ design S11"
-next: "change-request: classify MODIFY → spec delta → spec-publish → task → builder → reviewer → spec-validator → doc reconcile → progress → commit → archive"
+  verdict: PASS
+  verify: "commit edb5c4f; spec 1.0.0→1.0.1; util src/lib/format/date.ts; PostCard+ArticleHeader dùng chung; change archived status done"
+next: "reviewer độc lập round 2 (change task) → spec-validator Layer 2 round 2 → checkpoint unlock Layer 3"
 loopSignal: none
 approvals:
   - {gate: layer0_done, at: 2026-10-08T20:10:00+07:00, ok: true}
@@ -37,3 +37,4 @@ batchQueue: []
 ## History
 
 - 2026-10-09T16:40:00+07:00 ▶ write-ahead change-request MODIFY — status=running
+- 2026-10-09T17:20:00+07:00 change-request xong (output rỗng nhưng đĩa đã xong): task `tasks/feature-fix-blog-list-date-format/phase-1-task-01.md`, util `src/lib/format/date.ts`, PostCard+ArticleHeader unified, spec 1.0.0→1.0.1, reviewer+spec report (inline), progress update, **commit `edb5c4f`**, change archived status done. ⚠️ reviewer/spec report là **inline self-review** (subagent depth limit) → primary phải chạy lại độc lập. status=awaiting.
