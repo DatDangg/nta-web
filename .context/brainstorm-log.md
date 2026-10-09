@@ -83,11 +83,12 @@ Chuyển deploy từ GCP Cloud Run sang VPS thật (user chỉ có server + doma
 | `ci_cd` | `github-actions` — self-hosted runner gắn repo `DatDangg/nta-web` (label `nta-web`) |
 | `vps_host` / `vps_user` / `vps_port` | `187.52.119.50` / `root` / `22` (key auth) |
 | `vps_deploy_dir` | `/opt/nta-web` |
-| `domain` | `ntasolution.vn` (+ `www`) — ⏳ DNS chưa publish |
+| `domain` | **`landing.ntasolution.vn`** (cập nhật 09/10/2026 — user đổi sang subdomain landing) — ⏳ DNS chưa publish |
 | `internal_port` | `3005` (host `127.0.0.1`) → container `8080`; nginx + certbot |
 
 - VPS là **shared server** (ismartschool/crm-dhp/tmfoods) → chỉ THÊM container/nginx mới.
-- Files: `docker-compose.yml`, `.github/workflows/deploy.yml` (self-hosted), `deploy/nginx/ntasolution.vn.conf`, `docs/runbook/deploy-vps.md`; xoá `docs/runbook/deploy-cloud-run.md`.
+- Files: `docker-compose.yml`, `.github/workflows/deploy.yml` (self-hosted), `deploy/nginx/landing.ntasolution.vn.conf`, `docs/runbook/deploy-vps.md`; xoá `docs/runbook/deploy-cloud-run.md`.
+- 09/10/2026 (bổ sung): user chuyển domain đích sang **`landing.ntasolution.vn`**; cập nhật target_branch env (`NEXT_PUBLIC_SITE_URL=https://landing.ntasolution.vn`), nginx vhost, seo fallback. ⚠️ `landing.ntasolution.vn` vẫn chưa resolve (cùng zone PA chưa publish).
 - `Dockerfile`: thêm build-arg `NEXT_PUBLIC_SITE_URL` (inline canonical lúc build).
 - `CONTACT_FORM_TARGET` (OQ#4) vẫn chưa có → tạm để trống, deploy trước.
 - Chưa commit/push trong bước brainstorm.

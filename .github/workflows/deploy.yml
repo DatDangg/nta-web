@@ -15,7 +15,7 @@ permissions:
   contents: read
 
 env:
-  NEXT_PUBLIC_SITE_URL: https://ntasolution.vn
+  NEXT_PUBLIC_SITE_URL: https://landing.ntasolution.vn
   HOST_PORT: "3005"
   CONTACT_FORM_TARGET: ${{ secrets.CONTACT_FORM_TARGET }}
 

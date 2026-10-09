@@ -12,17 +12,18 @@ attempt: 0
 interrupted: false
 updatedAt: 2026-10-09T02:35:00+07:00
 filesTouched: [Dockerfile, .github/workflows/deploy.yml, .context/project-config.md, .context/brainstorm-log.md, docs/runbook/deploy-vps.md]
-filesNew: [docker-compose.yml, deploy/nginx/ntasolution.vn.conf, docs/runbook/deploy-vps.md, .context/runs/devops-nta-website-vps-deploy.md]
+filesNew: [docker-compose.yml, deploy/nginx/landing.ntasolution.vn.conf, docs/runbook/deploy-vps.md, .context/runs/devops-nta-website-vps-deploy.md]
 evidence:
   reportPath: null
   verify: "Self-hosted runner cài tại /opt/actions-runner-nta-web (v2.338.0, RUNNER_ALLOW_RUNASASROOT=1, label nta-web, service active). Pushed b2d883c + ec1420d → job 'deploy' Succeeded. Deploy chuẩn hoá: runner workspace /opt/actions-runner-nta-web/_work/nta-web/nta-web (bỏ /opt/nta-web). Container nta-web running+healthy, 127.0.0.1:3005->8080, health {status:ok}. Routes 200. DNS vẫn chặn."
 understand: "Bước 6 DevOps — deploy NTA website lên VPS (KHÔNG dùng GCP Cloud Run như config cũ). Config chốt: deploy_platform other(GCP) → docker-vps; method (A) self-hosted GitHub Actions runner cho repo DatDangg/nta-web; nginx + certbot; port nội bộ 3005; CONTACT_FORM_TARGET tạm để trống (chưa có info)."
-next: "Còn lại: (1) DNS: PA Vietnam chưa publish A record → chờ/liên hệ PA hoặc chuyển Cloudflare → bật nginx vhost + certbot HTTPS. (2) Đo R-22 (Lighthouse Perf/LCP/CLS) + R-23 (viewport 375/768/1280) sau khi public. (3) CONTACT_FORM_TARGET khi user có info. (4) Thêm repo secret CONTACT_FORM_TARGET nếu cần."
+next: "Còn lại: (1) DNS: PA Vietnam chưa publish A record (cả apex ntasolution.vn lẫn landing.ntasolution.vn) → chờ/liên hệ PA hoặc chuyển Cloudflare → bật nginx vhost landing + certbot HTTPS. (2) Đo R-22 + R-23 sau khi public. (3) CONTACT_FORM_TARGET khi user có info."
 loopSignal: none
 approvals:
   - {gate: vps_deploy_plan, at: 2026-10-09T00:00:00+07:00, ok: true}   # user chốt A(actions)+nginx+certbot+port 3005
   - {gate: vps_container_deployed, at: 2026-10-09T02:25:00+07:00, ok: true}   # container lên port 3005, health OK
   - {gate: self_hosted_runner_live, at: 2026-10-09T02:35:00+07:00, ok: true}   # runner active, CI/CD deploy Succeeded
+  - {gate: domain_switch_landing, at: 2026-10-09T02:40:00+07:00, ok: true}   # user đổi domain đích → landing.ntasolution.vn
 blockedReason: "DNS A record (PA Vietnam) — cần cho HTTPS/public"
 ```
 

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { routing } from '@/i18n/routing';
 
-export const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://ntasolution.vn';
+export const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://landing.ntasolution.vn';
 
 function localizedSegments(locale: string, pathname: string) {
   const normalizedPath = pathname.replace(/^\/+|\/+$/g, '');

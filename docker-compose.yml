@@ -4,7 +4,7 @@
 # App bind 127.0.0.1:3005 (chỉ nội bộ) → nginx reverse proxy (HTTPS) đứng trước.
 #
 # Biến môi trường (đọc từ shell/.env, KHÔNG commit giá trị thật):
-#   NEXT_PUBLIC_SITE_URL   build-time, canonical URL (mặc định https://ntasolution.vn)
+#   NEXT_PUBLIC_SITE_URL   build-time, canonical URL (mặc định https://landing.ntasolution.vn)
 #   CONTACT_FORM_TARGET    server-only, đích forward form (OQ#4 — có thể để trống tạm)
 #   HOST_PORT              port host (mặc định 3005)
 
@@ -13,7 +13,7 @@ services:
     build:
       context: .
       args:
-        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-https://ntasolution.vn}
+        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-https://landing.ntasolution.vn}
     image: nta-web:latest
     container_name: nta-web
     restart: unless-stopped
