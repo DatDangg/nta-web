@@ -93,3 +93,15 @@ Chuyển deploy từ GCP Cloud Run sang VPS thật (user chỉ có server + doma
 - `CONTACT_FORM_TARGET` (OQ#4) vẫn chưa có → tạm để trống, deploy trước.
 - Chưa commit/push trong bước brainstorm.
 
+## Cập nhật 09/10/2026 — đổi domain đích sang `ntavietnam.tech`
+
+User cấp domain mới `ntavietnam.tech` (thay `landing.ntasolution.vn`). Chốt: **thay hoàn toàn** (không song song), canonical `https://ntavietnam.tech` (HTTPS), **chỉ apex** (không `www`).
+
+| Field | Giá trị |
+|---|---|
+| `domain` | `landing.ntasolution.vn` → **`ntavietnam.tech`** — ⏳ cần xác nhận DNS A record trỏ về `187.52.119.50` |
+
+- Files cập nhật: `.github/workflows/deploy.yml`, `docker-compose.yml`, `deploy/nginx/ntavietnam.tech.conf` (rename từ `landing.ntasolution.vn.conf`), `docs/runbook/deploy-vps.md`, `src/lib/seo.ts` (fallback), `public/llms.txt`, `docs/API_SPEC.md`, `.context/design-spec.md`, `.context/project-config.md`.
+- Việc còn lại: publish DNS A record → `certbot --nginx -d ntavietnam.tech` → bật nginx vhost + xoá vhost preview IP.
+- Spec/intent docs (`SPECIFICATIONS.md`, `BRIEF.md`, `docs/BRD.md`) **chưa** đổi (theo dõi như gap domain drift — xử lý qua `/change` nếu cần).
+

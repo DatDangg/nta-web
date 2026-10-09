@@ -84,7 +84,7 @@ kiểu Apple, dựa trên Tailwind + system SF Pro/Inter, motion fade/slide ti�
 
 ### 1.8 SEO global (R-21)
 
-- Title template: `"%s | NTA"` (không lặp brand 2 lần, ≤ 60 ký tự); `metadataBase` = `https://ntasolution.vn`.
+- Title template: `"%s | NTA"` (không lặp brand 2 lần, ≤ 60 ký tự); `metadataBase` = `https://ntavietnam.tech`.
 - Mỗi route: `title` + `description` (150–160 ký tự) + `alternates.languages {vi, en, x-default}` +
   OpenGraph (`locale vi_VN/en_US`, ảnh OG 1200×630 OG-site) + Twitter card.
 - JSON-LD: **Organization + WebSite** (root layout, 2 locale) · **BreadcrumbList** (trang con) ·

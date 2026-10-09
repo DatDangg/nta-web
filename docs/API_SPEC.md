@@ -16,7 +16,7 @@
 
 ```
 Development: http://localhost:3000/api
-Production:  https://ntasolution.vn/api
+Production:  https://ntavietnam.tech/api
 ```
 
 ## Phạm vi API (NTA Website v1)
