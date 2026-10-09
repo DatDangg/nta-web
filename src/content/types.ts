@@ -8,6 +8,9 @@ export interface Solution {
   benefits: string[];
   category: 'enterprise' | 'ai';
   useCases?: string[];
+  sections?: { title: string; intro?: string; items?: string[] }[];
+  highlights?: { value: string; label: string }[];
+  faq?: { question: string; answer: string }[];
   image?: string;
   screenshots?: string[];
   relatedCases?: string[];

@@ -104,7 +104,7 @@ Font stack: `-apple-system, BlinkMacSystemFont, "SF Pro Display", Inter, "Segoe 
 
 ### Screen: Chi tiết giải pháp AI
 - **Route:** `/solutions/ai/[slug]` (`boxai` | `flycam` | `custom-ai`)
-- **Components:** PageHeader, FeatureList, UseCases, CaseStudyLink, CTAForm
+- **Components:** PageHeader, FeatureList, BenefitList, SolutionSections, SolutionHighlights, UseCases, FaqList, CaseStudyLink, CTAForm
 
 ### Screen: Sản phẩm App
 - **Route:** `/products`

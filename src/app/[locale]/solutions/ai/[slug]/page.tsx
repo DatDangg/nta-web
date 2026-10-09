@@ -4,6 +4,10 @@ import { notFound } from 'next/navigation';
 import { CaseStudyLink } from '@/components/solutions/CaseStudyLink';
 import { FeatureList } from '@/components/solutions/FeatureList';
 import { UseCases } from '@/components/solutions/UseCases';
+import { BenefitList } from '@/components/solutions/BenefitList';
+import { SolutionSections } from '@/components/solutions/SolutionSections';
+import { SolutionHighlights } from '@/components/solutions/SolutionHighlights';
+import { FaqList } from '@/components/solutions/FaqList';
 import { CTAForm } from '@/components/contact/CTAForm';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { getCaseStudyBySlug } from '@/lib/content/case-studies';
@@ -51,7 +55,11 @@ export default async function AiSolutionDetailPage({ params }: { params: Promise
       <div className="mx-auto w-full max-w-container px-4 sm:px-6 lg:px-8">
         <div className="min-w-0 xl:max-w-[720px]">
           <FeatureList features={solution.features} title={t('featuresTitle')} />
+          {solution.benefits.length > 0 && <BenefitList benefits={solution.benefits} title={t('benefitsTitle')} />}
+          <SolutionSections sections={solution.sections ?? []} />
+          <SolutionHighlights highlights={solution.highlights ?? []} title={t('highlightsTitle')} />
           <UseCases cases={solution.useCases ?? []} title={t('useCasesTitle')} />
+          <FaqList faq={solution.faq ?? []} title={t('faqTitle')} />
         </div>
       </div>
       <CaseStudyLink caseStudy={relatedCase} linkLabel={t('caseStudyLink')} title={t('relatedCaseTitle')} />

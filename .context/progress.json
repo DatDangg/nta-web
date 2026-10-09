@@ -10,8 +10,8 @@
       "currentPhase": 0,
       "totalLayers": 5,
       "currentLayer": 4,
-      "completedTasks": ["layer-0-task-01", "layer-0-task-02", "layer-0-task-03", "layer-0-task-04", "layer-0-task-05", "layer-0-task-06", "layer-1-task-01", "layer-1-task-02", "layer-1-task-03", "layer-1-task-04", "layer-1-task-05", "fix-layer1-dead-links-phase-1-task-01", "layer-2-task-01", "layer-2-task-02", "layer-2-task-03", "layer-2-task-04", "layer-2-task-05", "layer-2-task-06", "layer-2-task-07", "fix-blog-list-date-format-phase-1-task-01", "layer-3-task-01", "layer-3-task-02", "layer-3-task-03", "layer-4-task-01", "layer-4-task-02", "layer-4-task-03", "layer-4-task-04"],
-      "inProgressTask": null,
+      "completedTasks": ["layer-0-task-01", "layer-0-task-02", "layer-0-task-03", "layer-0-task-04", "layer-0-task-05", "layer-0-task-06", "layer-1-task-01", "layer-1-task-02", "layer-1-task-03", "layer-1-task-04", "layer-1-task-05", "fix-layer1-dead-links-phase-1-task-01", "layer-2-task-01", "layer-2-task-02", "layer-2-task-03", "layer-2-task-04", "layer-2-task-05", "layer-2-task-06", "layer-2-task-07", "fix-blog-list-date-format-phase-1-task-01", "layer-3-task-01", "layer-3-task-02", "layer-3-task-03", "layer-4-task-01", "layer-4-task-02", "layer-4-task-03", "layer-4-task-04", "change-ai-solution-content-phase-1-task-01"],
+      "inProgressTask": "change-ai-solution-content-phase-1-task-02",
       "tasks": [
         {
           "id": "layer-0-task-01",
@@ -240,16 +240,26 @@
           "reviewResult": "PASS",
           "reviewReport": ".context/review-reports/feature-nta-website-layer-4-task-04-round-1-review.md",
           "note": "Deploy config Cloud Run (R-27/R-14/R-19) — GENERATE files, KHÔNG deploy/push. next.config output:standalone + Dockerfile multi-stage (Node 22 slim, non-root, server.js, PORT 8080) + .dockerignore + .github/workflows/deploy.yml (draft, chỉ workflow_dispatch) + docs/runbook/deploy-cloud-run.md. r1 NORMAL PASS (0 CRITICAL/MAJOR, 3 MINOR non-blocking). Verify: lint/typecheck/build PASS; .next/standalone/server.js chạy → /api/health 200, / 200; YAML valid; ci.yml unchanged. docker build Blocked (no docker). MINOR carry-forward → deploy thật ở /start bước 6: pin --platform linux/amd64, NEXT_PUBLIC_SITE_URL build-arg, secret version pin."
+        },
+        {
+          "id": "change-ai-solution-content-phase-1-task-01",
+          "layer": 1,
+          "status": "done",
+          "reviewLevel": "STRICT",
+          "reviewResult": "PASS",
+          "reviewReport": ".context/review-reports/change-ai-solution-content-phase-1-task-01-round-1-review.md",
+          "changeRequest": "spec/changes/2026-10-09-ai-solution-content.md",
+          "note": "MODIFY content/render (R-06a..e). Render infra: Solution type optional sections/highlights/faq + benefits render trên /solutions/ai/[slug] (SolutionSections/SolutionHighlights/FaqList, no new dep). r1 STRICT PASS (0 CRITICAL/MAJOR, 2 MINOR non-blocking). Verify: lint/typecheck/build PASS, 6 AI routes SSG. Residual: chưa có data (task-02); MINOR empty-section-with-title-only + content string keys."
         }
       ],
-      "specVersion": "1.0.1",
+      "specVersion": "1.1.0",
       "planDir": "tasks/nta-website/",
       "layerPlanDiagram": "docs/diagrams/layer-plan.html",
       "initialBuildCompletedAt": "2026-10-10T03:15:00+07:00",
-      "specPublished": { "scopeVersion": 4, "trigger": "initial-build", "path": "spec/test-scope/current.json" },
+      "specPublished": { "scopeVersion": 5, "trigger": "feature-update", "path": "spec/test-scope/current.json" },
       "layer4PhaseReview": { "verdict": "PASS", "report": ".context/review-reports/feature-nta-website-layer-4-round-1-spec-review.md" },
       "note": "Initial build hoàn tất: Layer 0..4 (totalLayers 5 = layer-plan 'Layer 0 → 4'). 27 req R-01..R-27 implemented. R-22 (Lighthouse Perf/LCP/CLS) + R-23 (viewport 375/768/1280) PARTIAL — đo ở gate DevOps/prod (bước 6). Chưa push (forbidden_branch main, auto_push false), chưa deploy.",
-      "lastUpdated": "2026-10-10T03:15:00+07:00"
+      "lastUpdated": "2026-10-09T00:00:00+07:00"
     }
   ],
   "bugs": []
