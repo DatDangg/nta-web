@@ -7,17 +7,17 @@ workItem: devops/nta-website
 phaseTask: step-6-vps-deploy
 step: devops
 agent: null
-status: blocked                     # CI/CD VPS xong + preview qua IP; chờ DNS (HTTPS/certbot) + form target
+status: done                        # domain live (HTTPS + canonical đúng); còn R-22/R-23 đo sau + CONTACT_FORM_TARGET
 attempt: 0
 interrupted: false
-updatedAt: 2026-10-09T03:30:00+07:00
+updatedAt: 2026-10-09T16:10:00+07:00
 filesTouched: [.github/workflows/deploy.yml, docker-compose.yml, src/lib/seo.ts, public/llms.txt, docs/API_SPEC.md, docs/runbook/deploy-vps.md, .context/project-config.md, .context/design-spec.md, .context/brainstorm-log.md, .context/runs/devops-nta-website-vps-deploy.md]
 filesNew: []
 evidence:
   reportPath: null
-  verify: "Self-hosted runner cài tại /opt/actions-runner-nta-web (v2.338.0, RUNNER_ALLOW_RUNASASROOT=1, label nta-web, service active). Pushed b2d883c + ec1420d → job 'deploy' Succeeded. Deploy chuẩn hoá: runner workspace /opt/actions-runner-nta-web/_work/nta-web/nta-web (bỏ /opt/nta-web). Container nta-web running+healthy, 127.0.0.1:3005->8080, health {status:ok}. Routes 200. DNS vẫn chặn."
+  verify: "Self-hosted runner cài tại /opt/actions-runner-nta-web (v2.338.0, RUNNER_ALLOW_RUNASASROOT=1, label nta-web, service active). Deploy chuẩn hoá: runner workspace /opt/actions-runner-nta-web/_work/nta-web/nta-web. 09/10/2026 domain ntavietnam.tech live: DNS A → 187.52.119.50; nginx vhost ntavietnam.tech + certbot Let\'s Encrypt (ECDSA, hạn 2027-01-07, auto-renew); http→https 301; gỡ vhost preview IP. Container rebuild từ HEAD 4d8120d (git archive) với NEXT_PUBLIC_SITE_URL=https://ntavietnam.tech → healthy, 127.0.0.1:3005→8080. Verify ngoài: / /api/health /llms.txt /robots.txt /sitemap.xml /en /solutions/ai = 200; canonical=https://ntavietnam.tech; robots sitemap=https://ntavietnam.tech/sitemap.xml; llms.txt 9 ref domain mới / 0 ref cũ."
 understand: "Bước 6 DevOps — deploy NTA website lên VPS (KHÔNG dùng GCP Cloud Run như config cũ). Config chốt: deploy_platform other(GCP) → docker-vps; method (A) self-hosted GitHub Actions runner cho repo DatDangg/nta-web; nginx + certbot; port nội bộ 3005; CONTACT_FORM_TARGET tạm để trống (chưa có info)."
-next: "Còn lại: (1) Cấu hình DNS A record cho `ntavietnam.tech` → 187.52.119.50 (script dựng: deploy nginx vhost + certbot HTTPS). (2) Đo R-22 + R-23 sau khi public. (3) CONTACT_FORM_TARGET khi user có info. (4) Gap: SPECIFICATIONS/BRIEF/BRD còn ghi domain cũ — xử lý qua /change nếu cần."
+next: "Còn lại: (1) Đo R-22 (Lighthouse) + R-23 (viewport) trên domain public. (2) CONTACT_FORM_TARGET khi user có info. (3) Gap: SPECIFICATIONS/BRIEF/BRD còn ghi domain cũ — xử lý qua /change nếu cần. Lưu ý: remote GitHub vẫn ở 28527cb (chưa push); build domain vừa rồi chạy thủ công từ HEAD local."
 loopSignal: none
 approvals:
   - {gate: vps_deploy_plan, at: 2026-10-09T00:00:00+07:00, ok: true}   # user chốt A(actions)+nginx+certbot+port 3005
@@ -25,7 +25,8 @@ approvals:
   - {gate: self_hosted_runner_live, at: 2026-10-09T02:35:00+07:00, ok: true}   # runner active, CI/CD deploy Succeeded
   - {gate: domain_switch_landing, at: 2026-10-09T02:40:00+07:00, ok: true}   # user đổi domain đích → landing.ntasolution.vn
   - {gate: domain_switch_ntavietnam, at: 2026-10-09T03:30:00+07:00, ok: true}   # user đổi domain đích → ntavietnam.tech (thay hoàn toàn, https apex, không www)
-blockedReason: "DNS A record (PA Vietnam) — cần cho HTTPS/public"
+  - {gate: prod_domain_live, at: 2026-10-09T16:10:00+07:00, ok: true}   # user duyệt "tự ssh làm" → bật nginx + certbot + rebuild canonical trên VPS
+blockedReason: null
 ```
 
 ## Notes / WIP reasoning
@@ -44,3 +45,4 @@ blockedReason: "DNS A record (PA Vietnam) — cần cho HTTPS/public"
 - 2026-10-09 cài self-hosted runner (`/opt/actions-runner-nta-web`, v2.338.0, label `nta-web`, RUNNER_ALLOW_RUNASROOT=1), service active. Push test `b2d883c` → job Succeeded. Chuẩn hoá deploy từ runner workspace, bỏ `/opt/nta-web`; push `ec1420d` → container tạo lại từ workspace, healthy, health OK. CI/CD end-to-end OK.
 - 2026-10-09 thêm nginx vhost **tạm** `/etc/nginx/sites-available/nta-web-preview.conf` (server_name 187.52.119.50 → proxy 127.0.0.1:3005) để preview qua IP. Verify ngoài: http://187.52.119.50/ = 200, title NTA, /api/health ok. ⚠️ XOÁ file này khi domain live (đã có `deploy/nginx/ntasolution.vn.conf` trong repo cho bản thật).
 - 2026-10-09 đổi domain đích `landing.ntasolution.vn` → **`ntavietnam.tech`** (thay hoàn toàn, canonical `https://ntavietnam.tech`, apex không www). Rename nginx vhost → `deploy/nginx/ntavietnam.tech.conf`; cập nhật deploy.yml/compose/seo fallback/runbook/project-config/brainstorm-log + `public/llms.txt` (đang stale `ntasolution.vn`) + `docs/API_SPEC.md` + `.context/design-spec.md`. Chưa đổi SPECIFICATIONS/BRIEF/BRD (gap).
+- 2026-10-09 (SSH, user duyệt "tự ssh làm") domain **live**: scp vhost → `/etc/nginx/sites-available/ntavietnam.tech`, symlink, `certbot --nginx -d ntavietnam.tech` (HTTPS+redirect), gỡ `/etc/nginx/sites-enabled/nta-web-preview.conf`. Rebuild image **thủ công** từ HEAD local (`git archive` → `/opt/nta-web-deploy`, `docker compose -p nta-web up -d --build` với `NEXT_PUBLIC_SITE_URL=https://ntavietnam.tech`; temp dir đã xoá). Verify ngoài: 7 route 200, canonical/robots/sitemap/llms.txt = `ntavietnam.tech`, 0 ref cũ. ⚠️ Chưa push → remote GitHub vẫn `28527cb`; CI lần tới sẽ build lại từ workspace.

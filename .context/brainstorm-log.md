@@ -102,6 +102,7 @@ User cấp domain mới `ntavietnam.tech` (thay `landing.ntasolution.vn`). Chố
 | `domain` | `landing.ntasolution.vn` → **`ntavietnam.tech`** — ⏳ cần xác nhận DNS A record trỏ về `187.52.119.50` |
 
 - Files cập nhật: `.github/workflows/deploy.yml`, `docker-compose.yml`, `deploy/nginx/ntavietnam.tech.conf` (rename từ `landing.ntasolution.vn.conf`), `docs/runbook/deploy-vps.md`, `src/lib/seo.ts` (fallback), `public/llms.txt`, `docs/API_SPEC.md`, `.context/design-spec.md`, `.context/project-config.md`.
-- Việc còn lại: publish DNS A record → `certbot --nginx -d ntavietnam.tech` → bật nginx vhost + xoá vhost preview IP.
+- ✅ Đã triển khai 09/10/2026: DNS `ntavietnam.tech` → `187.52.119.50`; nginx vhost `ntavietnam.tech` + `certbot --nginx` (HTTPS, cert hạn 07/01/2027, http→https 301); gỡ vhost preview IP; rebuild container với `NEXT_PUBLIC_SITE_URL=https://ntavietnam.tech` (canonical/robots/sitemap/llms.txt đều đúng domain mới).
+- Việc còn lại: đo R-22 (Lighthouse) + R-23 (viewport) sau khi public; `CONTACT_FORM_TARGET` (OQ#4).
 - Spec/intent docs (`SPECIFICATIONS.md`, `BRIEF.md`, `docs/BRD.md`) **chưa** đổi (theo dõi như gap domain drift — xử lý qua `/change` nếu cần).
 

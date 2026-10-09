@@ -11,10 +11,10 @@
 | SSH | `root@187.52.119.50` (key auth) |
 | Port nội bộ | `127.0.0.1:3005` → container `8080` |
 | Reverse proxy | nginx sẵn có (80/443) + certbot |
-| Domain | **`ntavietnam.tech`** — ⏳ cần xác nhận DNS A record trỏ về `187.52.119.50` (trước khi HTTPS/certbot) |
+| Domain | **`ntavietnam.tech`** — ✅ live 09/10/2026 (DNS A → `187.52.119.50`, HTTPS Let's Encrypt, http→https 301) |
 | Deploy | GitHub Actions self-hosted runner (label `nta-web`), deploy từ runner workspace |
 | Deploy dir (thực tế) | `/opt/actions-runner-nta-web/_work/nta-web/nta-web` (workspace của runner) |
-| Preview tạm | `http://187.52.119.50/` (nginx vhost tạm theo IP — xoá khi domain live) |
+| Preview tạm | ~~`http://187.52.119.50/`~~ (vhost preview theo IP đã xoá khi domain live) |
 
 ## 1. Deploy tự động (chuẩn)
 
