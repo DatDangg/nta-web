@@ -105,6 +105,7 @@ Font stack: `-apple-system, BlinkMacSystemFont, "SF Pro Display", Inter, "Segoe 
 ### Screen: Chi tiết giải pháp AI
 - **Route:** `/solutions/ai/[slug]` (`boxai` | `flycam` | `custom-ai`)
 - **Components:** PageHeader, FeatureList, BenefitList, SolutionSections, SolutionHighlights, UseCases, FaqList, CaseStudyLink, CTAForm
+- **Content data (MDX VI/EN):** `sections` / `highlights` / `faq` optional fields render bởi SolutionSections/SolutionHighlights/FaqList (rỗng → ẩn). Nội dung 3 trang: Talvra (custom-ai), BoxAI + Đền Bảo Hà (định tính), Flycam — theo spec delta R-06a..e.
 
 ### Screen: Sản phẩm App
 - **Route:** `/products`
@@ -117,6 +118,7 @@ Font stack: `-apple-system, BlinkMacSystemFont, "SF Pro Display", Inter, "Segoe 
 ### Screen: Case Study (chi tiết)
 - **Route:** `/case-studies/[slug]`
 - **Components:** PageHeader, MetaBar (khách hàng, lĩnh vực, năm), ChallengeBlock, SolutionBlock, ResultBlock (số liệu), ImageGallery, RelatedStudies, CTA
+- **Content data:** `oc-eo-learning` = dự án AI camera + flycam khu di tích Óc Eo – Ba Thê (category `ai`, slug giữ nguyên) — viết theo nhánh **phương án đề xuất** (kết quả kỳ vọng/dự toán, BR-004). Featured case ở `src/content/home.ts` cùng context (R-08a).
 
 ### Screen: Tin tức / Blog
 - **Route:** `/blog` + `/blog/[slug]`

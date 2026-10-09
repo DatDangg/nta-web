@@ -11,6 +11,9 @@ status: running
 attempt: 0
 interrupted: false
 updatedAt: 2026-10-09T00:00:00+07:00
+commits:
+  - 28fc4b0  # chore: publish spec 1.1.0 scope v5 + task plan
+  - 0f6899f  # feat: phase-1-task-01 (reviewer STRICT PASS)
 filesTouched:
   - SPECIFICATIONS.md          # spec_version 1.0.1 → 1.1.0, thêm R-06a..e + R-08a
   - spec/CHANGELOG.md          # row 1.1.0 MINOR scope v5
@@ -32,7 +35,7 @@ evidence:
   reportPath: .context/review-reports/change-ai-solution-content-spec-validation.md
   round: 0
   verdict: null
-next: "Reviewer STRICT phase-1-task-01 → nếu PASS: close-out task-01 → builder task-02"
+next: "Reviewer STRICT phase-1-task-02 → PASS: close-out + archive change file + spec end-phase validation"
 loopSignal: none
 approvals:
   - {gate: phase_plan, at: "2026-10-09", ok: true}   # user: "Duyệt plan, chạy tuần tự"

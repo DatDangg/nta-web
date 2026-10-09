@@ -1,17 +1,66 @@
 ---
 slug: boxai
 image: /images/solutions/boxai.svg
-title: "BoxAI"
-description: "Trợ lý AI nội bộ cho doanh nghiệp, trả lời trên dữ liệu riêng."
+title: "BoxAI — camera AI tại biên"
+description: "Kết hợp camera cố định, AI Box NVIDIA Jetson và trung tâm VMS để phát hiện sự kiện tại chỗ, điều hành cảnh báo thống nhất và bổ trợ bằng flycam khi cần."
 category: ai
 features:
-  - "Tra cứu tài liệu nội bộ"
-  - "Trả lời theo nguồn được cung cấp"
-  - "Phân quyền truy cập theo nhu cầu triển khai"
+  - "Phân tích video tại biên bằng NVIDIA Jetson và DeepStream"
+  - "Danh mục 21 thuật toán AI và 3 tính năng nền, lựa chọn theo bài toán"
+  - "Kết nối sự kiện camera với VMS và flycam theo quy tắc kiểm soát"
 benefits:
-  - "Rút ngắn thời gian tìm thông tin"
-  - "Tận dụng kho tri thức hiện có"
+  - "Giảm lượng video phải truyền về trung tâm bằng cách xử lý tại cụm camera"
+  - "Duy trì phân tích và cảnh báo cục bộ khi mất kết nối trung tâm"
+  - "Tập trung camera, bản đồ và cảnh báo trong một giao diện điều hành"
 useCases:
-  - "Tra cứu quy trình nội bộ"
-  - "Hỗ trợ nhân viên mới"
+  - "Bảo vệ khu di tích khỏi xâm nhập, đào trộm và phá hoại"
+  - "Phát hiện cháy, khói và động vật xâm nhập tại khu vực rộng"
+  - "Giám sát ra vào, trật tự và an toàn tại khu công nghiệp, kho bãi"
+highlights:
+  - value: "21"
+    label: "thuật toán AI trong danh mục"
+  - value: "3"
+    label: "tính năng nền: dashboard, cảnh báo tại chỗ, tìm kiếm thông minh"
+  - value: "4–16"
+    label: "kênh mỗi box tùy tải thuật toán và cấu hình"
+sections:
+  - title: "Kiến trúc ba tầng"
+    items:
+      - "Camera IP cố định, PTZ hoặc 360° ghi nhận hình ảnh tại các vị trí phù hợp."
+      - "AI Box NVIDIA Jetson xử lý luồng video tại biên; sự kiện được chuyển qua MQTT/TLS hoặc webhook."
+      - "Trung tâm VMS hiển thị camera, bản đồ và cảnh báo; có thể tích hợp luồng flycam để xác minh sự kiện."
+  - title: "Phần cứng và xử lý tại biên"
+    intro: "Cấu hình được lựa chọn theo số camera, tổ hợp thuật toán và kết quả khảo sát."
+    items:
+      - "Jetson Orin NX 16GB Super là cấu hình box chủ lực; Orin Nano Super có thể phù hợp với cụm nhỏ."
+      - "DeepStream xử lý pipeline RTSP, giải mã video, suy luận TensorRT và theo dõi đối tượng."
+      - "Ước tính thiết kế khoảng 16 kênh giải mã 1080p mỗi box; số kênh AI thực tế phụ thuộc độ nặng thuật toán và cần benchmark tại hiện trường."
+  - title: "Danh mục thuật toán theo nhu cầu"
+    intro: "Danh mục gồm 21 thuật toán, chia thành các nhóm bảo vệ tài sản, an toàn cháy nổ, trật tự xã hội, kiểm soát ra vào, xâm nhập và điều tra. Không phải mọi thuật toán đều chạy đồng thời trên mọi cấu hình."
+    items:
+      - "Bảo vệ tài sản: đào trộm, camera bị can thiệp, vật thể bị lấy đi, phá hoại và thay đổi nền đất."
+      - "An toàn và trật tự: phát hiện lửa/khói, âm thanh bất thường, đánh nhau, hành vi vi phạm và tụ tập đông người."
+      - "Kiểm soát ra vào: đếm người, theo dõi phương tiện, nhận diện biển số Việt Nam, vạch ảo và danh sách khuôn mặt."
+      - "Xâm nhập và điều tra: phát hiện xâm nhập ban đêm, động vật, drone lạ, bám đuổi PTZ và vũ khí."
+      - "Ba tính năng nền: dashboard phân tích, cảnh báo tại chỗ và tìm kiếm video theo đặc điểm."
+  - title: "Chọn tổ hợp và số kênh theo tải"
+    intro: "Số kênh là ước tính thiết kế, không phải cam kết mọi kênh chạy đủ 21 thuật toán. Cấu hình cuối cùng cần benchmark mAP và độ trễ với tổ hợp thực tế."
+    items:
+      - "Tải nhẹ như phát hiện và theo dõi người, xe, động vật: ước tính tối đa 16 kênh/box."
+      - "Tải trung bình có cháy/khói, tampering, tripwire hoặc ANPR: khoảng 8–12 kênh/box."
+      - "Tải nặng với pose, hành vi, nhận diện khuôn mặt hoặc nhiều thuật toán kết hợp: khoảng 2–6 kênh/box."
+  - title: "Gói theo ngành"
+    items:
+      - "Di tích: ưu tiên đào trộm, xâm nhập ban đêm, cháy/khói, động vật và bảo vệ kho hiện vật."
+      - "Rừng và kiểm lâm: giám sát cháy, xâm nhập và các tuyến tuần tra theo vùng rủi ro."
+      - "Khu công nghiệp, kho bãi: tập trung xâm nhập, cháy nổ, ra vào và an toàn vận hành."
+  - title: "Triển khai thực tế tại Đền Bảo Hà"
+    intro: "NTA đã triển khai giải pháp tại Đền Bảo Hà. Thông tin được chia sẻ ở đây ở mức định tính; số lượng camera, thiết bị cụ thể và mốc triển khai sẽ được cập nhật sau khi được xác nhận."
+faq:
+  - question: "BoxAI có gửi toàn bộ video lên trung tâm không?"
+    answer: "AI xử lý tại biên giúp giảm nhu cầu truyền toàn bộ luồng video; phương án gửi sự kiện, clip và lưu trữ được cấu hình theo yêu cầu dự án."
+  - question: "Mỗi box chạy được bao nhiêu camera?"
+    answer: "Tùy độ phân giải và tổ hợp thuật toán. Mốc 16 kênh là ước tính giải mã; năng lực AI cần được benchmark thực địa trước khi chốt cấu hình."
+relatedCases:
+  - oc-eo-learning
 ---

@@ -10,8 +10,8 @@
       "currentPhase": 0,
       "totalLayers": 5,
       "currentLayer": 4,
-      "completedTasks": ["layer-0-task-01", "layer-0-task-02", "layer-0-task-03", "layer-0-task-04", "layer-0-task-05", "layer-0-task-06", "layer-1-task-01", "layer-1-task-02", "layer-1-task-03", "layer-1-task-04", "layer-1-task-05", "fix-layer1-dead-links-phase-1-task-01", "layer-2-task-01", "layer-2-task-02", "layer-2-task-03", "layer-2-task-04", "layer-2-task-05", "layer-2-task-06", "layer-2-task-07", "fix-blog-list-date-format-phase-1-task-01", "layer-3-task-01", "layer-3-task-02", "layer-3-task-03", "layer-4-task-01", "layer-4-task-02", "layer-4-task-03", "layer-4-task-04", "change-ai-solution-content-phase-1-task-01"],
-      "inProgressTask": "change-ai-solution-content-phase-1-task-02",
+      "completedTasks": ["layer-0-task-01", "layer-0-task-02", "layer-0-task-03", "layer-0-task-04", "layer-0-task-05", "layer-0-task-06", "layer-1-task-01", "layer-1-task-02", "layer-1-task-03", "layer-1-task-04", "layer-1-task-05", "fix-layer1-dead-links-phase-1-task-01", "layer-2-task-01", "layer-2-task-02", "layer-2-task-03", "layer-2-task-04", "layer-2-task-05", "layer-2-task-06", "layer-2-task-07", "fix-blog-list-date-format-phase-1-task-01", "layer-3-task-01", "layer-3-task-02", "layer-3-task-03", "layer-4-task-01", "layer-4-task-02", "layer-4-task-03", "layer-4-task-04", "change-ai-solution-content-phase-1-task-01", "change-ai-solution-content-phase-1-task-02"],
+      "inProgressTask": null,
       "tasks": [
         {
           "id": "layer-0-task-01",
@@ -250,6 +250,16 @@
           "reviewReport": ".context/review-reports/change-ai-solution-content-phase-1-task-01-round-1-review.md",
           "changeRequest": "spec/changes/2026-10-09-ai-solution-content.md",
           "note": "MODIFY content/render (R-06a..e). Render infra: Solution type optional sections/highlights/faq + benefits render trên /solutions/ai/[slug] (SolutionSections/SolutionHighlights/FaqList, no new dep). r1 STRICT PASS (0 CRITICAL/MAJOR, 2 MINOR non-blocking). Verify: lint/typecheck/build PASS, 6 AI routes SSG. Residual: chưa có data (task-02); MINOR empty-section-with-title-only + content string keys."
+        },
+        {
+          "id": "change-ai-solution-content-phase-1-task-02",
+          "layer": 1,
+          "status": "done",
+          "reviewLevel": "STRICT",
+          "reviewResult": "PASS",
+          "reviewReport": ".context/review-reports/change-ai-solution-content-phase-1-task-02-round-1-review.md",
+          "changeRequest": "spec/changes/2026-10-09-ai-solution-content.md",
+          "note": "MODIFY-CONTENT: 8 MDX VI/EN (custom-ai/boxai/flycam + oc-eo-learning) + home.ts featuredCase (MAJOR validator closed). Óc Eo = phương án đề xuất (BR-004); Đền Bảo Hà định tính, không bịa số. Category oc-eo → ai, slug giữ. r1 STRICT PASS (0 CRITICAL/MAJOR, 3 MINOR: custom-ai thiếu section khác biệt tường minh, boxai highlight 4–16 hẹp hơn nguồn 2–16, DESIGN reconcile — đã reconcile khi close-out). Verify: lint/typecheck/build PASS, 8/8 routes. Deferred: MINOR-1/-2 content polish (non-blocking)."
         }
       ],
       "specVersion": "1.1.0",

@@ -17,7 +17,7 @@ const homeContent: Record<Locale, HomeContent> = {
       { slug: 'music-app', title: 'Ứng dụng nhạc AI', description: 'Tạo và khám phá âm nhạc có hỗ trợ AI.', image: '/images/products/music-app-preview.svg', alt: 'Màn hình minh họa ứng dụng nhạc AI' },
       { slug: 'hair-style-ai', title: 'Kiểu tóc AI', description: 'Xem trước các phong cách tóc khác nhau.', image: '/images/products/hair-style-ai-preview.svg', alt: 'Màn hình minh họa ứng dụng thử kiểu tóc AI' },
     ],
-    featuredCase: { title: 'Số hóa quản lý đào tạo tại Óc Eo', description: 'Tập hợp tài liệu và luồng quản lý đào tạo trong một quy trình dễ tra cứu.', href: '/case-studies/oc-eo-learning', image: '/images/cases/oc-eo-learning-overview.svg', alt: 'Minh họa quy trình quản lý tài liệu đào tạo' },
+    featuredCase: { title: 'Phương án AI camera và flycam tại Óc Eo – Ba Thê', description: 'Đề xuất kết hợp camera AI tại biên và flycam tuần tra để hỗ trợ bảo vệ khu di tích.', href: '/case-studies/oc-eo-learning', image: '/images/cases/oc-eo-learning-overview.svg', alt: 'Minh họa phương án camera AI và flycam tuần tra tại khu di tích Óc Eo – Ba Thê' },
   },
   en: {
     solutionCards: [
@@ -29,7 +29,7 @@ const homeContent: Record<Locale, HomeContent> = {
       { slug: 'music-app', title: 'AI music app', description: 'Create and explore AI-assisted music.', image: '/images/products/music-app-preview.svg', alt: 'Preview screen for the AI music app' },
       { slug: 'hair-style-ai', title: 'Hair-style AI', description: 'Preview different hairstyle options.', image: '/images/products/hair-style-ai-preview.svg', alt: 'Preview screen for the Hair-style AI app' },
     ],
-    featuredCase: { title: 'Learning management digitization at Óc Eo', description: 'Bring training materials and management into an easier-to-navigate workflow.', href: '/en/case-studies/oc-eo-learning', image: '/images/cases/oc-eo-learning-overview.svg', alt: 'Illustration of a training material management workflow' },
+    featuredCase: { title: 'Proposed AI camera and drone plan for Óc Eo – Ba Thê', description: 'A proposal combining edge AI cameras and drone patrols to support heritage-site protection.', href: '/en/case-studies/oc-eo-learning', image: '/images/cases/oc-eo-learning-overview.svg', alt: 'Illustration of the proposed AI camera and drone patrol plan at Óc Eo – Ba Thê' },
   },
 };
 

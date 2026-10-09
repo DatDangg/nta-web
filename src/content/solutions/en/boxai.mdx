@@ -1,17 +1,66 @@
 ---
 slug: boxai
 image: /images/solutions/boxai.svg
-title: "BoxAI"
-description: "An internal AI assistant that answers from your own data."
+title: "BoxAI — edge AI for fixed cameras"
+description: "Combine fixed cameras, NVIDIA Jetson AI Boxes and a VMS operations center to detect events locally, coordinate alerts and bring in drones for verification when needed."
 category: ai
 features:
-  - "Internal document search"
-  - "Answers grounded in provided sources"
-  - "Access controls for deployment"
+  - "Analyze video at the edge with NVIDIA Jetson and DeepStream"
+  - "Choose from a catalog of 21 AI algorithms and 3 platform capabilities"
+  - "Connect camera events to VMS and drones using controlled rules"
 benefits:
-  - "Spend less time searching"
-  - "Make use of existing knowledge"
+  - "Reduce video sent to the center by processing streams near camera clusters"
+  - "Continue local analysis and alerts when the central connection is unavailable"
+  - "Bring cameras, maps and alerts together in one operations interface"
 useCases:
-  - "Searching internal procedures"
-  - "Supporting new employees"
+  - "Protect heritage sites from intrusion, excavation and vandalism"
+  - "Detect fire, smoke and animal intrusion across large areas"
+  - "Monitor access, safety and incidents at industrial sites and warehouses"
+highlights:
+  - value: "21"
+    label: "algorithms in the catalog"
+  - value: "3"
+    label: "platform capabilities: dashboard, on-site deterrence, smart search"
+  - value: "4–16"
+    label: "channels per box, depending on workload and configuration"
+sections:
+  - title: "Three-layer architecture"
+    items:
+      - "Fixed, PTZ or 360-degree IP cameras capture relevant locations."
+      - "NVIDIA Jetson AI Boxes process video at the edge and publish events through MQTT/TLS or webhooks."
+      - "A central VMS presents cameras, maps and alerts; drone feeds can be integrated to verify incidents."
+  - title: "Hardware and edge processing"
+    intro: "Select the configuration based on camera count, algorithm mix and site survey findings."
+    items:
+      - "Jetson Orin NX 16GB Super is the primary box option; Orin Nano Super may suit smaller clusters."
+      - "DeepStream handles the RTSP, video decoding, TensorRT inference and object-tracking pipeline."
+      - "About 16 channels of 1080p decoding per box is a design estimate. Actual AI throughput depends on algorithm workload and requires on-site benchmarking."
+  - title: "Algorithms selected for each use case"
+    intro: "The catalog contains 21 algorithms across asset protection, fire safety, public order, access control, intrusion and investigation. Not every algorithm runs simultaneously on every configuration."
+    items:
+      - "Asset protection: excavation, camera tampering, left/removed objects, vandalism and scene changes."
+      - "Safety and public order: fire/smoke, audio events, fights, policy violations and unusual crowds."
+      - "Access control: people counting, vehicle tracking, Vietnamese plate recognition, virtual tripwires and face lists."
+      - "Intrusion and investigation: night intrusion, animals, unauthorized drones, PTZ tracking and weapons."
+      - "Three platform capabilities: analytics dashboard, on-site deterrence and smart video search."
+  - title: "Match channel count to workload"
+    intro: "Channel counts are design estimates, not a promise that every channel runs all 21 algorithms. Benchmark mAP and latency with the intended workload before confirming a configuration."
+    items:
+      - "Light workloads such as detecting and tracking people, vehicles or animals: up to an estimated 16 channels per box."
+      - "Medium workloads with fire/smoke, tampering, tripwire or plate recognition: around 8–12 channels per box."
+      - "Heavy workloads with pose, actions, face recognition or several combined algorithms: around 2–6 channels per box."
+  - title: "Packages by sector"
+    items:
+      - "Heritage sites: prioritize excavation, night intrusion, fire/smoke, animals and artifact-store protection."
+      - "Forestry and rangers: monitor fire, intrusion and patrol routes based on risk zones."
+      - "Industrial sites and warehouses: focus on intrusion, fire, access and operational safety."
+  - title: "Deployment at Bao Ha Temple"
+    intro: "NTA has delivered a deployment at Bao Ha Temple. This page shares the project qualitatively; camera counts, specific equipment and dates will be added only after confirmation."
+faq:
+  - question: "Does BoxAI send all video to the operations center?"
+    answer: "Edge processing reduces the need to stream every video feed centrally. Event, clip and storage handling are configured to project requirements."
+  - question: "How many cameras can each box support?"
+    answer: "It depends on resolution and algorithm workload. Sixteen channels is a decoding estimate; AI throughput must be benchmarked on site before final configuration."
+relatedCases:
+  - oc-eo-learning
 ---
