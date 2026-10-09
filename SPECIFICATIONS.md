@@ -1,5 +1,5 @@
 ---
-spec_version: 2.0.0
+spec_version: 3.0.0
 updated_at: 2026-10-09
 ---
 
@@ -28,7 +28,7 @@ _(cập nhật 2026-10-09: đổi domain đích sang `ntavietnam.tech` — chang
 
 - **In Scope:** 9 nhóm trang (trang chủ, về NTA, giải pháp DN + 4 trang con, giải pháp AI + trang con,
   sản phẩm app, case study, blog, liên hệ, nav/footer) · UI responsive mobile-first light minimal ·
-  SEO cơ bản · song ngữ VI/EN · form liên hệ có chống spam · deploy Cloud Run.
+  SEO cơ bản · song ngữ VI/EN · form liên hệ có chống spam · deploy docker-vps (Docker + nginx trên VPS).
   Nguồn: `docs/BRD.md:47-53`
 - **Out of Scope:** hệ thống đăng nhập / CMS quản trị phức tạp (phase sau) · e-commerce / thanh toán ·
   tính năng nghiệp vụ của sản phẩm (CRM/HRM/LMS/DentGo…).
@@ -40,7 +40,7 @@ _(cập nhật 2026-10-09: đổi domain đích sang `ntavietnam.tech` — chang
 - **Nội dung:** file nội dung trong repo (MDX / JSON / TS), render SSG/SSR — nguồn: `docs/ERD.md:20-22`
 - **i18n:** `next-intl` hoặc `next-i18n` (mặc định VI, toggle EN, route `/en/...`) — nguồn: `BRIEF.md:42`
 - **Database/ORM:** none (`db_tool: none`, `migration_required: false`) — nguồn: `.context/project-config.md:40-41`, `docs/ERD.md:16-18`
-- **Deploy:** Google Cloud Run `asia-southeast1`, scale-to-zero — nguồn: `BRIEF.md:43`, `docs/BRD.md:53`
+- **Deploy:** docker-vps — VPS `187.52.119.50` (shared), Docker + nginx + certbot, container `nta-web` tại `127.0.0.1:3005` — nguồn: `.context/project-config.md:51-59`, `docs/runbook/deploy-vps.md`
 - **CI/CD:** GitHub Actions — nguồn: `.context/project-config.md:48`
 - ⚠️ `[cần xác nhận]` package manager (dự kiến npm — `.context/project-config.md:22`)
 
@@ -150,7 +150,7 @@ Base URL: dev `http://localhost:3000/api` · prod `https://ntavietnam.tech/api` 
   `400 {status:"error",errors}` / `429 {status:"error",message}`.
   `[reverse-engineered from docs]` — nguồn: `docs/API_SPEC.md:40-61`
   - `[cần xác nhận]` rate-limit threshold (request/window) chưa doc nào định nghĩa — `docs/API_SPEC.md:60`
-- **R-14:** `GET /api/health` — `{status:"ok",timestamp}` cho Cloud Run / uptime.
+- **R-14:** `GET /api/health` — `{status:"ok",timestamp}` cho health check / uptime (docker-vps).
   `[reverse-engineered from docs]` — nguồn: `docs/API_SPEC.md:63-67`
 - **R-15:** Không dựng `GET /api/posts` hoặc `GET /api/case-studies` trong v1; nội dung được render từ file tĩnh trong repo.
   API danh sách động nằm ngoài phạm vi v1. Nguồn ban đầu: `docs/API_SPEC.md:30-31` (tùy chọn).
@@ -202,7 +202,7 @@ Base URL: dev `http://localhost:3000/api` · prod `https://ntavietnam.tech/api` 
 - **R-26 (Content):** ít nhất 9 nhóm trang theo dàn ý; nội dung v1 dùng nội dung mẫu hợp lý
   (điền dần khi có nội dung thật). `[reverse-engineered from docs]` — nguồn: `docs/BRD.md:48,31,165`
 - **Constraints (soft, không testable riêng):** Regulatory — chú ý bản quyền ảnh/nội dung
-  (`docs/BRD.md:159`); Budget — ưu tiên free tier GCP (`docs/BRD.md:157`); Timeline — dựng khung +
+  (`docs/BRD.md:159`); Budget — VPS shared chi phí thấp (`docs/BRD.md:157`); Timeline — dựng khung +
   nội dung mẫu nhanh (`docs/BRD.md:158`).
 
 ## Scalability Profile (OPTIONAL — chỉ khi user bật Scalability Option)
@@ -214,10 +214,11 @@ Base URL: dev `http://localhost:3000/api` · prod `https://ntavietnam.tech/api` 
 
 ## Deployment
 
-- **R-27:** Deploy Google Cloud Run `asia-southeast1`, scale-to-zero, max-instances 3, availability
-  ≥ 99.5%; domain `ntavietnam.tech` (live 2026-10-09 — HTTPS apex, không `www`; http→https 301); CI/CD GitHub Actions; ưu tiên free tier GCP.
-  `[reverse-engineered from docs]` — nguồn: `BRIEF.md:43`, `docs/BRD.md:53,126,127,157`, `.context/project-config.md:47-48`
-  - _(cập nhật 2026-10-09: đổi domain đích sang `ntavietnam.tech` — change `domain-ntavietnam`)_. ⚠️ Nền tảng deploy thực tế đã chuyển Cloud Run → **docker-vps** (`.context/project-config.md:51,58`); đây là drift **ngoài phạm vi change domain**, cần change riêng để reconcile.
+- **R-27:** Deploy **docker-vps** — VPS `187.52.119.50` (shared; chỉ thêm container mới), Docker + nginx + certbot,
+  container `nta-web` tại `127.0.0.1:3005` (host→container 8080); availability target ≥ 99.5% (đo uptime thực tế);
+  domain `ntavietnam.tech` (live 2026-10-09 — HTTPS apex, không `www`; http→https 301); CI/CD GitHub Actions (self-hosted runner label `nta-web`).
+  `[reverse-engineered from docs]` — nguồn: `BRIEF.md:43`, `docs/BRD.md:53,126,127,157`, `.context/project-config.md:51-59`, `docs/runbook/deploy-vps.md`
+  - _(cập nhật 2026-10-09: domain `ntavietnam.tech` — change `domain-ntavietnam`; nền tảng deploy reconcile về **docker-vps** — change `deploy-platform-docker-vps` → đã hết drift)._
 
 ---
 

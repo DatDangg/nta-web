@@ -1,10 +1,10 @@
 {
-  "specVersion": "2.0.0",
-  "scopeVersion": 6,
-  "generatedAt": "2026-10-09T17:15:00+07:00",
+  "specVersion": "3.0.0",
+  "scopeVersion": 7,
+  "generatedAt": "2026-10-09T18:05:00+07:00",
   "trigger": "feature-update",
-  "workItem": "change-domain-ntavietnam",
-  "specRefs": ["R-13", "R-19", "R-21", "R-27"],
+  "workItem": "change-deploy-platform-docker-vps",
+  "specRefs": ["R-14", "R-26", "R-27"],
   "changed": {
     "files": [
       "SPECIFICATIONS.md",
@@ -12,40 +12,38 @@
       "docs/BRD.md",
       "docs/API_SPEC.md",
       "docs/specs/2026-10-08-nta-website-design.md",
-      "spec/updates/2026-10-09-domain-ntavietnam.md",
+      ".context/compressed-summary.md",
+      "spec/updates/2026-10-09-deploy-platform-docker-vps.md",
       "spec/CHANGELOG.md",
       "spec/test-scope/current.json"
     ],
-    "modules": ["deployment", "seo", "api-base-url", "intent-docs"]
+    "modules": ["deployment", "ci-cd", "health-check", "intent-docs"]
   },
   "impact": {
     "direct": [
-      "R-27: domain đích sản phẩm = ntavietnam.tech (canonical https://ntavietnam.tech, HTTPS apex không www, thay hoàn toàn — không chạy song song)",
-      "R-13: API prod base URL = https://ntavietnam.tech/api (dev giữ http://localhost:3000/api)",
-      "R-19: HTTPS only — enforce TLS toàn bộ + http→https 301 trên domain mới",
-      "R-21: SEO canonical/sitemap/robots/llms.txt/JSON-LD emit domain mới",
-      "0 dòng code change trong change này — code/config đã đổi + deploy ở commit 4d8120d/00f2560 (doc/spec reconcile)"
+      "R-27: nền tảng deploy = docker-vps — VPS 187.52.119.50 (shared), Docker + nginx + certbot, container nta-web tại 127.0.0.1:3005 (host→container 8080), CI GitHub Actions self-hosted runner (label nta-web); availability target ≥ 99.5% (đo uptime, bỏ nhãn Cloud Run SLA); domain ntavietnam.tech giữ nguyên",
+      "R-14: GET /api/health dùng cho health check / uptime trên docker-vps (bỏ wording 'cho Cloud Run')",
+      "R-26 (Constraints/Budget): 'free tier GCP' → 'VPS shared chi phí thấp'",
+      "0 dòng code change trong change này — code/config + runbook đã đổi + deploy ở commit 4c34b9b/28527cb/4d8120d (docs/spec reconcile)"
     ],
     "dependents": [
-      "canonical + hreflang (vi/en/x-default) mọi page dưới domain ntavietnam.tech",
-      "sitemap.xml, robots.txt, llms.txt, og:image absolute URL",
-      "NEXT_PUBLIC_SITE_URL=https://ntavietnam.tech (build-arg container prod)",
-      "nginx vhost deploy/nginx/ntavietnam.tech.conf + certbot certificate (hạn 2027-01-07)",
-      "intent docs SPECIFICATIONS/BRIEF/BRD + design spec đồng bộ domain mới"
+      "docs/runbook/deploy-vps.md (as-built deploy doc — đã đúng, không sửa)",
+      "deploy/docker-compose + Dockerfile + .github/workflows/deploy.yml (VPS self-hosted runner — code, không sửa)",
+      "intent docs SPECIFICATIONS/BRIEF/BRD/API_SPEC + design spec đồng bộ nền tảng docker-vps"
     ],
     "regression": [
-      "Các route chính trả 200 qua HTTPS domain mới: / , /en , /api/health , /llms.txt , /robots.txt , /sitemap.xml , /solutions/ai",
-      "không còn canonical/OG/sitemap trỏ domain cũ",
-      "http://ntavietnam.tech → https://ntavietnam.tech = 301",
-      "npm run lint · npm run typecheck · npm run build PASS (không hồi quy — code không đổi)"
+      "GET /api/health trả 200 {status:'ok',...} qua 127.0.0.1:3005 và qua domain ntavietnam.tech",
+      "Các route chính vẫn trả 200 qua HTTPS domain ntavietnam.tech (không hồi quy do docs-only)",
+      "grep 'Cloud Run' / 'asia-southeast1' / 'free tier GCP' trong intent docs đã sửa = 0"
     ]
   },
   "acceptance": [
-    "SPECIFICATIONS.md không còn ghi domain đích cũ (grep = 0); Overview domain + API prod base URL + R-27 đều là ntavietnam.tech",
-    "BRIEF.md và docs/BRD.md không còn ghi domain đích cũ",
-    "docs/API_SPEC.md Production = https://ntavietnam.tech/api (khớp deploy thực tế)",
-    "spec_version bumped 1.1.0 → 2.0.0 (MAJOR) + spec/updates/2026-10-09-domain-ntavietnam.md + CHANGELOG + test-scope/current.json (scopeVersion 6)",
-    "npm run lint · npm run typecheck · npm run build PASS (verify áp dụng cho code hiện có — change docs-only)"
+    "Không còn mô tả deploy platform = Google Cloud Run / asia-southeast1 scale-to-zero / free tier GCP trong SPECIFICATIONS.md, BRIEF.md, docs/BRD.md, docs/API_SPEC.md, docs/specs/2026-10-08-nta-website-design.md, .context/compressed-summary.md (grep = 0)",
+    "Deploy mô tả đúng docker-vps: VPS 187.52.119.50, Docker + nginx + certbot, port nội bộ 3005, CI GitHub Actions self-hosted runner",
+    "R-27 + R-14 khớp platform mới; note drift cũ ở SPECIFICATIONS.md:220 đã gỡ",
+    "Không đổi behavior/code; domain ntavietnam.tech giữ nguyên",
+    "spec_version bumped 2.0.0 → 3.0.0 (MAJOR) + spec/updates/2026-10-09-deploy-platform-docker-vps.md + CHANGELOG + test-scope/current.json (scopeVersion 7)",
+    "npm run lint · npm run typecheck · npm run build PASS (change docs-only — không bắt buộc chạy lại; code không đổi)"
   ],
   "risk": "low"
 }

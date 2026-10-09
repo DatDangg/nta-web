@@ -50,7 +50,7 @@ một nơi tra cứu hồ sơ năng lực, case study và thông tin liên hệ 
 - SEO cơ bản: meta/OG per page, sitemap, robots, JSON-LD.
 - **Song ngữ Việt/Anh (i18n)**: mặc định VI, toggle EN, route `/en/...`.
 - Form liên hệ (lưu/forward, có chống spam).
-- Deploy Google Cloud Run (asia-southeast1), domain `ntavietnam.tech`.
+- Deploy **docker-vps** (VPS `187.52.119.50`, Docker + nginx + certbot, container `nta-web` tại `127.0.0.1:3005`), domain `ntavietnam.tech`.
 
 ### Out of Scope
 - Hệ thống đăng nhập / CMS quản trị phức tạp (có thể bổ sung sau).
@@ -123,8 +123,8 @@ một nơi tra cứu hồ sơ năng lực, case study và thông tin liên hệ 
 | Performance | LCP < 2.5s, ảnh tối ưu qua `next/image`, lazy-load, bundle gọn |
 | Security | HTTPS only, form rate-limit + chống spam, không lộ secret (Secret Manager) |
 | SEO | SSR/SSG, meta + OpenGraph per page, sitemap.xml, robots.txt, JSON-LD Organization |
-| Scalability | Cloud Run scale-to-zero, max-instances 3 (đủ cho traffic marketing) |
-| Availability | ≥ 99.5% (Cloud Run SLA) |
+| Scalability | Docker container trên VPS (1 instance, đủ cho traffic marketing; có thể scale sau) |
+| Availability | Target ≥ 99.5% (đo uptime thực tế trên VPS) |
 | Accessibility | WCAG 2.1 AA — contrast, keyboard, alt text, semantic HTML |
 | Responsive | Mobile-first, 4 breakpoint (375 / 768 / 1280 / 1536) |
 | Language | Song ngữ Việt/Anh — mặc định VI, toggle EN; hreflang + localized meta |
@@ -153,8 +153,8 @@ một nơi tra cứu hồ sơ năng lực, case study và thông tin liên hệ 
 
 ## Constraints
 
-- **Technical:** Next.js (App Router) + TypeScript + Tailwind CSS; deploy Google Cloud Run.
-- **Budget:** Ưu tiên free tier GCP (scale-to-zero), hạn chế dịch vụ trả phí.
+- **Technical:** Next.js (App Router) + TypeScript + Tailwind CSS; deploy Docker trên VPS (nginx + certbot).
+- **Budget:** VPS shared (chi phí thấp), hạn chế dịch vụ trả phí.
 - **Timeline:** Dựng xong khung + nội dung mẫu để test nhanh (anh chạy `/start` ngày kế tiếp).
 - **Regulatory:** Không có yêu cầu đặc biệt; chú ý bản quyền ảnh/nội dung.
 

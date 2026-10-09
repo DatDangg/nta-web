@@ -40,11 +40,11 @@ nhà nước hiểu năng lực NTA, xem case study tiêu biểu (vd Óc Eo), v�
 - **Accessibility:** WCAG 2.1 AA — contrast, keyboard nav, alt text, semantic HTML.
 - **Security:** HTTPS only; form liên hệ có rate-limit + chống spam; không lộ secret.
 - **Language:** song ngữ Việt/Anh (i18n `next-intl` hoặc `next-i18n`; mặc định VI, toggle EN; `/en/...` routes).
-- **Deploy:** Google Cloud Run `asia-southeast1`, scale-to-zero; domain `ntavietnam.tech` (live 09/10/2026 — HTTPS apex).
+- **Deploy:** docker-vps — VPS `187.52.119.50` (Docker + nginx + certbot, container `nta-web` `127.0.0.1:3005`); domain `ntavietnam.tech` (live 09/10/2026 — HTTPS apex).
 
 ## Notes
 - Stack đề xuất: **Next.js (App Router) + TypeScript + Tailwind CSS**, theme **light minimal kiểu Apple**.
 - Ảnh/diagram: dùng skill `archify` cho sơ đồ kiến trúc nếu cần.
-- Deploy doc: `.devops/templates/gcp-cloud-run.md`.
+- Deploy doc: `docs/runbook/deploy-vps.md`.
 - Dàn ý & context đầy đủ: `memory/projects/nta-website.md` (workspace Eve).
 - ⚠️ Còn thiếu (xem Open Questions trong `docs/BRD.md`): logo, brand color chính thức, domain, ngôn ngữ, hotline/email thật.

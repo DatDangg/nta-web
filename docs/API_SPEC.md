@@ -26,7 +26,7 @@ Website v1 là **content-driven, không có đăng nhập người dùng**. API 
 | Method | Endpoint | Mục đích | Auth |
 |--------|----------|----------|------|
 | POST | `/api/contact` | Nhận form liên hệ (tên, email, SĐT, nội dung) | công khai + rate-limit |
-| GET | `/api/health` | Health check cho Cloud Run / uptime | công khai |
+| GET | `/api/health` | Health check / uptime | công khai |
 | GET | `/api/posts` | Danh sách bài blog (nếu cần động; v1 có thể là static) | công khai |
 | GET | `/api/case-studies` | Danh sách case study (nếu cần động) | công khai |
 

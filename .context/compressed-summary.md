@@ -35,6 +35,7 @@
 ### Key Decisions
 - Xem `.context/decisions.md` (full). Nổi bật: R-03 = ≥2 sản phẩm (ratified); v1 static content files, không API động; giữ `about.partners: []` chờ xác nhận; O1 (case-study metric) omit → render định tính.
 - Domain: ntavietnam.tech; song ngữ VI/EN; style light minimal; Next.js App Router + TS + Tailwind; next-intl `localePrefix: 'as-needed'`.
+- Deploy: **docker-vps** — VPS `187.52.119.50` (shared), Docker + nginx + certbot, container `nta-web` tại `127.0.0.1:3005`, CI GitHub Actions self-hosted runner (label `nta-web`); domain ntavietnam.tech live 09/10/2026.
 - Enterprise slug order canonical: `crm, hrm, lms, dentgo`; AI slug: `boxai, flycam, custom-ai` (`src/lib/content/slug.ts`).
 - Format ngày blog (list = detail = design S11): util chung `src/lib/format/date.ts::formatPostDate` (VI `08/10/2026`, EN `Oct 8, 2026`).
 - Pagination SSG: server render page mặc định trong `<Suspense fallback>` + client component (`CaseStudyFilter`/`BlogFilter`) đọc `useSearchParams`.
@@ -55,12 +56,12 @@
 - Next task: **layer-4-task-01** — SEO sitemap/robots/JSON-LD/metadata + llms.txt
 - Build hiện tại: 47 static pages; verify commands `.context/project-config.md` = `npm run lint` · `npm run typecheck` · `npm run build` (test_command: null)
 - Branch: `main` (staging-direct); push KHÔNG tự động (`forbidden_branch: main`, `auto_push_after_pass: false`)
-- Spec: `SPECIFICATIONS.md` **1.0.1** (27 req) · `spec/test-scope/current.json` scopeVersion 3
+- Spec: `SPECIFICATIONS.md` **3.0.0** (27 req — platform deploy docker-vps) · `spec/test-scope/current.json` scopeVersion 7
 
 ### Deferred / Non-blocking
 - **→ L4 task-03 (a11y/responsive sweep):** m-L3-1 (`ContactForm.tsx:19-22` focus 429 dead branch), m-L3-3 (`contact/page.tsx` map md không full-width), m-L3-4 (`useContactForm.ts:85-97` bỏ server error message + `errors.form/honeypot`).
 - **→ L4 task-01 (SEO):** JSON-LD ContactPage; JSON-LD BreadcrumbList/Service/Organization/WebSite; `robots.txt`/`sitemap.xml`/`llms.txt`; metadata `alternates` hardcode trên vài route; metadata description dài (En blog 190).
-- **→ L4 task-04 (deploy) RESIDUAL:** xác nhận GFE append **rightmost** XFF trên Cloud Run — nếu proxy KHÔNG append như giả định → MAJOR rate-limit mở lại. Rate-limit in-memory per-instance (không share khi scale ngang).
+- **→ L4 task-04 (deploy) RESIDUAL:** xác nhận proxy append **rightmost** XFF trên hạ tầng thật (docker-vps/nginx) — nếu proxy KHÔNG append như giả định → MAJOR rate-limit mở lại. Rate-limit in-memory per-instance (không share khi scale ngang). (Lưu ý: comment trong code rate-limit còn ghi tên platform cũ — code ngoài phạm vi change docs này.)
 - **[SOFT] M-2** related sections (RelatedStudies/RelatedSolutions/CaseStudyLink) luôn ẩn vì content chưa khai `related`/`relatedCases` → cần author content hoặc ratify R-08 optional.
 - **[SOFT] residual SSG pagination page-1-only** (chỉ page 1 trong static HTML) → L4 SEO cân nhắc.
 - Layer-2 MINOR khác: pagination scroll, `<header>` lặp, carousel aria, Footer thiếu link (Gap 5 L1), BlogFilter nhận `body` (payload), origin/PAGE_SIZE hardcode trùng.

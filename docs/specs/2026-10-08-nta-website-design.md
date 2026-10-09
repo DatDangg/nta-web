@@ -9,7 +9,7 @@
 ## Overview
 
 Website giới thiệu công ty NTA (3 mảng giải pháp: Doanh nghiệp / AI / App AI) — content-driven,
-song ngữ VI/EN, light minimal kiểu Apple, deploy Cloud Run `asia-southeast1`, domain `ntavietnam.tech`.
+song ngữ VI/EN, light minimal kiểu Apple, deploy docker-vps (Docker + nginx trên VPS), domain `ntavietnam.tech`.
 Không đăng nhập, không DB, không CMS ở v1.
 
 ## Problem Statement
@@ -25,7 +25,7 @@ Alternatives đã cân nhắc:
 
 | Approach | Ưu | Nhược | Kết luận |
 |---|---|---|---|
-| **A. SSG + content files (chọn)** | Nhanh, SEO tốt, free, khớp `db_tool: none`, dễ deploy Cloud Run | Content đổi phải redeploy | ✅ **Chọn** — v1 marketing site |
+| **A. SSG + content files (chọn)** | Nhanh, SEO tốt, free, khớp `db_tool: none`, dễ deploy docker-vps | Content đổi phải redeploy | ✅ **Chọn** — v1 marketing site |
 | B. Headless CMS ngay v1 | Content edit không cần dev | Thêm service trả phí/scope creep — BRD Out of Scope (`docs/BRD.md:56`) | ❌ |
 | C. SSR-only dynamic | Content realtime | LCP chậm hơn, thừa khi content ít đổi | ❌ |
 
@@ -74,7 +74,7 @@ Theo `docs/DESIGN.md` (Component Library + Screen Inventory):
    (filled → trả `200 ok` giả, không forward) → **forward qua `CONTACT_FORM_TARGET`**
    (`[cần xác nhận]` OQ#4 — interface đã chốt, đích chốt sau) → `{status:"ok"}`.
 3. **i18n:** middleware detect locale → `/` = VI, `/en/*` = EN; `hreflang` + localized meta.
-4. **Health:** `GET /api/health` → `{status,timestamp}` cho Cloud Run.
+4. **Health:** `GET /api/health` → `{status,timestamp}` cho health check / uptime (docker-vps).
 
 ## Error Handling
 
@@ -112,4 +112,4 @@ thay bằng placeholder — `[cần xác nhận]` OQ#1–3.
 | Content | Đủ 9 trang, static MDX, ≥2 case study, ≥3–4 sản phẩm |
 | Git | `target: main`, `forbidden: main`, `auto_push: false` |
 | Models | builder(+strong) `openai/gpt-6-luna` · reviewer/spec-validator/change-request `opencode-go/deepseek-v4.1-flash` |
-| Deploy | gcp-cloud-run `asia-southeast1` scale-to-zero, max-instances 3 · CI: github-actions |
+| Deploy | docker-vps (VPS `187.52.119.50`, Docker + nginx + certbot, container `nta-web` tại `127.0.0.1:3005`) · CI: github-actions (self-hosted runner label `nta-web`) |
