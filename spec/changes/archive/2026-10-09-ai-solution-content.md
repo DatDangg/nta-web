@@ -1,11 +1,19 @@
 ---
 id: ai-solution-content
 type: feature
-status: pending
+status: done
 created: 2026-10-09
+closed: 2026-10-09
+spec_version: 1.1.0
+scopeVersion: 5
 ---
 
 # Add/Update nội dung Giải pháp AI (Talvra, Box AI, Flycam) + Case Study Óc Eo
+
+> **CLOSED 2026-10-09** — 5/5 acceptance PASS (final validator: `.context/review-reports/change-ai-solution-content-final-spec-validation.md`).
+> Commits: `28fc4b0` (spec publish) · `0f6899f` (task-01 render) · `e654f3b` (task-02 content).
+> Checkpoint decisions: Óc Eo = **phương án đề xuất** (BR-004, kết quả kỳ vọng/dự toán); Đền Bảo Hà **định tính** (số liệu chờ anh Tuấn Anh); tên Óc Eo/Đền Bảo Hà **được công bố** (user confirm 09/10).
+> Deferred MINOR: custom-ai thiếu section "điểm khác biệt" tường minh; boxai highlight "4–16 kênh" (nguồn B.4: 2–16).
 
 ## Yêu cầu
 

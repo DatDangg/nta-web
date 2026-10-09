@@ -5,9 +5,9 @@
 ```yaml
 workItem: change/ai-solution-content
 phaseTask: intake
-step: reviewer
-agent: reviewer
-status: running
+step: done
+agent: null
+status: done
 attempt: 0
 interrupted: false
 updatedAt: 2026-10-09T00:00:00+07:00
@@ -32,10 +32,10 @@ filesNew:
   - src/components/solutions/SolutionHighlights.tsx  # task-01
   - src/components/solutions/FaqList.tsx             # task-01
 evidence:
-  reportPath: .context/review-reports/change-ai-solution-content-spec-validation.md
-  round: 0
-  verdict: null
-next: "Reviewer STRICT phase-1-task-02 → PASS: close-out + archive change file + spec end-phase validation"
+  reportPath: .context/review-reports/change-ai-solution-content-final-spec-validation.md
+  round: 1
+  verdict: PASS
+next: "DONE — change archived; còn deferred MINOR (content polish) + số liệu Đền Bảo Hà chờ anh Tuấn Anh"
 loopSignal: none
 approvals:
   - {gate: phase_plan, at: "2026-10-09", ok: true}   # user: "Duyệt plan, chạy tuần tự"
@@ -57,3 +57,8 @@ needsInputResolved:
 ## History
 
 - 2026-10-09 journal created — `/change ai-solution-content` start
+- 2026-10-09 change-request intake → spec delta 1.1.0 + scope v5 + validator pre-plan PASS
+- 2026-10-09 checkpoint: user duyệt plan tuần tự; Óc Eo = phương án đề xuất; Đền Bảo Hà định tính + tên được công bố
+- 2026-10-09 task-01 builder + reviewer STRICT PASS → commits 28fc4b0 (spec publish) + 0f6899f
+- 2026-10-09 task-02 builder + reviewer STRICT PASS → commit e654f3b
+- 2026-10-09 final spec-validator PASS (5/5) → change file status done + archive
