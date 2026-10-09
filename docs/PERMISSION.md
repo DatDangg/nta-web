@@ -37,5 +37,5 @@ Các route còn lại (trang nội dung) không cần guard — render tĩnh/SSR
 ## Ghi chú bảo mật
 
 - Không lộ secret ra client: biến `NEXT_PUBLIC_*` chỉ dùng cho giá trị công khai.
-- Secret (token mail/API) để ở Secret Manager / env server — xem `.devops/templates/gcp-cloud-run.md` mục 4.
+- Secret (token mail/API) để ở env server — `.env.local` khi dev / GitHub Actions secrets khi CI; deploy trên VPS → xem `docs/runbook/deploy-vps.md`, khai báo biến ở `.context/project-config.md` §Secrets.
 - Chi tiết hardening: `skills/security/` (nếu bật).

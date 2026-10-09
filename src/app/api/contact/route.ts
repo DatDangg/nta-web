@@ -34,7 +34,7 @@ function isValidIpAddress(value: string): boolean {
 }
 
 function getClientIp(request: NextRequest): string {
-  // Cloud Run/GFE appends the trusted client IP rightmost; rate-limit state is in-memory per instance.
+  // nginx (VPS) appends the real client IP rightmost via X-Forwarded-For; rate-limit state is in-memory per instance.
   const trustedIp = request.headers.get('x-forwarded-for')?.split(',').at(-1)?.trim();
   return trustedIp && isValidIpAddress(trustedIp) ? trustedIp : SHARED_FALLBACK_KEY;
 }

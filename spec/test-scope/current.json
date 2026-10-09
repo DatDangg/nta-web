@@ -1,49 +1,45 @@
 {
   "specVersion": "3.0.0",
-  "scopeVersion": 7,
-  "generatedAt": "2026-10-09T18:05:00+07:00",
+  "scopeVersion": 8,
+  "generatedAt": "2026-10-09T19:15:00+07:00",
   "trigger": "feature-update",
-  "workItem": "change-deploy-platform-docker-vps",
-  "specRefs": ["R-14", "R-26", "R-27"],
+  "workItem": "change-cleanup-gcp-drift-comment-permission",
+  "specRefs": ["R-18", "R-27"],
   "changed": {
     "files": [
-      "SPECIFICATIONS.md",
-      "BRIEF.md",
-      "docs/BRD.md",
-      "docs/API_SPEC.md",
-      "docs/specs/2026-10-08-nta-website-design.md",
-      ".context/compressed-summary.md",
-      "spec/updates/2026-10-09-deploy-platform-docker-vps.md",
+      "src/app/api/contact/route.ts",
+      "docs/PERMISSION.md",
+      "spec/updates/2026-10-09-cleanup-gcp-drift-comment-permission.md",
       "spec/CHANGELOG.md",
-      "spec/test-scope/current.json"
+      "spec/test-scope/current.json",
+      "tasks/change-cleanup-gcp-drift-comment-permission/phase-1-task-01.md"
     ],
-    "modules": ["deployment", "ci-cd", "health-check", "intent-docs"]
+    "modules": ["rate-limit/contact-api (comment-only)", "permission-doc"]
   },
   "impact": {
     "direct": [
-      "R-27: nền tảng deploy = docker-vps — VPS 187.52.119.50 (shared), Docker + nginx + certbot, container nta-web tại 127.0.0.1:3005 (host→container 8080), CI GitHub Actions self-hosted runner (label nta-web); availability target ≥ 99.5% (đo uptime, bỏ nhãn Cloud Run SLA); domain ntavietnam.tech giữ nguyên",
-      "R-14: GET /api/health dùng cho health check / uptime trên docker-vps (bỏ wording 'cho Cloud Run')",
-      "R-26 (Constraints/Budget): 'free tier GCP' → 'VPS shared chi phí thấp'",
-      "0 dòng code change trong change này — code/config + runbook đã đổi + deploy ở commit 4c34b9b/28527cb/4d8120d (docs/spec reconcile)"
+      "Comment `getClientIp()` trong `src/app/api/contact/route.ts:37` mô tả đúng reverse proxy = nginx (VPS) append IP client thật rightmost qua X-Forwarded-For — KHÔNG đổi dòng code logic nào",
+      "`docs/PERMISSION.md:40` secrets pointer: bỏ Secret Manager + `.devops/templates/gcp-cloud-run.md` → env (`.env.local` / GitHub Actions secrets) + `docs/runbook/deploy-vps.md` + `.context/project-config.md` §Secrets",
+      "0 dòng code logic change trong change này (chỉ comment + doc pointer)"
     ],
     "dependents": [
-      "docs/runbook/deploy-vps.md (as-built deploy doc — đã đúng, không sửa)",
-      "deploy/docker-compose + Dockerfile + .github/workflows/deploy.yml (VPS self-hosted runner — code, không sửa)",
-      "intent docs SPECIFICATIONS/BRIEF/BRD/API_SPEC + design spec đồng bộ nền tảng docker-vps"
+      "`src/lib/api/rate-limit.ts` (rate-limit 5/10min/IP, in-memory per instance — không đổi; comment chỉ mô tả đúng nguồn IP)",
+      "`deploy/nginx/ntavietnam.tech.conf` (`proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;` — premise rightmost = client thật, không sửa)",
+      "`docs/runbook/deploy-vps.md` (as-built deploy doc — pointer mới trỏ tới, không sửa)"
     ],
     "regression": [
-      "GET /api/health trả 200 {status:'ok',...} qua 127.0.0.1:3005 và qua domain ntavietnam.tech",
-      "Các route chính vẫn trả 200 qua HTTPS domain ntavietnam.tech (không hồi quy do docs-only)",
-      "grep 'Cloud Run' / 'asia-southeast1' / 'free tier GCP' trong intent docs đã sửa = 0"
+      "`POST /api/contact` guard order rateLimit → validate → honeypot → forward vẫn hoạt động (R-18) — 429 khi vượt 5 req/10min/IP, 200 khi hợp lệ",
+      "Rate-limit lấy đúng IP client từ XFF rightmost khi qua nginx (VPS) — hành vi `getClientIp` không đổi",
+      "grep 'Cloud Run' / 'GFE' / 'Secret Manager' / 'gcp-cloud-run' / 'asia-southeast1' trong `docs/PERMISSION.md` + `src/app/api/contact/route.ts` = 0",
+      "`npm run lint` (0 errors) · `npm run typecheck` PASS · `npm run build` PASS"
     ]
   },
   "acceptance": [
-    "Không còn mô tả deploy platform = Google Cloud Run / asia-southeast1 scale-to-zero / free tier GCP trong SPECIFICATIONS.md, BRIEF.md, docs/BRD.md, docs/API_SPEC.md, docs/specs/2026-10-08-nta-website-design.md, .context/compressed-summary.md (grep = 0)",
-    "Deploy mô tả đúng docker-vps: VPS 187.52.119.50, Docker + nginx + certbot, port nội bộ 3005, CI GitHub Actions self-hosted runner",
-    "R-27 + R-14 khớp platform mới; note drift cũ ở SPECIFICATIONS.md:220 đã gỡ",
-    "Không đổi behavior/code; domain ntavietnam.tech giữ nguyên",
-    "spec_version bumped 2.0.0 → 3.0.0 (MAJOR) + spec/updates/2026-10-09-deploy-platform-docker-vps.md + CHANGELOG + test-scope/current.json (scopeVersion 7)",
-    "npm run lint · npm run typecheck · npm run build PASS (change docs-only — không bắt buộc chạy lại; code không đổi)"
+    "`docs/PERMISSION.md` không còn `gcp-cloud-run.md` / 'Secret Manager'; trỏ đúng deploy VPS + secrets qua env",
+    "`src/app/api/contact/route.ts` comment mô tả đúng nginx/VPS (không còn 'Cloud Run/GFE'); logic `getClientIp` giữ nguyên hành vi",
+    "grep drift (gcp-cloud-run|cloud run|asia-southeast1|secret manager) trong 2 file = 0",
+    "npm run lint / typecheck / build PASS (không hồi quy)",
+    "Spec Publisher: spec/updates/ + spec/CHANGELOG.md + spec/test-scope/current.json (scopeVersion 8); KHÔNG bump spec_version (vẫn 3.0.0 — không đổi requirement/behavior)"
   ],
   "risk": "low"
 }
