@@ -9,7 +9,7 @@
 ## Overview
 
 Website giới thiệu công ty NTA (3 mảng giải pháp: Doanh nghiệp / AI / App AI) — content-driven,
-song ngữ VI/EN, light minimal kiểu Apple, deploy Cloud Run `asia-southeast1`, domain `ntasolution.vn`.
+song ngữ VI/EN, light minimal kiểu Apple, deploy Cloud Run `asia-southeast1`, domain `ntavietnam.tech`.
 Không đăng nhập, không DB, không CMS ở v1.
 
 ## Problem Statement

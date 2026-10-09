@@ -34,7 +34,7 @@
 
 ### Key Decisions
 - Xem `.context/decisions.md` (full). Nổi bật: R-03 = ≥2 sản phẩm (ratified); v1 static content files, không API động; giữ `about.partners: []` chờ xác nhận; O1 (case-study metric) omit → render định tính.
-- Domain: ntasolution.vn; song ngữ VI/EN; style light minimal; Next.js App Router + TS + Tailwind; next-intl `localePrefix: 'as-needed'`.
+- Domain: ntavietnam.tech; song ngữ VI/EN; style light minimal; Next.js App Router + TS + Tailwind; next-intl `localePrefix: 'as-needed'`.
 - Enterprise slug order canonical: `crm, hrm, lms, dentgo`; AI slug: `boxai, flycam, custom-ai` (`src/lib/content/slug.ts`).
 - Format ngày blog (list = detail = design S11): util chung `src/lib/format/date.ts::formatPostDate` (VI `08/10/2026`, EN `Oct 8, 2026`).
 - Pagination SSG: server render page mặc định trong `<Suspense fallback>` + client component (`CaseStudyFilter`/`BlogFilter`) đọc `useSearchParams`.

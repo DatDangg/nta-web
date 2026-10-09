@@ -10,7 +10,7 @@
       "currentPhase": 0,
       "totalLayers": 5,
       "currentLayer": 4,
-      "completedTasks": ["layer-0-task-01", "layer-0-task-02", "layer-0-task-03", "layer-0-task-04", "layer-0-task-05", "layer-0-task-06", "layer-1-task-01", "layer-1-task-02", "layer-1-task-03", "layer-1-task-04", "layer-1-task-05", "fix-layer1-dead-links-phase-1-task-01", "layer-2-task-01", "layer-2-task-02", "layer-2-task-03", "layer-2-task-04", "layer-2-task-05", "layer-2-task-06", "layer-2-task-07", "fix-blog-list-date-format-phase-1-task-01", "layer-3-task-01", "layer-3-task-02", "layer-3-task-03", "layer-4-task-01", "layer-4-task-02", "layer-4-task-03", "layer-4-task-04", "change-ai-solution-content-phase-1-task-01", "change-ai-solution-content-phase-1-task-02"],
+      "completedTasks": ["layer-0-task-01", "layer-0-task-02", "layer-0-task-03", "layer-0-task-04", "layer-0-task-05", "layer-0-task-06", "layer-1-task-01", "layer-1-task-02", "layer-1-task-03", "layer-1-task-04", "layer-1-task-05", "fix-layer1-dead-links-phase-1-task-01", "layer-2-task-01", "layer-2-task-02", "layer-2-task-03", "layer-2-task-04", "layer-2-task-05", "layer-2-task-06", "layer-2-task-07", "fix-blog-list-date-format-phase-1-task-01", "layer-3-task-01", "layer-3-task-02", "layer-3-task-03", "layer-4-task-01", "layer-4-task-02", "layer-4-task-03", "layer-4-task-04", "change-ai-solution-content-phase-1-task-01", "change-ai-solution-content-phase-1-task-02", "change-domain-ntavietnam-phase-1-task-01"],
       "inProgressTask": null,
       "tasks": [
         {
@@ -260,16 +260,26 @@
           "reviewReport": ".context/review-reports/change-ai-solution-content-phase-1-task-02-round-1-review.md",
           "changeRequest": "spec/changes/archive/2026-10-09-ai-solution-content.md",
           "note": "MODIFY-CONTENT: 8 MDX VI/EN (custom-ai/boxai/flycam + oc-eo-learning) + home.ts featuredCase (MAJOR validator closed). Óc Eo = phương án đề xuất (BR-004); Đền Bảo Hà định tính, không bịa số. Category oc-eo → ai, slug giữ. r1 STRICT PASS (0 CRITICAL/MAJOR, 3 MINOR: custom-ai thiếu section khác biệt tường minh, boxai highlight 4–16 hẹp hơn nguồn 2–16, DESIGN reconcile — đã reconcile khi close-out). Verify: lint/typecheck/build PASS, 8/8 routes. Deferred: MINOR-1/-2 content polish (non-blocking)."
+        },
+        {
+          "id": "change-domain-ntavietnam-phase-1-task-01",
+          "layer": 4,
+          "status": "done",
+          "reviewLevel": "NORMAL",
+          "reviewResult": "PASS",
+          "reviewReport": ".context/review-reports/change-domain-ntavietnam-spec-validation.md",
+          "changeRequest": "spec/changes/archive/2026-10-09-domain-ntavietnam.md",
+          "note": "MODIFY post-build (domain drift): đồng bộ spec/intent docs sang ntavietnam.tech + spec publish. Docs-only — 0 dòng code (code/config đã đổi+deploy ở 4d8120d/00f2560). Files: SPECIFICATIONS.md (Overview/API base/R-27 + version), BRIEF.md, docs/BRD.md, docs/specs/2026-10-08-nta-website-design.md, .context/compressed-summary.md, spec/updates/2026-10-09-domain-ntavietnam.md, spec/CHANGELOG.md, spec/test-scope/current.json. spec 1.1.0→2.0.0 (MAJOR, canonical contract), scope v5→v6. Verify: lint/typecheck/build PASS; grep domain cũ trong target docs = 0. spec-validator = PASS (inline). Residual: deploy platform drift Cloud Run(docs)→docker-vps ngoài scope."
         }
       ],
-      "specVersion": "1.1.0",
+      "specVersion": "2.0.0",
       "planDir": "tasks/nta-website/",
       "layerPlanDiagram": "docs/diagrams/layer-plan.html",
       "initialBuildCompletedAt": "2026-10-10T03:15:00+07:00",
-      "specPublished": { "scopeVersion": 5, "trigger": "feature-update", "path": "spec/test-scope/current.json" },
+      "specPublished": { "scopeVersion": 6, "trigger": "feature-update", "path": "spec/test-scope/current.json" },
       "layer4PhaseReview": { "verdict": "PASS", "report": ".context/review-reports/feature-nta-website-layer-4-round-1-spec-review.md" },
-      "note": "Initial build hoàn tất: Layer 0..4 (totalLayers 5 = layer-plan 'Layer 0 → 4'). 27 req R-01..R-27 implemented. R-22 (Lighthouse Perf/LCP/CLS) + R-23 (viewport 375/768/1280) PARTIAL — đo ở gate DevOps/prod (bước 6). Chưa push (forbidden_branch main, auto_push false), chưa deploy.",
-      "lastUpdated": "2026-10-09T00:00:00+07:00"
+      "note": "Initial build hoàn tất: Layer 0..4 (totalLayers 5 = layer-plan 'Layer 0 → 4'). 27 req R-01..R-27 implemented. R-22 (Lighthouse Perf/LCP/CLS) + R-23 (viewport 375/768/1280) PARTIAL — đo ở gate DevOps/prod (bước 6). Chưa push (forbidden_branch main, auto_push false), chưa deploy. Post-build: ai-solution-content (spec 1.1.0) + domain-ntavietnam (domain → ntavietnam.tech, spec 2.0.0, scope v6; change-UI còn pending).",
+      "lastUpdated": "2026-10-09T17:15:00+07:00"
     }
   ],
   "bugs": []

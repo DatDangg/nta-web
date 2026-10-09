@@ -50,7 +50,7 @@ một nơi tra cứu hồ sơ năng lực, case study và thông tin liên hệ 
 - SEO cơ bản: meta/OG per page, sitemap, robots, JSON-LD.
 - **Song ngữ Việt/Anh (i18n)**: mặc định VI, toggle EN, route `/en/...`.
 - Form liên hệ (lưu/forward, có chống spam).
-- Deploy Google Cloud Run (asia-southeast1), domain `ntasolution.vn`.
+- Deploy Google Cloud Run (asia-southeast1), domain `ntavietnam.tech`.
 
 ### Out of Scope
 - Hệ thống đăng nhập / CMS quản trị phức tạp (có thể bổ sung sau).
@@ -164,7 +164,7 @@ một nơi tra cứu hồ sơ năng lực, case study và thông tin liên hệ 
 
 - Nội dung chi tiết (mô tả sản phẩm, case study) sẽ được điền dần sau; v1 dùng nội dung mẫu hợp lý.
 - Chưa có logo/brand color chính thức → tạm dùng palette neutral light kiểu Apple, dễ thay sau.
-- Domain chính thức: **`ntasolution.vn`** (gắn vào Cloud Run sau khi anh cấp quyền DNS).
+- Domain chính thức: **`ntavietnam.tech`** (đã chốt 09/10/2026 — canonical `https://ntavietnam.tech`, HTTPS apex không `www`).
 
 ---
 

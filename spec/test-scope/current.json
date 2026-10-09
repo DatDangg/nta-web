@@ -1,59 +1,51 @@
 {
-  "specVersion": "1.1.0",
-  "scopeVersion": 5,
-  "generatedAt": "2026-10-09T00:00:00+07:00",
+  "specVersion": "2.0.0",
+  "scopeVersion": 6,
+  "generatedAt": "2026-10-09T17:15:00+07:00",
   "trigger": "feature-update",
-  "workItem": "change-ai-solution-content",
-  "specRefs": ["R-06a", "R-06b", "R-06c", "R-06d", "R-06e", "R-08a"],
+  "workItem": "change-domain-ntavietnam",
+  "specRefs": ["R-13", "R-19", "R-21", "R-27"],
   "changed": {
     "files": [
-      "src/content/solutions/vi/custom-ai.mdx",
-      "src/content/solutions/en/custom-ai.mdx",
-      "src/content/solutions/vi/boxai.mdx",
-      "src/content/solutions/en/boxai.mdx",
-      "src/content/solutions/vi/flycam.mdx",
-      "src/content/solutions/en/flycam.mdx",
-      "src/content/case-studies/vi/oc-eo-learning.mdx",
-      "src/content/case-studies/en/oc-eo-learning.mdx",
-      "src/content/home.ts",
-      "src/content/types.ts",
-      "src/app/[locale]/solutions/ai/[slug]/page.tsx",
-      "src/components/solutions/**",
-      "src/i18n/messages/vi.json",
-      "src/i18n/messages/en.json"
+      "SPECIFICATIONS.md",
+      "BRIEF.md",
+      "docs/BRD.md",
+      "docs/API_SPEC.md",
+      "docs/specs/2026-10-08-nta-website-design.md",
+      "spec/updates/2026-10-09-domain-ntavietnam.md",
+      "spec/CHANGELOG.md",
+      "spec/test-scope/current.json"
     ],
-    "modules": ["solutions-ai", "case-studies", "i18n", "content-model"]
+    "modules": ["deployment", "seo", "api-base-url", "intent-docs"]
   },
   "impact": {
     "direct": [
-      "R-06a/R-06b/R-06c: 3 trang chi tiết AI (custom-ai= Talvra; boxai=AI camera+AI Box + triển khai Đền Bảo Hà định tính; flycam=DJI Dock 2+Matrice 3TD) render nội dung thật, không placeholder, đủ 4 nhóm thông tin (kiến trúc/thuật toán/lợi ích/ứng dụng ngành)",
-      "R-06d: trang chi tiết AI render benefits + section nội dung có cấu trúc (mới) + chỉ số nổi bật/FAQ tùy chọn; giữ SSG + i18n VI/EN",
-      "R-06e: giải pháp AI liên kết case study Óc Eo (relatedCases)",
-      "R-08a: case study oc-eo-learning đổi nội dung sang dự án AI camera + flycam khu di tích Óc Eo – Ba Thê, format vấn đề → giải pháp → kết quả; category enterprise → ai; slug giữ nguyên",
-      "Nội dung song ngữ: bản EN dịch tương ứng bản VI (VI phải hoàn chỉnh)"
+      "R-27: domain đích sản phẩm = ntavietnam.tech (canonical https://ntavietnam.tech, HTTPS apex không www, thay hoàn toàn — không chạy song song)",
+      "R-13: API prod base URL = https://ntavietnam.tech/api (dev giữ http://localhost:3000/api)",
+      "R-19: HTTPS only — enforce TLS toàn bộ + http→https 301 trên domain mới",
+      "R-21: SEO canonical/sitemap/robots/llms.txt/JSON-LD emit domain mới",
+      "0 dòng code change trong change này — code/config đã đổi + deploy ở commit 4d8120d/00f2560 (doc/spec reconcile)"
     ],
     "dependents": [
-      "Case-study list filter (client) theo category — Óc Eo chuyển sang filter 'ai'",
-      "Trang chủ CaseStudyHighlight dùng src/content/home.ts featuredCase (title/description/alt Óc Eo) — phải khớp nội dung mới",
-      "/solutions/ai overview dùng CaseStudyTeaser tìm slug oc-eo-learning (không đổi slug → vẫn hiển thị)",
-      "SolutionCard trên /solutions/ai + home dùng title/description của 3 solution",
-      "SEO metadata title/description của 3 trang AI + case study (lấy từ content)",
-      "Heading hierarchy (h1→h2→h3) trên các section mới"
+      "canonical + hreflang (vi/en/x-default) mọi page dưới domain ntavietnam.tech",
+      "sitemap.xml, robots.txt, llms.txt, og:image absolute URL",
+      "NEXT_PUBLIC_SITE_URL=https://ntavietnam.tech (build-arg container prod)",
+      "nginx vhost deploy/nginx/ntavietnam.tech.conf + certbot certificate (hạn 2027-01-07)",
+      "intent docs SPECIFICATIONS/BRIEF/BRD + design spec đồng bộ domain mới"
     ],
     "regression": [
-      "SSG/prerender các route AI + case-studies không rớt prerender-manifest sau khi thêm section render",
-      "2 case study hiển thị đúng filter (enterprise/ai/all) và pagination",
-      "Các trang solution enterprise/khác không bị ảnh hưởng bởi thay đổi type Solution",
-      "lint/typecheck/build PASS; không lỗi i18n key thiếu"
+      "Các route chính trả 200 qua HTTPS domain mới: / , /en , /api/health , /llms.txt , /robots.txt , /sitemap.xml , /solutions/ai",
+      "không còn canonical/OG/sitemap trỏ domain cũ",
+      "http://ntavietnam.tech → https://ntavietnam.tech = 301",
+      "npm run lint · npm run typecheck · npm run build PASS (không hồi quy — code không đổi)"
     ]
   },
   "acceptance": [
-    "Trang 'Giải pháp AI / AI tùy chỉnh' có nội dung Talvra (mô tả platform, template, lợi ích, use case) — render thật, không placeholder",
-    "Trang 'Giải pháp AI / BoxAI' có nội dung phần B (kiến trúc, thuật toán, lợi ích, ứng dụng ngành) + đề cập triển khai Đền Bảo Hà",
-    "Trang 'Giải pháp AI / Flycam' có nội dung flycam phần B (DJI Dock 2, phạm vi phủ, thermal, use case)",
-    "Case Study Óc Eo sửa từ 'Số hoá quản lý đào tạo' sang đúng nội dung phần C (AI camera + flycam khu di tích), đúng format vấn đề → giải pháp → kết quả",
-    "Nội dung song ngữ VI/EN (tối thiểu bản VI hoàn chỉnh)",
-    "npm run lint · npm run typecheck · npm run build PASS"
+    "SPECIFICATIONS.md không còn ghi domain đích cũ (grep = 0); Overview domain + API prod base URL + R-27 đều là ntavietnam.tech",
+    "BRIEF.md và docs/BRD.md không còn ghi domain đích cũ",
+    "docs/API_SPEC.md Production = https://ntavietnam.tech/api (khớp deploy thực tế)",
+    "spec_version bumped 1.1.0 → 2.0.0 (MAJOR) + spec/updates/2026-10-09-domain-ntavietnam.md + CHANGELOG + test-scope/current.json (scopeVersion 6)",
+    "npm run lint · npm run typecheck · npm run build PASS (verify áp dụng cho code hiện có — change docs-only)"
   ],
-  "risk": "medium"
+  "risk": "low"
 }

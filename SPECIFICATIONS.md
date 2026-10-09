@@ -1,5 +1,5 @@
 ---
-spec_version: 1.1.0
+spec_version: 2.0.0
 updated_at: 2026-10-09
 ---
 
@@ -20,8 +20,9 @@ flycam/drone, AI tùy chỉnh), (3) App AI (music app, hair-style AI). Hướng 
 cơ quan nhà nước, đối tác. **Không** có đăng nhập người dùng ở v1.
 Nguồn: `BRIEF.md:5-17`, `docs/BRD.md:14-31`.
 
-Domain: **`ntasolution.vn`** · Song ngữ **VI/EN** · Phong cách **light minimal kiểu Apple**.
+Domain: **`ntavietnam.tech`** (canonical `https://ntavietnam.tech` — HTTPS, apex, không `www`) · Song ngữ **VI/EN** · Phong cách **light minimal kiểu Apple**.
 Nguồn: `BRIEF.md:15-16`, `docs/BRD.md:51,167` (quyết định ngày 08/10/2026 — xem `git log`: ab335bb, e7f54aa).
+_(cập nhật 2026-10-09: đổi domain đích sang `ntavietnam.tech` — change `domain-ntavietnam`, `spec/updates/2026-10-09-domain-ntavietnam.md`)_
 
 ## Scope
 
@@ -142,7 +143,7 @@ Nguồn: `BRIEF.md:15-16`, `docs/BRD.md:51,167` (quyết định ngày 08/10/202
 
 ## API Endpoints
 
-Base URL: dev `http://localhost:3000/api` · prod `https://ntasolution.vn/api` — `docs/API_SPEC.md:15-20`
+Base URL: dev `http://localhost:3000/api` · prod `https://ntavietnam.tech/api` — `docs/API_SPEC.md:15-20`
 
 - **R-13:** `POST /api/contact` — nhận form (name bắt buộc 2–100 ký tự, email bắt buộc, phone tuỳ chọn
   9–15 số, message bắt buộc 10–2000 ký tự, honeypot phải rỗng). Response: `200 {status:"ok"}` /
@@ -214,8 +215,9 @@ Base URL: dev `http://localhost:3000/api` · prod `https://ntasolution.vn/api` �
 ## Deployment
 
 - **R-27:** Deploy Google Cloud Run `asia-southeast1`, scale-to-zero, max-instances 3, availability
-  ≥ 99.5%; domain `ntasolution.vn` (gắn sau khi có DNS); CI/CD GitHub Actions; ưu tiên free tier GCP.
+  ≥ 99.5%; domain `ntavietnam.tech` (live 2026-10-09 — HTTPS apex, không `www`; http→https 301); CI/CD GitHub Actions; ưu tiên free tier GCP.
   `[reverse-engineered from docs]` — nguồn: `BRIEF.md:43`, `docs/BRD.md:53,126,127,157`, `.context/project-config.md:47-48`
+  - _(cập nhật 2026-10-09: đổi domain đích sang `ntavietnam.tech` — change `domain-ntavietnam`)_. ⚠️ Nền tảng deploy thực tế đã chuyển Cloud Run → **docker-vps** (`.context/project-config.md:51,58`); đây là drift **ngoài phạm vi change domain**, cần change riêng để reconcile.
 
 ---
 

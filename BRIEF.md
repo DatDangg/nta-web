@@ -12,7 +12,7 @@ Website giới thiệu năng lực, sản phẩm và giải pháp của công ty
 Mục tiêu: trang giới thiệu (marketing/showcase) hướng B2B — giúp khách doanh nghiệp & cơ quan
 nhà nước hiểu năng lực NTA, xem case study tiêu biểu (vd Óc Eo), và liên hệ/tư vấn.
 
-> ✅ Đã chốt (08/10/2026): **Domain `ntasolution.vn`** · **Song ngữ VI/EN** (i18n, mặc định VI có toggle EN) ·
+> ✅ Đã chốt (08/10/2026): **Domain `ntavietnam.tech`** _(cập nhật 09/10/2026 — canonical `https://ntavietnam.tech`, HTTPS apex)_ · **Song ngữ VI/EN** (i18n, mặc định VI có toggle EN) ·
 > Đối tượng **cả nhà nước lẫn tư nhân** · Phong cách **minimal ấn tượng kiểu Apple** (light, nhiều whitespace, typography lớn).
 **Không** phải hệ thống nghiệp vụ có đăng nhập — đây là website giới thiệu (content-driven).
 
@@ -40,7 +40,7 @@ nhà nước hiểu năng lực NTA, xem case study tiêu biểu (vd Óc Eo), v�
 - **Accessibility:** WCAG 2.1 AA — contrast, keyboard nav, alt text, semantic HTML.
 - **Security:** HTTPS only; form liên hệ có rate-limit + chống spam; không lộ secret.
 - **Language:** song ngữ Việt/Anh (i18n `next-intl` hoặc `next-i18n`; mặc định VI, toggle EN; `/en/...` routes).
-- **Deploy:** Google Cloud Run `asia-southeast1`, scale-to-zero; domain `ntasolution.vn` (gắn sau khi có DNS).
+- **Deploy:** Google Cloud Run `asia-southeast1`, scale-to-zero; domain `ntavietnam.tech` (live 09/10/2026 — HTTPS apex).
 
 ## Notes
 - Stack đề xuất: **Next.js (App Router) + TypeScript + Tailwind CSS**, theme **light minimal kiểu Apple**.
