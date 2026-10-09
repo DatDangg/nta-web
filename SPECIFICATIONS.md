@@ -1,5 +1,5 @@
 ---
-spec_version: 1.0.1
+spec_version: 1.1.0
 updated_at: 2026-10-09
 ---
 
@@ -75,6 +75,23 @@ Nguồn: `BRIEF.md:15-16`, `docs/BRD.md:51,167` (quyết định ngày 08/10/202
 - **R-06:** Trang tổng quan `/solutions/ai` + trang con `/solutions/ai/[slug]`
   (`boxai` | `flycam` | `custom-ai`); mỗi giải pháp có mô tả + case study liên quan nếu có dữ liệu (tùy chọn).
   `[reverse-engineered from docs]` — nguồn: `docs/BRD.md:88-90` (FR-030), `docs/DESIGN.md:101-107`
+- **R-06a (content — AI tùy chỉnh / Talvra):** trang `custom-ai` trình bày **nền tảng Talvra** (content thật,
+  không placeholder): vấn đề của SME, định nghĩa platform, 4 nguyên tắc, 3 template trợ lý
+  (Support / Sales / Ecommerce), hành trình 6 bước (form → cấu hình → duyệt người → launch → monitor → bàn giao),
+  kênh tích hợp (Zalo · KioskViet · Telegram), điểm khác biệt, an toàn & kiểm soát, tiến độ + roadmap,
+  đối tượng phù hợp, tầm nhìn, CTA. — nguồn: change `spec/changes/2026-10-09-ai-solution-content.md` phần A.
+- **R-06b (content — BoxAI):** trang `boxai` trình bày giải pháp **AI camera + AI Box (NVIDIA Jetson)**:
+  kiến trúc 3 tầng (camera cố định + edge AI box + VMS), phần cứng (Orin NX/Nano, DeepStream), ngân sách
+  thuật toán theo kênh, danh mục 21 thuật toán + 3 tính năng nền, gói theo ngành (di tích / rừng / KCN),
+  KPI; **đề cập triển khai thực tế tại Đền Bảo Hà** (định tính — số liệu hiện trường **chờ xác nhận**, không tự bịa).
+  — nguồn: change phần B.
+- **R-06c (content — Flycam):** trang `flycam` trình bày **DJI Dock 2 + Matrice 3TD**: thông số thiết bị,
+  thời gian phản ứng theo khoảng cách, ba khái niệm diện tích phủ, 4 loại route bay, lịch bay theo cấp dự báo
+  cháy (I–V), bộ lọc trigger, KPI, FAQ. — nguồn: change phần B.
+- **R-06d (render — trang chi tiết AI):** trang chi tiết AI render `benefits` (lợi ích) + **section nội dung
+  có cấu trúc** (kiến trúc / thuật toán / ứng dụng ngành) + chỉ số nổi bật/FAQ tùy chọn; giữ SSG + i18n VI/EN.
+  — thiết kế component cập nhật ở `.context/design-spec.md`.
+- **R-06e (link case study):** giải pháp AI liên kết tới case study liên quan (Óc Eo) — thoả AC `docs/BRD.md:90`.
 
 ### Module 5 — Sản phẩm App
 
@@ -88,6 +105,14 @@ Nguồn: `BRIEF.md:15-16`, `docs/BRD.md:51,167` (quyết định ngày 08/10/202
   (meta bar, Challenge → Solution → Result, gallery, related); ít nhất 2 case study (Óc Eo, phòng khám…).
   `[reverse-engineered from docs]` — nguồn: `docs/BRD.md:98-100` (FR-050), `docs/DESIGN.md:113-119`
   - Empty state cho list chưa specify — `[cần xác nhận]` khi implement (`docs/DESIGN.md:82` principle).
+- **R-08a (content — case study Óc Eo):** case study `oc-eo-learning` **sửa nội dung** từ "Số hoá quản lý
+  đào tạo tại Óc Eo" → **dự án AI camera + flycam tại khu di tích Óc Eo – Ba Thê** (content thật, phần C):
+  bối cảnh (~433 ha, di tích quốc gia đặc biệt), giải pháp kiến trúc 3 tầng (~200 camera), chức năng theo gói,
+  kết quả/số liệu, điểm mạnh — đúng format **vấn đề → giải pháp → kết quả**. Category đổi `enterprise` → `ai`;
+  giữ nguyên slug `oc-eo-learning`. — nguồn: change `spec/changes/2026-10-09-ai-solution-content.md` phần C.
+  - ⚠️ **Needs-input (chờ xác nhận):** phần C mô tả số liệu "từ phương án" (dự toán + lộ trình) — cần user xác nhận
+    đây là **phương án đề xuất** hay **dự án đã triển khai** để ghi "kết quả" trung thực (BR-004).
+  - ⚠️ **Needs-input:** số liệu hiện trường Đền Bảo Hà (R-06b) chờ anh Tuấn Anh — không tự bịa.
 
 ### Module 7 — Tin tức / Blog
 

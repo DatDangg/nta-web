@@ -1,82 +1,59 @@
 {
-  "specVersion": "1.0.1",
-  "scopeVersion": 4,
-  "generatedAt": "2026-10-10T03:15:00+07:00",
-  "trigger": "initial-build",
-  "workItem": "nta-website",
-  "specRefs": ["R-01", "R-02", "R-03", "R-04", "R-05", "R-06", "R-07", "R-08", "R-09", "R-10", "R-11", "R-12", "R-13", "R-14", "R-15", "R-16", "R-17", "R-18", "R-19", "R-20", "R-21", "R-22", "R-23", "R-24", "R-25", "R-26", "R-27"],
+  "specVersion": "1.1.0",
+  "scopeVersion": 5,
+  "generatedAt": "2026-10-09T00:00:00+07:00",
+  "trigger": "feature-update",
+  "workItem": "change-ai-solution-content",
+  "specRefs": ["R-06a", "R-06b", "R-06c", "R-06d", "R-06e", "R-08a"],
   "changed": {
     "files": [
-      "src/app/**",
-      "src/components/**",
-      "src/content/**",
-      "src/i18n/**",
-      "src/lib/**",
-      "src/app/sitemap.ts",
-      "src/app/robots.ts",
-      "src/app/api/health/route.ts",
-      "src/app/api/contact/route.ts",
-      "public/llms.txt",
-      "public/images/og-default.png",
-      "next.config.ts",
-      "Dockerfile",
-      ".dockerignore",
-      ".github/workflows/ci.yml",
-      ".github/workflows/deploy.yml",
-      "docs/runbook/deploy-cloud-run.md"
+      "src/content/solutions/vi/custom-ai.mdx",
+      "src/content/solutions/en/custom-ai.mdx",
+      "src/content/solutions/vi/boxai.mdx",
+      "src/content/solutions/en/boxai.mdx",
+      "src/content/solutions/vi/flycam.mdx",
+      "src/content/solutions/en/flycam.mdx",
+      "src/content/case-studies/vi/oc-eo-learning.mdx",
+      "src/content/case-studies/en/oc-eo-learning.mdx",
+      "src/content/home.ts",
+      "src/content/types.ts",
+      "src/app/[locale]/solutions/ai/[slug]/page.tsx",
+      "src/components/solutions/**",
+      "src/i18n/messages/vi.json",
+      "src/i18n/messages/en.json"
     ],
-    "modules": ["foundation", "layout", "home", "about", "solutions-enterprise", "solutions-ai", "products", "case-studies", "blog", "contact", "api", "seo", "i18n", "deploy-config"]
+    "modules": ["solutions-ai", "case-studies", "i18n", "content-model"]
   },
   "impact": {
     "direct": [
-      "R-01/R-02 i18n VI/EN 2 locale: mọi route render đúng ngôn ngữ, LanguageToggle đổi locale, hreflang/canonical",
-      "R-03 Header desktop (dropdown Solutions + Esc/focus) + MobileNav drawer (focus trap, Esc, inert, touch ≥44px) + Footer",
-      "R-04 trang chủ: Hero, SolutionGrid, ProductStrip, CaseStudyHighlight, CTABanner",
-      "R-05 Giải pháp Doanh nghiệp: overview + 4 detail (crm/hrm/lms/dentgo) + CTAForm",
-      "R-06 Giải pháp AI: overview + 3 detail (boxai/flycam/custom-ai) + CTAForm",
-      "R-07 Sản phẩm app (2 app) + ScreenshotCarousel + download/coming-soon",
-      "R-08 Case study list + detail (challenge/solution/result/gallery)",
-      "R-09 Blog list (pagination, date format VI dd/mm/yyyy, EN 'Oct 8, 2026') + MDX detail + ShareBar + RelatedPosts",
-      "R-10 /contact: ContactForm 6 states, hotline/info/office-hours/map iframe title",
-      "R-11 404 noindex + gợi ý điều hướng",
-      "R-12/R-20/R-21 SEO: sitemap 42 URL (no /api/*, no 404), robots allow + sitemap, llms.txt, JSON-LD, og/hreflang",
-      "R-13 POST /api/contact: 200 {status:ok} / 400 {status:error,errors} / 429 {status:error,message} / 500 generic",
-      "R-14 GET /api/health: {status,timestamp} + Cache-Control no-store",
-      "R-15 chỉ 2 route API (health, contact)",
-      "R-18 guard order rateLimit→validate→honeypot→forward; honeypot 200 giả không forward",
-      "R-19 secret CONTACT_FORM_TARGET server-only; HTTPS-only (deploy)",
-      "R-22 performance: next/font Inter subset latin+vietnamese, next/image, images avif/webp",
-      "R-23/R-24 responsive + WCAG 2.1 AA: contrast, keyboard/focus, alt, heading hierarchy, reduced-motion, touch ≥44px",
-      "R-25 validate email + SĐT client & server",
-      "R-26 nội dung song ngữ đầy đủ",
-      "R-27 deploy config Cloud Run asia-southeast1 (Dockerfile standalone, deploy.yml draft manual-only, runbook) — chưa deploy"
+      "R-06a/R-06b/R-06c: 3 trang chi tiết AI (custom-ai= Talvra; boxai=AI camera+AI Box + triển khai Đền Bảo Hà định tính; flycam=DJI Dock 2+Matrice 3TD) render nội dung thật, không placeholder, đủ 4 nhóm thông tin (kiến trúc/thuật toán/lợi ích/ứng dụng ngành)",
+      "R-06d: trang chi tiết AI render benefits + section nội dung có cấu trúc (mới) + chỉ số nổi bật/FAQ tùy chọn; giữ SSG + i18n VI/EN",
+      "R-06e: giải pháp AI liên kết case study Óc Eo (relatedCases)",
+      "R-08a: case study oc-eo-learning đổi nội dung sang dự án AI camera + flycam khu di tích Óc Eo – Ba Thê, format vấn đề → giải pháp → kết quả; category enterprise → ai; slug giữ nguyên",
+      "Nội dung song ngữ: bản EN dịch tương ứng bản VI (VI phải hoàn chỉnh)"
     ],
     "dependents": [
-      "Shared: Header/Footer/LanguageToggle trên mọi route; useContactForm dùng bởi ContactForm + CTAForm; card components (PostCard/SolutionCard/CaseStudyCard/ProductCard/AppCard) dùng ở home + list pages + related",
-      "SEO lib (src/lib/seo.ts, jsonld.ts) dùng bởi mọi page metadata + sitemap/robots",
-      "next.config output:'standalone' + images ảnh hưởng mọi build/deploy"
+      "Case-study list filter (client) theo category — Óc Eo chuyển sang filter 'ai'",
+      "Trang chủ CaseStudyHighlight dùng src/content/home.ts featuredCase (title/description/alt Óc Eo) — phải khớp nội dung mới",
+      "/solutions/ai overview dùng CaseStudyTeaser tìm slug oc-eo-learning (không đổi slug → vẫn hiển thị)",
+      "SolutionCard trên /solutions/ai + home dùng title/description của 3 solution",
+      "SEO metadata title/description của 3 trang AI + case study (lấy từ content)",
+      "Heading hierarchy (h1→h2→h3) trên các section mới"
     ],
     "regression": [
-      "SSG/prerender 43 static HTML (21 route × 2 locale + 404) — build PASS, không rớt prerender-manifest",
-      "Blog/CaseStudies/Solutions list SSG + filter/pagination (Suspense + client filter) không rớt prerender",
-      "Layer 3 API contract + Layer 4 SEO/a11y không regression sau task-03 (i18n error, heading, contrast, label-in-name)"
+      "SSG/prerender các route AI + case-studies không rớt prerender-manifest sau khi thêm section render",
+      "2 case study hiển thị đúng filter (enterprise/ai/all) và pagination",
+      "Các trang solution enterprise/khác không bị ảnh hưởng bởi thay đổi type Solution",
+      "lint/typecheck/build PASS; không lỗi i18n key thiếu"
     ]
   },
   "acceptance": [
-    "Mọi route 2 locale render đúng ngôn ngữ; VI = unprefixed URL, EN = /en/*; hreflang vi/en/x-default đủ",
-    "Header desktop dropdown + MobileNav drawer: keyboard flow đầy đủ, focus trap + Esc + trả focus, touch target ≥44px, không trap sai",
-    "Chỉ 2 API route (/api/health, /api/contact); health 200 {status:'ok'}; contact 200/400/429/500 đúng shape API_SPEC",
-    "Guard order đúng; honeypot trả 200 giả không forward; CONTACT_FORM_TARGET không lộ client",
-    "ContactForm + CTAForm 6 states (default/validating/submitting/success/rate-limit/error); 429 focus summary; lỗi hiển thị localized (VI/EN), có feedback cho lỗi form/honeypot",
-    "Sitemap 42 URL (không /api/*, không 404); robots allow + sitemap + không chặn AI crawler; llms.txt tồn tại; 404 noindex",
-    "JSON-LD Organization + WebSite (mọi trang), BreadcrumbList (detail), Article (blog/case detail), ContactPage (contact) — parse không lỗi",
-    "Heading hierarchy mỗi trang h1→h2→h3 không nhảy cấp (kể cả list pages có sr-only h2)",
-    "Lighthouse a11y = 1.0/0 fail; SEO = 1.0; contrast text chính/CTA/badge/error ≥4.5:1",
-    "Không horizontal overflow ở base/md/lg; grid contact khớp design S12",
-    "reduced-motion: animation tắt được",
-    "npm run lint · npm run typecheck · npm run build PASS; .next/standalone/server.js chạy → /api/health 200",
-    "PARTIAL cần đo ở gate DevOps/prod: R-22 (Lighthouse Perf ≥90, LCP<2.5s, CLS<0.1) + R-23 (viewport 375/768/1280 thực)",
-    "Deploy config: Dockerfile multi-stage non-root standalone; deploy.yml CHỈ workflow_dispatch (không auto deploy), không secret hardcode, flags R-27 đúng; runbook đủ mục"
+    "Trang 'Giải pháp AI / AI tùy chỉnh' có nội dung Talvra (mô tả platform, template, lợi ích, use case) — render thật, không placeholder",
+    "Trang 'Giải pháp AI / BoxAI' có nội dung phần B (kiến trúc, thuật toán, lợi ích, ứng dụng ngành) + đề cập triển khai Đền Bảo Hà",
+    "Trang 'Giải pháp AI / Flycam' có nội dung flycam phần B (DJI Dock 2, phạm vi phủ, thermal, use case)",
+    "Case Study Óc Eo sửa từ 'Số hoá quản lý đào tạo' sang đúng nội dung phần C (AI camera + flycam khu di tích), đúng format vấn đề → giải pháp → kết quả",
+    "Nội dung song ngữ VI/EN (tối thiểu bản VI hoàn chỉnh)",
+    "npm run lint · npm run typecheck · npm run build PASS"
   ],
-  "risk": "high"
+  "risk": "medium"
 }
