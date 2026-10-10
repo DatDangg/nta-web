@@ -2,9 +2,12 @@ import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { BenefitList } from '@/components/solutions/BenefitList';
+import { FaqList } from '@/components/solutions/FaqList';
 import { FeatureList } from '@/components/solutions/FeatureList';
 import { RelatedSolutions } from '@/components/solutions/RelatedSolutions';
 import { ScreenshotSection } from '@/components/solutions/ScreenshotSection';
+import { SolutionSections } from '@/components/solutions/SolutionSections';
+import { UseCases } from '@/components/solutions/UseCases';
 import { CTAForm } from '@/components/contact/CTAForm';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { getAllSolutions, getSolutionBySlug } from '@/lib/content/solutions';
@@ -55,6 +58,8 @@ export default async function EnterpriseSolutionDetailPage({ params }: { params:
   const relatedSolutions = solution.relatedCases?.length
     ? allSolutions.filter((candidate) => candidate.category === 'enterprise' && candidate.slug !== solution.slug && candidate.relatedCases?.some((relatedCase) => solution.relatedCases?.includes(relatedCase)))
     : [];
+  // Opt-in per solution so CRM/LMS/DentGo keep their current layout while HRM gains the written content.
+  const extended = solution.renderExtendedContent === true;
 
   return (
     <>
@@ -64,6 +69,9 @@ export default async function EnterpriseSolutionDetailPage({ params }: { params:
         <div className="min-w-0 xl:max-w-[720px]">
           <FeatureList features={solution.features} title={t('featuresTitle')} />
           <BenefitList benefits={solution.benefits} title={t('benefitsTitle')} />
+          <SolutionSections sections={extended ? solution.sections ?? [] : []} />
+          <UseCases cases={extended ? solution.useCases ?? [] : []} title={t('useCasesTitle')} />
+          <FaqList faq={extended ? solution.faq ?? [] : []} title={t('faqTitle')} />
           <ScreenshotSection imageAlt={solution.title} images={solution.screenshots ?? []} title={t('screenshotsTitle')} />
         </div>
         <div className="pb-12 lg:py-12">

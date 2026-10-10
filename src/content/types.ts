@@ -14,6 +14,9 @@ export interface Solution {
   image?: string;
   screenshots?: string[];
   relatedCases?: string[];
+  // Opt-in for the enterprise detail page: renders sections, useCases and faq.
+  // AI solution pages always render them, so they ignore this flag.
+  renderExtendedContent?: boolean;
 }
 
 export interface Product {
