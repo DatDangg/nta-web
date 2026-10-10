@@ -9,11 +9,11 @@
 - **URL hệ thống:** http://187.52.119.50:3002/ (địa chỉ hệ thống thật; không đưa lên trang public).
 - **Chụp ngày:** 10/10/2026 · **viewport:** 1600×1000 · **theme:** sáng (light) · **ngôn ngữ:** tiếng Việt.
 - **Tài khoản demo:** `dieuhanh.lientruong` — Quản trị viên trường, phạm vi phân quyền **3 trường**.
-- **Dữ liệu trong ảnh:** giao diện có tên người, tên trường và mã học sinh; chưa có bằng chứng độc lập xác nhận mọi dữ liệu là giả hoặc không chứa PII thực.
+- **Dữ liệu trong ảnh:** tên và mã học sinh, cùng thông tin học sinh/giáo viên hiển thị, là dữ liệu demo đã được mô phỏng; không phải dữ liệu người thật.
 - **Con số quan sát trong ảnh demo (mốc provenance, không dùng làm số liệu marketing):** **91 học sinh** hiển thị ở `02-dashboard-tong-quan.png` và `03-hoc-sinh.png`; **3 trường** hiển thị ở `01-da-truong-tong-quan.png` và là phạm vi tài khoản demo. Không nêu phiên bản sản phẩm vì không quan sát thấy trong ảnh; bỏ số liệu 30 tài khoản phụ huynh vì chưa đối chiếu được với ảnh.
 - **Ảnh tiếng Việt**; trang `/en` dùng chung ảnh này (chấp nhận được).
 
-> ⚠️ **Ảnh LMS và URL hệ thống chưa được rà/ẩn danh đủ để đưa lên public.** URL IP hệ thống thật được ghi ở trên; ảnh còn hiển thị tên trường, tên học sinh/phụ huynh/giáo viên và tên tài khoản quản trị demo (ví dụ Nguyễn Thanh Hà). Trước khi đưa ảnh lên public trong change `.mdx` sau, không đưa URL hệ thống lên trang; redact URL/địa chỉ truy cập nếu xuất hiện, tên trường, tên và mã học sinh, tên phụ huynh/giáo viên/quản trị viên, cùng mọi email hoặc dữ liệu nhận diện khác; xác nhận toàn bộ dữ liệu là giả.
+> **Ghi chú khi xuất bản:** thông tin học sinh và giáo viên trong ảnh là dữ liệu demo mô phỏng. Tên sản phẩm/khách hàng được phép giữ nguyên làm bằng chứng triển khai; URL IP của hệ thống và tài khoản demo chỉ để tra cứu nội bộ, tuyệt đối không đưa lên trang public.
 
 ## 2. Positioning — sản phẩm này là gì
 
@@ -77,7 +77,7 @@ AI gợi ý nhận xét học sinh ngay trong màn hình đánh giá, hỗ trợ
 
 | Khối trong README | Field trong `Solution` (`src/content/types.ts`) | Ghi chú |
 |---|---|---|
-| H1 — tên tài liệu nội bộ | `title` | Không dùng nguyên H1 trên trang public; đề xuất title trung tính **“Quản trị trường học”**, không chứa tên khách hàng/sản phẩm. Giữ H1 hiện tại chỉ làm tên tài liệu nội bộ. |
+| H1 — tên tài liệu nội bộ | `title` | Có thể chọn title trung tính **“Quản trị trường học”** theo giọng thương hiệu NTA; nếu muốn nhắc tên khách hàng hoặc sản phẩm trong nội dung hay breadcrumb thì được phép. H1 hiện tại có thể giữ làm tên tài liệu. |
 | §2 Positioning | `description` | 1–2 câu dùng cho hero + meta description |
 | §3 Vấn đề khách hàng gặp | `sections[0].intro` | mở đầu khối nội dung đầu tiên |
 | §4 Năng lực chính | `features[]` — mỗi năng lực 1 phần tử dạng `"<Tiêu đề> — <mô tả>"` | 4 phần tử |

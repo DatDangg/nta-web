@@ -10,11 +10,11 @@
 - **Tên sản phẩm:** DentGo Smile — *Hệ điều hành Quản trị Nha khoa Đa chi nhánh*.
 - **Chụp ngày:** 10/10/2026 · **viewport:** ~1735×1123 · **theme:** sáng (light) · **ngôn ngữ:** tiếng Việt.
 - **Tài khoản demo:** `admin@demo1` / `123456` — vai trò *Quản trị hệ thống*, phạm vi *Tất cả chi nhánh*.
-- **Dữ liệu trong ảnh:** ảnh hiển thị tên, mã hồ sơ, số điện thoại, ngày sinh, email, CCCD, thẻ BHYT và dữ liệu khám mẫu. Tài liệu nguồn cho biết chúng được thay bằng dữ liệu mô phỏng trên trình duyệt (không ghi vào database demo), nhưng chưa có xác minh độc lập rằng mọi giá trị đều không thuộc người thật.
+- **Dữ liệu trong ảnh:** tên, số điện thoại, CCCD, thẻ BHYT và các thông tin bệnh nhân khác đã được thay bằng dữ liệu mô phỏng trên trình duyệt; không phải dữ liệu người thật và không ghi vào database demo.
 - **Con số quan sát trong ảnh (mốc provenance, không dùng làm số liệu marketing):** 248 hồ sơ; 6 bệnh nhân mẫu hiển thị.
 - **Ảnh tiếng Việt**; trang `/en` dùng chung ảnh này (chấp nhận được).
 
-> ⚠️ **Ảnh DentGo và thông tin truy cập chưa được redact đủ để đưa lên public.** Tài liệu còn ghi URL hệ thống demo, tên tài khoản và mật khẩu; ảnh hiển thị brand/logo DentGo, tên bác sĩ/quản trị viên và bệnh nhân, mã hồ sơ, số điện thoại, email, CCCD, thẻ BHYT, địa chỉ và thông tin điều trị. Trước khi đưa ảnh lên public trong change `.mdx` sau, tuyệt đối không công khai URL, tài khoản hoặc mật khẩu; redact brand/logo nếu chưa được duyệt, tên nhân viên/bệnh nhân, mã hồ sơ, số điện thoại, email, CCCD, thẻ BHYT, địa chỉ và mọi chi tiết khám/điều trị có thể nhận diện; xác nhận dữ liệu còn lại là giả.
+> **Ghi chú khi xuất bản:** thông tin bệnh nhân trong ảnh là dữ liệu mô phỏng; thương hiệu DentGo Smile và tên sản phẩm là thật, được phép giữ nguyên để minh hoạ hệ thống đang vận hành. URL hệ thống demo và thông tin đăng nhập (`admin@demo1` / `123456`) chỉ dùng nội bộ, tuyệt đối không đưa lên trang public.
 
 ## 2. Positioning — sản phẩm này là gì
 
@@ -79,7 +79,7 @@ Có. Nhắc lịch qua Zalo OA và gửi SMS theo mẫu; bảng kê Labo, hoá �
 
 | Khối trong README | Field trong `Solution` (`src/content/types.ts`) | Ghi chú |
 |---|---|---|
-| H1 — tên tài liệu nội bộ | `title` | Không dùng nguyên H1 trên trang public; đề xuất title trung tính **“Quản trị phòng khám nha khoa”**, không chứa tên khách hàng/sản phẩm. Giữ H1 hiện tại chỉ làm tên tài liệu nội bộ. |
+| H1 — tên tài liệu nội bộ | `title` | Có thể chọn title trung tính **“Quản trị phòng khám nha khoa”** theo giọng thương hiệu NTA; nếu muốn nhắc tên khách hàng hoặc sản phẩm trong nội dung hay breadcrumb thì được phép. H1 hiện tại có thể giữ làm tên tài liệu. |
 | §2 Positioning | `description` | 1–2 câu dùng cho hero + meta description |
 | §3 Vấn đề khách hàng gặp | `sections[0].intro` | mở đầu khối nội dung đầu tiên |
 | §4 Năng lực chính | `features[]` — mỗi năng lực 1 phần tử dạng `"<Tiêu đề> — <mô tả>"` | 4 phần tử |

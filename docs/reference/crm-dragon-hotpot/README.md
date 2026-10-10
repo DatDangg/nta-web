@@ -9,11 +9,11 @@
 - **URL hệ thống:** https://cms.dragonhotpotvietnam.com/
 - **Chụp ngày:** 10/10/2026 · **viewport:** 1600×1000 · **theme:** tối (dark) · **ngôn ngữ:** tiếng Việt.
 - **Tài khoản demo:** không ghi trong tài liệu này.
-- **Dữ liệu khách hàng:** ảnh hiển thị tên, số điện thoại và ngày sinh mẫu ở các màn khách hàng; chưa có bằng chứng độc lập xác nhận mọi dữ liệu này là giả. Riêng widget sinh nhật trong `01-tong-quan.png` hiển thị tên/ngày sinh demo. Brand Dragon Hotpot, tên chi nhánh/địa điểm (gồm Dragon Hot Pot Lê Duẩn, Nguyễn Huệ, Võ Văn Tân) và email quản trị `admin@ntacrm.vn` vẫn hiển thị nguyên, chưa được redact.
+- **Dữ liệu khách hàng:** tên, số điện thoại, mã khách và ngày sinh trong ảnh đã được ẩn danh thành dữ liệu demo; widget sinh nhật trong `01-tong-quan.png` cũng dùng tên/ngày sinh mô phỏng. Brand Dragon Hotpot, tên chi nhánh/địa điểm (Dragon Hot Pot Lê Duẩn, Nguyễn Huệ, Võ Văn Tân) và email quản trị `admin@ntacrm.vn` là thông tin thật được giữ nguyên.
 - **Con số tổng quan quan sát trong ảnh (đặt ở Metadata làm mốc provenance, không dùng làm số liệu marketing):** khách hàng **2.627 / 132 trang** · đơn hàng **7.435 / 372 trang**.
 - **Ảnh tiếng Việt**; trang `/en` dùng chung ảnh này (chấp nhận được).
 
-> ⚠️ **Ảnh CRM chưa được redact đủ để đưa lên public.** Chúng còn chứa brand/logo Dragon Hotpot, tên chi nhánh/địa điểm (Lê Duẩn, Nguyễn Huệ, Võ Văn Tân), email quản trị `admin@ntacrm.vn`, cùng tên/số điện thoại/mã khách và dữ liệu giao dịch hiển thị. Trước khi ảnh được đưa lên trang public trong change `.mdx` sau, redact brand/logo, mọi tên chi nhánh/địa điểm, email/tên quản trị viên, tên/điện thoại/ngày sinh/mã khách, cùng mọi thông tin giao dịch có thể nhận diện; xác nhận riêng toàn bộ dữ liệu còn lại là giả.
+> **Ghi chú khi xuất bản:** dữ liệu khách hàng nhìn thấy trong ảnh đã được mô phỏng/ẩn danh; tên thương hiệu và chi nhánh Dragon Hotpot cùng email quản trị là thông tin thật, được phép giữ nguyên như bằng chứng hệ thống đang vận hành. Không đưa URL hệ thống hay tài khoản/mật khẩu demo lên trang public.
 
 ## 2. Positioning — sản phẩm này là gì
 
@@ -75,7 +75,7 @@ Có liên kết với Zalo OA để đo mức độ quan tâm và gửi thông b
 
 | Khối trong README | Field trong `Solution` (`src/content/types.ts`) | Ghi chú |
 |---|---|---|
-| H1 — tên tài liệu nội bộ | `title` | Không dùng nguyên H1 trên trang public; đề xuất title trung tính **“Quản trị khách hàng (CRM)”**, không chứa tên khách hàng. Giữ H1 hiện tại chỉ làm tên tài liệu nội bộ. |
+| H1 — tên tài liệu nội bộ | `title` | Có thể chọn title trung tính **“Quản trị khách hàng (CRM)”** cho phù hợp giọng thương hiệu NTA; nếu muốn nhắc tên khách hàng trong nội dung hoặc breadcrumb thì được phép. H1 hiện tại có thể giữ làm tên tài liệu. |
 | §2 Positioning | `description` | 1–2 câu dùng cho hero + meta description |
 | §3 Vấn đề khách hàng gặp | `sections[0].intro` | mở đầu khối nội dung đầu tiên |
 | §4 Năng lực chính | `features[]` — mỗi năng lực 1 phần tử dạng `"<Tiêu đề> — <mô tả>"` | 4 phần tử |
