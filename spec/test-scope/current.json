@@ -1,43 +1,66 @@
 {
   "specVersion": "3.0.0",
-  "scopeVersion": 9,
-  "generatedAt": "2026-10-10T20:30:00+07:00",
+  "scopeVersion": 10,
+  "generatedAt": "2026-10-10T23:30:00+07:00",
   "trigger": "feature-update",
-  "workItem": "change-enterprise-solution-docs-web-ready",
+  "workItem": "change-publish-solution-screenshots",
   "specRefs": [],
   "changed": {
     "files": [
-      "docs/reference/hrm-mock/README.md",
-      "docs/reference/crm-dragon-hotpot/README.md",
-      "docs/reference/lms-ismartschool/README.md",
-      "docs/reference/dentgo-smile/README.md",
-      "spec/updates/2026-10-10-enterprise-solution-docs-web-ready.md",
+      "src/content/solutions/vi/crm.mdx",
+      "src/content/solutions/en/crm.mdx",
+      "src/content/solutions/vi/lms.mdx",
+      "src/content/solutions/en/lms.mdx",
+      "src/content/solutions/vi/dentgo.mdx",
+      "src/content/solutions/en/dentgo.mdx",
+      "src/content/solutions/vi/boxai.mdx",
+      "src/content/solutions/en/boxai.mdx",
+      "src/app/[locale]/solutions/ai/[slug]/page.tsx",
+      "src/i18n/messages/vi.json",
+      "src/i18n/messages/en.json",
+      "public/images/solutions/boxai/01-dashboard-quan-tri.jpg",
+      "public/images/solutions/boxai/02-tasks-channels.jpg",
+      "public/images/solutions/boxai/03-ai-box.jpg",
+      "docs/DESIGN.md",
+      "spec/updates/2026-10-10-publish-solution-screenshots.md",
       "spec/CHANGELOG.md",
       "spec/test-scope/current.json",
-      "tasks/change-enterprise-solution-docs-web-ready/phase-1-task-01.md"
+      "tasks/change-publish-solution-screenshots/phase-1-task-01.md",
+      "spec/changes/archive/2026-10-10-publish-solution-screenshots.md",
+      ".context/progress.json"
     ],
-    "modules": ["docs/reference (tài liệu tham chiếu nội bộ — không render lên web)"]
+    "modules": [
+      "src/content/solutions (nội dung .mdx)",
+      "src/app/[locale]/solutions/ai/[slug] (render ScreenshotSection)",
+      "src/i18n/messages (key solutions.ai.screenshotsTitle)"
+    ]
   },
   "impact": {
     "direct": [
-      "4 README docs-only viết lại theo cấu trúc 8 heading web-ready; thêm bảng mapping khối → field `Solution` + danh sách ảnh `screenshots/` kèm thứ tự đề xuất",
-      "Không có bề mặt runtime: docs không được import/render ở `src/app` hay `src/content`"
+      "BoxAI (vi+en): thêm 3 screenshots `/images/solutions/boxai/*.jpg` → trang AI detail render ScreenshotSection (trước đây không có).",
+      "CRM/LMS/DentGo (vi+en): viết đầy đủ nội dung (description/features/benefits/useCases/sections/faq/screenshots) + `renderExtendedContent: true` → trang enterprise detail hiển thị sections/useCases/faq + 5/7/5 ảnh.",
+      "Trang AI detail: import + render `<ScreenshotSection>` sau `<FaqList>`; i18n `solutions.ai.screenshotsTitle` (vi+en)."
     ],
     "dependents": [
-      "Change `.mdx` sau (chưa làm): đưa ảnh CRM/LMS/DentGo lên web + thêm `screenshots` vào `src/content/solutions/{vi,en}/*.mdx`; copy 3 ảnh BoxAI vào `public/images/solutions/boxai/`",
-      "`src/content/types.ts` interface `Solution` — chỉ được tham chiếu trong docs (không sửa)"
+      "Flycam / Custom-AI (nhóm AI, không khai screenshots) → ScreenshotSection `return null`, không đổi layout/không heading rỗng.",
+      "HRM (nhóm enterprise, đã bật renderExtendedContent trước đó) → không đổi file, phải giữ nguyên output.",
+      "Trang danh sách `/solutions/enterprise` + `/solutions/ai` (đọc title/description của .mdx) — title LMS/DentGo đổi sang text trung tính."
     ],
     "regression": [
-      "Không có hồi quy web: 0 dòng code/config/`.mdx` đổi. Không cần chạy lint/typecheck/build (docs-only).",
-      "Xác nhận `git status` chỉ có 4 README trong `docs/reference/**` (ngoài file dirty có sẵn `package-lock.json` + các dir asset untracked)"
+      "HRM (vi+en): đếm `<img>`/heading trong HTML build phải khớp trước change (enterprise page.tsx + hrm.mdx KHÔNG đổi).",
+      "Flycam/Custom-AI (vi+en): không xuất hiện heading 'Hình ảnh giải pháp'/ảnh mới.",
+      "i18n: các key `solutions.*` khác không đổi; `next build` không báo missing message."
     ]
   },
   "acceptance": [
-    "Cả 4 README dùng cùng bộ 8 heading, đúng thứ tự; mỗi 'năng lực chính' trỏ ≥1 ảnh cụ thể trong `screenshots/`",
-    "Mỗi file có bảng mapping sang schema `.mdx` liệt kê đủ ảnh + thứ tự đề xuất",
-    "Không bịa tên khách hàng/KPI/năm triển khai; `hrm-mock/README.md` vẫn cảnh báo mockup và `highlights` để trống",
-    "Không sửa file ngoài `docs/reference/**` (chỉ 4 README)",
-    "Spec Publisher: spec/updates/ + spec/CHANGELOG.md + spec/test-scope/current.json (scopeVersion 9); KHÔNG bump spec_version (vẫn 3.0.0 — không đổi requirement/behavior)"
+    "3 ảnh BoxAI trong `public/images/solutions/boxai/`; `boxai.mdx` (vi+en) khai đúng `screenshots`.",
+    "Trang AI render ScreenshotSection; flycam/custom-ai không hụt ảnh/heading rỗng.",
+    "`solutions.ai.screenshotsTitle` có ở cả vi.json + en.json.",
+    "CRM/LMS/DentGo .mdx (vi+en): screenshots đúng thứ tự, sections, useCases, faq, renderExtendedContent: true.",
+    "highlights trống ở CRM/LMS/DentGo; BoxAI giữ highlights 21/3/4–16 (user chốt 10/10/2026 — thông số sản phẩm spec R-06b, không phải số liệu ảnh demo).",
+    "Grep `src/content/solutions/**/*.mdx` không còn URL hệ thống / admin@demo1 / 123456 / 187.52.119.50 / dragonhotpotvietnam.com.",
+    "Regression HRM vi+en giữ nguyên.",
+    "npm run lint / typecheck / build PASS (test_command: null → skip, no test configured)."
   ],
-  "risk": "low"
+  "risk": "medium"
 }

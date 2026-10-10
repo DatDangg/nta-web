@@ -8,6 +8,7 @@ import { BenefitList } from '@/components/solutions/BenefitList';
 import { SolutionSections } from '@/components/solutions/SolutionSections';
 import { SolutionHighlights } from '@/components/solutions/SolutionHighlights';
 import { FaqList } from '@/components/solutions/FaqList';
+import { ScreenshotSection } from '@/components/solutions/ScreenshotSection';
 import { CTAForm } from '@/components/contact/CTAForm';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { getCaseStudyBySlug } from '@/lib/content/case-studies';
@@ -60,6 +61,7 @@ export default async function AiSolutionDetailPage({ params }: { params: Promise
           <SolutionHighlights highlights={solution.highlights ?? []} title={t('highlightsTitle')} />
           <UseCases cases={solution.useCases ?? []} title={t('useCasesTitle')} />
           <FaqList faq={solution.faq ?? []} title={t('faqTitle')} />
+          <ScreenshotSection imageAlt={solution.title} images={solution.screenshots ?? []} title={t('screenshotsTitle')} />
         </div>
       </div>
       <CaseStudyLink caseStudy={relatedCase} linkLabel={t('caseStudyLink')} title={t('relatedCaseTitle')} />

@@ -95,8 +95,9 @@ Font stack: `-apple-system, BlinkMacSystemFont, "SF Pro Display", Inter, "Segoe 
 
 ### Screen: Chi tiết giải pháp doanh nghiệp
 - **Route:** `/solutions/enterprise/[slug]` (`crm` | `hrm` | `lms` | `dentgo`)
-- **Components:** PageHeader, FeatureList, BenefitList, ScreenshotSection, RelatedSolutions, CTAForm
+- **Components:** PageHeader, FeatureList, BenefitList, SolutionSections, UseCases, FaqList, ScreenshotSection, RelatedSolutions, CTAForm
 - **States:** Default, 404 (slug sai)
+- **Notes:** SolutionSections/UseCases/FaqList chỉ render khi giải pháp bật cờ opt-in `renderExtendedContent: true` (hiện bật cho HRM/CRM/LMS/DentGo); ScreenshotSection ẩn khi không có `screenshots`.
 
 ### Screen: Giải pháp AI (tổng quan)
 - **Route:** `/solutions/ai`
@@ -104,7 +105,7 @@ Font stack: `-apple-system, BlinkMacSystemFont, "SF Pro Display", Inter, "Segoe 
 
 ### Screen: Chi tiết giải pháp AI
 - **Route:** `/solutions/ai/[slug]` (`boxai` | `flycam` | `custom-ai`)
-- **Components:** PageHeader, FeatureList, BenefitList, SolutionSections, SolutionHighlights, UseCases, FaqList, CaseStudyLink, CTAForm
+- **Components:** PageHeader, FeatureList, BenefitList, SolutionSections, SolutionHighlights, UseCases, FaqList, ScreenshotSection, CaseStudyLink, CTAForm
 - **Content data (MDX VI/EN):** `sections` / `highlights` / `faq` optional fields render bởi SolutionSections/SolutionHighlights/FaqList (rỗng → ẩn). Nội dung 3 trang: Talvra (custom-ai), BoxAI + Đền Bảo Hà (định tính), Flycam — theo spec delta R-06a..e.
 
 ### Screen: Sản phẩm App

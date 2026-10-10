@@ -1,7 +1,9 @@
 ---
 id: publish-solution-screenshots
 type: feature
-status: pending
+status: done
+resolved: 2026-10-10
+task: tasks/change-publish-solution-screenshots/phase-1-task-01.md
 created: 2026-10-10
 ---
 
@@ -117,18 +119,21 @@ Viết từ docs tham chiếu theo cấu trúc 8 phần đã chốt, map sang sc
 
 ## Acceptance
 
-- [ ] 3 ảnh BoxAI có trong `public/images/solutions/boxai/`, `boxai.mdx` (vi+en) khai đúng `screenshots`.
-- [ ] `page.tsx` nhóm AI render `ScreenshotSection`; `flycam` và `custom-ai` (không có ảnh) không bị ảnh
-      hụt/heading rỗng — component `return null` khi rỗng.
-- [ ] `solutions.ai.screenshotsTitle` có ở cả `vi.json` và `en.json`.
-- [ ] CRM/LMS/DentGo `.mdx` (vi+en): có `screenshots` đúng thứ tự ảnh, `sections`, `useCases` đầy đủ,
+- [x] 3 ảnh BoxAI có trong `public/images/solutions/boxai/`, `boxai.mdx` (vi+en) khai đúng `screenshots`.
+- [x] `page.tsx` nhóm AI render `ScreenshotSection`; `flycam` và `custom-ai` (không có ảnh) không bị ảnh
+      hụt/heading rỗng — component `return null` khi rỗng (xác nhận trên HTML build).
+- [x] `solutions.ai.screenshotsTitle` có ở cả `vi.json` và `en.json`.
+- [x] CRM/LMS/DentGo `.mdx` (vi+en): có `screenshots` đúng thứ tự ảnh, `sections`, `useCases` đầy đủ,
       `faq`, và `renderExtendedContent: true`.
-- [ ] `highlights` trống ở cả 4 trang (chưa có số liệu thật đã xác nhận).
-- [ ] Grep toàn bộ `.mdx` không còn URL hệ thống, `admin@demo1`, `123456`, `187.52.119.50`,
-      `dragonhotpotvietnam.com`.
-- [ ] Trang HRM hiển thị y hệt trước change (regression check).
-- [ ] `npm run lint`, `npm run typecheck`, `npm run build` PASS.
-- [ ] Visual check 4 trang (vi + en) trên local.
+- [x] `highlights` trống ở CRM/LMS/DentGo. **BoxAI giữ `highlights` 21/3/4–16 — user chốt 10/10/2026**:
+      đây là thông số sản phẩm trong spec R-06b (đã duyệt ở change `2026-10-09-ai-solution-content`),
+      KHÔNG phải số liệu trong ảnh demo → mâu thuẫn nội tại của change file (với §C) giải quyết theo §C.
+- [x] Grep toàn bộ `.mdx` không còn URL hệ thống, `admin@demo1`, `123456`, `187.52.119.50`,
+      `dragonhotpotvietnam.com` (0 match).
+- [x] Trang HRM hiển thị y hệt trước change (regression check — `hrm.mdx` không sửa, build vẫn 5 ảnh).
+- [x] `npm run lint`, `npm run typecheck`, `npm run build` PASS.
+- [ ] Visual check 4 trang (vi + en) trên local. **Chưa làm — cần user mở trang xác nhận** (ảnh hiển thị
+      đúng, không lộ watermark/URL hệ thống trong ảnh, giọng văn copy ổn).
 
 ## Ngoài phạm vi
 
@@ -142,19 +147,16 @@ Viết từ docs tham chiếu theo cấu trúc 8 phần đã chốt, map sang sc
 Theo `.context/project-config.md`: `npm run lint`, `npm run typecheck`, `npm run build`.
 (`test_command: null` — repo chưa có test framework.)
 
-## ⚠️ Còn câu hỏi chưa chốt — cần user trả lời trước khi builder viết BoxAI
+## ✅ Câu hỏi đã chốt — ảnh BoxAI tiếng Anh
 
-**Ảnh BoxAI chụp UI tiếng Anh** (đền Bảo Hà: `Intelligent Safety Alarm Management Platform`, `Group Stream`,
-`访客`), trong khi 20 ảnh CRM/LMS/DentGo/HRM đều tiếng Việt. Đưa lên trang `/solutions/ai/boxai` (vi) sẽ
-thấy ảnh tiếng Anh — khách Việt có thể thấy lạc giọng. Ba lựa chọn:
+**User chốt 2026-10-10: chọn (a) — giữ nguyên tiếng Anh.** Không thêm caption tiếng Việt, không redact,
+không đóng khung lại ảnh.
 
-- **(a) Giữ nguyên tiếng Anh** — đúng thực tế sản phẩm đang chạy, không sửa ảnh. Trang `/en` hợp hơn.
-- **(b) Đóng khung + thêm caption tiếng Việt** giải thích các thuật ngữ (`访客` = khách, `Task Stream` =
-  luồng nhiệm vụ…) — giữ ảnh gốc nhưng có nhãn tiếng Việt đi kèm.
-- **(c) Tạm không đưa ảnh BoxAI lên trang** — chỉ làm CRM/LMS/DentGo trong change này.
+Lý do: đúng thực tế sản phẩm đang chạy tại đền Bảo Hà; ảnh là bằng chứng sản phẩm vận hành nên không
+tự ý chỉnh sửa. Đánh đổi: trang `/vi/solutions/ai/boxai` sẽ hiện UI tiếng Anh giữa 20 ảnh tiếng Việt
+của các trang khác — user cần review khi xem trang.
 
-Chưa chốt → builder **không được tự chọn**. Mặc định an toàn: làm (a) và ghi rõ vào task để user review
-khi xem trang.
+Phương án (b) caption / (c) không đưa ảnh lên web **không dùng**.
 
 ## Ghi chú
 
