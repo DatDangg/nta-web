@@ -9,7 +9,6 @@ import { ScreenshotSection } from '@/components/solutions/ScreenshotSection';
 import { SolutionSections } from '@/components/solutions/SolutionSections';
 import { UseCases } from '@/components/solutions/UseCases';
 import { CTAForm } from '@/components/contact/CTAForm';
-import { Container } from '@/components/ui/Container';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { getAllSolutions, getSolutionBySlug } from '@/lib/content/solutions';
 import { enterpriseSlugs, getEnterpriseStaticParams, isEnterpriseSlug, isLocale } from '@/lib/content/slug';
@@ -69,8 +68,15 @@ export default async function EnterpriseSolutionDetailPage({ params }: { params:
       <PageHeader breadcrumbs={[{ label: t('title'), href: '/solutions/enterprise' }, { label: solution.title }]} description={solution.description} title={solution.title} />
       {/* Chỉ chia 2 cột khi THỰC SỰ có related — giữ cột phải rỗng sẽ làm nội dung lệch trái.
           KHÔNG bọc Container ở cấp này: nó sẽ giới hạn bề rộng của mọi <Section> bên trong,
-          khiến nền xen kẽ không tràn full-width (spec §1 L2). Container thuộc về từng Section. */}
-      <div className={hasRelated ? 'grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_18.75rem] xl:gap-16' : ''}>
+          khiến nền xen kẽ không tràn full-width (spec §1 L2). Container thuộc về từng Section.
+          Nhánh 2 cột chỉ cần padding cho cột sidebar (nội dung chính tự có Container trong Section). */}
+      <div
+        className={
+          hasRelated
+            ? 'grid grid-cols-1 gap-10 px-4 sm:px-6 lg:grid-cols-[minmax(0,1fr)_18.75rem] lg:px-8 xl:gap-16'
+            : ''
+        }
+      >
         <div className="min-w-0">
           <FeatureList features={solution.features} title={t('featuresTitle')} />
           <BenefitList benefits={solution.benefits} title={t('benefitsTitle')} />

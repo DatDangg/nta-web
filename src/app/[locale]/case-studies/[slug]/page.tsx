@@ -57,13 +57,12 @@ export default async function CaseStudyDetailPage({ params }: { params: Promise<
     <PageHeader breadcrumbs={[{ label: t('title'), href: '/case-studies' }, { label: study.title }]} description={study.result} title={study.title} />
     <script dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }} type="application/ld+json" />
     <div>
+      {/* Mỗi block tự giới hạn bề rộng trong <Container> của riêng mình. KHÔNG bọc wrapper 720px
+          ở cấp này: SolutionBlock có nền alt phải tràn full-width (spec §1 L2). */}
       <MetaBar caseStudy={study} labels={labels} />
-      {/* Nội dung chữ thuần 1 cột → giới hạn độ dài dòng; khối có ảnh (gallery) giữ nguyên. */}
-      <div className="mx-auto max-w-[720px]">
-        <ChallengeBlock content={study.challenge} title={t('challenge')} />
-        <SolutionBlock content={study.solution} title={t('solution')} />
-        <ResultBlock content={study.result} metrics={study.metrics ?? []} title={t('result')} />
-      </div>
+      <ChallengeBlock content={study.challenge} title={t('challenge')} />
+      <SolutionBlock content={study.solution} title={t('solution')} />
+      <ResultBlock content={study.result} metrics={study.metrics ?? []} title={t('result')} />
       <ImageGallery images={study.gallery} title={t('gallery')} />
     </div>
     <RelatedStudies categoryLabel={(item) => t(`categories.${item.category}`)} imageAlt={(item) => t('imageAlt', { title: item.title })} studies={related} title={t('related')} />

@@ -1,8 +1,8 @@
-import type { ElementType, ReactNode } from 'react';
+import type { ElementType, HTMLAttributes, ReactNode } from 'react';
 
-type ContainerSize = 'default' | 'prose' | 'narrow';
+export type ContainerSize = 'default' | 'prose' | 'narrow';
 
-type ContainerProps = {
+type ContainerProps = HTMLAttributes<HTMLElement> & {
   as?: ElementType;
   children: ReactNode;
   className?: string;
@@ -26,11 +26,21 @@ const sizeClass: Record<ContainerSize, string> = {
   narrow: 'max-w-[520px]',
 };
 
-export function Container({ as: Tag = 'div', children, className = '', size = 'default' }: ContainerProps) {
+export function Container({
+  as: Tag = 'div',
+  children,
+  className = '',
+  size = 'default',
+  ...containerProps
+}: ContainerProps) {
   // `sizeClass` đặt trước `className` để caller vẫn override được bằng class riêng.
   const classes = ['mx-auto', 'w-full', 'px-4', 'sm:px-6', 'lg:px-8', sizeClass[size], className]
     .filter(Boolean)
     .join(' ');
 
-  return <Tag className={classes}>{children}</Tag>;
+  return (
+    <Tag className={classes} {...containerProps}>
+      {children}
+    </Tag>
+  );
 }

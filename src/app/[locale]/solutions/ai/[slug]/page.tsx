@@ -54,15 +54,13 @@ export default async function AiSolutionDetailPage({ params }: { params: Promise
       <JsonLd data={createBreadcrumbJsonLd([{ name: locale === 'en' ? 'Home' : 'Trang chủ', path: locale === 'en' ? '/en' : '/' }, { name: t('title'), path: `${locale === 'en' ? '/en' : ''}/solutions/ai` }, { name: solution.title, path: `${locale === 'en' ? '/en' : ''}/solutions/ai/${slug}` }])} />
       <PageHeader breadcrumbs={[{ label: t('title'), href: '/solutions/ai' }, { label: solution.title }]} description={solution.description} title={t('detailTitle', { title: solution.title })} />
       <div>
-        <div className="min-w-0">
-          <FeatureList features={solution.features} title={t('featuresTitle')} />
-          {solution.benefits.length > 0 && <BenefitList benefits={solution.benefits} title={t('benefitsTitle')} />}
-          <SolutionSections sections={solution.sections ?? []} />
-          <SolutionHighlights highlights={solution.highlights ?? []} title={t('highlightsTitle')} />
-          <UseCases cases={solution.useCases ?? []} title={t('useCasesTitle')} />
-          <FaqList faq={solution.faq ?? []} title={t('faqTitle')} />
-          <ScreenshotSection imageAlt={solution.title} images={solution.screenshots ?? []} title={t('screenshotsTitle')} />
-        </div>
+        <FeatureList features={solution.features} title={t('featuresTitle')} />
+        {solution.benefits.length > 0 && <BenefitList benefits={solution.benefits} title={t('benefitsTitle')} />}
+        <SolutionSections sections={solution.sections ?? []} />
+        <SolutionHighlights highlights={solution.highlights ?? []} title={t('highlightsTitle')} />
+        <UseCases cases={solution.useCases ?? []} title={t('useCasesTitle')} />
+        <FaqList faq={solution.faq ?? []} title={t('faqTitle')} />
+        <ScreenshotSection imageAlt={solution.title} images={solution.screenshots ?? []} title={t('screenshotsTitle')} />
       </div>
       <CaseStudyLink caseStudy={relatedCase} linkLabel={t('caseStudyLink')} title={t('relatedCaseTitle')} />
       <CTAForm />
