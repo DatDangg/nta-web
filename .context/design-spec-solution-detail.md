@@ -78,14 +78,26 @@ export function Container({ as: Tag = 'div', size = 'default', children, classNa
 }
 ```
 
-| `size` | `max-width` | Dùng cho |
-|---|---|---|
-| `default` | `1280px` (`max-w-container`) | **mặc định — dùng cho mọi thứ có ảnh**: hero ảnh, zig-zag features, bento, section AI tối, CTA cuối, section chuẩn, header, footer |
-| `prose` | `720px` | **CHỈ khối chữ thuần**: FAQ, đoạn văn giới thiệu, câu trả lời dài. Không dùng khi section có ảnh |
-| `narrow` | `520px` | hero **text** (căn giữa) — phần text, không phải phần ảnh |
+| `size` | `max-width` | Căn giữa? | Dùng cho |
+|---|---|---|---|
+| `default` | `1280px` | ✅ `mx-auto` | **mặc định — mọi thứ có ảnh**: hero ảnh, zig-zag features, bento, section AI tối, CTA cuối, section chuẩn, header, footer |
+| `prose` | `720px` | ❌ **bám mép trái** | **CHỈ khối chữ thuần 1 cột**: FAQ, đoạn văn giới thiệu, block case study. KHÔNG dùng khi section có ảnh |
+| `narrow` | `520px` | ✅ `mx-auto` | hero **text** — phần text, không phải phần ảnh |
 
-**Quy tắc bất di bất dịch:** section nào có ảnh → `size="default"` (1280).
-720px chỉ dành cho nội dung đọc liên tục không có ảnh. Không bao giờ bọc ảnh trong 720px.
+**Quy tắc mép trái (sửa 2026-11 sau khi anh soi ảnh):**
+
+> `prose` **KHÔNG** căn giữa. Nó chỉ giới hạn `max-width`, vẫn **bám mép trái** của container 1280
+> và dùng **cùng padding ngang** (`px-4 sm:px-6 lg:px-8`).
+
+Lý do: nếu `prose` có `mx-auto`, khối 720px lùi vào giữa → lệch so với các section 1280 xung quanh
+và tiêu đề cùng cấp. Quan sát được ở 3 trang trước khi sửa:
+- Case study: "Thách thức" · "Giải pháp" lùi giữa, còn "Kết quả" ở mép trái → lệch ngang hàng
+- Trang giải pháp: "Câu hỏi thường gặp" căn giữa, lệch với các section khác
+- Về NTA: breadcrumb lùi giữa, lệch với "Năng lực"
+
+**Chỉ hero mới căn giữa** (`narrow` có `mx-auto`), vì hero là khối duy nhất được thiết kế
+theo trục giữa. Ngoại lệ có chủ đích: block "sứ mệnh" ở trang Về NTA (`MissionBlock`) căn giữa
+vì là câu tuyên ngôn — giữ nguyên, không phải lỗi.
 
 `Section` dùng lại `Container` → không còn hai chỗ hardcode lệch nhau.
 

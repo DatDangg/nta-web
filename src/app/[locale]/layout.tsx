@@ -47,7 +47,11 @@ export default async function LocaleLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale} className={inter.variable}>
+    // `suppressHydrationWarning`: script dưới đây thêm class `js` vào <html> TRƯỚC khi
+// React hydrate, nên client thấy <html class="js"> trong khi server render không có →
+// mismatch ("some attributes of the server rendered HTML didn't match"). Class `js` chỉ
+// dùng cho hiệu ứng reveal (globals.css: `html.js .reveal:not(.revealed)`), không ảnh hưởng nội dung.
+<html className={inter.variable} lang={locale} suppressHydrationWarning>
       <body>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([
           createOrganizationJsonLd(), createWebSiteJsonLd(locale),
