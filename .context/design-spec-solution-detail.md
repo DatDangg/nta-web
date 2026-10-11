@@ -111,22 +111,12 @@ với `h-auto w-full` thì ** méo/giãn**. Ngoài ra CLS dự đoán sai (ảnh
 
 **Sửa — `HomeImage` không hardcode tỉ lệ nữa:**
 
-1. Thêm prop `ratio?: number | string` (mặc định `'16/10'` cho ảnh nội dung, `'1/1'` cho avatar/logo).
-2. Bỏ `width`/`height` hardcode; dùng `fill` + `sizes` khi trong container có kích thước, hoặc truyền
-   `ratio` để wrapper giữ đúng tỉ lệ ảnh thật.
-3. **Nguồn tỉ lệ:** ảnh giải pháp lấy từ `docs/screenshots-mapping.md` (đã đo sẵn). Không đo lại trong code.
-4. Ảnh v2 có **khung cửa sổ macOS vẽ sẵn** (3 chấm + viền + thanh tiêu đề) → **KHÔNG** đặt khung tỉ lệ cứng
-   và **KHÔNG** dùng `object-cover`. Cắt đáy mất viền dưới; cắt 2 bên mất 3 chấm. Dùng `max-w`/`max-h`
-   để co cả 2 chiều, giữ nguyên tỉ lệ — chi tiết ở §3.1.
-
-Quy tắc dùng `ratio`:
-
-| Ngữ cảnh | `ratio` | Lý do |
-|---|---|---|
-| Hero giải pháp | `16/10` + `object-top` | ảnh v2 cao, cắt đuôi giữ phần đầu (tiêu đề app) |
-| Feature zig-zag | `4/3` + `object-top` | ảnh vừa khung cột |
-| Card giải pháp (grid) | `16/10` + `object-cover` | ảnh cũ SVG vẫn dùng |
-| Team / partner | `1/1` | ảnh vuông |
+1. Bỏ `width`/`height` hardcode trong `HomeImage`.
+2. **Nguồn tỉ lệ:** ảnh giải pháp lấy từ `docs/screenshots-mapping.md` (đã đo sẵn). Không đo lại trong code.
+3. Cách hiển thị ảnh giải pháp (hero + zig-zag) theo **§3.1** — chia 2 trường hợp theo tỉ lệ.
+   **KHÔNG** dùng `object-cover`, **KHÔNG** đặt khung tỉ lệ cứng (ảnh v2 có khung cửa sổ macOS vẽ sẵn).
+4. Ảnh **không** phải ảnh v2 (ảnh cũ, SVG, avatar, logo) thì giữ cách cũ: khung cố định + `object-cover`,
+   vì không có khung macOS để phá. Ngưỡng phân biệt: file nằm trong `public/images/solutions/v2/` → theo §3.1.
 
 ---
 
@@ -238,46 +228,29 @@ ngang nhất. Cả 2 sản phẩm xung đột đều chênh < 0.3 → **dùng `0
 
 **Nguyên tắc:** **không cắt ảnh v2 theo bất kỳ hướng nào.** Giữ nguyên tỉ lệ gốc.
 
-**Cơ chế — để trình duyệt tự co, không ép khung:**
+**Cơ chế — thu nhỏ giữ tỉ lệ, KHÔNG cắt. Chia 2 trường hợp theo tỉ lệ ảnh:**
 
-```tsx
-// <img> trần, không khung, không object-fit cắt
-<img
-  className="block h-auto w-auto max-w-full max-h-[640px] rounded-lg border border-border shadow-lg"
-  src={...}
-/>
-```
+Cơ chế cũ (`max-h` trần, ảnh co lại) có 2 lỗi: ảnh dọc ở `max-h-420` chỉ còn rộng ~310px (không đọc được),
+và `fade` trên ảnh **đã không bị cắt** là vô lý (xoá viền dưới khung khi ảnh vốn đã vừa).
 
-| Thuộc tính | Vai trò |
-|---|---|
-| `w-auto h-auto` | giữ **tỉ lệ gốc**, trình duyệt tự thu nhỏ |
-| `max-w-full` | không tràn ngang trên mobile |
-| `max-h-[640px]` (hero) | chặn ảnh quá cao — **co cả 2 chiều**, không méo |
-| `max-h-[420px]` (zig-zag) | tương tự, nhỏ hơn |
-| `rounded-lg border border-border shadow-lg` | bo góc + viền + đổ bóng bên ngoài ảnh, **không cắt ảnh** |
-| `mx-auto` | căn giữa khi ảnh hẹp hơn container |
+| | **Trường hợp A — ảnh ngang, tỉ lệ ≥ 1.0** | **Trường hợp B — ảnh dọc, tỉ lệ < 1.0** |
+|---|---|---|
+| Ví dụ | CRM/LMS/DentGo `01-tong-quan` (1.06–1.36) | HRM `01` (1.06) · `06-nghi-phep` (0.93) · `07` (0.996) · `08` (0.735) |
+| Ảnh | `h-auto w-auto max-w-full max-h-[420px] mx-auto` | `w-full h-auto` — **rộng đúng bằng cột** |
+| Khung bọc | không cần | `max-h-[420px] overflow-hidden rounded-lg` |
+| Fade đáy | **KHÔNG** (ảnh không bị cắt → fade là vô lý) | `.shot-fade-bottom` |
+| Vì sao | Không có phần bị cắt nên viền dưới khung hiện trọn vẹn | Ảnh cao hơn khung → phần đáy bị cắt thật, fade cho mượt |
 
-Vì `width` và `height` đều `auto`, trình duyệt áp **cả hai** ràng buộc cùng lúc và luôn giữ tỉ lệ.
-Không cần `aspect-ratio`, không cần `object-fit`.
+**Ngưỡng KHÔNG hardcode theo tên ảnh.** Tỉ lệ lấy từ cột đã đo trong `docs/screenshots-mapping.md`:
+≥ 1.0 → trường hợp A · < 1.0 → trường hợp B. Lưu vào data (`feature.ratio`) khi gắn ảnh ở T4.
 
-**Fade đáy bằng mask (thay cho cắt cứng):**
+**Hero** (áp cùng 2 trường hợp, `max-h` lớn hơn):
 
-Khi ảnh cao hơn `max-height`, phần đáy bị co lại nhưng vẫn **bị cắt cứng** → mất viền dưới.
-Thêm mask làm mờ dần để phần bị cắt không "đứt" đột ngột:
-
-```css
-.shot-fade-bottom {
-  -webkit-mask-image: linear-gradient(to bottom, #000 88%, transparent 100%);
-  mask-image: linear-gradient(to bottom, #000 88%, transparent 100%);
-}
-```
-
-| Thuộc tính | Giá trị |
-|---|---|
-| Áp khi nào | ảnh **cao hơn** `max-height` (tức là sẽ bị cắt đáy) |
-| Vùng fade | 12% chiều cao hiển thị cuối cùng |
-| Không áp khi | ảnh vừa khít → viền dưới cửa sổ hiện trọn vẹn |
-| Prefers-reduced-motion | không liên quan (mask tĩnh) |
+| | Ảnh ngang ≥ 1.0 | Ảnh dọc < 1.0 |
+|---|---|---|
+| Ảnh | `h-auto w-auto max-w-full max-h-[640px] mx-auto` | `w-full h-auto`, khung `max-h-[640px] overflow-hidden rounded-lg` |
+| Hero ảnh gần vuông (HRM 1.06) | `max-w-[960px]` căn giữa + `mx-auto` | `max-w-[960px]` căn giữa |
+| Fade | **KHÔNG** | `.shot-fade-bottom` |
 
 **Hero ảnh gần vuông (HRM 1.06):**
 
@@ -291,9 +264,8 @@ Thêm mask làm mờ dần để phần bị cắt không "đứt" đột ngột
 → Hero ảnh HRM căn giữa, nhỏ hơn 2 trang kia nhưng **không méo, không mất khung**.
 Đổi `max-w` theo tỉ lệ trong `shots`/`mdx`, không hardcode theo tên sản phẩm.
 
-**Zig-zag:** bỏ `aspect-[4/3]` cố định. Cột ảnh dùng cùng cơ chế: `w-auto h-auto max-w-full max-h-[420px]`
-+ `mx-auto`. Ảnh thấp hơn 420 thì hiện nguyên kích thước → **các khối không còn bị ép vuông**,
-chênh lệch chiều cao giữa các feature giảm tự nhiên. Ảnh nào cao hơn thì fade đáy.
+**Zig-zag:** bỏ `aspect-[4/3]` cố định. Cột ảnh dùng đúng 2 trường hợp trên với `max-h-[420px]`
+(mobile `max-h-[320px]`). Ảnh nào cao hơn thì fade đáy.
 
 **Về `HomeImage` (L4):** bỏ hẳn khái niệm `ratio` cứng. `HomeImage` nhận `maxH`/`maxW` (chuỗi class
 Tailwind, mặc định theo ngữ cảnh) và **không** set `width`/`height` — dùng `next/image` không có
@@ -454,9 +426,9 @@ Grid bento **không đều** (tránh kiểu "3 card icon + tiêu đề + chữ" 
 ```
 ┌───────────────────────┬─────────────────┐
 │                       │  Thông tư      │
-│   TT 27/2018          │  27/2018       │
+│   TT 27/2020          │  27/2020       │
 │   (ô lớn, 2/3 rộng)   ├─────────────────┤
-│   mô tả               │  TT 70/2025     │
+│   mô tả               │  TT 70/2026     │
 │                       │  (ô nhỏ)       │
 │                       ├─────────────────┤
 │                       │  Liên thông     │
@@ -512,11 +484,10 @@ Grid bento **không đều** (tránh kiểu "3 card icon + tiêu đề + chữ" 
 | Container | `<Container>` **default 1280** | section có ảnh → KHÔNG dùng `prose` |
 | Padding | `py-section` | full-width |
 
-**Nội dung AI (4 gợi ý, dạng danh sách có nhãn):**
+**Nội dung AI (3 gợi ý, dạng danh sách có nhãn) — xem bảng §11.4:**
 1. Gợi ý câu nhận xét học sinh ngay trong màn hình đánh giá
 2. Tóm tắt biên bản họp
 3. Soạn thông báo
-4. Cảnh báo sớm (kèm nhật ký sử dụng AI)
 
 ### 5.4 3 thẻ "Dành cho ai"
 
@@ -568,101 +539,12 @@ Nhãn phải là câu hỏi đầy đủ. Mũi tên `aria-hidden="true"` (thông
 
 ---
 
-## Phần 6 — Copy LMS VI/EN (anh duyệt riêng)
+## Phần 6 — Copy LMS VI/EN
 
-Viết lại ngắn gọn kiểu Apple: **ngắn hơn hiện tại ~40%**, không slogan, giữ nguyên thông tin pháp lý.
-
-### 6.1 Nguyên tắc viết
-
-| Nên | Không nên |
-|---|---|
-| Câu 1 ý, 12–22 từ | Câu dài 2 mệnh đề nối bằng dấu phẩy |
-| Động từ mạnh ở đầu câu | "Giải pháp toàn diện", "đột phá", "seamless" |
-| Con số cụ thể khi có | "hiệu quả", "linh hoạt", "mạnh mẽ" |
-| Nói đúng giới hạn nếu có | Giấu giới hạn rồi nói "đáp ứng mọi nhu cầu" |
-
-### 6.2 Hero
-
-**VI**
-
-- H1: `Quản trị trường học (LMS)`
-- Mô tả: `Một hệ thống cho toàn bộ vận hành trường: chương trình, thời khoá biểu, đánh giá, học bạ số và báo cáo điều hành.`
-- CTA 1: `Đăng ký demo`
-- CTA 2: `Xem tính năng ›`
-
-**EN**
-
-- H1: `School Management (LMS)`
-- Description: `One system for school operations: curriculum, timetables, assessment, digital records and executive reporting.`
-- CTA 1: `Request a demo`
-- CTA 2: `See features ›`
-
-### 6.3 4 feature
-
-**F1 — Quản trị đa trường & bảng điều khiển**
-
-- VI: `Một tài khoản quản trị nhiều trường. Xem chỉ số tổng hợp cấp liên trường, rồi bấm vào bảng điều khiển của từng trường: học sinh, người dùng hoạt động, lớp học và tiến độ công việc.`
-- EN: `Run multiple schools from one account. Read roll-up figures across schools, then drill into each school's dashboard: students, active users, classes and work progress.`
-
-**F2 — Hồ sơ học sinh, phụ huynh và nhân sự**
-
-- VI: `Danh sách học sinh lọc theo khối, lớp, trạng thái. Mỗi hồ sơ gắn với phụ huynh và giáo viên chủ nhiệm. Biến động học sinh và nhân sự quản lý trong cùng hệ thống.`
-- EN: `Filter students by grade, class and status. Every profile links to a parent and a homeroom teacher. Enrolment and staff changes are managed in the same system.`
-
-**F3 — Đánh giá học sinh theo quy định, có AI hỗ trợ**
-
-- VI: `Nghiệp vụ đánh giá đi đúng từng bước: nhận xét thường xuyên, đánh giá định kỳ, năng lực và phẩm chất, tổng hợp và chốt. Trợ lý AI gợi ý câu nhận xét ngay trong màn hình.`
-- EN: `Assessment follows each required step: regular comments, periodic grading, competences and conduct, then final consolidation. An AI assistant suggests comment wording inside the screen.`
-
-**F4 — Điều hành giảng dạy: thời khoá biểu, giáo án, học bạ số**
-
-- VI: `Xếp thời khoá biểu bằng kéo–thả, xuất Excel hoặc PDF. Giáo án điện tử đi theo vòng đời soạn–duyệt, gắn với bài học. Học bạ số có mốc tạo lập, chu trình ký, phát hành và nhật ký truy cập.`
-- EN: `Build timetables by drag and drop, export to Excel or PDF. Digital lesson plans follow a draft–approve cycle tied to each lesson. Digital records carry creation deadlines, a signing chain, issuance and an access log.`
-
-### 6.4 Bento pháp quy
-
-| Ô | VI | EN |
-|---|---|---|
-| **Tiêu đề section** | `Bám sát văn bản pháp quy` | `Built on the actual regulations` |
-| **TT 27/2018** (ô lớn) | `Thông tư 27/2018 — Đánh giá học sinh` · Mô tả: `Màn hình đánh giá chia theo đúng bốn bước nghiệp vụ: nhận xét thường xuyên, đánh giá định kỳ, năng lực và phẩm chất, tổng hợp và chốt.` | `Circular 27/2018 — Student assessment` · `The assessment screen is split into the four required stages: regular comments, periodic grading, competences and conduct, and final consolidation.` |
-| **TT 70/2025** (ô nhỏ) | `Thông tư 70/2025 (Điều 7.4) — Học bạ số` · `Hạn tạo lập, ký giáo viên chủ nhiệm và ban giám hiệu, phát hành, xác thực.` | `Circular 70/2025 (Article 7.4) — Digital records` · `Creation deadlines, homeroom teacher and principal signatures, issuance and verification.` |
-| **Liên thông** (ô nhỏ) | `Liên thông CSDL ngành` · `Mục quản trị riêng để đẩy dữ liệu trường lên cơ sở dữ liệu ngành.` | `Sector data exchange` · `A dedicated admin area pushes school data to the sector database.` |
-
-### 6.5 Section AI (nền tối)
-
-| | VI | EN |
-|---|---|---|
-| Tiêu đề | `Trợ lý AI trong công việc hằng ngày` | `AI in the daily workflow` |
-| Mô tả | `AI chạy trong nghiệp vụ, không phải một màn hình riêng. Mọi thao tác đều ghi nhật ký để tra lại.` | `AI runs inside the workflow, not as a separate screen. Every action is logged for later review.` |
-| Gợi ý 1 | `Gợi ý câu nhận xét học sinh ngay trong màn hình đánh giá` | `Suggests student comment wording inside the assessment screen` |
-| Gợi ý 2 | `Tóm tắt biên bản họp` | `Summarises meeting minutes` |
-| Gợi ý 3 | `Soạn thông báo` | `Drafts announcements` |
-| Gợi ý 4 | `Cảnh báo sớm` | `Early warnings` |
-
-### 6.6 3 thẻ "Dành cho ai"
-
-| Thẻ | VI | EN |
-|---|---|---|
-| 1 | `Trường tiểu học` · `Muốn số hoá toàn bộ vận hành trong một hệ thống thay cho nhiều phần mềm rời.` | `Primary schools` · `Want one system across operations instead of several disconnected tools.` |
-| 2 | `Đơn vị quản lý nhiều trường` · `Cần một tài khoản xem tổng hợp liên trường rồi đi vào từng cơ sở.` | `Multi-school operators` · `Need one account to see a cross-school view and drill into each campus.` |
-| 3 | `Ban giám hiệu` · `Cần báo cáo điều hành nhanh thay cho việc gom số liệu thủ công.` | `School leadership` · `Need executive reporting without compiling figures by hand.` |
-
-### 6.7 FAQ (4 câu, trả lời ngắn)
-
-| # | VI | EN |
-|---|---|---|
-| 1 | **Khác gì LMS học trực tuyến?** — `Đây là hệ thống quản trị trường học: chương trình, thời khoá biểu, đánh giá, học bạ, hành chính và báo cáo. Không phải nơi làm bài tập hay thi online.` | **How is this different from an online course platform?** — `This is a school operations system: curriculum, timetables, assessment, student records, administration and reporting. It is not an online quiz or assignment tool.` |
-| 2 | **Dùng được cho nhiều trường không?** — `Có. Một tài khoản quản trị có thể quản lý nhiều trường và xem tổng hợp liên trường.` | **Can it run multiple schools?** — `Yes. A single administrator account can manage several schools and view cross-school totals.` |
-| 3 | **Đánh giá và học bạ có bám quy định không?** — `Có. Đánh giá học sinh theo Thông tư 27/2018; học bạ số theo Thông tư 70/2025, Điều 7.4.` | **Do assessment and student records follow the regulations?** — `Yes. Student assessment follows Circular 27/2018; digital student records follow Circular 70/2025, Article 7.4.` |
-| 4 | **Trợ lý AI làm được gì?** — `Gợi ý câu nhận xét trong màn hình đánh giá, tóm tắt biên bản, soạn thông báo và cảnh báo sớm. Có nhật ký để tra lại lịch sử sử dụng.` | **What does the AI assistant do?** — `Suggests comment wording in the assessment screen, summarises minutes, drafts announcements and raises early warnings. Usage is logged for review.` |
-
-### 6.8 CTA cuối
-
-| | VI | EN |
-|---|---|---|
-| Tiêu đề | `Xem LMS trên dữ liệu thật của trường bạn` | `See the LMS running on your own school data` |
-| Mô tả | `Chúng tôi dựng bản demo với chương trình và lịch học mẫu để bạn xem đúng giao diện sẽ dùng hằng ngày.` | `We set up a demo with a sample curriculum and timetable so you can see the interface you will use daily.` |
-| Nút | `Đăng ký demo` | `Request a demo` |
+> ⚠ **ĐÃ THAY BẰNG PHẦN 11 — KHÔNG DÙNG PHẦN NÀY.**
+>
+> Bản copy trong phần này là **bản nháp đầu tiên**, đã bị thay toàn bộ sau khi user duyệt lại.
+> Nguồn copy duy nhất cho builder là **Phần 11**. Nếu hai phần mâu thuẫn → **Phần 11 thắng**.
 
 ---
 
@@ -742,7 +624,7 @@ Dưới **mọi ảnh HRM**, hiển thị chú thích:
 | R4 | Ảnh v2 của CRM/LMS vẫn **cao** (tới 3524px) | **Đã xử lý**: `max-h-[640px]` co cả 2 chiều + `.shot-fade-bottom` mờ dần đáy, **không cắt cứng**. Nếu vẫn thấy nặng → chụp lại riêng LMS ở `maxHeight` như DentGo |
 | R5 | Bento dùng `grid-rows-2` cố định — tràn khi nội dung dài hơn ô | Ô dùng `content-start` + chiều cao tự; không set `h-full` cứng |
 | R6 | Accordion `<details>` không có animation đóng/mở (tránh phải JS) | Chấp nhận — WebKit đã animate sẵn; không thêm JS cho hiệu ứng này |
-| R7 | Hero khung `16/10` rộng hơn mọi ảnh v2 → **mọi hero đều bị cắt** đáy | `object-top` giữ phần có thông tin. Khung `4/3` cắt ít hơn — **chờ anh chốt** |
+| R7 | ~~Hero khung `16/10` rộng hơn mọi ảnh v2~~ | **✅ ĐÃ XỬ LÝ (2026-11):** bỏ khung cố định hoàn toàn. Dùng cơ chế 2 trường hợp theo tỉ lệ ở §3.1 — không cắt ảnh |
 
 ### 8.1 Quy tắc migrate `features` (đã chốt)
 
@@ -786,7 +668,7 @@ Ví dụ tách ở dấu `—`:
 | Zig-zag giới hạn chiều cao ảnh để các khối không chênh nhau quá nhiều | ✅ §4.2 |
 | Contrast §5.3 đã tính số (7.4:1), không dùng `--color-primary` trên nền tối | ✅ §2.1 |
 | Mọi ảnh có alt riêng VI/EN theo mapping | ✅ §7 |
-| Copy LMS VI/EN viết lại, giữ đúng TT 27/2018 + TT 70/2025 Đ7.4 | ✅ §6 |
+| Copy LMS VI/EN viết lại, giữ đúng số hiệu thông tư đã chốt (TT 27/2020 + TT 70/2026) | ✅ §11 |
 | Hero có 2 CTA, chỉ 1 intent mỗi CTA | ✅ §3 |
 | Touch target ≥ 44px (CTA lg = min-h-12, accordion min-h-11) | ✅ |
 | `prefers-reduced-motion` đã có global | ✅ không thêm motion mới |
@@ -805,15 +687,16 @@ Ví dụ tách ở dấu `—`:
 | ✅ | 4 lỗi bố cục: sửa ở tầng template, áp mọi trang |
 | ✅ | `prose` 720 **chỉ** cho khối chữ thuần; mọi section có ảnh → `default` 1280, kể cả khi không có relatedSolutions |
 | ✅ | Hero: ảnh đại diện sản phẩm, tỉ lệ ngang nhất trong nhóm đại diện |
-| ✅ | **Ảnh v2 không bao giờ bị cắt** (cả hero lẫn zig-zag): `max-w`/`max-h` co cả 2 chiều + `.shot-fade-bottom` mờ dần đáy. Hero ảnh gần vuông (HRM) giới hạn `max-w-[960px]` |
+| ✅ | **Ảnh v2 không bao giờ bị cắt** (cả hero lẫn zig-zag) — 2 trường hợp theo tỉ lệ ở §3.1: ≥ 1.0 thu nhỏ giữ tỉ lệ không fade; < 1.0 bọc khung `max-h` + `overflow-hidden` + fade đáy. Hero ảnh gần vuông (HRM) giới hạn `max-w-[960px]` |
 | ✅ | **R1: migrate cả 8 file `.mdx` trong 1 lần.** CRM/HRM/DentGo chỉ tách `title` + `description` (ở `—` hoặc `:`), **giữ nguyên câu chữ**. Sau migrate: build + kiểm tra 4 trang render đủ tính năng như trước |
 | ✅ | **§5.3 dùng `04-danh-gia-ai-crop.png`** (ảnh đầy đủ đã dùng ở feature 3) |
-| ✅ | Copy LMS dùng bản viết lại §6 (không theo quy tắc tách-chuỗi) |
+| ✅ | Copy LMS dùng **Phần 11** (không theo quy tắc tách-chuỗi) |
+| ✅ | **Số hiệu thông tư** (§11.3): TT **27/2020** + TT **70/2026**, bỏ "Điều 7.4" |
+| ✅ | **Bỏ gợi ý "Cảnh báo sớm"** (§11.4) — section AI còn 3 gợi ý |
 
-### 10.2 Còn 2 điểm chờ anh (chặn T5, không chặn T1–T4)
+### 10.2 Không còn blocker
 
-1. **Số hiệu thông tư** (§11.3) — 27/2018 hay 27/2020. T1–T4 không phụ thuộc.
-2. **Chi tiết "Cảnh báo sớm"** (§11.4) — cảnh báo về cái gì. Tạm dùng nhãn chung, đúng nghĩa, cập nhật sau.
+Cả 2 điểm chờ đã chốt (2026-11). **T1–T5 không còn phụ thuộc gì.**
 
 > `aspect-[16/10]` / `aspect-[4/3]` đã bị **loại bỏ hoàn toàn** — xem §3.1.
 
@@ -830,12 +713,6 @@ Ví dụ tách ở dấu `—`:
 **Verify chung:** lint · typecheck · build · 8 route SSG · contrast axe trên section ink ·
 ảnh không méo · grep `max-w-[1280px]` = 0 · 4 trang render đủ tính năng.
 
----
-
-**Chờ anh duyệt.** Ba điểm cần anh chốt trước khi tôi chuyển sang code:
-1. **§6 copy LMS** — anh duyệt riêng (VI + EN).
-2. **R1** — đồng ý migrate `features` toàn bộ 8 file `.mdx` trong 1 lần?
-3. **§5.3 ảnh AI** — dùng crop `04-danh-gia-ai-crop.png` (khung "Trợ lý AI") hay dùng ảnh đầy đủ `04-danh-gia-ai.png`?
 ---
 
 ## Phần 11 — Copy LMS VI/EN (ĐÃ DUYỆT 2026-11)
@@ -875,19 +752,30 @@ Mỗi mô tả là **hai câu ngắn**, không lặp tiêu đề.
 
 **Tiêu đề 4 tính năng** giữ nguyên như bản ở §5.1 (khối 1–4).
 
-### 11.3 Bento pháp quy — CHỜ XÁC NHẬN SỐ HIỆU
+### 11.3 Bento pháp quy — số hiệu đã chốt
 
-> **BLOCKER:** anh đang kiểm tra lại số hiệu (27/2018 hay 27/2020). Tạm để placeholder.
-> **Builder KHÔNG đưa placeholder này vào code** — phải chờ anh chốt rồi mới viết vào `lms.mdx`.
-
-| Ô | VI (chờ chốt) | EN (chờ chốt) |
+| Ô | VI | EN |
 |---|---|---|
 | Tiêu đề section | Bám sát văn bản pháp quy | Built on the actual regulations |
-| Ô lớn | **[SỐ HIỆU CHƯA CHỐT] — Đánh giá học sinh**<br>Màn hình đánh giá chia theo đúng bốn bước nghiệp vụ: nhận xét thường xuyên, đánh giá địết kỳ, năng lực và phẩm chất, tổng hợp và chốt. | **[CIRCULAR NUMBER PENDING] — Student assessment**<br>The assessment screen is split into the four required stages: regular comments, periodic grading, competences and conduct, and final consolidation. |
-| Ô nhỏ 1 | **Thông tư 70/2025 (Điều 7.4) — Học bạ số**<br>Hạn tạo lập, ký giáo viên chủ nhiệm và ban giám hiệu, phát hành, xác thực. | **Circular 70/2025 (Article 7.4) — Digital records**<br>Creation deadlines, homeroom teacher and principal signatures, issuance and verification. |
+| Ô lớn | **Thông tư 27/2020 — Đánh giá học sinh**<br>Màn hình đánh giá chia theo đúng bốn bước nghiệp vụ: nhận xét thường xuyên, đánh giá địết kỳ, năng lực và phẩm chất, tổng hợp và chốt. | **Circular 27/2020 — Student assessment**<br>The assessment screen is split into the four required stages: regular comments, periodic grading, competences and conduct, and final consolidation. |
+| Ô nhỏ 1 | **Thông tư 70/2026 — Học bạ số**<br>Hạn tạo lập, ký giáo viên chủ nhiệm và ban giám hiệu, phát hành, xác thực. | **Circular 70/2026 — Digital records**<br>Creation deadlines, homeroom teacher and principal signatures, issuance and verification. |
 | Ô nhỏ 2 | **Liên thông CSDL ngành**<br>Mục quản trị riêng để đẩy dữ liệu trường lên cơ sở dữ liệu ngành. | **Sector data exchange**<br>A dedicated admin area pushes school data to the sector database. |
 
-Nội dung mô tả trong ô đã duyệt, chỉ **số hiệu** chờ xác nhận.
+**Số hiệu đã chốt (2026-11, user đã tra):**
+
+| Văn bản | Số hiệu đúng | Ghi chú |
+|---|---|---|
+| Đánh giá học sinh | **Thông tư 27/2020/TT-BGDĐT** | KHÔNG phải 27/2018 |
+| Học bạ số | **Thông tư 70/2026/TT-BGDĐT** | ban hành 22/8/2026, hiệu lực 08/10/2026. KHÔNG phải 70/2025 |
+
+**BỎ "Điều 7.4" ở mọi chỗ** — copy chỉ ghi số hiệu thông tư, không ghi điều khoản.
+
+> ⚠ **Kiểm tra dữ liệu ảnh (2026-11):** Thông tư 27/2020 quy định **4 mức đánh giá**
+> (Hoàn thành xuất sắc · Hoàn thành tốt · Hoàn thành · Chưa hoàn thành).
+> `scripts/screenshots/fixtures/lms.json` chỉ có **3 mức** — thiếu "Hoàn thành xuất sắc".
+> Ảnh `04-danh-gia-ai.png` chụp tab "Nhận xét thường xuyên" nên **không lộ mức đánh giá** → ảnh không sai.
+> Copy §11.2 nói "đi đúng từng bước theo quy định" (4 bước nghiệp vụ, không nói 4 mức) → vẫn đúng.
+> **Không cần sửa gì.** Ghi nhận: nếu sau này chụp tab "Đánh giá định kỳ" thì phải bổ sung mức còn thiếu vào fixture.
 
 ### 11.4 Section AI (nền tối)
 
@@ -898,11 +786,10 @@ Nội dung mô tả trong ô đã duyệt, chỉ **số hiệu** chờ xác nh�
 | Gợi ý 1 | Gợi ý câu nhận xét học sinh ngay trong màn hình đánh giá | Suggests student comment wording inside the assessment screen |
 | Gợi ý 2 | Tóm tắt biên bản họp | Summarises meeting minutes |
 | Gợi ý 3 | Soạn thông báo | Drafts announcements |
-| Gợi ý 4 | **Cảnh báo sớm — chờ anh điền cụ thể** | **Early warnings — pending detail** |
+| Gợi ý 4 | *(không dùng)* | *(không dùng)* |
 
-> **BLOCKER nhỏ:** "Cảnh báo sớm" cần anh điền cụ thể (nợ học phí quá hạn, học sinh chuyển trường,
-> giáo viên nghỉ dài ngày, lớp quá tải…). Builder tạm dùng nhãn chung `Cảnh báo sớm` / `Early warnings`
-> — đủ đúng nghĩa, không sai, cập nhật sau được.
+> **Đã chốt (2026-11): user chọn BỎ gợi ý "Cảnh báo sớm"** vì nội dung mơ hồ, dễ bịa.
+> Section AI chỉ còn **3 gợi ý**. Bảo đảm **không** nhắc "cảnh báo sớm" ở bất kỳ đâu trong layout LMS.
 
 ### 11.5 Ba thẻ "Dành cho ai"
 
@@ -918,17 +805,17 @@ Nội dung mô tả trong ô đã duyệt, chỉ **số hiệu** chờ xác nh�
 |---|---|---|
 | 1 | Khác gì LMS học trực tuyến? | Đây là hệ thống quản trị trường học: chương trình, thời khoá biểu, đánh giá, học bạ, hành chính và báo cáo. Không phải nơi làm bài tập hay thi online. |
 | 2 | Dùng được cho nhiều trường không? | Có. Một tài khoản quản trị có thể quản lý nhiều trường và xem tổng hợp liên trường. |
-| 3 | Đánh giá và học bạ có bám quy định không? | Có. Nghiệp vụ đánh giá và học bạ số được thiết kế theo đúng thông tư của ngành giáo dục. |
-| 4 | Trợ lý AI làm được gì? | Gợi ý câu nhận xét trong màn hình đánh giá, tóm tắt biên bản, soạn thông báo và cảnh báo sớm. Có nhật ký để tra lại lịch sử sử dụng. |
+| 3 | Đánh giá và học bạ có bám quy định không? | Có. Đánh giá học sinh theo Thông tư 27/2020; học bạ số theo Thông tư 70/2026. |
+| 4 | Trợ lý AI làm được gì? | Gợi ý câu nhận xét trong màn hình đánh giá, tóm tắt biên bản và soạn thông báo. Có nhật ký để tra lại lịch sử sử dụng. |
 
 | # | EN — hỏi | EN — đáp |
 |---|---|---|
 | 1 | How is this different from an online course platform? | This is a school operations system: curriculum, timetables, assessment, student records, administration and reporting. It is not an online quiz or assignment tool. |
 | 2 | Can it run multiple schools? | Yes. A single administrator account can manage several schools and view cross-school totals. |
-| 3 | Do assessment and student records follow the regulations? | Yes. Assessment and digital records are designed against the education sector's circulars. |
-| 4 | What does the AI assistant do? | Suggests comment wording in the assessment screen, summarises minutes, drafts announcements and raises early warnings. Usage is logged for review. |
+| 3 | Do assessment and student records follow the regulations? | Yes. Student assessment follows Circular 27/2020; digital student records follow Circular 70/2026. |
+| 4 | What does the AI assistant do? | Suggests comment wording in the assessment screen, summarises minutes and drafts announcements. Usage is logged for review. |
 
-> FAQ 3 VI/EN đã bỏ số hiệu vì chờ xác nhận — dùng cách diễn đạt chung, vẫn đúng nghĩa.
+> FAQ 3 đã điền số hiệu sau khi user tra xác nhận (2026-11).
 
 ### 11.7 CTA cuối
 
@@ -941,6 +828,7 @@ Nội dung mô tả trong ô đã duyệt, chỉ **số hiệu** chờ xác nh�
 ### 11.8 Ghi chú
 
 - Không dùng em-dash trong copy mới, không eyebrow, không số thứ tự section.
-- Bốn tính năng dùng **bản rút gọn đã duyệt** (hai câu ngắn), không phải bản dài ở §6.
+- Bốn tính năng dùng **bản rút gọn đã duyệt** (hai câu ngắn) — không dùng bản dài (đã xoá cùng Phần 6).
 - EN H1 đổi thành **School Management (LMS)**.
-- Hai chỗ đang chờ anh: số hiệu thông tư (§11.3) và chi tiết "cảnh báo sớm" (§11.4).
+- **Không còn placeholder nào.** Số hiệu thông tư và danh sách gợi ý AI đã chốt xong.
+- Section AI chỉ có **3 gợi ý** — không nhắc "cảnh báo sớm" ở bất kỳ đâu.

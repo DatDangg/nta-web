@@ -108,7 +108,7 @@ Spec §5. **HÀNH ĐỘNG SAU KHI USER CHỐT 2 ĐIỂM BLOCKER (xem §3).**
 
 | # | Nội dung | Trạng |
 |---|---|---|
-| B1 | **Số hiệu thông tư đánh giá** — 27/2018 hay 27/2020 | User đang kiểm tra. Bento ô lớn + FAQ 3 chưa viết số hiệu. **Không đoán, không điền placeholder vào code.** |
+| B1 | ~~Số hiệu thông tư đánh giá~~ **ĐÃ CHỐT** | TT **27/2020** (không phải 27/2018) · học bạ số TT **70/2026** ban hành 22/8/2026, hiệu lực 08/10/2026 (không phải 70/2025) · **bỏ "Điều 7.4"** ở mọi chỗ |
 | B2 | **Chi tiết "Cảnh báo sớm"** — cảnh báo về cái gì | Tạm dùng nhãn chung `Cảnh báo sớm` / `Early warnings` (đúng nghĩa, không sai). Cập nhật sau được. |
 
 T1–T4 **không** phụ thuộc 2 blocker này → có thể chạy trước.

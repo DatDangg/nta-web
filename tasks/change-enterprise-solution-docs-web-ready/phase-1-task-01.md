@@ -136,7 +136,7 @@ Nguồn nội dung: README cũ §2 (danh bạ/quy trình/tổ chức/tra cứu) 
 3. **Đánh giá học sinh theo TT27** (kèm AI gợi ý nhận xét) → `04-danh-gia-tt27.png`
 4. **Điều hành giảng dạy: thời khoá biểu · giáo án · học bạ số** → `05-thoi-khoa-bieu.png`, `06-giao-an-dien-tu.png`, `07-hoc-ba-so.png`
 
-§5: TT27/2018 · TT70/2025 (Đ7.4) · Liên thông CSDL ngành.
+§5: TT27/2020 · TT70/2026 · Liên thông CSDL ngành.
 
 ### DentGo Smile — 5 ảnh
 1. **Tổng quan ca làm đa chi nhánh** → `01-tong-quan.png`

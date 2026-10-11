@@ -44,8 +44,8 @@ Khác với phần mềm quản trị trường thông thường, các quy đị
 
 | Văn bản / kết nối | Áp dụng ở đâu trong sản phẩm |
 |---|---|
-| **Thông tư 27/2018** | Màn hình **Đánh giá học sinh** — nhận xét thường xuyên, đánh giá định kỳ, năng lực & phẩm chất, tổng hợp & chốt. |
-| **Thông tư 70/2025 (Đ7.4)** | Màn hình **Học bạ số** — hạn tạo lập, ký giáo viên chủ nhiệm/ban giám hiệu, phát hành, xác thực. |
+| **Thông tư 27/2020** | Màn hình **Đánh giá học sinh** — nhận xét thường xuyên, đánh giá định kỳ, năng lực & phẩm chất, tổng hợp & chốt. |
+| **Thông tư 70/2026** | Màn hình **Học bạ số** — hạn tạo lập, ký giáo viên chủ nhiệm/ban giám hiệu, phát hành, xác thực. |
 | **Liên thông CSDL ngành** | Mục quản trị riêng — đẩy dữ liệu trường lên cơ sở dữ liệu ngành. |
 | **AI nghiệp vụ** | Trợ lý hỏi đáp quy định, gợi ý nhận xét, tóm tắt biên bản, soạn thông báo, cảnh báo sớm — kèm nhật ký sử dụng AI. |
 
@@ -83,7 +83,7 @@ AI gợi ý nhận xét học sinh ngay trong màn hình đánh giá, hỗ trợ
 | §4 Năng lực chính | `features[]` — mỗi năng lực 1 phần tử dạng `"<Tiêu đề> — <mô tả>"` | 4 phần tử |
 | §4 (chi tiết từng năng lực) | `sections[0].items[]` | có thể tách thành bullet |
 | §4 Ảnh minh hoạ | `screenshots[]` | theo thứ tự ở bảng dưới |
-| §5 Tích hợp / pháp quy | `sections[1].title` + `sections[1].items[]` | TT27, TT70 Đ7.4, liên thông CSDL ngành, AI nghiệp vụ |
+| §5 Tích hợp / pháp quy | `sections[1].title` + `sections[1].items[]` | TT27, TT70, liên thông CSDL ngành, AI nghiệp vụ |
 | §6 Use case | `useCases[]` | 5 phần tử |
 | §7 FAQ | `faq[]` | mảng `{ question, answer }`, 4 phần tử |
 | Kết quả/giá trị (từ §2, §4) | `benefits[]` | 2–3 outcome ngắn |
