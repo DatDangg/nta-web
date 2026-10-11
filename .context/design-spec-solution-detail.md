@@ -519,21 +519,21 @@ Grid bento **không đều** (tránh kiểu "3 card icon + tiêu đề + chữ" 
 
 ### 5.3 AI — section nền tối (`variant="ink"`)
 
+> ✅ **ĐÃ CHỐT (2026-10-11): khung "Trợ lý nhận xét" dựng bằng DOM (`AiAssistantPanel`), KHÔNG dùng ảnh crop.**
+
 ```
 ┌────────────────────────────────────────────┐
 │  (nền --color-ink #1d1d1f)                  │
 │                                            │
 │  Tiêu đề (text-h2, text-ink-text)          │
 │  Mô tả ngắn (text-ink-text-secondary)      │
+│  3 gợi ý — dạng danh sách có nhãn,         │
+│  KHÔNG phải icon + chữ                     │
 │                                            │
 │  ┌──────────────────────────────────┐      │
 │  │  Trợ lý AI gợi ý nhận xét        │      │
-│  │  • 4 gợi ý (dạng danh sách,      │      │
-│  │    KHÔNG phải icon + chữ)         │      │
-│  │  └──────────────┐                 │      │
-│  │                 │ ảnh crop khung  │      │
-│  │                 │ AI (04-danh-gia │      │
-│  │                 │ -ai-crop.png)  │      │
+│  │  AiAssistantPanel (HTML/CSS)      │      │
+│  │  căn mép trái như text            │      │
 │  └──────────────────────────────────┘      │
 └────────────────────────────────────────────┘
 ```
@@ -546,24 +546,29 @@ Grid bento **không đều** (tránh kiểu "3 card icon + tiêu đề + chữ" 
 | Link/CTA | `text-accent-ink` | `#64b5ff` — ≈ 7.4:1 ✅ (`--color-primary` #0071e3 chỉ 3.4:1, **không đạt**) |
 | Viền thẻ | `border-ink-border` | `#48484a` |
 | Nền thẻ | `bg-ink-surface` | `#2c2c2e` |
-| Layout | `lg:grid-cols-2 lg:gap-16 xl:gap-20` — **2 cột bằng nhau**, KHÔNG dùng cột ảnh hẹp `20rem` | ⚠ **ĐÃ ĐỔI 2026-11 — xem ghi chú bên dưới** |
-| Cột ảnh | rộng **bằng cột chữ** (mỗi cột ~608px tại 1280) | ảnh crop phải **đọc rõ** chữ bên trong |
-
-> ⚠ **SAI LỆCH SO VỚI SPEC — chờ anh duyệt.** Bản gốc bảo ảnh nằm ở cột phải, rộng bằng cột chữ.
-> Nhưng ảnh crop AI là **1223×284, tỉ lệ 4.31** — một dải rất ngang, rất thấp. Trong cột 608px
-> nó chỉ còn **608×141px**, chữ bên trong **không đọc được** — trong khi spec cũng yêu cầu
-> "ảnh crop phải đọc rõ chữ bên trong". Hai yêu cầu mâu thuẫn nhau.
->
-> **Đã dựng:** ảnh tràn ngang **dưới** text + danh sách, chiếm trọn 1216px → hiển thị gần
-> đúng kích thước gốc (1223px), chữ đọc được. Đã chụp và gửi anh duyệt.
->
-> **Nếu anh muốn giữ đúng 2 cột:** phải đổi sang `04-danh-gia-ai-tt27-crop.png` (1307×1130,
-> tỉ lệ 1.157) — nhưng crop đó là **lưới nhận xét TT27**, không phải khung "Trợ lý AI" mà
-> copy §11.4 nói tới. Không có crop nào khác của khung AI.
-| Ảnh | **`04-danh-gia-ai-crop.png`** — khung "Trợ lý AI" (đã chốt; ảnh đầy đủ `04-danh-gia-ai.png` đã dùng ở feature 3) | viền `border-ink-border`, bo góc `rounded-lg` |
-| Kích thước ảnh | `h-auto w-auto max-w-full` — giữ tỉ lệ crop | xem §3.1 |
-| Container | `<Container>` **default 1280** | section có ảnh → KHÔNG dùng `prose` |
+| Layout | `lg:grid-cols-2 lg:gap-16 xl:gap-20` — **2 cột bằng nhau**: trái = tiêu đề + mô tả + 3 gợi ý, phải = `AiAssistantPanel` |
+| Khung "Trợ lý nhận xét" | component **`AiAssistantPanel`** (HTML/CSS) | **KHÔNG dùng ảnh crop** — lý do ở ghi chú bên dưới |
+| Căn chỉnh panel | **căn mép trái như text** (`max-w-full`, không căn giữa) | cùng mép trái với cột chữ, không lơ lửng giữa section |
+| Panel mobile | full-width, padding `p-5`, text **đọc rõ ở 375px** | responsive theo **nội dung**, không theo tỉ lệ ảnh cứng |
+| Nền panel | lấy màu từ ảnh gốc: nền `#047857`, viền trong `#059669` | đúng màu app, không lệch hệ màu section |
+| Chữ trên nền panel | `text-white` (4.97:1) hoặc `text-white/90` (4.77:1) | KHÔNG dùng `/85` (4.43) hay `/80` (4.11) — dưới ngưỡng 4.5:1 |
+| Container | `<Container>` **default 1280** | section có khung → KHÔNG dùng `prose` |
 | Padding | `py-section` | full-width |
+
+> **Vì sao bỏ ảnh crop `04-danh-gia-ai-crop.png`** (đo thật **1223×284, tỉ lệ 4.31**):
+>
+> 1. **Không đọc được.** Crop là một dải rất ngang, rất thấp. Trong cột 608px (bằng cột chữ
+>    tại 1280) nó chỉ còn **608×141px** — chữ bên trong nhỏ hơn mức đọc được; ở 375px còn tệ
+>    hơn nữa. Spec yêu cầu "ảnh crop phải đọc rõ chữ bên trong" — ảnh này không làm được.
+> 2. **Nền trắng bao quanh lóa lên trên nền tối.** Crop được chụp kèm nền trắng của app; đặt
+>    cạnh chữ trên nền `#1d1d1f` thành một hộp trắng lơ lửng, lệch hệ màu với cả section.
+> 3. **Không có crop nào khác** của chính khung AI. Crop thay thế `04-danh-gia-ai-tt27-crop.png`
+>    (1307×1130) là **lưới nhận xét TT27**, không phải khung "Trợ lý AI" mà copy §11.4 nói tới.
+>
+> **Thay bằng `AiAssistantPanel`** — cùng nội dung, màu lấy từ ảnh gốc, nhưng:
+> - **căn mép trái như text**, không lơ lửng ở giữa section
+> - responsive theo nội dung → **vẫn đọc được ở 375px**
+> - contrast trên nền xanh đo thật, mọi chữ ≥ 4.5:1 (bảng trên)
 
 **Nội dung AI (3 gợi ý, dạng danh sách có nhãn) — xem bảng §11.4:**
 1. Gợi ý câu nhận xét học sinh ngay trong màn hình đánh giá
@@ -770,7 +775,7 @@ Ví dụ tách ở dấu `—`:
 | ✅ | Hero: ảnh đại diện sản phẩm, tỉ lệ ngang nhất trong nhóm đại diện |
 | ✅ | **Ảnh v2 không bao giờ bị cắt** (cả hero lẫn zig-zag) — 2 trường hợp theo tỉ lệ ở §3.1: ≥ 1.0 thu nhỏ giữ tỉ lệ không fade; < 1.0 bọc khung `max-h` + `overflow-hidden` + fade đáy. Hero ảnh gần vuông (HRM) giới hạn `max-w-[960px]` |
 | ✅ | **R1: migrate cả 8 file `.mdx` trong 1 lần.** CRM/HRM/DentGo chỉ tách `title` + `description` (ở `—` hoặc `:`), **giữ nguyên câu chữ**. Sau migrate: build + kiểm tra 4 trang render đủ tính năng như trước |
-| ✅ | **§5.3 dùng `04-danh-gia-ai-crop.png`** (ảnh đầy đủ đã dùng ở feature 3) |
+| ✅ | **§5.3 khung "Trợ lý AI" dựng bằng DOM (`AiAssistantPanel`)** — KHÔNG dùng ảnh crop. Lý do: crop tỉ lệ 4.31 không đọc được ở cột 608px, nền trắng bao quanh lóa trên nền tối. Panel căn mép trái như text, đọc rõ ở 375px (ảnh đầy đủ `04-danh-gia-ai.png` vẫn dùng ở feature 3) |
 | ✅ | Copy LMS dùng **Phần 11** (không theo quy tắc tách-chuỗi) |
 | ✅ | **Số hiệu thông tư** (§11.3): TT **27/2020** + TT **70/2026**, bỏ "Điều 7.4" |
 | ✅ | **Bỏ gợi ý "Cảnh báo sớm"** (§11.4) — section AI còn 3 gợi ý |
