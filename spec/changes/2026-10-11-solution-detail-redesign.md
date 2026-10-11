@@ -83,8 +83,10 @@ Spec §5. **Chạy được ngay — B1 + B2 đã đóng (xem §3).**
 - Bỏ render: section ảnh cuối trang, `benefits`, `useCases`, `sections`, `screenshots`.
   **Giữ nguyên data trong `lms.mdx`, chỉ không render** (bật lại được sau).
 - Bento: ô TT27 `lg:col-span-2 lg:row-span-2`, 2 ô nhỏ. Viền + nền, KHÔNG dùng cả shadow.
-- AI section: `variant="ink"`, layout **2 cột bằng nhau** (`lg:grid-cols-2`), ảnh `04-danh-gia-ai-crop.png`
-  phải đọc rõ chữ bên trong. Dùng `text-accent-ink` cho link/CTA.
+- AI section: `variant="ink"`, layout **2 cột bằng nhau** (`lg:grid-cols-2`).
+  ~~Ảnh `04-danh-gia-ai-crop.png`~~ → **ĐÃ ĐỔI (spec §5.3, user chốt 2026-10-11): khung "Trợ lý
+  nhận xét" dựng bằng DOM `AiAssistantPanel`** (crop tỉ lệ 4.31 không đọc được ở cột 608px,
+  nền trắng lóa trên nền tối). Dùng `text-accent-ink` cho link/CTA.
 - FAQ: `<details>`/`<summary>` native, marker là chevron SVG tự vẽ (`group-open:rotate-180`),
   KHÔNG dùng ký tự `+`/`−`. Tất cả đóng mặc định.
 - Copy: bảng §11 (VI + EN). Chỉ 2 chỗ placeholder theo §3.

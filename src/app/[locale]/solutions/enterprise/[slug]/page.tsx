@@ -3,15 +3,20 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { BenefitList } from '@/components/solutions/BenefitList';
 import { FaqList } from '@/components/solutions/FaqList';
-import { FeatureList } from '@/components/solutions/FeatureList';
-import { FeatureZigZag } from '@/components/solutions/FeatureZigZag';
+import { FeatureZigZag, FeatureImageRow } from '@/components/solutions/FeatureZigZag';
 import { RelatedSolutions } from '@/components/solutions/RelatedSolutions';
 import { ScreenshotSection } from '@/components/solutions/ScreenshotSection';
 import { SolutionHero } from '@/components/solutions/SolutionHero';
 import { SolutionSections } from '@/components/solutions/SolutionSections';
 import { UseCases } from '@/components/solutions/UseCases';
+import { BentoCompliance } from '@/components/solutions/BentoCompliance';
+import { AiSection } from '@/components/solutions/AiSection';
+import { AudienceCards } from '@/components/solutions/AudienceCards';
+import { FaqAccordion } from '@/components/solutions/FaqAccordion';
+import { normalizeFeatures } from '@/components/solutions/features';
+import { Section } from '@/components/ui/Section';
+import { buttonStyles } from '@/components/ui/Button';
 import { CTAForm } from '@/components/contact/CTAForm';
-import { PageHeader } from '@/components/shared/PageHeader';
 import { getAllSolutions, getSolutionBySlug } from '@/lib/content/solutions';
 import { enterpriseSlugs, getEnterpriseStaticParams, isEnterpriseSlug, isLocale } from '@/lib/content/slug';
 import { JsonLd } from '@/components/seo/JsonLd';
@@ -60,37 +65,70 @@ export default async function EnterpriseSolutionDetailPage({ params }: { params:
   const relatedSolutions = solution.relatedCases?.length
     ? allSolutions.filter((candidate) => candidate.category === 'enterprise' && candidate.slug !== solution.slug && candidate.relatedCases?.some((relatedCase) => solution.relatedCases?.includes(relatedCase)))
     : [];
-  // Opt-in per solution so CRM/LMS/DentGo keep their current layout while HRM gains the written content.
   const extended = solution.renderExtendedContent === true;
   const hasRelated = relatedSolutions.length > 0;
-  // T4: 3 trang CRM/HRM/DentGo chuyển layout mới (SolutionHero + FeatureZigZag).
-  // LMS set `layout: 'lms'` → giữ nhánh cũ, T5 sẽ thay bằng layout 8 block (spec §5).
-  const useLegacyLayout = solution.layout === 'lms';
+  const isLmsLayout = solution.layout === 'lms';
   const crumbs = [{ label: t('title'), href: '/solutions/enterprise' }, { label: solution.title }];
 
+  const jsonLd = (
+    <JsonLd data={createBreadcrumbJsonLd([{ name: locale === 'en' ? 'Home' : 'Trang chủ', path: locale === 'en' ? '/en' : '/' }, { name: t('title'), path: `${locale === 'en' ? '/en' : ''}/solutions/enterprise` }, { name: solution.title, path: `${locale === 'en' ? '/en' : ''}/solutions/enterprise/${slug}` }])} />
+  );
+
+  // Hero dùng chung cho cả 2 nhánh layout (spec §3).
+  const hero = (
+    <SolutionHero
+      breadcrumbs={crumbs}
+      caption={solution.imageCaption}
+      description={solution.description}
+      image={solution.heroShot?.src}
+      imageAlt={solution.heroShot?.alt}
+      imageMaxW={solution.heroShot?.maxWidth ?? 'max-w-full'}
+      imageRatio={solution.heroShot?.ratio}
+      primaryCta={{ href: localizedPath(locale, '/contact'), label: t('demoCta') }}
+      secondaryCta={{
+        ariaLabel: t('featuresCtaAria'),
+        href: '#features',
+        label: t('featuresCta'),
+      }}
+      title={solution.title}
+    />
+  );
+
+  // ── LMS: layout riêng 8 block theo đúng thứ tự spec §5, copy §11. ──
+  // BỎ render benefits/useCases/sections/screenshots — data GIỮ NGUYÊN trong mdx (R2).
+  if (isLmsLayout) {
+    const features = normalizeFeatures(solution.features);
+    const rowFeature = features[3];
+    const { compliance, aiSection, audience, cta } = solution;
+
+    return (
+      <>
+        {jsonLd}
+        {hero}
+        <FeatureZigZag features={features.slice(0, 3)} id="features" />
+        {rowFeature ? <FeatureImageRow feature={rowFeature} /> : null}
+        {compliance ? <BentoCompliance items={compliance.items} title={compliance.title} /> : null}
+        {aiSection ? (
+          <AiSection
+            description={aiSection.description}
+            panel={aiSection.panel}
+            suggestions={aiSection.suggestions}
+            title={aiSection.title}
+          />
+        ) : null}
+        {audience ? <AudienceCards cards={audience.cards} title={audience.title} /> : null}
+        <FaqAccordion items={solution.faq ?? []} title={t('faqTitle')} />
+        {cta ? <LmsCtaBlock button={cta.button} description={cta.description} locale={locale} title={cta.title} /> : null}
+        <CTAForm />
+      </>
+    );
+  }
+
+  // ── CRM / HRM / DentGo: layout chung (SolutionHero + zig-zag + sections mở rộng). ──
   return (
     <>
-      <JsonLd data={createBreadcrumbJsonLd([{ name: locale === 'en' ? 'Home' : 'Trang chủ', path: locale === 'en' ? '/en' : '/' }, { name: t('title'), path: `${locale === 'en' ? '/en' : ''}/solutions/enterprise` }, { name: solution.title, path: `${locale === 'en' ? '/en' : ''}/solutions/enterprise/${slug}` }])} />
-      {useLegacyLayout ? (
-        <PageHeader breadcrumbs={crumbs} description={solution.description} title={solution.title} />
-      ) : (
-        <SolutionHero
-          breadcrumbs={crumbs}
-          caption={solution.imageCaption}
-          description={solution.description}
-          image={solution.heroShot?.src}
-          imageAlt={solution.heroShot?.alt}
-          imageMaxW={solution.heroShot?.maxWidth ?? 'max-w-full'}
-          imageRatio={solution.heroShot?.ratio}
-          primaryCta={{ href: localizedPath(locale, '/contact'), label: t('demoCta') }}
-          secondaryCta={{
-            ariaLabel: t('featuresCtaAria'),
-            href: '#features',
-            label: t('featuresCta'),
-          }}
-          title={solution.title}
-        />
-      )}
+      {jsonLd}
+      {hero}
       {/* Chỉ chia 2 cột khi THỰC SỰ có related — giữ cột phải rỗng sẽ làm nội dung lệch trái.
           KHÔNG bọc Container ở cấp này: nó sẽ giới hạn bề rộng của mọi <Section> bên trong,
           khiến nền xen kẽ không tràn full-width (spec §1 L2). Container thuộc về từng Section.
@@ -103,23 +141,16 @@ export default async function EnterpriseSolutionDetailPage({ params }: { params:
         }
       >
         <div className="min-w-0">
-          {useLegacyLayout ? (
-            <FeatureList
-              features={solution.features.map((f) => (typeof f === 'string' ? f : f.description ? `${f.title} — ${f.description}` : f.title))}
-              title={t('featuresTitle')}
-            />
-          ) : (
-            <FeatureZigZag caption={solution.imageCaption} features={solution.features} id="features" />
-          )}
+          <FeatureZigZag caption={solution.imageCaption} features={solution.features} id="features" />
           <BenefitList benefits={solution.benefits} title={t('benefitsTitle')} />
           <SolutionSections sections={extended ? solution.sections ?? [] : []} />
           <UseCases cases={extended ? solution.useCases ?? [] : []} title={t('useCasesTitle')} />
           <FaqList faq={extended ? solution.faq ?? [] : []} title={t('faqTitle')} />
           <ScreenshotSection
-            caption={useLegacyLayout ? undefined : solution.imageCaption}
+            caption={solution.imageCaption}
             imageAlt={solution.title}
             images={solution.screenshots ?? []}
-            shotFrame={!useLegacyLayout}
+            shotFrame
             title={t('screenshotsTitle')}
           />
         </div>
@@ -131,5 +162,23 @@ export default async function EnterpriseSolutionDetailPage({ params }: { params:
       </div>
       <CTAForm />
     </>
+  );
+}
+
+/**
+ * CTA cuối của layout LMS (spec §5.6): nền `background`, căn giữa, **1 nút** duy nhất
+ * cho mỗi intent. Nút full-width ở mobile. Đặt TRƯỚC `CTAForm` (form tư vấn — intent khác).
+ */
+function LmsCtaBlock({ title, description, button, locale }: { title: string; description: string; button: string; locale: string }) {
+  return (
+    <Section spacing="large">
+      <div className="flex flex-col items-center gap-6 text-center">
+        <h2 className="text-h2 font-bold">{title}</h2>
+        <p className="max-w-[52ch] text-body-lg text-text-secondary">{description}</p>
+        <a className={`${buttonStyles('primary', 'lg')} w-full sm:w-auto`} href={localizedPath(locale, '/contact')}>
+          {button}
+        </a>
+      </div>
+    </Section>
   );
 }

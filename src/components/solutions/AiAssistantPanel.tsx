@@ -71,7 +71,9 @@ export function AiAssistantPanel({
       </div>
 
       {suggestions.length ? (
-        <figcaption className="mt-4 space-y-2">
+        // `<div>` chứ không phải `<figcaption>` — đây là NỘI DUNG của panel, không phải
+        // chú thích cho figure cha (figcaption bọc suggestions là semantics lỏng).
+        <div className="mt-4 space-y-2">
           {suggestions.map((item) => (
             <div
               className="rounded-lg border border-ink-border bg-ink-surface px-4 py-3"
@@ -83,7 +85,7 @@ export function AiAssistantPanel({
               <p className="mt-1 text-sm text-ink-text">{item.text}</p>
             </div>
           ))}
-        </figcaption>
+        </div>
       ) : null}
     </figure>
   );

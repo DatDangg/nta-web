@@ -10,7 +10,7 @@ function Chevron() {
   return (
     <svg
       aria-hidden="true"
-      className="h-5 w-5 shrink-0 text-text-secondary transition-transform duration-fast group-open:rotate-180"
+      className="h-5 w-5 shrink-0 text-text-secondary transition-transform duration-fast group-open:rotate-180 motion-reduce:transition-none"
       fill="none"
       viewBox="0 0 24 24"
     >

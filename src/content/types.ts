@@ -78,6 +78,29 @@ export interface Solution {
    * `imageAlt`) hoặc `{src, alt}` (alt riêng theo bảng §7).
    */
   screenshots?: (string | { src: string; alt: string; ratio?: number })[];
+  /**
+   * 4 block riêng của layout LMS (spec §5.2–§5.6, copy §11) — CHỈ trang có
+   * `layout: 'lms'` đọc các field này; trang khác bỏ qua.
+   */
+  compliance?: {
+    title: string;
+    items: { large?: boolean; title: string; description: string; image?: { src: string; alt: string; ratio?: number } }[];
+  };
+  aiSection?: {
+    title: string;
+    description: string;
+    suggestions: string[];
+    panel: {
+      label: string;
+      student: string;
+      meta?: string;
+      action: string;
+      description?: string;
+      suggestions?: { label: string; text: string }[];
+    };
+  };
+  audience?: { title: string; cards: { title: string; description: string }[] };
+  cta?: { title: string; description: string; button: string };
   relatedCases?: string[];
   // Opt-in for the enterprise detail page: renders sections, useCases and faq.
   // AI solution pages always render them, so they ignore this flag.

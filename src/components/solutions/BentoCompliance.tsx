@@ -74,7 +74,7 @@ export function BentoCompliance({
                   alt={item.image.alt}
                   maxH="max-h-[360px]"
                   ratio={item.image.ratio}
-                  skin="mx-auto rounded-md border border-border shadow-sm"
+                  skin="mx-auto rounded-md border border-border"
                   sizes="(max-width: 1024px) 100vw, 60vw"
                   src={item.image.src}
                 />

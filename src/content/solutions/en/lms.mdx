@@ -1,21 +1,44 @@
 ---
 slug: lms
 image: /images/solutions/lms.svg
-title: "School management (LMS)"
-description: "A multi-school management system that covers almost the entire operating lifecycle of a school — curriculum, timetabling, teaching, assessment, digital records, administration and reporting — and follows Vietnam's education regulations."
+title: "School Management (LMS)"
+description: "One system for school operations: curriculum, timetables, assessment, digital records and executive reporting."
 category: enterprise
-# T4: mark LMS for the dedicated 8-block layout (spec §5) — T5 replaces the legacy branch in page.tsx.
+# Mark LMS for the dedicated 8-block layout (spec §5, T5).
 layout: lms
 renderExtendedContent: true
+heroShot:
+  src: /images/solutions/v2/lms/01-tong-quan.png
+  alt: "Multi-school overview: student, teacher and class figures for three schools"
+  ratio: 1.396
 features:
   - title: "Multi-school management & dashboards"
     description: "One account for many schools. Read the roll-up figures, then drill into a single school in one click."
+    image: /images/solutions/v2/lms/02-quan-tri-bang-dieu-khien.png
+    imageAlt: "School dashboard with student, active user and work progress cards"
+    ratio: 1.151
   - title: "Student – parent – staff records"
     description: "Every student profile links to a parent and a homeroom teacher. Filter by grade, class and status in seconds."
+    image: /images/solutions/v2/lms/03-ho-so-hoc-sinh.png
+    imageAlt: "Student list filtered by grade and class, with homeroom teacher column"
+    ratio: 0.805
   - title: "Regulation-based assessment with AI support"
     description: "Assessment follows each required step. An AI assistant suggests comment wording the moment a teacher needs it."
+    image: /images/solutions/v2/lms/04-danh-gia-ai.png
+    imageAlt: "Student assessment grid by subject with the AI comment assistant panel"
+    ratio: 1.01
   - title: "Teaching operations: timetable · lesson plans · digital records"
     description: "Drag-and-drop timetables. Lesson plans drafted and approved online. Digital records signed and issued inside the system."
+    image: /images/solutions/v2/lms/05-thoi-khoa-bieu.png
+    imageAlt: "Whole-school timetable built by drag and drop"
+    ratio: 0.877
+    extraImages:
+      - src: /images/solutions/v2/lms/06-giao-an-dien-tu.png
+        alt: "Digital lesson plans by subject with draft and approval status"
+        ratio: 1.114
+      - src: /images/solutions/v2/lms/07-hoc-ba-so.png
+        alt: "Digital student records with signing and issuance status"
+        ratio: 0.824
 benefits:
   - "Bring grades, timetables, records and administration into one system instead of several disconnected tools."
   - "Keep deadlines, the signing chain and record publication inside the system to reduce errors and make tracking easier."
@@ -25,14 +48,9 @@ useCases:
   - "A school that must strictly follow assessment and record regulations: deadlines, signing chain and publication built into the system."
   - "A school that wants to cut teachers' comment-writing time: use the assistant to suggest comments right in the assessment screen."
   - "A board of managers that needs fast operational reports: use dashboards and reports instead of gathering figures by hand."
-screenshots:
-  - "/images/solutions/lms/01-da-truong-tong-quan.png"
-  - "/images/solutions/lms/02-dashboard-tong-quan.png"
-  - "/images/solutions/lms/03-hoc-sinh.png"
-  - "/images/solutions/lms/04-danh-gia-tt27.png"
-  - "/images/solutions/lms/05-thoi-khoa-bieu.png"
-  - "/images/solutions/lms/06-giao-an-dien-tu.png"
-  - "/images/solutions/lms/07-hoc-ba-so.png"
+screenshots: []
+# ↓ Data KEPT AS-IS (R2) — the new LMS layout does NOT render benefits/useCases/sections.
+# Re-enable rendering in page.tsx if needed later.
 sections:
   - title: "The problem & the solution"
     intro: "Schools often use separate tools for grades, timetables, records and administration — re-entering data and letting systems drift apart. Digital records must follow regulations with several deadlines and a signing/publishing chain, which is error-prone and hard to trace; teachers have to comment on every student, which takes a lot of time. Schools with several campuses struggle to consolidate figures, and pushing data to the sector system by hand is slow and easily out of sync."
@@ -49,12 +67,62 @@ sections:
       - "Sector database linkage — a dedicated admin section that pushes school data to the sector database."
       - "Domain AI — an assistant for regulation Q&A, comment suggestions, minute summaries, notice drafting and early warnings, with an AI usage log."
 faq:
-  - question: "How is this different from an online learning LMS?"
-    answer: "It is a full school management system (curriculum, timetables, assessment, records, administration, reporting), not just a place for homework or online exams."
-  - question: "Can it be used for several schools on one account?"
-    answer: "Yes. The system is multi-school: one admin account can manage several schools and view cross-school totals."
-  - question: "Does assessment and record-keeping follow regulations?"
-    answer: "Yes. Student assessment and digital records are designed to follow the education sector's circulars."
-  - question: "What can the AI assistant do?"
-    answer: "It suggests student comments right in the assessment screen, helps draft notices, summarise minutes and raise early warnings; a log lets you trace how it was used."
+  # Copy §11.6 (approved) — replaces the old set; Q4 used to mention "early warnings" (B2 closed).
+  - question: "How is this different from an online course platform?"
+    answer: "This is a school operations system: curriculum, timetables, assessment, student records, administration and reporting. It is not an online quiz or assignment tool."
+  - question: "Can it run multiple schools?"
+    answer: "Yes. A single administrator account can manage several schools and view cross-school totals."
+  - question: "Do assessment and student records follow the regulations?"
+    answer: "Yes. Student assessment follows Circular 27/2020; digital student records follow Circular 70/2026."
+  - question: "What does the AI assistant do?"
+    answer: "Suggests comment wording in the assessment screen, summarises minutes and drafts announcements. Usage is logged for review."
+# ── LMS-only blocks (spec §5.2–§5.6, copy §11) ──
+compliance:
+  title: "Built on the actual regulations"
+  items:
+    - large: true
+      # §11.3 uses an em-dash but §11.8 bans em-dashes in new copy → ":" (reconciled with the
+      # verified /dev/components preview).
+      title: "Circular 27/2020: Student assessment"
+      description: "The assessment screen is split into the four required stages: regular comments, periodic grading, competences and conduct, and final consolidation."
+      image:
+        src: /images/solutions/v2/lms/04-danh-gia-ai-tt27-crop.png
+        # Alt describes the UI (§7 rule) — do not repeat the cell title.
+        alt: "Four-step student assessment grid under Circular 27/2020 with the AI assistant panel"
+        ratio: 1.157
+    - title: "Circular 70/2026: Digital records"
+      description: "Creation deadlines, homeroom teacher and principal signatures, issuance and verification."
+    - title: "Sector data exchange"
+      description: "A dedicated admin area pushes school data to the sector database."
+aiSection:
+  title: "AI in the daily workflow"
+  description: "AI runs inside the workflow, not as a separate screen. Every use is logged for later review."
+  suggestions:
+    - "Suggests student comment wording inside the assessment screen"
+    - "Summarises meeting minutes"
+    - "Drafts announcements"
+  panel:
+    label: "Comment assistant"
+    student: "Suggestions for Nguyen Bao Chau"
+    meta: "Generate for 12 students still blank"
+    action: "Generate 3 suggestions"
+    description: "Based on the recorded KTĐK score, the previous term's comments and the logged competences. You can generate them in bulk, then review each one."
+    suggestions:
+      - label: "Suggestion 1"
+        text: "Takes part in class activities, answers clearly and follows the expected order throughout the assessment period."
+      - label: "Suggestion 2"
+        text: "Steady results in the main subjects; more independent study time would help."
+audience:
+  title: "Who it's for"
+  cards:
+    - title: "Primary schools"
+      description: "Want one system across operations instead of several disconnected tools."
+    - title: "Multi-school operators"
+      description: "Need one account to see a cross-school view and drill into each campus."
+    - title: "School leadership"
+      description: "Need executive reporting without compiling figures by hand."
+cta:
+  title: "See how the LMS would run your school"
+  description: "We set up a demo with a sample curriculum and timetable so you can see the interface you will use daily."
+  button: "Request a demo"
 ---

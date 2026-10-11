@@ -2,20 +2,43 @@
 slug: lms
 image: /images/solutions/lms.svg
 title: "Quản trị trường học (LMS)"
-description: "Hệ thống quản trị trường học đa trường bao phủ gần như toàn bộ vòng đời vận hành của một trường — chương trình, thời khoá biểu, giảng dạy, đánh giá, học bạ số, hành chính và báo cáo điều hành — và bám sát văn bản pháp quy của ngành giáo dục."
+description: "Một hệ thống cho toàn bộ vận hành trường: chương trình, thời khoá biểu, đánh giá, học bạ số và báo cáo điều hành."
 category: enterprise
-# T4: đánh dấu LMS dùng layout riêng 8 block (spec §5) — T5 sẽ thay nhánh legacy trong page.tsx.
+# Đánh dấu LMS dùng layout riêng 8 block (spec §5, T5).
 layout: lms
 renderExtendedContent: true
+heroShot:
+  src: /images/solutions/v2/lms/01-tong-quan.png
+  alt: "Màn hình tổng quan đa trường: chỉ số học sinh, giáo viên và lớp học của ba trường"
+  ratio: 1.396
 features:
   - title: "Quản trị đa trường & bảng điều khiển"
     description: "Một tài khoản cho nhiều trường. Xem số liệu tổng hợp, rồi đi sâu vào từng trường chỉ với một cú bấm."
+    image: /images/solutions/v2/lms/02-quan-tri-bang-dieu-khien.png
+    imageAlt: "Bảng điều khiển trường với thẻ học sinh, người dùng hoạt động và tiến độ công việc"
+    ratio: 1.151
   - title: "Hồ sơ học sinh – phụ huynh – nhân sự"
     description: "Hồ sơ học sinh gắn liền phụ huynh và giáo viên chủ nhiệm. Lọc theo khối, lớp, trạng thái trong vài giây."
+    image: /images/solutions/v2/lms/03-ho-so-hoc-sinh.png
+    imageAlt: "Danh sách học sinh lọc theo khối và lớp, kèm cột giáo viên chủ nhiệm"
+    ratio: 0.805
   - title: "Đánh giá học sinh + trợ lý AI gợi ý nhận xét"
     description: "Đánh giá đi đúng từng bước theo quy định. Trợ lý AI gợi ý câu nhận xét ngay khi giáo viên cần."
+    image: /images/solutions/v2/lms/04-danh-gia-ai.png
+    imageAlt: "Lưới nhận xét học sinh theo môn, kèm khung trợ lý AI gợi ý câu nhận xét"
+    ratio: 1.01
   - title: "Thời khoá biểu · giáo án điện tử · học bạ số"
     description: "Thời khoá biểu kéo–thả. Giáo án soạn–duyệt trực tuyến. Học bạ số ký và phát hành ngay trong hệ thống."
+    image: /images/solutions/v2/lms/05-thoi-khoa-bieu.png
+    imageAlt: "Màn hình xếp thời khoá biểu toàn trường bằng kéo và thả"
+    ratio: 0.877
+    extraImages:
+      - src: /images/solutions/v2/lms/06-giao-an-dien-tu.png
+        alt: "Danh sách giáo án điện tử theo môn và vòng đời soạn duyệt"
+        ratio: 1.114
+      - src: /images/solutions/v2/lms/07-hoc-ba-so.png
+        alt: "Danh sách học bạ số kèm trạng thái ký và phát hành"
+        ratio: 0.824
 benefits:
   - "Gom điểm số, thời khoá biểu, học bạ và hành chính về một hệ thống thay cho nhiều phần mềm rời rạc."
   - "Giữ mốc thời hạn, chu trình ký và phát hành học bạ nằm sẵn trong hệ thống để giảm sai sót và dễ truy vết."
@@ -25,14 +48,9 @@ useCases:
   - "Trường cần tuân thủ nghiêm quy định về đánh giá và học bạ: muốn mốc thời hạn, chu trình ký và phát hành nằm sẵn trong hệ thống."
   - "Trường muốn giảm thời gian soạn nhận xét cho giáo viên: dùng trợ lý gợi ý nhận xét ngay trong màn hình đánh giá."
   - "Ban giám hiệu cần báo cáo điều hành nhanh: dùng bảng điều khiển và báo cáo thay cho việc gom số liệu thủ công."
-screenshots:
-  - "/images/solutions/lms/01-da-truong-tong-quan.png"
-  - "/images/solutions/lms/02-dashboard-tong-quan.png"
-  - "/images/solutions/lms/03-hoc-sinh.png"
-  - "/images/solutions/lms/04-danh-gia-tt27.png"
-  - "/images/solutions/lms/05-thoi-khoa-bieu.png"
-  - "/images/solutions/lms/06-giao-an-dien-tu.png"
-  - "/images/solutions/lms/07-hoc-ba-so.png"
+screenshots: []
+# ↓ Data GIỮ NGUYÊN (R2) — layout LMS mới KHÔNG render benefits/useCases/sections.
+# Muốn dùng lại sau này thì bật render ở page.tsx.
 sections:
   - title: "Vấn đề & giải pháp"
     intro: "Trường thường dùng nhiều phần mềm rời cho điểm số, thời khoá biểu, học bạ và hành chính — nhập liệu trùng và dữ liệu lệch nhau giữa các hệ thống. Học bạ phải làm theo quy định với nhiều mốc thời hạn và chu trình ký/phát hành nên dễ sai sót, khó truy vết; giáo viên phải nhận xét từng học sinh nên việc soạn nhận xét rất tốn thời gian. Trường có nhiều điểm trường khó tổng hợp số liệu, và việc đẩy dữ liệu lên hệ thống ngành làm thủ công dễ chậm và thiếu đồng bộ."
@@ -49,12 +67,62 @@ sections:
       - "Liên thông CSDL ngành — mục quản trị riêng để đẩy dữ liệu trường lên cơ sở dữ liệu ngành."
       - "AI nghiệp vụ — trợ lý hỏi đáp quy định, gợi ý nhận xét, tóm tắt biên bản, soạn thông báo, cảnh báo sớm, kèm nhật ký sử dụng AI."
 faq:
-  - question: "Hệ thống này khác gì một LMS học trực tuyến?"
-    answer: "Đây là hệ thống quản trị trường học đầy đủ (chương trình, thời khoá biểu, đánh giá, học bạ, hành chính, báo cáo), không chỉ là nơi làm bài tập hay thi online."
-  - question: "Có dùng được cho nhiều trường trên cùng một tài khoản không?"
-    answer: "Có. Hệ thống là đa trường: một tài khoản quản trị có thể quản lý nhiều trường và xem tổng hợp liên trường."
-  - question: "Việc đánh giá và học bạ có bám quy định không?"
-    answer: "Có. Đánh giá học sinh và học bạ số được thiết kế theo đúng các thông tư của ngành giáo dục."
+  # Copy §11.6 (đã duyệt) — thay bản cũ, câu 4 trước đây còn "cảnh báo sớm" (B2 đã đóng).
+  - question: "Khác gì LMS học trực tuyến?"
+    answer: "Đây là hệ thống quản trị trường học: chương trình, thời khoá biểu, đánh giá, học bạ, hành chính và báo cáo. Không phải nơi làm bài tập hay thi online."
+  - question: "Dùng được cho nhiều trường không?"
+    answer: "Có. Một tài khoản quản trị có thể quản lý nhiều trường và xem tổng hợp liên trường."
+  - question: "Đánh giá và học bạ có bám quy định không?"
+    answer: "Có. Đánh giá học sinh theo Thông tư 27/2020; học bạ số theo Thông tư 70/2026."
   - question: "Trợ lý AI làm được gì?"
-    answer: "AI gợi ý nhận xét học sinh ngay trong màn hình đánh giá, hỗ trợ soạn thông báo, tóm tắt biên bản và cảnh báo sớm; có nhật ký để tra lại lịch sử sử dụng."
+    answer: "Gợi ý câu nhận xét trong màn hình đánh giá, tóm tắt biên bản và soạn thông báo. Có nhật ký để tra lại lịch sử sử dụng."
+# ── 4 block riêng của layout LMS (spec §5.2–§5.6, copy §11) ──
+compliance:
+  title: "Bám sát văn bản pháp quy"
+  items:
+    - large: true
+      # §11.3 dùng "—" nhưng §11.8 cấm em-dash trong copy mới → dùng ":" (đã reconcile với
+      # trang preview /dev/components, verified). Đồng thời sửa typo "địết" → "định kỳ".
+      title: "Thông tư 27/2020: Đánh giá học sinh"
+      description: "Màn hình đánh giá chia theo đúng bốn bước nghiệp vụ: nhận xét thường xuyên, đánh giá định kỳ, năng lực và phẩm chất, tổng hợp và chốt."
+      image:
+        src: /images/solutions/v2/lms/04-danh-gia-ai-tt27-crop.png
+        # Alt mô tả GIAO DIỆN (§7 rule) — không lặp lại tên tiêu đề ô.
+        alt: "Lưới nhận xét học sinh bốn bước của Thông tư 27/2020 với khung trợ lý AI"
+        ratio: 1.157
+    - title: "Thông tư 70/2026: Học bạ số"
+      description: "Hạn tạo lập, ký giáo viên chủ nhiệm và ban giám hiệu, phát hành, xác thực."
+    - title: "Liên thông CSDL ngành"
+      description: "Mục quản trị riêng để đẩy dữ liệu trường lên cơ sở dữ liệu ngành."
+aiSection:
+  title: "Trợ lý AI trong công việc hằng ngày"
+  description: "AI chạy trong nghiệp vụ, không phải một màn hình riêng. Mỗi lần dùng AI đều được ghi nhật ký để tra lại."
+  suggestions:
+    - "Gợi ý câu nhận xét học sinh ngay trong màn hình đánh giá"
+    - "Tóm tắt biên bản họp"
+    - "Soạn thông báo"
+  panel:
+    label: "Trợ lý nhận xét"
+    student: "Gợi ý cho Nguyễn Bảo Châu"
+    meta: "Tạo cho 12 em còn trống"
+    action: "Tạo 3 gợi ý"
+    description: "Dựa trên điểm KTĐK, nhận xét kỳ trước và mức năng lực đã ghi. Có thể tạo hàng loạt cho những em còn trống rồi duyệt lại từng câu."
+    suggestions:
+      - label: "Gợi ý 1"
+        text: "Em tích cực tham gia hoạt động, phát biểu đúng và đúng trình tự trong suốt kỳ đánh giá."
+      - label: "Gợi ý 2"
+        text: "Kết quả ổn định ở các môn chính, cần chú ý thêm phần tự học ngoài giờ."
+audience:
+  title: "Dành cho ai"
+  cards:
+    - title: "Trường tiểu học"
+      description: "Muốn số hoá toàn bộ vận hành trong một hệ thống thay cho nhiều phần mềm rời."
+    - title: "Đơn vị quản lý nhiều trường"
+      description: "Cần một tài khoản xem tổng hợp liên trường rồi đi vào từng cơ sở."
+    - title: "Ban giám hiệu"
+      description: "Cần báo cáo điều hành nhanh thay cho việc gom số liệu thủ công."
+cta:
+  title: "Xem LMS vận hành cho trường bạn"
+  description: "Chúng tôi dựng bản demo với chương trình và lịch học mẫu để bạn xem đúng giao diện sẽ dùng hằng ngày."
+  button: "Đăng ký demo"
 ---
