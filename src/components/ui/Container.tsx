@@ -6,6 +6,14 @@ type ContainerProps = HTMLAttributes<HTMLElement> & {
   as?: ElementType;
   children: ReactNode;
   className?: string;
+  /**
+   * Class áp cho **lớp nội dung** (bên trong padding ngang), không phải lớp ngoài.
+   *
+   * Dùng cho đường kẻ `border`: kẻ đặt trên lớp ngoài sẽ bắt đầu ở mép NGOÀI padding
+   * (x≈79 ở 1440) trong khi chữ bắt đầu ở mép trong (x≈111) → lệch ~32px, thấy rõ ở
+   * MetaBar và SolutionBlock. Đặt kẻ vào lớp nội dung là nó bắt đầu đúng mép chữ.
+   */
+  insetClassName?: string;
   size?: ContainerSize;
 };
 
@@ -35,16 +43,22 @@ export function Container({
   as: Tag = 'div',
   children,
   className = '',
+  insetClassName = '',
   size = 'default',
   ...containerProps
 }: ContainerProps) {
   const classes = [outerClass, sizeClass[size], className].filter(Boolean).join(' ');
 
-  // `prose` cần thêm một lớp trong để giới hạn 720px mà vẫn bám mép trái lớp ngoài.
-  if (size === 'prose') {
+  // Cần lớp nội dung khi: `prose` (giới hạn 720px) HOẶC caller muốn đặt kẻ trong padding.
+  // `narrow` không cần — hero căn giữa, không có kẻ.
+  if (size === 'prose' || insetClassName) {
+    const innerClasses = [size === 'prose' ? 'max-w-[720px]' : '', insetClassName]
+      .filter(Boolean)
+      .join(' ');
+
     return (
       <Tag className={classes} {...containerProps}>
-        <div className="max-w-[720px]">{children}</div>
+        <div className={innerClasses}>{children}</div>
       </Tag>
     );
   }

@@ -6,12 +6,13 @@ type MetaBarProps = { caseStudy: CaseStudy; labels: { client: string; sector: st
 /**
  * Thanh metadata (khách hàng · ngành · năm).
  *
- * `border-y` đặt BÊN TRONG `Container` mặc định 1280 → mép đường kẻ khớp mép nội dung của
- * các khối bên dưới ("Thách thức" · "Giải pháp"). Nội dung trong kẻ giới hạn 720px, bám trái.
+ * `border-y` đặt ở `insetClassName` (lớp trong padding), KHÔNG phải `className` (lớp ngoài):
+ * kẻ ở lớp ngoài bắt đầu ở mép ngoài padding — lệch ~32px so với mép chữ. Ở lớp trong,
+ * kẻ bắt đầu đúng mép chữ và khớp với các khối bên dưới.
  */
 export function MetaBar({ caseStudy, labels }: MetaBarProps) {
   return (
-    <Container as="dl" className="border-y border-border py-6">
+    <Container as="dl" insetClassName="border-y border-border py-6">
       <div className="grid max-w-[720px] grid-cols-1 gap-4 sm:grid-cols-3 md:flex md:flex-wrap md:gap-8">
         {[
           { label: labels.client, value: caseStudy.client },

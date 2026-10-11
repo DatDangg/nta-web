@@ -106,18 +106,29 @@ vì là câu tuyên ngôn — giữ nguyên, không phải lỗi. **Breadcrumb p
 `PageHeader variant="centered"` → `Breadcrumb centered` (`justify-center`), nếu không breadcrumb
 lệch trái giữa chừng so với tiêu đề căn giữa.
 
-**Đường kẻ (`border-y`) phải nằm TRONG container, không đặt trên `<section>`:**
-`border-y` trên `<section>` trải hết `100vw`, dài hơn mép nội dung ~32px → lệch. Nền (`bg-*`)
-thì được tràn full-width (theo L2). Tách: nền ở section, kẻ ở Container.
-- `MetaBar`: `Container` + `border-y` trên Container, grid trong `max-w-[720px]`
-- `SolutionBlock`: `<section className="bg-background-alt">` + `<Container className="border-y">`
+**Đường kẻ (`border`) phải nằm TRONG padding, không đặt trên lớp ngoài:**
+`border` đặt trên lớp ngoài bắt đầu ở mép NGOÀI padding (x≈79 ở 1440) trong khi chữ bắt đầu ở
+x≈111 → lệch ~32px. Dùng `insetClassName` của `Container` → kẻ áp cho **lớp nội dung**,
+bắt đầu đúng mép chữ.
+
+Nền (`bg-*`) thì vẫn tràn full-width (theo L2). Tách: nền ở section, kẻ ở `insetClassName`.
+- `MetaBar`: `<Container as="dl" insetClassName="border-y border-border py-6">`
+- `SolutionBlock`: **KHÔNG kẻ** — đã có nền xám phân tách khối với vùng trắng trên/dưới, thêm kẻ là dư
 
 ### Verify tự động — mép trái mọi section
 
 `scripts/screenshots/.tmp/check-left-align.mjs <width> <route...>` — chạy ở 1440 và 1920.
 
-Cơ chế: lấy mép trái logo `NTA` trong header làm mốc; đo mép trái **nội dung** từng section
-(1 lớp = trong padding; 2 lớp prose = div trong). Lệch quá ±2px → FAIL, in tên khối + lệch bao nhiêu.
+Cơ chế: lấy mép trái logo `NTA` trong header làm mốc; đo **hai loại**:
+
+1. **Nội dung** — mép trái từng section (1 lớp = trong padding; 2 lớp prose = div trong).
+   Lệch quá ±2px → FAIL, in tên khối + lệch bao nhiêu px.
+2. **Đường kẻ** — mọi phần tử có `border` >0px trong `body`, bỏ `header` và cột grid footer.
+   Kẻ phải bắt đầu đúng mép chữ. Cảnh báo này bắt được lỗi mà phép đo nội dung bỏ lọt:
+   `MetaBar` là con trực tiếp của `<main>`, **không nằm trong `<section>`** nên quét theo
+   section sẽ không thấy nó.
+   Cạnh phải **chỉ** kiểm tra khi kẻ chạy hết bề rộng container — kẻ trong prose 720 (vd FAQ)
+   có mép phải ở giữa là đúng, không phải lỗi.
 
 Phân biệt "căn giữa có chủ đích" với "bị lệch" — dùng **đối xứng + chiều rộng**:
 khối coi là căn giữa khi `|cách trái − cách phải| ≤ 2px` **và** hẹp hơn nội dung container đầy đủ.
@@ -131,7 +142,8 @@ Bẫy đã gặp khi viết script (không lặp lại):
 - Backtick trong comment nằm trong JS template literal → `SyntaxError`, module không chạy.
 
 **Script phải được kiểm chứng bằng negative test**: cố tình làm hỏng `prose` (bỏ lớp ngoài) →
-script phải báo `-112px` → khôi phục → PASS. Script luôn PASS là script vô dụng.
+script phải báo `-112px` → khôi phục → PASS. Tương tự cho kẻ: đưa `border-y` về `className`
+→ phải báo `-32px border-top/bottom <dl>`. Script luôn PASS là script vô dụng.
 
 `Section` dùng lại `Container` → không còn hai chỗ hardcode lệch nhau.
 
