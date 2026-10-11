@@ -1,19 +1,20 @@
 import type { HTMLAttributes } from 'react';
-import { Container } from './Container';
+import { Container, type ContainerSize } from './Container';
 
-type SectionVariant = 'default' | 'alt' | 'accent' | 'ink';
+export type SectionVariant = 'default' | 'alt' | 'accent' | 'ink';
 
 /**
  * `standard` — padding chuẩn của site (`py-12 md:py-16 xl:py-24`).
  * `large` — padding co giãn theo viewport (`--space-section`) cho hero và CTA cuối.
  */
-type SectionSize = 'standard' | 'large';
+type SectionSpacing = 'standard' | 'large';
 
 type SectionProps = HTMLAttributes<HTMLElement> & {
   variant?: SectionVariant;
-  size?: 'default' | 'prose' | 'narrow';
+  /** Bề rộng nội dung — dùng lại `ContainerSize` (Container là nguồn duy nhất). */
+  size?: ContainerSize;
   /** Cỡ padding dọc của section. Không phải bề rộng nội dung — xem `size`. */
-  spacing?: SectionSize;
+  spacing?: SectionSpacing;
 };
 
 const variantStyles: Record<SectionVariant, string> = {
@@ -25,7 +26,7 @@ const variantStyles: Record<SectionVariant, string> = {
   ink: 'bg-ink text-ink-text',
 };
 
-const spacingStyles: Record<SectionSize, string> = {
+const spacingStyles: Record<SectionSpacing, string> = {
   standard: 'py-12 md:py-16 xl:py-24',
   large: 'py-section',
 };

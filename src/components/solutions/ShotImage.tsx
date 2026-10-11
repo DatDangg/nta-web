@@ -72,9 +72,12 @@ export function ShotImage({
     />
   );
 
-  // Nhánh A (ảnh ngang): không có phần bị cắt → không khung bọc, không fade.
+  // Nhánh A (ảnh ngang): không có phần bị cắt → không khung `max-h`/`overflow-hidden`, không fade.
+  // Nhưng `skin` (viền + bo góc + bóng) VẪN phải áp — trước đây bị bỏ qua âm thầm khiến
+  // hero + đa số feature mất viền dù call site có truyền. Wrapper riêng thay vì gộp vào
+  // `<img>`: `skin` có thể chứa `max-w-*` mâu thuẫn với `max-w-full` của `imageClass`.
   if (!shot.frameClass) {
-    return image;
+    return <div className={`${skin} overflow-hidden`}>{image}</div>;
   }
 
   return (

@@ -99,9 +99,10 @@
  * trường hợp B: ảnh dọc, tỉ lệ < 1.0). Khung bọc `overflow: hidden` cắt cứng, mask này
  * làm mép cắt mềm lại.
  *
- * ⚠ CHỈ dùng khi ảnh THỰC SỰ cao hơn khung. Ảnh ngang (tỉ lệ ≥ 1.0) không bị cắt →
- * fade sẽ xoá viền dưới khung cửa sổ cho vô nghĩa. Quyết định theo `ratio` trong data,
- * không áp cứng.
+ * ⚠ CHỉ bật khi ảnh THỰC SỰ cao hơn khung. `ShotImage` **đo** `scrollHeight > clientHeight`
+ * lúc render (và theo `ResizeObserver`) rồi mới thêm class này — KHÔNG quyết định theo
+ * `ratio` tĩnh, vì việc ảnh có bị cắt còn phụ thuộc bề rộng cột (đổi theo viewport).
+ * Fade khi ảnh không bị cắt sẽ xoá viền dưới khung cửa sổ — đúng thứ cơ chế này sinh ra để tránh.
  */
 .shot-fade-bottom {
   -webkit-mask-image: linear-gradient(to bottom, black 78%, transparent 100%);

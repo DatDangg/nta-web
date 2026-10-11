@@ -1,14 +1,22 @@
 import { Section } from '@/components/ui/Section';
-import { ShotImage } from './ShotImage';
+import { AiAssistantPanel } from './AiAssistantPanel';
+
+export type AiSuggestionItem = { label: string; text: string };
 
 type AiSectionProps = {
   title: string;
   description: string;
   /** Danh sách gợi ý — dạng danh sách có nhãn, KHÔNG phải icon + chữ. */
   suggestions: string[];
-  image?: string;
-  imageAlt?: string;
-  imageRatio?: number;
+  /** Nội dung khung "Trợ lý nhận xét" dựng bằng HTML/CSS (không dùng ảnh). */
+  panel: {
+    label: string;
+    student: string;
+    meta?: string;
+    action: string;
+    description?: string;
+    suggestions?: AiSuggestionItem[];
+  };
 };
 
 /**
@@ -17,55 +25,36 @@ type AiSectionProps = {
  * ⚠ Trên nền `ink`, KHÔNG dùng `text-primary` (#0071e3, chỉ đạt 3.4:1 so với #1d1d1f —
  * dưới WCAG AA). Dùng nhóm token `ink-*` và `accent-ink` #64b5ff (≈7.4:1).
  *
- * **SAI LỆCH SO VỚI SPEC §5.3 — cần anh duyệt:** spec bảo 2 cột bằng nhau (text trái, ảnh
- * phải). Nhưng ảnh crop AI là **1223×284, tỉ lệ 4.3** — một dải rất ngang và rất thấp.
- * Trong cột ~608px nó chỉ còn 608×141px, chữ bên trong **không đọc được**, mà spec cũng
- * yêu cầu "ảnh crop phải đọc rõ chữ bên trong". Hai yêu cầu này mâu thuẫn nhau.
+ * **Sai lệch so với spec §5.3 (đã chốt 2026-11):** spec bảo ảnh crop AI đặt ở cột phải,
+ * 2 cột bằng nhau. Thực tế crop là **1223×284, tỉ lệ 4.31** — dải rất ngang, rất thấp:
+ * ở cột 608px chỉ còn 608×141px, chữ không đọc được; và **nền trắng bao quanh lóa lên
+ * trên nền tối**, lệch với text căn trái, co ở 375px là vô dụng.
  *
- * Chọn: **ảnh tràn ngang dưới**, chiếm trọn 1216px → hiển thị gần đúng kích thước gốc
- * (1223px), chữ đọc được. Giữ phần text + danh sách ở trên.
- * Nếu anh muốn giữ đúng 2 cột như spec, phải đổi sang crop khác
- * (`04-danh-gia-ai-tt27-crop.png`, tỉ lệ 1.157) — nhưng crop đó là lưới nhận xét TT27,
- * không phải khung Trợ lý AI mà copy §11.4 nói tới.
+ * → Thay ảnh bằng component HTML/CSS `AiAssistantPanel`: cùng nội dung và màu, nhưng nền
+ * đúng màu `ink`, **căn mép trái như text**, và co lại vẫn đọc được ở 375px.
  */
-export function AiSection({
-  title,
-  description,
-  suggestions,
-  image,
-  imageAlt,
-  imageRatio,
-}: AiSectionProps) {
+export function AiSection({ title, description, suggestions, panel }: AiSectionProps) {
   return (
     <Section spacing="large" variant="ink">
-      <div className="max-w-[65ch]">
-        <h2 className="text-h2 font-bold text-ink-text">{title}</h2>
-        <p className="mt-4 text-body-lg text-ink-text-secondary">{description}</p>
-      </div>
+      <div className="grid gap-10 lg:grid-cols-2 lg:gap-16 xl:gap-20">
+        <div className="max-w-[52ch]">
+          <h2 className="text-h2 font-bold text-ink-text">{title}</h2>
+          <p className="mt-4 text-body-lg text-ink-text-secondary">{description}</p>
 
-      <ul className="mt-8 grid max-w-[65ch] gap-4">
-        {suggestions.map((suggestion) => (
-          <li
-            className="border-l-2 border-accent-ink bg-ink-surface py-3 pl-4 pr-4 text-body text-ink-text"
-            key={suggestion}
-          >
-            {suggestion}
-          </li>
-        ))}
-      </ul>
-
-      {image ? (
-        <div className="mt-12">
-          <ShotImage
-            alt={imageAlt ?? ''}
-            maxH="max-h-[420px]"
-            ratio={imageRatio}
-            skin="rounded-lg border border-ink-border"
-            sizes="(max-width: 1280px) 100vw, 1216px"
-            src={image}
-          />
+          <ul className="mt-8 space-y-3">
+            {suggestions.map((suggestion) => (
+              <li
+                className="border-l-2 border-accent-ink bg-ink-surface py-3 pl-4 pr-4 text-body text-ink-text"
+                key={suggestion}
+              >
+                {suggestion}
+              </li>
+            ))}
+          </ul>
         </div>
-      ) : null}
+
+        <AiAssistantPanel {...panel} />
+      </div>
     </Section>
   );
 }

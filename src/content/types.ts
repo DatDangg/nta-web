@@ -38,6 +38,11 @@ export interface Solution {
   features: Feature[] | LegacyFeature[];
   benefits: string[];
   category: 'enterprise' | 'ai';
+  /**
+   * Bố cục trang chi tiết: `default` (zig-zag chung) · `lms` (layout riêng 8 block, spec §5).
+   * Thiếu cờ → `default`. Chỉ T5 mới đọc cờ này.
+   */
+  layout?: 'default' | 'lms';
   useCases?: string[];
   sections?: { title: string; intro?: string; items?: string[] }[];
   highlights?: { value: string; label: string }[];
