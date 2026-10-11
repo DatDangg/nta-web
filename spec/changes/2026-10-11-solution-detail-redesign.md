@@ -75,7 +75,7 @@ Spec §3, §4, §7.
 
 ### T5 — LMS layout riêng
 
-Spec §5. **HÀNH ĐỘNG SAU KHI USER CHỐT 2 ĐIỂM BLOCKER (xem §3).**
+Spec §5. **Chạy được ngay — B1 + B2 đã đóng (xem §3).**
 
 8 block theo thứ tự: hero → 4 features → bento pháp quy → AI nền tối → 3 thẻ "Dành cho ai"
 → FAQ accordion → CTA cuối full-width.
@@ -104,14 +104,14 @@ Spec §5. **HÀNH ĐỘNG SAU KHI USER CHỐT 2 ĐIỂM BLOCKER (xem §3).**
 
 ---
 
-## 3. BLOCKER — cần user chốt trước T5
+## 3. BLOCKER — ĐÃ ĐÓNG HẾT (2026-11)
 
 | # | Nội dung | Trạng |
 |---|---|---|
-| B1 | ~~Số hiệu thông tư đánh giá~~ **ĐÃ CHỐT** | TT **27/2020** (không phải 27/2018) · học bạ số TT **70/2026** ban hành 22/8/2026, hiệu lực 08/10/2026 (không phải 70/2025) · **bỏ "Điều 7.4"** ở mọi chỗ |
-| B2 | **Chi tiết "Cảnh báo sớm"** — cảnh báo về cái gì | Tạm dùng nhãn chung `Cảnh báo sớm` / `Early warnings` (đúng nghĩa, không sai). Cập nhật sau được. |
+| B1 | Số hiệu thông tư đánh giá | ✅ **ĐÃ CHỐT** — TT **27/2020** (không phải 27/2018) · học bạ số TT **70/2026** ban hành 22/8/2026, hiệu lực 08/10/2026 (không phải 70/2025) · **bỏ "Điều 7.4"** ở mọi chỗ |
+| B2 | Chi tiết "Cảnh báo sớm" | ✅ **ĐÃ ĐÓNG — BỎ HẲN.** User chốt bỏ gợi ý "Cảnh báo sớm" (nội dung mơ hồ, dễ bịa). Section AI chỉ còn **3 gợi ý** (gợi ý nhận xét · tóm tắt biên bản · soạn thông báo); đã xoá khỏi FAQ 4 câu VI/EN. Không nhắc "cảnh báo sớm" ở bất kỳ đâu trong layout LMS. |
 
-T1–T4 **không** phụ thuộc 2 blocker này → có thể chạy trước.
+**Không còn blocker.** T1–T5 chạy được ngay — không chờ gì thêm.
 
 ---
 
@@ -147,7 +147,7 @@ T1–T4 **không** phụ thuộc 2 blocker này → có thể chạy trước.
 - [ ] Bento ô lớn chiếm 2/3, 2 ô nhỏ cột phải
 - [ ] Section AI nền tối, chữ đạt contrast, ảnh crop đọc rõ
 - [ ] FAQ accordion mở/đóng bằng bàn phím
-- [ ] Copy VI/EN khớp bảng §11 (trừ 2 blocker)
+- [ ] Copy VI/EN khớp bảng §11 (không còn placeholder/blocker nào)
 - [ ] `lms.mdx` vẫn còn `benefits`/`useCases`/`sections`/`screenshots` trong data
 
 **Chung:**
@@ -164,7 +164,7 @@ T1–T4 **không** phụ thuộc 2 blocker này → có thể chạy trước.
    NORMAL cho T3, T4.
 3. Sau T4: **chụp 4 trang ở 375px + 1440px gửi user duyệt.**
 4. **KHÔNG push, KHÔNG deploy.** Chỉ khi user nói OK.
-5. T5 chỉ chạy sau khi B1 + B2 được chốt.
+5. T5 chạy được ngay — B1 + B2 đã đóng (xem §3).
 
 > `spec_version` 3.0.0 KHÔNG bump (không đổi requirement R-05/R-06, chỉ đổi cách hiển thị).
 > `spec/test-scope/current.json` bump scope v10 → v11.
