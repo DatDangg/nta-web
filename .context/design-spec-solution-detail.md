@@ -84,20 +84,54 @@ export function Container({ as: Tag = 'div', size = 'default', children, classNa
 | `prose` | `720px` | ❌ **bám mép trái** | **CHỈ khối chữ thuần 1 cột**: FAQ, đoạn văn giới thiệu, block case study. KHÔNG dùng khi section có ảnh |
 | `narrow` | `520px` | ✅ `mx-auto` | hero **text** — phần text, không phải phần ảnh |
 
-**Quy tắc mép trái (sửa 2026-11 sau khi anh soi ảnh):**
+**Quy tắc mép trái (sửa 2026-11, lần 2 — sau khi sửa lần 1 đi sai hướng):**
 
-> `prose` **KHÔNG** căn giữa. Nó chỉ giới hạn `max-width`, vẫn **bám mép trái** của container 1280
-> và dùng **cùng padding ngang** (`px-4 sm:px-6 lg:px-8`).
+> `prose` là **2 lớp**:
+> - **Lớp ngoài**: y hệt `default` — `mx-auto max-w-container` + `px-4 sm:px-6 lg:px-8`.
+>   Lớp này quyết định mép trái, phải **khớp mọi section khác**.
+> - **Lớp trong**: `max-w-[720px]`, **KHÔNG `mx-auto`** → bám mép trái lớp ngoài.
 
-Lý do: nếu `prose` có `mx-auto`, khối 720px lùi vào giữa → lệch so với các section 1280 xung quanh
-và tiêu đề cùng cấp. Quan sát được ở 3 trang trước khi sửa:
+⚠ Sửa lần 1 bỏ hẳn `mx-auto` khỏi `prose` → **sai**. Không còn lớp ngoài 1280 nên khối 720px
+dính sát mép màn hình (~30px), nằm ngoài container. Nhận ra khi anh soi ảnh 1440/1920.
+
+**Vì sao `prose` không căn giữa:** khối 720px lùi vào giữa sẽ lệch so với các section 1280 xung
+quanh và tiêu đề cùng cấp. Quan sát được ở 3 trang trước khi sửa:
 - Case study: "Thách thức" · "Giải pháp" lùi giữa, còn "Kết quả" ở mép trái → lệch ngang hàng
 - Trang giải pháp: "Câu hỏi thường gặp" căn giữa, lệch với các section khác
 - Về NTA: breadcrumb lùi giữa, lệch với "Năng lực"
 
 **Chỉ hero mới căn giữa** (`narrow` có `mx-auto`), vì hero là khối duy nhất được thiết kế
 theo trục giữa. Ngoại lệ có chủ đích: block "sứ mệnh" ở trang Về NTA (`MissionBlock`) căn giữa
-vì là câu tuyên ngôn — giữ nguyên, không phải lỗi.
+vì là câu tuyên ngôn — giữ nguyên, không phải lỗi. **Breadcrumb phải theo trục của hero**:
+`PageHeader variant="centered"` → `Breadcrumb centered` (`justify-center`), nếu không breadcrumb
+lệch trái giữa chừng so với tiêu đề căn giữa.
+
+**Đường kẻ (`border-y`) phải nằm TRONG container, không đặt trên `<section>`:**
+`border-y` trên `<section>` trải hết `100vw`, dài hơn mép nội dung ~32px → lệch. Nền (`bg-*`)
+thì được tràn full-width (theo L2). Tách: nền ở section, kẻ ở Container.
+- `MetaBar`: `Container` + `border-y` trên Container, grid trong `max-w-[720px]`
+- `SolutionBlock`: `<section className="bg-background-alt">` + `<Container className="border-y">`
+
+### Verify tự động — mép trái mọi section
+
+`scripts/screenshots/.tmp/check-left-align.mjs <width> <route...>` — chạy ở 1440 và 1920.
+
+Cơ chế: lấy mép trái logo `NTA` trong header làm mốc; đo mép trái **nội dung** từng section
+(1 lớp = trong padding; 2 lớp prose = div trong). Lệch quá ±2px → FAIL, in tên khối + lệch bao nhiêu.
+
+Phân biệt "căn giữa có chủ đích" với "bị lệch" — dùng **đối xứng + chiều rộng**:
+khối coi là căn giữa khi `|cách trái − cách phải| ≤ 2px` **và** hẹp hơn nội dung container đầy đủ.
+Container 1280 ở 1440/1920 luôn đối xứng nên nếu chỉ test đối xứng sẽ bỏ sót toàn bộ.
+
+Bẫy đã gặp khi viết script (không lặp lại):
+- Cột của grid (footer 4 cột) là `<section>` riêng → loại bằng `display` của `sec.parentElement`,
+  **không phải** của `el.parentElement`.
+- Grid/flex container (`Nhận tư vấn`) có `firstElementChild` là **một cột**, dùng làm "lớp trong"
+  sẽ đo sai → chỉ coi là 2 lớp khi `el` có `display: block`.
+- Backtick trong comment nằm trong JS template literal → `SyntaxError`, module không chạy.
+
+**Script phải được kiểm chứng bằng negative test**: cố tình làm hỏng `prose` (bỏ lớp ngoài) →
+script phải báo `-112px` → khôi phục → PASS. Script luôn PASS là script vô dụng.
 
 `Section` dùng lại `Container` → không còn hai chỗ hardcode lệch nhau.
 

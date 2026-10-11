@@ -13,18 +13,21 @@ type ContainerProps = HTMLAttributes<HTMLElement> & {
  * Nguồn sự thật duy nhất cho mọi giới hạn bề rộng trên site.
  *
  * - `default` (1280px): mặc định — mọi section CÓ ảnh, section chuẩn, header, footer, CTA.
- * - `prose` (720px): CHỈ khối chữ thuần MỘT cột (FAQ, đoạn văn dài). **Bám mép trái** của
- *   container 1280 (không căn giữa) — nếu căn giữa, khối 720px lùi vào giữa, lệch so với
- *   các section 1280 xung quanh và tiêu đề cùng cấp. Quy tắc: chỉ hero mới căn giữa.
+ * - `prose` (720px): CHỈ khối chữ thuần MỘT cột (FAQ, đoạn văn dài).
+ *   **2 lớp**: lớp ngoài y hệt `default` (1280 + `mx-auto` + padding) để mép trái khớp mọi
+ *   section khác; lớp trong `max-w-[720px]` bám mép trái lớp ngoài (KHÔNG `mx-auto` — nếu có
+ *   sẽ lùi vào giữa và lệch so với tiêu đề cùng cấp).
  * - `narrow` (520px): **duy nhất** căn giữa (`mx-auto`) — hero text.
  *
  * ⚠ KHÔNG dùng `prose` cho khối chữ nhiều cột (grid 2–3 cột): ở 720px mỗi cột chỉ còn ~340px,
  * chữ bị bẻ dòng từng từ. Với grid, giữ `default` và giới hạn từng cột bằng `max-w-[65ch]`.
  * ⚠ KHÔNG dùng `prose` cho section có ảnh — bóp ảnh thành dải hẹp, lệch tỉ lệ giữa các trang.
  */
+const outerClass = 'mx-auto w-full max-w-container px-4 sm:px-6 lg:px-8';
+
 const sizeClass: Record<ContainerSize, string> = {
-  default: 'mx-auto max-w-container',
-  prose: 'max-w-[720px]',
+  default: '',
+  prose: '',
   narrow: 'mx-auto max-w-[520px]',
 };
 
@@ -35,11 +38,16 @@ export function Container({
   size = 'default',
   ...containerProps
 }: ContainerProps) {
-  // `sizeClass` đặt trước `className` để caller vẫn override được bằng class riêng.
-  // `prose` không có `mx-auto` → bám mép trái, dùng padding y hệt `default`.
-  const classes = ['w-full', 'px-4', 'sm:px-6', 'lg:px-8', sizeClass[size], className]
-    .filter(Boolean)
-    .join(' ');
+  const classes = [outerClass, sizeClass[size], className].filter(Boolean).join(' ');
+
+  // `prose` cần thêm một lớp trong để giới hạn 720px mà vẫn bám mép trái lớp ngoài.
+  if (size === 'prose') {
+    return (
+      <Tag className={classes} {...containerProps}>
+        <div className="max-w-[720px]">{children}</div>
+      </Tag>
+    );
+  }
 
   return (
     <Tag className={classes} {...containerProps}>

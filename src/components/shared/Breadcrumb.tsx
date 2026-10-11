@@ -7,16 +7,18 @@ export interface BreadcrumbItem {
 }
 
 interface BreadcrumbProps {
+  /** Căn giữa breadcrumb — dùng khi hero căn giữa để trục giữa khớp tiêu đề. */
+  centered?: boolean;
   items: BreadcrumbItem[];
 }
 
-export function Breadcrumb({ items }: BreadcrumbProps) {
+export function Breadcrumb({ centered = false, items }: BreadcrumbProps) {
   const t = useTranslations('nav');
   const crumbs = [{ label: t('home'), href: '/' }, ...items.slice(-2)];
 
   return (
     <nav aria-label="Breadcrumb" className="text-sm text-text-secondary">
-      <ol className="flex flex-wrap items-center gap-2">
+      <ol className={`flex flex-wrap items-center gap-2 ${centered ? 'justify-center' : ''}`}>
         {crumbs.map((item, index) => {
           const isCurrent = index === crumbs.length - 1;
           return (
