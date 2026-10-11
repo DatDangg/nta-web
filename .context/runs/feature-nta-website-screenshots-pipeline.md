@@ -8,40 +8,62 @@ workItem: feature/nta-website
 phaseTask: screenshots-pipeline
 step: done
 agent: primary
-status: awaiting            # chờ user: quyết định commit + có mở change-request nối ảnh v2 vào .mdx
-attempt: 2
+status: awaiting            # chờ user: quyết định có mở change-request nối ảnh v2 vào .mdx
+attempt: 3
 interrupted: false
-updatedAt: 2026-10-11T10:30:00+07:00
+updatedAt: 2026-10-11T00:00:00+07:00
+commit: a225bf9
 filesNew:
-  - scripts/screenshots/README.md
-  - scripts/screenshots/capture.mjs
-  - scripts/screenshots/cdp.mjs
-  - scripts/screenshots/live.mjs
-  - scripts/screenshots/shots.mjs
-  - scripts/screenshots/serve.mjs
-  - scripts/screenshots/inspect.mjs
-  - scripts/screenshots/wrapper.html
-  - scripts/screenshots/mock-hrm/{index.html,app.js}
-  - scripts/screenshots/fixtures/{hrm,lms,crm,dentgo}.json   # đã sửa lại theo shape API thật
-  - public/images/solutions/hrm/*-v2.png (+ crop)
-  - public/images/solutions/lms/v2/*.png
-  - public/images/solutions/crm/*-v2.png
-  - public/images/solutions/dentgo/*-v2.png (+ -crop)
+  - scripts/screenshots/            # pipeline chụp (capture/live/shots/wrapper/brand/fixtures/mock-hrm)
+  - public/images/solutions/v2/     # 26 ảnh + 24 crop
   - docs/screenshots-mapping.md
 filesTouched:
-  - scripts/screenshots/{PLAN-STEP1.md,design-tokens.md,build-*-fixture.mjs,mock-hrm/app.css,measure-frame.mjs}
-  - .gitignore                       # + scripts/screenshots/.tmp/
+  - scripts/screenshots/capture.mjs   # +hideFloatingWidgets, +fitPageWidth (đo bề rộng), +appWidth, +maxHeight, --dump
+  - scripts/screenshots/shots.mjs     # dentgo: appWidth 1700, maxHeight theo shot, hideWidgets/fitTables
+  - .gitignore                        # + scripts/screenshots/.tmp/
 evidence:
   reportPath: docs/screenshots-mapping.md
-  verdict: "HRM 9/9 · LMS 7/7 · CRM 5/5 · DentGo 5/5 chụp được, 0 console error (--debug); crop đủ cả 4 sản phẩm"
+  verdict: >
+    DentGo 5/5 ảnh sạch sau khi sửa 3 lỗi. User duyệt: "ảnh ok rồi đấy".
+    CRM/LMS/HRM giữ nguyên theo quyết định user (lệch tỉ lệ với DentGo, chấp nhận).
 next: >
-  (1) Ảnh v2 CHƯA nối vào web (`.mdx` vẫn trỏ ảnh cũ) → nếu muốn hiển thị: mở change request riêng
-      theo /change (đụng nội dung đã publish).
-  (2) Quyết định commit: scripts/screenshots + ảnh v2 + docs/screenshots-mapping.md (chưa commit).
+  (1) Ảnh v2 CHƯA nối vào web (`.mdx` vẫn trỏ ảnh cũ) → nếu muốn hiển thị: mở change request
+      theo /change. Yêu cầu user: gắn vào heroImage + features[].image (LMS: showcase),
+      alt VI/EN riêng từng ảnh theo mapping, HRM thêm caption "Giao diện minh hoạ",
+      chỉ giữ screenshots[] cho ảnh chưa gắn. ⚠ Template HIỆN CHƯA có heroImage /
+      features[].image / showcase → phải mở rộng schema trước (types.ts `features: string[]`).
+  (2) Design layout mới chưa làm. User đã chốt hướng: hero text căn giữa + 2 CTA
+      ("Đăng ký demo" / "Xem tính năng ›") + ảnh full-width; tính năng xen kẽ zigzag;
+      LMS layout riêng 4 section (đa trường · hồ sơ · đánh giá+AI · thời khoá biểu/giáo án/học bạ số)
+      + bento văn bản pháp quy (TT27/TT70) + section nền tối AI + 3 thẻ "Dành cho ai"
+      + FAQ accordion + CTA full-width; bỏ section ảnh cuối trang và section lặp ý.
+  (3) KHÔNG tự deploy prod. Sau Reviewer PASS: chụp 4 trang ở 375px + 1440px gửi user duyệt,
+      user OK mới push + deploy (hard gate do user đặt).
 loopSignal: none
 approvals:
   - { gate: scope, at: 2026-10-11T00:00:00+07:00, ok: "user chọn Full: mock 9 màn + capture + chụp hết" }
+  - { gate: content, at: 2026-10-11T00:00:00+07:00, ok: "user xác nhận dữ liệu trong ảnh là giả" }
+  - { gate: fix-scope, at: 2026-10-11T00:00:00+07:00, ok: "user: sửa hết ảnh v2 DentGo, cái nào lỗi sửa cái đó" }
+  - { gate: review-images, at: 2026-10-11T00:00:00+07:00, ok: "user duyệt ảnh DentGo sau khi sửa" }
+  - { gate: re-shoot-other, at: 2026-10-11T00:00:00+07:00, ok: "user: giữ nguyên CRM/LMS/HRM, chỉ sửa DentGo" }
+  - { gate: commit, at: 2026-10-11T00:00:00+07:00, ok: "user: commit v2 + scripts + mapping" }
 ```
+
+## Lỗi ảnh DentGo — đã tìm gốc rễ và sửa (2026-10-11)
+
+Ba lỗi user báo, tất cả từ các quyết định cũ trong `capture.mjs`:
+
+| Lỗi | Nguyên nhân gốc | Sửa |
+|---|---|---|
+| Nút tròn (chat) lệch lạc, đè giữa bảng | Nút mở hỗ trợ là `position: fixed`; `unlockHeight` ép **mọi** `fixed` → `static` để mở khoá chiều cao → nút rơi vào giữa luồng | `hideFloatingWidgets()` — ẩn theo `aria-label` chứa hỗ trợ/chat/zalo/support + bo tròn + sát mép phải. Chạy **sau cùng** trước lúc chụp (ẩn sớm thì React render lại khôi phục) |
+| Bảng bị cắt cột cuối (chọc UI) | Bảng app rộng 1510–1665px > khung 1328px | Shot đặt `appWidth: 1700`, wrapper tự co ảnh về 1328 (`cropFromFramed` nhân hệ số `1328/appW`) |
+| Ảnh dài lê thê | Chụp full-page không giới hạn | `maxHeight` theo từng shot (1100–1500px), mặc định `VIEWPORT_H × 2` |
+
+**Hai hướng đã thử và bỏ** (đừng tái diễn):
+- `transform: scale()` trên host — tạo vùng trống lệch mép phải.
+- `zoom` trên `<html>` — cũng lệch; thêm nữa `scrollWidth` là layout px chưa nhân zoom nên vòng lặp tính sai, phải đo bằng `getBoundingClientRect()`.
+
+**Bẫy khi viết comment trong template string** `.mjs`: dùng backtick trong comment sẽ hỏng cú pháp — đã mắc 2 lần (`SyntaxError: Unexpected identifier`).
 
 ## Kết quả
 
