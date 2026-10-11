@@ -296,11 +296,22 @@ và `fade` trên ảnh **đã không bị cắt** là vô lý (xoá viền dư�
 | Ví dụ | CRM/LMS/DentGo `01-tong-quan` (1.06–1.36) | HRM `01` (1.06) · `06-nghi-phep` (0.93) · `07` (0.996) · `08` (0.735) |
 | Ảnh | `h-auto w-auto max-w-full max-h-[420px] mx-auto` | `w-full h-auto` — **rộng đúng bằng cột** |
 | Khung bọc | không cần | `max-h-[420px] overflow-hidden rounded-lg` |
-| Fade đáy | **KHÔNG** (ảnh không bị cắt → fade là vô lý) | `.shot-fade-bottom` |
+| Fade đáy | **KHÔNG** (ảnh không bị cắt → fade là vô lý) | `.shot-fade-bottom` — **chỉ khi ảnh THỰC SỰ cao hơn khung** |
 | Vì sao | Không có phần bị cắt nên viền dưới khung hiện trọn vẹn | Ảnh cao hơn khung → phần đáy bị cắt thật, fade cho mượt |
 
 **Ngưỡng KHÔNG hardcode theo tên ảnh.** Tỉ lệ lấy từ cột đã đo trong `docs/screenshots-mapping.md`:
 ≥ 1.0 → trường hợp A · < 1.0 → trường hợp B. Lưu vào data (`feature.ratio`) khi gắn ảnh ở T4.
+
+**⚠ Fade phải ĐO, không quyết định từ `ratio` (sửa 2026-11).** `ratio` chỉ chọn *nhánh hiển thị*
+(A/B), **không** đủ để biết ảnh có bị cắt đáy hay không — việc đó phụ thuộc **bề rộng cột**,
+mà bề rộng cột đổi theo viewport. Ví dụ `lms/07-hoc-ba-so` (ratio 0.836):
+cao 410px ở mobile → **vừa** `max-h-420`, **không bị cắt**; cao 727px ở lg → **bị cắt**.
+Quyết định tĩnh sẽ fade nhầm ở một trong hai viewport, mà fade trên ảnh không bị cắt là
+**xoá viền dưới khung cửa sổ** — đúng thứ cơ chế này sinh ra để tránh.
+
+→ `ShotImage` (client component) render rồi đo `frame.scrollHeight > frame.clientHeight`,
+bật `.shot-fade-bottom` khi **thực sự** bị cắt. Đã verify: frame bị cắt → fade bật;
+frame không bị cắt → fade tắt (viền đáy khung macOS giữ nguyên).
 
 **Hero** (áp cùng 2 trường hợp, `max-h` lớn hơn):
 
@@ -535,8 +546,20 @@ Grid bento **không đều** (tránh kiểu "3 card icon + tiêu đề + chữ" 
 | Link/CTA | `text-accent-ink` | `#64b5ff` — ≈ 7.4:1 ✅ (`--color-primary` #0071e3 chỉ 3.4:1, **không đạt**) |
 | Viền thẻ | `border-ink-border` | `#48484a` |
 | Nền thẻ | `bg-ink-surface` | `#2c2c2e` |
-| Layout | `lg:grid-cols-2 lg:gap-16 xl:gap-20` — **2 cột bằng nhau**, KHÔNG dùng cột ảnh hẹp `20rem` | text trái, ảnh crop phải |
+| Layout | `lg:grid-cols-2 lg:gap-16 xl:gap-20` — **2 cột bằng nhau**, KHÔNG dùng cột ảnh hẹp `20rem` | ⚠ **ĐÃ ĐỔI 2026-11 — xem ghi chú bên dưới** |
 | Cột ảnh | rộng **bằng cột chữ** (mỗi cột ~608px tại 1280) | ảnh crop phải **đọc rõ** chữ bên trong |
+
+> ⚠ **SAI LỆCH SO VỚI SPEC — chờ anh duyệt.** Bản gốc bảo ảnh nằm ở cột phải, rộng bằng cột chữ.
+> Nhưng ảnh crop AI là **1223×284, tỉ lệ 4.31** — một dải rất ngang, rất thấp. Trong cột 608px
+> nó chỉ còn **608×141px**, chữ bên trong **không đọc được** — trong khi spec cũng yêu cầu
+> "ảnh crop phải đọc rõ chữ bên trong". Hai yêu cầu mâu thuẫn nhau.
+>
+> **Đã dựng:** ảnh tràn ngang **dưới** text + danh sách, chiếm trọn 1216px → hiển thị gần
+> đúng kích thước gốc (1223px), chữ đọc được. Đã chụp và gửi anh duyệt.
+>
+> **Nếu anh muốn giữ đúng 2 cột:** phải đổi sang `04-danh-gia-ai-tt27-crop.png` (1307×1130,
+> tỉ lệ 1.157) — nhưng crop đó là **lưới nhận xét TT27**, không phải khung "Trợ lý AI" mà
+> copy §11.4 nói tới. Không có crop nào khác của khung AI.
 | Ảnh | **`04-danh-gia-ai-crop.png`** — khung "Trợ lý AI" (đã chốt; ảnh đầy đủ `04-danh-gia-ai.png` đã dùng ở feature 3) | viền `border-ink-border`, bo góc `rounded-lg` |
 | Kích thước ảnh | `h-auto w-auto max-w-full` — giữ tỉ lệ crop | xem §3.1 |
 | Container | `<Container>` **default 1280** | section có ảnh → KHÔNG dùng `prose` |

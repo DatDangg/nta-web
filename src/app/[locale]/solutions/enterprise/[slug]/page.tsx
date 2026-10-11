@@ -78,7 +78,7 @@ export default async function EnterpriseSolutionDetailPage({ params }: { params:
         }
       >
         <div className="min-w-0">
-          <FeatureList features={solution.features} title={t('featuresTitle')} />
+          <FeatureList features={solution.features.map((f) => (typeof f === 'string' ? f : f.title))} title={t('featuresTitle')} />
           <BenefitList benefits={solution.benefits} title={t('benefitsTitle')} />
           <SolutionSections sections={extended ? solution.sections ?? [] : []} />
           <UseCases cases={extended ? solution.useCases ?? [] : []} title={t('useCasesTitle')} />

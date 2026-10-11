@@ -33,9 +33,22 @@ const config: Config = {
         'warning-ink': 'var(--color-warning-ink)',
         overlay: 'var(--color-overlay)',
         skeleton: 'var(--color-skeleton)',
+        // Nền tối + token đi kèm (spec §2.1). `accent-ink` BẮT BUỘC cho link/CTA trên nền ink:
+        // `primary` (#0071e3) chỉ đạt 3.4:1 trên nền #1d1d1f, dưới WCAG AA.
+        ink: 'var(--color-ink)',
+        'ink-surface': 'var(--color-ink-surface)',
+        'ink-border': 'var(--color-ink-border)',
+        'ink-text': 'var(--color-ink-text)',
+        'ink-text-secondary': 'var(--color-ink-text-secondary)',
+        'accent-ink': 'var(--color-accent-ink)',
       },
       backgroundImage: { 'gradient-soft': 'var(--bg-gradient-soft)' },
       maxWidth: { container: '1280px' },
+      spacing: {
+        // Khoảng cách co giãn cho hero/section lớn (spec §2.2) → `py-hero`, `pt-section`, …
+        hero: 'var(--space-hero)',
+        section: 'var(--space-section)',
+      },
       fontFamily: { sans: ['var(--font-sans)'], mono: ['var(--font-mono)'] },
       fontSize: {
         hero: 'var(--text-hero)',

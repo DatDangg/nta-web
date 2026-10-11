@@ -25,6 +25,17 @@
   --color-success-ink: #0f7b31;
   --color-warning: #ff9500;
   --color-warning-ink: #a85c00;
+  /* Nền tối cho section AI. Giá trị `--color-ink` trùng `--color-text-primary` (#1d1d1f)
+     — đồng nhất với bảng màu Apple. 4 token "ink-*" đi kèm đặt chữ/viền/nền thẻ trên nền này. */
+  --color-ink: #1d1d1f;
+  --color-ink-surface: #2c2c2e;
+  --color-ink-border: #48484a;
+  --color-ink-text: #f5f5f7;
+  --color-ink-text-secondary: #a1a1a6;
+  /* Link/CTA trên nền tối. BẮT BUỘC dùng token này thay --color-primary (#0071e3):
+     #0071e3 trên #1d1d1f chỉ đạt contrast ≈3.4:1 — dưới WCAG AA 4.5:1 cho text thường.
+     #64b5ff đạt ≈7.4:1. */
+  --color-accent-ink: #64b5ff;
   --bg-gradient-soft: linear-gradient(180deg, #ffffff 0%, #f5f5f7 100%);
   --font-sans: var(--font-inter, Inter), -apple-system, BlinkMacSystemFont,
     "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -49,6 +60,9 @@
   --space-2xl: 3rem;
   --space-3xl: 4rem;
   --space-4xl: 6rem;
+  /* Khoảng cách cho hero/section lớn — co giãn theo viewport (spec §2.2). */
+  --space-hero: clamp(2.5rem, 2rem + 2.5vw, 4.5rem);
+  --space-section: clamp(4rem, 3rem + 4vw, 7rem);
   --radius-sm: 4px;
   --radius-md: 8px;
   --radius-lg: 16px;
@@ -78,6 +92,20 @@
 
 .reveal-item {
   transition: opacity 400ms cubic-bezier(0.16, 1, 0.3, 1), transform 400ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/*
+ * Mờ dần đáy ảnh — dùng cho ảnh khung macOS BỊ CẮT bởi `max-height` khung bọc (spec §3.1
+ * trường hợp B: ảnh dọc, tỉ lệ < 1.0). Khung bọc `overflow: hidden` cắt cứng, mask này
+ * làm mép cắt mềm lại.
+ *
+ * ⚠ CHỈ dùng khi ảnh THỰC SỰ cao hơn khung. Ảnh ngang (tỉ lệ ≥ 1.0) không bị cắt →
+ * fade sẽ xoá viền dưới khung cửa sổ cho vô nghĩa. Quyết định theo `ratio` trong data,
+ * không áp cứng.
+ */
+.shot-fade-bottom {
+  -webkit-mask-image: linear-gradient(to bottom, black 78%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 78%, transparent 100%);
 }
 
 html.js .reveal:not(.revealed) .reveal-item {
