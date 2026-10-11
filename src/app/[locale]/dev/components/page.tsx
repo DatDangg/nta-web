@@ -468,8 +468,10 @@ export default async function ComponentPreviewPage({
         <FeatureImageRow feature={toImageRowFeature(sample, lang)} key={sample.image} />
       ))}
 
-      {/* --- 5. Bento pháp quy — PHƯƠNG ÁN A: ô lớn có ẢNH --- */}
-      <CaseHeading>BentoCompliance · PHƯƠNG ÁN A — ô lớn có ảnh 04-danh-gia-ai-tt27-crop.png</CaseHeading>
+      {/* --- 5. Bento pháp quy — PHƯƠNG ÁN A (ĐÃ CHỐT): ô lớn có ảnh --- */}
+      <CaseHeading>
+        BentoCompliance · PHƯƠNG ÁN A (đã chốt) — ô lớn có ảnh 04-danh-gia-ai-tt27-crop.png
+      </CaseHeading>
       <BentoCompliance
         items={[
           {
@@ -488,8 +490,11 @@ export default async function ComponentPreviewPage({
         title={c.bentoTitle}
       />
 
-      {/* --- 5b. Bento pháp quy — PHƯƠNG ÁN B: ô lớn dùng CON SỐ cực lớn --- */}
-      <CaseHeading>BentoCompliance · PHƯƠNG ÁN B — ô lớn dùng con số &quot;27&quot; cỡ cực lớn, không ảnh</CaseHeading>
+      {/* --- 5b. Bento pháp quy — PHƯƠNG ÁN B (FALLBACK): ô lớn dùng CON SỐ cực lớn.
+          Dùng lại khi ảnh crop ô lớn không tạo được nhịp thị giác tốt. --- */}
+      <CaseHeading>
+        BentoCompliance · PHƯƠNG ÁN B (fallback) — ô lớn dùng con số &quot;27&quot; cỡ cực lớn, không ảnh
+      </CaseHeading>
       <BentoCompliance
         items={[
           {

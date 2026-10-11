@@ -517,6 +517,11 @@ Grid bento **không đều** (tránh kiểu "3 card icon + tiêu đề + chữ" 
 
 **Tiêu đề section:** "Bám sát văn bản pháp quy" — không eyebrow, không số thứ tự.
 
+> ✅ **ĐÃ CHỐT (2026-10-11): ô lớn dùng PHƯƠNG ÁN A — ảnh `04-danh-gia-ai-tt27-crop.png`.**
+> Phương án B (con số `27` cỡ cực lớn, không ảnh) chỉ là **fallback** — dùng lại nếu ảnh
+> crop ô lớn không tạo được nhịp thị giác tốt hoặc ảnh lỗi. Cả hai đều đã dựng ở trang
+> preview `/dev/components` để so sánh trực tiếp.
+
 ### 5.3 AI — section nền tối (`variant="ink"`)
 
 > ✅ **ĐÃ CHỐT (2026-10-11): khung "Trợ lý nhận xét" dựng bằng DOM (`AiAssistantPanel`), KHÔNG dùng ảnh crop.**

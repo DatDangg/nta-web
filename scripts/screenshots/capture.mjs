@@ -20,6 +20,7 @@ import { CDP, sleep } from "./cdp.mjs";
 import { SHOTS, ORDER } from "./shots.mjs";
 import { prepareLive, enableProbe, login, ENV, LIVE } from "./live.mjs";
 import { ensureFakeLogo } from "./brand.mjs";
+import { assertImagesReady } from "./images-ready.mjs";
 
 /* ---------- cấu hình cố định (đo từ ảnh cũ — design-tokens.md) ---------- */
 const APP_WIDTH = 1328;      // bề rộng nội dung cửa sổ
@@ -562,6 +563,12 @@ for (const slug of targets) {
       // Trần chiều cao ảnh: giữ phần đầu người xem thấy thật, bỏ đuôi dài lê thê
       // (bảng lịch hẹn DentGo dài 2500 CSS px → ảnh 5030px, sidebar trắng 2/3 ảnh).
       const maxH = shot.maxHeight ?? VIEWPORT_H * 2;
+      // BƯỚC BẮT BUỘC — chặn chụp khi còn ảnh chưa decode xong (xem images-ready.mjs).
+      // Ảnh app do fixture/mocks trả về; ảnh 404 là lỗi thật → phải dừng, không "chụp đại".
+      if (!probe) {
+        const img = await assertImagesReady(cdp, sessionId, `${slug}/${shot.name}`, { settleMs: 30_000 });
+        log(`    · ảnh sẵn sàng ${img.ready}/${img.total}`);
+      }
       const app = await fullPagePng(cdp, sessionId, appW, maxH);
       if (app.truncated) log(`    · cắt chiều cao ${app.rawHeight} → ${maxH}px (bỏ đuôi dài)`);
       const tmpRel = `/.tmp/app-${slug}-${shot.name}.png`;
