@@ -1,9 +1,11 @@
 import type { HTMLAttributes } from 'react';
+import { Container } from './Container';
 
 type SectionVariant = 'default' | 'alt' | 'accent';
 
 type SectionProps = HTMLAttributes<HTMLElement> & {
   variant?: SectionVariant;
+  size?: 'default' | 'prose' | 'narrow';
 };
 
 const variantStyles: Record<SectionVariant, string> = {
@@ -14,6 +16,7 @@ const variantStyles: Record<SectionVariant, string> = {
 
 export function Section({
   variant = 'default',
+  size = 'default',
   className = '',
   children,
   ...sectionProps
@@ -23,9 +26,7 @@ export function Section({
       className={`py-12 md:py-16 xl:py-24 ${variantStyles[variant]} ${className}`.trim()}
       {...sectionProps}
     >
-      <div className="mx-auto w-full max-w-container px-4 sm:px-6 lg:px-8">
-        {children}
-      </div>
+      <Container size={size}>{children}</Container>
     </section>
   );
 }

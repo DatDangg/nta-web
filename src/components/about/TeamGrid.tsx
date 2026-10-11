@@ -7,7 +7,7 @@ type Member = { name: string; role: string; image: string };
 function TeamPortrait({ member, fallback }: { member: Member; fallback: string }) {
   return (
     <div className="aspect-[4/3] overflow-hidden rounded-lg bg-surface-sunken">
-      <HomeImage alt={member.name || fallback} className="h-full w-full object-cover" sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw" src={member.image} />
+      <HomeImage alt={member.name || fallback} className="h-full w-full object-cover" height={600} sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw" src={member.image} width={800} />
     </div>
   );
 }

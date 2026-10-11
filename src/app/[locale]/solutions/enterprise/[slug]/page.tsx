@@ -9,6 +9,7 @@ import { ScreenshotSection } from '@/components/solutions/ScreenshotSection';
 import { SolutionSections } from '@/components/solutions/SolutionSections';
 import { UseCases } from '@/components/solutions/UseCases';
 import { CTAForm } from '@/components/contact/CTAForm';
+import { Container } from '@/components/ui/Container';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { getAllSolutions, getSolutionBySlug } from '@/lib/content/solutions';
 import { enterpriseSlugs, getEnterpriseStaticParams, isEnterpriseSlug, isLocale } from '@/lib/content/slug';
@@ -60,13 +61,18 @@ export default async function EnterpriseSolutionDetailPage({ params }: { params:
     : [];
   // Opt-in per solution so CRM/LMS/DentGo keep their current layout while HRM gains the written content.
   const extended = solution.renderExtendedContent === true;
+  const hasRelated = relatedSolutions.length > 0;
 
   return (
     <>
       <JsonLd data={createBreadcrumbJsonLd([{ name: locale === 'en' ? 'Home' : 'Trang chủ', path: locale === 'en' ? '/en' : '/' }, { name: t('title'), path: `${locale === 'en' ? '/en' : ''}/solutions/enterprise` }, { name: solution.title, path: `${locale === 'en' ? '/en' : ''}/solutions/enterprise/${slug}` }])} />
       <PageHeader breadcrumbs={[{ label: t('title'), href: '/solutions/enterprise' }, { label: solution.title }]} description={solution.description} title={solution.title} />
-      <div className="mx-auto grid w-full max-w-container grid-cols-1 gap-10 px-4 sm:px-6 lg:grid-cols-[minmax(0,1fr)_18.75rem] lg:px-8 xl:gap-16">
-        <div className="min-w-0 xl:max-w-[720px]">
+      {/* Chỉ chia 2 cột khi THỰC SỰ có related — giữ cột phải rỗng sẽ làm nội dung lệch trái.
+          Cột trái là wrapper thuần để các <Section> bên trong tự tràn full-width (nền xen kẽ không bị bóp 720px). */}
+      <Container
+        className={hasRelated ? 'grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_18.75rem] xl:gap-16' : 'grid grid-cols-1 gap-10'}
+      >
+        <div className="min-w-0">
           <FeatureList features={solution.features} title={t('featuresTitle')} />
           <BenefitList benefits={solution.benefits} title={t('benefitsTitle')} />
           <SolutionSections sections={extended ? solution.sections ?? [] : []} />
@@ -74,10 +80,12 @@ export default async function EnterpriseSolutionDetailPage({ params }: { params:
           <FaqList faq={extended ? solution.faq ?? [] : []} title={t('faqTitle')} />
           <ScreenshotSection imageAlt={solution.title} images={solution.screenshots ?? []} title={t('screenshotsTitle')} />
         </div>
-        <div className="pb-12 lg:py-12">
-          <RelatedSolutions solutions={relatedSolutions} title={t('relatedTitle')} />
-        </div>
-      </div>
+        {hasRelated && (
+          <div className="pb-12 lg:py-12">
+            <RelatedSolutions solutions={relatedSolutions} title={t('relatedTitle')} />
+          </div>
+        )}
+      </Container>
       <CTAForm />
     </>
   );

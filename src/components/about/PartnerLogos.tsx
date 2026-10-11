@@ -25,5 +25,5 @@ export function PartnerLogos({ partners, title }: { partners: Partner[]; title: 
 }
 
 function Logo({ partner }: { partner: Partner }) {
-  return <HomeImage alt={partner.name} className="h-12 w-auto max-w-full object-contain grayscale transition-[filter] duration-[250ms] hover:grayscale-0" sizes="(min-width: 1024px) 16vw, 33vw" src={partner.logo ?? ''} />;
+  return <HomeImage alt={partner.name} className="h-12 w-auto max-w-full object-contain grayscale transition-[filter] duration-[250ms] hover:grayscale-0" height={48} sizes="(min-width: 1024px) 16vw, 33vw" src={partner.logo ?? ''} width={160} />;
 }

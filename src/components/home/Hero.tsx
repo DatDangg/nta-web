@@ -2,6 +2,8 @@ import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/navigation';
 import { buttonStyles } from '@/components/ui/Button';
 import { Reveal } from '@/components/ui/Reveal';
+import { CARD_IMAGE_RATIO } from '@/components/cards/cardStyles';
+import { Container } from '@/components/ui/Container';
 import { HomeImage } from '@/components/shared/HomeImage';
 
 export async function Hero() {
@@ -10,7 +12,7 @@ export async function Hero() {
 
   return (
     <section className="bg-background py-12 md:py-16 xl:py-24">
-      <div className="mx-auto grid w-full max-w-container items-center gap-10 px-4 sm:px-6 md:grid-cols-[1.1fr_0.9fr] lg:px-8 xl:gap-16">
+      <Container className="grid items-center gap-10 md:grid-cols-[1.1fr_0.9fr] xl:gap-16">
         <Reveal className="text-center md:text-left">
           <h1 className="text-hero font-bold leading-[1.12] tracking-[-0.02em]">{t('heroTitle')}</h1>
           <p className="mx-auto mt-6 max-w-[65ch] text-body-lg text-text-secondary md:mx-0">{t('heroDescription')}</p>
@@ -23,12 +25,14 @@ export async function Hero() {
           <HomeImage
             alt={t('heroImageAlt')}
             className="aspect-[4/3] w-full rounded-lg bg-surface-sunken object-cover"
+            height={1200}
             priority
             sizes="(min-width: 768px) 45vw, 100vw"
             src="/images/solutions/enterprise.svg"
+            width={1600}
           />
         </Reveal>
-      </div>
+      </Container>
     </section>
   );
 }
