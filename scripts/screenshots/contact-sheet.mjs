@@ -56,7 +56,9 @@ function usage() {
 
 const args = parseArgs(process.argv.slice(2));
 const DEBUG_PORT = 9349;
-const BASE = `http://localhost:${args.port}`;
+// Dùng 127.0.0.1 thay vì localhost: trên máy này `localhost` resolve IPv6 ::1 trước,
+// còn `next start`/standalone bind IPv4 → kết nối treo (timeout), không phải ECONNREFUSED.
+const BASE = `http://127.0.0.1:${args.port}`;
 if (!['vi', 'en'].includes(args.locale)) throw new Error(`locale không hợp lệ: ${args.locale}`);
 
 /** Trang preview dev-only — chặn production bằng `notFound()` khi NODE_ENV !== 'development'. */
@@ -247,7 +249,7 @@ try {
       const { sessionId } = await cdp.newPage("about:blank");
       await cdp.send("Network.enable", {}, sessionId);
       await cdp.send("Network.setCookie", {
-        name: "NEXT_LOCALE", value: args.locale, domain: "localhost", path: "/", secure: false,
+        name: "NEXT_LOCALE", value: args.locale, domain: "127.0.0.1", path: "/", secure: false,
       }, sessionId);
       await cdp.send("Emulation.setDeviceMetricsOverride", { width, height, deviceScaleFactor: 1, mobile: width < 700 }, sessionId);
       await cdp.navigate(sessionId, url);

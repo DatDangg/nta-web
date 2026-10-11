@@ -42,3 +42,28 @@
   2 CTA ✓ · zigzag 3 feature (ảnh 0.805 clip+fade) ✓ · FeatureImageRow 3 ảnh 1 hàng căn đỉnh ✓ ·
   bento A 2/3 + ":" ✓ · AI ink 3 gợi ý + panel DOM ✓ · 3 thẻ ✓ · FAQ 4 câu đóng ✓ · CTA cuối ✓
 - next: reviewer STRICT → commit T5
+
+## step: T5 close-out + spec publish v11 + contact sheet — status=awaiting ✅ DONE
+- **Commit T5 = 54bd7cb** (10 files).
+- **★ Spec Publisher scope v11**: `spec/updates/2026-10-11-solution-detail-redesign.md` (mới) +
+  `spec/CHANGELOG.md` +1 dòng (3.0.0 KHÔNG bump, scope v11 `feature-update`) +
+  `spec/test-scope/current.json` v10→v11. JSON valid ✓.
+- **Archive change**: `spec/changes/2026-10-11-…` → `spec/changes/archive/…` (git mv) +
+  progress.json 5 chỗ trỏ archive ✓.
+- **progress.json**: +3 task entries (T3 NORMAL/T4 NORMAL/T5 STRICT PASS), completedTasks +3,
+  specPublished scopeVersion 11, JSON valid ✓.
+- **Contact sheet 4 trang × 375+1440 × VI+EN = 16/16 ảnh, pixel audit sạch** (trên production
+  standalone build, KHÔNG dev):
+  - `scripts/screenshots/.tmp/contact-sheet-vi.png` (7548×10841)
+  - `scripts/screenshots/.tmp/contact-sheet-en.png` (7548×10958)
+- **Overflow probe**: 10/10 tổ hợp (4 route VI + LMS EN × 375/1440) = 0px ✓
+  (`scripts/screenshots/.tmp/probe-overflow.mjs`).
+- **Sự cố môi trường đã fix (ghi để không lặp)**:
+  1. Dev server sống trong khi `npm run build` ghi `.next` → cache corrupt → 500 lang rỗng
+     (2 lần). Fix: kill hết process 3001/3002/3003 → `Remove-Item .next` → build sạch →
+     chạy production. **Quy tắc: không build khi dev server đang sống.**
+  2. `next start` warn `output: standalone` → dùng `node .next/standalone/server.js`
+     + copy `.next/static` + `public` vào standalone (Next không copy tự động `public`).
+  3. `localhost` resolve IPv6 ::1, server bind IPv4 → timeout (không phải ECONNREFUSED).
+     Fix: `contact-sheet.mjs` BASE + cookie domain → `127.0.0.1`.
+  4. PowerShell làm hỏng UTF-8 khi echo → verify script viết bằng Node file (không `node -e`).

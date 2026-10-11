@@ -10,7 +10,7 @@
       "currentPhase": 0,
       "totalLayers": 5,
       "currentLayer": 4,
-      "completedTasks": ["layer-0-task-01", "layer-0-task-02", "layer-0-task-03", "layer-0-task-04", "layer-0-task-05", "layer-0-task-06", "layer-1-task-01", "layer-1-task-02", "layer-1-task-03", "layer-1-task-04", "layer-1-task-05", "fix-layer1-dead-links-phase-1-task-01", "layer-2-task-01", "layer-2-task-02", "layer-2-task-03", "layer-2-task-04", "layer-2-task-05", "layer-2-task-06", "layer-2-task-07", "fix-blog-list-date-format-phase-1-task-01", "layer-3-task-01", "layer-3-task-02", "layer-3-task-03", "layer-4-task-01", "layer-4-task-02", "layer-4-task-03", "layer-4-task-04", "change-ai-solution-content-phase-1-task-01", "change-ai-solution-content-phase-1-task-02", "change-domain-ntavietnam-phase-1-task-01", "change-deploy-platform-docker-vps-phase-1-task-01", "change-cleanup-gcp-drift-comment-permission-phase-1-task-01", "change-hrm-solution-content-phase-1-task-01", "change-enterprise-solution-docs-web-ready-phase-1-task-01", "change-publish-solution-screenshots-phase-1-task-01", "change-solution-detail-redesign-phase-1-task-01", "change-solution-detail-redesign-phase-1-task-02"],
+      "completedTasks": ["layer-0-task-01", "layer-0-task-02", "layer-0-task-03", "layer-0-task-04", "layer-0-task-05", "layer-0-task-06", "layer-1-task-01", "layer-1-task-02", "layer-1-task-03", "layer-1-task-04", "layer-1-task-05", "fix-layer1-dead-links-phase-1-task-01", "layer-2-task-01", "layer-2-task-02", "layer-2-task-03", "layer-2-task-04", "layer-2-task-05", "layer-2-task-06", "layer-2-task-07", "fix-blog-list-date-format-phase-1-task-01", "layer-3-task-01", "layer-3-task-02", "layer-3-task-03", "layer-4-task-01", "layer-4-task-02", "layer-4-task-03", "layer-4-task-04", "change-ai-solution-content-phase-1-task-01", "change-ai-solution-content-phase-1-task-02", "change-domain-ntavietnam-phase-1-task-01", "change-deploy-platform-docker-vps-phase-1-task-01", "change-cleanup-gcp-drift-comment-permission-phase-1-task-01", "change-hrm-solution-content-phase-1-task-01", "change-enterprise-solution-docs-web-ready-phase-1-task-01", "change-publish-solution-screenshots-phase-1-task-01", "change-solution-detail-redesign-phase-1-task-01", "change-solution-detail-redesign-phase-1-task-02", "change-solution-detail-redesign-phase-1-task-03", "change-solution-detail-redesign-phase-1-task-04", "change-solution-detail-redesign-phase-1-task-05"],
       "inProgressTask": null,
       "tasks": [
         {
@@ -328,7 +328,7 @@
           "reviewLevel": "STRICT",
           "reviewResult": "PASS",
           "reviewReport": ".context/review-reports/change-solution-detail-redesign-phase-1-task-01-round-2-review.md",
-          "changeRequest": "spec/changes/2026-10-11-solution-detail-redesign.md",
+          "changeRequest": "spec/changes/archive/2026-10-11-solution-detail-redesign.md",
           "note": "T1 — sửa 4 lỗi bố cục chung (L1 grid 2 cột rỗng theo dữ liệu, L2 Section lồng div 720, L3 hardcode max-w-[1280px] → Container primitive, L4 HomeImage width/height cứng). r1 FAIL → fix 3 MAJOR + residual → r2 PASS STRICT. Verify: lint/typecheck/build PASS, 8/8 route enterprise SSG, grep max-w-[1280px]=0."
         },
         {
@@ -338,18 +338,48 @@
           "reviewLevel": "STRICT",
           "reviewResult": "PASS",
           "reviewReport": ".context/review-reports/change-solution-detail-redesign-phase-1-task-02-round-2-review.md",
-          "changeRequest": "spec/changes/2026-10-11-solution-detail-redesign.md",
+          "changeRequest": "spec/changes/archive/2026-10-11-solution-detail-redesign.md",
           "note": "T2 — token ink/space + Feature[] schema (normalize ngược string[]) + Solution.layout flag + 7 component (SolutionHero/FeatureZigZag/FeatureImageRow/BentoCompliance/AudienceCards/AiSection+FaqAccordion) + trang preview dev-only. Commit chính f526c16; polish sau review r1 FAIL (4 MAJOR: nested Container double padding → 5 component tự gọi Section; contrast panel trắng /80-/85 → /90 4.77:1; thiếu cờ layout; ShotImage bỏ skin nhánh A) → r2 PASS STRICT. Verify do primary chạy thật: lint 0 errors/typecheck/build PASS. RESOLVED 2026-10-11: AiSection dùng DOM panel (AiAssistantPanel) thay ảnh crop — USER ĐÃ CHỐT, spec §5.3 đã cập nhật (lý do: crop 1223×284 tỉ lệ 4.31 không đọc được ở cột 608px; nền trắng lóa trên nền ink; không có crop nào khác của khung AI). Panel căn mép trái như text + đọc rõ ở 375. Verify 7 điểm sau T2 trên /dev/components @3001 (CDP 1440+375, VI+EN) = 7/7 ĐẠT (xem .context/runs/change-nta-website-solution-detail-T2-verify.md) — chờ user duyệt contact sheet rồi chạy T3."
+        },
+        {
+          "id": "change-solution-detail-redesign-phase-1-task-03",
+          "layer": 1,
+          "status": "done",
+          "reviewLevel": "NORMAL",
+          "reviewResult": "PASS",
+          "reviewReport": ".context/review-reports/change-solution-detail-redesign-phase-1-task-03-round-1-review.md",
+          "changeRequest": "spec/changes/archive/2026-10-11-solution-detail-redesign.md",
+          "note": "T3 — migrate features 8 .mdx string[] → Feature[] (CRM/HRM/DentGo tách title/description GIỮ NGUYÊN câu chữ rule §8.1, HRM title-only; LMS copy §11.2 title §5.1). page.tsx ghép lại 'title — description' cho FeatureList (bridge gỡ hẳn ở T5). Verify: lint/typecheck/build 51/51, verify-t3 8/8 route đủ title + LMS desc §11.2 render + text crm = chuỗi gốc. r1 NORMAL PASS (0 CRITICAL/MAJOR, 6 MINOR carry-forward T4–T5). Đóng B2 trong change file ('Cảnh báo sớm' BỎ HẲN). Commit 055e9b5. (Ghi chú: reviewer bị env block npm.cmd → primary đã chạy verify trước review.)"
+        },
+        {
+          "id": "change-solution-detail-redesign-phase-1-task-04",
+          "layer": 1,
+          "status": "done",
+          "reviewLevel": "NORMAL",
+          "reviewResult": "PASS",
+          "reviewReport": ".context/review-reports/change-solution-detail-redesign-phase-1-task-04-round-1-review.md",
+          "changeRequest": "spec/changes/archive/2026-10-11-solution-detail-redesign.md",
+          "note": "T4 — CRM/HRM/DentGo layout mới: SolutionHero (ảnh 01-tong-quan, HRM max-w-[960px] ratio 1.065, CTA 'Đăng ký demo'/'Xem tính năng ›' #features) + FeatureZigZag gắn ảnh v2/alt bảng §7 + CHỈ HRM imageCaption figcaption 'Giao diện minh hoạ' (hero + 3 feature + 5 screenshots, VI/EN) + screenshots → ảnh v2 CHƯA gắn (hết trộn khung cũ). F1 overview CRM/DentGo không ảnh (01 = hero, không lặp §5.1). types: HeroShot/imageCaption/screenshots union + SolutionCard normalize. LMS set layout: 'lms' (giữ nhánh legacy tới T5). r1 NORMAL PASS (0 CRITICAL/MAJOR, 4 MINOR). Verify: verify-t4 36/36 + check #3 (git diff 055e9b5 — chỉ dòng screenshots cũ xóa, 0 dòng title/description đổi) + soi mắt 3 trang 1440. Commit 0f3cb5a."
+        },
+        {
+          "id": "change-solution-detail-redesign-phase-1-task-05",
+          "layer": 1,
+          "status": "done",
+          "reviewLevel": "STRICT",
+          "reviewResult": "PASS",
+          "reviewReport": ".context/review-reports/change-solution-detail-redesign-phase-1-task-05-round-1-review.md",
+          "changeRequest": "spec/changes/archive/2026-10-11-solution-detail-redesign.md",
+          "note": "T5 — LMS layout riêng 8 block (§5 + copy §11): XÓA hẳn nhánh legacy (PageHeader/FeatureList/bridge 'title — description' → đóng MINOR #1 T3 + #1 T4); hero §11.1 + 4 features (3 zigzag + FeatureImageRow 3 ảnh) + bento PHƯƠNG ÁN A (ảnh 04-danh-gia-ai-tt27-crop, user chốt) + AiSection ink (AiAssistantPanel DOM, 3 gợi ý §11.4) + audience §11.5 + FAQ accordion §11.6 (FAQ4/EN SẠCH 'cảnh báo sớm'/'early warning') + CTA cuối §11.7 (1 nút, trước CTAForm). BỎ render benefits/useCases/sections/screenshots — data GIỮ NGUYÊN mdx (R2, verify check). EN H1 → 'School Management (LMS)' (§11.8). Reconcile §11: bento title ':' thay em-dash (§11.8 cấm) + typo spec 'địết'→'định kỳ'. types +4 field LMS. r1 STRICT PASS (0 CRITICAL/MAJOR, 6 MINOR — đã fix 5: alt bento mô tả giao diện, bỏ shadow-sm bento, chevron motion-reduce, figcaption→div AiAssistantPanel, change file cập nhật panel DOM; MINOR còn: EN 4 feature titles LMS ngoài §11 do spec KHÔNG có bảng EN title — chờ user xác nhận). Verify: lint/typecheck/build 51/51, verify-t5 39/39 (check thứ tự theo heading DOM, tránh false positive i18n bundle), soi mắt LMS 1440. Commit 54bd7cb."
         }
       ],
       "specVersion": "3.0.0",
       "planDir": "tasks/nta-website/",
       "layerPlanDiagram": "docs/diagrams/layer-plan.html",
       "initialBuildCompletedAt": "2026-10-10T03:15:00+07:00",
-      "specPublished": { "scopeVersion": 10, "trigger": "feature-update", "path": "spec/test-scope/current.json", "note": "T1+T2 của solution-detail-redesign đã xong nhưng scope v11 CHƯA publish — chờ publish sau khi change hoàn tất (T3–T5) hoặc khi user cần" },
+      "specPublished": { "scopeVersion": 11, "trigger": "feature-update", "path": "spec/test-scope/current.json", "note": "Publish sau khi T1–T5 PASS review (spec 3.0.0 KHÔNG bump — redesign layout, không đổi requirement). Chờ user duyệt contact sheet 4 trang 375+1440 rồi mới push/deploy." },
       "layer4PhaseReview": { "verdict": "PASS", "report": ".context/review-reports/feature-nta-website-layer-4-round-1-spec-review.md" },
       "note": "Initial build hoàn tất: Layer 0..4 (totalLayers 5 = layer-plan 'Layer 0 → 4'). 27 req R-01..R-27 implemented. R-22 (Lighthouse Perf/LCP/CLS) + R-23 (viewport 375/768/1280) PARTIAL — đo ở gate DevOps/prod (bước 6). Chưa push (forbidden_branch main, auto_push false). Post-build: ai-solution-content (spec 1.1.0) + domain-ntavietnam (domain → ntavietnam.tech, spec 2.0.0, scope v6) + deploy-platform-docker-vps (Cloud Run → docker-vps, spec 3.0.0, scope v7) + cleanup-gcp-drift-comment-permission (dọn nốt drift GCP, spec 3.0.0 KHÔNG bump, scope v8) + hrm-solution-content (5 ảnh mockup + sections/useCases/faq qua cờ renderExtendedContent; spec 3.0.0 KHÔNG bump; cần user duyệt copy trước production). + enterprise-solution-docs-web-ready (viết lại 4 docs/reference README theo 8 heading web-ready; docs-only 0 dòng code; spec 3.0.0 KHÔNG bump; scope v8→v9; caveat: builder+reviewer chạy inline do env chặn subagent lồng → primary nên re-run reviewer độc lập). + publish-solution-screenshots (3 ảnh BoxAI + nội dung đầy đủ CRM/LMS/DentGo vi+en + ScreenshotSection vào trang AI + i18n key; spec 3.0.0 KHÔNG bump; scope v9→v10; reviewer STRICT round-1 PASS 0 CRITICAL/MAJOR/3 MINOR; verify lint/typecheck/build PASS do primary chạy lại; cần user xem ảnh BoxAI tiếng Anh + đọc lại copy).",
-      "lastUpdated": "2026-10-11T23:30:00+07:00"
+      "lastUpdated": "2026-10-12T01:30:00+07:00"
     }
   ],
   "bugs": []
