@@ -10,18 +10,21 @@ export function SolutionSections({ sections }: { sections: SolutionSectionConten
   if (sections.length === 0) return null;
 
   return (
-    <div>
-      {sections.map((section) => (
-        <Section key={section.title}>
-          <h2 className="text-h2 font-semibold">{section.title}</h2>
-          {section.intro && <p className="mt-4 max-w-prose text-body-lg">{section.intro}</p>}
-          {section.items && section.items.length > 0 && (
-            <ul className="mt-6 grid gap-4 sm:grid-cols-2">
-              {section.items.map((item) => <li className="border-t border-border py-4" key={item}>{item}</li>)}
-            </ul>
-          )}
-        </Section>
-      ))}
-    </div>
+    // Nội dung chữ thuần MỘT cột → prose. Grid items 2 cột giữ default + giới hạn từng cột.
+<div>
+        {sections.map((section) => (
+          <Section key={section.title} size="prose">
+            <h2 className="text-h2 font-semibold">{section.title}</h2>
+            {section.intro && <p className="mt-4 text-body-lg">{section.intro}</p>}
+            {section.items && section.items.length > 0 && (
+              <ul className="mt-6 grid gap-4 sm:grid-cols-2">
+                {section.items.map((item) => (
+                  <li className="max-w-[65ch] border-t border-border py-4" key={item}>{item}</li>
+                ))}
+              </ul>
+            )}
+          </Section>
+        ))}
+      </div>
   );
 }

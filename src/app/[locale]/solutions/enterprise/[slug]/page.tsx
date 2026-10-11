@@ -68,10 +68,9 @@ export default async function EnterpriseSolutionDetailPage({ params }: { params:
       <JsonLd data={createBreadcrumbJsonLd([{ name: locale === 'en' ? 'Home' : 'Trang chủ', path: locale === 'en' ? '/en' : '/' }, { name: t('title'), path: `${locale === 'en' ? '/en' : ''}/solutions/enterprise` }, { name: solution.title, path: `${locale === 'en' ? '/en' : ''}/solutions/enterprise/${slug}` }])} />
       <PageHeader breadcrumbs={[{ label: t('title'), href: '/solutions/enterprise' }, { label: solution.title }]} description={solution.description} title={solution.title} />
       {/* Chỉ chia 2 cột khi THỰC SỰ có related — giữ cột phải rỗng sẽ làm nội dung lệch trái.
-          Cột trái là wrapper thuần để các <Section> bên trong tự tràn full-width (nền xen kẽ không bị bóp 720px). */}
-      <Container
-        className={hasRelated ? 'grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_18.75rem] xl:gap-16' : 'grid grid-cols-1 gap-10'}
-      >
+          KHÔNG bọc Container ở cấp này: nó sẽ giới hạn bề rộng của mọi <Section> bên trong,
+          khiến nền xen kẽ không tràn full-width (spec §1 L2). Container thuộc về từng Section. */}
+      <div className={hasRelated ? 'grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_18.75rem] xl:gap-16' : ''}>
         <div className="min-w-0">
           <FeatureList features={solution.features} title={t('featuresTitle')} />
           <BenefitList benefits={solution.benefits} title={t('benefitsTitle')} />
@@ -85,7 +84,7 @@ export default async function EnterpriseSolutionDetailPage({ params }: { params:
             <RelatedSolutions solutions={relatedSolutions} title={t('relatedTitle')} />
           </div>
         )}
-      </Container>
+      </div>
       <CTAForm />
     </>
   );

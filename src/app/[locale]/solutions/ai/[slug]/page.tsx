@@ -53,8 +53,8 @@ export default async function AiSolutionDetailPage({ params }: { params: Promise
     <>
       <JsonLd data={createBreadcrumbJsonLd([{ name: locale === 'en' ? 'Home' : 'Trang chủ', path: locale === 'en' ? '/en' : '/' }, { name: t('title'), path: `${locale === 'en' ? '/en' : ''}/solutions/ai` }, { name: solution.title, path: `${locale === 'en' ? '/en' : ''}/solutions/ai/${slug}` }])} />
       <PageHeader breadcrumbs={[{ label: t('title'), href: '/solutions/ai' }, { label: solution.title }]} description={solution.description} title={t('detailTitle', { title: solution.title })} />
-      <div className="mx-auto w-full max-w-container px-4 sm:px-6 lg:px-8">
-        <div className="min-w-0 xl:max-w-[720px]">
+      <div>
+        <div className="min-w-0">
           <FeatureList features={solution.features} title={t('featuresTitle')} />
           {solution.benefits.length > 0 && <BenefitList benefits={solution.benefits} title={t('benefitsTitle')} />}
           <SolutionSections sections={solution.sections ?? []} />

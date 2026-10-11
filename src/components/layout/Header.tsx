@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Link, usePathname } from '@/i18n/navigation';
 import { buttonStyles } from '@/components/ui/Button';
+import { Container } from '@/components/ui/Container';
 import { LanguageToggle } from './LanguageToggle';
 import { MobileNav } from './MobileNav';
 
@@ -45,7 +46,7 @@ export function Header() {
 
   return (
     <header className={`sticky top-0 z-header border-b border-border transition-[background-color,backdrop-filter] ${scrolled ? 'bg-background/85 backdrop-blur-md' : 'bg-background'}`}>
-      <div className="mx-auto flex h-16 max-w-container items-center justify-between px-4 sm:px-6 lg:h-[72px] lg:px-8">
+      <Container className="flex h-16 items-center justify-between lg:h-[72px]">
         <Link aria-label={t('homeLabel')} className="flex min-h-11 items-center px-2 text-xl font-semibold tracking-tight text-text-primary" href="/">NTA</Link>
         <nav aria-label={t('label')} className="hidden items-center gap-5 lg:flex">
           <div className="group relative" onBlur={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setSolutionsOpen(false); }} onMouseEnter={() => setSolutionsOpen(true)} onMouseLeave={(event) => { if (!event.currentTarget.contains(document.activeElement)) setSolutionsOpen(false); }}>
@@ -59,7 +60,7 @@ export function Header() {
         </nav>
         <div className="hidden items-center gap-4 lg:flex"><LanguageToggle /><Link className={`${buttonStyles('primary', 'sm')} whitespace-nowrap`} href="/contact">{common('contact')}</Link></div>
         <MobileNav />
-      </div>
+      </Container>
     </header>
   );
 }

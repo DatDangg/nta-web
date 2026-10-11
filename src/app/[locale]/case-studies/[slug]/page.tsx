@@ -56,9 +56,10 @@ export default async function CaseStudyDetailPage({ params }: { params: Promise<
     <JsonLd data={createBreadcrumbJsonLd([{ name: locale === 'en' ? 'Home' : 'Trang chủ', path: locale === 'en' ? '/en' : '/' }, { name: t('title'), path: `${locale === 'en' ? '/en' : ''}/case-studies` }, { name: study.title, path: `${locale === 'en' ? '/en' : ''}/case-studies/${slug}` }])} />
     <PageHeader breadcrumbs={[{ label: t('title'), href: '/case-studies' }, { label: study.title }]} description={study.result} title={study.title} />
     <script dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }} type="application/ld+json" />
-    <div className="mx-auto w-full max-w-container px-4 sm:px-6 lg:px-8">
+    <div>
       <MetaBar caseStudy={study} labels={labels} />
-      <div className="mx-auto xl:max-w-[720px]">
+      {/* Nội dung chữ thuần 1 cột → giới hạn độ dài dòng; khối có ảnh (gallery) giữ nguyên. */}
+      <div className="mx-auto max-w-[720px]">
         <ChallengeBlock content={study.challenge} title={t('challenge')} />
         <SolutionBlock content={study.solution} title={t('solution')} />
         <ResultBlock content={study.result} metrics={study.metrics ?? []} title={t('result')} />
