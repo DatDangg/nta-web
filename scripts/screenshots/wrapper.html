@@ -5,12 +5,19 @@
   <title>wrapper</title>
   <style>
     /* Khung cửa sổ macOS — thông số đo từ ảnh cũ (scripts/screenshots/design-tokens.md).
-       1328 (nội dung) + 56×2 (padding) = 1440 CSS px → ảnh ra 2880 px @dsf 2. */
+       1328 (nội dung) → ảnh ra 2656 px @dsf 2.
+
+       NỀN NGOÀI PHẢI TRONG SUỐT, KHÔNG padding, KHÔNG nền xám.
+       Lý do: ảnh trước đây có `padding: 56px` + `background: #eef1f5` → bị "nướng" sẵn
+       một hộp xám vuông quanh cửa sổ. Trên web, hộp xám đó hiện thành viền nền thừa
+       quanh ảnh, còn HRM lại được component bo góc + shadow → hai kiểu trông lệch nhau.
+       Giờ ảnh chỉ còn đúng cửa sổ macOS, bo góc bo tròn sẵn ở 4 góc cửa sổ; viền và bóng
+       đổ do component thêm, nhất quán cho mọi ảnh.
+       `Emulation.setDefaultBackgroundColorOverride` trong capture.mjs ép alpha = 0 để
+       `Page.captureScreenshot` xuất PNG có kênh alpha. */
     * { box-sizing: border-box; }
-    html, body { margin: 0; padding: 0; }
+    html, body { margin: 0; padding: 0; background: transparent; }
     body {
-      background: #eef1f5;
-      padding: 56px;
       font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     }
     .window {
@@ -18,7 +25,9 @@
       border-radius: 12px;
       overflow: hidden;
       background: #fff;
-      box-shadow: 0 0 0 1px #e0e1e6; /* viền 1px không đổi bề rộng */
+      /* Viền 1px kẹp trong, KHÔNG đổi bề rộng. Box-shadow tròn theo bo góc nên 4 góc
+         ngoài bo góc vẫn trong suốt — đúng hình dạng cửa sổ macOS. */
+      box-shadow: 0 0 0 1px #e0e1e6;
     }
     .titlebar {
       position: relative;

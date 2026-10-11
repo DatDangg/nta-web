@@ -23,13 +23,29 @@ import { ensureFakeLogo } from "./brand.mjs";
 
 /* ---------- cấu hình cố định (đo từ ảnh cũ — design-tokens.md) ---------- */
 const APP_WIDTH = 1328;      // bề rộng nội dung cửa sổ
-const FRAME_WIDTH = 1440;    // khung: padding 56×2 + 1328
-const PADDING = 56;          // padding quanh cửa sổ (CSS px)
+const FRAME_WIDTH = 1328;    // KHUNG = chính cửa sổ. KHÔNG padding, KHÔNG nền xám
+const PADDING = 0;           // không còn padding quanh cửa sổ (wrapper.html đã bỏ)
 const TITLEBAR = 51;         // cao thanh tiêu đề macOS (CSS px)
-const DSF = 2;               // deviceScaleFactor → ảnh cuối 2880 px
+const DSF = 2;               // deviceScaleFactor → ảnh cuối 2656 px
 const CROP_PAD = 12;         // viền thêm quanh vùng crop (CSS px)
 const CROP_MAX_H = 620;      // trần chiều cao ảnh crop (CSS px)
 const VIEWPORT_H = 900;      // chiều cao 1 "màn hình" — ảnh chụp giới hạn theo đây (xem `capHeight`)
+
+/**
+ * Ép nền trong suốt khi chụp — không có nó, CDP tô trắng toàn bộ phần ngoài layout.
+ *
+ * ⚠ Phải dùng `Emulation.setDefaultBackgroundColorOverride`, KHÔNG phải tham số
+ * `backgroundColor` của `Page.captureScreenshot` (hàm này **không có** tham số đó — đặt
+ * vào chỉ bị bỏ qua âm thầm, PNG vẫn ra `Format24bppRgb`, không có kênh alpha).
+ *
+ * Nhờ vậy PNG xuất ra có kênh alpha: chỉ cửa sổ macOS còn màu, 4 góc bo của chính nó
+ * trong suốt, không có hộp xám/trắng nào bao quanh.
+ */
+const TRANSPARENT_BG = { color: { r: 0, g: 0, b: 0, a: 0 } };
+
+async function enableTransparentBackground(cdp, sessionId) {
+  await cdp.send("Emulation.setDefaultBackgroundColorOverride", TRANSPARENT_BG, sessionId);
+}
 
 const TMP = path.join(ROOT, ".tmp");
 const PROFILE = path.join(TMP, "profile");
@@ -292,7 +308,12 @@ async function fullPagePng(cdp, sessionId, width, maxHeight = Infinity) {
   const height = Math.min(raw, maxHeight);
   const { data } = await cdp.send(
     "Page.captureScreenshot",
-    { format: "png", captureBeyondViewport: true, fromSurface: true, clip: { x: 0, y: 0, width, height, scale: 1 } },
+    {
+      format: "png",
+      captureBeyondViewport: true,
+      fromSurface: true,
+      clip: { x: 0, y: 0, width, height, scale: 1 },
+    },
     sessionId
   );
   return { buf: Buffer.from(data, "base64"), width: width * DSF, height: height * DSF, truncated: raw > maxHeight, rawHeight: raw };
@@ -408,6 +429,8 @@ for (const slug of targets) {
   const { targetId, sessionId } = await cdp.newPage("about:blank");
   await cdp.send("Page.enable", {}, sessionId);
   await cdp.send("Runtime.enable", {}, sessionId);
+  // Bật TRƯỚC mọi lần chụp: không có nó CDP tô trắng phần ngoài layout → hộp trắng quanh ảnh.
+  await enableTransparentBackground(cdp, sessionId);
 
   try {
     if (conf.mode === "live") {

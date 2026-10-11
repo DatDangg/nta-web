@@ -96,6 +96,72 @@ Phòng khám trong ảnh: **Nha khoa Minh Tâm** (2 chi nhánh, thay tên thật
 > Ghi chú: ảnh `01-tong-quan` có khoảng trắng dưới sidebar — đó là **đệm khung macOS** (56px) +
 > nền trắng của app khi trang ngắn, giống hệt app thật mở trong trình duyệt.
 
+## Nền ngoài TRONG SUỐT (sửa 2026-10-11, lần 3)
+
+Ảnh trước đây bị **"nướng" sẵn hộp nền** quanh cửa sổ: `wrapper.html` có
+`background: #eef1f5; padding: 56px` → mỗi ảnh mang một viền xám vuông 56px. Trên web,
+hộp xám đó hiện thành nền thừa quanh ảnh; HRM lại được component bo góc + shadow →
+hai kiểu trông lệch nhau.
+
+**Đã sửa ở nguồn, xuất lại toàn bộ 26 ảnh:**
+
+| Việc | Cách làm |
+|---|---|
+| `wrapper.html` | `background: transparent`, **bỏ hẳn `padding: 56px`** — ảnh chỉ còn đúng cửa sổ macOS |
+| `capture.mjs` | `FRAME_WIDTH` 1440 → **1328**, `PADDING` 56 → **0** |
+| `capture.mjs` | `Emulation.setDefaultBackgroundColorOverride` alpha=0 → PNG có kênh alpha |
+
+> ⚠ **Bẫy:** `Page.captureScreenshot` **không có** tham số `backgroundColor`. Đặt vào chỉ bị
+> bỏ qua âm thầm — PNG vẫn ra `Format24bppRgb`, không alpha. Phải dùng
+> `Emulation.setDefaultBackgroundColorOverride`. Kiểm tra bắt buộc sau mỗi lần chụp:
+> `PixelFormat` phải là `Format32bppArgb` và 4 góc phải trong suốt.
+
+**Kết quả:** 26 ảnh khung đầy đủ đều có kênh alpha, 7/7 điểm ở 4 góc trong suốt.
+Ảnh `-crop` **không** cần trong suốt — crop là vùng *bên trong* app, góc phải đục.
+
+Tên file và mapping giữ nguyên. Viền + bóng đổ do component thêm, thống nhất mọi ảnh.
+
+## Kích thước & tỉ lệ sau khi bỏ padding (đo lại 2026-10-11)
+
+Bề rộng mọi ảnh: **2656px** (= 1328 CSS px @dsf 2). Chiều cao và tỉ lệ **đã đổi** so với
+bản cũ (bản cũ có 56px padding mỗi phía, không đổi bề rộng nội dung).
+
+| Sản phẩm | Ảnh | Kích thước | Tỉ lệ | Nhánh hiển thị |
+|---|---|---|---|---|
+| CRM | `01-tong-quan` | 2656×1902 | 1.396 | A (ngang) |
+| CRM | `02-khach-hang` | 2656×2176 | 1.221 | A |
+| CRM | `03-chi-tiet-khach-hang` | 2656×2338 | 1.136 | A |
+| CRM | `04-dat-ban` | 2656×2424 | 1.096 | A |
+| CRM | `05-don-hang` | 2656×2384 | 1.114 | A |
+| LMS | `01-tong-quan` | 2656×1902 | 1.396 | A |
+| LMS | `02-quan-tri-bang-dieu-khien` | 2656×2308 | 1.151 | A |
+| LMS | `03-ho-so-hoc-sinh` | 2656×3300 | **0.805** | **B (dọc)** |
+| LMS | `04-danh-gia-ai` | 2656×2630 | 1.010 | A |
+| LMS | `05-thoi-khoa-bieu` | 2656×3028 | **0.877** | **B** |
+| LMS | `06-giao-an-dien-tu` | 2656×2384 | 1.114 | A |
+| LMS | `07-hoc-ba-so` | 2656×3222 | **0.824** | **B** |
+| HRM | `01-tong-quan` | 2656×2494 | 1.065 | A (gần vuông → hero cần `max-w-[960px]`) |
+| HRM | `02-ho-so-nhan-vien` | 2656×2398 | 1.108 | A |
+| HRM | `03-chi-tiet-nhan-vien` | 2656×2024 | 1.312 | A |
+| HRM | `04-cham-cong` | 2656×2040 | 1.302 | A |
+| HRM | `05-tinh-luong` | 2656×2610 | 1.018 | A |
+| HRM | `06-nghi-phep` | 2656×2874 | **0.924** | **B** |
+| HRM | `07-co-cau-to-chuc` | 2656×2668 | **0.996** | **B** |
+| HRM | `08-quy-trinh-de-xuat` | 2656×3696 | **0.719** | **B (dọc nhất)** |
+| HRM | `09-tra-cuu-doi-ngu` | 2656×2506 | 1.060 | A |
+| DentGo | `01-tong-quan` | 2656×1902 | 1.396 | A |
+| DentGo | `02-ho-so-khach-hang` | 2656×1914 | 1.388 | A |
+| DentGo | `03-ho-so-rhm` | 2656×2284 | 1.163 | A |
+| DentGo | `04-lich-hen` | 2656×2446 | 1.086 | A |
+| DentGo | `05-kho-vat-tu` | 2656×1800 | **1.476** | A (ngang nhất) |
+
+**Ngưỡng nhánh A/B vẫn là 1.0**, không đổi. Các trường hợp biên vẫn giữ nguyên tính chất:
+`hrm/08` dọc nhất (0.719), `dentgo/05` ngang nhất (1.476), `hrm/01` gần vuông (1.065).
+
+> Tỉ lệ này là **dữ liệu đo**, nhưng nhánh hiển thị không quyết định từ `ratio` — xem
+> `.context/design-spec-solution-detail.md` §3.1: fade phải **đo** `scrollHeight > clientHeight`
+> vì việc ảnh có bị cắt còn phụ thuộc bề rộng cột (đổi theo viewport).
+
 ## Kiểm tra chất lượng ảnh
 
 Chạy `node scripts/screenshots/.tmp/audit-text.mjs` (script tạm trong `.tmp/`) để quét chữ thật hiển
