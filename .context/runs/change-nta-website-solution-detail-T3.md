@@ -38,5 +38,44 @@
 
 ---
 
-## step: T3 close-out + commit — status=running
-- next: commit 9 file T3 → T4 (CRM/HRM/DentGo layout mới)
+## step: T4 — CRM/HRM/DentGo layout mới — status=running (code xong, verify)
+
+### filesTouched (T4)
+- `src/content/types.ts` — thêm `HeroShot` + `solution.heroShot` + `solution.imageCaption` +
+  `screenshots` nhận `(string | {src, alt, ratio})[]`
+- `src/components/solutions/SolutionHero.tsx` — prop `caption` → `<figure>/<figcaption>`
+  (figure + `mx-auto` — max-w-960 không mx-auto sẽ dính mép trái Container)
+- `src/components/solutions/FeatureZigZag.tsx` — prop `id` (anchor #features) + `caption`
+  (figcaption mỗi ảnh)
+- `src/components/solutions/ScreenshotSection.tsx` — nhận item object alt/ratio + `caption` +
+  `shotFrame` (ShotImage khung v2). AI pages KHÔNG truyền → giữ nguyên HomeImage cũ.
+- `src/components/cards/SolutionCard.tsx` — normalize screenshots[0] (string | object)
+- `src/app/[locale]/solutions/enterprise/[slug]/page.tsx` — branch `useLegacyLayout =
+  solution.layout === 'lms'`: legacy = PageHeader + FeatureList (bridge title—desc giữ cho LMS
+  tới T5); mới = SolutionHero + FeatureZigZag(id=features, caption) + ScreenshotSection(shotFrame)
+- `src/i18n/messages/{vi,en}.json` — +3 key `solutions.enterprise`: demoCta / featuresCta / featuresCtaAria
+- 6 mdx crm/hrm/dentgo (vi+en): `heroShot` (01-tong-quan, ratio) + features gắn image/imageAlt/ratio
+  + `screenshots` → v2 ảnh chưa gắn + HRM `imageCaption`
+- 2 mdx lms (vi+en): `layout: lms` (T5 dùng)
+
+### Quyết định (ghi để reviewer đối chiếu)
+1. **F1 overview của CRM/DentGo KHÔNG gắn ảnh** — 01-tong-quan đã là hero, không lặp lại
+   (nguyên tắc §5.1 "ảnh đã dùng ở hero → không lặp"). Feature không ảnh = case §4.3.
+2. **screenshots = ảnh v2 CHƯA gắn** (rule §5 "screenshots giữ ảnh chưa gắn vào đâu"):
+   CRM [02] · DentGo [02] · HRM [03,04,05,06,07]. Alt theo bảng §7 + ratio đo.
+   Tránh trộn khung ảnh cũ (tự do) với v2 (khung macOS) trên cùng trang.
+3. **F2 CRM → 03** (alt khớp title "Hồ sơ 360°"); **F2 DentGo → 03** (desc "mở ra là hồ sơ
+   lâm sàng…" khớp alt 03); HRM F1/F2/F3 → 02/08/09 (08 = case B dọc 0.719).
+4. **EN title LMS giữ nguyên** (spec không có bảng EN title — MINOR #3 review T3).
+5. `layout: 'lms'` set ngay ở T4 để page branch được; T5 code nhánh mới.
+6. Bridge `title — description` CHỈ còn ở nhánh legacy (LMS) — revert hẳn ở T5 (MINOR #1).
+
+### Verify
+- lint 0 errors (1 warning pre-existing) · typecheck PASS · build PASS 51/51 (8 route enterprise SSG)
+- `scripts/screenshots/.tmp/verify-t4.mjs` → **36/36 PASS**: hero v2, id=features, alt §7
+  (HRM 18× "Giao diện minh hoạ"), figcaption HRM cả VI/EN, CRM/DentGo không caption,
+  max-w-960 HRM, LMS giữ legacy, 0 ảnh screenshot cũ, file v2 tồn tại.
+- Fix 2 lỗi khi code: ternary thiếu `)` (parse error) + `SolutionCard` chưa normalize union.
+- Dev server 3002: CRM chụp OK 5/5; HRM 500 (dev cache stale — production build HRM PASS)
+  → kill dev server cũ (PID 23588, chạy từ 23:15 đêm qua) → restart. Chờ boot rồi chụp lại 3 trang.
+- next: chụp 3 trang 1440 soi mắt → reviewer NORMAL → commit T4

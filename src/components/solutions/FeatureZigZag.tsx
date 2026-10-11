@@ -8,6 +8,13 @@ type FeatureZigZagProps = {
   features: Feature[] | string[];
   /** Nền section — theo bảng §5 (mặc định `background`). Component tự gọi `<Section>`. */
   variant?: SectionVariant;
+  /** Anchor cho CTA hero "Xem tính năng ›" (spec §4.4 — trỏ tới `id="features"`). */
+  id?: string;
+  /**
+   * Chú thích `<figcaption>` dưới **mọi ảnh** trong section — chỉ HRM dùng
+   * ("Giao diện minh hoạ" / "Illustrative interface", spec §7). Thiếu → không caption.
+   */
+  caption?: string;
 };
 
 /**
@@ -20,8 +27,27 @@ const MAX_H = 'max-h-[320px] lg:max-h-[420px]';
 
 const IMAGE_SKIN = 'rounded-lg border border-border shadow-md';
 
-function FeatureImage({ src, alt, ratio }: { src: string; alt: string; ratio?: number }) {
-  return <ShotImage alt={alt} maxH={MAX_H} ratio={ratio} skin={IMAGE_SKIN} src={src} />;
+function FeatureImage({
+  src,
+  alt,
+  ratio,
+  caption,
+}: {
+  src: string;
+  alt: string;
+  ratio?: number;
+  caption?: string;
+}) {
+  const shot = (
+    <ShotImage alt={alt} maxH={MAX_H} ratio={ratio} skin={IMAGE_SKIN} src={src} />
+  );
+  if (!caption) return shot;
+  return (
+    <figure>
+      {shot}
+      <figcaption className="mt-3 text-body-sm text-text-secondary text-center">{caption}</figcaption>
+    </figure>
+  );
 }
 
 /**
@@ -40,11 +66,11 @@ function FeatureImage({ src, alt, ratio }: { src: string; alt: string; ratio?: n
  * `<Section>`"). KHÔNG bọc thêm `<Section>` hay `<Container>` ở ngoài — `Section` đã có
  * `Container` bên trong, lồng thêm sẽ **cộng padding ngang 2 lần**.
  */
-export function FeatureZigZag({ features, variant = 'default' }: FeatureZigZagProps) {
+export function FeatureZigZag({ features, variant = 'default', id, caption }: FeatureZigZagProps) {
   const list = normalizeFeatures(features);
 
   return (
-    <Section variant={variant}>
+    <Section id={id} variant={variant}>
       {list.map((feature, index) => {
         const reverse = index % 2 === 1;
 
@@ -77,7 +103,7 @@ export function FeatureZigZag({ features, variant = 'default' }: FeatureZigZagPr
             </div>
 
             <div className={reverse ? 'lg:order-1' : undefined}>
-              <FeatureImage alt={feature.imageAlt ?? ''} ratio={feature.ratio} src={feature.image} />
+              <FeatureImage alt={feature.imageAlt ?? ''} caption={caption} ratio={feature.ratio} src={feature.image} />
             </div>
           </div>
         );

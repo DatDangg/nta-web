@@ -25,6 +25,11 @@ type SolutionHeroProps = {
    * co nó còn ~906px rồi `max-h` xử lý tiếp — nhỏ hơn ảnh 1.36 nhưng không méo, không mất khung.
    */
   imageMaxW?: string;
+  /**
+   * Chú thích dưới ảnh hero (`<figcaption>` trong `<figure>`) — chỉ HRM dùng
+   * ("Giao diện minh hoạ" / "Illustrative interface", spec §7). Thiếu → không caption.
+   */
+  caption?: string;
   primaryCta: { label: string; href: string };
   secondaryCta: { label: string; href: string; ariaLabel?: string };
 };
@@ -48,6 +53,7 @@ export function SolutionHero({
   imageAlt,
   imageRatio,
   imageMaxW = 'max-w-full',
+  caption,
   primaryCta,
   secondaryCta,
 }: SolutionHeroProps) {
@@ -81,7 +87,12 @@ export function SolutionHero({
 
       {image ? (
         <Container className="mt-12 sm:mt-16">
-          <div className={imageMaxW}>
+          {/* Caption chỉ render khi có (`caption` prop) — HRM là mock vẽ tay nên mọi ảnh
+              phải nói rõ (spec §7). Figure/figcaption semantic để screen reader đọc
+              alt trước, caption sau. */}
+          {/* mx-auto BẮT BUỘC khi imageMaxW hẹp hơn Container (HRM 960px) —
+              không thì figure dính mép trái thay vì căn giữa. */}
+          <figure className={`${imageMaxW} mx-auto`}>
             <ShotImage
               alt={imageAlt ?? ''}
               height={1440}
@@ -92,7 +103,12 @@ export function SolutionHero({
               sizes="(max-width: 1024px) 100vw, 1280px"
               src={image}
             />
-          </div>
+            {caption ? (
+              <figcaption className="mt-3 text-body-sm text-text-secondary text-center">
+                {caption}
+              </figcaption>
+            ) : null}
+          </figure>
         </Container>
       ) : null}
     </header>

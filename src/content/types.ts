@@ -27,6 +27,21 @@ export interface Feature {
 /** Dữ liệu cũ chưa migrate: `features` là `string[]`. */
 export type LegacyFeature = string;
 
+/**
+ * Ảnh hero của trang chi tiết giải pháp (khác `image` — `image` là SVG đại diện cho OG/JSON-LD).
+ *
+ * `maxWidth` chỉ ghi khi ảnh gần vuông cần giới hạn bề rộng riêng (spec §3: HRM 1.06 →
+ * `max-w-[960px]`). Ảnh ngang hơn bỏ trống → `max-w-full`.
+ */
+export interface HeroShot {
+  src: string;
+  /** Alt mô tả giao diện đang làm gì — KHÔNG phải tên sản phẩm (spec §7). */
+  alt: string;
+  /** Tỉ lệ đo sẵn từ `docs/screenshots-mapping.md`. */
+  ratio?: number;
+  maxWidth?: string;
+}
+
 export interface Solution {
   slug: string;
   title: string;
@@ -48,7 +63,21 @@ export interface Solution {
   highlights?: { value: string; label: string }[];
   faq?: { question: string; answer: string }[];
   image?: string;
-  screenshots?: string[];
+  /**
+   * Ảnh hero (khung macOS) — khác `image` (SVG cho OG). Thiếu → hero chỉ có text + CTA,
+   * KHÔNG render khung ảnh rỗng (spec §3).
+   */
+  heroShot?: HeroShot;
+  /**
+   * Chú thích `<figcaption>` dưới **mọi ảnh** trang này (spec §7 — chỉ HRM dùng:
+   * ảnh HRM là mock vẽ tay nên phải nói rõ). Thiếu → không caption.
+   */
+  imageCaption?: string;
+  /**
+   * Ảnh chụp màn hình còn lại (chưa gắn vào hero/features). Hỗ trợ `string` (alt chung
+   * `imageAlt`) hoặc `{src, alt}` (alt riêng theo bảng §7).
+   */
+  screenshots?: (string | { src: string; alt: string; ratio?: number })[];
   relatedCases?: string[];
   // Opt-in for the enterprise detail page: renders sections, useCases and faq.
   // AI solution pages always render them, so they ignore this flag.

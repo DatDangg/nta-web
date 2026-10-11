@@ -4,8 +4,10 @@ import { notFound } from 'next/navigation';
 import { BenefitList } from '@/components/solutions/BenefitList';
 import { FaqList } from '@/components/solutions/FaqList';
 import { FeatureList } from '@/components/solutions/FeatureList';
+import { FeatureZigZag } from '@/components/solutions/FeatureZigZag';
 import { RelatedSolutions } from '@/components/solutions/RelatedSolutions';
 import { ScreenshotSection } from '@/components/solutions/ScreenshotSection';
+import { SolutionHero } from '@/components/solutions/SolutionHero';
 import { SolutionSections } from '@/components/solutions/SolutionSections';
 import { UseCases } from '@/components/solutions/UseCases';
 import { CTAForm } from '@/components/contact/CTAForm';
@@ -61,11 +63,34 @@ export default async function EnterpriseSolutionDetailPage({ params }: { params:
   // Opt-in per solution so CRM/LMS/DentGo keep their current layout while HRM gains the written content.
   const extended = solution.renderExtendedContent === true;
   const hasRelated = relatedSolutions.length > 0;
+  // T4: 3 trang CRM/HRM/DentGo chuyển layout mới (SolutionHero + FeatureZigZag).
+  // LMS set `layout: 'lms'` → giữ nhánh cũ, T5 sẽ thay bằng layout 8 block (spec §5).
+  const useLegacyLayout = solution.layout === 'lms';
+  const crumbs = [{ label: t('title'), href: '/solutions/enterprise' }, { label: solution.title }];
 
   return (
     <>
       <JsonLd data={createBreadcrumbJsonLd([{ name: locale === 'en' ? 'Home' : 'Trang chủ', path: locale === 'en' ? '/en' : '/' }, { name: t('title'), path: `${locale === 'en' ? '/en' : ''}/solutions/enterprise` }, { name: solution.title, path: `${locale === 'en' ? '/en' : ''}/solutions/enterprise/${slug}` }])} />
-      <PageHeader breadcrumbs={[{ label: t('title'), href: '/solutions/enterprise' }, { label: solution.title }]} description={solution.description} title={solution.title} />
+      {useLegacyLayout ? (
+        <PageHeader breadcrumbs={crumbs} description={solution.description} title={solution.title} />
+      ) : (
+        <SolutionHero
+          breadcrumbs={crumbs}
+          caption={solution.imageCaption}
+          description={solution.description}
+          image={solution.heroShot?.src}
+          imageAlt={solution.heroShot?.alt}
+          imageMaxW={solution.heroShot?.maxWidth ?? 'max-w-full'}
+          imageRatio={solution.heroShot?.ratio}
+          primaryCta={{ href: localizedPath(locale, '/contact'), label: t('demoCta') }}
+          secondaryCta={{
+            ariaLabel: t('featuresCtaAria'),
+            href: '#features',
+            label: t('featuresCta'),
+          }}
+          title={solution.title}
+        />
+      )}
       {/* Chỉ chia 2 cột khi THỰC SỰ có related — giữ cột phải rỗng sẽ làm nội dung lệch trái.
           KHÔNG bọc Container ở cấp này: nó sẽ giới hạn bề rộng của mọi <Section> bên trong,
           khiến nền xen kẽ không tràn full-width (spec §1 L2). Container thuộc về từng Section.
@@ -78,15 +103,25 @@ export default async function EnterpriseSolutionDetailPage({ params }: { params:
         }
       >
         <div className="min-w-0">
-          <FeatureList
-            features={solution.features.map((f) => (typeof f === 'string' ? f : f.description ? `${f.title} — ${f.description}` : f.title))}
-            title={t('featuresTitle')}
-          />
+          {useLegacyLayout ? (
+            <FeatureList
+              features={solution.features.map((f) => (typeof f === 'string' ? f : f.description ? `${f.title} — ${f.description}` : f.title))}
+              title={t('featuresTitle')}
+            />
+          ) : (
+            <FeatureZigZag caption={solution.imageCaption} features={solution.features} id="features" />
+          )}
           <BenefitList benefits={solution.benefits} title={t('benefitsTitle')} />
           <SolutionSections sections={extended ? solution.sections ?? [] : []} />
           <UseCases cases={extended ? solution.useCases ?? [] : []} title={t('useCasesTitle')} />
           <FaqList faq={extended ? solution.faq ?? [] : []} title={t('faqTitle')} />
-          <ScreenshotSection imageAlt={solution.title} images={solution.screenshots ?? []} title={t('screenshotsTitle')} />
+          <ScreenshotSection
+            caption={useLegacyLayout ? undefined : solution.imageCaption}
+            imageAlt={solution.title}
+            images={solution.screenshots ?? []}
+            shotFrame={!useLegacyLayout}
+            title={t('screenshotsTitle')}
+          />
         </div>
         {hasRelated && (
           <div className="pb-12 lg:py-12">

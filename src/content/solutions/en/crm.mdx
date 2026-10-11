@@ -5,15 +5,29 @@ title: "Customer relationship management (CRM)"
 description: "An operations CRM for multi-branch restaurant chains: customer data from the point-of-sale is consolidated in one place for follow-up, instead of drifting away after each transaction."
 category: enterprise
 renderExtendedContent: true
+heroShot:
+  src: /images/solutions/v2/crm/01-tong-quan.png
+  alt: "Today dashboard: arrivals, orders, revenue and open tickets"
+  ratio: 1.396
 features:
+  # Overview = hero image 01-tong-quan → do NOT repeat it here (spec §5.1 rule).
   - title: "Daily operations overview"
     description: "a time-based landing screen with guest, order, revenue and open-complaint figures, plus upcoming reservations and this week's birthdays."
   - title: "360° customer profile"
     description: "a guest list filterable by membership tier and messaging-channel interest; each profile shows visits, last visit, total spend, loyalty points, order history and care history."
+    image: /images/solutions/v2/crm/03-chi-tiet-khach-hang.png
+    imageAlt: "360-degree customer profile: details, visit history and offers"
+    ratio: 1.136
   - title: "Reservation management by branch"
     description: "reservations listed and calendared by time range and status, following a clear cycle (booked → seated → completed / no-show / cancelled)."
+    image: /images/solutions/v2/crm/04-dat-ban.png
+    imageAlt: "Table reservation screen by schedule and booking status"
+    ratio: 1.096
   - title: "Order management & revenue reconciliation"
     description: "orders by branch and sales channel with a full status lifecycle from placement to payment or cancellation, supporting reconciliation and revenue reporting."
+    image: /images/solutions/v2/crm/05-don-hang.png
+    imageAlt: "Order list with payment status"
+    ratio: 1.114
 benefits:
   - "Recognise regulars and bring them back at the right time, instead of letting guest data drift after each bill."
   - "See revenue, orders and reservation activity across branches on one screen."
@@ -24,11 +38,10 @@ useCases:
   - "Chains that manage table reservations: track reservations per branch without missing guests."
   - "Chain management that needs one dashboard for revenue, orders and complaints across branches."
 screenshots:
-  - "/images/solutions/crm/01-tong-quan.png"
-  - "/images/solutions/crm/02-khach-hang.png"
-  - "/images/solutions/crm/03-chi-tiet-khach-hang.png"
-  - "/images/solutions/crm/04-dat-ban.png"
-  - "/images/solutions/crm/05-don-hang.png"
+  # v2 shots not attached to hero/features (01 = hero; 03/04/05 = features).
+  - src: /images/solutions/v2/crm/02-khach-hang.png
+    alt: "Customer list with visit history, loyalty points and Zalo balance"
+    ratio: 1.221
 sections:
   - title: "The problem & the solution"
     intro: "Each branch handles a large number of transactions every day, but customer data stays inside the POS, so there is nowhere to recognise returning guests and keep caring for them. Table, birthday and promotion reminders are handled manually over messaging, which is easy to miss and hard to measure; multi-branch chains also struggle to see revenue and operations in a single view."
