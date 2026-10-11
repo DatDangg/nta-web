@@ -1,0 +1,2175 @@
+{
+  "meta": {
+    "chain": "Hồng Phúc Nướng & Lẩu",
+    "loggedInUser": "Trần Quốc Khánh",
+    "note": "Dữ liệu giả để chụp ảnh minh hoạ trang giải pháp CRM."
+  },
+  "branches": [
+    {
+      "id": "br1",
+      "name": "Hồng Phúc Nướng & Lẩu – Cao Thắng",
+      "address": "Số 19 đường Cao Thắng, phường 5, quận 3, TP. Hồ Chí Minh",
+      "phone": "028 7300 1901",
+      "isActive": true,
+      "cukcukBranchId": "ck1000",
+      "cukcukBranchCode": "CS1",
+      "createdAt": "2026-01-05T03:00:00.000Z",
+      "updatedAt": "2026-09-01T03:00:00.000Z",
+      "hours": [],
+      "isOpenNow": true
+    },
+    {
+      "id": "br2",
+      "name": "Hồng Phúc Nướng & Lẩu – Trần Quang Khải",
+      "address": "Số 88 Trần Quang Khải, phường Tân Định, quận 1, TP. Hồ Chí Minh",
+      "phone": "028 7300 1902",
+      "isActive": true,
+      "cukcukBranchId": "ck1001",
+      "cukcukBranchCode": "CS2",
+      "createdAt": "2026-01-05T03:00:00.000Z",
+      "updatedAt": "2026-09-01T03:00:00.000Z",
+      "hours": [],
+      "isOpenNow": true
+    },
+    {
+      "id": "br3",
+      "name": "Hồng Phúc Nướng & Lẩu – Thảo Điền",
+      "address": "Số 42 Nguyễn Ư Dĩ, phường Thảo Điền, TP. Thủ Đức, TP. Hồ Chí Minh",
+      "phone": "028 7300 1903",
+      "isActive": true,
+      "cukcukBranchId": "ck1002",
+      "cukcukBranchCode": "CS3",
+      "createdAt": "2026-01-05T03:00:00.000Z",
+      "updatedAt": "2026-09-01T03:00:00.000Z",
+      "hours": [],
+      "isOpenNow": true
+    }
+  ],
+  "customers": [
+    {
+      "id": "cus_001",
+      "fullName": "Trần Quốc Khánh",
+      "phone": "+840912***100",
+      "dob": "1980-01-03",
+      "gender": "MALE",
+      "email": "anh1@example.com",
+      "address": null,
+      "source": "WALK_IN",
+      "loyaltyTier": {
+        "code": "MEMBER",
+        "nameVi": "Thành Viên",
+        "rank": 0
+      },
+      "loyaltyTierId": "MEMBER",
+      "loyaltyTierSince": "2026-06-01T00:00:00.000Z",
+      "loyaltyTierEvaluatedAt": "2026-09-01T00:00:00.000Z",
+      "tags": [],
+      "favoriteDishes": [],
+      "favoriteFlavors": [],
+      "favoriteToppings": [],
+      "notes": null,
+      "district": null,
+      "city": null,
+      "originBranchId": "br1",
+      "cukcukCustomerCode": "CK2000",
+      "cukcukSyncedAt": "2026-09-30T02:00:00.000Z",
+      "updatedAt": "2026-10-01T02:00:00.000Z",
+      "stats": {
+        "visitCount": 2,
+        "lastVisitAt": "2026-08-02T10:20:00.000Z"
+      },
+      "zalo": {
+        "linked": true,
+        "followsOA": true,
+        "hasPushAddress": true
+      },
+      "isBlacklisted": false,
+      "createdAt": "2026-05-10T08:00:00.000Z"
+    },
+    {
+      "id": "cus_002",
+      "fullName": "Nguyễn Thị Hồng Nhung",
+      "phone": "+840913***117",
+      "dob": null,
+      "gender": "FEMALE",
+      "email": null,
+      "address": "Số 13 đường Cao Thắng, phường 5, quận 3, TP. Hồ Chí Minh",
+      "source": "CUKCUK",
+      "loyaltyTier": {
+        "code": "GOLD",
+        "nameVi": "Vàng",
+        "rank": 1
+      },
+      "loyaltyTierId": "GOLD",
+      "loyaltyTierSince": "2026-06-01T00:00:00.000Z",
+      "loyaltyTierEvaluatedAt": "2026-09-01T00:00:00.000Z",
+      "tags": [],
+      "favoriteDishes": [],
+      "favoriteFlavors": [],
+      "favoriteToppings": [],
+      "notes": null,
+      "district": "Quận 3",
+      "city": "TP. Hồ Chí Minh",
+      "originBranchId": "br2",
+      "cukcukCustomerCode": "CK2001",
+      "cukcukSyncedAt": "2026-09-30T02:00:00.000Z",
+      "updatedAt": "2026-10-01T02:00:00.000Z",
+      "stats": {
+        "visitCount": 7,
+        "lastVisitAt": "2026-09-05T11:20:00.000Z"
+      },
+      "zalo": {
+        "linked": false,
+        "followsOA": false,
+        "hasPushAddress": false
+      },
+      "isBlacklisted": false,
+      "createdAt": "2026-06-11T08:00:00.000Z"
+    },
+    {
+      "id": "cus_003",
+      "fullName": "Lê Văn Hùng",
+      "phone": "+840914***134",
+      "dob": null,
+      "gender": "MALE",
+      "email": null,
+      "address": null,
+      "source": "CUKCUK",
+      "loyaltyTier": {
+        "code": "PLATINUM",
+        "nameVi": "Bạch Kim",
+        "rank": 2
+      },
+      "loyaltyTierId": "PLATINUM",
+      "loyaltyTierSince": "2026-06-01T00:00:00.000Z",
+      "loyaltyTierEvaluatedAt": "2026-09-01T00:00:00.000Z",
+      "tags": [],
+      "favoriteDishes": [],
+      "favoriteFlavors": [],
+      "favoriteToppings": [],
+      "notes": null,
+      "district": null,
+      "city": null,
+      "originBranchId": "br3",
+      "cukcukCustomerCode": "CK2002",
+      "cukcukSyncedAt": "2026-09-30T02:00:00.000Z",
+      "updatedAt": "2026-10-01T02:00:00.000Z",
+      "stats": {
+        "visitCount": 12,
+        "lastVisitAt": "2026-10-08T12:20:00.000Z"
+      },
+      "zalo": {
+        "linked": true,
+        "followsOA": false,
+        "hasPushAddress": false
+      },
+      "isBlacklisted": false,
+      "createdAt": "2026-07-12T08:00:00.000Z"
+    },
+    {
+      "id": "cus_004",
+      "fullName": "Phạm Minh Châu",
+      "phone": "+840915***151",
+      "dob": null,
+      "gender": "FEMALE",
+      "email": "chi4@example.com",
+      "address": null,
+      "source": "CUKCUK",
+      "loyaltyTier": {
+        "code": "MEMBER",
+        "nameVi": "Thành Viên",
+        "rank": 0
+      },
+      "loyaltyTierId": "MEMBER",
+      "loyaltyTierSince": "2026-06-01T00:00:00.000Z",
+      "loyaltyTierEvaluatedAt": "2026-09-01T00:00:00.000Z",
+      "tags": [],
+      "favoriteDishes": [],
+      "favoriteFlavors": [],
+      "favoriteToppings": [],
+      "notes": null,
+      "district": null,
+      "city": null,
+      "originBranchId": "br1",
+      "cukcukCustomerCode": "CK2003",
+      "cukcukSyncedAt": "2026-09-30T02:00:00.000Z",
+      "updatedAt": "2026-10-01T02:00:00.000Z",
+      "stats": {
+        "visitCount": 17,
+        "lastVisitAt": "2026-08-11T13:20:00.000Z"
+      },
+      "zalo": {
+        "linked": true,
+        "followsOA": true,
+        "hasPushAddress": false
+      },
+      "isBlacklisted": false,
+      "createdAt": "2026-08-13T08:00:00.000Z"
+    },
+    {
+      "id": "cus_005",
+      "fullName": "Vũ Đình Hải",
+      "phone": "+840916***168",
+      "dob": "1984-05-11",
+      "gender": "MALE",
+      "email": null,
+      "address": "Số 16 đường Cao Thắng, phường 5, quận 3, TP. Hồ Chí Minh",
+      "source": "CUKCUK",
+      "loyaltyTier": {
+        "code": "GOLD",
+        "nameVi": "Vàng",
+        "rank": 1
+      },
+      "loyaltyTierId": "GOLD",
+      "loyaltyTierSince": "2026-06-01T00:00:00.000Z",
+      "loyaltyTierEvaluatedAt": "2026-09-01T00:00:00.000Z",
+      "tags": [],
+      "favoriteDishes": [],
+      "favoriteFlavors": [],
+      "favoriteToppings": [],
+      "notes": null,
+      "district": "Quận 3",
+      "city": "TP. Hồ Chí Minh",
+      "originBranchId": "br2",
+      "cukcukCustomerCode": "CK2004",
+      "cukcukSyncedAt": "2026-09-30T02:00:00.000Z",
+      "updatedAt": "2026-10-01T02:00:00.000Z",
+      "stats": {
+        "visitCount": 22,
+        "lastVisitAt": "2026-09-14T14:20:00.000Z"
+      },
+      "zalo": {
+        "linked": false,
+        "followsOA": false,
+        "hasPushAddress": true
+      },
+      "isBlacklisted": false,
+      "createdAt": "2026-09-14T08:00:00.000Z"
+    },
+    {
+      "id": "cus_006",
+      "fullName": "Đặng Thu Hà",
+      "phone": "+840917***185",
+      "dob": null,
+      "gender": "FEMALE",
+      "email": null,
+      "address": null,
+      "source": "WALK_IN",
+      "loyaltyTier": {
+        "code": "PLATINUM",
+        "nameVi": "Bạch Kim",
+        "rank": 2
+      },
+      "loyaltyTierId": "PLATINUM",
+      "loyaltyTierSince": "2026-06-01T00:00:00.000Z",
+      "loyaltyTierEvaluatedAt": "2026-09-01T00:00:00.000Z",
+      "tags": [],
+      "favoriteDishes": [],
+      "favoriteFlavors": [],
+      "favoriteToppings": [],
+      "notes": null,
+      "district": null,
+      "city": null,
+      "originBranchId": "br3",
+      "cukcukCustomerCode": "CK2005",
+      "cukcukSyncedAt": "2026-09-30T02:00:00.000Z",
+      "updatedAt": "2026-10-01T02:00:00.000Z",
+      "stats": {
+        "visitCount": 6,
+        "lastVisitAt": "2026-10-17T15:20:00.000Z"
+      },
+      "zalo": {
+        "linked": true,
+        "followsOA": false,
+        "hasPushAddress": false
+      },
+      "isBlacklisted": false,
+      "createdAt": "2026-05-15T08:00:00.000Z"
+    },
+    {
+      "id": "cus_007",
+      "fullName": "Bùi Tiến Dũng",
+      "phone": "+840918***202",
+      "dob": null,
+      "gender": "MALE",
+      "email": "anh7@example.com",
+      "address": null,
+      "source": "CUKCUK",
+      "loyaltyTier": {
+        "code": "MEMBER",
+        "nameVi": "Thành Viên",
+        "rank": 0
+      },
+      "loyaltyTierId": "MEMBER",
+      "loyaltyTierSince": "2026-06-01T00:00:00.000Z",
+      "loyaltyTierEvaluatedAt": "2026-09-01T00:00:00.000Z",
+      "tags": [],
+      "favoriteDishes": [],
+      "favoriteFlavors": [],
+      "favoriteToppings": [],
+      "notes": null,
+      "district": null,
+      "city": null,
+      "originBranchId": "br1",
+      "cukcukCustomerCode": "CK2006",
+      "cukcukSyncedAt": "2026-09-30T02:00:00.000Z",
+      "updatedAt": "2026-10-01T02:00:00.000Z",
+      "stats": {
+        "visitCount": 11,
+        "lastVisitAt": "2026-08-20T16:20:00.000Z"
+      },
+      "zalo": {
+        "linked": true,
+        "followsOA": true,
+        "hasPushAddress": false
+      },
+      "isBlacklisted": false,
+      "createdAt": "2026-06-16T08:00:00.000Z"
+    },
+    {
+      "id": "cus_008",
+      "fullName": "Hoàng Lan Anh",
+      "phone": "+840919***219",
+      "dob": null,
+      "gender": "FEMALE",
+      "email": null,
+      "address": "Số 19 đường Cao Thắng, phường 5, quận 3, TP. Hồ Chí Minh",
+      "source": "CUKCUK",
+      "loyaltyTier": {
+        "code": "GOLD",
+        "nameVi": "Vàng",
+        "rank": 1
+      },
+      "loyaltyTierId": "GOLD",
+      "loyaltyTierSince": "2026-06-01T00:00:00.000Z",
+      "loyaltyTierEvaluatedAt": "2026-09-01T00:00:00.000Z",
+      "tags": [],
+      "favoriteDishes": [],
+      "favoriteFlavors": [],
+      "favoriteToppings": [],
+      "notes": null,
+      "district": "Quận 3",
+      "city": "TP. Hồ Chí Minh",
+      "originBranchId": "br2",
+      "cukcukCustomerCode": "CK2007",
+      "cukcukSyncedAt": "2026-09-30T02:00:00.000Z",
+      "updatedAt": "2026-10-01T02:00:00.000Z",
+      "stats": {
+        "visitCount": 16,
+        "lastVisitAt": "2026-09-23T17:20:00.000Z"
+      },
+      "zalo": {
+        "linked": false,
+        "followsOA": false,
+        "hasPushAddress": false
+      },
+      "isBlacklisted": false,
+      "createdAt": "2026-07-17T08:00:00.000Z"
+    },
+    {
+      "id": "cus_009",
+      "fullName": "Trần Thị Bích Ngọc",
+      "phone": "+840912***236",
+      "dob": "1988-09-19",
+      "gender": "MALE",
+      "email": null,
+      "address": null,
+      "source": "CUKCUK",
+      "loyaltyTier": {
+        "code": "PLATINUM",
+        "nameVi": "Bạch Kim",
+        "rank": 2
+      },
+      "loyaltyTierId": "PLATINUM",
+      "loyaltyTierSince": "2026-06-01T00:00:00.000Z",
+      "loyaltyTierEvaluatedAt": "2026-09-01T00:00:00.000Z",
+      "tags": [],
+      "favoriteDishes": [],
+      "favoriteFlavors": [],
+      "favoriteToppings": [],
+      "notes": null,
+      "district": null,
+      "city": null,
+      "originBranchId": "br3",
+      "cukcukCustomerCode": "CK2008",
+      "cukcukSyncedAt": "2026-09-30T02:00:00.000Z",
+      "updatedAt": "2026-10-01T02:00:00.000Z",
+      "stats": {
+        "visitCount": 21,
+        "lastVisitAt": "2026-10-26T18:20:00.000Z"
+      },
+      "zalo": {
+        "linked": true,
+        "followsOA": false,
+        "hasPushAddress": true
+      },
+      "isBlacklisted": false,
+      "createdAt": "2026-08-18T08:00:00.000Z"
+    },
+    {
+      "id": "cus_010",
+      "fullName": "Nguyễn Thu Trang",
+      "phone": "+840913***253",
+      "dob": null,
+      "gender": "FEMALE",
+      "email": "chi10@example.com",
+      "address": null,
+      "source": "CUKCUK",
+      "loyaltyTier": {
+        "code": "MEMBER",
+        "nameVi": "Thành Viên",
+        "rank": 0
+      },
+      "loyaltyTierId": "MEMBER",
+      "loyaltyTierSince": "2026-06-01T00:00:00.000Z",
+      "loyaltyTierEvaluatedAt": "2026-09-01T00:00:00.000Z",
+      "tags": [],
+      "favoriteDishes": [],
+      "favoriteFlavors": [],
+      "favoriteToppings": [],
+      "notes": null,
+      "district": null,
+      "city": null,
+      "originBranchId": "br1",
+      "cukcukCustomerCode": "CK2009",
+      "cukcukSyncedAt": "2026-09-30T02:00:00.000Z",
+      "updatedAt": "2026-10-01T02:00:00.000Z",
+      "stats": {
+        "visitCount": 5,
+        "lastVisitAt": "2026-08-03T19:20:00.000Z"
+      },
+      "zalo": {
+        "linked": true,
+        "followsOA": true,
+        "hasPushAddress": false
+      },
+      "isBlacklisted": false,
+      "createdAt": "2026-09-19T08:00:00.000Z"
+    },
+    {
+      "id": "cus_011",
+      "fullName": "Lê Thị Mai Anh",
+      "phone": "+840914***270",
+      "dob": null,
+      "gender": "MALE",
+      "email": null,
+      "address": "Số 22 đường Cao Thắng, phường 5, quận 3, TP. Hồ Chí Minh",
+      "source": "WALK_IN",
+      "loyaltyTier": {
+        "code": "GOLD",
+        "nameVi": "Vàng",
+        "rank": 1
+      },
+      "loyaltyTierId": "GOLD",
+      "loyaltyTierSince": "2026-06-01T00:00:00.000Z",
+      "loyaltyTierEvaluatedAt": "2026-09-01T00:00:00.000Z",
+      "tags": [],
+      "favoriteDishes": [],
+      "favoriteFlavors": [],
+      "favoriteToppings": [],
+      "notes": null,
+      "district": "Quận 3",
+      "city": "TP. Hồ Chí Minh",
+      "originBranchId": "br2",
+      "cukcukCustomerCode": "CK2010",
+      "cukcukSyncedAt": "2026-09-30T02:00:00.000Z",
+      "updatedAt": "2026-10-01T02:00:00.000Z",
+      "stats": {
+        "visitCount": 10,
+        "lastVisitAt": "2026-09-06T10:20:00.000Z"
+      },
+      "zalo": {
+        "linked": false,
+        "followsOA": false,
+        "hasPushAddress": false
+      },
+      "isBlacklisted": false,
+      "createdAt": "2026-05-10T08:00:00.000Z"
+    },
+    {
+      "id": "cus_012",
+      "fullName": "Phạm Khánh Linh",
+      "phone": "+840915***287",
+      "dob": null,
+      "gender": "FEMALE",
+      "email": null,
+      "address": null,
+      "source": "CUKCUK",
+      "loyaltyTier": {
+        "code": "PLATINUM",
+        "nameVi": "Bạch Kim",
+        "rank": 2
+      },
+      "loyaltyTierId": "PLATINUM",
+      "loyaltyTierSince": "2026-06-01T00:00:00.000Z",
+      "loyaltyTierEvaluatedAt": "2026-09-01T00:00:00.000Z",
+      "tags": [],
+      "favoriteDishes": [],
+      "favoriteFlavors": [],
+      "favoriteToppings": [],
+      "notes": null,
+      "district": null,
+      "city": null,
+      "originBranchId": "br3",
+      "cukcukCustomerCode": "CK2011",
+      "cukcukSyncedAt": "2026-09-30T02:00:00.000Z",
+      "updatedAt": "2026-10-01T02:00:00.000Z",
+      "stats": {
+        "visitCount": 15,
+        "lastVisitAt": "2026-10-09T11:20:00.000Z"
+      },
+      "zalo": {
+        "linked": true,
+        "followsOA": false,
+        "hasPushAddress": false
+      },
+      "isBlacklisted": false,
+      "createdAt": "2026-06-11T08:00:00.000Z"
+    }
+  ],
+  "customerDetail": {
+    "id": "cus_002",
+    "fullName": "Nguyễn Thị Hồng Nhung",
+    "phone": "+840913***117",
+    "dob": null,
+    "gender": "FEMALE",
+    "email": null,
+    "address": "Số 13 đường Cao Thắng, phường 5, quận 3, TP. Hồ Chí Minh",
+    "source": "CUKCUK",
+    "loyaltyTier": {
+      "code": "GOLD",
+      "nameVi": "Vàng",
+      "rank": 1
+    },
+    "loyaltyTierId": "GOLD",
+    "loyaltyTierSince": "2026-06-01T00:00:00.000Z",
+    "loyaltyTierEvaluatedAt": "2026-09-01T00:00:00.000Z",
+    "tags": [],
+    "favoriteDishes": [],
+    "favoriteFlavors": [],
+    "favoriteToppings": [],
+    "notes": null,
+    "district": "Quận 3",
+    "city": "TP. Hồ Chí Minh",
+    "originBranchId": "br2",
+    "cukcukCustomerCode": "CK2001",
+    "cukcukSyncedAt": "2026-09-30T02:00:00.000Z",
+    "updatedAt": "2026-10-01T02:00:00.000Z",
+    "stats": {
+      "visitCount": 7,
+      "lastVisitAt": "2026-09-05T11:20:00.000Z"
+    },
+    "zalo": {
+      "linked": false,
+      "followsOA": false,
+      "hasPushAddress": false
+    },
+    "isBlacklisted": false,
+    "createdAt": "2026-06-11T08:00:00.000Z",
+    "orderCount": 3,
+    "visitTotalCount": 3,
+    "totalSpendVnd": 1936000,
+    "openComplaints": 0,
+    "feedbackCount": 1,
+    "careNoteCount": 3,
+    "loyalty": {
+      "pointsBalance": 1700,
+      "eligibleSpendVnd": 1250000,
+      "loyaltyTier": {
+        "code": "GOLD",
+        "nameVi": "Vàng",
+        "rank": 1
+      },
+      "loyaltyTierSince": "2026-09-01T00:00:00.000Z",
+      "nextTier": {
+        "code": "PLATINUM",
+        "nameVi": "Bạch Kim",
+        "rank": 2
+      },
+      "vndToNextTier": 5000000,
+      "expiringSoonPoints": 0,
+      "recentTransactions": [
+        {
+          "id": "t1",
+          "type": "EARN",
+          "points": 1520,
+          "createdAt": "2026-10-03T12:00:00.000Z",
+          "note": "Tích điểm đơn HP-10248"
+        },
+        {
+          "id": "t2",
+          "type": "REDEEM",
+          "points": -500,
+          "createdAt": "2026-09-20T19:00:00.000Z",
+          "note": "Đổi tráng miệng"
+        },
+        {
+          "id": "t3",
+          "type": "EARN",
+          "points": 680,
+          "createdAt": "2026-08-16T13:00:00.000Z",
+          "note": "Tích điểm đơn HP-09755"
+        }
+      ]
+    },
+    "recentVisits": [
+      {
+        "id": "v1",
+        "status": "COMPLETED",
+        "visitCode": "LH-0912",
+        "partySize": 4,
+        "reservedFor": "2026-10-03T11:30:00.000Z",
+        "visitedAt": "2026-10-03T11:30:00.000Z",
+        "checkedInAt": "2026-10-03T11:30:00.000Z",
+        "totalSpendVnd": 1250000,
+        "notes": null,
+        "branchId": "br1",
+        "branch": {
+          "id": "br1",
+          "name": "Hồng Phúc Nướng & Lẩu – Cao Thắng",
+          "address": "Số 19 đường Cao Thắng, phường 5, quận 3, TP. Hồ Chí Minh",
+          "phone": "028 7300 1901",
+          "isActive": true,
+          "cukcukBranchId": "ck1000",
+          "cukcukBranchCode": "CS1",
+          "createdAt": "2026-01-05T03:00:00.000Z",
+          "updatedAt": "2026-09-01T03:00:00.000Z",
+          "hours": [],
+          "isOpenNow": true
+        }
+      },
+      {
+        "id": "v2",
+        "status": "COMPLETED",
+        "visitCode": "LH-0884",
+        "partySize": 2,
+        "reservedFor": "2026-09-20T18:10:00.000Z",
+        "visitedAt": "2026-09-20T18:10:00.000Z",
+        "checkedInAt": "2026-09-20T18:10:00.000Z",
+        "totalSpendVnd": 686000,
+        "notes": null,
+        "branchId": "br2",
+        "branch": {
+          "id": "br2",
+          "name": "Hồng Phúc Nướng & Lẩu – Trần Quang Khải",
+          "address": "Số 88 Trần Quang Khải, phường Tân Định, quận 1, TP. Hồ Chí Minh",
+          "phone": "028 7300 1902",
+          "isActive": true,
+          "cukcukBranchId": "ck1001",
+          "cukcukBranchCode": "CS2",
+          "createdAt": "2026-01-05T03:00:00.000Z",
+          "updatedAt": "2026-09-01T03:00:00.000Z",
+          "hours": [],
+          "isOpenNow": true
+        }
+      },
+      {
+        "id": "v3",
+        "status": "COMPLETED",
+        "visitCode": "LH-0801",
+        "partySize": 6,
+        "reservedFor": "2026-08-16T12:05:00.000Z",
+        "visitedAt": "2026-08-16T12:05:00.000Z",
+        "checkedInAt": "2026-08-16T12:05:00.000Z",
+        "totalSpendVnd": 2140000,
+        "notes": null,
+        "branchId": "br1",
+        "branch": {
+          "id": "br1",
+          "name": "Hồng Phúc Nướng & Lẩu – Cao Thắng",
+          "address": "Số 19 đường Cao Thắng, phường 5, quận 3, TP. Hồ Chí Minh",
+          "phone": "028 7300 1901",
+          "isActive": true,
+          "cukcukBranchId": "ck1000",
+          "cukcukBranchCode": "CS1",
+          "createdAt": "2026-01-05T03:00:00.000Z",
+          "updatedAt": "2026-09-01T03:00:00.000Z",
+          "hours": [],
+          "isOpenNow": true
+        }
+      }
+    ],
+    "recentOrders": [
+      {
+        "id": "o1",
+        "code": "HP-10248",
+        "status": "PAID",
+        "orderedAt": "2026-10-03T11:30:00.000Z",
+        "totalVnd": 1250000,
+        "items": [
+          {
+            "productName": "Set lẩu Thái chua cay (2 người)",
+            "quantity": 2,
+            "unitPriceVnd": 429000
+          }
+        ]
+      },
+      {
+        "id": "o2",
+        "code": "HP-09912",
+        "status": "PAID",
+        "orderedAt": "2026-09-20T18:10:00.000Z",
+        "totalVnd": 686000,
+        "items": [
+          {
+            "productName": "Set lẩu Malay cho 1 người",
+            "quantity": 2,
+            "unitPriceVnd": 245000
+          }
+        ]
+      },
+      {
+        "id": "o3",
+        "code": "HP-09755",
+        "status": "CANCELLED",
+        "orderedAt": "2026-08-16T12:05:00.000Z",
+        "totalVnd": 2140000,
+        "items": [
+          {
+            "productName": "Set tiệc lẩu 6 người",
+            "quantity": 1,
+            "unitPriceVnd": 2140000
+          }
+        ]
+      }
+    ],
+    "recentFeedback": [
+      {
+        "id": "f1",
+        "kind": "PRAISE",
+        "rating": 5,
+        "content": "Nhân viên nhiệt tình, nước lẩu đậm đà, sẽ quay lại.",
+        "createdAt": "2026-10-03T12:30:00.000Z"
+      }
+    ]
+  },
+  "reservations": [
+    {
+      "id": "res_001",
+      "customerId": "cus_001",
+      "guestName": "Nguyễn Thị Hồng Nhung",
+      "guestPhone": "0914 *** 134",
+      "branchId": "br1",
+      "status": "RESERVED",
+      "reservedFor": "2026-10-14T17:30:00.000Z",
+      "visitedAt": null,
+      "partySize": 2,
+      "notes": null,
+      "createdById": "usr_001",
+      "deletedAt": null,
+      "orderId": null,
+      "createdAt": "2026-10-10T09:15:00.000Z",
+      "updatedAt": "2026-10-12T11:20:00.000Z",
+      "branch": {
+        "id": "br1",
+        "name": "Hồng Phúc Nướng & Lẩu – Cao Thắng",
+        "address": "Số 19 đường Cao Thắng, phường 5, quận 3, TP. Hồ Chí Minh",
+        "phone": "028 7300 1901",
+        "isActive": true,
+        "cukcukBranchId": "ck1000",
+        "cukcukBranchCode": "CS1",
+        "createdAt": "2026-01-05T03:00:00.000Z",
+        "updatedAt": "2026-09-01T03:00:00.000Z",
+        "hours": [],
+        "isOpenNow": true
+      },
+      "customer": {
+        "id": "cus_001",
+        "fullName": "Trần Quốc Khánh",
+        "phone": "+840912***100",
+        "favoriteDishes": [],
+        "favoriteFlavors": [],
+        "favoriteToppings": [],
+        "visitCount": 2
+      },
+      "order": null
+    },
+    {
+      "id": "res_002",
+      "customerId": null,
+      "guestName": "Lê Văn Hùng",
+      "guestPhone": null,
+      "branchId": "br2",
+      "status": "RESERVED",
+      "reservedFor": "2026-10-15T18:00:00.000Z",
+      "visitedAt": null,
+      "partySize": 3,
+      "notes": null,
+      "createdById": "usr_001",
+      "deletedAt": null,
+      "orderId": null,
+      "createdAt": "2026-10-11T09:16:00.000Z",
+      "updatedAt": "2026-10-13T11:21:00.000Z",
+      "branch": {
+        "id": "br2",
+        "name": "Hồng Phúc Nướng & Lẩu – Trần Quang Khải",
+        "address": "Số 88 Trần Quang Khải, phường Tân Định, quận 1, TP. Hồ Chí Minh",
+        "phone": "028 7300 1902",
+        "isActive": true,
+        "cukcukBranchId": "ck1001",
+        "cukcukBranchCode": "CS2",
+        "createdAt": "2026-01-05T03:00:00.000Z",
+        "updatedAt": "2026-09-01T03:00:00.000Z",
+        "hours": [],
+        "isOpenNow": true
+      },
+      "customer": {
+        "id": "cus_002",
+        "fullName": "Nguyễn Thị Hồng Nhung",
+        "phone": "+840913***117",
+        "favoriteDishes": [],
+        "favoriteFlavors": [],
+        "favoriteToppings": [],
+        "visitCount": 7
+      },
+      "order": null
+    },
+    {
+      "id": "res_003",
+      "customerId": "cus_003",
+      "guestName": "Phạm Minh Châu",
+      "guestPhone": null,
+      "branchId": "br3",
+      "status": "SEATED",
+      "reservedFor": "2026-10-16T18:30:00.000Z",
+      "visitedAt": "2026-10-16T18:30:00.000Z",
+      "partySize": 4,
+      "notes": "Khách yêu cầu bàn gần cửa sổ",
+      "createdById": "usr_001",
+      "deletedAt": null,
+      "orderId": null,
+      "createdAt": "2026-10-12T09:17:00.000Z",
+      "updatedAt": "2026-10-14T11:22:00.000Z",
+      "branch": {
+        "id": "br3",
+        "name": "Hồng Phúc Nướng & Lẩu – Thảo Điền",
+        "address": "Số 42 Nguyễn Ư Dĩ, phường Thảo Điền, TP. Thủ Đức, TP. Hồ Chí Minh",
+        "phone": "028 7300 1903",
+        "isActive": true,
+        "cukcukBranchId": "ck1002",
+        "cukcukBranchCode": "CS3",
+        "createdAt": "2026-01-05T03:00:00.000Z",
+        "updatedAt": "2026-09-01T03:00:00.000Z",
+        "hours": [],
+        "isOpenNow": true
+      },
+      "customer": {
+        "id": "cus_003",
+        "fullName": "Lê Văn Hùng",
+        "phone": "+840914***134",
+        "favoriteDishes": [],
+        "favoriteFlavors": [],
+        "favoriteToppings": [],
+        "visitCount": 12
+      },
+      "order": null
+    },
+    {
+      "id": "res_004",
+      "customerId": null,
+      "guestName": "Vũ Đình Hải",
+      "guestPhone": "0917 *** 185",
+      "branchId": "br1",
+      "status": "RESERVED",
+      "reservedFor": "2026-10-17T19:00:00.000Z",
+      "visitedAt": null,
+      "partySize": 5,
+      "notes": null,
+      "createdById": "usr_001",
+      "deletedAt": null,
+      "orderId": null,
+      "createdAt": "2026-10-13T09:18:00.000Z",
+      "updatedAt": "2026-10-15T11:23:00.000Z",
+      "branch": {
+        "id": "br1",
+        "name": "Hồng Phúc Nướng & Lẩu – Cao Thắng",
+        "address": "Số 19 đường Cao Thắng, phường 5, quận 3, TP. Hồ Chí Minh",
+        "phone": "028 7300 1901",
+        "isActive": true,
+        "cukcukBranchId": "ck1000",
+        "cukcukBranchCode": "CS1",
+        "createdAt": "2026-01-05T03:00:00.000Z",
+        "updatedAt": "2026-09-01T03:00:00.000Z",
+        "hours": [],
+        "isOpenNow": true
+      },
+      "customer": {
+        "id": "cus_004",
+        "fullName": "Phạm Minh Châu",
+        "phone": "+840915***151",
+        "favoriteDishes": [],
+        "favoriteFlavors": [],
+        "favoriteToppings": [],
+        "visitCount": 17
+      },
+      "order": null
+    },
+    {
+      "id": "res_005",
+      "customerId": "cus_005",
+      "guestName": "Đặng Thu Hà",
+      "guestPhone": null,
+      "branchId": "br2",
+      "status": "COMPLETED",
+      "reservedFor": "2026-10-18T19:30:00.000Z",
+      "visitedAt": "2026-10-18T19:30:00.000Z",
+      "partySize": 6,
+      "notes": null,
+      "createdById": "usr_001",
+      "deletedAt": null,
+      "orderId": null,
+      "createdAt": "2026-10-10T09:19:00.000Z",
+      "updatedAt": "2026-10-12T11:24:00.000Z",
+      "branch": {
+        "id": "br2",
+        "name": "Hồng Phúc Nướng & Lẩu – Trần Quang Khải",
+        "address": "Số 88 Trần Quang Khải, phường Tân Định, quận 1, TP. Hồ Chí Minh",
+        "phone": "028 7300 1902",
+        "isActive": true,
+        "cukcukBranchId": "ck1001",
+        "cukcukBranchCode": "CS2",
+        "createdAt": "2026-01-05T03:00:00.000Z",
+        "updatedAt": "2026-09-01T03:00:00.000Z",
+        "hours": [],
+        "isOpenNow": true
+      },
+      "customer": {
+        "id": "cus_005",
+        "fullName": "Vũ Đình Hải",
+        "phone": "+840916***168",
+        "favoriteDishes": [],
+        "favoriteFlavors": [],
+        "favoriteToppings": [],
+        "visitCount": 22
+      },
+      "order": null
+    },
+    {
+      "id": "res_006",
+      "customerId": null,
+      "guestName": "Bùi Tiến Dũng",
+      "guestPhone": null,
+      "branchId": "br3",
+      "status": "RESERVED",
+      "reservedFor": "2026-10-19T20:00:00.000Z",
+      "visitedAt": null,
+      "partySize": 7,
+      "notes": null,
+      "createdById": "usr_001",
+      "deletedAt": null,
+      "orderId": null,
+      "createdAt": "2026-10-11T09:20:00.000Z",
+      "updatedAt": "2026-10-13T11:25:00.000Z",
+      "branch": {
+        "id": "br3",
+        "name": "Hồng Phúc Nướng & Lẩu – Thảo Điền",
+        "address": "Số 42 Nguyễn Ư Dĩ, phường Thảo Điền, TP. Thủ Đức, TP. Hồ Chí Minh",
+        "phone": "028 7300 1903",
+        "isActive": true,
+        "cukcukBranchId": "ck1002",
+        "cukcukBranchCode": "CS3",
+        "createdAt": "2026-01-05T03:00:00.000Z",
+        "updatedAt": "2026-09-01T03:00:00.000Z",
+        "hours": [],
+        "isOpenNow": true
+      },
+      "customer": {
+        "id": "cus_006",
+        "fullName": "Đặng Thu Hà",
+        "phone": "+840917***185",
+        "favoriteDishes": [],
+        "favoriteFlavors": [],
+        "favoriteToppings": [],
+        "visitCount": 6
+      },
+      "order": null
+    },
+    {
+      "id": "res_007",
+      "customerId": "cus_007",
+      "guestName": "Bùi Ngọc Ánh",
+      "guestPhone": "0912 *** 236",
+      "branchId": "br1",
+      "status": "NO_SHOW",
+      "reservedFor": "2026-10-20T20:30:00.000Z",
+      "visitedAt": null,
+      "partySize": 2,
+      "notes": null,
+      "createdById": "usr_001",
+      "deletedAt": null,
+      "orderId": null,
+      "createdAt": "2026-10-12T09:21:00.000Z",
+      "updatedAt": "2026-10-14T11:26:00.000Z",
+      "branch": {
+        "id": "br1",
+        "name": "Hồng Phúc Nướng & Lẩu – Cao Thắng",
+        "address": "Số 19 đường Cao Thắng, phường 5, quận 3, TP. Hồ Chí Minh",
+        "phone": "028 7300 1901",
+        "isActive": true,
+        "cukcukBranchId": "ck1000",
+        "cukcukBranchCode": "CS1",
+        "createdAt": "2026-01-05T03:00:00.000Z",
+        "updatedAt": "2026-09-01T03:00:00.000Z",
+        "hours": [],
+        "isOpenNow": true
+      },
+      "customer": {
+        "id": "cus_007",
+        "fullName": "Bùi Tiến Dũng",
+        "phone": "+840918***202",
+        "favoriteDishes": [],
+        "favoriteFlavors": [],
+        "favoriteToppings": [],
+        "visitCount": 11
+      },
+      "order": null
+    },
+    {
+      "id": "res_008",
+      "customerId": null,
+      "guestName": "Hoàng Thu Thảo",
+      "guestPhone": null,
+      "branchId": "br2",
+      "status": "RESERVED",
+      "reservedFor": "2026-10-21T21:00:00.000Z",
+      "visitedAt": null,
+      "partySize": 3,
+      "notes": null,
+      "createdById": "usr_001",
+      "deletedAt": null,
+      "orderId": null,
+      "createdAt": "2026-10-13T09:22:00.000Z",
+      "updatedAt": "2026-10-15T11:27:00.000Z",
+      "branch": {
+        "id": "br2",
+        "name": "Hồng Phúc Nướng & Lẩu – Trần Quang Khải",
+        "address": "Số 88 Trần Quang Khải, phường Tân Định, quận 1, TP. Hồ Chí Minh",
+        "phone": "028 7300 1902",
+        "isActive": true,
+        "cukcukBranchId": "ck1001",
+        "cukcukBranchCode": "CS2",
+        "createdAt": "2026-01-05T03:00:00.000Z",
+        "updatedAt": "2026-09-01T03:00:00.000Z",
+        "hours": [],
+        "isOpenNow": true
+      },
+      "customer": {
+        "id": "cus_008",
+        "fullName": "Hoàng Lan Anh",
+        "phone": "+840919***219",
+        "favoriteDishes": [],
+        "favoriteFlavors": [],
+        "favoriteToppings": [],
+        "visitCount": 16
+      },
+      "order": null
+    },
+    {
+      "id": "res_009",
+      "customerId": "cus_009",
+      "guestName": "Đỗ Hải Yến",
+      "guestPhone": null,
+      "branchId": "br3",
+      "status": "COMPLETED",
+      "reservedFor": "2026-10-22T17:30:00.000Z",
+      "visitedAt": "2026-10-22T17:30:00.000Z",
+      "partySize": 4,
+      "notes": null,
+      "createdById": "usr_001",
+      "deletedAt": null,
+      "orderId": null,
+      "createdAt": "2026-10-10T09:23:00.000Z",
+      "updatedAt": "2026-10-12T11:28:00.000Z",
+      "branch": {
+        "id": "br3",
+        "name": "Hồng Phúc Nướng & Lẩu – Thảo Điền",
+        "address": "Số 42 Nguyễn Ư Dĩ, phường Thảo Điền, TP. Thủ Đức, TP. Hồ Chí Minh",
+        "phone": "028 7300 1903",
+        "isActive": true,
+        "cukcukBranchId": "ck1002",
+        "cukcukBranchCode": "CS3",
+        "createdAt": "2026-01-05T03:00:00.000Z",
+        "updatedAt": "2026-09-01T03:00:00.000Z",
+        "hours": [],
+        "isOpenNow": true
+      },
+      "customer": {
+        "id": "cus_009",
+        "fullName": "Trần Thị Bích Ngọc",
+        "phone": "+840912***236",
+        "favoriteDishes": [],
+        "favoriteFlavors": [],
+        "favoriteToppings": [],
+        "visitCount": 21
+      },
+      "order": null
+    },
+    {
+      "id": "res_010",
+      "customerId": null,
+      "guestName": "Ngô Thanh Mai",
+      "guestPhone": "0915 *** 287",
+      "branchId": "br1",
+      "status": "RESERVED",
+      "reservedFor": "2026-10-23T18:00:00.000Z",
+      "visitedAt": null,
+      "partySize": 5,
+      "notes": null,
+      "createdById": "usr_001",
+      "deletedAt": null,
+      "orderId": null,
+      "createdAt": "2026-10-11T09:24:00.000Z",
+      "updatedAt": "2026-10-13T11:29:00.000Z",
+      "branch": {
+        "id": "br1",
+        "name": "Hồng Phúc Nướng & Lẩu – Cao Thắng",
+        "address": "Số 19 đường Cao Thắng, phường 5, quận 3, TP. Hồ Chí Minh",
+        "phone": "028 7300 1901",
+        "isActive": true,
+        "cukcukBranchId": "ck1000",
+        "cukcukBranchCode": "CS1",
+        "createdAt": "2026-01-05T03:00:00.000Z",
+        "updatedAt": "2026-09-01T03:00:00.000Z",
+        "hours": [],
+        "isOpenNow": true
+      },
+      "customer": {
+        "id": "cus_010",
+        "fullName": "Nguyễn Thu Trang",
+        "phone": "+840913***253",
+        "favoriteDishes": [],
+        "favoriteFlavors": [],
+        "favoriteToppings": [],
+        "visitCount": 5
+      },
+      "order": null
+    }
+  ],
+  "orders": [
+    {
+      "id": "ord_001",
+      "code": "HP-10247",
+      "customerId": "cus_001",
+      "branchId": "br1",
+      "branch": {
+        "id": "br1",
+        "name": "Hồng Phúc Nướng & Lẩu – Cao Thắng",
+        "address": "Số 19 đường Cao Thắng, phường 5, quận 3, TP. Hồ Chí Minh",
+        "phone": "028 7300 1901",
+        "isActive": true,
+        "cukcukBranchId": "ck1000",
+        "cukcukBranchCode": "CS1",
+        "createdAt": "2026-01-05T03:00:00.000Z",
+        "updatedAt": "2026-09-01T03:00:00.000Z",
+        "hours": [],
+        "isOpenNow": true
+      },
+      "channel": "CUKCUK",
+      "cukcukServiceType": "TAKEAWAY",
+      "status": "PAID",
+      "orderedAt": "2026-10-02T10:10:00.000Z",
+      "guestCount": 1,
+      "subtotalVnd": 919000,
+      "discountVnd": 0,
+      "totalVnd": 919000,
+      "voucherDiscountVnd": 0,
+      "note": null,
+      "loyaltyExcluded": false,
+      "itemsSyncDirty": false,
+      "createdById": "usr_001",
+      "deletedAt": null,
+      "createdAt": "2026-10-02T10:10:00.000Z",
+      "updatedAt": "2026-10-02T11:20:00.000Z",
+      "items": [
+        {
+          "id": "oi0_0",
+          "productName": "Set lẩu Thái chua cay (2 người)",
+          "quantity": 1,
+          "unitPriceVnd": 429000,
+          "lineTotalVnd": 429000
+        },
+        {
+          "id": "oi0_1",
+          "productName": "Set lẩu Malay cho 1 người",
+          "quantity": 2,
+          "unitPriceVnd": 245000,
+          "lineTotalVnd": 490000
+        }
+      ],
+      "customer": {
+        "id": "cus_001",
+        "fullName": "Trần Quốc Khánh"
+      }
+    },
+    {
+      "id": "ord_002",
+      "code": "HP-10248",
+      "customerId": null,
+      "branchId": "br2",
+      "branch": {
+        "id": "br2",
+        "name": "Hồng Phúc Nướng & Lẩu – Trần Quang Khải",
+        "address": "Số 88 Trần Quang Khải, phường Tân Định, quận 1, TP. Hồ Chí Minh",
+        "phone": "028 7300 1902",
+        "isActive": true,
+        "cukcukBranchId": "ck1001",
+        "cukcukBranchCode": "CS2",
+        "createdAt": "2026-01-05T03:00:00.000Z",
+        "updatedAt": "2026-09-01T03:00:00.000Z",
+        "hours": [],
+        "isOpenNow": true
+      },
+      "channel": "POS",
+      "cukcukServiceType": "DINE_IN",
+      "status": "PAYMENT_REQUESTED",
+      "orderedAt": "2026-10-03T11:12:00.000Z",
+      "guestCount": 2,
+      "subtotalVnd": 513000,
+      "discountVnd": 0,
+      "totalVnd": 513000,
+      "voucherDiscountVnd": 0,
+      "note": null,
+      "loyaltyExcluded": false,
+      "itemsSyncDirty": false,
+      "createdById": "usr_001",
+      "deletedAt": null,
+      "createdAt": "2026-10-03T11:12:00.000Z",
+      "updatedAt": "2026-10-03T12:22:00.000Z",
+      "items": [
+        {
+          "id": "oi1_0",
+          "productName": "Bắp bò Hàn Quốc (150g)",
+          "quantity": 2,
+          "unitPriceVnd": 169000,
+          "lineTotalVnd": 338000
+        },
+        {
+          "id": "oi1_1",
+          "productName": "Nấm đùi gà",
+          "quantity": 1,
+          "unitPriceVnd": 45000,
+          "lineTotalVnd": 45000
+        },
+        {
+          "id": "oi1_2",
+          "productName": "Rau muống xào tỏi",
+          "quantity": 2,
+          "unitPriceVnd": 65000,
+          "lineTotalVnd": 130000
+        }
+      ],
+      "customer": null
+    },
+    {
+      "id": "ord_003",
+      "code": "HP-10249",
+      "customerId": null,
+      "branchId": "br3",
+      "branch": {
+        "id": "br3",
+        "name": "Hồng Phúc Nướng & Lẩu – Thảo Điền",
+        "address": "Số 42 Nguyễn Ư Dĩ, phường Thảo Điền, TP. Thủ Đức, TP. Hồ Chí Minh",
+        "phone": "028 7300 1903",
+        "isActive": true,
+        "cukcukBranchId": "ck1002",
+        "cukcukBranchCode": "CS3",
+        "createdAt": "2026-01-05T03:00:00.000Z",
+        "updatedAt": "2026-09-01T03:00:00.000Z",
+        "hours": [],
+        "isOpenNow": true
+      },
+      "channel": "IN_STORE",
+      "cukcukServiceType": "DINE_IN",
+      "status": "PAID",
+      "orderedAt": "2026-10-04T12:14:00.000Z",
+      "guestCount": 3,
+      "subtotalVnd": 1012000,
+      "discountVnd": 0,
+      "totalVnd": 1012000,
+      "voucherDiscountVnd": 0,
+      "note": null,
+      "loyaltyExcluded": false,
+      "itemsSyncDirty": false,
+      "createdById": "usr_001",
+      "deletedAt": null,
+      "createdAt": "2026-10-04T12:14:00.000Z",
+      "updatedAt": "2026-10-04T13:24:00.000Z",
+      "items": [
+        {
+          "id": "oi2_0",
+          "productName": "Đậu phụ non chiên",
+          "quantity": 1,
+          "unitPriceVnd": 39000,
+          "lineTotalVnd": 39000
+        },
+        {
+          "id": "oi2_1",
+          "productName": "Trà chanh pha sẵn",
+          "quantity": 2,
+          "unitPriceVnd": 35000,
+          "lineTotalVnd": 70000
+        },
+        {
+          "id": "oi2_2",
+          "productName": "Chè khúc bạch",
+          "quantity": 1,
+          "unitPriceVnd": 45000,
+          "lineTotalVnd": 45000
+        },
+        {
+          "id": "oi2_3",
+          "productName": "Set lẩu Thái chua cay (2 người)",
+          "quantity": 2,
+          "unitPriceVnd": 429000,
+          "lineTotalVnd": 858000
+        }
+      ],
+      "customer": null
+    },
+    {
+      "id": "ord_004",
+      "code": "HP-10250",
+      "customerId": "cus_004",
+      "branchId": "br1",
+      "branch": {
+        "id": "br1",
+        "name": "Hồng Phúc Nướng & Lẩu – Cao Thắng",
+        "address": "Số 19 đường Cao Thắng, phường 5, quận 3, TP. Hồ Chí Minh",
+        "phone": "028 7300 1901",
+        "isActive": true,
+        "cukcukBranchId": "ck1000",
+        "cukcukBranchCode": "CS1",
+        "createdAt": "2026-01-05T03:00:00.000Z",
+        "updatedAt": "2026-09-01T03:00:00.000Z",
+        "hours": [],
+        "isOpenNow": true
+      },
+      "channel": "CUKCUK",
+      "cukcukServiceType": "TAKEAWAY",
+      "status": "CANCELLED",
+      "orderedAt": "2026-10-05T13:16:00.000Z",
+      "guestCount": 4,
+      "subtotalVnd": 1103000,
+      "discountVnd": 50000,
+      "totalVnd": 1053000,
+      "voucherDiscountVnd": 0,
+      "note": null,
+      "loyaltyExcluded": false,
+      "itemsSyncDirty": false,
+      "createdById": "usr_001",
+      "deletedAt": null,
+      "createdAt": "2026-10-05T13:16:00.000Z",
+      "updatedAt": "2026-10-05T14:26:00.000Z",
+      "items": [
+        {
+          "id": "oi3_0",
+          "productName": "Set lẩu Thái chua cay (2 người)",
+          "quantity": 2,
+          "unitPriceVnd": 429000,
+          "lineTotalVnd": 858000
+        },
+        {
+          "id": "oi3_1",
+          "productName": "Set lẩu Malay cho 1 người",
+          "quantity": 1,
+          "unitPriceVnd": 245000,
+          "lineTotalVnd": 245000
+        }
+      ],
+      "customer": {
+        "id": "cus_004",
+        "fullName": "Phạm Minh Châu"
+      }
+    },
+    {
+      "id": "ord_005",
+      "code": "HP-10251",
+      "customerId": null,
+      "branchId": "br2",
+      "branch": {
+        "id": "br2",
+        "name": "Hồng Phúc Nướng & Lẩu – Trần Quang Khải",
+        "address": "Số 88 Trần Quang Khải, phường Tân Định, quận 1, TP. Hồ Chí Minh",
+        "phone": "028 7300 1902",
+        "isActive": true,
+        "cukcukBranchId": "ck1001",
+        "cukcukBranchCode": "CS2",
+        "createdAt": "2026-01-05T03:00:00.000Z",
+        "updatedAt": "2026-09-01T03:00:00.000Z",
+        "hours": [],
+        "isOpenNow": true
+      },
+      "channel": "CALL",
+      "cukcukServiceType": "DINE_IN",
+      "status": "SERVING",
+      "orderedAt": "2026-10-06T14:18:00.000Z",
+      "guestCount": 5,
+      "subtotalVnd": 324000,
+      "discountVnd": 0,
+      "totalVnd": 324000,
+      "voucherDiscountVnd": 0,
+      "note": null,
+      "loyaltyExcluded": false,
+      "itemsSyncDirty": false,
+      "createdById": "usr_001",
+      "deletedAt": null,
+      "createdAt": "2026-10-06T14:18:00.000Z",
+      "updatedAt": "2026-10-06T15:28:00.000Z",
+      "items": [
+        {
+          "id": "oi4_0",
+          "productName": "Bắp bò Hàn Quốc (150g)",
+          "quantity": 1,
+          "unitPriceVnd": 169000,
+          "lineTotalVnd": 169000
+        },
+        {
+          "id": "oi4_1",
+          "productName": "Nấm đùi gà",
+          "quantity": 2,
+          "unitPriceVnd": 45000,
+          "lineTotalVnd": 90000
+        },
+        {
+          "id": "oi4_2",
+          "productName": "Rau muống xào tỏi",
+          "quantity": 1,
+          "unitPriceVnd": 65000,
+          "lineTotalVnd": 65000
+        }
+      ],
+      "customer": null
+    },
+    {
+      "id": "ord_006",
+      "code": "HP-10252",
+      "customerId": null,
+      "branchId": "br3",
+      "branch": {
+        "id": "br3",
+        "name": "Hồng Phúc Nướng & Lẩu – Thảo Điền",
+        "address": "Số 42 Nguyễn Ư Dĩ, phường Thảo Điền, TP. Thủ Đức, TP. Hồ Chí Minh",
+        "phone": "028 7300 1903",
+        "isActive": true,
+        "cukcukBranchId": "ck1002",
+        "cukcukBranchCode": "CS3",
+        "createdAt": "2026-01-05T03:00:00.000Z",
+        "updatedAt": "2026-09-01T03:00:00.000Z",
+        "hours": [],
+        "isOpenNow": true
+      },
+      "channel": "POS",
+      "cukcukServiceType": "DINE_IN",
+      "status": "PAID",
+      "orderedAt": "2026-10-07T15:20:00.000Z",
+      "guestCount": 1,
+      "subtotalVnd": 632000,
+      "discountVnd": 0,
+      "totalVnd": 632000,
+      "voucherDiscountVnd": 0,
+      "note": "Khách báo trước 30 phút",
+      "loyaltyExcluded": false,
+      "itemsSyncDirty": false,
+      "createdById": "usr_001",
+      "deletedAt": null,
+      "createdAt": "2026-10-07T15:20:00.000Z",
+      "updatedAt": "2026-10-07T16:30:00.000Z",
+      "items": [
+        {
+          "id": "oi5_0",
+          "productName": "Đậu phụ non chiên",
+          "quantity": 2,
+          "unitPriceVnd": 39000,
+          "lineTotalVnd": 78000
+        },
+        {
+          "id": "oi5_1",
+          "productName": "Trà chanh pha sẵn",
+          "quantity": 1,
+          "unitPriceVnd": 35000,
+          "lineTotalVnd": 35000
+        },
+        {
+          "id": "oi5_2",
+          "productName": "Chè khúc bạch",
+          "quantity": 2,
+          "unitPriceVnd": 45000,
+          "lineTotalVnd": 90000
+        },
+        {
+          "id": "oi5_3",
+          "productName": "Set lẩu Thái chua cay (2 người)",
+          "quantity": 1,
+          "unitPriceVnd": 429000,
+          "lineTotalVnd": 429000
+        }
+      ],
+      "customer": null
+    },
+    {
+      "id": "ord_007",
+      "code": "HP-10253",
+      "customerId": "cus_007",
+      "branchId": "br1",
+      "branch": {
+        "id": "br1",
+        "name": "Hồng Phúc Nướng & Lẩu – Cao Thắng",
+        "address": "Số 19 đường Cao Thắng, phường 5, quận 3, TP. Hồ Chí Minh",
+        "phone": "028 7300 1901",
+        "isActive": true,
+        "cukcukBranchId": "ck1000",
+        "cukcukBranchCode": "CS1",
+        "createdAt": "2026-01-05T03:00:00.000Z",
+        "updatedAt": "2026-09-01T03:00:00.000Z",
+        "hours": [],
+        "isOpenNow": true
+      },
+      "channel": "CUKCUK",
+      "cukcukServiceType": "TAKEAWAY",
+      "status": "DELIVERED",
+      "orderedAt": "2026-10-08T16:22:00.000Z",
+      "guestCount": 2,
+      "subtotalVnd": 919000,
+      "discountVnd": 0,
+      "totalVnd": 919000,
+      "voucherDiscountVnd": 0,
+      "note": null,
+      "loyaltyExcluded": false,
+      "itemsSyncDirty": false,
+      "createdById": "usr_001",
+      "deletedAt": null,
+      "createdAt": "2026-10-08T16:22:00.000Z",
+      "updatedAt": "2026-10-08T17:32:00.000Z",
+      "items": [
+        {
+          "id": "oi6_0",
+          "productName": "Set lẩu Thái chua cay (2 người)",
+          "quantity": 1,
+          "unitPriceVnd": 429000,
+          "lineTotalVnd": 429000
+        },
+        {
+          "id": "oi6_1",
+          "productName": "Set lẩu Malay cho 1 người",
+          "quantity": 2,
+          "unitPriceVnd": 245000,
+          "lineTotalVnd": 490000
+        }
+      ],
+      "customer": {
+        "id": "cus_007",
+        "fullName": "Bùi Tiến Dũng"
+      }
+    },
+    {
+      "id": "ord_008",
+      "code": "HP-10254",
+      "customerId": null,
+      "branchId": "br2",
+      "branch": {
+        "id": "br2",
+        "name": "Hồng Phúc Nướng & Lẩu – Trần Quang Khải",
+        "address": "Số 88 Trần Quang Khải, phường Tân Định, quận 1, TP. Hồ Chí Minh",
+        "phone": "028 7300 1902",
+        "isActive": true,
+        "cukcukBranchId": "ck1001",
+        "cukcukBranchCode": "CS2",
+        "createdAt": "2026-01-05T03:00:00.000Z",
+        "updatedAt": "2026-09-01T03:00:00.000Z",
+        "hours": [],
+        "isOpenNow": true
+      },
+      "channel": "OTHER",
+      "cukcukServiceType": "DINE_IN",
+      "status": "PAID",
+      "orderedAt": "2026-10-09T17:24:00.000Z",
+      "guestCount": 3,
+      "subtotalVnd": 513000,
+      "discountVnd": 0,
+      "totalVnd": 513000,
+      "voucherDiscountVnd": 0,
+      "note": null,
+      "loyaltyExcluded": false,
+      "itemsSyncDirty": false,
+      "createdById": "usr_001",
+      "deletedAt": null,
+      "createdAt": "2026-10-09T17:24:00.000Z",
+      "updatedAt": "2026-10-09T18:34:00.000Z",
+      "items": [
+        {
+          "id": "oi7_0",
+          "productName": "Bắp bò Hàn Quốc (150g)",
+          "quantity": 2,
+          "unitPriceVnd": 169000,
+          "lineTotalVnd": 338000
+        },
+        {
+          "id": "oi7_1",
+          "productName": "Nấm đùi gà",
+          "quantity": 1,
+          "unitPriceVnd": 45000,
+          "lineTotalVnd": 45000
+        },
+        {
+          "id": "oi7_2",
+          "productName": "Rau muống xào tỏi",
+          "quantity": 2,
+          "unitPriceVnd": 65000,
+          "lineTotalVnd": 130000
+        }
+      ],
+      "customer": null
+    },
+    {
+      "id": "ord_009",
+      "code": "HP-10255",
+      "customerId": null,
+      "branchId": "br3",
+      "branch": {
+        "id": "br3",
+        "name": "Hồng Phúc Nướng & Lẩu – Thảo Điền",
+        "address": "Số 42 Nguyễn Ư Dĩ, phường Thảo Điền, TP. Thủ Đức, TP. Hồ Chí Minh",
+        "phone": "028 7300 1903",
+        "isActive": true,
+        "cukcukBranchId": "ck1002",
+        "cukcukBranchCode": "CS3",
+        "createdAt": "2026-01-05T03:00:00.000Z",
+        "updatedAt": "2026-09-01T03:00:00.000Z",
+        "hours": [],
+        "isOpenNow": true
+      },
+      "channel": "CUKCUK",
+      "cukcukServiceType": "DINE_IN",
+      "status": "PAYMENT_REQUESTED",
+      "orderedAt": "2026-10-10T18:26:00.000Z",
+      "guestCount": 4,
+      "subtotalVnd": 1012000,
+      "discountVnd": 0,
+      "totalVnd": 1012000,
+      "voucherDiscountVnd": 0,
+      "note": null,
+      "loyaltyExcluded": false,
+      "itemsSyncDirty": false,
+      "createdById": "usr_001",
+      "deletedAt": null,
+      "createdAt": "2026-10-10T18:26:00.000Z",
+      "updatedAt": "2026-10-10T19:36:00.000Z",
+      "items": [
+        {
+          "id": "oi8_0",
+          "productName": "Đậu phụ non chiên",
+          "quantity": 1,
+          "unitPriceVnd": 39000,
+          "lineTotalVnd": 39000
+        },
+        {
+          "id": "oi8_1",
+          "productName": "Trà chanh pha sẵn",
+          "quantity": 2,
+          "unitPriceVnd": 35000,
+          "lineTotalVnd": 70000
+        },
+        {
+          "id": "oi8_2",
+          "productName": "Chè khúc bạch",
+          "quantity": 1,
+          "unitPriceVnd": 45000,
+          "lineTotalVnd": 45000
+        },
+        {
+          "id": "oi8_3",
+          "productName": "Set lẩu Thái chua cay (2 người)",
+          "quantity": 2,
+          "unitPriceVnd": 429000,
+          "lineTotalVnd": 858000
+        }
+      ],
+      "customer": null
+    },
+    {
+      "id": "ord_010",
+      "code": "HP-10256",
+      "customerId": "cus_010",
+      "branchId": "br1",
+      "branch": {
+        "id": "br1",
+        "name": "Hồng Phúc Nướng & Lẩu – Cao Thắng",
+        "address": "Số 19 đường Cao Thắng, phường 5, quận 3, TP. Hồ Chí Minh",
+        "phone": "028 7300 1901",
+        "isActive": true,
+        "cukcukBranchId": "ck1000",
+        "cukcukBranchCode": "CS1",
+        "createdAt": "2026-01-05T03:00:00.000Z",
+        "updatedAt": "2026-09-01T03:00:00.000Z",
+        "hours": [],
+        "isOpenNow": true
+      },
+      "channel": "POS",
+      "cukcukServiceType": "TAKEAWAY",
+      "status": "PAID",
+      "orderedAt": "2026-10-11T19:28:00.000Z",
+      "guestCount": 5,
+      "subtotalVnd": 1103000,
+      "discountVnd": 0,
+      "totalVnd": 1103000,
+      "voucherDiscountVnd": 0,
+      "note": null,
+      "loyaltyExcluded": false,
+      "itemsSyncDirty": false,
+      "createdById": "usr_001",
+      "deletedAt": null,
+      "createdAt": "2026-10-11T19:28:00.000Z",
+      "updatedAt": "2026-10-11T20:38:00.000Z",
+      "items": [
+        {
+          "id": "oi9_0",
+          "productName": "Set lẩu Thái chua cay (2 người)",
+          "quantity": 2,
+          "unitPriceVnd": 429000,
+          "lineTotalVnd": 858000
+        },
+        {
+          "id": "oi9_1",
+          "productName": "Set lẩu Malay cho 1 người",
+          "quantity": 1,
+          "unitPriceVnd": 245000,
+          "lineTotalVnd": 245000
+        }
+      ],
+      "customer": {
+        "id": "cus_010",
+        "fullName": "Nguyễn Thu Trang"
+      }
+    },
+    {
+      "id": "ord_011",
+      "code": "HP-10257",
+      "customerId": null,
+      "branchId": "br2",
+      "branch": {
+        "id": "br2",
+        "name": "Hồng Phúc Nướng & Lẩu – Trần Quang Khải",
+        "address": "Số 88 Trần Quang Khải, phường Tân Định, quận 1, TP. Hồ Chí Minh",
+        "phone": "028 7300 1902",
+        "isActive": true,
+        "cukcukBranchId": "ck1001",
+        "cukcukBranchCode": "CS2",
+        "createdAt": "2026-01-05T03:00:00.000Z",
+        "updatedAt": "2026-09-01T03:00:00.000Z",
+        "hours": [],
+        "isOpenNow": true
+      },
+      "channel": "CUKCUK",
+      "cukcukServiceType": "DINE_IN",
+      "status": "CANCELLED",
+      "orderedAt": "2026-10-12T10:30:00.000Z",
+      "guestCount": 1,
+      "subtotalVnd": 324000,
+      "discountVnd": 0,
+      "totalVnd": 324000,
+      "voucherDiscountVnd": 0,
+      "note": null,
+      "loyaltyExcluded": false,
+      "itemsSyncDirty": false,
+      "createdById": "usr_001",
+      "deletedAt": null,
+      "createdAt": "2026-10-12T10:30:00.000Z",
+      "updatedAt": "2026-10-12T11:40:00.000Z",
+      "items": [
+        {
+          "id": "oi10_0",
+          "productName": "Bắp bò Hàn Quốc (150g)",
+          "quantity": 1,
+          "unitPriceVnd": 169000,
+          "lineTotalVnd": 169000
+        },
+        {
+          "id": "oi10_1",
+          "productName": "Nấm đùi gà",
+          "quantity": 2,
+          "unitPriceVnd": 45000,
+          "lineTotalVnd": 90000
+        },
+        {
+          "id": "oi10_2",
+          "productName": "Rau muống xào tỏi",
+          "quantity": 1,
+          "unitPriceVnd": 65000,
+          "lineTotalVnd": 65000
+        }
+      ],
+      "customer": null
+    },
+    {
+      "id": "ord_012",
+      "code": "HP-10258",
+      "customerId": null,
+      "branchId": "br3",
+      "branch": {
+        "id": "br3",
+        "name": "Hồng Phúc Nướng & Lẩu – Thảo Điền",
+        "address": "Số 42 Nguyễn Ư Dĩ, phường Thảo Điền, TP. Thủ Đức, TP. Hồ Chí Minh",
+        "phone": "028 7300 1903",
+        "isActive": true,
+        "cukcukBranchId": "ck1002",
+        "cukcukBranchCode": "CS3",
+        "createdAt": "2026-01-05T03:00:00.000Z",
+        "updatedAt": "2026-09-01T03:00:00.000Z",
+        "hours": [],
+        "isOpenNow": true
+      },
+      "channel": "IN_STORE",
+      "cukcukServiceType": "DINE_IN",
+      "status": "SERVING",
+      "orderedAt": "2026-10-13T11:32:00.000Z",
+      "guestCount": 2,
+      "subtotalVnd": 632000,
+      "discountVnd": 0,
+      "totalVnd": 632000,
+      "voucherDiscountVnd": 0,
+      "note": null,
+      "loyaltyExcluded": false,
+      "itemsSyncDirty": false,
+      "createdById": "usr_001",
+      "deletedAt": null,
+      "createdAt": "2026-10-13T11:32:00.000Z",
+      "updatedAt": "2026-10-13T12:42:00.000Z",
+      "items": [
+        {
+          "id": "oi11_0",
+          "productName": "Đậu phụ non chiên",
+          "quantity": 2,
+          "unitPriceVnd": 39000,
+          "lineTotalVnd": 78000
+        },
+        {
+          "id": "oi11_1",
+          "productName": "Trà chanh pha sẵn",
+          "quantity": 1,
+          "unitPriceVnd": 35000,
+          "lineTotalVnd": 35000
+        },
+        {
+          "id": "oi11_2",
+          "productName": "Chè khúc bạch",
+          "quantity": 2,
+          "unitPriceVnd": 45000,
+          "lineTotalVnd": 90000
+        },
+        {
+          "id": "oi11_3",
+          "productName": "Set lẩu Thái chua cay (2 người)",
+          "quantity": 1,
+          "unitPriceVnd": 429000,
+          "lineTotalVnd": 429000
+        }
+      ],
+      "customer": null
+    }
+  ],
+  "dashboard": {
+    "totalCustomers": 1286,
+    "newThisWeek": 18,
+    "newThisMonth": 26,
+    "genderBreakdown": [
+      {
+        "gender": "MALE",
+        "count": 620
+      },
+      {
+        "gender": "FEMALE",
+        "count": 651
+      },
+      {
+        "gender": "OTHER",
+        "count": 3
+      },
+      {
+        "gender": "UNKNOWN",
+        "count": 12
+      }
+    ],
+    "byBranch": [
+      {
+        "branchId": "br1",
+        "branchName": "Hồng Phúc Nướng & Lẩu – Cao Thắng",
+        "count": 742
+      },
+      {
+        "branchId": "br2",
+        "branchName": "Hồng Phúc Nướng & Lẩu – Trần Quang Khải",
+        "count": 381
+      },
+      {
+        "branchId": "br3",
+        "branchName": "Hồng Phúc Nướng & Lẩu – Thảo Điền",
+        "count": 163
+      }
+    ],
+    "growth": [
+      {
+        "weekStart": "2026-08-16",
+        "count": 24
+      },
+      {
+        "weekStart": "2026-08-23",
+        "count": 42
+      },
+      {
+        "weekStart": "2026-08-30",
+        "count": 31
+      },
+      {
+        "weekStart": "2026-09-06",
+        "count": 20
+      },
+      {
+        "weekStart": "2026-09-13",
+        "count": 16
+      },
+      {
+        "weekStart": "2026-09-20",
+        "count": 9
+      },
+      {
+        "weekStart": "2026-09-27",
+        "count": 12
+      },
+      {
+        "weekStart": "2026-10-04",
+        "count": 18
+      }
+    ],
+    "upcomingBirthdays": [
+      {
+        "id": "cus_003",
+        "fullName": "Lê Văn Hùng",
+        "dob": "1996-10-11",
+        "daysUntil": 1,
+        "turningAge": 30
+      },
+      {
+        "id": "cus_005",
+        "fullName": "Vũ Đình Hải",
+        "dob": "1991-10-12",
+        "daysUntil": 2,
+        "turningAge": 35
+      },
+      {
+        "id": "cus_007",
+        "fullName": "Bùi Tiến Dũng",
+        "dob": "1988-10-14",
+        "daysUntil": 4,
+        "turningAge": 38
+      },
+      {
+        "id": "cus_009",
+        "fullName": "Trần Thị Bích Ngọc",
+        "dob": "1998-10-15",
+        "daysUntil": 5,
+        "turningAge": 28
+      },
+      {
+        "id": "cus_011",
+        "fullName": "Lê Thị Mai Anh",
+        "dob": "1993-10-16",
+        "daysUntil": 6,
+        "turningAge": 33
+      }
+    ],
+    "birthdaysThisMonth": 236,
+    "returningCustomers": 96,
+    "lapsedCustomers": 24,
+    "lapsedDays": 60,
+    "lapsedList": [
+      {
+        "id": "cus_002",
+        "fullName": "Nguyễn Thị Hồng Nhung",
+        "daysSince": 68,
+        "lastVisitAt": "2026-08-03T10:58:34.423Z"
+      },
+      {
+        "id": "cus_004",
+        "fullName": "Phạm Minh Châu",
+        "daysSince": 64,
+        "lastVisitAt": "2026-08-07T18:06:13.172Z"
+      },
+      {
+        "id": "cus_006",
+        "fullName": "Đặng Thu Hà",
+        "daysSince": 61,
+        "lastVisitAt": "2026-08-10T09:52:08.529Z"
+      }
+    ],
+    "reservationsToday": 4,
+    "reservationsUpcoming": 10,
+    "upcomingReservations": [
+      {
+        "id": "res_001",
+        "customerId": "cus_001",
+        "guestName": "Nguyễn Thị Hồng Nhung",
+        "guestPhone": "0914 *** 134",
+        "branchId": "br1",
+        "status": "RESERVED",
+        "reservedFor": "2026-10-14T17:30:00.000Z",
+        "visitedAt": null,
+        "partySize": 2,
+        "notes": null,
+        "createdById": "usr_001",
+        "deletedAt": null,
+        "orderId": null,
+        "createdAt": "2026-10-10T09:15:00.000Z",
+        "updatedAt": "2026-10-12T11:20:00.000Z",
+        "branch": {
+          "id": "br1",
+          "name": "Hồng Phúc Nướng & Lẩu – Cao Thắng",
+          "address": "Số 19 đường Cao Thắng, phường 5, quận 3, TP. Hồ Chí Minh",
+          "phone": "028 7300 1901",
+          "isActive": true,
+          "cukcukBranchId": "ck1000",
+          "cukcukBranchCode": "CS1",
+          "createdAt": "2026-01-05T03:00:00.000Z",
+          "updatedAt": "2026-09-01T03:00:00.000Z",
+          "hours": [],
+          "isOpenNow": true
+        },
+        "customer": {
+          "id": "cus_001",
+          "fullName": "Trần Quốc Khánh",
+          "phone": "+840912***100",
+          "favoriteDishes": [],
+          "favoriteFlavors": [],
+          "favoriteToppings": [],
+          "visitCount": 2
+        },
+        "order": null
+      },
+      {
+        "id": "res_002",
+        "customerId": null,
+        "guestName": "Lê Văn Hùng",
+        "guestPhone": null,
+        "branchId": "br2",
+        "status": "RESERVED",
+        "reservedFor": "2026-10-15T18:00:00.000Z",
+        "visitedAt": null,
+        "partySize": 3,
+        "notes": null,
+        "createdById": "usr_001",
+        "deletedAt": null,
+        "orderId": null,
+        "createdAt": "2026-10-11T09:16:00.000Z",
+        "updatedAt": "2026-10-13T11:21:00.000Z",
+        "branch": {
+          "id": "br2",
+          "name": "Hồng Phúc Nướng & Lẩu – Trần Quang Khải",
+          "address": "Số 88 Trần Quang Khải, phường Tân Định, quận 1, TP. Hồ Chí Minh",
+          "phone": "028 7300 1902",
+          "isActive": true,
+          "cukcukBranchId": "ck1001",
+          "cukcukBranchCode": "CS2",
+          "createdAt": "2026-01-05T03:00:00.000Z",
+          "updatedAt": "2026-09-01T03:00:00.000Z",
+          "hours": [],
+          "isOpenNow": true
+        },
+        "customer": {
+          "id": "cus_002",
+          "fullName": "Nguyễn Thị Hồng Nhung",
+          "phone": "+840913***117",
+          "favoriteDishes": [],
+          "favoriteFlavors": [],
+          "favoriteToppings": [],
+          "visitCount": 7
+        },
+        "order": null
+      },
+      {
+        "id": "res_004",
+        "customerId": null,
+        "guestName": "Vũ Đình Hải",
+        "guestPhone": "0917 *** 185",
+        "branchId": "br1",
+        "status": "RESERVED",
+        "reservedFor": "2026-10-17T19:00:00.000Z",
+        "visitedAt": null,
+        "partySize": 5,
+        "notes": null,
+        "createdById": "usr_001",
+        "deletedAt": null,
+        "orderId": null,
+        "createdAt": "2026-10-13T09:18:00.000Z",
+        "updatedAt": "2026-10-15T11:23:00.000Z",
+        "branch": {
+          "id": "br1",
+          "name": "Hồng Phúc Nướng & Lẩu – Cao Thắng",
+          "address": "Số 19 đường Cao Thắng, phường 5, quận 3, TP. Hồ Chí Minh",
+          "phone": "028 7300 1901",
+          "isActive": true,
+          "cukcukBranchId": "ck1000",
+          "cukcukBranchCode": "CS1",
+          "createdAt": "2026-01-05T03:00:00.000Z",
+          "updatedAt": "2026-09-01T03:00:00.000Z",
+          "hours": [],
+          "isOpenNow": true
+        },
+        "customer": {
+          "id": "cus_004",
+          "fullName": "Phạm Minh Châu",
+          "phone": "+840915***151",
+          "favoriteDishes": [],
+          "favoriteFlavors": [],
+          "favoriteToppings": [],
+          "visitCount": 17
+        },
+        "order": null
+      },
+      {
+        "id": "res_006",
+        "customerId": null,
+        "guestName": "Bùi Tiến Dũng",
+        "guestPhone": null,
+        "branchId": "br3",
+        "status": "RESERVED",
+        "reservedFor": "2026-10-19T20:00:00.000Z",
+        "visitedAt": null,
+        "partySize": 7,
+        "notes": null,
+        "createdById": "usr_001",
+        "deletedAt": null,
+        "orderId": null,
+        "createdAt": "2026-10-11T09:20:00.000Z",
+        "updatedAt": "2026-10-13T11:25:00.000Z",
+        "branch": {
+          "id": "br3",
+          "name": "Hồng Phúc Nướng & Lẩu – Thảo Điền",
+          "address": "Số 42 Nguyễn Ư Dĩ, phường Thảo Điền, TP. Thủ Đức, TP. Hồ Chí Minh",
+          "phone": "028 7300 1903",
+          "isActive": true,
+          "cukcukBranchId": "ck1002",
+          "cukcukBranchCode": "CS3",
+          "createdAt": "2026-01-05T03:00:00.000Z",
+          "updatedAt": "2026-09-01T03:00:00.000Z",
+          "hours": [],
+          "isOpenNow": true
+        },
+        "customer": {
+          "id": "cus_006",
+          "fullName": "Đặng Thu Hà",
+          "phone": "+840917***185",
+          "favoriteDishes": [],
+          "favoriteFlavors": [],
+          "favoriteToppings": [],
+          "visitCount": 6
+        },
+        "order": null
+      }
+    ],
+    "openComplaints": 2,
+    "complaintsThisMonth": 3,
+    "guestsToday": 128,
+    "ordersToday": 86,
+    "revenueTodayVnd": 44854864,
+    "generatedAt": "2026-10-11T10:00:00.000Z"
+  }
+}

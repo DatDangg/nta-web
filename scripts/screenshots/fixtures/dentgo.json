@@ -1,0 +1,4809 @@
+{
+  "meta": {
+    "clinic": "Nha khoa Minh Tâm",
+    "loggedInUser": "BS. Trần Minh Khoa",
+    "note": "Dữ liệu giả để chụp ảnh minh hoạ trang giải pháp DentGo."
+  },
+  "authMe": {
+    "user": {
+      "id": "0f8d8101-0f67-4fa7-814d-000c9a5e69df",
+      "username": "admin@minhtam",
+      "phone": "0912 000 345",
+      "role": "ADMIN",
+      "staffProfile": {
+        "id": "b54cda26-b54a-4eca-856e-0000eefd831a",
+        "fullName": "BS. Trần Minh Khoa",
+        "phone": "0912 000 345",
+        "email": null,
+        "managedClinicName": null,
+        "branch": {
+          "id": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+          "code": "MINTAM-NT",
+          "name": "Nha khoa Minh Tâm – Nguyễn Trãi"
+        }
+      }
+    },
+    "permissionOverrides": [],
+    "effectiveModules": [
+      "users",
+      "branches",
+      "patients",
+      "services",
+      "scheduling",
+      "clinical",
+      "customer-care",
+      "billing",
+      "inventory",
+      "suppliers",
+      "reports",
+      "notifications",
+      "support-tickets",
+      "audit",
+      "files",
+      "full-master"
+    ],
+    "effectiveFeatures": [
+      "overview",
+      "appointments",
+      "queue",
+      "waitlist",
+      "reminders",
+      "customer-care",
+      "patients",
+      "visits",
+      "billing",
+      "inventory",
+      "operations",
+      "support-tickets"
+    ],
+    "effectiveActionPermissions": [
+      "141:view",
+      "142:view",
+      "158:create",
+      "158:update"
+    ],
+    "rolePermissionsConfigured": false
+  },
+  "subscription": {
+    "subscription": {
+      "id": "adc4fab2-ad9e-4a1e-8f8a-000cc233550e",
+      "status": "active",
+      "storedStatus": "ACTIVE",
+      "plan": {
+        "id": "4bfc7463-4bd5-4495-8dc7-000cea08403d",
+        "code": "PRO",
+        "name": "Gói chuyên nghiệp"
+      },
+      "startsAt": "2026-01-01T00:00:00.000Z",
+      "currentUntil": "2026-12-31T00:00:00.000Z",
+      "graceDays": 15,
+      "graceEndsAt": null,
+      "daysUntilExpiry": 81,
+      "isAccessBlocked": false,
+      "contractCode": null,
+      "contractValue": null,
+      "currency": "VND"
+    }
+  },
+  "zaloConversations": {
+    "conversations": []
+  },
+  "unread": {
+    "unreadCount": 0
+  },
+  "appointmentsOptions": {
+    "branches": [
+      {
+        "id": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+        "code": "MINTAM-HN",
+        "name": "Nha khoa Minh Tâm – Trần Duy Hưng",
+        "address": "Số 12 Trần Duy Hưng, Cầu Giấy, Hà Nội",
+        "phone": "024 7300 0001",
+        "isActive": true,
+        "createdAt": "2025-01-02T03:00:00.000Z",
+        "updatedAt": "2026-09-01T03:00:00.000Z",
+        "deletedAt": null,
+        "nationalDrugSystemCode": null,
+        "nationalDrugSystemPassword": null,
+        "defaultConsumptionWarehouseId": null
+      },
+      {
+        "id": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+        "code": "MINTAM-NT",
+        "name": "Nha khoa Minh Tâm – Nguyễn Trãi",
+        "address": "Số 245 Nguyễn Trãi, Thanh Xuân, Hà Nội",
+        "phone": "024 7300 0002",
+        "isActive": true,
+        "createdAt": "2025-01-02T03:00:00.000Z",
+        "updatedAt": "2026-09-01T03:00:00.000Z",
+        "deletedAt": null,
+        "nationalDrugSystemCode": null,
+        "nationalDrugSystemPassword": null,
+        "defaultConsumptionWarehouseId": null
+      }
+    ],
+    "services": [
+      {
+        "id": "ea33ee14-ea0c-4f0c-8c04-000d11dd2b6c",
+        "code": "KH_M_T_NG_QU_T",
+        "name": "Khám tổng quát",
+        "defaultPriceVnd": 150000,
+        "currency": "VND",
+        "isActive": true
+      },
+      {
+        "id": "886b67c5-8843-4983-8a41-000d39b2169b",
+        "code": "C_O_V_I_R_NG",
+        "name": "Cạo vôi răng",
+        "defaultPriceVnd": 350000,
+        "currency": "VND",
+        "isActive": true
+      },
+      {
+        "id": "26a2e176-267a-43fa-887e-000d618701ca",
+        "code": "TR_M_COMPOSITE",
+        "name": "Trám composite",
+        "defaultPriceVnd": 450000,
+        "currency": "VND",
+        "isActive": true
+      },
+      {
+        "id": "c4da5b27-c4b1-4e71-86bb-000d895becf9",
+        "code": "NH__R_NG_KH_N",
+        "name": "Nhổ răng khôn",
+        "defaultPriceVnd": 1500000,
+        "currency": "VND",
+        "isActive": true
+      },
+      {
+        "id": "6311d4d8-62e8-48e8-84f8-000db130d828",
+        "code": "_I_U_TR__T_Y",
+        "name": "Điều trị tủy",
+        "defaultPriceVnd": 1800000,
+        "currency": "VND",
+        "isActive": true
+      },
+      {
+        "id": "01494e89-011f-435f-8335-000dd905c357",
+        "code": "B_C_R_NG_S_",
+        "name": "Bọc răng sứ",
+        "defaultPriceVnd": 3000000,
+        "currency": "VND",
+        "isActive": true
+      },
+      {
+        "id": "9f80c83a-9f56-4dd6-8172-000e00daae86",
+        "code": "T_Y_TR_NG_R_NG",
+        "name": "Tẩy trắng răng",
+        "defaultPriceVnd": 2000000,
+        "currency": "VND",
+        "isActive": true
+      },
+      {
+        "id": "3db841eb-3d8d-484d-8faf-000e28af99b5",
+        "code": "NI_NG_R_NG___KI_M_TR",
+        "name": "Niềng răng – kiểm tra",
+        "defaultPriceVnd": 0,
+        "currency": "VND",
+        "isActive": true
+      }
+    ],
+    "doctors": [
+      {
+        "id": "daa66d13-daa5-4f65-8ab7-0000777ec18d",
+        "staffProfileId": "78dde6c4-78dc-49dc-88f4-00009f53acbc",
+        "specialtyId": null,
+        "photoFileId": null,
+        "publicBio": null,
+        "specialty": null,
+        "experienceText": null,
+        "createdAt": "2025-02-01T08:00:00.000Z",
+        "updatedAt": "2025-02-01T08:00:00.000Z",
+        "staffProfile": {
+          "id": "78dde6c4-78dc-49dc-88f4-00009f53acbc",
+          "userId": null,
+          "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+          "fullName": "BS. Nguyễn Hoài An",
+          "avatarUrl": null,
+          "positionTitle": "Bác sĩ",
+          "phone": "0912 000 000",
+          "email": null,
+          "status": "ACTIVE",
+          "isActive": true
+        }
+      },
+      {
+        "id": "17156075-1713-4453-8731-0000c72897eb",
+        "staffProfileId": "b54cda26-b54a-4eca-856e-0000eefd831a",
+        "specialtyId": null,
+        "photoFileId": null,
+        "publicBio": null,
+        "specialty": null,
+        "experienceText": null,
+        "createdAt": "2025-02-01T08:00:00.000Z",
+        "updatedAt": "2025-02-01T08:00:00.000Z",
+        "staffProfile": {
+          "id": "b54cda26-b54a-4eca-856e-0000eefd831a",
+          "userId": null,
+          "branchId": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+          "fullName": "BS. Trần Minh Khoa",
+          "avatarUrl": null,
+          "positionTitle": "Bác sĩ",
+          "phone": "0912 000 001",
+          "email": null,
+          "status": "ACTIVE",
+          "isActive": true
+        }
+      },
+      {
+        "id": "538453d7-5381-4941-83ab-000116d26e49",
+        "staffProfileId": "f1bbcd88-f1b8-43b8-81e8-00013ea75978",
+        "specialtyId": null,
+        "photoFileId": null,
+        "publicBio": null,
+        "specialty": null,
+        "experienceText": null,
+        "createdAt": "2025-02-01T08:00:00.000Z",
+        "updatedAt": "2025-02-01T08:00:00.000Z",
+        "staffProfile": {
+          "id": "f1bbcd88-f1b8-43b8-81e8-00013ea75978",
+          "userId": null,
+          "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+          "fullName": "BS. Lê Thu Trang",
+          "avatarUrl": null,
+          "positionTitle": "Bác sĩ",
+          "phone": "0912 000 002",
+          "email": null,
+          "status": "ACTIVE",
+          "isActive": true
+        }
+      }
+    ]
+  },
+  "financialSummary": {
+    "branchId": null,
+    "date": "2026-10-11",
+    "serviceTotalVnd": 24500000,
+    "collectedTotalVnd": 21300000,
+    "invoiceCount": 9,
+    "updatedAt": "2026-10-11T10:00:00.000Z"
+  },
+  "patients": [
+    {
+      "id": "8ff34739-8fef-4e2f-8025-0001667c44a7",
+      "patientCode": "BN-120",
+      "fullName": "Nguyễn Thị Lan Hương",
+      "phone": "0912 320 100",
+      "email": "benhnhan.1@example.com",
+      "nationalId": "012 345 67456",
+      "dateOfBirth": "1994-01-03T00:00:00.000Z",
+      "gender": "Nữ",
+      "address": "Số 12 ngõ 30 phường Dịch Vọng, quận Cầu Giấy, Hà Nội",
+      "addressLine": "Số 12 ngõ 30",
+      "province": "Hà Nội",
+      "district": "Cầu Giấy",
+      "ward": null,
+      "avatarFileId": null,
+      "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+      "doctorProfileId": "daa66d13-daa5-4f65-8ab7-0000777ec18d",
+      "createdAt": "2025-03-10T08:00:00.000Z",
+      "updatedAt": "2026-09-30T08:00:00.000Z",
+      "deletedAt": null,
+      "sourceId": null,
+      "occupationId": null,
+      "crmSegment": "Thân thiết",
+      "crmNotes": null,
+      "mergedIntoPatientProfileId": null,
+      "mergedAt": null,
+      "medicalInfo": {
+        "id": "2e2ac0ea-2e26-48a6-8e62-00018e512fd6",
+        "patientProfileId": "8ff34739-8fef-4e2f-8025-0001667c44a7",
+        "allergies": null,
+        "chronicDiseases": null,
+        "medicalHistory": "Từng điều trị tủy răng 46 (2024)",
+        "dentalNotes": "Răng 36 sâu răng, cần theo dõi",
+        "createdAt": "2025-03-10T08:00:00.000Z",
+        "updatedAt": "2026-09-20T08:00:00.000Z"
+      },
+      "insurancePolicies": [
+        {
+          "id": "cc623a9b-cc5d-431d-8c9f-0001b6261b05",
+          "provider": "BHYT",
+          "cardNo": "DN4 01 0123 4567 890",
+          "validFrom": "2026-01-01",
+          "validTo": "2026-12-31"
+        }
+      ],
+      "emergencyContacts": [
+        {
+          "id": "6a99b44c-6a94-4d94-8adc-0001ddfb0634",
+          "name": "Hương (người nhà)",
+          "phone": "098 700 000",
+          "relation": "Vợ/Chồng"
+        }
+      ],
+      "source": null,
+      "occupation": null,
+      "branch": {
+        "id": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+        "code": "MINTAM-HN",
+        "name": "Nha khoa Minh Tâm – Trần Duy Hưng",
+        "address": "Số 12 Trần Duy Hưng, Cầu Giấy, Hà Nội",
+        "phone": "024 7300 0001"
+      },
+      "doctorProfile": {
+        "id": "daa66d13-daa5-4f65-8ab7-0000777ec18d",
+        "staffProfileId": "78dde6c4-78dc-49dc-88f4-00009f53acbc",
+        "staffProfile": {
+          "id": "78dde6c4-78dc-49dc-88f4-00009f53acbc",
+          "fullName": "BS. Nguyễn Hoài An"
+        }
+      },
+      "crmProfile": null,
+      "avatarFile": null,
+      "debtLedgerEntries": [],
+      "appointments": [
+        {
+          "id": "b8ab03a8-b898-4298-8988-00063944bf58",
+          "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+          "patientProfileId": "8ff34739-8fef-4e2f-8025-0001667c44a7",
+          "doctorProfileId": "daa66d13-daa5-4f65-8ab7-0000777ec18d",
+          "chairId": null,
+          "serviceId": null,
+          "patientDisplayName": "Nguyễn Thị Lan Hương",
+          "startsAt": "2026-10-11T09:00:00.000Z",
+          "endsAt": "2026-10-11T09:30:00.000Z",
+          "status": "CONFIRMED",
+          "holdExpiresAt": null,
+          "confirmedAt": "2026-10-11T09:00:00.000Z",
+          "checkedInAt": null,
+          "cancelledAt": null,
+          "cancellationReason": null,
+          "noShowAt": null,
+          "notes": "Tư vấn chỉnh nha",
+          "serviceTitle": "Tư vấn chỉnh nha",
+          "serviceName": "Tư vấn chỉnh nha",
+          "doctorName": "BS. Nguyễn Hoài An",
+          "isDirectVisit": false,
+          "createdAt": "2026-10-01T08:00:00.000Z",
+          "updatedAt": "2026-10-11T09:00:00.000Z",
+          "branch": {
+            "id": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+            "code": "MINTAM-HN",
+            "name": "Nha khoa Minh Tâm – Trần Duy Hưng",
+            "address": "Số 12 Trần Duy Hưng, Cầu Giấy, Hà Nội",
+            "phone": "024 7300 0001",
+            "isActive": true
+          },
+          "patientProfile": {
+            "id": "8ff34739-8fef-4e2f-8025-0001667c44a7",
+            "patientCode": "BN-120",
+            "fullName": "Nguyễn Thị Lan Hương",
+            "phone": "0912 320 100",
+            "gender": "Nữ",
+            "dateOfBirth": "1994-01-03T00:00:00.000Z",
+            "medicalInfo": {
+              "id": "2e2ac0ea-2e26-48a6-8e62-00018e512fd6",
+              "patientProfileId": "8ff34739-8fef-4e2f-8025-0001667c44a7",
+              "allergies": null,
+              "chronicDiseases": null,
+              "medicalHistory": "Từng điều trị tủy răng 46 (2024)",
+              "dentalNotes": "Răng 36 sâu răng, cần theo dõi",
+              "createdAt": "2025-03-10T08:00:00.000Z",
+              "updatedAt": "2026-09-20T08:00:00.000Z"
+            },
+            "insurancePolicies": [
+              {
+                "id": "cc623a9b-cc5d-431d-8c9f-0001b6261b05",
+                "provider": "BHYT",
+                "cardNo": "DN4 01 0123 4567 890",
+                "validFrom": "2026-01-01",
+                "validTo": "2026-12-31"
+              }
+            ],
+            "emergencyContacts": [
+              {
+                "id": "6a99b44c-6a94-4d94-8adc-0001ddfb0634",
+                "name": "Hương (người nhà)",
+                "phone": "098 700 000",
+                "relation": "Vợ/Chồng"
+              }
+            ],
+            "totalDebtVnd": 0
+          },
+          "doctorProfile": {
+            "id": "daa66d13-daa5-4f65-8ab7-0000777ec18d",
+            "staffProfileId": "78dde6c4-78dc-49dc-88f4-00009f53acbc",
+            "staffProfile": {
+              "id": "78dde6c4-78dc-49dc-88f4-00009f53acbc",
+              "fullName": "BS. Nguyễn Hoài An"
+            }
+          }
+        },
+        {
+          "id": "2344b7f4-232c-402c-8464-0008173fc58c",
+          "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+          "patientProfileId": "8ff34739-8fef-4e2f-8025-0001667c44a7",
+          "doctorProfileId": "daa66d13-daa5-4f65-8ab7-0000777ec18d",
+          "chairId": null,
+          "serviceId": null,
+          "patientDisplayName": "Nguyễn Thị Lan Hương",
+          "startsAt": "2026-10-16T09:00:00.000Z",
+          "endsAt": "2026-10-16T09:30:00.000Z",
+          "status": "CONFIRMED",
+          "holdExpiresAt": null,
+          "confirmedAt": "2026-10-16T09:00:00.000Z",
+          "checkedInAt": null,
+          "cancelledAt": null,
+          "cancellationReason": null,
+          "noShowAt": null,
+          "notes": "Siết khí chỉnh nha",
+          "serviceTitle": "Siết khí chỉnh nha",
+          "serviceName": "Siết khí chỉnh nha",
+          "doctorName": "BS. Nguyễn Hoài An",
+          "isDirectVisit": false,
+          "createdAt": "2026-10-01T08:00:00.000Z",
+          "updatedAt": "2026-10-16T09:00:00.000Z",
+          "branch": {
+            "id": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+            "code": "MINTAM-HN",
+            "name": "Nha khoa Minh Tâm – Trần Duy Hưng",
+            "address": "Số 12 Trần Duy Hưng, Cầu Giấy, Hà Nội",
+            "phone": "024 7300 0001",
+            "isActive": true
+          },
+          "patientProfile": {
+            "id": "8ff34739-8fef-4e2f-8025-0001667c44a7",
+            "patientCode": "BN-120",
+            "fullName": "Nguyễn Thị Lan Hương",
+            "phone": "0912 320 100",
+            "gender": "Nữ",
+            "dateOfBirth": "1994-01-03T00:00:00.000Z",
+            "medicalInfo": {
+              "id": "2e2ac0ea-2e26-48a6-8e62-00018e512fd6",
+              "patientProfileId": "8ff34739-8fef-4e2f-8025-0001667c44a7",
+              "allergies": null,
+              "chronicDiseases": null,
+              "medicalHistory": "Từng điều trị tủy răng 46 (2024)",
+              "dentalNotes": "Răng 36 sâu răng, cần theo dõi",
+              "createdAt": "2025-03-10T08:00:00.000Z",
+              "updatedAt": "2026-09-20T08:00:00.000Z"
+            },
+            "insurancePolicies": [
+              {
+                "id": "cc623a9b-cc5d-431d-8c9f-0001b6261b05",
+                "provider": "BHYT",
+                "cardNo": "DN4 01 0123 4567 890",
+                "validFrom": "2026-01-01",
+                "validTo": "2026-12-31"
+              }
+            ],
+            "emergencyContacts": [
+              {
+                "id": "6a99b44c-6a94-4d94-8adc-0001ddfb0634",
+                "name": "Hương (người nhà)",
+                "phone": "098 700 000",
+                "relation": "Vợ/Chồng"
+              }
+            ],
+            "totalDebtVnd": 0
+          },
+          "doctorProfile": {
+            "id": "daa66d13-daa5-4f65-8ab7-0000777ec18d",
+            "staffProfileId": "78dde6c4-78dc-49dc-88f4-00009f53acbc",
+            "staffProfile": {
+              "id": "78dde6c4-78dc-49dc-88f4-00009f53acbc",
+              "fullName": "BS. Nguyễn Hoài An"
+            }
+          }
+        }
+      ],
+      "avatarUrl": null,
+      "profileCompleteness": {
+        "requiredFields": [
+          "fullName",
+          "phone",
+          "dateOfBirth",
+          "gender",
+          "address",
+          "allergies",
+          "chronicDiseases",
+          "medicalHistory",
+          "emergencyContact"
+        ],
+        "missingFields": [
+          "emergencyContact",
+          "allergies",
+          "chronicDiseases"
+        ],
+        "isComplete": false
+      },
+      "totalDebtVnd": 0,
+      "paymentStatus": "PAID",
+      "arrivalAt": "2026-10-11T08:10:00.000Z",
+      "currentVisit": {
+        "appointmentId": null,
+        "startsAt": "2026-10-11T08:10:00.000Z",
+        "status": "WAITING",
+        "appointmentStatus": "CONFIRMED",
+        "queueNumber": 1,
+        "queueStatus": "WAITING",
+        "branch": {
+          "id": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+          "code": "MINTAM-HN",
+          "name": "Nha khoa Minh Tâm – Trần Duy Hưng",
+          "address": "Số 12 Trần Duy Hưng, Cầu Giấy, Hà Nội",
+          "phone": "024 7300 0001"
+        },
+        "serviceName": "Khám tổng quát",
+        "firstProcedureName": null,
+        "doctorName": "BS. Nguyễn Hoài An",
+        "notes": null,
+        "registrationStatus": "DA_TIEP_NHAN"
+      }
+    },
+    {
+      "id": "08d12dfd-08cb-480b-8919-000205cff163",
+      "patientCode": "BN-121",
+      "fullName": "Trần Văn Bình",
+      "phone": "0913 321 123",
+      "email": null,
+      "nationalId": null,
+      "dateOfBirth": "1988-02-08T00:00:00.000Z",
+      "gender": "Nam",
+      "address": null,
+      "addressLine": null,
+      "province": "Hà Nội",
+      "district": null,
+      "ward": null,
+      "avatarFileId": null,
+      "branchId": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+      "doctorProfileId": "17156075-1713-4453-8731-0000c72897eb",
+      "createdAt": "2025-04-11T08:00:00.000Z",
+      "updatedAt": "2026-09-30T08:00:00.000Z",
+      "deletedAt": null,
+      "sourceId": null,
+      "occupationId": null,
+      "crmSegment": "Mới",
+      "crmNotes": null,
+      "mergedIntoPatientProfileId": null,
+      "mergedAt": null,
+      "medicalInfo": {
+        "id": "a708a7ae-a702-4282-8756-00022da4dc92",
+        "patientProfileId": "08d12dfd-08cb-480b-8919-000205cff163",
+        "allergies": "Penicillin",
+        "chronicDiseases": null,
+        "medicalHistory": null,
+        "dentalNotes": null,
+        "createdAt": "2025-03-10T08:00:00.000Z",
+        "updatedAt": "2026-09-20T08:00:00.000Z"
+      },
+      "insurancePolicies": [],
+      "emergencyContacts": [],
+      "source": null,
+      "occupation": null,
+      "branch": {
+        "id": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+        "code": "MINTAM-NT",
+        "name": "Nha khoa Minh Tâm – Nguyễn Trãi",
+        "address": "Số 245 Nguyễn Trãi, Thanh Xuân, Hà Nội",
+        "phone": "024 7300 0002"
+      },
+      "doctorProfile": {
+        "id": "17156075-1713-4453-8731-0000c72897eb",
+        "staffProfileId": "b54cda26-b54a-4eca-856e-0000eefd831a",
+        "staffProfile": {
+          "id": "b54cda26-b54a-4eca-856e-0000eefd831a",
+          "fullName": "BS. Trần Minh Khoa"
+        }
+      },
+      "crmProfile": null,
+      "avatarFile": null,
+      "debtLedgerEntries": [],
+      "appointments": [
+        {
+          "id": "56e27d59-56cf-4d0f-87c5-00066119aa87",
+          "branchId": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+          "patientProfileId": "08d12dfd-08cb-480b-8919-000205cff163",
+          "doctorProfileId": "17156075-1713-4453-8731-0000c72897eb",
+          "chairId": null,
+          "serviceId": null,
+          "patientDisplayName": "Trần Văn Bình",
+          "startsAt": "2026-10-11T09:30:00.000Z",
+          "endsAt": "2026-10-11T10:15:00.000Z",
+          "status": "CHECKED_IN",
+          "holdExpiresAt": null,
+          "confirmedAt": "2026-10-11T09:30:00.000Z",
+          "checkedInAt": "2026-10-11T09:30:00.000Z",
+          "cancelledAt": null,
+          "cancellationReason": null,
+          "noShowAt": null,
+          "notes": "Nhổ răng khôn 48",
+          "serviceTitle": "Nhổ răng khôn 48",
+          "serviceName": "Nhổ răng khôn 48",
+          "doctorName": "BS. Trần Minh Khoa",
+          "isDirectVisit": false,
+          "createdAt": "2026-10-01T08:00:00.000Z",
+          "updatedAt": "2026-10-11T09:30:00.000Z",
+          "branch": {
+            "id": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+            "code": "MINTAM-NT",
+            "name": "Nha khoa Minh Tâm – Nguyễn Trãi",
+            "address": "Số 245 Nguyễn Trãi, Thanh Xuân, Hà Nội",
+            "phone": "024 7300 0002",
+            "isActive": true
+          },
+          "patientProfile": {
+            "id": "08d12dfd-08cb-480b-8919-000205cff163",
+            "patientCode": "BN-121",
+            "fullName": "Trần Văn Bình",
+            "phone": "0913 321 123",
+            "gender": "Nam",
+            "dateOfBirth": "1988-02-08T00:00:00.000Z",
+            "medicalInfo": {
+              "id": "a708a7ae-a702-4282-8756-00022da4dc92",
+              "patientProfileId": "08d12dfd-08cb-480b-8919-000205cff163",
+              "allergies": "Penicillin",
+              "chronicDiseases": null,
+              "medicalHistory": null,
+              "dentalNotes": null,
+              "createdAt": "2025-03-10T08:00:00.000Z",
+              "updatedAt": "2026-09-20T08:00:00.000Z"
+            },
+            "insurancePolicies": [],
+            "emergencyContacts": [],
+            "totalDebtVnd": 1900000
+          },
+          "doctorProfile": {
+            "id": "17156075-1713-4453-8731-0000c72897eb",
+            "staffProfileId": "b54cda26-b54a-4eca-856e-0000eefd831a",
+            "staffProfile": {
+              "id": "b54cda26-b54a-4eca-856e-0000eefd831a",
+              "fullName": "BS. Trần Minh Khoa"
+            }
+          }
+        },
+        {
+          "id": "fdeb2507-fdd1-4f91-8f1b-00088ebe8719",
+          "branchId": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+          "patientProfileId": "08d12dfd-08cb-480b-8919-000205cff163",
+          "doctorProfileId": "daa66d13-daa5-4f65-8ab7-0000777ec18d",
+          "chairId": null,
+          "serviceId": null,
+          "patientDisplayName": "Trần Văn Bình",
+          "startsAt": "2026-10-22T09:00:00.000Z",
+          "endsAt": "2026-10-22T09:40:00.000Z",
+          "status": "CONFIRMED",
+          "holdExpiresAt": null,
+          "confirmedAt": "2026-10-22T09:00:00.000Z",
+          "checkedInAt": null,
+          "cancelledAt": null,
+          "cancellationReason": null,
+          "noShowAt": null,
+          "notes": "Cắt chỉ sau nhổ răng",
+          "serviceTitle": "Cắt chỉ sau nhổ răng",
+          "serviceName": "Cắt chỉ sau nhổ răng",
+          "doctorName": "BS. Nguyễn Hoài An",
+          "isDirectVisit": false,
+          "createdAt": "2026-10-01T08:00:00.000Z",
+          "updatedAt": "2026-10-22T09:00:00.000Z",
+          "branch": {
+            "id": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+            "code": "MINTAM-NT",
+            "name": "Nha khoa Minh Tâm – Nguyễn Trãi",
+            "address": "Số 245 Nguyễn Trãi, Thanh Xuân, Hà Nội",
+            "phone": "024 7300 0002",
+            "isActive": true
+          },
+          "patientProfile": {
+            "id": "08d12dfd-08cb-480b-8919-000205cff163",
+            "patientCode": "BN-121",
+            "fullName": "Trần Văn Bình",
+            "phone": "0913 321 123",
+            "gender": "Nam",
+            "dateOfBirth": "1988-02-08T00:00:00.000Z",
+            "medicalInfo": {
+              "id": "a708a7ae-a702-4282-8756-00022da4dc92",
+              "patientProfileId": "08d12dfd-08cb-480b-8919-000205cff163",
+              "allergies": "Penicillin",
+              "chronicDiseases": null,
+              "medicalHistory": null,
+              "dentalNotes": null,
+              "createdAt": "2025-03-10T08:00:00.000Z",
+              "updatedAt": "2026-09-20T08:00:00.000Z"
+            },
+            "insurancePolicies": [],
+            "emergencyContacts": [],
+            "totalDebtVnd": 1900000
+          },
+          "doctorProfile": {
+            "id": "daa66d13-daa5-4f65-8ab7-0000777ec18d",
+            "staffProfileId": "78dde6c4-78dc-49dc-88f4-00009f53acbc",
+            "staffProfile": {
+              "id": "78dde6c4-78dc-49dc-88f4-00009f53acbc",
+              "fullName": "BS. Nguyễn Hoài An"
+            }
+          }
+        }
+      ],
+      "avatarUrl": null,
+      "profileCompleteness": {
+        "requiredFields": [
+          "fullName",
+          "phone",
+          "dateOfBirth",
+          "gender",
+          "address",
+          "allergies",
+          "chronicDiseases",
+          "medicalHistory",
+          "emergencyContact"
+        ],
+        "missingFields": [
+          "emergencyContact",
+          "chronicDiseases"
+        ],
+        "isComplete": false
+      },
+      "totalDebtVnd": 1900000,
+      "paymentStatus": "PARTIALLY_PAID",
+      "arrivalAt": null,
+      "currentVisit": null
+    },
+    {
+      "id": "4540215f-4539-4cf9-8593-00025579c7c1",
+      "patientCode": "BN-122",
+      "fullName": "Phạm Thị Thuý",
+      "phone": "0914 322 146",
+      "email": null,
+      "nationalId": null,
+      "dateOfBirth": "1991-03-13T00:00:00.000Z",
+      "gender": "Nữ",
+      "address": "Số 14 ngõ 32 phường Dịch Vọng, quận Cầu Giấy, Hà Nội",
+      "addressLine": "Số 14 ngõ 32",
+      "province": "Hà Nội",
+      "district": "Cầu Giấy",
+      "ward": null,
+      "avatarFileId": null,
+      "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+      "doctorProfileId": "538453d7-5381-4941-83ab-000116d26e49",
+      "createdAt": "2025-05-12T08:00:00.000Z",
+      "updatedAt": "2026-09-30T08:00:00.000Z",
+      "deletedAt": null,
+      "sourceId": null,
+      "occupationId": null,
+      "crmSegment": "Mới",
+      "crmNotes": null,
+      "mergedIntoPatientProfileId": null,
+      "mergedAt": null,
+      "medicalInfo": {
+        "id": "e3779b10-e370-4770-83d0-00027d4eb2f0",
+        "patientProfileId": "4540215f-4539-4cf9-8593-00025579c7c1",
+        "allergies": null,
+        "chronicDiseases": null,
+        "medicalHistory": null,
+        "dentalNotes": null,
+        "createdAt": "2025-03-10T08:00:00.000Z",
+        "updatedAt": "2026-09-20T08:00:00.000Z"
+      },
+      "insurancePolicies": [],
+      "emergencyContacts": [],
+      "source": null,
+      "occupation": null,
+      "branch": {
+        "id": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+        "code": "MINTAM-HN",
+        "name": "Nha khoa Minh Tâm – Trần Duy Hưng",
+        "address": "Số 12 Trần Duy Hưng, Cầu Giấy, Hà Nội",
+        "phone": "024 7300 0001"
+      },
+      "doctorProfile": {
+        "id": "538453d7-5381-4941-83ab-000116d26e49",
+        "staffProfileId": "f1bbcd88-f1b8-43b8-81e8-00013ea75978",
+        "staffProfile": {
+          "id": "f1bbcd88-f1b8-43b8-81e8-00013ea75978",
+          "fullName": "BS. Lê Thu Trang"
+        }
+      },
+      "crmProfile": null,
+      "avatarFile": null,
+      "debtLedgerEntries": [],
+      "appointments": [
+        {
+          "id": "f519f70a-f506-4786-8602-000688ee95b6",
+          "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+          "patientProfileId": "4540215f-4539-4cf9-8593-00025579c7c1",
+          "doctorProfileId": "538453d7-5381-4941-83ab-000116d26e49",
+          "chairId": null,
+          "serviceId": null,
+          "patientDisplayName": "Phạm Thị Thuý",
+          "startsAt": "2026-10-11T10:00:00.000Z",
+          "endsAt": "2026-10-11T10:40:00.000Z",
+          "status": "IN_TREATMENT",
+          "holdExpiresAt": null,
+          "confirmedAt": "2026-10-11T10:00:00.000Z",
+          "checkedInAt": null,
+          "cancelledAt": null,
+          "cancellationReason": null,
+          "noShowAt": null,
+          "notes": "Trám răng 24",
+          "serviceTitle": "Trám răng 24",
+          "serviceName": "Trám răng 24",
+          "doctorName": "BS. Lê Thu Trang",
+          "isDirectVisit": false,
+          "createdAt": "2026-10-01T08:00:00.000Z",
+          "updatedAt": "2026-10-11T10:00:00.000Z",
+          "branch": {
+            "id": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+            "code": "MINTAM-HN",
+            "name": "Nha khoa Minh Tâm – Trần Duy Hưng",
+            "address": "Số 12 Trần Duy Hưng, Cầu Giấy, Hà Nội",
+            "phone": "024 7300 0001",
+            "isActive": true
+          },
+          "patientProfile": {
+            "id": "4540215f-4539-4cf9-8593-00025579c7c1",
+            "patientCode": "BN-122",
+            "fullName": "Phạm Thị Thuý",
+            "phone": "0914 322 146",
+            "gender": "Nữ",
+            "dateOfBirth": "1991-03-13T00:00:00.000Z",
+            "medicalInfo": {
+              "id": "e3779b10-e370-4770-83d0-00027d4eb2f0",
+              "patientProfileId": "4540215f-4539-4cf9-8593-00025579c7c1",
+              "allergies": null,
+              "chronicDiseases": null,
+              "medicalHistory": null,
+              "dentalNotes": null,
+              "createdAt": "2025-03-10T08:00:00.000Z",
+              "updatedAt": "2026-09-20T08:00:00.000Z"
+            },
+            "insurancePolicies": [],
+            "emergencyContacts": [],
+            "totalDebtVnd": 4500000
+          },
+          "doctorProfile": {
+            "id": "538453d7-5381-4941-83ab-000116d26e49",
+            "staffProfileId": "f1bbcd88-f1b8-43b8-81e8-00013ea75978",
+            "staffProfile": {
+              "id": "f1bbcd88-f1b8-43b8-81e8-00013ea75978",
+              "fullName": "BS. Lê Thu Trang"
+            }
+          }
+        }
+      ],
+      "avatarUrl": null,
+      "profileCompleteness": {
+        "requiredFields": [
+          "fullName",
+          "phone",
+          "dateOfBirth",
+          "gender",
+          "address",
+          "allergies",
+          "chronicDiseases",
+          "medicalHistory",
+          "emergencyContact"
+        ],
+        "missingFields": [
+          "emergencyContact",
+          "allergies",
+          "chronicDiseases"
+        ],
+        "isComplete": false
+      },
+      "totalDebtVnd": 4500000,
+      "paymentStatus": "UNPAID",
+      "arrivalAt": "2026-10-11T10:16:00.000Z",
+      "currentVisit": {
+        "appointmentId": null,
+        "startsAt": "2026-10-11T10:16:00.000Z",
+        "status": "DONE",
+        "appointmentStatus": "CONFIRMED",
+        "queueNumber": 3,
+        "queueStatus": "IN_SERVICE",
+        "branch": {
+          "id": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+          "code": "MINTAM-HN",
+          "name": "Nha khoa Minh Tâm – Trần Duy Hưng",
+          "address": "Số 12 Trần Duy Hưng, Cầu Giấy, Hà Nội",
+          "phone": "024 7300 0001"
+        },
+        "serviceName": "Cạo vôi răng",
+        "firstProcedureName": null,
+        "doctorName": "BS. Lê Thu Trang",
+        "notes": null,
+        "registrationStatus": "DA_TIEP_NHAN"
+      }
+    },
+    {
+      "id": "81af14c1-81a7-41e7-820d-0002a5239e1f",
+      "patientCode": "BN-123",
+      "fullName": "Lê Quang Hải",
+      "phone": "0915 323 169",
+      "email": "benhnhan.4@example.com",
+      "nationalId": null,
+      "dateOfBirth": "1985-04-18T00:00:00.000Z",
+      "gender": "Nam",
+      "address": null,
+      "addressLine": null,
+      "province": "Hà Nội",
+      "district": null,
+      "ward": null,
+      "avatarFileId": null,
+      "branchId": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+      "doctorProfileId": "daa66d13-daa5-4f65-8ab7-0000777ec18d",
+      "createdAt": "2025-06-13T08:00:00.000Z",
+      "updatedAt": "2026-09-30T08:00:00.000Z",
+      "deletedAt": null,
+      "sourceId": null,
+      "occupationId": null,
+      "crmSegment": "Thân thiết",
+      "crmNotes": null,
+      "mergedIntoPatientProfileId": null,
+      "mergedAt": null,
+      "medicalInfo": {
+        "id": "1fe68e72-1fde-4c5e-804a-0002ccf8894e",
+        "patientProfileId": "81af14c1-81a7-41e7-820d-0002a5239e1f",
+        "allergies": null,
+        "chronicDiseases": null,
+        "medicalHistory": null,
+        "dentalNotes": null,
+        "createdAt": "2025-03-10T08:00:00.000Z",
+        "updatedAt": "2026-09-20T08:00:00.000Z"
+      },
+      "insurancePolicies": [],
+      "emergencyContacts": [
+        {
+          "id": "be1e0823-be15-46d5-8e87-0002f4cd747d",
+          "name": "Hải (người nhà)",
+          "phone": "098 700 003",
+          "relation": "Vợ/Chồng"
+        }
+      ],
+      "source": null,
+      "occupation": null,
+      "branch": {
+        "id": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+        "code": "MINTAM-NT",
+        "name": "Nha khoa Minh Tâm – Nguyễn Trãi",
+        "address": "Số 245 Nguyễn Trãi, Thanh Xuân, Hà Nội",
+        "phone": "024 7300 0002"
+      },
+      "doctorProfile": {
+        "id": "daa66d13-daa5-4f65-8ab7-0000777ec18d",
+        "staffProfileId": "78dde6c4-78dc-49dc-88f4-00009f53acbc",
+        "staffProfile": {
+          "id": "78dde6c4-78dc-49dc-88f4-00009f53acbc",
+          "fullName": "BS. Nguyễn Hoài An"
+        }
+      },
+      "crmProfile": null,
+      "avatarFile": null,
+      "debtLedgerEntries": [],
+      "appointments": [
+        {
+          "id": "935170bb-933d-41fd-843f-0006b0c380e5",
+          "branchId": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+          "patientProfileId": "81af14c1-81a7-41e7-820d-0002a5239e1f",
+          "doctorProfileId": "daa66d13-daa5-4f65-8ab7-0000777ec18d",
+          "chairId": null,
+          "serviceId": null,
+          "patientDisplayName": "Lê Quang Hải",
+          "startsAt": "2026-10-11T10:30:00.000Z",
+          "endsAt": "2026-10-11T11:10:00.000Z",
+          "status": "CONFIRMED",
+          "holdExpiresAt": null,
+          "confirmedAt": "2026-10-11T10:30:00.000Z",
+          "checkedInAt": null,
+          "cancelledAt": null,
+          "cancellationReason": null,
+          "noShowAt": null,
+          "notes": "Cạo vôi răng",
+          "serviceTitle": "Cạo vôi răng",
+          "serviceName": "Cạo vôi răng",
+          "doctorName": "BS. Nguyễn Hoài An",
+          "isDirectVisit": false,
+          "createdAt": "2026-10-01T08:00:00.000Z",
+          "updatedAt": "2026-10-11T10:30:00.000Z",
+          "branch": {
+            "id": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+            "code": "MINTAM-NT",
+            "name": "Nha khoa Minh Tâm – Nguyễn Trãi",
+            "address": "Số 245 Nguyễn Trãi, Thanh Xuân, Hà Nội",
+            "phone": "024 7300 0002",
+            "isActive": true
+          },
+          "patientProfile": {
+            "id": "81af14c1-81a7-41e7-820d-0002a5239e1f",
+            "patientCode": "BN-123",
+            "fullName": "Lê Quang Hải",
+            "phone": "0915 323 169",
+            "gender": "Nam",
+            "dateOfBirth": "1985-04-18T00:00:00.000Z",
+            "medicalInfo": {
+              "id": "1fe68e72-1fde-4c5e-804a-0002ccf8894e",
+              "patientProfileId": "81af14c1-81a7-41e7-820d-0002a5239e1f",
+              "allergies": null,
+              "chronicDiseases": null,
+              "medicalHistory": null,
+              "dentalNotes": null,
+              "createdAt": "2025-03-10T08:00:00.000Z",
+              "updatedAt": "2026-09-20T08:00:00.000Z"
+            },
+            "insurancePolicies": [],
+            "emergencyContacts": [
+              {
+                "id": "be1e0823-be15-46d5-8e87-0002f4cd747d",
+                "name": "Hải (người nhà)",
+                "phone": "098 700 003",
+                "relation": "Vợ/Chồng"
+              }
+            ],
+            "totalDebtVnd": 0
+          },
+          "doctorProfile": {
+            "id": "daa66d13-daa5-4f65-8ab7-0000777ec18d",
+            "staffProfileId": "78dde6c4-78dc-49dc-88f4-00009f53acbc",
+            "staffProfile": {
+              "id": "78dde6c4-78dc-49dc-88f4-00009f53acbc",
+              "fullName": "BS. Nguyễn Hoài An"
+            }
+          }
+        }
+      ],
+      "avatarUrl": null,
+      "profileCompleteness": {
+        "requiredFields": [
+          "fullName",
+          "phone",
+          "dateOfBirth",
+          "gender",
+          "address",
+          "allergies",
+          "chronicDiseases",
+          "medicalHistory",
+          "emergencyContact"
+        ],
+        "missingFields": [
+          "emergencyContact",
+          "allergies",
+          "chronicDiseases"
+        ],
+        "isComplete": false
+      },
+      "totalDebtVnd": 0,
+      "paymentStatus": "PAID",
+      "arrivalAt": null,
+      "currentVisit": null
+    },
+    {
+      "id": "5c5581d4-5c4c-414c-8cc4-00031ca25fac",
+      "patientCode": "BN-124",
+      "fullName": "Vũ Thị Nhung",
+      "phone": "0916 324 192",
+      "email": null,
+      "nationalId": "012 345 67460",
+      "dateOfBirth": "1996-05-23T00:00:00.000Z",
+      "gender": "Nữ",
+      "address": "Số 16 ngõ 34 phường Dịch Vọng, quận Cầu Giấy, Hà Nội",
+      "addressLine": "Số 16 ngõ 34",
+      "province": "Hà Nội",
+      "district": "Cầu Giấy",
+      "ward": null,
+      "avatarFileId": null,
+      "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+      "doctorProfileId": "17156075-1713-4453-8731-0000c72897eb",
+      "createdAt": "2025-07-14T08:00:00.000Z",
+      "updatedAt": "2026-09-30T08:00:00.000Z",
+      "deletedAt": null,
+      "sourceId": null,
+      "occupationId": null,
+      "crmSegment": "Mới",
+      "crmNotes": null,
+      "mergedIntoPatientProfileId": null,
+      "mergedAt": null,
+      "medicalInfo": {
+        "id": "fa8cfb85-fa83-4bc3-8b01-000344774adb",
+        "patientProfileId": "5c5581d4-5c4c-414c-8cc4-00031ca25fac",
+        "allergies": "Dị ứng thuốc tê Lidocain",
+        "chronicDiseases": null,
+        "medicalHistory": null,
+        "dentalNotes": null,
+        "createdAt": "2025-03-10T08:00:00.000Z",
+        "updatedAt": "2026-09-20T08:00:00.000Z"
+      },
+      "insurancePolicies": [],
+      "emergencyContacts": [],
+      "source": null,
+      "occupation": null,
+      "branch": {
+        "id": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+        "code": "MINTAM-HN",
+        "name": "Nha khoa Minh Tâm – Trần Duy Hưng",
+        "address": "Số 12 Trần Duy Hưng, Cầu Giấy, Hà Nội",
+        "phone": "024 7300 0001"
+      },
+      "doctorProfile": {
+        "id": "17156075-1713-4453-8731-0000c72897eb",
+        "staffProfileId": "b54cda26-b54a-4eca-856e-0000eefd831a",
+        "staffProfile": {
+          "id": "b54cda26-b54a-4eca-856e-0000eefd831a",
+          "fullName": "BS. Trần Minh Khoa"
+        }
+      },
+      "crmProfile": null,
+      "avatarFile": null,
+      "debtLedgerEntries": [],
+      "appointments": [
+        {
+          "id": "3188ea6c-3174-4c74-827c-0006d8986c14",
+          "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+          "patientProfileId": "5c5581d4-5c4c-414c-8cc4-00031ca25fac",
+          "doctorProfileId": "17156075-1713-4453-8731-0000c72897eb",
+          "chairId": null,
+          "serviceId": null,
+          "patientDisplayName": "Vũ Thị Nhung",
+          "startsAt": "2026-10-11T14:00:00.000Z",
+          "endsAt": "2026-10-11T14:45:00.000Z",
+          "status": "CONFIRMED",
+          "holdExpiresAt": null,
+          "confirmedAt": "2026-10-11T14:00:00.000Z",
+          "checkedInAt": null,
+          "cancelledAt": null,
+          "cancellationReason": null,
+          "noShowAt": null,
+          "notes": "Bọc răng sứ 15",
+          "serviceTitle": "Bọc răng sứ 15",
+          "serviceName": "Bọc răng sứ 15",
+          "doctorName": "BS. Trần Minh Khoa",
+          "isDirectVisit": false,
+          "createdAt": "2026-10-01T08:00:00.000Z",
+          "updatedAt": "2026-10-11T14:00:00.000Z",
+          "branch": {
+            "id": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+            "code": "MINTAM-HN",
+            "name": "Nha khoa Minh Tâm – Trần Duy Hưng",
+            "address": "Số 12 Trần Duy Hưng, Cầu Giấy, Hà Nội",
+            "phone": "024 7300 0001",
+            "isActive": true
+          },
+          "patientProfile": {
+            "id": "5c5581d4-5c4c-414c-8cc4-00031ca25fac",
+            "patientCode": "BN-124",
+            "fullName": "Vũ Thị Nhung",
+            "phone": "0916 324 192",
+            "gender": "Nữ",
+            "dateOfBirth": "1996-05-23T00:00:00.000Z",
+            "medicalInfo": {
+              "id": "fa8cfb85-fa83-4bc3-8b01-000344774adb",
+              "patientProfileId": "5c5581d4-5c4c-414c-8cc4-00031ca25fac",
+              "allergies": "Dị ứng thuốc tê Lidocain",
+              "chronicDiseases": null,
+              "medicalHistory": null,
+              "dentalNotes": null,
+              "createdAt": "2025-03-10T08:00:00.000Z",
+              "updatedAt": "2026-09-20T08:00:00.000Z"
+            },
+            "insurancePolicies": [],
+            "emergencyContacts": [],
+            "totalDebtVnd": 1900000
+          },
+          "doctorProfile": {
+            "id": "17156075-1713-4453-8731-0000c72897eb",
+            "staffProfileId": "b54cda26-b54a-4eca-856e-0000eefd831a",
+            "staffProfile": {
+              "id": "b54cda26-b54a-4eca-856e-0000eefd831a",
+              "fullName": "BS. Trần Minh Khoa"
+            }
+          }
+        },
+        {
+          "id": "c17c31a5-c163-4aa3-82a1-00083f14b0bb",
+          "branchId": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+          "patientProfileId": "5c5581d4-5c4c-414c-8cc4-00031ca25fac",
+          "doctorProfileId": "17156075-1713-4453-8731-0000c72897eb",
+          "chairId": null,
+          "serviceId": null,
+          "patientDisplayName": "Vũ Thị Nhung",
+          "startsAt": "2026-10-18T10:00:00.000Z",
+          "endsAt": "2026-10-18T10:45:00.000Z",
+          "status": "CONFIRMED",
+          "holdExpiresAt": null,
+          "confirmedAt": "2026-10-18T10:00:00.000Z",
+          "checkedInAt": null,
+          "cancelledAt": null,
+          "cancellationReason": null,
+          "noShowAt": null,
+          "notes": "Gắn răng sứ",
+          "serviceTitle": "Gắn răng sứ",
+          "serviceName": "Gắn răng sứ",
+          "doctorName": "BS. Trần Minh Khoa",
+          "isDirectVisit": false,
+          "createdAt": "2026-10-01T08:00:00.000Z",
+          "updatedAt": "2026-10-18T10:00:00.000Z",
+          "branch": {
+            "id": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+            "code": "MINTAM-NT",
+            "name": "Nha khoa Minh Tâm – Nguyễn Trãi",
+            "address": "Số 245 Nguyễn Trãi, Thanh Xuân, Hà Nội",
+            "phone": "024 7300 0002",
+            "isActive": true
+          },
+          "patientProfile": {
+            "id": "5c5581d4-5c4c-414c-8cc4-00031ca25fac",
+            "patientCode": "BN-124",
+            "fullName": "Vũ Thị Nhung",
+            "phone": "0916 324 192",
+            "gender": "Nữ",
+            "dateOfBirth": "1996-05-23T00:00:00.000Z",
+            "medicalInfo": {
+              "id": "fa8cfb85-fa83-4bc3-8b01-000344774adb",
+              "patientProfileId": "5c5581d4-5c4c-414c-8cc4-00031ca25fac",
+              "allergies": "Dị ứng thuốc tê Lidocain",
+              "chronicDiseases": null,
+              "medicalHistory": null,
+              "dentalNotes": null,
+              "createdAt": "2025-03-10T08:00:00.000Z",
+              "updatedAt": "2026-09-20T08:00:00.000Z"
+            },
+            "insurancePolicies": [],
+            "emergencyContacts": [],
+            "totalDebtVnd": 1900000
+          },
+          "doctorProfile": {
+            "id": "17156075-1713-4453-8731-0000c72897eb",
+            "staffProfileId": "b54cda26-b54a-4eca-856e-0000eefd831a",
+            "staffProfile": {
+              "id": "b54cda26-b54a-4eca-856e-0000eefd831a",
+              "fullName": "BS. Trần Minh Khoa"
+            }
+          }
+        }
+      ],
+      "avatarUrl": null,
+      "profileCompleteness": {
+        "requiredFields": [
+          "fullName",
+          "phone",
+          "dateOfBirth",
+          "gender",
+          "address",
+          "allergies",
+          "chronicDiseases",
+          "medicalHistory",
+          "emergencyContact"
+        ],
+        "missingFields": [
+          "emergencyContact",
+          "chronicDiseases"
+        ],
+        "isComplete": false
+      },
+      "totalDebtVnd": 1900000,
+      "paymentStatus": "PARTIALLY_PAID",
+      "arrivalAt": "2026-10-11T08:22:00.000Z",
+      "currentVisit": {
+        "appointmentId": null,
+        "startsAt": "2026-10-11T08:22:00.000Z",
+        "status": "IN_PROGRESS",
+        "appointmentStatus": "CONFIRMED",
+        "queueNumber": 5,
+        "queueStatus": "IN_SERVICE",
+        "branch": {
+          "id": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+          "code": "MINTAM-HN",
+          "name": "Nha khoa Minh Tâm – Trần Duy Hưng",
+          "address": "Số 12 Trần Duy Hưng, Cầu Giấy, Hà Nội",
+          "phone": "024 7300 0001"
+        },
+        "serviceName": "Khám tổng quát",
+        "firstProcedureName": null,
+        "doctorName": "BS. Trần Minh Khoa",
+        "notes": null,
+        "registrationStatus": "DA_TIEP_NHAN"
+      }
+    },
+    {
+      "id": "98c47536-98ba-463a-893e-00036c4c360a",
+      "patientCode": "BN-125",
+      "fullName": "Hoàng Anh Tuấn",
+      "phone": "0917 325 215",
+      "email": null,
+      "nationalId": null,
+      "dateOfBirth": "1993-06-03T00:00:00.000Z",
+      "gender": "Nam",
+      "address": null,
+      "addressLine": null,
+      "province": "Hà Nội",
+      "district": null,
+      "ward": null,
+      "avatarFileId": null,
+      "branchId": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+      "doctorProfileId": "538453d7-5381-4941-83ab-000116d26e49",
+      "createdAt": "2025-08-15T08:00:00.000Z",
+      "updatedAt": "2026-09-30T08:00:00.000Z",
+      "deletedAt": null,
+      "sourceId": null,
+      "occupationId": null,
+      "crmSegment": "Mới",
+      "crmNotes": null,
+      "mergedIntoPatientProfileId": null,
+      "mergedAt": null,
+      "medicalInfo": {
+        "id": "36fbeee7-36f1-40b1-877b-000394212139",
+        "patientProfileId": "98c47536-98ba-463a-893e-00036c4c360a",
+        "allergies": null,
+        "chronicDiseases": null,
+        "medicalHistory": null,
+        "dentalNotes": null,
+        "createdAt": "2025-03-10T08:00:00.000Z",
+        "updatedAt": "2026-09-20T08:00:00.000Z"
+      },
+      "insurancePolicies": [
+        {
+          "id": "d5336898-d528-4b28-85b8-0003bbf60c68",
+          "provider": "BHYT",
+          "cardNo": "DN4 01 0123 4567 890",
+          "validFrom": "2026-01-01",
+          "validTo": "2026-12-31"
+        }
+      ],
+      "emergencyContacts": [],
+      "source": null,
+      "occupation": null,
+      "branch": {
+        "id": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+        "code": "MINTAM-NT",
+        "name": "Nha khoa Minh Tâm – Nguyễn Trãi",
+        "address": "Số 245 Nguyễn Trãi, Thanh Xuân, Hà Nội",
+        "phone": "024 7300 0002"
+      },
+      "doctorProfile": {
+        "id": "538453d7-5381-4941-83ab-000116d26e49",
+        "staffProfileId": "f1bbcd88-f1b8-43b8-81e8-00013ea75978",
+        "staffProfile": {
+          "id": "f1bbcd88-f1b8-43b8-81e8-00013ea75978",
+          "fullName": "BS. Lê Thu Trang"
+        }
+      },
+      "crmProfile": null,
+      "avatarFile": null,
+      "debtLedgerEntries": [],
+      "appointments": [
+        {
+          "id": "cfc0641d-cfab-46eb-80b9-0007006d5743",
+          "branchId": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+          "patientProfileId": "98c47536-98ba-463a-893e-00036c4c360a",
+          "doctorProfileId": "538453d7-5381-4941-83ab-000116d26e49",
+          "chairId": null,
+          "serviceId": null,
+          "patientDisplayName": "Hoàng Anh Tuấn",
+          "startsAt": "2026-10-11T14:30:00.000Z",
+          "endsAt": "2026-10-11T15:10:00.000Z",
+          "status": "COMPLETED",
+          "holdExpiresAt": null,
+          "confirmedAt": "2026-10-11T14:30:00.000Z",
+          "checkedInAt": null,
+          "cancelledAt": null,
+          "cancellationReason": null,
+          "noShowAt": null,
+          "notes": "Tẩy trắng răng",
+          "serviceTitle": "Tẩy trắng răng",
+          "serviceName": "Tẩy trắng răng",
+          "doctorName": "BS. Lê Thu Trang",
+          "isDirectVisit": false,
+          "createdAt": "2026-10-01T08:00:00.000Z",
+          "updatedAt": "2026-10-11T14:30:00.000Z",
+          "branch": {
+            "id": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+            "code": "MINTAM-NT",
+            "name": "Nha khoa Minh Tâm – Nguyễn Trãi",
+            "address": "Số 245 Nguyễn Trãi, Thanh Xuân, Hà Nội",
+            "phone": "024 7300 0002",
+            "isActive": true
+          },
+          "patientProfile": {
+            "id": "98c47536-98ba-463a-893e-00036c4c360a",
+            "patientCode": "BN-125",
+            "fullName": "Hoàng Anh Tuấn",
+            "phone": "0917 325 215",
+            "gender": "Nam",
+            "dateOfBirth": "1993-06-03T00:00:00.000Z",
+            "medicalInfo": {
+              "id": "36fbeee7-36f1-40b1-877b-000394212139",
+              "patientProfileId": "98c47536-98ba-463a-893e-00036c4c360a",
+              "allergies": null,
+              "chronicDiseases": null,
+              "medicalHistory": null,
+              "dentalNotes": null,
+              "createdAt": "2025-03-10T08:00:00.000Z",
+              "updatedAt": "2026-09-20T08:00:00.000Z"
+            },
+            "insurancePolicies": [
+              {
+                "id": "d5336898-d528-4b28-85b8-0003bbf60c68",
+                "provider": "BHYT",
+                "cardNo": "DN4 01 0123 4567 890",
+                "validFrom": "2026-01-01",
+                "validTo": "2026-12-31"
+              }
+            ],
+            "emergencyContacts": [],
+            "totalDebtVnd": 4500000
+          },
+          "doctorProfile": {
+            "id": "538453d7-5381-4941-83ab-000116d26e49",
+            "staffProfileId": "f1bbcd88-f1b8-43b8-81e8-00013ea75978",
+            "staffProfile": {
+              "id": "f1bbcd88-f1b8-43b8-81e8-00013ea75978",
+              "fullName": "BS. Lê Thu Trang"
+            }
+          }
+        },
+        {
+          "id": "5fb3ab56-5f9a-451a-80de-000866e99bea",
+          "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+          "patientProfileId": "98c47536-98ba-463a-893e-00036c4c360a",
+          "doctorProfileId": "538453d7-5381-4941-83ab-000116d26e49",
+          "chairId": null,
+          "serviceId": null,
+          "patientDisplayName": "Hoàng Anh Tuấn",
+          "startsAt": "2026-10-20T15:30:00.000Z",
+          "endsAt": "2026-10-20T16:00:00.000Z",
+          "status": "CONFIRMED",
+          "holdExpiresAt": null,
+          "confirmedAt": "2026-10-20T15:30:00.000Z",
+          "checkedInAt": null,
+          "cancelledAt": null,
+          "cancellationReason": null,
+          "noShowAt": null,
+          "notes": "Tái khám trám răng",
+          "serviceTitle": "Tái khám trám răng",
+          "serviceName": "Tái khám trám răng",
+          "doctorName": "BS. Lê Thu Trang",
+          "isDirectVisit": false,
+          "createdAt": "2026-10-01T08:00:00.000Z",
+          "updatedAt": "2026-10-20T15:30:00.000Z",
+          "branch": {
+            "id": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+            "code": "MINTAM-HN",
+            "name": "Nha khoa Minh Tâm – Trần Duy Hưng",
+            "address": "Số 12 Trần Duy Hưng, Cầu Giấy, Hà Nội",
+            "phone": "024 7300 0001",
+            "isActive": true
+          },
+          "patientProfile": {
+            "id": "98c47536-98ba-463a-893e-00036c4c360a",
+            "patientCode": "BN-125",
+            "fullName": "Hoàng Anh Tuấn",
+            "phone": "0917 325 215",
+            "gender": "Nam",
+            "dateOfBirth": "1993-06-03T00:00:00.000Z",
+            "medicalInfo": {
+              "id": "36fbeee7-36f1-40b1-877b-000394212139",
+              "patientProfileId": "98c47536-98ba-463a-893e-00036c4c360a",
+              "allergies": null,
+              "chronicDiseases": null,
+              "medicalHistory": null,
+              "dentalNotes": null,
+              "createdAt": "2025-03-10T08:00:00.000Z",
+              "updatedAt": "2026-09-20T08:00:00.000Z"
+            },
+            "insurancePolicies": [
+              {
+                "id": "d5336898-d528-4b28-85b8-0003bbf60c68",
+                "provider": "BHYT",
+                "cardNo": "DN4 01 0123 4567 890",
+                "validFrom": "2026-01-01",
+                "validTo": "2026-12-31"
+              }
+            ],
+            "emergencyContacts": [],
+            "totalDebtVnd": 4500000
+          },
+          "doctorProfile": {
+            "id": "538453d7-5381-4941-83ab-000116d26e49",
+            "staffProfileId": "f1bbcd88-f1b8-43b8-81e8-00013ea75978",
+            "staffProfile": {
+              "id": "f1bbcd88-f1b8-43b8-81e8-00013ea75978",
+              "fullName": "BS. Lê Thu Trang"
+            }
+          }
+        }
+      ],
+      "avatarUrl": null,
+      "profileCompleteness": {
+        "requiredFields": [
+          "fullName",
+          "phone",
+          "dateOfBirth",
+          "gender",
+          "address",
+          "allergies",
+          "chronicDiseases",
+          "medicalHistory",
+          "emergencyContact"
+        ],
+        "missingFields": [
+          "emergencyContact",
+          "allergies",
+          "chronicDiseases"
+        ],
+        "isComplete": false
+      },
+      "totalDebtVnd": 4500000,
+      "paymentStatus": "UNPAID",
+      "arrivalAt": null,
+      "currentVisit": null
+    },
+    {
+      "id": "736ae249-735f-459f-83f5-0003e3caf797",
+      "patientCode": "BN-126",
+      "fullName": "Đỗ Thị Mai",
+      "phone": "0918 326 238",
+      "email": "benhnhan.7@example.com",
+      "nationalId": null,
+      "dateOfBirth": "1990-07-08T00:00:00.000Z",
+      "gender": "Nữ",
+      "address": "Số 18 ngõ 36 phường Dịch Vọng, quận Cầu Giấy, Hà Nội",
+      "addressLine": "Số 18 ngõ 36",
+      "province": "Hà Nội",
+      "district": "Cầu Giấy",
+      "ward": null,
+      "avatarFileId": null,
+      "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+      "doctorProfileId": "daa66d13-daa5-4f65-8ab7-0000777ec18d",
+      "createdAt": "2025-09-16T08:00:00.000Z",
+      "updatedAt": "2026-09-30T08:00:00.000Z",
+      "deletedAt": null,
+      "sourceId": null,
+      "occupationId": null,
+      "crmSegment": "Thân thiết",
+      "crmNotes": null,
+      "mergedIntoPatientProfileId": null,
+      "mergedAt": null,
+      "medicalInfo": {
+        "id": "11a25bfa-1196-4016-8232-00040b9fe2c6",
+        "patientProfileId": "736ae249-735f-459f-83f5-0003e3caf797",
+        "allergies": null,
+        "chronicDiseases": null,
+        "medicalHistory": null,
+        "dentalNotes": null,
+        "createdAt": "2025-03-10T08:00:00.000Z",
+        "updatedAt": "2026-09-20T08:00:00.000Z"
+      },
+      "insurancePolicies": [],
+      "emergencyContacts": [
+        {
+          "id": "afd9d5ab-afcd-4a8d-806f-00043374cdf5",
+          "name": "Mai (người nhà)",
+          "phone": "098 700 006",
+          "relation": "Vợ/Chồng"
+        }
+      ],
+      "source": null,
+      "occupation": null,
+      "branch": {
+        "id": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+        "code": "MINTAM-HN",
+        "name": "Nha khoa Minh Tâm – Trần Duy Hưng",
+        "address": "Số 12 Trần Duy Hưng, Cầu Giấy, Hà Nội",
+        "phone": "024 7300 0001"
+      },
+      "doctorProfile": {
+        "id": "daa66d13-daa5-4f65-8ab7-0000777ec18d",
+        "staffProfileId": "78dde6c4-78dc-49dc-88f4-00009f53acbc",
+        "staffProfile": {
+          "id": "78dde6c4-78dc-49dc-88f4-00009f53acbc",
+          "fullName": "BS. Nguyễn Hoài An"
+        }
+      },
+      "crmProfile": null,
+      "avatarFile": null,
+      "debtLedgerEntries": [],
+      "appointments": [
+        {
+          "id": "6df7ddce-6de2-4162-8ef6-000728424272",
+          "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+          "patientProfileId": "736ae249-735f-459f-83f5-0003e3caf797",
+          "doctorProfileId": "daa66d13-daa5-4f65-8ab7-0000777ec18d",
+          "chairId": null,
+          "serviceId": null,
+          "patientDisplayName": "Đỗ Thị Mai",
+          "startsAt": "2026-10-11T15:00:00.000Z",
+          "endsAt": "2026-10-11T15:50:00.000Z",
+          "status": "CONFIRMED",
+          "holdExpiresAt": null,
+          "confirmedAt": "2026-10-11T15:00:00.000Z",
+          "checkedInAt": null,
+          "cancelledAt": null,
+          "cancellationReason": null,
+          "noShowAt": null,
+          "notes": "Niềng răng – kiểm tra định kỳ",
+          "serviceTitle": "Niềng răng – kiểm tra định kỳ",
+          "serviceName": "Niềng răng – kiểm tra định kỳ",
+          "doctorName": "BS. Nguyễn Hoài An",
+          "isDirectVisit": false,
+          "createdAt": "2026-10-01T08:00:00.000Z",
+          "updatedAt": "2026-10-11T15:00:00.000Z",
+          "branch": {
+            "id": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+            "code": "MINTAM-HN",
+            "name": "Nha khoa Minh Tâm – Trần Duy Hưng",
+            "address": "Số 12 Trần Duy Hưng, Cầu Giấy, Hà Nội",
+            "phone": "024 7300 0001",
+            "isActive": true
+          },
+          "patientProfile": {
+            "id": "736ae249-735f-459f-83f5-0003e3caf797",
+            "patientCode": "BN-126",
+            "fullName": "Đỗ Thị Mai",
+            "phone": "0918 326 238",
+            "gender": "Nữ",
+            "dateOfBirth": "1990-07-08T00:00:00.000Z",
+            "medicalInfo": {
+              "id": "11a25bfa-1196-4016-8232-00040b9fe2c6",
+              "patientProfileId": "736ae249-735f-459f-83f5-0003e3caf797",
+              "allergies": null,
+              "chronicDiseases": null,
+              "medicalHistory": null,
+              "dentalNotes": null,
+              "createdAt": "2025-03-10T08:00:00.000Z",
+              "updatedAt": "2026-09-20T08:00:00.000Z"
+            },
+            "insurancePolicies": [],
+            "emergencyContacts": [
+              {
+                "id": "afd9d5ab-afcd-4a8d-806f-00043374cdf5",
+                "name": "Mai (người nhà)",
+                "phone": "098 700 006",
+                "relation": "Vợ/Chồng"
+              }
+            ],
+            "totalDebtVnd": 0
+          },
+          "doctorProfile": {
+            "id": "daa66d13-daa5-4f65-8ab7-0000777ec18d",
+            "staffProfileId": "78dde6c4-78dc-49dc-88f4-00009f53acbc",
+            "staffProfile": {
+              "id": "78dde6c4-78dc-49dc-88f4-00009f53acbc",
+              "fullName": "BS. Nguyễn Hoài An"
+            }
+          }
+        }
+      ],
+      "avatarUrl": null,
+      "profileCompleteness": {
+        "requiredFields": [
+          "fullName",
+          "phone",
+          "dateOfBirth",
+          "gender",
+          "address",
+          "allergies",
+          "chronicDiseases",
+          "medicalHistory",
+          "emergencyContact"
+        ],
+        "missingFields": [
+          "emergencyContact",
+          "allergies",
+          "chronicDiseases"
+        ],
+        "isComplete": false
+      },
+      "totalDebtVnd": 0,
+      "paymentStatus": "PAID",
+      "arrivalAt": "2026-10-11T10:28:00.000Z",
+      "currentVisit": {
+        "appointmentId": null,
+        "startsAt": "2026-10-11T10:28:00.000Z",
+        "status": "WAITING",
+        "appointmentStatus": "CONFIRMED",
+        "queueNumber": 7,
+        "queueStatus": "WAITING",
+        "branch": {
+          "id": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+          "code": "MINTAM-HN",
+          "name": "Nha khoa Minh Tâm – Trần Duy Hưng",
+          "address": "Số 12 Trần Duy Hưng, Cầu Giấy, Hà Nội",
+          "phone": "024 7300 0001"
+        },
+        "serviceName": "Cạo vôi răng",
+        "firstProcedureName": null,
+        "doctorName": "BS. Nguyễn Hoài An",
+        "notes": null,
+        "registrationStatus": "DA_TIEP_NHAN"
+      }
+    },
+    {
+      "id": "4e114f5c-4e04-4504-8eac-00045b49b924",
+      "patientCode": "BN-127",
+      "fullName": "Ngô Văn Thành",
+      "phone": "0919 327 261",
+      "email": null,
+      "nationalId": null,
+      "dateOfBirth": "1987-08-13T00:00:00.000Z",
+      "gender": "Nam",
+      "address": null,
+      "addressLine": null,
+      "province": "Hà Nội",
+      "district": null,
+      "ward": null,
+      "avatarFileId": null,
+      "branchId": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+      "doctorProfileId": "17156075-1713-4453-8731-0000c72897eb",
+      "createdAt": "2025-03-17T08:00:00.000Z",
+      "updatedAt": "2026-09-30T08:00:00.000Z",
+      "deletedAt": null,
+      "sourceId": null,
+      "occupationId": null,
+      "crmSegment": "Mới",
+      "crmNotes": null,
+      "mergedIntoPatientProfileId": null,
+      "mergedAt": null,
+      "medicalInfo": {
+        "id": "ec48c90d-ec3b-4f7b-8ce9-0004831ea453",
+        "patientProfileId": "4e114f5c-4e04-4504-8eac-00045b49b924",
+        "allergies": null,
+        "chronicDiseases": "Tăng huyết áp",
+        "medicalHistory": null,
+        "dentalNotes": null,
+        "createdAt": "2025-03-10T08:00:00.000Z",
+        "updatedAt": "2026-09-20T08:00:00.000Z"
+      },
+      "insurancePolicies": [],
+      "emergencyContacts": [],
+      "source": null,
+      "occupation": null,
+      "branch": {
+        "id": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+        "code": "MINTAM-NT",
+        "name": "Nha khoa Minh Tâm – Nguyễn Trãi",
+        "address": "Số 245 Nguyễn Trãi, Thanh Xuân, Hà Nội",
+        "phone": "024 7300 0002"
+      },
+      "doctorProfile": {
+        "id": "17156075-1713-4453-8731-0000c72897eb",
+        "staffProfileId": "b54cda26-b54a-4eca-856e-0000eefd831a",
+        "staffProfile": {
+          "id": "b54cda26-b54a-4eca-856e-0000eefd831a",
+          "fullName": "BS. Trần Minh Khoa"
+        }
+      },
+      "crmProfile": null,
+      "avatarFile": null,
+      "debtLedgerEntries": [],
+      "appointments": [
+        {
+          "id": "0c2f577f-0c19-4bd9-8d33-000750172da1",
+          "branchId": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+          "patientProfileId": "4e114f5c-4e04-4504-8eac-00045b49b924",
+          "doctorProfileId": "17156075-1713-4453-8731-0000c72897eb",
+          "chairId": null,
+          "serviceId": null,
+          "patientDisplayName": "Ngô Văn Thành",
+          "startsAt": "2026-10-11T15:30:00.000Z",
+          "endsAt": "2026-10-11T16:20:00.000Z",
+          "status": "CHECKED_IN",
+          "holdExpiresAt": null,
+          "confirmedAt": "2026-10-11T15:30:00.000Z",
+          "checkedInAt": "2026-10-11T15:30:00.000Z",
+          "cancelledAt": null,
+          "cancellationReason": null,
+          "noShowAt": null,
+          "notes": "Nhổ răng sữa",
+          "serviceTitle": "Nhổ răng sữa",
+          "serviceName": "Nhổ răng sữa",
+          "doctorName": "BS. Trần Minh Khoa",
+          "isDirectVisit": false,
+          "createdAt": "2026-10-01T08:00:00.000Z",
+          "updatedAt": "2026-10-11T15:30:00.000Z",
+          "branch": {
+            "id": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+            "code": "MINTAM-NT",
+            "name": "Nha khoa Minh Tâm – Nguyễn Trãi",
+            "address": "Số 245 Nguyễn Trãi, Thanh Xuân, Hà Nội",
+            "phone": "024 7300 0002",
+            "isActive": true
+          },
+          "patientProfile": {
+            "id": "4e114f5c-4e04-4504-8eac-00045b49b924",
+            "patientCode": "BN-127",
+            "fullName": "Ngô Văn Thành",
+            "phone": "0919 327 261",
+            "gender": "Nam",
+            "dateOfBirth": "1987-08-13T00:00:00.000Z",
+            "medicalInfo": {
+              "id": "ec48c90d-ec3b-4f7b-8ce9-0004831ea453",
+              "patientProfileId": "4e114f5c-4e04-4504-8eac-00045b49b924",
+              "allergies": null,
+              "chronicDiseases": "Tăng huyết áp",
+              "medicalHistory": null,
+              "dentalNotes": null,
+              "createdAt": "2025-03-10T08:00:00.000Z",
+              "updatedAt": "2026-09-20T08:00:00.000Z"
+            },
+            "insurancePolicies": [],
+            "emergencyContacts": [],
+            "totalDebtVnd": 1900000
+          },
+          "doctorProfile": {
+            "id": "17156075-1713-4453-8731-0000c72897eb",
+            "staffProfileId": "b54cda26-b54a-4eca-856e-0000eefd831a",
+            "staffProfile": {
+              "id": "b54cda26-b54a-4eca-856e-0000eefd831a",
+              "fullName": "BS. Trần Minh Khoa"
+            }
+          }
+        }
+      ],
+      "avatarUrl": null,
+      "profileCompleteness": {
+        "requiredFields": [
+          "fullName",
+          "phone",
+          "dateOfBirth",
+          "gender",
+          "address",
+          "allergies",
+          "chronicDiseases",
+          "medicalHistory",
+          "emergencyContact"
+        ],
+        "missingFields": [
+          "emergencyContact",
+          "allergies"
+        ],
+        "isComplete": false
+      },
+      "totalDebtVnd": 1900000,
+      "paymentStatus": "PARTIALLY_PAID",
+      "arrivalAt": null,
+      "currentVisit": null
+    },
+    {
+      "id": "8a8042be-8a72-49f2-8b26-0004aaf38f82",
+      "patientCode": "BN-128",
+      "fullName": "Bùi Thị Thanh Tâm",
+      "phone": "0912 328 284",
+      "email": null,
+      "nationalId": "012 345 67464",
+      "dateOfBirth": "1998-09-18T00:00:00.000Z",
+      "gender": "Nữ",
+      "address": "Số 20 ngõ 38 phường Dịch Vọng, quận Cầu Giấy, Hà Nội",
+      "addressLine": "Số 20 ngõ 38",
+      "province": "Hà Nội",
+      "district": "Cầu Giấy",
+      "ward": null,
+      "avatarFileId": null,
+      "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+      "doctorProfileId": "538453d7-5381-4941-83ab-000116d26e49",
+      "createdAt": "2025-04-18T08:00:00.000Z",
+      "updatedAt": "2026-09-30T08:00:00.000Z",
+      "deletedAt": null,
+      "sourceId": null,
+      "occupationId": null,
+      "crmSegment": "Mới",
+      "crmNotes": null,
+      "mergedIntoPatientProfileId": null,
+      "mergedAt": null,
+      "medicalInfo": {
+        "id": "28b7bc6f-28a9-4469-8963-0004d2c87ab1",
+        "patientProfileId": "8a8042be-8a72-49f2-8b26-0004aaf38f82",
+        "allergies": null,
+        "chronicDiseases": null,
+        "medicalHistory": null,
+        "dentalNotes": null,
+        "createdAt": "2025-03-10T08:00:00.000Z",
+        "updatedAt": "2026-09-20T08:00:00.000Z"
+      },
+      "insurancePolicies": [],
+      "emergencyContacts": [],
+      "source": null,
+      "occupation": null,
+      "branch": {
+        "id": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+        "code": "MINTAM-HN",
+        "name": "Nha khoa Minh Tâm – Trần Duy Hưng",
+        "address": "Số 12 Trần Duy Hưng, Cầu Giấy, Hà Nội",
+        "phone": "024 7300 0001"
+      },
+      "doctorProfile": {
+        "id": "538453d7-5381-4941-83ab-000116d26e49",
+        "staffProfileId": "f1bbcd88-f1b8-43b8-81e8-00013ea75978",
+        "staffProfile": {
+          "id": "f1bbcd88-f1b8-43b8-81e8-00013ea75978",
+          "fullName": "BS. Lê Thu Trang"
+        }
+      },
+      "crmProfile": null,
+      "avatarFile": null,
+      "debtLedgerEntries": [],
+      "appointments": [
+        {
+          "id": "aa66d130-aa50-4650-8b70-000777ec18d0",
+          "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+          "patientProfileId": "8a8042be-8a72-49f2-8b26-0004aaf38f82",
+          "doctorProfileId": "538453d7-5381-4941-83ab-000116d26e49",
+          "chairId": null,
+          "serviceId": null,
+          "patientDisplayName": "Bùi Thị Thanh Tâm",
+          "startsAt": "2026-10-12T16:00:00.000Z",
+          "endsAt": "2026-10-12T16:40:00.000Z",
+          "status": "CONFIRMED",
+          "holdExpiresAt": null,
+          "confirmedAt": "2026-10-12T16:00:00.000Z",
+          "checkedInAt": null,
+          "cancelledAt": null,
+          "cancellationReason": null,
+          "noShowAt": null,
+          "notes": "Điều trị tủy 36",
+          "serviceTitle": "Điều trị tủy 36",
+          "serviceName": "Điều trị tủy 36",
+          "doctorName": "BS. Lê Thu Trang",
+          "isDirectVisit": false,
+          "createdAt": "2026-10-01T08:00:00.000Z",
+          "updatedAt": "2026-10-12T16:00:00.000Z",
+          "branch": {
+            "id": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+            "code": "MINTAM-HN",
+            "name": "Nha khoa Minh Tâm – Trần Duy Hưng",
+            "address": "Số 12 Trần Duy Hưng, Cầu Giấy, Hà Nội",
+            "phone": "024 7300 0001",
+            "isActive": true
+          },
+          "patientProfile": {
+            "id": "8a8042be-8a72-49f2-8b26-0004aaf38f82",
+            "patientCode": "BN-128",
+            "fullName": "Bùi Thị Thanh Tâm",
+            "phone": "0912 328 284",
+            "gender": "Nữ",
+            "dateOfBirth": "1998-09-18T00:00:00.000Z",
+            "medicalInfo": {
+              "id": "28b7bc6f-28a9-4469-8963-0004d2c87ab1",
+              "patientProfileId": "8a8042be-8a72-49f2-8b26-0004aaf38f82",
+              "allergies": null,
+              "chronicDiseases": null,
+              "medicalHistory": null,
+              "dentalNotes": null,
+              "createdAt": "2025-03-10T08:00:00.000Z",
+              "updatedAt": "2026-09-20T08:00:00.000Z"
+            },
+            "insurancePolicies": [],
+            "emergencyContacts": [],
+            "totalDebtVnd": 4500000
+          },
+          "doctorProfile": {
+            "id": "538453d7-5381-4941-83ab-000116d26e49",
+            "staffProfileId": "f1bbcd88-f1b8-43b8-81e8-00013ea75978",
+            "staffProfile": {
+              "id": "f1bbcd88-f1b8-43b8-81e8-00013ea75978",
+              "fullName": "BS. Lê Thu Trang"
+            }
+          }
+        }
+      ],
+      "avatarUrl": null,
+      "profileCompleteness": {
+        "requiredFields": [
+          "fullName",
+          "phone",
+          "dateOfBirth",
+          "gender",
+          "address",
+          "allergies",
+          "chronicDiseases",
+          "medicalHistory",
+          "emergencyContact"
+        ],
+        "missingFields": [
+          "emergencyContact",
+          "allergies",
+          "chronicDiseases"
+        ],
+        "isComplete": false
+      },
+      "totalDebtVnd": 4500000,
+      "paymentStatus": "UNPAID",
+      "arrivalAt": "2026-10-11T08:34:00.000Z",
+      "currentVisit": {
+        "appointmentId": null,
+        "startsAt": "2026-10-11T08:34:00.000Z",
+        "status": "DONE",
+        "appointmentStatus": "CONFIRMED",
+        "queueNumber": 9,
+        "queueStatus": "IN_SERVICE",
+        "branch": {
+          "id": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+          "code": "MINTAM-HN",
+          "name": "Nha khoa Minh Tâm – Trần Duy Hưng",
+          "address": "Số 12 Trần Duy Hưng, Cầu Giấy, Hà Nội",
+          "phone": "024 7300 0001"
+        },
+        "serviceName": "Khám tổng quát",
+        "firstProcedureName": null,
+        "doctorName": "BS. Lê Thu Trang",
+        "notes": null,
+        "registrationStatus": "DA_TIEP_NHAN"
+      }
+    },
+    {
+      "id": "c6ef3620-c6e0-4ee0-87a0-0004fa9d65e0",
+      "patientCode": "BN-129",
+      "fullName": "Đặng Hữu Nghị",
+      "phone": "0913 329 307",
+      "email": "benhnhan.10@example.com",
+      "nationalId": null,
+      "dateOfBirth": "1983-01-23T00:00:00.000Z",
+      "gender": "Nam",
+      "address": null,
+      "addressLine": null,
+      "province": "Hà Nội",
+      "district": null,
+      "ward": null,
+      "avatarFileId": null,
+      "branchId": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+      "doctorProfileId": "daa66d13-daa5-4f65-8ab7-0000777ec18d",
+      "createdAt": "2025-05-19T08:00:00.000Z",
+      "updatedAt": "2026-09-30T08:00:00.000Z",
+      "deletedAt": null,
+      "sourceId": null,
+      "occupationId": null,
+      "crmSegment": "Thân thiết",
+      "crmNotes": null,
+      "mergedIntoPatientProfileId": null,
+      "mergedAt": null,
+      "medicalInfo": {
+        "id": "6526afd1-6517-4957-85dd-00052272510f",
+        "patientProfileId": "c6ef3620-c6e0-4ee0-87a0-0004fa9d65e0",
+        "allergies": null,
+        "chronicDiseases": null,
+        "medicalHistory": null,
+        "dentalNotes": null,
+        "createdAt": "2025-03-10T08:00:00.000Z",
+        "updatedAt": "2026-09-20T08:00:00.000Z"
+      },
+      "insurancePolicies": [],
+      "emergencyContacts": [
+        {
+          "id": "035e2982-034e-43ce-841a-00054a473c3e",
+          "name": "Nghị (người nhà)",
+          "phone": "098 700 009",
+          "relation": "Vợ/Chồng"
+        }
+      ],
+      "source": null,
+      "occupation": null,
+      "branch": {
+        "id": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+        "code": "MINTAM-NT",
+        "name": "Nha khoa Minh Tâm – Nguyễn Trãi",
+        "address": "Số 245 Nguyễn Trãi, Thanh Xuân, Hà Nội",
+        "phone": "024 7300 0002"
+      },
+      "doctorProfile": {
+        "id": "daa66d13-daa5-4f65-8ab7-0000777ec18d",
+        "staffProfileId": "78dde6c4-78dc-49dc-88f4-00009f53acbc",
+        "staffProfile": {
+          "id": "78dde6c4-78dc-49dc-88f4-00009f53acbc",
+          "fullName": "BS. Nguyễn Hoài An"
+        }
+      },
+      "crmProfile": null,
+      "avatarFile": null,
+      "debtLedgerEntries": [],
+      "appointments": [
+        {
+          "id": "489e4ae1-4887-40c7-89ad-00079fc103ff",
+          "branchId": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+          "patientProfileId": "c6ef3620-c6e0-4ee0-87a0-0004fa9d65e0",
+          "doctorProfileId": "daa66d13-daa5-4f65-8ab7-0000777ec18d",
+          "chairId": null,
+          "serviceId": null,
+          "patientDisplayName": "Đặng Hữu Nghị",
+          "startsAt": "2026-10-13T16:30:00.000Z",
+          "endsAt": "2026-10-13T17:10:00.000Z",
+          "status": "CANCELLED",
+          "holdExpiresAt": null,
+          "confirmedAt": "2026-10-13T16:30:00.000Z",
+          "checkedInAt": null,
+          "cancelledAt": "2026-10-13T16:30:00.000Z",
+          "cancellationReason": "Bệnh nhân báo bận",
+          "noShowAt": null,
+          "notes": "Cạo vôi răng",
+          "serviceTitle": "Cạo vôi răng",
+          "serviceName": "Cạo vôi răng",
+          "doctorName": "BS. Nguyễn Hoài An",
+          "isDirectVisit": false,
+          "createdAt": "2026-10-01T08:00:00.000Z",
+          "updatedAt": "2026-10-13T16:30:00.000Z",
+          "branch": {
+            "id": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+            "code": "MINTAM-NT",
+            "name": "Nha khoa Minh Tâm – Nguyễn Trãi",
+            "address": "Số 245 Nguyễn Trãi, Thanh Xuân, Hà Nội",
+            "phone": "024 7300 0002",
+            "isActive": true
+          },
+          "patientProfile": {
+            "id": "c6ef3620-c6e0-4ee0-87a0-0004fa9d65e0",
+            "patientCode": "BN-129",
+            "fullName": "Đặng Hữu Nghị",
+            "phone": "0913 329 307",
+            "gender": "Nam",
+            "dateOfBirth": "1983-01-23T00:00:00.000Z",
+            "medicalInfo": {
+              "id": "6526afd1-6517-4957-85dd-00052272510f",
+              "patientProfileId": "c6ef3620-c6e0-4ee0-87a0-0004fa9d65e0",
+              "allergies": null,
+              "chronicDiseases": null,
+              "medicalHistory": null,
+              "dentalNotes": null,
+              "createdAt": "2025-03-10T08:00:00.000Z",
+              "updatedAt": "2026-09-20T08:00:00.000Z"
+            },
+            "insurancePolicies": [],
+            "emergencyContacts": [
+              {
+                "id": "035e2982-034e-43ce-841a-00054a473c3e",
+                "name": "Nghị (người nhà)",
+                "phone": "098 700 009",
+                "relation": "Vợ/Chồng"
+              }
+            ],
+            "totalDebtVnd": 0
+          },
+          "doctorProfile": {
+            "id": "daa66d13-daa5-4f65-8ab7-0000777ec18d",
+            "staffProfileId": "78dde6c4-78dc-49dc-88f4-00009f53acbc",
+            "staffProfile": {
+              "id": "78dde6c4-78dc-49dc-88f4-00009f53acbc",
+              "fullName": "BS. Nguyễn Hoài An"
+            }
+          }
+        }
+      ],
+      "avatarUrl": null,
+      "profileCompleteness": {
+        "requiredFields": [
+          "fullName",
+          "phone",
+          "dateOfBirth",
+          "gender",
+          "address",
+          "allergies",
+          "chronicDiseases",
+          "medicalHistory",
+          "emergencyContact"
+        ],
+        "missingFields": [
+          "emergencyContact",
+          "allergies",
+          "chronicDiseases"
+        ],
+        "isComplete": false
+      },
+      "totalDebtVnd": 0,
+      "paymentStatus": "PAID",
+      "arrivalAt": null,
+      "currentVisit": null
+    },
+    {
+      "id": "a195a333-a185-4e45-8257-0005721c276d",
+      "patientCode": "BN-130",
+      "fullName": "Lý Thị Bích Ngọc",
+      "phone": "0914 330 330",
+      "email": null,
+      "nationalId": null,
+      "dateOfBirth": "1995-02-03T00:00:00.000Z",
+      "gender": "Nữ",
+      "address": "Số 22 ngõ 40 phường Dịch Vọng, quận Cầu Giấy, Hà Nội",
+      "addressLine": "Số 22 ngõ 40",
+      "province": "Hà Nội",
+      "district": "Cầu Giấy",
+      "ward": null,
+      "avatarFileId": null,
+      "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+      "doctorProfileId": "17156075-1713-4453-8731-0000c72897eb",
+      "createdAt": "2025-06-10T08:00:00.000Z",
+      "updatedAt": "2026-09-30T08:00:00.000Z",
+      "deletedAt": null,
+      "sourceId": null,
+      "occupationId": null,
+      "crmSegment": "Mới",
+      "crmNotes": null,
+      "mergedIntoPatientProfileId": null,
+      "mergedAt": null,
+      "medicalInfo": {
+        "id": "3fcd1ce4-3fbc-48bc-8094-000599f1129c",
+        "patientProfileId": "a195a333-a185-4e45-8257-0005721c276d",
+        "allergies": null,
+        "chronicDiseases": null,
+        "medicalHistory": null,
+        "dentalNotes": null,
+        "createdAt": "2025-03-10T08:00:00.000Z",
+        "updatedAt": "2026-09-20T08:00:00.000Z"
+      },
+      "insurancePolicies": [
+        {
+          "id": "de049695-ddf3-4333-8ed1-0005c1c5fdcb",
+          "provider": "BHYT",
+          "cardNo": "DN4 01 0123 4567 890",
+          "validFrom": "2026-01-01",
+          "validTo": "2026-12-31"
+        }
+      ],
+      "emergencyContacts": [],
+      "source": null,
+      "occupation": null,
+      "branch": {
+        "id": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+        "code": "MINTAM-HN",
+        "name": "Nha khoa Minh Tâm – Trần Duy Hưng",
+        "address": "Số 12 Trần Duy Hưng, Cầu Giấy, Hà Nội",
+        "phone": "024 7300 0001"
+      },
+      "doctorProfile": {
+        "id": "17156075-1713-4453-8731-0000c72897eb",
+        "staffProfileId": "b54cda26-b54a-4eca-856e-0000eefd831a",
+        "staffProfile": {
+          "id": "b54cda26-b54a-4eca-856e-0000eefd831a",
+          "fullName": "BS. Trần Minh Khoa"
+        }
+      },
+      "crmProfile": null,
+      "avatarFile": null,
+      "debtLedgerEntries": [],
+      "appointments": [
+        {
+          "id": "e6d5c492-e6be-4b3e-87ea-0007c795ef2e",
+          "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+          "patientProfileId": "a195a333-a185-4e45-8257-0005721c276d",
+          "doctorProfileId": "17156075-1713-4453-8731-0000c72897eb",
+          "chairId": null,
+          "serviceId": null,
+          "patientDisplayName": "Lý Thị Bích Ngọc",
+          "startsAt": "2026-10-09T08:30:00.000Z",
+          "endsAt": "2026-10-09T09:00:00.000Z",
+          "status": "COMPLETED",
+          "holdExpiresAt": null,
+          "confirmedAt": "2026-10-09T08:30:00.000Z",
+          "checkedInAt": null,
+          "cancelledAt": null,
+          "cancellationReason": null,
+          "noShowAt": null,
+          "notes": "Khám tổng quát",
+          "serviceTitle": "Khám tổng quát",
+          "serviceName": "Khám tổng quát",
+          "doctorName": "BS. Trần Minh Khoa",
+          "isDirectVisit": false,
+          "createdAt": "2026-10-01T08:00:00.000Z",
+          "updatedAt": "2026-10-09T08:30:00.000Z",
+          "branch": {
+            "id": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+            "code": "MINTAM-HN",
+            "name": "Nha khoa Minh Tâm – Trần Duy Hưng",
+            "address": "Số 12 Trần Duy Hưng, Cầu Giấy, Hà Nội",
+            "phone": "024 7300 0001",
+            "isActive": true
+          },
+          "patientProfile": {
+            "id": "a195a333-a185-4e45-8257-0005721c276d",
+            "patientCode": "BN-130",
+            "fullName": "Lý Thị Bích Ngọc",
+            "phone": "0914 330 330",
+            "gender": "Nữ",
+            "dateOfBirth": "1995-02-03T00:00:00.000Z",
+            "medicalInfo": {
+              "id": "3fcd1ce4-3fbc-48bc-8094-000599f1129c",
+              "patientProfileId": "a195a333-a185-4e45-8257-0005721c276d",
+              "allergies": null,
+              "chronicDiseases": null,
+              "medicalHistory": null,
+              "dentalNotes": null,
+              "createdAt": "2025-03-10T08:00:00.000Z",
+              "updatedAt": "2026-09-20T08:00:00.000Z"
+            },
+            "insurancePolicies": [
+              {
+                "id": "de049695-ddf3-4333-8ed1-0005c1c5fdcb",
+                "provider": "BHYT",
+                "cardNo": "DN4 01 0123 4567 890",
+                "validFrom": "2026-01-01",
+                "validTo": "2026-12-31"
+              }
+            ],
+            "emergencyContacts": [],
+            "totalDebtVnd": 1900000
+          },
+          "doctorProfile": {
+            "id": "17156075-1713-4453-8731-0000c72897eb",
+            "staffProfileId": "b54cda26-b54a-4eca-856e-0000eefd831a",
+            "staffProfile": {
+              "id": "b54cda26-b54a-4eca-856e-0000eefd831a",
+              "fullName": "BS. Trần Minh Khoa"
+            }
+          }
+        }
+      ],
+      "avatarUrl": null,
+      "profileCompleteness": {
+        "requiredFields": [
+          "fullName",
+          "phone",
+          "dateOfBirth",
+          "gender",
+          "address",
+          "allergies",
+          "chronicDiseases",
+          "medicalHistory",
+          "emergencyContact"
+        ],
+        "missingFields": [
+          "emergencyContact",
+          "allergies",
+          "chronicDiseases"
+        ],
+        "isComplete": false
+      },
+      "totalDebtVnd": 1900000,
+      "paymentStatus": "PARTIALLY_PAID",
+      "arrivalAt": "2026-10-11T10:40:00.000Z",
+      "currentVisit": {
+        "appointmentId": null,
+        "startsAt": "2026-10-11T10:40:00.000Z",
+        "status": "IN_PROGRESS",
+        "appointmentStatus": "CONFIRMED",
+        "queueNumber": 11,
+        "queueStatus": "IN_SERVICE",
+        "branch": {
+          "id": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+          "code": "MINTAM-HN",
+          "name": "Nha khoa Minh Tâm – Trần Duy Hưng",
+          "address": "Số 12 Trần Duy Hưng, Cầu Giấy, Hà Nội",
+          "phone": "024 7300 0001"
+        },
+        "serviceName": "Cạo vôi răng",
+        "firstProcedureName": null,
+        "doctorName": "BS. Trần Minh Khoa",
+        "notes": null,
+        "registrationStatus": "DA_TIEP_NHAN"
+      }
+    },
+    {
+      "id": "7c3c1046-7c2a-4daa-8d0e-0005e99ae8fa",
+      "patientCode": "BN-131",
+      "fullName": "Phan Thành Trung",
+      "phone": "0915 331 353",
+      "email": null,
+      "nationalId": null,
+      "dateOfBirth": "1992-03-08T00:00:00.000Z",
+      "gender": "Nam",
+      "address": null,
+      "addressLine": null,
+      "province": "Hà Nội",
+      "district": null,
+      "ward": null,
+      "avatarFileId": null,
+      "branchId": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+      "doctorProfileId": "538453d7-5381-4941-83ab-000116d26e49",
+      "createdAt": "2025-07-11T08:00:00.000Z",
+      "updatedAt": "2026-09-30T08:00:00.000Z",
+      "deletedAt": null,
+      "sourceId": null,
+      "occupationId": null,
+      "crmSegment": "Mới",
+      "crmNotes": null,
+      "mergedIntoPatientProfileId": null,
+      "mergedAt": null,
+      "medicalInfo": {
+        "id": "1a7389f7-1a61-4821-8b4b-0006116fd429",
+        "patientProfileId": "7c3c1046-7c2a-4daa-8d0e-0005e99ae8fa",
+        "allergies": null,
+        "chronicDiseases": null,
+        "medicalHistory": null,
+        "dentalNotes": null,
+        "createdAt": "2025-03-10T08:00:00.000Z",
+        "updatedAt": "2026-09-20T08:00:00.000Z"
+      },
+      "insurancePolicies": [],
+      "emergencyContacts": [],
+      "source": null,
+      "occupation": null,
+      "branch": {
+        "id": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+        "code": "MINTAM-NT",
+        "name": "Nha khoa Minh Tâm – Nguyễn Trãi",
+        "address": "Số 245 Nguyễn Trãi, Thanh Xuân, Hà Nội",
+        "phone": "024 7300 0002"
+      },
+      "doctorProfile": {
+        "id": "538453d7-5381-4941-83ab-000116d26e49",
+        "staffProfileId": "f1bbcd88-f1b8-43b8-81e8-00013ea75978",
+        "staffProfile": {
+          "id": "f1bbcd88-f1b8-43b8-81e8-00013ea75978",
+          "fullName": "BS. Lê Thu Trang"
+        }
+      },
+      "crmProfile": null,
+      "avatarFile": null,
+      "debtLedgerEntries": [],
+      "appointments": [
+        {
+          "id": "850d3e43-84f5-45b5-8627-0007ef6ada5d",
+          "branchId": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+          "patientProfileId": "7c3c1046-7c2a-4daa-8d0e-0005e99ae8fa",
+          "doctorProfileId": "538453d7-5381-4941-83ab-000116d26e49",
+          "chairId": null,
+          "serviceId": null,
+          "patientDisplayName": "Phan Thành Trung",
+          "startsAt": "2026-10-14T13:30:00.000Z",
+          "endsAt": "2026-10-14T14:00:00.000Z",
+          "status": "CONFIRMED",
+          "holdExpiresAt": null,
+          "confirmedAt": "2026-10-14T13:30:00.000Z",
+          "checkedInAt": null,
+          "cancelledAt": null,
+          "cancellationReason": null,
+          "noShowAt": null,
+          "notes": "Lấy dấu phục hình",
+          "serviceTitle": "Lấy dấu phục hình",
+          "serviceName": "Lấy dấu phục hình",
+          "doctorName": "BS. Lê Thu Trang",
+          "isDirectVisit": false,
+          "createdAt": "2026-10-01T08:00:00.000Z",
+          "updatedAt": "2026-10-14T13:30:00.000Z",
+          "branch": {
+            "id": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+            "code": "MINTAM-NT",
+            "name": "Nha khoa Minh Tâm – Nguyễn Trãi",
+            "address": "Số 245 Nguyễn Trãi, Thanh Xuân, Hà Nội",
+            "phone": "024 7300 0002",
+            "isActive": true
+          },
+          "patientProfile": {
+            "id": "7c3c1046-7c2a-4daa-8d0e-0005e99ae8fa",
+            "patientCode": "BN-131",
+            "fullName": "Phan Thành Trung",
+            "phone": "0915 331 353",
+            "gender": "Nam",
+            "dateOfBirth": "1992-03-08T00:00:00.000Z",
+            "medicalInfo": {
+              "id": "1a7389f7-1a61-4821-8b4b-0006116fd429",
+              "patientProfileId": "7c3c1046-7c2a-4daa-8d0e-0005e99ae8fa",
+              "allergies": null,
+              "chronicDiseases": null,
+              "medicalHistory": null,
+              "dentalNotes": null,
+              "createdAt": "2025-03-10T08:00:00.000Z",
+              "updatedAt": "2026-09-20T08:00:00.000Z"
+            },
+            "insurancePolicies": [],
+            "emergencyContacts": [],
+            "totalDebtVnd": 4500000
+          },
+          "doctorProfile": {
+            "id": "538453d7-5381-4941-83ab-000116d26e49",
+            "staffProfileId": "f1bbcd88-f1b8-43b8-81e8-00013ea75978",
+            "staffProfile": {
+              "id": "f1bbcd88-f1b8-43b8-81e8-00013ea75978",
+              "fullName": "BS. Lê Thu Trang"
+            }
+          }
+        }
+      ],
+      "avatarUrl": null,
+      "profileCompleteness": {
+        "requiredFields": [
+          "fullName",
+          "phone",
+          "dateOfBirth",
+          "gender",
+          "address",
+          "allergies",
+          "chronicDiseases",
+          "medicalHistory",
+          "emergencyContact"
+        ],
+        "missingFields": [
+          "emergencyContact",
+          "allergies",
+          "chronicDiseases"
+        ],
+        "isComplete": false
+      },
+      "totalDebtVnd": 4500000,
+      "paymentStatus": "UNPAID",
+      "arrivalAt": null,
+      "currentVisit": null
+    }
+  ],
+  "appointments": [
+    {
+      "id": "b8ab03a8-b898-4298-8988-00063944bf58",
+      "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+      "patientProfileId": "8ff34739-8fef-4e2f-8025-0001667c44a7",
+      "doctorProfileId": "daa66d13-daa5-4f65-8ab7-0000777ec18d",
+      "chairId": null,
+      "serviceId": null,
+      "patientDisplayName": "Nguyễn Thị Lan Hương",
+      "startsAt": "2026-10-11T09:00:00.000Z",
+      "endsAt": "2026-10-11T09:30:00.000Z",
+      "status": "CONFIRMED",
+      "holdExpiresAt": null,
+      "confirmedAt": "2026-10-11T09:00:00.000Z",
+      "checkedInAt": null,
+      "cancelledAt": null,
+      "cancellationReason": null,
+      "noShowAt": null,
+      "notes": "Tư vấn chỉnh nha",
+      "serviceTitle": "Tư vấn chỉnh nha",
+      "serviceName": "Tư vấn chỉnh nha",
+      "doctorName": "BS. Nguyễn Hoài An",
+      "isDirectVisit": false,
+      "createdAt": "2026-10-01T08:00:00.000Z",
+      "updatedAt": "2026-10-11T09:00:00.000Z",
+      "branch": {
+        "id": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+        "code": "MINTAM-HN",
+        "name": "Nha khoa Minh Tâm – Trần Duy Hưng",
+        "address": "Số 12 Trần Duy Hưng, Cầu Giấy, Hà Nội",
+        "phone": "024 7300 0001",
+        "isActive": true
+      },
+      "patientProfile": {
+        "id": "8ff34739-8fef-4e2f-8025-0001667c44a7",
+        "patientCode": "BN-120",
+        "fullName": "Nguyễn Thị Lan Hương",
+        "phone": "0912 320 100",
+        "gender": "Nữ",
+        "dateOfBirth": "1994-01-03T00:00:00.000Z",
+        "medicalInfo": {
+          "id": "2e2ac0ea-2e26-48a6-8e62-00018e512fd6",
+          "patientProfileId": "8ff34739-8fef-4e2f-8025-0001667c44a7",
+          "allergies": null,
+          "chronicDiseases": null,
+          "medicalHistory": "Từng điều trị tủy răng 46 (2024)",
+          "dentalNotes": "Răng 36 sâu răng, cần theo dõi",
+          "createdAt": "2025-03-10T08:00:00.000Z",
+          "updatedAt": "2026-09-20T08:00:00.000Z"
+        },
+        "insurancePolicies": [
+          {
+            "id": "cc623a9b-cc5d-431d-8c9f-0001b6261b05",
+            "provider": "BHYT",
+            "cardNo": "DN4 01 0123 4567 890",
+            "validFrom": "2026-01-01",
+            "validTo": "2026-12-31"
+          }
+        ],
+        "emergencyContacts": [
+          {
+            "id": "6a99b44c-6a94-4d94-8adc-0001ddfb0634",
+            "name": "Hương (người nhà)",
+            "phone": "098 700 000",
+            "relation": "Vợ/Chồng"
+          }
+        ],
+        "totalDebtVnd": 0
+      },
+      "doctorProfile": {
+        "id": "daa66d13-daa5-4f65-8ab7-0000777ec18d",
+        "staffProfileId": "78dde6c4-78dc-49dc-88f4-00009f53acbc",
+        "staffProfile": {
+          "id": "78dde6c4-78dc-49dc-88f4-00009f53acbc",
+          "fullName": "BS. Nguyễn Hoài An"
+        }
+      }
+    },
+    {
+      "id": "56e27d59-56cf-4d0f-87c5-00066119aa87",
+      "branchId": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+      "patientProfileId": "08d12dfd-08cb-480b-8919-000205cff163",
+      "doctorProfileId": "17156075-1713-4453-8731-0000c72897eb",
+      "chairId": null,
+      "serviceId": null,
+      "patientDisplayName": "Trần Văn Bình",
+      "startsAt": "2026-10-11T09:30:00.000Z",
+      "endsAt": "2026-10-11T10:15:00.000Z",
+      "status": "CHECKED_IN",
+      "holdExpiresAt": null,
+      "confirmedAt": "2026-10-11T09:30:00.000Z",
+      "checkedInAt": "2026-10-11T09:30:00.000Z",
+      "cancelledAt": null,
+      "cancellationReason": null,
+      "noShowAt": null,
+      "notes": "Nhổ răng khôn 48",
+      "serviceTitle": "Nhổ răng khôn 48",
+      "serviceName": "Nhổ răng khôn 48",
+      "doctorName": "BS. Trần Minh Khoa",
+      "isDirectVisit": false,
+      "createdAt": "2026-10-01T08:00:00.000Z",
+      "updatedAt": "2026-10-11T09:30:00.000Z",
+      "branch": {
+        "id": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+        "code": "MINTAM-NT",
+        "name": "Nha khoa Minh Tâm – Nguyễn Trãi",
+        "address": "Số 245 Nguyễn Trãi, Thanh Xuân, Hà Nội",
+        "phone": "024 7300 0002",
+        "isActive": true
+      },
+      "patientProfile": {
+        "id": "08d12dfd-08cb-480b-8919-000205cff163",
+        "patientCode": "BN-121",
+        "fullName": "Trần Văn Bình",
+        "phone": "0913 321 123",
+        "gender": "Nam",
+        "dateOfBirth": "1988-02-08T00:00:00.000Z",
+        "medicalInfo": {
+          "id": "a708a7ae-a702-4282-8756-00022da4dc92",
+          "patientProfileId": "08d12dfd-08cb-480b-8919-000205cff163",
+          "allergies": "Penicillin",
+          "chronicDiseases": null,
+          "medicalHistory": null,
+          "dentalNotes": null,
+          "createdAt": "2025-03-10T08:00:00.000Z",
+          "updatedAt": "2026-09-20T08:00:00.000Z"
+        },
+        "insurancePolicies": [],
+        "emergencyContacts": [],
+        "totalDebtVnd": 1900000
+      },
+      "doctorProfile": {
+        "id": "17156075-1713-4453-8731-0000c72897eb",
+        "staffProfileId": "b54cda26-b54a-4eca-856e-0000eefd831a",
+        "staffProfile": {
+          "id": "b54cda26-b54a-4eca-856e-0000eefd831a",
+          "fullName": "BS. Trần Minh Khoa"
+        }
+      }
+    },
+    {
+      "id": "f519f70a-f506-4786-8602-000688ee95b6",
+      "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+      "patientProfileId": "4540215f-4539-4cf9-8593-00025579c7c1",
+      "doctorProfileId": "538453d7-5381-4941-83ab-000116d26e49",
+      "chairId": null,
+      "serviceId": null,
+      "patientDisplayName": "Phạm Thị Thuý",
+      "startsAt": "2026-10-11T10:00:00.000Z",
+      "endsAt": "2026-10-11T10:40:00.000Z",
+      "status": "IN_TREATMENT",
+      "holdExpiresAt": null,
+      "confirmedAt": "2026-10-11T10:00:00.000Z",
+      "checkedInAt": null,
+      "cancelledAt": null,
+      "cancellationReason": null,
+      "noShowAt": null,
+      "notes": "Trám răng 24",
+      "serviceTitle": "Trám răng 24",
+      "serviceName": "Trám răng 24",
+      "doctorName": "BS. Lê Thu Trang",
+      "isDirectVisit": false,
+      "createdAt": "2026-10-01T08:00:00.000Z",
+      "updatedAt": "2026-10-11T10:00:00.000Z",
+      "branch": {
+        "id": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+        "code": "MINTAM-HN",
+        "name": "Nha khoa Minh Tâm – Trần Duy Hưng",
+        "address": "Số 12 Trần Duy Hưng, Cầu Giấy, Hà Nội",
+        "phone": "024 7300 0001",
+        "isActive": true
+      },
+      "patientProfile": {
+        "id": "4540215f-4539-4cf9-8593-00025579c7c1",
+        "patientCode": "BN-122",
+        "fullName": "Phạm Thị Thuý",
+        "phone": "0914 322 146",
+        "gender": "Nữ",
+        "dateOfBirth": "1991-03-13T00:00:00.000Z",
+        "medicalInfo": {
+          "id": "e3779b10-e370-4770-83d0-00027d4eb2f0",
+          "patientProfileId": "4540215f-4539-4cf9-8593-00025579c7c1",
+          "allergies": null,
+          "chronicDiseases": null,
+          "medicalHistory": null,
+          "dentalNotes": null,
+          "createdAt": "2025-03-10T08:00:00.000Z",
+          "updatedAt": "2026-09-20T08:00:00.000Z"
+        },
+        "insurancePolicies": [],
+        "emergencyContacts": [],
+        "totalDebtVnd": 4500000
+      },
+      "doctorProfile": {
+        "id": "538453d7-5381-4941-83ab-000116d26e49",
+        "staffProfileId": "f1bbcd88-f1b8-43b8-81e8-00013ea75978",
+        "staffProfile": {
+          "id": "f1bbcd88-f1b8-43b8-81e8-00013ea75978",
+          "fullName": "BS. Lê Thu Trang"
+        }
+      }
+    },
+    {
+      "id": "935170bb-933d-41fd-843f-0006b0c380e5",
+      "branchId": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+      "patientProfileId": "81af14c1-81a7-41e7-820d-0002a5239e1f",
+      "doctorProfileId": "daa66d13-daa5-4f65-8ab7-0000777ec18d",
+      "chairId": null,
+      "serviceId": null,
+      "patientDisplayName": "Lê Quang Hải",
+      "startsAt": "2026-10-11T10:30:00.000Z",
+      "endsAt": "2026-10-11T11:10:00.000Z",
+      "status": "CONFIRMED",
+      "holdExpiresAt": null,
+      "confirmedAt": "2026-10-11T10:30:00.000Z",
+      "checkedInAt": null,
+      "cancelledAt": null,
+      "cancellationReason": null,
+      "noShowAt": null,
+      "notes": "Cạo vôi răng",
+      "serviceTitle": "Cạo vôi răng",
+      "serviceName": "Cạo vôi răng",
+      "doctorName": "BS. Nguyễn Hoài An",
+      "isDirectVisit": false,
+      "createdAt": "2026-10-01T08:00:00.000Z",
+      "updatedAt": "2026-10-11T10:30:00.000Z",
+      "branch": {
+        "id": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+        "code": "MINTAM-NT",
+        "name": "Nha khoa Minh Tâm – Nguyễn Trãi",
+        "address": "Số 245 Nguyễn Trãi, Thanh Xuân, Hà Nội",
+        "phone": "024 7300 0002",
+        "isActive": true
+      },
+      "patientProfile": {
+        "id": "81af14c1-81a7-41e7-820d-0002a5239e1f",
+        "patientCode": "BN-123",
+        "fullName": "Lê Quang Hải",
+        "phone": "0915 323 169",
+        "gender": "Nam",
+        "dateOfBirth": "1985-04-18T00:00:00.000Z",
+        "medicalInfo": {
+          "id": "1fe68e72-1fde-4c5e-804a-0002ccf8894e",
+          "patientProfileId": "81af14c1-81a7-41e7-820d-0002a5239e1f",
+          "allergies": null,
+          "chronicDiseases": null,
+          "medicalHistory": null,
+          "dentalNotes": null,
+          "createdAt": "2025-03-10T08:00:00.000Z",
+          "updatedAt": "2026-09-20T08:00:00.000Z"
+        },
+        "insurancePolicies": [],
+        "emergencyContacts": [
+          {
+            "id": "be1e0823-be15-46d5-8e87-0002f4cd747d",
+            "name": "Hải (người nhà)",
+            "phone": "098 700 003",
+            "relation": "Vợ/Chồng"
+          }
+        ],
+        "totalDebtVnd": 0
+      },
+      "doctorProfile": {
+        "id": "daa66d13-daa5-4f65-8ab7-0000777ec18d",
+        "staffProfileId": "78dde6c4-78dc-49dc-88f4-00009f53acbc",
+        "staffProfile": {
+          "id": "78dde6c4-78dc-49dc-88f4-00009f53acbc",
+          "fullName": "BS. Nguyễn Hoài An"
+        }
+      }
+    },
+    {
+      "id": "3188ea6c-3174-4c74-827c-0006d8986c14",
+      "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+      "patientProfileId": "5c5581d4-5c4c-414c-8cc4-00031ca25fac",
+      "doctorProfileId": "17156075-1713-4453-8731-0000c72897eb",
+      "chairId": null,
+      "serviceId": null,
+      "patientDisplayName": "Vũ Thị Nhung",
+      "startsAt": "2026-10-11T14:00:00.000Z",
+      "endsAt": "2026-10-11T14:45:00.000Z",
+      "status": "CONFIRMED",
+      "holdExpiresAt": null,
+      "confirmedAt": "2026-10-11T14:00:00.000Z",
+      "checkedInAt": null,
+      "cancelledAt": null,
+      "cancellationReason": null,
+      "noShowAt": null,
+      "notes": "Bọc răng sứ 15",
+      "serviceTitle": "Bọc răng sứ 15",
+      "serviceName": "Bọc răng sứ 15",
+      "doctorName": "BS. Trần Minh Khoa",
+      "isDirectVisit": false,
+      "createdAt": "2026-10-01T08:00:00.000Z",
+      "updatedAt": "2026-10-11T14:00:00.000Z",
+      "branch": {
+        "id": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+        "code": "MINTAM-HN",
+        "name": "Nha khoa Minh Tâm – Trần Duy Hưng",
+        "address": "Số 12 Trần Duy Hưng, Cầu Giấy, Hà Nội",
+        "phone": "024 7300 0001",
+        "isActive": true
+      },
+      "patientProfile": {
+        "id": "5c5581d4-5c4c-414c-8cc4-00031ca25fac",
+        "patientCode": "BN-124",
+        "fullName": "Vũ Thị Nhung",
+        "phone": "0916 324 192",
+        "gender": "Nữ",
+        "dateOfBirth": "1996-05-23T00:00:00.000Z",
+        "medicalInfo": {
+          "id": "fa8cfb85-fa83-4bc3-8b01-000344774adb",
+          "patientProfileId": "5c5581d4-5c4c-414c-8cc4-00031ca25fac",
+          "allergies": "Dị ứng thuốc tê Lidocain",
+          "chronicDiseases": null,
+          "medicalHistory": null,
+          "dentalNotes": null,
+          "createdAt": "2025-03-10T08:00:00.000Z",
+          "updatedAt": "2026-09-20T08:00:00.000Z"
+        },
+        "insurancePolicies": [],
+        "emergencyContacts": [],
+        "totalDebtVnd": 1900000
+      },
+      "doctorProfile": {
+        "id": "17156075-1713-4453-8731-0000c72897eb",
+        "staffProfileId": "b54cda26-b54a-4eca-856e-0000eefd831a",
+        "staffProfile": {
+          "id": "b54cda26-b54a-4eca-856e-0000eefd831a",
+          "fullName": "BS. Trần Minh Khoa"
+        }
+      }
+    },
+    {
+      "id": "cfc0641d-cfab-46eb-80b9-0007006d5743",
+      "branchId": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+      "patientProfileId": "98c47536-98ba-463a-893e-00036c4c360a",
+      "doctorProfileId": "538453d7-5381-4941-83ab-000116d26e49",
+      "chairId": null,
+      "serviceId": null,
+      "patientDisplayName": "Hoàng Anh Tuấn",
+      "startsAt": "2026-10-11T14:30:00.000Z",
+      "endsAt": "2026-10-11T15:10:00.000Z",
+      "status": "COMPLETED",
+      "holdExpiresAt": null,
+      "confirmedAt": "2026-10-11T14:30:00.000Z",
+      "checkedInAt": null,
+      "cancelledAt": null,
+      "cancellationReason": null,
+      "noShowAt": null,
+      "notes": "Tẩy trắng răng",
+      "serviceTitle": "Tẩy trắng răng",
+      "serviceName": "Tẩy trắng răng",
+      "doctorName": "BS. Lê Thu Trang",
+      "isDirectVisit": false,
+      "createdAt": "2026-10-01T08:00:00.000Z",
+      "updatedAt": "2026-10-11T14:30:00.000Z",
+      "branch": {
+        "id": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+        "code": "MINTAM-NT",
+        "name": "Nha khoa Minh Tâm – Nguyễn Trãi",
+        "address": "Số 245 Nguyễn Trãi, Thanh Xuân, Hà Nội",
+        "phone": "024 7300 0002",
+        "isActive": true
+      },
+      "patientProfile": {
+        "id": "98c47536-98ba-463a-893e-00036c4c360a",
+        "patientCode": "BN-125",
+        "fullName": "Hoàng Anh Tuấn",
+        "phone": "0917 325 215",
+        "gender": "Nam",
+        "dateOfBirth": "1993-06-03T00:00:00.000Z",
+        "medicalInfo": {
+          "id": "36fbeee7-36f1-40b1-877b-000394212139",
+          "patientProfileId": "98c47536-98ba-463a-893e-00036c4c360a",
+          "allergies": null,
+          "chronicDiseases": null,
+          "medicalHistory": null,
+          "dentalNotes": null,
+          "createdAt": "2025-03-10T08:00:00.000Z",
+          "updatedAt": "2026-09-20T08:00:00.000Z"
+        },
+        "insurancePolicies": [
+          {
+            "id": "d5336898-d528-4b28-85b8-0003bbf60c68",
+            "provider": "BHYT",
+            "cardNo": "DN4 01 0123 4567 890",
+            "validFrom": "2026-01-01",
+            "validTo": "2026-12-31"
+          }
+        ],
+        "emergencyContacts": [],
+        "totalDebtVnd": 4500000
+      },
+      "doctorProfile": {
+        "id": "538453d7-5381-4941-83ab-000116d26e49",
+        "staffProfileId": "f1bbcd88-f1b8-43b8-81e8-00013ea75978",
+        "staffProfile": {
+          "id": "f1bbcd88-f1b8-43b8-81e8-00013ea75978",
+          "fullName": "BS. Lê Thu Trang"
+        }
+      }
+    },
+    {
+      "id": "6df7ddce-6de2-4162-8ef6-000728424272",
+      "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+      "patientProfileId": "736ae249-735f-459f-83f5-0003e3caf797",
+      "doctorProfileId": "daa66d13-daa5-4f65-8ab7-0000777ec18d",
+      "chairId": null,
+      "serviceId": null,
+      "patientDisplayName": "Đỗ Thị Mai",
+      "startsAt": "2026-10-11T15:00:00.000Z",
+      "endsAt": "2026-10-11T15:50:00.000Z",
+      "status": "CONFIRMED",
+      "holdExpiresAt": null,
+      "confirmedAt": "2026-10-11T15:00:00.000Z",
+      "checkedInAt": null,
+      "cancelledAt": null,
+      "cancellationReason": null,
+      "noShowAt": null,
+      "notes": "Niềng răng – kiểm tra định kỳ",
+      "serviceTitle": "Niềng răng – kiểm tra định kỳ",
+      "serviceName": "Niềng răng – kiểm tra định kỳ",
+      "doctorName": "BS. Nguyễn Hoài An",
+      "isDirectVisit": false,
+      "createdAt": "2026-10-01T08:00:00.000Z",
+      "updatedAt": "2026-10-11T15:00:00.000Z",
+      "branch": {
+        "id": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+        "code": "MINTAM-HN",
+        "name": "Nha khoa Minh Tâm – Trần Duy Hưng",
+        "address": "Số 12 Trần Duy Hưng, Cầu Giấy, Hà Nội",
+        "phone": "024 7300 0001",
+        "isActive": true
+      },
+      "patientProfile": {
+        "id": "736ae249-735f-459f-83f5-0003e3caf797",
+        "patientCode": "BN-126",
+        "fullName": "Đỗ Thị Mai",
+        "phone": "0918 326 238",
+        "gender": "Nữ",
+        "dateOfBirth": "1990-07-08T00:00:00.000Z",
+        "medicalInfo": {
+          "id": "11a25bfa-1196-4016-8232-00040b9fe2c6",
+          "patientProfileId": "736ae249-735f-459f-83f5-0003e3caf797",
+          "allergies": null,
+          "chronicDiseases": null,
+          "medicalHistory": null,
+          "dentalNotes": null,
+          "createdAt": "2025-03-10T08:00:00.000Z",
+          "updatedAt": "2026-09-20T08:00:00.000Z"
+        },
+        "insurancePolicies": [],
+        "emergencyContacts": [
+          {
+            "id": "afd9d5ab-afcd-4a8d-806f-00043374cdf5",
+            "name": "Mai (người nhà)",
+            "phone": "098 700 006",
+            "relation": "Vợ/Chồng"
+          }
+        ],
+        "totalDebtVnd": 0
+      },
+      "doctorProfile": {
+        "id": "daa66d13-daa5-4f65-8ab7-0000777ec18d",
+        "staffProfileId": "78dde6c4-78dc-49dc-88f4-00009f53acbc",
+        "staffProfile": {
+          "id": "78dde6c4-78dc-49dc-88f4-00009f53acbc",
+          "fullName": "BS. Nguyễn Hoài An"
+        }
+      }
+    },
+    {
+      "id": "0c2f577f-0c19-4bd9-8d33-000750172da1",
+      "branchId": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+      "patientProfileId": "4e114f5c-4e04-4504-8eac-00045b49b924",
+      "doctorProfileId": "17156075-1713-4453-8731-0000c72897eb",
+      "chairId": null,
+      "serviceId": null,
+      "patientDisplayName": "Ngô Văn Thành",
+      "startsAt": "2026-10-11T15:30:00.000Z",
+      "endsAt": "2026-10-11T16:20:00.000Z",
+      "status": "CHECKED_IN",
+      "holdExpiresAt": null,
+      "confirmedAt": "2026-10-11T15:30:00.000Z",
+      "checkedInAt": "2026-10-11T15:30:00.000Z",
+      "cancelledAt": null,
+      "cancellationReason": null,
+      "noShowAt": null,
+      "notes": "Nhổ răng sữa",
+      "serviceTitle": "Nhổ răng sữa",
+      "serviceName": "Nhổ răng sữa",
+      "doctorName": "BS. Trần Minh Khoa",
+      "isDirectVisit": false,
+      "createdAt": "2026-10-01T08:00:00.000Z",
+      "updatedAt": "2026-10-11T15:30:00.000Z",
+      "branch": {
+        "id": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+        "code": "MINTAM-NT",
+        "name": "Nha khoa Minh Tâm – Nguyễn Trãi",
+        "address": "Số 245 Nguyễn Trãi, Thanh Xuân, Hà Nội",
+        "phone": "024 7300 0002",
+        "isActive": true
+      },
+      "patientProfile": {
+        "id": "4e114f5c-4e04-4504-8eac-00045b49b924",
+        "patientCode": "BN-127",
+        "fullName": "Ngô Văn Thành",
+        "phone": "0919 327 261",
+        "gender": "Nam",
+        "dateOfBirth": "1987-08-13T00:00:00.000Z",
+        "medicalInfo": {
+          "id": "ec48c90d-ec3b-4f7b-8ce9-0004831ea453",
+          "patientProfileId": "4e114f5c-4e04-4504-8eac-00045b49b924",
+          "allergies": null,
+          "chronicDiseases": "Tăng huyết áp",
+          "medicalHistory": null,
+          "dentalNotes": null,
+          "createdAt": "2025-03-10T08:00:00.000Z",
+          "updatedAt": "2026-09-20T08:00:00.000Z"
+        },
+        "insurancePolicies": [],
+        "emergencyContacts": [],
+        "totalDebtVnd": 1900000
+      },
+      "doctorProfile": {
+        "id": "17156075-1713-4453-8731-0000c72897eb",
+        "staffProfileId": "b54cda26-b54a-4eca-856e-0000eefd831a",
+        "staffProfile": {
+          "id": "b54cda26-b54a-4eca-856e-0000eefd831a",
+          "fullName": "BS. Trần Minh Khoa"
+        }
+      }
+    },
+    {
+      "id": "aa66d130-aa50-4650-8b70-000777ec18d0",
+      "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+      "patientProfileId": "8a8042be-8a72-49f2-8b26-0004aaf38f82",
+      "doctorProfileId": "538453d7-5381-4941-83ab-000116d26e49",
+      "chairId": null,
+      "serviceId": null,
+      "patientDisplayName": "Bùi Thị Thanh Tâm",
+      "startsAt": "2026-10-12T16:00:00.000Z",
+      "endsAt": "2026-10-12T16:40:00.000Z",
+      "status": "CONFIRMED",
+      "holdExpiresAt": null,
+      "confirmedAt": "2026-10-12T16:00:00.000Z",
+      "checkedInAt": null,
+      "cancelledAt": null,
+      "cancellationReason": null,
+      "noShowAt": null,
+      "notes": "Điều trị tủy 36",
+      "serviceTitle": "Điều trị tủy 36",
+      "serviceName": "Điều trị tủy 36",
+      "doctorName": "BS. Lê Thu Trang",
+      "isDirectVisit": false,
+      "createdAt": "2026-10-01T08:00:00.000Z",
+      "updatedAt": "2026-10-12T16:00:00.000Z",
+      "branch": {
+        "id": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+        "code": "MINTAM-HN",
+        "name": "Nha khoa Minh Tâm – Trần Duy Hưng",
+        "address": "Số 12 Trần Duy Hưng, Cầu Giấy, Hà Nội",
+        "phone": "024 7300 0001",
+        "isActive": true
+      },
+      "patientProfile": {
+        "id": "8a8042be-8a72-49f2-8b26-0004aaf38f82",
+        "patientCode": "BN-128",
+        "fullName": "Bùi Thị Thanh Tâm",
+        "phone": "0912 328 284",
+        "gender": "Nữ",
+        "dateOfBirth": "1998-09-18T00:00:00.000Z",
+        "medicalInfo": {
+          "id": "28b7bc6f-28a9-4469-8963-0004d2c87ab1",
+          "patientProfileId": "8a8042be-8a72-49f2-8b26-0004aaf38f82",
+          "allergies": null,
+          "chronicDiseases": null,
+          "medicalHistory": null,
+          "dentalNotes": null,
+          "createdAt": "2025-03-10T08:00:00.000Z",
+          "updatedAt": "2026-09-20T08:00:00.000Z"
+        },
+        "insurancePolicies": [],
+        "emergencyContacts": [],
+        "totalDebtVnd": 4500000
+      },
+      "doctorProfile": {
+        "id": "538453d7-5381-4941-83ab-000116d26e49",
+        "staffProfileId": "f1bbcd88-f1b8-43b8-81e8-00013ea75978",
+        "staffProfile": {
+          "id": "f1bbcd88-f1b8-43b8-81e8-00013ea75978",
+          "fullName": "BS. Lê Thu Trang"
+        }
+      }
+    },
+    {
+      "id": "489e4ae1-4887-40c7-89ad-00079fc103ff",
+      "branchId": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+      "patientProfileId": "c6ef3620-c6e0-4ee0-87a0-0004fa9d65e0",
+      "doctorProfileId": "daa66d13-daa5-4f65-8ab7-0000777ec18d",
+      "chairId": null,
+      "serviceId": null,
+      "patientDisplayName": "Đặng Hữu Nghị",
+      "startsAt": "2026-10-13T16:30:00.000Z",
+      "endsAt": "2026-10-13T17:10:00.000Z",
+      "status": "CANCELLED",
+      "holdExpiresAt": null,
+      "confirmedAt": "2026-10-13T16:30:00.000Z",
+      "checkedInAt": null,
+      "cancelledAt": "2026-10-13T16:30:00.000Z",
+      "cancellationReason": "Bệnh nhân báo bận",
+      "noShowAt": null,
+      "notes": "Cạo vôi răng",
+      "serviceTitle": "Cạo vôi răng",
+      "serviceName": "Cạo vôi răng",
+      "doctorName": "BS. Nguyễn Hoài An",
+      "isDirectVisit": false,
+      "createdAt": "2026-10-01T08:00:00.000Z",
+      "updatedAt": "2026-10-13T16:30:00.000Z",
+      "branch": {
+        "id": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+        "code": "MINTAM-NT",
+        "name": "Nha khoa Minh Tâm – Nguyễn Trãi",
+        "address": "Số 245 Nguyễn Trãi, Thanh Xuân, Hà Nội",
+        "phone": "024 7300 0002",
+        "isActive": true
+      },
+      "patientProfile": {
+        "id": "c6ef3620-c6e0-4ee0-87a0-0004fa9d65e0",
+        "patientCode": "BN-129",
+        "fullName": "Đặng Hữu Nghị",
+        "phone": "0913 329 307",
+        "gender": "Nam",
+        "dateOfBirth": "1983-01-23T00:00:00.000Z",
+        "medicalInfo": {
+          "id": "6526afd1-6517-4957-85dd-00052272510f",
+          "patientProfileId": "c6ef3620-c6e0-4ee0-87a0-0004fa9d65e0",
+          "allergies": null,
+          "chronicDiseases": null,
+          "medicalHistory": null,
+          "dentalNotes": null,
+          "createdAt": "2025-03-10T08:00:00.000Z",
+          "updatedAt": "2026-09-20T08:00:00.000Z"
+        },
+        "insurancePolicies": [],
+        "emergencyContacts": [
+          {
+            "id": "035e2982-034e-43ce-841a-00054a473c3e",
+            "name": "Nghị (người nhà)",
+            "phone": "098 700 009",
+            "relation": "Vợ/Chồng"
+          }
+        ],
+        "totalDebtVnd": 0
+      },
+      "doctorProfile": {
+        "id": "daa66d13-daa5-4f65-8ab7-0000777ec18d",
+        "staffProfileId": "78dde6c4-78dc-49dc-88f4-00009f53acbc",
+        "staffProfile": {
+          "id": "78dde6c4-78dc-49dc-88f4-00009f53acbc",
+          "fullName": "BS. Nguyễn Hoài An"
+        }
+      }
+    },
+    {
+      "id": "e6d5c492-e6be-4b3e-87ea-0007c795ef2e",
+      "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+      "patientProfileId": "a195a333-a185-4e45-8257-0005721c276d",
+      "doctorProfileId": "17156075-1713-4453-8731-0000c72897eb",
+      "chairId": null,
+      "serviceId": null,
+      "patientDisplayName": "Lý Thị Bích Ngọc",
+      "startsAt": "2026-10-09T08:30:00.000Z",
+      "endsAt": "2026-10-09T09:00:00.000Z",
+      "status": "COMPLETED",
+      "holdExpiresAt": null,
+      "confirmedAt": "2026-10-09T08:30:00.000Z",
+      "checkedInAt": null,
+      "cancelledAt": null,
+      "cancellationReason": null,
+      "noShowAt": null,
+      "notes": "Khám tổng quát",
+      "serviceTitle": "Khám tổng quát",
+      "serviceName": "Khám tổng quát",
+      "doctorName": "BS. Trần Minh Khoa",
+      "isDirectVisit": false,
+      "createdAt": "2026-10-01T08:00:00.000Z",
+      "updatedAt": "2026-10-09T08:30:00.000Z",
+      "branch": {
+        "id": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+        "code": "MINTAM-HN",
+        "name": "Nha khoa Minh Tâm – Trần Duy Hưng",
+        "address": "Số 12 Trần Duy Hưng, Cầu Giấy, Hà Nội",
+        "phone": "024 7300 0001",
+        "isActive": true
+      },
+      "patientProfile": {
+        "id": "a195a333-a185-4e45-8257-0005721c276d",
+        "patientCode": "BN-130",
+        "fullName": "Lý Thị Bích Ngọc",
+        "phone": "0914 330 330",
+        "gender": "Nữ",
+        "dateOfBirth": "1995-02-03T00:00:00.000Z",
+        "medicalInfo": {
+          "id": "3fcd1ce4-3fbc-48bc-8094-000599f1129c",
+          "patientProfileId": "a195a333-a185-4e45-8257-0005721c276d",
+          "allergies": null,
+          "chronicDiseases": null,
+          "medicalHistory": null,
+          "dentalNotes": null,
+          "createdAt": "2025-03-10T08:00:00.000Z",
+          "updatedAt": "2026-09-20T08:00:00.000Z"
+        },
+        "insurancePolicies": [
+          {
+            "id": "de049695-ddf3-4333-8ed1-0005c1c5fdcb",
+            "provider": "BHYT",
+            "cardNo": "DN4 01 0123 4567 890",
+            "validFrom": "2026-01-01",
+            "validTo": "2026-12-31"
+          }
+        ],
+        "emergencyContacts": [],
+        "totalDebtVnd": 1900000
+      },
+      "doctorProfile": {
+        "id": "17156075-1713-4453-8731-0000c72897eb",
+        "staffProfileId": "b54cda26-b54a-4eca-856e-0000eefd831a",
+        "staffProfile": {
+          "id": "b54cda26-b54a-4eca-856e-0000eefd831a",
+          "fullName": "BS. Trần Minh Khoa"
+        }
+      }
+    },
+    {
+      "id": "850d3e43-84f5-45b5-8627-0007ef6ada5d",
+      "branchId": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+      "patientProfileId": "7c3c1046-7c2a-4daa-8d0e-0005e99ae8fa",
+      "doctorProfileId": "538453d7-5381-4941-83ab-000116d26e49",
+      "chairId": null,
+      "serviceId": null,
+      "patientDisplayName": "Phan Thành Trung",
+      "startsAt": "2026-10-14T13:30:00.000Z",
+      "endsAt": "2026-10-14T14:00:00.000Z",
+      "status": "CONFIRMED",
+      "holdExpiresAt": null,
+      "confirmedAt": "2026-10-14T13:30:00.000Z",
+      "checkedInAt": null,
+      "cancelledAt": null,
+      "cancellationReason": null,
+      "noShowAt": null,
+      "notes": "Lấy dấu phục hình",
+      "serviceTitle": "Lấy dấu phục hình",
+      "serviceName": "Lấy dấu phục hình",
+      "doctorName": "BS. Lê Thu Trang",
+      "isDirectVisit": false,
+      "createdAt": "2026-10-01T08:00:00.000Z",
+      "updatedAt": "2026-10-14T13:30:00.000Z",
+      "branch": {
+        "id": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+        "code": "MINTAM-NT",
+        "name": "Nha khoa Minh Tâm – Nguyễn Trãi",
+        "address": "Số 245 Nguyễn Trãi, Thanh Xuân, Hà Nội",
+        "phone": "024 7300 0002",
+        "isActive": true
+      },
+      "patientProfile": {
+        "id": "7c3c1046-7c2a-4daa-8d0e-0005e99ae8fa",
+        "patientCode": "BN-131",
+        "fullName": "Phan Thành Trung",
+        "phone": "0915 331 353",
+        "gender": "Nam",
+        "dateOfBirth": "1992-03-08T00:00:00.000Z",
+        "medicalInfo": {
+          "id": "1a7389f7-1a61-4821-8b4b-0006116fd429",
+          "patientProfileId": "7c3c1046-7c2a-4daa-8d0e-0005e99ae8fa",
+          "allergies": null,
+          "chronicDiseases": null,
+          "medicalHistory": null,
+          "dentalNotes": null,
+          "createdAt": "2025-03-10T08:00:00.000Z",
+          "updatedAt": "2026-09-20T08:00:00.000Z"
+        },
+        "insurancePolicies": [],
+        "emergencyContacts": [],
+        "totalDebtVnd": 4500000
+      },
+      "doctorProfile": {
+        "id": "538453d7-5381-4941-83ab-000116d26e49",
+        "staffProfileId": "f1bbcd88-f1b8-43b8-81e8-00013ea75978",
+        "staffProfile": {
+          "id": "f1bbcd88-f1b8-43b8-81e8-00013ea75978",
+          "fullName": "BS. Lê Thu Trang"
+        }
+      }
+    },
+    {
+      "id": "2344b7f4-232c-402c-8464-0008173fc58c",
+      "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+      "patientProfileId": "8ff34739-8fef-4e2f-8025-0001667c44a7",
+      "doctorProfileId": "daa66d13-daa5-4f65-8ab7-0000777ec18d",
+      "chairId": null,
+      "serviceId": null,
+      "patientDisplayName": "Nguyễn Thị Lan Hương",
+      "startsAt": "2026-10-16T09:00:00.000Z",
+      "endsAt": "2026-10-16T09:30:00.000Z",
+      "status": "CONFIRMED",
+      "holdExpiresAt": null,
+      "confirmedAt": "2026-10-16T09:00:00.000Z",
+      "checkedInAt": null,
+      "cancelledAt": null,
+      "cancellationReason": null,
+      "noShowAt": null,
+      "notes": "Siết khí chỉnh nha",
+      "serviceTitle": "Siết khí chỉnh nha",
+      "serviceName": "Siết khí chỉnh nha",
+      "doctorName": "BS. Nguyễn Hoài An",
+      "isDirectVisit": false,
+      "createdAt": "2026-10-01T08:00:00.000Z",
+      "updatedAt": "2026-10-16T09:00:00.000Z",
+      "branch": {
+        "id": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+        "code": "MINTAM-HN",
+        "name": "Nha khoa Minh Tâm – Trần Duy Hưng",
+        "address": "Số 12 Trần Duy Hưng, Cầu Giấy, Hà Nội",
+        "phone": "024 7300 0001",
+        "isActive": true
+      },
+      "patientProfile": {
+        "id": "8ff34739-8fef-4e2f-8025-0001667c44a7",
+        "patientCode": "BN-120",
+        "fullName": "Nguyễn Thị Lan Hương",
+        "phone": "0912 320 100",
+        "gender": "Nữ",
+        "dateOfBirth": "1994-01-03T00:00:00.000Z",
+        "medicalInfo": {
+          "id": "2e2ac0ea-2e26-48a6-8e62-00018e512fd6",
+          "patientProfileId": "8ff34739-8fef-4e2f-8025-0001667c44a7",
+          "allergies": null,
+          "chronicDiseases": null,
+          "medicalHistory": "Từng điều trị tủy răng 46 (2024)",
+          "dentalNotes": "Răng 36 sâu răng, cần theo dõi",
+          "createdAt": "2025-03-10T08:00:00.000Z",
+          "updatedAt": "2026-09-20T08:00:00.000Z"
+        },
+        "insurancePolicies": [
+          {
+            "id": "cc623a9b-cc5d-431d-8c9f-0001b6261b05",
+            "provider": "BHYT",
+            "cardNo": "DN4 01 0123 4567 890",
+            "validFrom": "2026-01-01",
+            "validTo": "2026-12-31"
+          }
+        ],
+        "emergencyContacts": [
+          {
+            "id": "6a99b44c-6a94-4d94-8adc-0001ddfb0634",
+            "name": "Hương (người nhà)",
+            "phone": "098 700 000",
+            "relation": "Vợ/Chồng"
+          }
+        ],
+        "totalDebtVnd": 0
+      },
+      "doctorProfile": {
+        "id": "daa66d13-daa5-4f65-8ab7-0000777ec18d",
+        "staffProfileId": "78dde6c4-78dc-49dc-88f4-00009f53acbc",
+        "staffProfile": {
+          "id": "78dde6c4-78dc-49dc-88f4-00009f53acbc",
+          "fullName": "BS. Nguyễn Hoài An"
+        }
+      }
+    },
+    {
+      "id": "c17c31a5-c163-4aa3-82a1-00083f14b0bb",
+      "branchId": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+      "patientProfileId": "5c5581d4-5c4c-414c-8cc4-00031ca25fac",
+      "doctorProfileId": "17156075-1713-4453-8731-0000c72897eb",
+      "chairId": null,
+      "serviceId": null,
+      "patientDisplayName": "Vũ Thị Nhung",
+      "startsAt": "2026-10-18T10:00:00.000Z",
+      "endsAt": "2026-10-18T10:45:00.000Z",
+      "status": "CONFIRMED",
+      "holdExpiresAt": null,
+      "confirmedAt": "2026-10-18T10:00:00.000Z",
+      "checkedInAt": null,
+      "cancelledAt": null,
+      "cancellationReason": null,
+      "noShowAt": null,
+      "notes": "Gắn răng sứ",
+      "serviceTitle": "Gắn răng sứ",
+      "serviceName": "Gắn răng sứ",
+      "doctorName": "BS. Trần Minh Khoa",
+      "isDirectVisit": false,
+      "createdAt": "2026-10-01T08:00:00.000Z",
+      "updatedAt": "2026-10-18T10:00:00.000Z",
+      "branch": {
+        "id": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+        "code": "MINTAM-NT",
+        "name": "Nha khoa Minh Tâm – Nguyễn Trãi",
+        "address": "Số 245 Nguyễn Trãi, Thanh Xuân, Hà Nội",
+        "phone": "024 7300 0002",
+        "isActive": true
+      },
+      "patientProfile": {
+        "id": "5c5581d4-5c4c-414c-8cc4-00031ca25fac",
+        "patientCode": "BN-124",
+        "fullName": "Vũ Thị Nhung",
+        "phone": "0916 324 192",
+        "gender": "Nữ",
+        "dateOfBirth": "1996-05-23T00:00:00.000Z",
+        "medicalInfo": {
+          "id": "fa8cfb85-fa83-4bc3-8b01-000344774adb",
+          "patientProfileId": "5c5581d4-5c4c-414c-8cc4-00031ca25fac",
+          "allergies": "Dị ứng thuốc tê Lidocain",
+          "chronicDiseases": null,
+          "medicalHistory": null,
+          "dentalNotes": null,
+          "createdAt": "2025-03-10T08:00:00.000Z",
+          "updatedAt": "2026-09-20T08:00:00.000Z"
+        },
+        "insurancePolicies": [],
+        "emergencyContacts": [],
+        "totalDebtVnd": 1900000
+      },
+      "doctorProfile": {
+        "id": "17156075-1713-4453-8731-0000c72897eb",
+        "staffProfileId": "b54cda26-b54a-4eca-856e-0000eefd831a",
+        "staffProfile": {
+          "id": "b54cda26-b54a-4eca-856e-0000eefd831a",
+          "fullName": "BS. Trần Minh Khoa"
+        }
+      }
+    },
+    {
+      "id": "5fb3ab56-5f9a-451a-80de-000866e99bea",
+      "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+      "patientProfileId": "98c47536-98ba-463a-893e-00036c4c360a",
+      "doctorProfileId": "538453d7-5381-4941-83ab-000116d26e49",
+      "chairId": null,
+      "serviceId": null,
+      "patientDisplayName": "Hoàng Anh Tuấn",
+      "startsAt": "2026-10-20T15:30:00.000Z",
+      "endsAt": "2026-10-20T16:00:00.000Z",
+      "status": "CONFIRMED",
+      "holdExpiresAt": null,
+      "confirmedAt": "2026-10-20T15:30:00.000Z",
+      "checkedInAt": null,
+      "cancelledAt": null,
+      "cancellationReason": null,
+      "noShowAt": null,
+      "notes": "Tái khám trám răng",
+      "serviceTitle": "Tái khám trám răng",
+      "serviceName": "Tái khám trám răng",
+      "doctorName": "BS. Lê Thu Trang",
+      "isDirectVisit": false,
+      "createdAt": "2026-10-01T08:00:00.000Z",
+      "updatedAt": "2026-10-20T15:30:00.000Z",
+      "branch": {
+        "id": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+        "code": "MINTAM-HN",
+        "name": "Nha khoa Minh Tâm – Trần Duy Hưng",
+        "address": "Số 12 Trần Duy Hưng, Cầu Giấy, Hà Nội",
+        "phone": "024 7300 0001",
+        "isActive": true
+      },
+      "patientProfile": {
+        "id": "98c47536-98ba-463a-893e-00036c4c360a",
+        "patientCode": "BN-125",
+        "fullName": "Hoàng Anh Tuấn",
+        "phone": "0917 325 215",
+        "gender": "Nam",
+        "dateOfBirth": "1993-06-03T00:00:00.000Z",
+        "medicalInfo": {
+          "id": "36fbeee7-36f1-40b1-877b-000394212139",
+          "patientProfileId": "98c47536-98ba-463a-893e-00036c4c360a",
+          "allergies": null,
+          "chronicDiseases": null,
+          "medicalHistory": null,
+          "dentalNotes": null,
+          "createdAt": "2025-03-10T08:00:00.000Z",
+          "updatedAt": "2026-09-20T08:00:00.000Z"
+        },
+        "insurancePolicies": [
+          {
+            "id": "d5336898-d528-4b28-85b8-0003bbf60c68",
+            "provider": "BHYT",
+            "cardNo": "DN4 01 0123 4567 890",
+            "validFrom": "2026-01-01",
+            "validTo": "2026-12-31"
+          }
+        ],
+        "emergencyContacts": [],
+        "totalDebtVnd": 4500000
+      },
+      "doctorProfile": {
+        "id": "538453d7-5381-4941-83ab-000116d26e49",
+        "staffProfileId": "f1bbcd88-f1b8-43b8-81e8-00013ea75978",
+        "staffProfile": {
+          "id": "f1bbcd88-f1b8-43b8-81e8-00013ea75978",
+          "fullName": "BS. Lê Thu Trang"
+        }
+      }
+    },
+    {
+      "id": "fdeb2507-fdd1-4f91-8f1b-00088ebe8719",
+      "branchId": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+      "patientProfileId": "08d12dfd-08cb-480b-8919-000205cff163",
+      "doctorProfileId": "daa66d13-daa5-4f65-8ab7-0000777ec18d",
+      "chairId": null,
+      "serviceId": null,
+      "patientDisplayName": "Trần Văn Bình",
+      "startsAt": "2026-10-22T09:00:00.000Z",
+      "endsAt": "2026-10-22T09:40:00.000Z",
+      "status": "CONFIRMED",
+      "holdExpiresAt": null,
+      "confirmedAt": "2026-10-22T09:00:00.000Z",
+      "checkedInAt": null,
+      "cancelledAt": null,
+      "cancellationReason": null,
+      "noShowAt": null,
+      "notes": "Cắt chỉ sau nhổ răng",
+      "serviceTitle": "Cắt chỉ sau nhổ răng",
+      "serviceName": "Cắt chỉ sau nhổ răng",
+      "doctorName": "BS. Nguyễn Hoài An",
+      "isDirectVisit": false,
+      "createdAt": "2026-10-01T08:00:00.000Z",
+      "updatedAt": "2026-10-22T09:00:00.000Z",
+      "branch": {
+        "id": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+        "code": "MINTAM-NT",
+        "name": "Nha khoa Minh Tâm – Nguyễn Trãi",
+        "address": "Số 245 Nguyễn Trãi, Thanh Xuân, Hà Nội",
+        "phone": "024 7300 0002",
+        "isActive": true
+      },
+      "patientProfile": {
+        "id": "08d12dfd-08cb-480b-8919-000205cff163",
+        "patientCode": "BN-121",
+        "fullName": "Trần Văn Bình",
+        "phone": "0913 321 123",
+        "gender": "Nam",
+        "dateOfBirth": "1988-02-08T00:00:00.000Z",
+        "medicalInfo": {
+          "id": "a708a7ae-a702-4282-8756-00022da4dc92",
+          "patientProfileId": "08d12dfd-08cb-480b-8919-000205cff163",
+          "allergies": "Penicillin",
+          "chronicDiseases": null,
+          "medicalHistory": null,
+          "dentalNotes": null,
+          "createdAt": "2025-03-10T08:00:00.000Z",
+          "updatedAt": "2026-09-20T08:00:00.000Z"
+        },
+        "insurancePolicies": [],
+        "emergencyContacts": [],
+        "totalDebtVnd": 1900000
+      },
+      "doctorProfile": {
+        "id": "daa66d13-daa5-4f65-8ab7-0000777ec18d",
+        "staffProfileId": "78dde6c4-78dc-49dc-88f4-00009f53acbc",
+        "staffProfile": {
+          "id": "78dde6c4-78dc-49dc-88f4-00009f53acbc",
+          "fullName": "BS. Nguyễn Hoài An"
+        }
+      }
+    }
+  ],
+  "visits": [
+    {
+      "id": "9c229eb8-9c08-4a08-8d58-0008b6937248",
+      "appointmentId": "b8ab03a8-b898-4298-8988-00063944bf58",
+      "status": "SCHEDULED",
+      "checkedInAt": null,
+      "startedAt": null,
+      "pendingPaymentAt": null,
+      "completedAt": null,
+      "createdAt": "2026-10-01T08:00:00.000Z",
+      "updatedAt": "2026-10-11T09:00:00.000Z",
+      "emrStatus": "OPEN",
+      "clinicalRecord": null,
+      "adviceRecords": [],
+      "labOrders": [],
+      "diagnosticOrders": [],
+      "prescriptions": [],
+      "invoice": null,
+      "serviceProposals": [],
+      "externalLabWorkOrders": [],
+      "appointment": {
+        "id": "b8ab03a8-b898-4298-8988-00063944bf58",
+        "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+        "patientProfileId": "8ff34739-8fef-4e2f-8025-0001667c44a7",
+        "doctorProfileId": "daa66d13-daa5-4f65-8ab7-0000777ec18d",
+        "chairId": null,
+        "serviceId": null,
+        "patientDisplayName": "Nguyễn Thị Lan Hương",
+        "startsAt": "2026-10-11T09:00:00.000Z",
+        "endsAt": "2026-10-11T09:30:00.000Z",
+        "status": "CONFIRMED",
+        "holdExpiresAt": null,
+        "confirmedAt": "2026-10-11T09:00:00.000Z",
+        "checkedInAt": null,
+        "cancelledAt": null,
+        "cancellationReason": null,
+        "noShowAt": null,
+        "notes": "Tư vấn chỉnh nha",
+        "serviceTitle": "Tư vấn chỉnh nha",
+        "serviceName": "Tư vấn chỉnh nha",
+        "doctorName": "BS. Nguyễn Hoài An",
+        "isDirectVisit": false,
+        "createdAt": "2026-10-01T08:00:00.000Z",
+        "updatedAt": "2026-10-11T09:00:00.000Z",
+        "branch": {
+          "id": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+          "code": "MINTAM-HN",
+          "name": "Nha khoa Minh Tâm – Trần Duy Hưng",
+          "address": "Số 12 Trần Duy Hưng, Cầu Giấy, Hà Nội",
+          "phone": "024 7300 0001",
+          "isActive": true
+        },
+        "patientProfile": {
+          "id": "8ff34739-8fef-4e2f-8025-0001667c44a7",
+          "patientCode": "BN-120",
+          "fullName": "Nguyễn Thị Lan Hương",
+          "phone": "0912 320 100",
+          "gender": "Nữ",
+          "dateOfBirth": "1994-01-03T00:00:00.000Z",
+          "medicalInfo": {
+            "id": "2e2ac0ea-2e26-48a6-8e62-00018e512fd6",
+            "patientProfileId": "8ff34739-8fef-4e2f-8025-0001667c44a7",
+            "allergies": null,
+            "chronicDiseases": null,
+            "medicalHistory": "Từng điều trị tủy răng 46 (2024)",
+            "dentalNotes": "Răng 36 sâu răng, cần theo dõi",
+            "createdAt": "2025-03-10T08:00:00.000Z",
+            "updatedAt": "2026-09-20T08:00:00.000Z"
+          },
+          "insurancePolicies": [
+            {
+              "id": "cc623a9b-cc5d-431d-8c9f-0001b6261b05",
+              "provider": "BHYT",
+              "cardNo": "DN4 01 0123 4567 890",
+              "validFrom": "2026-01-01",
+              "validTo": "2026-12-31"
+            }
+          ],
+          "emergencyContacts": [
+            {
+              "id": "6a99b44c-6a94-4d94-8adc-0001ddfb0634",
+              "name": "Hương (người nhà)",
+              "phone": "098 700 000",
+              "relation": "Vợ/Chồng"
+            }
+          ],
+          "totalDebtVnd": 0
+        },
+        "doctorProfile": {
+          "id": "daa66d13-daa5-4f65-8ab7-0000777ec18d",
+          "staffProfileId": "78dde6c4-78dc-49dc-88f4-00009f53acbc",
+          "staffProfile": {
+            "id": "78dde6c4-78dc-49dc-88f4-00009f53acbc",
+            "fullName": "BS. Nguyễn Hoài An"
+          }
+        }
+      }
+    },
+    {
+      "id": "3a5a1869-3a3f-447f-8b95-0008de685d77",
+      "appointmentId": "56e27d59-56cf-4d0f-87c5-00066119aa87",
+      "status": "CHECKED_IN",
+      "checkedInAt": "2026-10-11T09:30:00.000Z",
+      "startedAt": null,
+      "pendingPaymentAt": null,
+      "completedAt": null,
+      "createdAt": "2026-10-01T08:00:00.000Z",
+      "updatedAt": "2026-10-11T09:30:00.000Z",
+      "emrStatus": "OPEN",
+      "clinicalRecord": null,
+      "adviceRecords": [],
+      "labOrders": [],
+      "diagnosticOrders": [],
+      "prescriptions": [],
+      "invoice": null,
+      "serviceProposals": [],
+      "externalLabWorkOrders": [],
+      "appointment": {
+        "id": "56e27d59-56cf-4d0f-87c5-00066119aa87",
+        "branchId": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+        "patientProfileId": "08d12dfd-08cb-480b-8919-000205cff163",
+        "doctorProfileId": "17156075-1713-4453-8731-0000c72897eb",
+        "chairId": null,
+        "serviceId": null,
+        "patientDisplayName": "Trần Văn Bình",
+        "startsAt": "2026-10-11T09:30:00.000Z",
+        "endsAt": "2026-10-11T10:15:00.000Z",
+        "status": "CHECKED_IN",
+        "holdExpiresAt": null,
+        "confirmedAt": "2026-10-11T09:30:00.000Z",
+        "checkedInAt": "2026-10-11T09:30:00.000Z",
+        "cancelledAt": null,
+        "cancellationReason": null,
+        "noShowAt": null,
+        "notes": "Nhổ răng khôn 48",
+        "serviceTitle": "Nhổ răng khôn 48",
+        "serviceName": "Nhổ răng khôn 48",
+        "doctorName": "BS. Trần Minh Khoa",
+        "isDirectVisit": false,
+        "createdAt": "2026-10-01T08:00:00.000Z",
+        "updatedAt": "2026-10-11T09:30:00.000Z",
+        "branch": {
+          "id": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+          "code": "MINTAM-NT",
+          "name": "Nha khoa Minh Tâm – Nguyễn Trãi",
+          "address": "Số 245 Nguyễn Trãi, Thanh Xuân, Hà Nội",
+          "phone": "024 7300 0002",
+          "isActive": true
+        },
+        "patientProfile": {
+          "id": "08d12dfd-08cb-480b-8919-000205cff163",
+          "patientCode": "BN-121",
+          "fullName": "Trần Văn Bình",
+          "phone": "0913 321 123",
+          "gender": "Nam",
+          "dateOfBirth": "1988-02-08T00:00:00.000Z",
+          "medicalInfo": {
+            "id": "a708a7ae-a702-4282-8756-00022da4dc92",
+            "patientProfileId": "08d12dfd-08cb-480b-8919-000205cff163",
+            "allergies": "Penicillin",
+            "chronicDiseases": null,
+            "medicalHistory": null,
+            "dentalNotes": null,
+            "createdAt": "2025-03-10T08:00:00.000Z",
+            "updatedAt": "2026-09-20T08:00:00.000Z"
+          },
+          "insurancePolicies": [],
+          "emergencyContacts": [],
+          "totalDebtVnd": 1900000
+        },
+        "doctorProfile": {
+          "id": "17156075-1713-4453-8731-0000c72897eb",
+          "staffProfileId": "b54cda26-b54a-4eca-856e-0000eefd831a",
+          "staffProfile": {
+            "id": "b54cda26-b54a-4eca-856e-0000eefd831a",
+            "fullName": "BS. Trần Minh Khoa"
+          }
+        }
+      }
+    },
+    {
+      "id": "d891921a-d876-4ef6-89d2-0009063d48a6",
+      "appointmentId": "f519f70a-f506-4786-8602-000688ee95b6",
+      "status": "IN_PROGRESS",
+      "checkedInAt": null,
+      "startedAt": "2026-10-11T10:00:00.000Z",
+      "pendingPaymentAt": null,
+      "completedAt": null,
+      "createdAt": "2026-10-01T08:00:00.000Z",
+      "updatedAt": "2026-10-11T10:00:00.000Z",
+      "emrStatus": "OPEN",
+      "clinicalRecord": null,
+      "adviceRecords": [],
+      "labOrders": [],
+      "diagnosticOrders": [],
+      "prescriptions": [],
+      "invoice": null,
+      "serviceProposals": [],
+      "externalLabWorkOrders": [],
+      "appointment": {
+        "id": "f519f70a-f506-4786-8602-000688ee95b6",
+        "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+        "patientProfileId": "4540215f-4539-4cf9-8593-00025579c7c1",
+        "doctorProfileId": "538453d7-5381-4941-83ab-000116d26e49",
+        "chairId": null,
+        "serviceId": null,
+        "patientDisplayName": "Phạm Thị Thuý",
+        "startsAt": "2026-10-11T10:00:00.000Z",
+        "endsAt": "2026-10-11T10:40:00.000Z",
+        "status": "IN_TREATMENT",
+        "holdExpiresAt": null,
+        "confirmedAt": "2026-10-11T10:00:00.000Z",
+        "checkedInAt": null,
+        "cancelledAt": null,
+        "cancellationReason": null,
+        "noShowAt": null,
+        "notes": "Trám răng 24",
+        "serviceTitle": "Trám răng 24",
+        "serviceName": "Trám răng 24",
+        "doctorName": "BS. Lê Thu Trang",
+        "isDirectVisit": false,
+        "createdAt": "2026-10-01T08:00:00.000Z",
+        "updatedAt": "2026-10-11T10:00:00.000Z",
+        "branch": {
+          "id": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+          "code": "MINTAM-HN",
+          "name": "Nha khoa Minh Tâm – Trần Duy Hưng",
+          "address": "Số 12 Trần Duy Hưng, Cầu Giấy, Hà Nội",
+          "phone": "024 7300 0001",
+          "isActive": true
+        },
+        "patientProfile": {
+          "id": "4540215f-4539-4cf9-8593-00025579c7c1",
+          "patientCode": "BN-122",
+          "fullName": "Phạm Thị Thuý",
+          "phone": "0914 322 146",
+          "gender": "Nữ",
+          "dateOfBirth": "1991-03-13T00:00:00.000Z",
+          "medicalInfo": {
+            "id": "e3779b10-e370-4770-83d0-00027d4eb2f0",
+            "patientProfileId": "4540215f-4539-4cf9-8593-00025579c7c1",
+            "allergies": null,
+            "chronicDiseases": null,
+            "medicalHistory": null,
+            "dentalNotes": null,
+            "createdAt": "2025-03-10T08:00:00.000Z",
+            "updatedAt": "2026-09-20T08:00:00.000Z"
+          },
+          "insurancePolicies": [],
+          "emergencyContacts": [],
+          "totalDebtVnd": 4500000
+        },
+        "doctorProfile": {
+          "id": "538453d7-5381-4941-83ab-000116d26e49",
+          "staffProfileId": "f1bbcd88-f1b8-43b8-81e8-00013ea75978",
+          "staffProfile": {
+            "id": "f1bbcd88-f1b8-43b8-81e8-00013ea75978",
+            "fullName": "BS. Lê Thu Trang"
+          }
+        }
+      }
+    },
+    {
+      "id": "76c90bcb-76ad-496d-880f-00092e1233d5",
+      "appointmentId": "935170bb-933d-41fd-843f-0006b0c380e5",
+      "status": "SCHEDULED",
+      "checkedInAt": null,
+      "startedAt": null,
+      "pendingPaymentAt": null,
+      "completedAt": null,
+      "createdAt": "2026-10-01T08:00:00.000Z",
+      "updatedAt": "2026-10-11T10:30:00.000Z",
+      "emrStatus": "OPEN",
+      "clinicalRecord": null,
+      "adviceRecords": [],
+      "labOrders": [],
+      "diagnosticOrders": [],
+      "prescriptions": [],
+      "invoice": null,
+      "serviceProposals": [],
+      "externalLabWorkOrders": [],
+      "appointment": {
+        "id": "935170bb-933d-41fd-843f-0006b0c380e5",
+        "branchId": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+        "patientProfileId": "81af14c1-81a7-41e7-820d-0002a5239e1f",
+        "doctorProfileId": "daa66d13-daa5-4f65-8ab7-0000777ec18d",
+        "chairId": null,
+        "serviceId": null,
+        "patientDisplayName": "Lê Quang Hải",
+        "startsAt": "2026-10-11T10:30:00.000Z",
+        "endsAt": "2026-10-11T11:10:00.000Z",
+        "status": "CONFIRMED",
+        "holdExpiresAt": null,
+        "confirmedAt": "2026-10-11T10:30:00.000Z",
+        "checkedInAt": null,
+        "cancelledAt": null,
+        "cancellationReason": null,
+        "noShowAt": null,
+        "notes": "Cạo vôi răng",
+        "serviceTitle": "Cạo vôi răng",
+        "serviceName": "Cạo vôi răng",
+        "doctorName": "BS. Nguyễn Hoài An",
+        "isDirectVisit": false,
+        "createdAt": "2026-10-01T08:00:00.000Z",
+        "updatedAt": "2026-10-11T10:30:00.000Z",
+        "branch": {
+          "id": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+          "code": "MINTAM-NT",
+          "name": "Nha khoa Minh Tâm – Nguyễn Trãi",
+          "address": "Số 245 Nguyễn Trãi, Thanh Xuân, Hà Nội",
+          "phone": "024 7300 0002",
+          "isActive": true
+        },
+        "patientProfile": {
+          "id": "81af14c1-81a7-41e7-820d-0002a5239e1f",
+          "patientCode": "BN-123",
+          "fullName": "Lê Quang Hải",
+          "phone": "0915 323 169",
+          "gender": "Nam",
+          "dateOfBirth": "1985-04-18T00:00:00.000Z",
+          "medicalInfo": {
+            "id": "1fe68e72-1fde-4c5e-804a-0002ccf8894e",
+            "patientProfileId": "81af14c1-81a7-41e7-820d-0002a5239e1f",
+            "allergies": null,
+            "chronicDiseases": null,
+            "medicalHistory": null,
+            "dentalNotes": null,
+            "createdAt": "2025-03-10T08:00:00.000Z",
+            "updatedAt": "2026-09-20T08:00:00.000Z"
+          },
+          "insurancePolicies": [],
+          "emergencyContacts": [
+            {
+              "id": "be1e0823-be15-46d5-8e87-0002f4cd747d",
+              "name": "Hải (người nhà)",
+              "phone": "098 700 003",
+              "relation": "Vợ/Chồng"
+            }
+          ],
+          "totalDebtVnd": 0
+        },
+        "doctorProfile": {
+          "id": "daa66d13-daa5-4f65-8ab7-0000777ec18d",
+          "staffProfileId": "78dde6c4-78dc-49dc-88f4-00009f53acbc",
+          "staffProfile": {
+            "id": "78dde6c4-78dc-49dc-88f4-00009f53acbc",
+            "fullName": "BS. Nguyễn Hoài An"
+          }
+        }
+      }
+    },
+    {
+      "id": "1500857c-14e4-43e4-864c-000955e71f04",
+      "appointmentId": "3188ea6c-3174-4c74-827c-0006d8986c14",
+      "status": "SCHEDULED",
+      "checkedInAt": null,
+      "startedAt": null,
+      "pendingPaymentAt": null,
+      "completedAt": null,
+      "createdAt": "2026-10-01T08:00:00.000Z",
+      "updatedAt": "2026-10-11T14:00:00.000Z",
+      "emrStatus": "OPEN",
+      "clinicalRecord": null,
+      "adviceRecords": [],
+      "labOrders": [],
+      "diagnosticOrders": [],
+      "prescriptions": [],
+      "invoice": null,
+      "serviceProposals": [],
+      "externalLabWorkOrders": [],
+      "appointment": {
+        "id": "3188ea6c-3174-4c74-827c-0006d8986c14",
+        "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+        "patientProfileId": "5c5581d4-5c4c-414c-8cc4-00031ca25fac",
+        "doctorProfileId": "17156075-1713-4453-8731-0000c72897eb",
+        "chairId": null,
+        "serviceId": null,
+        "patientDisplayName": "Vũ Thị Nhung",
+        "startsAt": "2026-10-11T14:00:00.000Z",
+        "endsAt": "2026-10-11T14:45:00.000Z",
+        "status": "CONFIRMED",
+        "holdExpiresAt": null,
+        "confirmedAt": "2026-10-11T14:00:00.000Z",
+        "checkedInAt": null,
+        "cancelledAt": null,
+        "cancellationReason": null,
+        "noShowAt": null,
+        "notes": "Bọc răng sứ 15",
+        "serviceTitle": "Bọc răng sứ 15",
+        "serviceName": "Bọc răng sứ 15",
+        "doctorName": "BS. Trần Minh Khoa",
+        "isDirectVisit": false,
+        "createdAt": "2026-10-01T08:00:00.000Z",
+        "updatedAt": "2026-10-11T14:00:00.000Z",
+        "branch": {
+          "id": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+          "code": "MINTAM-HN",
+          "name": "Nha khoa Minh Tâm – Trần Duy Hưng",
+          "address": "Số 12 Trần Duy Hưng, Cầu Giấy, Hà Nội",
+          "phone": "024 7300 0001",
+          "isActive": true
+        },
+        "patientProfile": {
+          "id": "5c5581d4-5c4c-414c-8cc4-00031ca25fac",
+          "patientCode": "BN-124",
+          "fullName": "Vũ Thị Nhung",
+          "phone": "0916 324 192",
+          "gender": "Nữ",
+          "dateOfBirth": "1996-05-23T00:00:00.000Z",
+          "medicalInfo": {
+            "id": "fa8cfb85-fa83-4bc3-8b01-000344774adb",
+            "patientProfileId": "5c5581d4-5c4c-414c-8cc4-00031ca25fac",
+            "allergies": "Dị ứng thuốc tê Lidocain",
+            "chronicDiseases": null,
+            "medicalHistory": null,
+            "dentalNotes": null,
+            "createdAt": "2025-03-10T08:00:00.000Z",
+            "updatedAt": "2026-09-20T08:00:00.000Z"
+          },
+          "insurancePolicies": [],
+          "emergencyContacts": [],
+          "totalDebtVnd": 1900000
+        },
+        "doctorProfile": {
+          "id": "17156075-1713-4453-8731-0000c72897eb",
+          "staffProfileId": "b54cda26-b54a-4eca-856e-0000eefd831a",
+          "staffProfile": {
+            "id": "b54cda26-b54a-4eca-856e-0000eefd831a",
+            "fullName": "BS. Trần Minh Khoa"
+          }
+        }
+      }
+    },
+    {
+      "id": "b337ff2d-b31b-4e5b-8489-00097dbc0a33",
+      "appointmentId": "cfc0641d-cfab-46eb-80b9-0007006d5743",
+      "status": "SCHEDULED",
+      "checkedInAt": null,
+      "startedAt": null,
+      "pendingPaymentAt": null,
+      "completedAt": "2026-10-11T15:10:00.000Z",
+      "createdAt": "2026-10-01T08:00:00.000Z",
+      "updatedAt": "2026-10-11T14:30:00.000Z",
+      "emrStatus": "OPEN",
+      "clinicalRecord": null,
+      "adviceRecords": [],
+      "labOrders": [],
+      "diagnosticOrders": [],
+      "prescriptions": [],
+      "invoice": null,
+      "serviceProposals": [],
+      "externalLabWorkOrders": [],
+      "appointment": {
+        "id": "cfc0641d-cfab-46eb-80b9-0007006d5743",
+        "branchId": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+        "patientProfileId": "98c47536-98ba-463a-893e-00036c4c360a",
+        "doctorProfileId": "538453d7-5381-4941-83ab-000116d26e49",
+        "chairId": null,
+        "serviceId": null,
+        "patientDisplayName": "Hoàng Anh Tuấn",
+        "startsAt": "2026-10-11T14:30:00.000Z",
+        "endsAt": "2026-10-11T15:10:00.000Z",
+        "status": "COMPLETED",
+        "holdExpiresAt": null,
+        "confirmedAt": "2026-10-11T14:30:00.000Z",
+        "checkedInAt": null,
+        "cancelledAt": null,
+        "cancellationReason": null,
+        "noShowAt": null,
+        "notes": "Tẩy trắng răng",
+        "serviceTitle": "Tẩy trắng răng",
+        "serviceName": "Tẩy trắng răng",
+        "doctorName": "BS. Lê Thu Trang",
+        "isDirectVisit": false,
+        "createdAt": "2026-10-01T08:00:00.000Z",
+        "updatedAt": "2026-10-11T14:30:00.000Z",
+        "branch": {
+          "id": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+          "code": "MINTAM-NT",
+          "name": "Nha khoa Minh Tâm – Nguyễn Trãi",
+          "address": "Số 245 Nguyễn Trãi, Thanh Xuân, Hà Nội",
+          "phone": "024 7300 0002",
+          "isActive": true
+        },
+        "patientProfile": {
+          "id": "98c47536-98ba-463a-893e-00036c4c360a",
+          "patientCode": "BN-125",
+          "fullName": "Hoàng Anh Tuấn",
+          "phone": "0917 325 215",
+          "gender": "Nam",
+          "dateOfBirth": "1993-06-03T00:00:00.000Z",
+          "medicalInfo": {
+            "id": "36fbeee7-36f1-40b1-877b-000394212139",
+            "patientProfileId": "98c47536-98ba-463a-893e-00036c4c360a",
+            "allergies": null,
+            "chronicDiseases": null,
+            "medicalHistory": null,
+            "dentalNotes": null,
+            "createdAt": "2025-03-10T08:00:00.000Z",
+            "updatedAt": "2026-09-20T08:00:00.000Z"
+          },
+          "insurancePolicies": [
+            {
+              "id": "d5336898-d528-4b28-85b8-0003bbf60c68",
+              "provider": "BHYT",
+              "cardNo": "DN4 01 0123 4567 890",
+              "validFrom": "2026-01-01",
+              "validTo": "2026-12-31"
+            }
+          ],
+          "emergencyContacts": [],
+          "totalDebtVnd": 4500000
+        },
+        "doctorProfile": {
+          "id": "538453d7-5381-4941-83ab-000116d26e49",
+          "staffProfileId": "f1bbcd88-f1b8-43b8-81e8-00013ea75978",
+          "staffProfile": {
+            "id": "f1bbcd88-f1b8-43b8-81e8-00013ea75978",
+            "fullName": "BS. Lê Thu Trang"
+          }
+        }
+      }
+    },
+    {
+      "id": "516f78de-5152-48d2-82c6-0009a590f562",
+      "appointmentId": "6df7ddce-6de2-4162-8ef6-000728424272",
+      "status": "SCHEDULED",
+      "checkedInAt": null,
+      "startedAt": null,
+      "pendingPaymentAt": null,
+      "completedAt": null,
+      "createdAt": "2026-10-01T08:00:00.000Z",
+      "updatedAt": "2026-10-11T15:00:00.000Z",
+      "emrStatus": "OPEN",
+      "clinicalRecord": null,
+      "adviceRecords": [],
+      "labOrders": [],
+      "diagnosticOrders": [],
+      "prescriptions": [],
+      "invoice": null,
+      "serviceProposals": [],
+      "externalLabWorkOrders": [],
+      "appointment": {
+        "id": "6df7ddce-6de2-4162-8ef6-000728424272",
+        "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+        "patientProfileId": "736ae249-735f-459f-83f5-0003e3caf797",
+        "doctorProfileId": "daa66d13-daa5-4f65-8ab7-0000777ec18d",
+        "chairId": null,
+        "serviceId": null,
+        "patientDisplayName": "Đỗ Thị Mai",
+        "startsAt": "2026-10-11T15:00:00.000Z",
+        "endsAt": "2026-10-11T15:50:00.000Z",
+        "status": "CONFIRMED",
+        "holdExpiresAt": null,
+        "confirmedAt": "2026-10-11T15:00:00.000Z",
+        "checkedInAt": null,
+        "cancelledAt": null,
+        "cancellationReason": null,
+        "noShowAt": null,
+        "notes": "Niềng răng – kiểm tra định kỳ",
+        "serviceTitle": "Niềng răng – kiểm tra định kỳ",
+        "serviceName": "Niềng răng – kiểm tra định kỳ",
+        "doctorName": "BS. Nguyễn Hoài An",
+        "isDirectVisit": false,
+        "createdAt": "2026-10-01T08:00:00.000Z",
+        "updatedAt": "2026-10-11T15:00:00.000Z",
+        "branch": {
+          "id": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+          "code": "MINTAM-HN",
+          "name": "Nha khoa Minh Tâm – Trần Duy Hưng",
+          "address": "Số 12 Trần Duy Hưng, Cầu Giấy, Hà Nội",
+          "phone": "024 7300 0001",
+          "isActive": true
+        },
+        "patientProfile": {
+          "id": "736ae249-735f-459f-83f5-0003e3caf797",
+          "patientCode": "BN-126",
+          "fullName": "Đỗ Thị Mai",
+          "phone": "0918 326 238",
+          "gender": "Nữ",
+          "dateOfBirth": "1990-07-08T00:00:00.000Z",
+          "medicalInfo": {
+            "id": "11a25bfa-1196-4016-8232-00040b9fe2c6",
+            "patientProfileId": "736ae249-735f-459f-83f5-0003e3caf797",
+            "allergies": null,
+            "chronicDiseases": null,
+            "medicalHistory": null,
+            "dentalNotes": null,
+            "createdAt": "2025-03-10T08:00:00.000Z",
+            "updatedAt": "2026-09-20T08:00:00.000Z"
+          },
+          "insurancePolicies": [],
+          "emergencyContacts": [
+            {
+              "id": "afd9d5ab-afcd-4a8d-806f-00043374cdf5",
+              "name": "Mai (người nhà)",
+              "phone": "098 700 006",
+              "relation": "Vợ/Chồng"
+            }
+          ],
+          "totalDebtVnd": 0
+        },
+        "doctorProfile": {
+          "id": "daa66d13-daa5-4f65-8ab7-0000777ec18d",
+          "staffProfileId": "78dde6c4-78dc-49dc-88f4-00009f53acbc",
+          "staffProfile": {
+            "id": "78dde6c4-78dc-49dc-88f4-00009f53acbc",
+            "fullName": "BS. Nguyễn Hoài An"
+          }
+        }
+      }
+    },
+    {
+      "id": "efa6f28f-ef89-4349-8103-0009cd65e091",
+      "appointmentId": "0c2f577f-0c19-4bd9-8d33-000750172da1",
+      "status": "CHECKED_IN",
+      "checkedInAt": "2026-10-11T15:30:00.000Z",
+      "startedAt": null,
+      "pendingPaymentAt": null,
+      "completedAt": null,
+      "createdAt": "2026-10-01T08:00:00.000Z",
+      "updatedAt": "2026-10-11T15:30:00.000Z",
+      "emrStatus": "OPEN",
+      "clinicalRecord": null,
+      "adviceRecords": [],
+      "labOrders": [],
+      "diagnosticOrders": [],
+      "prescriptions": [],
+      "invoice": null,
+      "serviceProposals": [],
+      "externalLabWorkOrders": [],
+      "appointment": {
+        "id": "0c2f577f-0c19-4bd9-8d33-000750172da1",
+        "branchId": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+        "patientProfileId": "4e114f5c-4e04-4504-8eac-00045b49b924",
+        "doctorProfileId": "17156075-1713-4453-8731-0000c72897eb",
+        "chairId": null,
+        "serviceId": null,
+        "patientDisplayName": "Ngô Văn Thành",
+        "startsAt": "2026-10-11T15:30:00.000Z",
+        "endsAt": "2026-10-11T16:20:00.000Z",
+        "status": "CHECKED_IN",
+        "holdExpiresAt": null,
+        "confirmedAt": "2026-10-11T15:30:00.000Z",
+        "checkedInAt": "2026-10-11T15:30:00.000Z",
+        "cancelledAt": null,
+        "cancellationReason": null,
+        "noShowAt": null,
+        "notes": "Nhổ răng sữa",
+        "serviceTitle": "Nhổ răng sữa",
+        "serviceName": "Nhổ răng sữa",
+        "doctorName": "BS. Trần Minh Khoa",
+        "isDirectVisit": false,
+        "createdAt": "2026-10-01T08:00:00.000Z",
+        "updatedAt": "2026-10-11T15:30:00.000Z",
+        "branch": {
+          "id": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+          "code": "MINTAM-NT",
+          "name": "Nha khoa Minh Tâm – Nguyễn Trãi",
+          "address": "Số 245 Nguyễn Trãi, Thanh Xuân, Hà Nội",
+          "phone": "024 7300 0002",
+          "isActive": true
+        },
+        "patientProfile": {
+          "id": "4e114f5c-4e04-4504-8eac-00045b49b924",
+          "patientCode": "BN-127",
+          "fullName": "Ngô Văn Thành",
+          "phone": "0919 327 261",
+          "gender": "Nam",
+          "dateOfBirth": "1987-08-13T00:00:00.000Z",
+          "medicalInfo": {
+            "id": "ec48c90d-ec3b-4f7b-8ce9-0004831ea453",
+            "patientProfileId": "4e114f5c-4e04-4504-8eac-00045b49b924",
+            "allergies": null,
+            "chronicDiseases": "Tăng huyết áp",
+            "medicalHistory": null,
+            "dentalNotes": null,
+            "createdAt": "2025-03-10T08:00:00.000Z",
+            "updatedAt": "2026-09-20T08:00:00.000Z"
+          },
+          "insurancePolicies": [],
+          "emergencyContacts": [],
+          "totalDebtVnd": 1900000
+        },
+        "doctorProfile": {
+          "id": "17156075-1713-4453-8731-0000c72897eb",
+          "staffProfileId": "b54cda26-b54a-4eca-856e-0000eefd831a",
+          "staffProfile": {
+            "id": "b54cda26-b54a-4eca-856e-0000eefd831a",
+            "fullName": "BS. Trần Minh Khoa"
+          }
+        }
+      }
+    }
+  ],
+  "dentalRecord": {
+    "id": "8dde6c40-8dc0-4dc0-8f40-0009f53acbc0",
+    "visitId": null,
+    "patientProfileId": "8ff34739-8fef-4e2f-8025-0001667c44a7",
+    "dentition": "PERMANENT",
+    "chiefComplaint": "Ê buốt răng hàm trên phải khi ăn đồ lạnh",
+    "extraOralExam": "Không phát hiện bất thường",
+    "intraOralExam": "Vệ sinh răng miệng trung bình, cao răng vùng cửa dưới",
+    "occlusion": "Khớp cắn Angle I",
+    "diagnosis": "Sâu ngà răng 16; viêm nha chu nhẹ vùng răng trước dưới",
+    "treatmentPlan": "Trám composite răng 16; lấy cao răng + đánh bóng toàn hàm; hẹn tái khám 3 tháng",
+    "performedTreatment": "Trám composite răng 16 hoàn tất, khớp cắn ổn định",
+    "followUpNote": "Tái khám sau 3 tháng để kiểm tra miếng trám và nha chu",
+    "createdAt": "2026-09-20T09:20:00.000Z",
+    "updatedAt": "2026-10-05T09:20:00.000Z",
+    "teeth": [
+      {
+        "id": "2c15e5f1-2bf7-4837-8d7d-000a1d0fb6ef",
+        "odontogramId": "8dde6c40-8dc0-4dc0-8f40-0009f53acbc0",
+        "toothNumber": "16",
+        "status": "CARIES",
+        "mobility": 0,
+        "conditionCodes": [
+          "Sâu răng"
+        ],
+        "diagnosis": "Sâu ngà mặt nhai",
+        "plannedTreatment": "Trám composite",
+        "performedTreatment": "Đã trám composite",
+        "notes": null,
+        "createdAt": "2026-09-20T09:20:00.000Z",
+        "updatedAt": "2026-10-05T09:20:00.000Z",
+        "surfaces": []
+      },
+      {
+        "id": "ca4d5fa2-ca2e-42ae-8bba-000a44e4a21e",
+        "odontogramId": "8dde6c40-8dc0-4dc0-8f40-0009f53acbc0",
+        "toothNumber": "26",
+        "status": "FILLED",
+        "mobility": 0,
+        "conditionCodes": [
+          "Đã trám"
+        ],
+        "diagnosis": null,
+        "plannedTreatment": null,
+        "performedTreatment": null,
+        "notes": null,
+        "createdAt": "2026-09-20T09:20:00.000Z",
+        "updatedAt": "2026-10-05T09:20:00.000Z",
+        "surfaces": []
+      },
+      {
+        "id": "6884d953-6865-4d25-89f7-000a6cb98d4d",
+        "odontogramId": "8dde6c40-8dc0-4dc0-8f40-0009f53acbc0",
+        "toothNumber": "36",
+        "status": "DECAYED",
+        "mobility": 0,
+        "conditionCodes": [
+          "Sâu răng"
+        ],
+        "diagnosis": "Sâu răng mặt nhai",
+        "plannedTreatment": "Điều trị tủy + chụp sứ",
+        "performedTreatment": null,
+        "notes": null,
+        "createdAt": "2026-09-20T09:20:00.000Z",
+        "updatedAt": "2026-10-05T09:20:00.000Z",
+        "surfaces": []
+      },
+      {
+        "id": "06bc5304-069c-479c-8834-000a948e787c",
+        "odontogramId": "8dde6c40-8dc0-4dc0-8f40-0009f53acbc0",
+        "toothNumber": "46",
+        "status": "CROWN",
+        "mobility": 0,
+        "conditionCodes": [
+          "Chụp sứ"
+        ],
+        "diagnosis": "Răng đã điều trị tủy",
+        "plannedTreatment": "Theo dõi định kỳ",
+        "performedTreatment": null,
+        "notes": null,
+        "createdAt": "2026-09-20T09:20:00.000Z",
+        "updatedAt": "2026-10-05T09:20:00.000Z",
+        "surfaces": []
+      },
+      {
+        "id": "a4f3ccb5-a4d3-4213-8671-000abc6363ab",
+        "odontogramId": "8dde6c40-8dc0-4dc0-8f40-0009f53acbc0",
+        "toothNumber": "11",
+        "status": "HEALTHY",
+        "mobility": 0,
+        "conditionCodes": [],
+        "diagnosis": null,
+        "plannedTreatment": null,
+        "performedTreatment": null,
+        "notes": null,
+        "createdAt": "2026-09-20T09:20:00.000Z",
+        "updatedAt": "2026-10-05T09:20:00.000Z",
+        "surfaces": []
+      },
+      {
+        "id": "432b4666-430a-4c8a-84ae-000ae4384eda",
+        "odontogramId": "8dde6c40-8dc0-4dc0-8f40-0009f53acbc0",
+        "toothNumber": "21",
+        "status": "MISSING",
+        "mobility": 0,
+        "conditionCodes": [
+          "Mất răng"
+        ],
+        "diagnosis": "Mất răng cối lớn",
+        "plannedTreatment": "Cấy implant",
+        "performedTreatment": null,
+        "notes": null,
+        "createdAt": "2026-09-20T09:20:00.000Z",
+        "updatedAt": "2026-10-05T09:20:00.000Z",
+        "surfaces": []
+      }
+    ],
+    "periodontalMeasurements": [],
+    "visit": null
+  },
+  "inventory": [
+    {
+      "id": "e162c017-e141-4701-82eb-000b0c0d3a09",
+      "sku": "VT001",
+      "name": "Găng tay latex size M",
+      "type": "MATERIAL",
+      "categoryId": null,
+      "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+      "unit": "Hộp",
+      "baseUomId": null,
+      "quantityPrecision": 0,
+      "lowStockThreshold": 50,
+      "latestPurchaseCostVnd": 98000,
+      "sellingPriceVnd": 135000,
+      "importPriceVnd": 98000,
+      "exportPriceVnd": 135000,
+      "amountVnd": null,
+      "warranty": null,
+      "activeIngredient": null,
+      "nationalDrugCode": null,
+      "nationalDrugName": null,
+      "nationalActiveIngredient": null,
+      "usage": "Găng tay y tế dùng 1 lần",
+      "instructions": null,
+      "sortPosition": 0,
+      "currency": "VND",
+      "note": null,
+      "taxCategoryId": null,
+      "supplierId": null,
+      "isActive": true,
+      "createdAt": "2025-06-11T03:28:00.000Z",
+      "updatedAt": "2026-09-30T03:28:00.000Z",
+      "category": null,
+      "branch": {
+        "id": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+        "code": "MINTAM-HN",
+        "name": "Nha khoa Minh Tâm – Trần Duy Hưng"
+      },
+      "supplier": null,
+      "batches": []
+    },
+    {
+      "id": "7f9a39c8-7f78-4178-8128-000b33e22538",
+      "sku": "VT002",
+      "name": "Khẩu trang y tế 3 lớp",
+      "type": "MATERIAL",
+      "categoryId": null,
+      "branchId": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+      "unit": "Hộp",
+      "baseUomId": null,
+      "quantityPrecision": 0,
+      "lowStockThreshold": 40,
+      "latestPurchaseCostVnd": 45000,
+      "sellingPriceVnd": 70000,
+      "importPriceVnd": 45000,
+      "exportPriceVnd": 70000,
+      "amountVnd": null,
+      "warranty": null,
+      "activeIngredient": null,
+      "nationalDrugCode": null,
+      "nationalDrugName": null,
+      "nationalActiveIngredient": null,
+      "usage": "Khẩu trang phòng khám",
+      "instructions": null,
+      "sortPosition": 1,
+      "currency": "VND",
+      "note": null,
+      "taxCategoryId": null,
+      "supplierId": null,
+      "isActive": true,
+      "createdAt": "2025-06-11T03:28:00.000Z",
+      "updatedAt": "2026-09-30T03:28:00.000Z",
+      "category": null,
+      "branch": {
+        "id": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+        "code": "MINTAM-NT",
+        "name": "Nha khoa Minh Tâm – Nguyễn Trãi"
+      },
+      "supplier": null,
+      "batches": []
+    },
+    {
+      "id": "1dd1b379-1daf-4bef-8f65-000b5bb71067",
+      "sku": "VT003",
+      "name": "Bông gòn y tế",
+      "type": "MATERIAL",
+      "categoryId": null,
+      "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+      "unit": "Gói",
+      "baseUomId": null,
+      "quantityPrecision": 0,
+      "lowStockThreshold": 30,
+      "latestPurchaseCostVnd": 18000,
+      "sellingPriceVnd": 32000,
+      "importPriceVnd": 18000,
+      "exportPriceVnd": 32000,
+      "amountVnd": null,
+      "warranty": null,
+      "activeIngredient": null,
+      "nationalDrugCode": null,
+      "nationalDrugName": null,
+      "nationalActiveIngredient": null,
+      "usage": "Sát khuẩn, lau dụng cụ",
+      "instructions": null,
+      "sortPosition": 2,
+      "currency": "VND",
+      "note": null,
+      "taxCategoryId": null,
+      "supplierId": null,
+      "isActive": true,
+      "createdAt": "2025-06-11T03:28:00.000Z",
+      "updatedAt": "2026-09-30T03:28:00.000Z",
+      "category": null,
+      "branch": {
+        "id": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+        "code": "MINTAM-HN",
+        "name": "Nha khoa Minh Tâm – Trần Duy Hưng"
+      },
+      "supplier": null,
+      "batches": []
+    },
+    {
+      "id": "bc092d2a-bbe6-4666-8da2-000b838bfb96",
+      "sku": "DC001",
+      "name": "Kim tiêm nha khoa 27G",
+      "type": "MATERIAL",
+      "categoryId": null,
+      "branchId": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+      "unit": "Hộp",
+      "baseUomId": null,
+      "quantityPrecision": 0,
+      "lowStockThreshold": 60,
+      "latestPurchaseCostVnd": 42000,
+      "sellingPriceVnd": 68000,
+      "importPriceVnd": 42000,
+      "exportPriceVnd": 68000,
+      "amountVnd": null,
+      "warranty": null,
+      "activeIngredient": null,
+      "nationalDrugCode": null,
+      "nationalDrugName": null,
+      "nationalActiveIngredient": null,
+      "usage": "Gây tê tại chỗ",
+      "instructions": null,
+      "sortPosition": 3,
+      "currency": "VND",
+      "note": null,
+      "taxCategoryId": null,
+      "supplierId": null,
+      "isActive": true,
+      "createdAt": "2025-06-11T03:28:00.000Z",
+      "updatedAt": "2026-09-30T03:28:00.000Z",
+      "category": null,
+      "branch": {
+        "id": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+        "code": "MINTAM-NT",
+        "name": "Nha khoa Minh Tâm – Nguyễn Trãi"
+      },
+      "supplier": null,
+      "batches": []
+    },
+    {
+      "id": "5a40a6db-5a1d-40dd-8bdf-000bab60e6c5",
+      "sku": "DC002",
+      "name": "Mũi khoan tròn carbide",
+      "type": "MATERIAL",
+      "categoryId": null,
+      "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+      "unit": "Cái",
+      "baseUomId": null,
+      "quantityPrecision": 0,
+      "lowStockThreshold": 100,
+      "latestPurchaseCostVnd": 28000,
+      "sellingPriceVnd": 45000,
+      "importPriceVnd": 28000,
+      "exportPriceVnd": 45000,
+      "amountVnd": null,
+      "warranty": null,
+      "activeIngredient": null,
+      "nationalDrugCode": null,
+      "nationalDrugName": null,
+      "nationalActiveIngredient": null,
+      "usage": "Dùng cho tay khoan",
+      "instructions": null,
+      "sortPosition": 4,
+      "currency": "VND",
+      "note": null,
+      "taxCategoryId": null,
+      "supplierId": null,
+      "isActive": true,
+      "createdAt": "2025-06-11T03:28:00.000Z",
+      "updatedAt": "2026-09-30T03:28:00.000Z",
+      "category": null,
+      "branch": {
+        "id": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+        "code": "MINTAM-HN",
+        "name": "Nha khoa Minh Tâm – Trần Duy Hưng"
+      },
+      "supplier": null,
+      "batches": []
+    },
+    {
+      "id": "f878208c-f854-4b54-8a1c-000bd335d1f4",
+      "sku": "TH001",
+      "name": "Lidocaine 2% – ống 1.8ml",
+      "type": "MEDICATION",
+      "categoryId": null,
+      "branchId": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+      "unit": "Hộp",
+      "baseUomId": null,
+      "quantityPrecision": 0,
+      "lowStockThreshold": 15,
+      "latestPurchaseCostVnd": 185000,
+      "sellingPriceVnd": 280000,
+      "importPriceVnd": 185000,
+      "exportPriceVnd": 280000,
+      "amountVnd": null,
+      "warranty": null,
+      "activeIngredient": null,
+      "nationalDrugCode": "VN-21548-19",
+      "nationalDrugName": null,
+      "nationalActiveIngredient": null,
+      "usage": "Thuốc tê",
+      "instructions": null,
+      "sortPosition": 5,
+      "currency": "VND",
+      "note": null,
+      "taxCategoryId": null,
+      "supplierId": null,
+      "isActive": true,
+      "createdAt": "2025-06-11T03:28:00.000Z",
+      "updatedAt": "2026-09-30T03:28:00.000Z",
+      "category": null,
+      "branch": {
+        "id": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+        "code": "MINTAM-NT",
+        "name": "Nha khoa Minh Tâm – Nguyễn Trãi"
+      },
+      "supplier": null,
+      "batches": []
+    },
+    {
+      "id": "96af9a3d-968b-45cb-8859-000bfb0abd23",
+      "sku": "TH002",
+      "name": "Amoxicillin 500mg",
+      "type": "MEDICATION",
+      "categoryId": null,
+      "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+      "unit": "Hộp",
+      "baseUomId": null,
+      "quantityPrecision": 0,
+      "lowStockThreshold": 20,
+      "latestPurchaseCostVnd": 120000,
+      "sellingPriceVnd": 190000,
+      "importPriceVnd": 120000,
+      "exportPriceVnd": 190000,
+      "amountVnd": null,
+      "warranty": null,
+      "activeIngredient": null,
+      "nationalDrugCode": "VN-11223-20",
+      "nationalDrugName": null,
+      "nationalActiveIngredient": null,
+      "usage": "Kháng sinh sau nhổ răng",
+      "instructions": null,
+      "sortPosition": 6,
+      "currency": "VND",
+      "note": null,
+      "taxCategoryId": null,
+      "supplierId": null,
+      "isActive": true,
+      "createdAt": "2025-06-11T03:28:00.000Z",
+      "updatedAt": "2026-09-30T03:28:00.000Z",
+      "category": null,
+      "branch": {
+        "id": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+        "code": "MINTAM-HN",
+        "name": "Nha khoa Minh Tâm – Trần Duy Hưng"
+      },
+      "supplier": null,
+      "batches": []
+    },
+    {
+      "id": "34e713ee-34c2-4042-8696-000c22dfa852",
+      "sku": "TH003",
+      "name": "Nước súc miệng Chlorhexidine 0,12%",
+      "type": "MEDICATION",
+      "categoryId": null,
+      "branchId": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+      "unit": "Chai",
+      "baseUomId": null,
+      "quantityPrecision": 0,
+      "lowStockThreshold": 24,
+      "latestPurchaseCostVnd": 62000,
+      "sellingPriceVnd": 95000,
+      "importPriceVnd": 62000,
+      "exportPriceVnd": 95000,
+      "amountVnd": null,
+      "warranty": null,
+      "activeIngredient": null,
+      "nationalDrugCode": "VN-19342-17",
+      "nationalDrugName": null,
+      "nationalActiveIngredient": null,
+      "usage": "Súc miệng sau phẫu thuật",
+      "instructions": null,
+      "sortPosition": 7,
+      "currency": "VND",
+      "note": null,
+      "taxCategoryId": null,
+      "supplierId": null,
+      "isActive": true,
+      "createdAt": "2025-06-11T03:28:00.000Z",
+      "updatedAt": "2026-09-30T03:28:00.000Z",
+      "category": null,
+      "branch": {
+        "id": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+        "code": "MINTAM-NT",
+        "name": "Nha khoa Minh Tâm – Nguyễn Trãi"
+      },
+      "supplier": null,
+      "batches": []
+    },
+    {
+      "id": "d31e8d9f-d2f9-4ab9-84d3-000c4ab49381",
+      "sku": "VT004",
+      "name": "Composite A2 4g",
+      "type": "MATERIAL",
+      "categoryId": null,
+      "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+      "unit": "Ống",
+      "baseUomId": null,
+      "quantityPrecision": 0,
+      "lowStockThreshold": 20,
+      "latestPurchaseCostVnd": 420000,
+      "sellingPriceVnd": 690000,
+      "importPriceVnd": 420000,
+      "exportPriceVnd": 690000,
+      "amountVnd": null,
+      "warranty": null,
+      "activeIngredient": null,
+      "nationalDrugCode": null,
+      "nationalDrugName": null,
+      "nationalActiveIngredient": null,
+      "usage": "Trám răng thẩm mỹ",
+      "instructions": null,
+      "sortPosition": 8,
+      "currency": "VND",
+      "note": null,
+      "taxCategoryId": null,
+      "supplierId": null,
+      "isActive": true,
+      "createdAt": "2025-06-11T03:28:00.000Z",
+      "updatedAt": "2026-09-30T03:28:00.000Z",
+      "category": null,
+      "branch": {
+        "id": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+        "code": "MINTAM-HN",
+        "name": "Nha khoa Minh Tâm – Trần Duy Hưng"
+      },
+      "supplier": null,
+      "batches": []
+    },
+    {
+      "id": "71560750-7130-4530-8310-000c72897eb0",
+      "sku": "VT005",
+      "name": "Xi măng GIC phục hồi",
+      "type": "MATERIAL",
+      "categoryId": null,
+      "branchId": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+      "unit": "Bộ",
+      "baseUomId": null,
+      "quantityPrecision": 0,
+      "lowStockThreshold": 10,
+      "latestPurchaseCostVnd": 380000,
+      "sellingPriceVnd": 560000,
+      "importPriceVnd": 380000,
+      "exportPriceVnd": 560000,
+      "amountVnd": null,
+      "warranty": null,
+      "activeIngredient": null,
+      "nationalDrugCode": null,
+      "nationalDrugName": null,
+      "nationalActiveIngredient": null,
+      "usage": "Trám răng sữa",
+      "instructions": null,
+      "sortPosition": 9,
+      "currency": "VND",
+      "note": null,
+      "taxCategoryId": null,
+      "supplierId": null,
+      "isActive": true,
+      "createdAt": "2025-06-11T03:28:00.000Z",
+      "updatedAt": "2026-09-30T03:28:00.000Z",
+      "category": null,
+      "branch": {
+        "id": "3c6ef362-3c6e-44ee-8c7a-00004fa9d65e",
+        "code": "MINTAM-NT",
+        "name": "Nha khoa Minh Tâm – Nguyễn Trãi"
+      },
+      "supplier": null,
+      "batches": []
+    }
+  ]
+}

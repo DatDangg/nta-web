@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <title>wrapper</title>
+  <style>
+    /* Khung cửa sổ macOS — thông số đo từ ảnh cũ (scripts/screenshots/design-tokens.md).
+       1328 (nội dung) + 56×2 (padding) = 1440 CSS px → ảnh ra 2880 px @dsf 2. */
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      background: #eef1f5;
+      padding: 56px;
+      font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+    .window {
+      width: 1328px;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #fff;
+      box-shadow: 0 0 0 1px #e0e1e6; /* viền 1px không đổi bề rộng */
+    }
+    .titlebar {
+      position: relative;
+      height: 51px;
+      background: #f5f5f7;
+      border-bottom: 1px solid #e3e3e7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .dots { position: absolute; left: 28px; top: 20px; display: flex; gap: 11px; }
+    .dots i { width: 14px; height: 14px; border-radius: 50%; display: block; }
+    .dots i:nth-child(1) { background: #fd807a; }
+    .dots i:nth-child(2) { background: #fec13f; }
+    .dots i:nth-child(3) { background: #39cc4f; }
+    .title { font-size: 17px; font-weight: 500; color: #6e6e73; }
+    img.shot { display: block; width: 1328px; height: auto; background: #fff; }
+    /* khi đang chờ ảnh: giữ chiều cao ước lượng để trang không nhảy */
+    .holder { width: 1328px; background: #fff; }
+  </style>
+</head>
+<body>
+  <div class="window">
+    <div class="titlebar">
+      <span class="dots"><i></i><i></i><i></i></span>
+      <span class="title" id="title">—</span>
+    </div>
+    <img class="shot" id="shot" alt="" />
+  </div>
+
+  <script>
+    const q = new URLSearchParams(location.search);
+    document.getElementById("title").textContent = q.get("title") || "";
+    const img = document.getElementById("shot");
+    img.src = q.get("src") || "";
+    const done = () => { window.__READY__ = true; };
+    if (img.complete && img.naturalWidth) done();
+    else { img.addEventListener("load", done); img.addEventListener("error", done); }
+  </script>
+</body>
+</html>
