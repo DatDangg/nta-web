@@ -410,7 +410,6 @@ export default async function ComponentPreviewPage({
 
   const lang = locale === 'en' ? 'en' : 'vi';
   const c = COPY[lang];
-  const prefix = locale === 'en' ? '/en' : '';
 
   return (
     <>
@@ -422,7 +421,7 @@ export default async function ComponentPreviewPage({
           <CaseHeading>{`SolutionHero · ${hero.key} · ratio ${hero.ratio} · ${hero.maxW}`}</CaseHeading>
           <SolutionHero
             breadcrumbs={[
-              { label: c.solutionsCrumb, href: `${prefix}/solutions` },
+              { label: c.solutionsCrumb, href: '/solutions' },
               { label: hero[lang].title },
             ]}
             description={hero[lang].description}
@@ -430,7 +429,7 @@ export default async function ComponentPreviewPage({
             imageAlt={hero[lang].alt}
             imageMaxW={hero.maxW}
             imageRatio={hero.ratio}
-            primaryCta={{ label: c.demoCta, href: `${prefix}/contact` }}
+            primaryCta={{ label: c.demoCta, href: '/contact' }}
             secondaryCta={{
               label: c.featuresCta,
               href: '#features',
@@ -445,11 +444,11 @@ export default async function ComponentPreviewPage({
       <CaseHeading>SolutionHero · KHÔNG có ảnh (bỏ hẳn khối ảnh)</CaseHeading>
       <SolutionHero
         breadcrumbs={[
-          { label: c.solutionsCrumb, href: `${prefix}/solutions` },
+          { label: c.solutionsCrumb, href: '/solutions' },
           { label: c.noImageTitle },
         ]}
         description={c.noImageDesc}
-        primaryCta={{ label: c.demoCta, href: `${prefix}/contact` }}
+        primaryCta={{ label: c.demoCta, href: '/contact' }}
         secondaryCta={{ label: c.featuresCta, href: '#features' }}
         title={c.noImageTitle}
       />

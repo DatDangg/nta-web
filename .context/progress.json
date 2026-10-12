@@ -370,13 +370,23 @@
           "reviewReport": ".context/review-reports/change-solution-detail-redesign-phase-1-task-05-round-1-review.md",
           "changeRequest": "spec/changes/archive/2026-10-11-solution-detail-redesign.md",
           "note": "T5 — LMS layout riêng 8 block (§5 + copy §11): XÓA hẳn nhánh legacy (PageHeader/FeatureList/bridge 'title — description' → đóng MINOR #1 T3 + #1 T4); hero §11.1 + 4 features (3 zigzag + FeatureImageRow 3 ảnh) + bento PHƯƠNG ÁN A (ảnh 04-danh-gia-ai-tt27-crop, user chốt) + AiSection ink (AiAssistantPanel DOM, 3 gợi ý §11.4) + audience §11.5 + FAQ accordion §11.6 (FAQ4/EN SẠCH 'cảnh báo sớm'/'early warning') + CTA cuối §11.7 (1 nút, trước CTAForm). BỎ render benefits/useCases/sections/screenshots — data GIỮ NGUYÊN mdx (R2, verify check). EN H1 → 'School Management (LMS)' (§11.8). Reconcile §11: bento title ':' thay em-dash (§11.8 cấm) + typo spec 'địết'→'định kỳ'. types +4 field LMS. r1 STRICT PASS (0 CRITICAL/MAJOR, 6 MINOR — đã fix 5: alt bento mô tả giao diện, bỏ shadow-sm bento, chevron motion-reduce, figcaption→div AiAssistantPanel, change file cập nhật panel DOM; MINOR còn: EN 4 feature titles LMS ngoài §11 do spec KHÔNG có bảng EN title — chờ user xác nhận). Verify: lint/typecheck/build 51/51, verify-t5 39/39 (check thứ tự theo heading DOM, tránh false positive i18n bundle), soi mắt LMS 1440. Commit 54bd7cb."
+        },
+        {
+          "id": "change-solution-detail-redesign-phase-1-task-06",
+          "layer": 1,
+          "status": "done",
+          "reviewLevel": "NORMAL",
+          "reviewResult": "PASS",
+          "reviewReport": ".context/review-reports/change-solution-detail-redesign-phase-1-task-06-round-1-review.md",
+          "changeRequest": "spec/changes/archive/2026-10-11-solution-detail-redesign.md",
+          "note": "T6 — follow-up sau khi user duyệt: (A) CRM/DentGo F1 gắn 01-tong-quan-crop.png (ratio 6.556 / 3.427 đo thật) + alt riêng VI/EN, ảnh hero đầy đủ chỉ còn 1 lần/trang; (B) fix CTA link: localizedPath() trả URL tuyệt đối nên nút demo trỏ thẳng domain production, đổi sang Link next-intl + href tương đối /contact (sửa luôn breadcrumb double-prefix /en/en/ ở dev preview); (C) xác nhận CTAForm còn trên cả 4 trang enterprise. r1 NORMAL PASS (0 CRITICAL/MAJOR, 3 MINOR — 1 đã sửa, 2 báo user). Verify: lint/typecheck PASS, build 51/51 exit 0, verify-t6 22/22, verify-t5 39/39 không regression. CHƯA push — chờ user duyệt xong thì push nhánh redesign/solution-detail (Vercel preview), KHÔNG push main."
         }
       ],
       "specVersion": "3.0.0",
       "planDir": "tasks/nta-website/",
       "layerPlanDiagram": "docs/diagrams/layer-plan.html",
       "initialBuildCompletedAt": "2026-10-10T03:15:00+07:00",
-      "specPublished": { "scopeVersion": 11, "trigger": "feature-update", "path": "spec/test-scope/current.json", "note": "Publish sau khi T1–T5 PASS review (spec 3.0.0 KHÔNG bump — redesign layout, không đổi requirement). Chờ user duyệt contact sheet 4 trang 375+1440 rồi mới push/deploy." },
+      "specPublished": { "scopeVersion": 11, "trigger": "feature-update", "path": "spec/test-scope/current.json", "note": "Publish sau khi T1–T5 PASS review (spec 3.0.0 KHÔNG bump). T6 là follow-up nhỏ (data ảnh + CTA link) — không bump scope vì không đổi requirement/contract; đã ghi vào journal T6 + change archive." },
       "layer4PhaseReview": { "verdict": "PASS", "report": ".context/review-reports/feature-nta-website-layer-4-round-1-spec-review.md" },
       "note": "Initial build hoàn tất: Layer 0..4 (totalLayers 5 = layer-plan 'Layer 0 → 4'). 27 req R-01..R-27 implemented. R-22 (Lighthouse Perf/LCP/CLS) + R-23 (viewport 375/768/1280) PARTIAL — đo ở gate DevOps/prod (bước 6). Chưa push (forbidden_branch main, auto_push false). Post-build: ai-solution-content (spec 1.1.0) + domain-ntavietnam (domain → ntavietnam.tech, spec 2.0.0, scope v6) + deploy-platform-docker-vps (Cloud Run → docker-vps, spec 3.0.0, scope v7) + cleanup-gcp-drift-comment-permission (dọn nốt drift GCP, spec 3.0.0 KHÔNG bump, scope v8) + hrm-solution-content (5 ảnh mockup + sections/useCases/faq qua cờ renderExtendedContent; spec 3.0.0 KHÔNG bump; cần user duyệt copy trước production). + enterprise-solution-docs-web-ready (viết lại 4 docs/reference README theo 8 heading web-ready; docs-only 0 dòng code; spec 3.0.0 KHÔNG bump; scope v8→v9; caveat: builder+reviewer chạy inline do env chặn subagent lồng → primary nên re-run reviewer độc lập). + publish-solution-screenshots (3 ảnh BoxAI + nội dung đầy đủ CRM/LMS/DentGo vi+en + ScreenshotSection vào trang AI + i18n key; spec 3.0.0 KHÔNG bump; scope v9→v10; reviewer STRICT round-1 PASS 0 CRITICAL/MAJOR/3 MINOR; verify lint/typecheck/build PASS do primary chạy lại; cần user xem ảnh BoxAI tiếng Anh + đọc lại copy).",
       "lastUpdated": "2026-10-12T01:30:00+07:00"

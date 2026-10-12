@@ -14,6 +14,7 @@ import { AiSection } from '@/components/solutions/AiSection';
 import { AudienceCards } from '@/components/solutions/AudienceCards';
 import { FaqAccordion } from '@/components/solutions/FaqAccordion';
 import { normalizeFeatures } from '@/components/solutions/features';
+import { Link } from '@/i18n/navigation';
 import { Section } from '@/components/ui/Section';
 import { buttonStyles } from '@/components/ui/Button';
 import { CTAForm } from '@/components/contact/CTAForm';
@@ -84,7 +85,7 @@ export default async function EnterpriseSolutionDetailPage({ params }: { params:
       imageAlt={solution.heroShot?.alt}
       imageMaxW={solution.heroShot?.maxWidth ?? 'max-w-full'}
       imageRatio={solution.heroShot?.ratio}
-      primaryCta={{ href: localizedPath(locale, '/contact'), label: t('demoCta') }}
+      primaryCta={{ href: '/contact', label: t('demoCta') }}
       secondaryCta={{
         ariaLabel: t('featuresCtaAria'),
         href: '#features',
@@ -118,7 +119,7 @@ export default async function EnterpriseSolutionDetailPage({ params }: { params:
         ) : null}
         {audience ? <AudienceCards cards={audience.cards} title={audience.title} /> : null}
         <FaqAccordion items={solution.faq ?? []} title={t('faqTitle')} />
-        {cta ? <LmsCtaBlock button={cta.button} description={cta.description} locale={locale} title={cta.title} /> : null}
+        {cta ? <LmsCtaBlock button={cta.button} description={cta.description} title={cta.title} /> : null}
         <CTAForm />
       </>
     );
@@ -168,16 +169,19 @@ export default async function EnterpriseSolutionDetailPage({ params }: { params:
 /**
  * CTA cuối của layout LMS (spec §5.6): nền `background`, căn giữa, **1 nút** duy nhất
  * cho mỗi intent. Nút full-width ở mobile. Đặt TRƯỚC `CTAForm` (form tư vấn — intent khác).
+ *
+ * `Link` của next-intl + href tương đối: giữ đúng domain khi xem preview (Vercel), không
+ * nhảy sang production như `localizedPath()`.
  */
-function LmsCtaBlock({ title, description, button, locale }: { title: string; description: string; button: string; locale: string }) {
+function LmsCtaBlock({ title, description, button }: { title: string; description: string; button: string }) {
   return (
     <Section spacing="large">
       <div className="flex flex-col items-center gap-6 text-center">
         <h2 className="text-h2 font-bold">{title}</h2>
         <p className="max-w-[52ch] text-body-lg text-text-secondary">{description}</p>
-        <a className={`${buttonStyles('primary', 'lg')} w-full sm:w-auto`} href={localizedPath(locale, '/contact')}>
+        <Link className={`${buttonStyles('primary', 'lg')} w-full sm:w-auto`} href="/contact">
           {button}
-        </a>
+        </Link>
       </div>
     </Section>
   );

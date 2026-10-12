@@ -1,5 +1,6 @@
 import { Container } from '@/components/ui/Container';
 import { Breadcrumb } from '@/components/shared/Breadcrumb';
+import { Link } from '@/i18n/navigation';
 import { buttonStyles } from '@/components/ui/Button';
 import { ShotImage } from './ShotImage';
 
@@ -30,6 +31,10 @@ type SolutionHeroProps = {
    * ("Giao diện minh hoạ" / "Illustrative interface", spec §7). Thiếu → không caption.
    */
   caption?: string;
+  /**
+   * Đường dẫn TƯƠNG ĐỐI, không có tiền tố locale — `Link` của next-intl tự thêm
+   * (`/contact` → `/contact` ở VI, `/en/contact` ở EN). KHÔNG truyền URL tuyệt đối.
+   */
   primaryCta: { label: string; href: string };
   secondaryCta: { label: string; href: string; ariaLabel?: string };
 };
@@ -71,16 +76,19 @@ export function SolutionHero({
             {description}
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
-            <a className={`${buttonStyles('primary', 'lg')} w-full sm:w-auto`} href={primaryCta.href}>
+            {/* `Link` của next-intl: tự thêm tiền tố locale + prefetch. KHÔNG dùng
+                `localizedPath()` ở đây — hàm đó trả URL tuyệt đối theo NEXT_PUBLIC_SITE_URL,
+                nên trên preview (Vercel) bấm nút sẽ nhảy sang domain production. */}
+            <Link className={`${buttonStyles('primary', 'lg')} w-full sm:w-auto`} href={primaryCta.href}>
               {primaryCta.label}
-            </a>
-            <a
+            </Link>
+            <Link
               aria-label={secondaryCta.ariaLabel}
               className={`${buttonStyles('outline', 'lg')} w-full sm:w-auto`}
               href={secondaryCta.href}
             >
               {secondaryCta.label}
-            </a>
+            </Link>
           </div>
         </div>
       </Container>
