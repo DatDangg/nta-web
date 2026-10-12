@@ -62,7 +62,8 @@
         "change-products-carousel-image-size-phase-1-task-01",
         "change-brand-logo-wordmark-removal-phase-1-task-01",
         "change-hairstyle-ai-gallery-screenshots-phase-1-task-01",
-        "change-home-solution-card-images-phase-1-task-01"
+        "change-home-solution-card-images-phase-1-task-01",
+        "change-home-footer-redesign-phase-1-task-01"
       ],
       "inProgressTask": null,
       "tasks": [
@@ -524,6 +525,16 @@
           "reviewReport": ".context/review-reports/change-home-solution-card-images-phase-1-task-01-round-1-review.md",
           "changeRequest": "spec/changes/archive/2026-10-12-home-solution-card-images.md",
           "note": "MODIFY post-build (asset + layout UI) — user: \"3 ảnh đầu t gửi, thay lần lượt vào 3 ảnh theo thứ tự ... vị trí bằng nhau, text thẳng hàng, cả thẻ cao bằng nhau\". home.ts (vi+en): 3 image → home-{enterprise,ai,apps}.jpg đúng thứ tự + alt VI/EN mới + BỎ shot:true; SolutionCard 2 nhánh Link flex h-full flex-col + body flex flex-1 flex-col + CTA mt-auto pt-4. r1 NORMAL PASS (0 CRITICAL/MAJOR; 4 MINOR non-blocking: 2 SVG cũ orphan, shot? không nơi set, object-cover cắt ~5.4%/mép, pt-4 trong box 44px). Verify primary chạy thật: lint 0 errors (1 warning pre-existing mdx no-img-element), typecheck PASS, build PASS; HTML vi/en 3 ảnh mới, 0 ref lms/01-tong-quan.png + ai-analysis.svg + ai-apps.svg; /solutions/enterprise + /solutions/ai không regression. spec 3.0.0 KHÔNG bump (R-02 giữ nguyên) — scope v17 (sau đó change brand-logo-lockup publish v18). Doc impact: none."
+        },
+        {
+          "id": "change-home-footer-redesign-phase-1-task-01",
+          "layer": 1,
+          "status": "done",
+          "reviewLevel": "STRICT",
+          "reviewResult": "PASS",
+          "reviewReport": ".context/review-reports/change-home-footer-redesign-phase-1-task-01-round-1-review.md",
+          "changeRequest": "spec/changes/2026-10-12-home-footer-redesign.md",
+          "note": "MODIFY post-build (UI/content, component dùng chung) — user 'sửa cho t cái đoạn footer đi' + 3 ảnh (2 nền + 1 goal). User chốt: CẢ dải CTA + Footer, TOÀN SITE; chỉ link tới route đã tồn tại. CTABanner (7 route) → nền teal footer-cta-bg.jpg + overlay + 3 bullet icon + nút pill trắng → /contact (copy title/description GIỮ NGUYÊN); Footer (mọi route VI+EN) → nền sáng footer-bg.jpg + cột thương hiệu (BrandLogo + tagline + 3 social tròn) + vạch dọc + 3 cột link (Về NTA/Giải pháp/Nội dung, chỉ route tồn tại) + card 'Cần hỗ trợ?' → /contact + legal (copyright + LanguageToggle). i18n vi/en +9 key, bỏ 3 key chết (contactGroup/ctaText/privacy). r1 STRICT PASS (0 CRITICAL/MAJOR; 2 MINOR: SupportCard sm:col-span-2 đã fix tại close-out; URL 3 social còn generic → residual). Verify primary chạy thật: lint 0 errors (1 warning pre-existing mdx no-img-element), typecheck PASS, build PASS 43 trang HTML; footer-bg render 43/43 (trừ 404 global pre-existing), cta-bg đúng mọi trang có CTABanner, chuỗi footer đúng locale VI/EN, 0 dead link, key parity 168/168. spec 3.0.0 KHÔNG bump (R-11/BR-001 vẫn thoả) — scope v18→v19. Concurrency: vi.json/en.json + design-spec.md còn hunk của session hero-banner (ngoài scope, không gộp). Doc impact: design-spec §1.2 reconcile. Residual: URL social thật; các mục link trong ảnh goal (Đội ngũ/Tuyển dụng/Tài liệu/FAQ/legal) lược vì chưa có trang; chưa render browser thật."
         }
       ],
       "specVersion": "3.0.0",
@@ -531,17 +542,17 @@
       "layerPlanDiagram": "docs/diagrams/layer-plan.html",
       "initialBuildCompletedAt": "2026-10-10T03:15:00+07:00",
       "specPublished": {
-        "scopeVersion": 18,
+        "scopeVersion": 19,
         "trigger": "feature-update",
         "path": "spec/test-scope/current.json",
-        "note": "Publish ngày 2026-10-12 sau T01 (change brand-logo-lockup) PASS review STRICT — spec 3.0.0 KHÔNG bump (chỉ đổi asset + thành phần hiển thị logo, không đổi requirement/behavior), scope v17→v18. Change file đã archive."
+        "note": "Publish ngày 2026-10-12 sau T01 (change home-footer-redesign) PASS review STRICT — spec 3.0.0 KHÔNG bump (restyle dải CTA + Footer toàn site, chỉ link tới route tồn tại; R-11/BR-001 vẫn thoả, không đổi requirement/behavior), scope v18→v19."
       },
       "layer4PhaseReview": {
         "verdict": "PASS",
         "report": ".context/review-reports/feature-nta-website-layer-4-round-1-spec-review.md"
       },
-      "note": "Initial build hoàn tất: Layer 0..4 (totalLayers 5 = layer-plan 'Layer 0 → 4'). 27 req R-01..R-27 implemented. R-22 (Lighthouse Perf/LCP/CLS) + R-23 (viewport 375/768/1280) PARTIAL — đo ở gate DevOps/prod (bước 6). Chưa push (forbidden_branch main, auto_push false). Post-build: ai-solution-content (spec 1.1.0) + domain-ntavietnam (domain → ntavietnam.tech, spec 2.0.0, scope v6) + deploy-platform-docker-vps (Cloud Run → docker-vps, spec 3.0.0, scope v7) + cleanup-gcp-drift-comment-permission (dọn nốt drift GCP, spec 3.0.0 KHÔNG bump, scope v8) + hrm-solution-content (5 ảnh mockup + sections/useCases/faq qua cờ renderExtendedContent; spec 3.0.0 KHÔNG bump; cần user duyệt copy trước production). + enterprise-solution-docs-web-ready (viết lại 4 docs/reference README theo 8 heading web-ready; docs-only 0 dòng code; spec 3.0.0 KHÔNG bump; scope v8→v9; caveat: builder+reviewer chạy inline do env chặn subagent lồng → primary nên re-run reviewer độc lập). + publish-solution-screenshots (3 ảnh BoxAI + nội dung đầy đủ CRM/LMS/DentGo vi+en + ScreenshotSection vào trang AI + i18n key; spec 3.0.0 KHÔNG bump; scope v9→v10; reviewer STRICT round-1 PASS 0 CRITICAL/MAJOR/3 MINOR; verify lint/typecheck/build PASS do primary chạy lại; cần user xem ảnh BoxAI tiếng Anh + đọc lại copy). + replace-remaining-placeholder-images (change 2026-10-12: T01 assets 3 PNG mock + 9 SVG + pipeline; T02 wiring hero/solutions AI/case-study/blog/about; T03 /contact bỏ map + placeholder; spec 3.0.0 KHÔNG bump, scope v11→v12; T04 /products dùng ảnh user cung cấp — khung 9/16 theo user chốt (poster dọc, giữ chữ); change đã archive).",
-      "lastUpdated": "2026-10-12T15:34:00+07:00"
+      "note": "Initial build hoàn tất: Layer 0..4 (totalLayers 5 = layer-plan 'Layer 0 → 4'). 27 req R-01..R-27 implemented. R-22 (Lighthouse Perf/LCP/CLS) + R-23 (viewport 375/768/1280) PARTIAL — đo ở gate DevOps/prod (bước 6). Chưa push (forbidden_branch main, auto_push false). Post-build: ai-solution-content (spec 1.1.0) + domain-ntavietnam (domain → ntavietnam.tech, spec 2.0.0, scope v6) + deploy-platform-docker-vps (Cloud Run → docker-vps, spec 3.0.0, scope v7) + cleanup-gcp-drift-comment-permission (dọn nốt drift GCP, spec 3.0.0 KHÔNG bump, scope v8) + hrm-solution-content (5 ảnh mockup + sections/useCases/faq qua cờ renderExtendedContent; spec 3.0.0 KHÔNG bump; cần user duyệt copy trước production). + enterprise-solution-docs-web-ready (viết lại 4 docs/reference README theo 8 heading web-ready; docs-only 0 dòng code; spec 3.0.0 KHÔNG bump; scope v8→v9; caveat: builder+reviewer chạy inline do env chặn subagent lồng → primary nên re-run reviewer độc lập). + publish-solution-screenshots (3 ảnh BoxAI + nội dung đầy đủ CRM/LMS/DentGo vi+en + ScreenshotSection vào trang AI + i18n key; spec 3.0.0 KHÔNG bump; scope v9→v10; reviewer STRICT round-1 PASS 0 CRITICAL/MAJOR/3 MINOR; verify lint/typecheck/build PASS do primary chạy lại; cần user xem ảnh BoxAI tiếng Anh + đọc lại copy). + replace-remaining-placeholder-images (change 2026-10-12: T01 assets 3 PNG mock + 9 SVG + pipeline; T02 wiring hero/solutions AI/case-study/blog/about; T03 /contact bỏ map + placeholder; spec 3.0.0 KHÔNG bump, scope v11→v12; T04 /products dùng ảnh user cung cấp — khung 9/16 theo user chốt (poster dọc, giữ chữ); change đã archive). + home-footer-redesign (restyle dải CTA + Footer toàn site theo ảnh user + 2 ảnh nền; chỉ link route tồn tại; spec 3.0.0 KHÔNG bump; scope v18→v19; reviewer STRICT r1 PASS 0 CRITICAL/MAJOR, 2 MINOR — 1 đã fix; concurrency: vi.json/en.json + design-spec.md còn hunk session hero-banner).",
+      "lastUpdated": "2026-10-12T15:36:00+07:00"
     }
   ],
   "bugs": []

@@ -6,7 +6,10 @@
       "viewSolutions": "Xem giải pháp",
       "learnMore": "Tìm hiểu thêm",
       "viewCaseStudies": "Xem case study",
-      "submit": "Gửi yêu cầu"
+      "submit": "Gửi yêu cầu",
+      "bulletConsulting": "Tư vấn chuyên sâu",
+      "bulletSolution": "Giải pháp phù hợp",
+      "bulletDeploy": "Triển khai nhanh chóng"
     }
   },
   "nav": {
@@ -28,10 +31,15 @@
     "aboutGroup": "Về NTA",
     "solutionsGroup": "Giải pháp",
     "contentGroup": "Nội dung",
-    "contactGroup": "Liên hệ",
-    "ctaText": "Trao đổi cùng đội ngũ NTA về nhu cầu của bạn.",
-    "copyright": "© NTA. Bảo lưu mọi quyền.",
-    "privacy": "Chính sách bảo mật"
+    "intro": "Giới thiệu",
+    "aiApps": "Ứng dụng AI",
+    "tagline": "Nền tảng vận hành doanh nghiệp thông minh với AI.",
+    "supportTitle": "Cần hỗ trợ?",
+    "supportLink": "Liên hệ với chúng tôi",
+    "socialFacebook": "Facebook của NTA",
+    "socialLinkedIn": "LinkedIn của NTA",
+    "socialYouTube": "YouTube của NTA",
+    "copyright": "© NTA. Bảo lưu mọi quyền."
   },
   "interactive": {
     "filter": {

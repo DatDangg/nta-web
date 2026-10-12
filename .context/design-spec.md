@@ -28,11 +28,15 @@ kiểu Apple, dựa trên Tailwind + system SF Pro/Inter, motion fade/slide ti�
 
 ### 1.2 App shell — Footer (R-11, BR-001)
 
-- Nền `background-alt`, 4 cột desktop / 2 cột tablet / 1 cột mobile (nhóm accordion tuỳ chọn):
-  **Về NTA** · **Giải pháp** (Enterprise + 4 slug, AI + 3 slug) · **Nội dung** (Sản phẩm, Case Study, Tin tức) ·
-  **Liên hệ** (hotline/email/địa chỉ placeholder + social icons + `VI|EN`).
-- Cột trái/biên: block CTA "Liên hệ tư vấn" (BR-001: mọi trang có CTA liên hệ ở footer).
-- Legal line: copyright + link Chính sách (nếu có). KHÔNG version footer, không chuỗi meta trang trí.
+- **Dải CTA cuối trang** (mọi route) = `CTABanner`: nền ảnh teal `footer-cta-bg.jpg` + overlay gradient,
+  chữ trắng; `h2` + mô tả + hàng 3 gạch đầu dòng icon (Tư vấn chuyên sâu · Giải pháp phù hợp ·
+  Triển khai nhanh chóng) ngăn vạch dọc; nút pill trắng "Liên hệ tư vấn" + mũi tên → `/contact`
+  (BR-001: mọi trang có CTA liên hệ ở footer).
+- **Footer** nền ảnh sáng `footer-bg.jpg` phủ `bg-background`; desktop grid 12 cột = cột thương hiệu
+  (`BrandLogo` + tagline + 3 social tròn) · 3 cột link (**Về NTA** · **Giải pháp** · **Nội dung**) ngăn vạch dọc ·
+  card "Cần hỗ trợ?" → `/contact`; tablet 2 cột; mobile 1 cột.
+- Chỉ link tới route đã tồn tại (mục chưa có trang trong ảnh mẫu đã lược). Legal line: copyright + `VI|EN`.
+  KHÔNG version footer, không chuỗi meta trang trí.
 
 ### 1.3 Section & layout-family system (taste-skill §4.7)
 

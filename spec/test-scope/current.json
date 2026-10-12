@@ -1,48 +1,53 @@
 {
   "specVersion": "3.0.0",
-  "scopeVersion": 18,
-  "generatedAt": "2026-10-12T15:20:00+07:00",
+  "scopeVersion": 19,
+  "generatedAt": "2026-10-12T15:35:00+07:00",
   "trigger": "feature-update",
-  "workItem": "change-brand-logo-lockup",
+  "workItem": "change-home-footer-redesign",
   "specRefs": [],
   "changed": {
     "files": [
-      "src/components/layout/BrandLogo.tsx",
-      "public/images/brand/logo-lockup.png",
+      "src/components/shared/CTABanner.tsx",
+      "src/components/layout/Footer.tsx",
+      "src/i18n/messages/vi.json",
+      "src/i18n/messages/en.json",
+      "public/images/home/footer-cta-bg.jpg",
+      "public/images/home/footer-bg.jpg",
       ".context/design-spec.md",
-      "spec/updates/2026-10-12-brand-logo-lockup.md",
+      "spec/updates/2026-10-12-home-footer-redesign.md",
       "spec/CHANGELOG.md",
       "spec/test-scope/current.json"
     ],
     "modules": [
-      "src/components/layout/BrandLogo.tsx (LOGO_MARK_SRC 480×397 h-9 → LOGO_LOCKUP_SRC 488×137 h-10)",
-      "public/images/brand/logo-lockup.png (asset cũ nền trắng đục 2000×750 → ảnh user crop 488×137 PNG RGBA trong suốt)"
+      "src/components/shared/CTABanner.tsx (nền ảnh teal + overlay, 3 bullet icon, nút pill trắng → /contact; giữ props title/description/href + variant fallback)",
+      "src/components/layout/Footer.tsx (nền ảnh sáng, FooterBrand/FooterLinks/SupportCard, 3 social, 3 cột link theo mapping, legal + LanguageToggle)",
+      "public/images/home/footer-cta-bg.jpg (1920×819, nền teal wave cho dải CTA)",
+      "public/images/home/footer-bg.jpg (1922×818, nền sáng globe dot cho footer)"
     ]
   },
   "impact": {
     "direct": [
-      "Header (mọi route, VI+EN): logo góc trái render lockup đầy đủ (mark + chữ NTA + tagline) thay cho mark-only.",
-      "Footer (mọi route, VI+EN): logo render lockup đầy đủ; khối logo link home tappable cao ~40px."
+      "CTABanner (7 route, VI+EN): home + about + products + solutions/enterprise + solutions/ai + blog/[slug] + case-studies/[slug] — nền teal + 3 bullet icon + nút pill trắng.",
+      "Footer (mọi route, VI+EN qua [locale]/layout.tsx): nền ảnh sáng + cột thương hiệu (logo + tagline + 3 social) + 3 cột link + card 'Cần hỗ trợ?' → /contact + legal (copyright + LanguageToggle)."
     ],
     "dependents": [
-      "BrandLogo — 2 caller Header.tsx:51 (<BrandLogo priority />) + Footer.tsx:21 (<BrandLogo />); không có caller khác (grep).",
-      "Header.tsx / Footer.tsx / MobileNav.tsx — KHÔNG đổi; Header vẫn tự chuyển SVG chevron.",
-      "src/lib/seo/jsonld.ts — KHÔNG đổi (Organization logo vẫn /images/brand/logo-square.png).",
-      "i18n vi.json/en.json — KHÔNG đổi (nav.homeLabel giữ nguyên)."
+      "src/i18n/messages/{vi,en}.json — thêm common.cta.bulletConsulting/bulletSolution/bulletDeploy + footer.intro/aiApps/tagline/supportTitle/supportLink/socialFacebook/socialLinkedIn/socialYouTube; bỏ footer.contactGroup/ctaText/privacy (không còn reference trong src/).",
+      "7 caller CTABanner (home/about/products/solutions×2/blog blog-detail/case-detail) — truyền variant primary|alt vẫn hợp lệ.",
+      "Layout [locale]/layout.tsx — KHÔNG đổi; Footer vẫn render ở :66."
     ],
     "regression": [
-      "Accessible name link home giữ nguyên: aria-label = 'NTA, trang chủ' (VI) / 'NTA, home' (EN).",
-      "JSON-LD Organization logo vẫn logo-square.png; favicon/apple-icon (src/app/icon.png, apple-icon.png) không đổi.",
-      "Không còn tham chiếu logo-mark.png trong src/ (0 reference — file giữ lại, không xoá).",
-      "Layout Header (sticky 64/72px) + Footer không vỡ: logo h-10 = 40px < chiều cao header."
+      "LanguageToggle vẫn ở footer (R-20 VI|EN); nav/form/JSON-LD/routing không đổi.",
+      "BR-001 (mọi trang có CTA/liên hệ ở footer) thoả qua dải CTABanner + SupportCard → /contact.",
+      "0 dead link: mọi href nội bộ ⊆ /about /contact /products /case-studies /blog /solutions/enterprise /solutions/ai (+ slug detail)."
     ]
   },
   "acceptance": [
-    "public/images/brand/logo-lockup.png = ảnh user đã crop sát nội dung (488×137, PNG RGBA nền trong suốt).",
-    "BrandLogo render <Image src='/images/brand/logo-lockup.png' width={488} height={137} className='h-10 w-auto' alt='' aria-hidden='true'>, prop priority vẫn truyền từ Header.",
-    "Header + Footer (VI+EN) render lockup; a11y name link home vẫn 'NTA, trang chủ' / 'NTA, home'.",
-    "JSON-LD vẫn logo-square.png; .context/design-spec.md:22 đã reconcile.",
-    "npm run lint (0 errors, 1 warning pre-existing src/components/mdx/index.tsx) / npm run typecheck / npm run build PASS; HTML build vi/en: logo-lockup.png = 9, logo-mark.png = 0, >NTA< = 0 (test_command: null → skip test)."
+    "Dải CTA + Footer render đúng 2 ảnh nền + nội dung ở mọi trang VI và EN (43 trang HTML build).",
+    "Footer links đúng mapping, chỉ route tồn tại (0 dead link).",
+    "i18n key parity vi/en = 168/168; không em-dash trong chuỗi UI mới.",
+    "A11y: social aria-label + target ≥44×44; ảnh nền alt='' aria-hidden; footer <h2>.",
+    "npm run lint (0 errors, 1 warning pre-existing src/components/mdx/index.tsx) / npm run typecheck / npm run build PASS; test_command: null → skip test.",
+    "Reviewer STRICT round 1 PASS (0 CRITICAL/MAJOR; 2 MINOR — MINOR-1 sm:col-span-2 đã fix)."
   ],
-  "risk": "low"
+  "risk": "medium"
 }

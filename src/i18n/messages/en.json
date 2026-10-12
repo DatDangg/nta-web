@@ -6,7 +6,10 @@
       "viewSolutions": "View solutions",
       "learnMore": "Learn more",
       "viewCaseStudies": "View case studies",
-      "submit": "Send request"
+      "submit": "Send request",
+      "bulletConsulting": "In-depth consulting",
+      "bulletSolution": "A suitable solution",
+      "bulletDeploy": "Fast deployment"
     }
   },
   "nav": {
@@ -28,10 +31,15 @@
     "aboutGroup": "About NTA",
     "solutionsGroup": "Solutions",
     "contentGroup": "Content",
-    "contactGroup": "Contact",
-    "ctaText": "Talk with the NTA team about your needs.",
-    "copyright": "© NTA. All rights reserved.",
-    "privacy": "Privacy policy"
+    "intro": "Introduction",
+    "aiApps": "AI apps",
+    "tagline": "An intelligent enterprise operations platform powered by AI.",
+    "supportTitle": "Need help?",
+    "supportLink": "Talk to our team",
+    "socialFacebook": "NTA on Facebook",
+    "socialLinkedIn": "NTA on LinkedIn",
+    "socialYouTube": "NTA on YouTube",
+    "copyright": "© NTA. All rights reserved."
   },
   "interactive": {
     "filter": {
