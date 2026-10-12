@@ -10,15 +10,23 @@
 - T03: `/contact` bỏ MapEmbed + dòng placeholder + key i18n + Footer + docs/DESIGN.md. Reviewer **r1 PASS NORMAL**.
 - Commit: T01 `bcf4d16` · T03 `fe73912`. progress.json đã update T01/T03 done. **Không push.**
 
-## step: T02 wiring — status=awaiting
+## step: T02 wiring — status=done ✅
 - Builder subagent **hết bước giữa chừng** (chưa verify, chưa cập nhật task/journal). Primary tiếp quản.
 - Sửa lỗi builder để lại: mojibake `?` ở alt (6 solution cardImageAlt + 6 gallery alt), alt EN dùng tiếng Việt
   (home.ts 3 dòng), và **sai format** `cardImage` (string + `cardImageAlt`) → object `{src, alt, ratio}`
   (khớp `crm.mdx`) — nếu không `/solutions/ai` không render ảnh. Set ratio: boxai 1.954, flycam/talvra 1.396.
 - Hero: `enterprise.svg` → `enterprise-hero.png`, `aspect-[4/3] object-cover` → `object-contain` + width/height
-  khớp tỉ lệ thật (2656×1902) để không cắt 2 bên, không letterbox lệch.
+  khớp tỉ lệ thật (2656×1902) để không cắt 2 bên, không letterbox lệch. Xoá dead import `CARD_IMAGE_RATIO`.
 - Gallery Óc Eo: builder tạo thêm 2 SVG không chữ `oc-eo-edge-detail.svg` + `oc-eo-operations-detail.svg`.
 - Verify (primary, thật): lint PASS (0 errors/1 warning pre-existing) · typecheck PASS · build PASS.
   HTML: `/`+`/en` hero mới; `/solutions/ai` render đủ 3 cardImage + alt VI/EN; `/about` team-ai/team-domain;
   dental = 3 ảnh dentgo; oc-eo = 3 SVG. `grep` src = 0 ref placeholder cũ. `check-left-align`: skip (không có script).
-- Next: reviewer STRICT. Cancel sẽ redo bước này.
+- Reviewer STRICT r1 = **PASS** (2 MINOR non-blocking: dead import đã xoá; mapping ảnh đội ngũ cần xác nhận).
+  Reviewer shell bị deny → kiểm chứng tĩnh; primary đã chạy verify thật.
+- Commit T02 `b41ddf0`. Spec publish scope v12.
+
+## step: T04 `/products` — status=blocked ⛔ (chờ user)
+- 2 ảnh user cung cấp **chưa có** trong `public/images/products/` (chỉ có `music-app-preview.svg` + `hair-style-ai-preview.svg`).
+- Task-04 quy định: file chưa có → **DỪNG**, báo orchestrator, KHÔNG tự dùng ảnh thay thế.
+- Cần user copy: `public/images/products/ai-music-app.jpg` + `public/images/products/hair-style-ai.jpg`.
+- Change file **giữ pending** (chưa archive) vì T04 chưa xong.
