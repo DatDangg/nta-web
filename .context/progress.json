@@ -10,7 +10,7 @@
       "currentPhase": 0,
       "totalLayers": 5,
       "currentLayer": 4,
-      "completedTasks": ["layer-0-task-01", "layer-0-task-02", "layer-0-task-03", "layer-0-task-04", "layer-0-task-05", "layer-0-task-06", "layer-1-task-01", "layer-1-task-02", "layer-1-task-03", "layer-1-task-04", "layer-1-task-05", "fix-layer1-dead-links-phase-1-task-01", "layer-2-task-01", "layer-2-task-02", "layer-2-task-03", "layer-2-task-04", "layer-2-task-05", "layer-2-task-06", "layer-2-task-07", "fix-blog-list-date-format-phase-1-task-01", "layer-3-task-01", "layer-3-task-02", "layer-3-task-03", "layer-4-task-01", "layer-4-task-02", "layer-4-task-03", "layer-4-task-04", "change-ai-solution-content-phase-1-task-01", "change-ai-solution-content-phase-1-task-02", "change-domain-ntavietnam-phase-1-task-01", "change-deploy-platform-docker-vps-phase-1-task-01", "change-cleanup-gcp-drift-comment-permission-phase-1-task-01", "change-hrm-solution-content-phase-1-task-01", "change-enterprise-solution-docs-web-ready-phase-1-task-01", "change-publish-solution-screenshots-phase-1-task-01", "change-solution-detail-redesign-phase-1-task-01", "change-solution-detail-redesign-phase-1-task-02", "change-solution-detail-redesign-phase-1-task-03", "change-solution-detail-redesign-phase-1-task-04", "change-solution-detail-redesign-phase-1-task-05"],
+      "completedTasks": ["layer-0-task-01", "layer-0-task-02", "layer-0-task-03", "layer-0-task-04", "layer-0-task-05", "layer-0-task-06", "layer-1-task-01", "layer-1-task-02", "layer-1-task-03", "layer-1-task-04", "layer-1-task-05", "fix-layer1-dead-links-phase-1-task-01", "layer-2-task-01", "layer-2-task-02", "layer-2-task-03", "layer-2-task-04", "layer-2-task-05", "layer-2-task-06", "layer-2-task-07", "fix-blog-list-date-format-phase-1-task-01", "layer-3-task-01", "layer-3-task-02", "layer-3-task-03", "layer-4-task-01", "layer-4-task-02", "layer-4-task-03", "layer-4-task-04", "change-ai-solution-content-phase-1-task-01", "change-ai-solution-content-phase-1-task-02", "change-domain-ntavietnam-phase-1-task-01", "change-deploy-platform-docker-vps-phase-1-task-01", "change-cleanup-gcp-drift-comment-permission-phase-1-task-01", "change-hrm-solution-content-phase-1-task-01", "change-enterprise-solution-docs-web-ready-phase-1-task-01", "change-publish-solution-screenshots-phase-1-task-01", "change-solution-detail-redesign-phase-1-task-01", "change-solution-detail-redesign-phase-1-task-02", "change-solution-detail-redesign-phase-1-task-03", "change-solution-detail-redesign-phase-1-task-04", "change-solution-detail-redesign-phase-1-task-05", "change-replace-placeholder-images-phase-1-task-01", "change-replace-placeholder-images-phase-1-task-03"],
       "inProgressTask": null,
       "tasks": [
         {
@@ -379,7 +379,28 @@
           "reviewResult": "PASS",
           "reviewReport": ".context/review-reports/change-solution-detail-redesign-phase-1-task-06-round-1-review.md",
           "changeRequest": "spec/changes/archive/2026-10-11-solution-detail-redesign.md",
-          "note": "T6 — follow-up sau khi user duyệt: (A) CRM/DentGo F1 gắn 01-tong-quan-crop.png (ratio 6.556 / 3.427 đo thật) + alt riêng VI/EN, ảnh hero đầy đủ chỉ còn 1 lần/trang; (B) fix CTA link: localizedPath() trả URL tuyệt đối nên nút demo trỏ thẳng domain production, đổi sang Link next-intl + href tương đối /contact (sửa luôn breadcrumb double-prefix /en/en/ ở dev preview); (C) xác nhận CTAForm còn trên cả 4 trang enterprise. r1 NORMAL PASS (0 CRITICAL/MAJOR, 3 MINOR — 1 đã sửa, 2 báo user). Verify: lint/typecheck PASS, build 51/51 exit 0, verify-t6 22/22, verify-t5 39/39 không regression. CHƯA push — chờ user duyệt xong thì push nhánh redesign/solution-detail (Vercel preview), KHÔNG push main."
+          "note": "T6 — follow-up sau khi user duyệt: (A) CRM/DentGo F1 gắn 01-tong-quan-crop.png (ratio 6.556 / 3.427 đo thật) + alt riêng VI/EN, ảnh hero đầy đủ chỉ còn 1 lần/trang; (B) fix CTA link: localizedPath() trả URL tuyệt đối nên nút demo trỏ thẳng domain production, đổi sang Link next-intl + href tương đối /contact (sửa luôn breadcrumb double-prefix /en/en/ ở dev preview); (C) xác nhận CTAForm còn trên cả 4 trang enterprise. r1 NORMAL PASS (0 CRITICAL/MAJOR, 3 MINOR — 1 đã sửa, 2 báo user). Verify: lint/typecheck PASS, build 51/51 exit 0, verify-t6 22/22, verify-t5 39/39 không regression. CHƯA push — chờ user duyệt xong thì push nhánh redesign/solution-detail (Vercel preview), KHÔNG push main.",
+          "extra": "T7 (follow-up #2) commit 61cb49e: 4 EN feature titles LMS theo bảng user chốt + ghi spec §11.2; crop lại crm/01-tong-quan-crop.png 2059x618 ratio 3.332."
+        },
+        {
+          "id": "change-replace-placeholder-images-phase-1-task-01",
+          "layer": 1,
+          "status": "done",
+          "reviewLevel": "NORMAL",
+          "reviewResult": "PASS",
+          "reviewReport": ".context/review-reports/change-replace-placeholder-images-phase-1-task-01-round-2-review.md",
+          "changeRequest": "spec/changes/2026-10-12-replace-remaining-placeholder-images.md",
+          "note": "T01 — assets: 3 PNG mock (enterprise-hero, flycam/01-tong-quan, talvra/01-tong-quan — 2656x1902 RGBA) + 9 SVG không chữ (illustrations ai-analysis/ai-apps/oc-eo-architecture, blog x4, about team-ai/team-domain) + scripts/screenshots mock-enterprise/flycam/talvra + capture/images-ready/serve/shots. r1 FAIL (1 CRITICAL mojibake + 1 MAJOR flycam nested article) → fix → r2 PASS NORMAL (2 MINOR: images-ready assertion CSS background hard-fail, indentation cosmetic). Verify: capture PASS, SVG <text> scan 0/9, lint/typecheck/build PASS."
+        },
+        {
+          "id": "change-replace-placeholder-images-phase-1-task-03",
+          "layer": 1,
+          "status": "done",
+          "reviewLevel": "NORMAL",
+          "reviewResult": "PASS",
+          "reviewReport": ".context/review-reports/change-replace-placeholder-images-phase-1-task-03-round-1-review.md",
+          "changeRequest": "spec/changes/2026-10-12-replace-remaining-placeholder-images.md",
+          "note": "T03 — /contact REMOVE: bỏ MapEmbed khỏi page, bỏ 2 dòng footer placeholder + 2 key i18n contact.placeholders, ContactInfo gọn; docs/DESIGN.md reconcile screen Liên hệ (bỏ MapEmbed + mô tả layout mới). r1 NORMAL PASS (2 MINOR non-blocking + 1 MINOR doc note). Verify bởi primary: lint/typecheck/build PASS."
         }
       ],
       "specVersion": "3.0.0",

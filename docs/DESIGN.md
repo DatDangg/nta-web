@@ -127,7 +127,7 @@ Font stack: `-apple-system, BlinkMacSystemFont, "SF Pro Display", Inter, "Segoe 
 
 ### Screen: Liên hệ
 - **Route:** `/contact`
-- **Components:** PageHeader, ContactForm (tên, email, SĐT, nội dung), ContactInfo (hotline/email/địa chỉ), MapEmbed, OfficeHours
+- **Components:** PageHeader, ContactForm (tên, email, SĐT, nội dung)
 - **States:** Default, Validating, Submitting, Success, Error
 
 ### Screen: 404
@@ -214,9 +214,9 @@ Font stack: `-apple-system, BlinkMacSystemFont, "SF Pro Display", Inter, "Segoe 
 - **Large:** list 3–4 cột.
 
 ### Screen: Liên hệ
-- **Mobile:** form 1 cột trên, info dưới; map full-width.
-- **Tablet:** form | info 2 cột; map full-width.
-- **Desktop:** 2 cột (form 60% | info+map 40%).
+- **Mobile:** consultation form in a single column.
+- **Tablet:** consultation form remains centered in a single column.
+- **Desktop:** consultation form remains centered with a readable maximum width.
 - **Large:** container max-width, spacing rộng.
 
 ### Screen: Header / Footer
