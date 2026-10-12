@@ -177,7 +177,11 @@
       "trends": "Trends",
       "guides": "Guides"
     },
-    "readingTime": "{minutes} min read"
+    "readingTime": "{minutes} min read",
+    "heroTitle": "News & Updates",
+    "heroLead": "on",
+    "heroAccent": "AI and real-world applications",
+    "heroDescription": "Stories, trends and practical insights on AI, technology and how NTA supports organizations on their digital transformation journey."
   },
   "contact": {
     "title": "Contact",

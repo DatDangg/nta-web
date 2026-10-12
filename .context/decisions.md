@@ -45,3 +45,9 @@
 - **Alternatives Considered:** 3 req/10 min (chặt hơn) hoặc 10 req/10 min (lỏng hơn).
 - **Rationale:** Cân bằng chống spam với không chặn nhầm người dùng thật; giữ interface forward không đổi khi thay đích.
 - **Consequences:** Rate-limit in-memory là per-instance (không chính xác khi scale ngang) — ghi residual; cấm `NEXT_PUBLIC_CONTACT_FORM_TARGET` (R-19).
+
+## 2026-10-13 — blog-listing-redesign: trang /blog bám pattern `src/components/listing/*`
+- Hero `/blog` tái dùng `ListingHero` + nền `hero-waves.jpg` (cùng ảnh user gửi) thay vì tạo hero riêng.
+- Màu minh hoạ/thanh lọc dùng hex/rgb arbitrary giống `listing/*` (teal `#0b9f8a`, `#2dd4bf`, `#5eead4`) thay vì chỉ token —
+  nhất quán với 4 trang danh sách hiện có; tránh opacity modifier trên màu `var()` (error-memory Error 7). Cần user xác nhận.
+

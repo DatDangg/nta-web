@@ -177,7 +177,11 @@
       "trends": "Xu hướng",
       "guides": "Hướng dẫn"
     },
-    "readingTime": "{minutes} phút đọc"
+    "readingTime": "{minutes} phút đọc",
+    "heroTitle": "Tin tức & Cập nhật",
+    "heroLead": "về",
+    "heroAccent": "AI và ứng dụng thực tiễn",
+    "heroDescription": "Những câu chuyện, xu hướng và chia sẻ thực tiễn về AI, công nghệ và cách NTA đồng hành cùng doanh nghiệp trên hành trình chuyển đổi số."
   },
   "contact": {
     "title": "Liên hệ",

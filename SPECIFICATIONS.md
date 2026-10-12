@@ -155,8 +155,10 @@ _(cập nhật 2026-10-09: đổi domain đích sang `ntavietnam.tech` — chang
     nhãn hiển thị lấy từ i18n (vi/en) — dùng chung cho badge list + detail.
   - **Thời gian đọc** tự tính từ số từ của bài (~200 từ/phút, tối thiểu 1 phút), hiển thị "5 phút đọc" / "5 min read".
   - **Chi tiết hành vi (chốt sau spec-validation round 1):**
-    - *Tiêu đề:* `h1` = tiêu đề 2 dòng của hero (VI "Tin tức & Cập nhật / về AI và ứng dụng thực tiễn", EN
-      "News & Updates / on AI and real-world applications"); metadata title giữ "Tin tức | NTA" / "Blog | NTA".
+    - *Tiêu đề:* hero dùng `ListingHero` chung của các trang danh sách: `h1` = dòng 1 ("Tin tức & Cập nhật" /
+      "News & Updates"), dòng 2 là tagline lớn có phần nhấn ("về **AI và ứng dụng thực tiễn**" / "on **AI and
+      real-world applications**"); metadata title giữ "Tin tức | NTA" / "Blog | NTA". Nền = `hero-waves.jpg`
+      dùng chung (cùng ảnh với `hero-background.png` user gửi, bản JPEG nén lại 1983×793 — 38KB).
       Nhãn chip EN: All · AI & Technology · Practical applications · Customer stories · NTA activities · Trends · Guides.
     - *Phân trang:* page size **12**. Không lọc/tìm: khối nổi bật (3 bài mới nhất) chỉ hiện ở trang 1 và KHÔNG tính vào
       page size; lưới = các bài từ thứ 4 trở đi, chia 12/trang. Đang lọc/tìm: lưới = toàn bộ kết quả, 12/trang.
@@ -174,7 +176,8 @@ _(cập nhật 2026-10-09: đổi domain đích sang `ntavietnam.tech` — chang
       `type="search"`; số kết quả trong `role="status"`; "Xem tất cả" chuyển focus tới tiêu đề mục đích, tôn trọng
       `prefers-reduced-motion`; minh hoạ hero `aria-hidden`.
     - *Kiểu dữ liệu:* `Post.category` là union 6 key; key lạ → build fail. Bài liên quan ở detail = cùng key.
-    - *Design:* màu/typography dùng design tokens hiện có, không hardcode màu mockup; ảnh nền hero dùng bản webp.
+    - *Design:* bám pattern trang danh sách hiện có (`src/components/listing/*`: hero sóng, thanh lọc kính, nhấn teal);
+      ảnh nền hero dùng bản đã tối ưu, không thêm asset PNG 1.5MB.
     - *Blast radius:* thẻ mới là component riêng (`src/components/blog/`); `PostCard` (dùng ở RelatedPosts) chỉ đổi
       nhãn badge sang i18n + chuỗi ngày.
   - **Ngoài phạm vi:** khối "Đăng ký nhận tin" (chưa có backend — làm sau). BR-004: không thêm bài/ảnh minh hoạ giả.
