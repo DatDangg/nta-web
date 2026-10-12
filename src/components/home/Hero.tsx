@@ -2,7 +2,6 @@ import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/navigation';
 import { buttonStyles } from '@/components/ui/Button';
 import { Reveal } from '@/components/ui/Reveal';
-import { CARD_IMAGE_RATIO } from '@/components/cards/cardStyles';
 import { Container } from '@/components/ui/Container';
 import { HomeImage } from '@/components/shared/HomeImage';
 
@@ -24,12 +23,12 @@ export async function Hero() {
         <Reveal>
           <HomeImage
             alt={t('heroImageAlt')}
-            className="aspect-[4/3] w-full rounded-lg bg-surface-sunken object-cover"
-            height={1200}
+            className="w-full rounded-lg bg-surface-sunken object-contain"
+            height={1902}
             priority
             sizes="(min-width: 768px) 45vw, 100vw"
-            src="/images/solutions/enterprise.svg"
-            width={1600}
+            src="/images/solutions/v2/enterprise-hero.png"
+            width={2656}
           />
         </Reveal>
       </Container>
