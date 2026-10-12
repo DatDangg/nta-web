@@ -8,3 +8,10 @@ Dockerfile
 docs
 .context
 tasks
+# Ảnh chụp màn hình tạm (~1.5GB) — không đóng góp gì cho image runtime.
+# Thiếu dòng này build context phình lên ~2.7GB, `docker compose build` mất >100s
+# chỉ để transfer, và có thể chạm giới hạn disk trên VPS.
+.tmp
+.tmp-*
+.tmp/
+.build.log
