@@ -9,14 +9,14 @@ export function ShowcaseOverview({ stats, pillars }: Props) {
   return (
     <section className="pb-10 md:pb-12">
       <Container>
-        <dl className="grid divide-y divide-border rounded-2xl border border-border/70 bg-white px-6 shadow-md sm:grid-cols-3 sm:divide-x sm:divide-y-0 sm:px-0">
+        <dl className="grid divide-y divide-border rounded-2xl border border-border bg-white px-6 shadow-md sm:grid-cols-3 sm:divide-x sm:divide-y-0 sm:px-0">
           {stats.map((stat) => (
             <div className="flex items-center gap-4 py-6 sm:justify-center sm:px-6" key={stat.label}>
               <ShowcaseIconBadge icon={stat.icon} size="lg" />
               <div className="min-w-0">
                 <dt className="sr-only">{stat.label}</dt>
                 <dd className="text-2xl font-bold tracking-tight text-text-primary">{stat.value}</dd>
-                <dd className="mt-1 text-sm leading-snug text-text-secondary">{stat.label}</dd>
+                <dd aria-hidden="true" className="mt-1 text-sm leading-snug text-text-secondary">{stat.label}</dd>
               </div>
             </div>
           ))}
@@ -24,7 +24,7 @@ export function ShowcaseOverview({ stats, pillars }: Props) {
 
         <div className="mt-6 grid gap-6 md:grid-cols-3">
           {pillars.map((pillar) => (
-            <article className="rounded-2xl border border-border/70 bg-white p-6 shadow-sm" key={pillar.title}>
+            <article className="rounded-2xl border border-border bg-white p-6 shadow-sm" key={pillar.title}>
               <div className="flex items-center gap-4">
                 <ShowcaseIconBadge icon={pillar.icon} />
                 <h2 className="text-lg font-bold text-text-primary">{pillar.title}</h2>

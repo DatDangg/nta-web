@@ -1,54 +1,62 @@
 {
-  "specVersion": "3.0.0",
-  "scopeVersion": 20,
-  "generatedAt": "2026-10-12T18:05:00+07:00",
+  "specVersion": "3.1.0",
+  "scopeVersion": 21,
+  "generatedAt": "2026-10-13T00:00:00+07:00",
   "trigger": "feature-update",
-  "workItem": "change-home-hero-banner-restyle",
-  "specRefs": [],
+  "workItem": "change-oc-eo-case-study-showcase",
+  "specRefs": [
+    "R-08b (mới)",
+    "R-08",
+    "R-08a",
+    "BR-004",
+    "design-spec Screen 9 (biến thể showcase)"
+  ],
   "changed": {
     "files": [
-      "src/components/home/Hero.tsx",
-      "src/components/home/HeroVisual.tsx",
+      "src/content/types.ts",
+      "src/app/[locale]/case-studies/[slug]/page.tsx",
+      "src/components/cards/CaseStudyCard.tsx",
+      "src/components/case-studies/showcase/ShowcaseHero.tsx",
+      "src/components/case-studies/showcase/ShowcaseOverview.tsx",
+      "src/components/case-studies/showcase/ShowcaseTechnology.tsx",
+      "src/components/case-studies/showcase/VmsMock.tsx",
+      "src/components/case-studies/showcase/ShowcasePhotos.tsx",
+      "src/components/case-studies/showcase/ShowcaseVision.tsx",
+      "src/components/case-studies/showcase/ShowcaseCTA.tsx",
+      "src/components/case-studies/showcase/ShowcaseLayout.tsx",
+      "src/components/case-studies/showcase/icons.tsx",
+      "src/content/case-studies/vi/oc-eo-learning.mdx",
+      "src/content/case-studies/en/oc-eo-learning.mdx",
       "src/content/home.ts",
-      "src/app/[locale]/page.tsx",
-      "src/i18n/messages/vi.json",
-      "src/i18n/messages/en.json",
-      "src/app/globals.css",
-      "public/images/home/hero-banner.jpg",
-      ".context/design-spec.md",
-      "spec/updates/2026-10-12-home-hero-banner-restyle.md",
-      "spec/CHANGELOG.md",
-      "spec/test-scope/current.json"
+      "public/images/cases/oc-eo/*.jpg"
     ],
     "modules": [
-      "src/components/home/Hero.tsx (split h1 heroTitleLead + heroTitleAccent teal, CTA primary + arrow, nền gradient, grid 0.85fr/1.15fr, prop panels)",
-      "src/components/home/HeroVisual.tsx (mới — ảnh aspect-6/5 object-cover object-[70%_50%] + overlay sáng + ListPanel/ChartPanel/StatPanel + wordmark NTA, lg+ aria-hidden)",
-      "src/content/home.ts (heroPanels vi/en: ai/chart/management/performance/apps + wordmark)",
-      "public/images/home/hero-banner.jpg (ảnh nền hero, 1787×880)"
+      "Case study detail — biến thể layout showcase (opt-in frontmatter)",
+      "CaseStudyCard — ảnh cover ưu tiên gallery[0]",
+      "Home featured case — ảnh hero.jpg"
     ]
   },
   "impact": {
     "direct": [
-      "Hero trang chủ `/` và `/en` (dùng duy nhất ở src/app/[locale]/page.tsx) — headline 2 màu, ảnh full-bleed crop 6/5, 5 panel kính + NTA overlay từ lg, CTA arrow, nền gradient."
+      "/case-studies/oc-eo-learning và /en/case-studies/oc-eo-learning — toàn bộ bố cục showcase: hero, 3 số liệu, 3 cột, note, khối công nghệ + VMS minh hoạ, carousel (nút prev/next ≥sm, swipe/keyboard), tầm nhìn, thẻ CTA."
     ],
     "dependents": [
-      "src/i18n/messages/{vi,en}.json — heroTitle → heroTitleLead + heroTitleAccent (0 ref heroTitle còn lại).",
-      "src/content/home.ts — +heroPanels (interface + vi/en); getHomeContent() truyền prop vào Hero.",
-      ".context/design-spec.md — Screen 1 Hero layout/copy + bảng responsive md 42.5%/57.5%."
+      "/case-studies (list + filter) — thẻ Óc Eo dùng hero.jpg; RelatedStudies dùng chung CaseStudyCard.",
+      "/ và /en — khối 'Câu chuyện khách hàng / Customer story' dùng hero.jpg + alt mới."
     ],
     "regression": [
-      "CTA href /contact + /solutions/enterprise giữ nguyên; priority (LCP) + alt heroImageAlt giữ.",
-      ".hero-bleed-right (globals.css) không đổi; mobile <md ảnh full cột dưới chữ; panels ẩn <lg.",
-      "Hero chỉ dùng ở trang chủ — không ảnh hưởng route khác."
+      "/case-studies/dental-clinic-operations (vi/en) giữ layout default: PageHeader, MetaBar, Challenge/Solution/Result, gallery, CTABanner.",
+      "Thẻ dental ở list vẫn dùng gallery[0].",
+      "JSON-LD BreadcrumbList + Article có ở cả 2 nhánh.",
+      "CTA hero anchor #giai-phap (vi) / #solution (en) cuộn tới khối công nghệ; CTA 'Xem chi tiết giải pháp' → /solutions/ai/boxai; thẻ CTA → /contact (đúng locale)."
     ]
   },
   "acceptance": [
-    "Hero dùng ảnh hero-banner.jpg full-bleed mép phải, không khung bo góc/nền xám; crop 6/5 object-[70%_50%] (CSS artifact xác nhận object-position:70% 50%).",
-    "Headline 2 màu VI (lead đen + accent teal #009e87) / EN; 1 h1 duy nhất, text đầy đủ.",
-    "5 panel kính + wordmark NTA render từ heroPanels (vi+en), aria-hidden, CHỈ lg+; chart cột dùng opacity-40 (CSS artifact xác nhận).",
-    "CTA 'Liên hệ tư vấn' có mũi tên →; nền gradient trắng→xanh; không horizontal scroll (DOM-eval scrollWidth==clientWidth).",
-    "npm.cmd run lint (0 errors, 1 warning pre-existing src/components/mdx/index.tsx) / npm.cmd run typecheck / npm.cmd run build (53/53) PASS; test_command: null → skip test.",
-    "Reviewer round 1 PASS → round 2 FAIL (fix) → round 3 PASS (0 CRITICAL/MAJOR; 4 MINOR non-blocking)."
+    "Bố cục khớp ảnh mẫu tasks/change-oc-eo-case-study-showcase/refs/target-showcase-mockup.jpg ở 1440 và 390, vi + en.",
+    "Đường nối 3 node → màn VMS hiển thị (rgba(0,158,135,0.4)); vòng tròn bản đồ màu teal.",
+    "Carousel có caption 'ảnh minh hoạ…' và alt bắt đầu 'Minh hoạ —' / 'Illustration —'; dòng note 'phương án đề xuất' dưới thẻ số liệu; quote có nguồn.",
+    "Không scroll ngang; nút carousel cuộn đúng; 0 console error.",
+    "typecheck PASS, lint 0 errors, build PASS; reviewer round 2 PASS."
   ],
-  "risk": "medium"
+  "risk": "low"
 }

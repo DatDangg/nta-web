@@ -1,6 +1,6 @@
 ---
-spec_version: 3.0.0
-updated_at: 2026-10-09
+spec_version: 3.1.0
+updated_at: 2026-10-13
 ---
 
 # SPECIFICATIONS.md — NTA Website
@@ -114,6 +114,18 @@ _(cập nhật 2026-10-09: đổi domain đích sang `ntavietnam.tech` — chang
   - ⚠️ **Needs-input (chờ xác nhận):** phần C mô tả số liệu "từ phương án" (dự toán + lộ trình) — cần user xác nhận
     đây là **phương án đề xuất** hay **dự án đã triển khai** để ghi "kết quả" trung thực (BR-004).
   - ⚠️ **Needs-input:** số liệu hiện trường Đền Bảo Hà (R-06b) chờ anh Tuấn Anh — không tự bịa.
+
+- **R-08b (bố cục showcase cho chi tiết case study):** chi tiết `/case-studies/[slug]` có **2 biến thể** chọn
+  bằng frontmatter `layout`: `default` (R-08 — MetaBar + Challenge → Solution → Result + gallery) và **`showcase`**
+  (landing theo ảnh mẫu, dữ liệu có cấu trúc trong `showcase`): hero (breadcrumb, eyebrow trạng thái, h1 slogan 2 màu,
+  subtitle = tên dự án, mô tả, CTA anchor; nút video **chỉ khi có URL thật**) + ảnh lớn · thẻ 3 số liệu · 3 cột
+  Thách thức / Giải pháp đề xuất / Kết quả kỳ vọng · dòng lưu ý `note` · khối công nghệ + màn VMS minh hoạ (caption
+  "minh hoạ / dữ liệu giả lập") · carousel ảnh (caption bắt buộc khi ảnh là minh hoạ) · khối tầm nhìn (quote có
+  `quoteSource`) · thẻ CTA → `/contact` · RelatedStudies. Biến thể showcase **không** render MetaBar / 3 khối văn
+  xuôi / `gallery` (giữ trong frontmatter làm fallback). Thẻ case study ở danh sách + khối featured trang chủ dùng
+  ảnh `cover` (thiếu → `gallery[0]`). Áp dụng đầu tiên: `oc-eo-learning` (vi/en). BR-004: phương án đề xuất phải
+  ghi rõ "đề xuất / kỳ vọng / tham chiếu", ảnh minh hoạ phải ghi là minh hoạ. — nguồn: change
+  `spec/changes/archive/2026-10-12-oc-eo-case-study-showcase.md`.
 
 ### Module 7 — Tin tức / Blog
 

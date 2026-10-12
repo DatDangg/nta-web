@@ -107,3 +107,12 @@ These rules were learned from real bugs. Apply them to every task, not just when
 - **Fix:** Lấy `x-forwarded-for` entry **phải nhất** (`.at(-1)`), validate bằng `isValidIpAddress` (IPv4/IPv6); thiếu/rác → **shared fallback bucket** (fail-closed, mọi request chung 1 bucket để không bypass, không key riêng). Thêm prune entry hết hạn; honeypot dùng raw `length > 0`. r2 PASS.
 - **Pattern:** Mọi giá trị từ header HTTP (XFF, X-Real-IP, Forwarded, User-Agent…) là **untrusted** — không dùng trực tiếp cho security/quota. Phải xác định theo **trust boundary** của proxy: dùng entry do proxy tin cậy thêm vào (thường phải nhất của XFF — GFE), validate format, và **fail-closed** khi thiếu (không fail-open).
 - **Prevention:** Control theo IP/rate-limit phải (1) nêu rõ trust assumption + platform, (2) validate IP, (3) thiếu/không hợp lệ → bucket chung bị giới hạn thay vì cho qua, (4) prune state. Verify: đổi XFF bên trái + giữ phải cố định → vẫn phải 429.
+
+### Error 7 — change-oc-eo-case-study-showcase: opacity modifier `/NN` trên màu `var()` không sinh CSS (lặp lại)
+- **Date:** 2026-10-13
+- **Task:** change-oc-eo-case-study-showcase/phase-1-task-01
+- **Error:** Reviewer r1 FAIL MAJOR-1: `bg-primary/40`, `border-accent/80`, `border-border/70`, `border-border/60` không có trong CSS build → đường nối sơ đồ vô hình, viền rơi về màu mặc định. Typecheck/lint/build đều PASS nên không phát hiện.
+- **Root Cause:** `tailwind.config.ts` khai màu theme là `'var(--color-…)'` không có `<alpha-value>` → Tailwind JIT bỏ qua modifier `/NN` một cách im lặng. Đã gặp ở change hero-banner round 2 nhưng chưa thành rule cho builder.
+- **Fix:** `bg-[rgb(0_158_135/0.4)]`, `border-[rgb(33_217_173/0.8)]`, `border-border` (bỏ alpha). r2 PASS, CSS artifact xác nhận.
+- **Pattern:** Màu theme dạng `var()` thuần + modifier `/NN` = class chết. Chỉ `background` (khai `rgb(var(...) / <alpha-value>)`) và màu built-in (`white`, `black`) dùng được `/NN`.
+- **Prevention:** Trước khi báo xong UI: `grep -rnE "(bg|border|text|ring|from|via|to|divide|outline)-(primary|accent|border|text-[a-z]+|surface[a-z-]*|ink[a-z-]*)/[0-9]+" src/` phải = 0; hoặc grep class trong `.next*/static/css`. Đã ghi rule vào design-spec Screen 9.

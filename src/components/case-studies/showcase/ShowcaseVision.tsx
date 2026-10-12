@@ -21,12 +21,13 @@ export function ShowcaseVision({ vision }: Props) {
           <h2 className="mt-4 whitespace-pre-line text-[clamp(1.75rem,1.4rem+1.3vw,2.375rem)] font-bold leading-tight text-text-primary">{vision.title}</h2>
           <p className="mt-4 max-w-[56ch] leading-relaxed text-text-secondary">{vision.description}</p>
         </div>
-        <figure className="rounded-2xl border border-border/60 bg-white/90 p-7 shadow-md backdrop-blur-sm">
+        <figure className="rounded-2xl border border-border bg-white/90 p-7 shadow-md backdrop-blur-sm">
           <svg aria-hidden="true" className="size-9 text-primary" fill="currentColor" viewBox="0 0 32 32">
             <path d="M4 18c0-6 3.5-10 9-11v4c-3 1-4.5 3.2-4.6 5H13v9H4v-7Zm15 0c0-6 3.5-10 9-11v4c-3 1-4.5 3.2-4.6 5H28v9h-9v-7Z" />
           </svg>
           <blockquote className="mt-4 italic leading-relaxed text-text-secondary">{vision.quote}</blockquote>
           <span aria-hidden="true" className="mt-6 block h-1 w-12 rounded-full bg-primary" />
+          {vision.quoteSource && <figcaption className="mt-3 text-sm font-medium text-text-primary">{vision.quoteSource}</figcaption>}
         </figure>
       </Container>
     </section>

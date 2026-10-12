@@ -432,6 +432,31 @@ Attribution dạng "Tên, Chức danh, Tổ chức" (không dấu gạch dài).
 **SEO:** "{Tên case} | Case Study | NTA" / EN tương ứng · desc trích kết quả ·
 JSON-LD: BreadcrumbList + Article(`type: "CreativeWork"`).
 
+#### Screen 9 — biến thể `layout: showcase` (R-08b, change `oc-eo-case-study-showcase`)
+
+Opt-in bằng frontmatter (`layout: showcase` + block `showcase`); thiếu → layout default ở trên.
+Ảnh mẫu: `tasks/change-oc-eo-case-study-showcase/refs/target-showcase-mockup.jpg`.
+
+**Layout (trên → dưới):** `ShowcaseHero` (nền gradient teal nhạt; trái: Breadcrumb · eyebrow · h1 2 dòng
+lead đen + accent gradient teal · subtitle đậm = tên dự án · mô tả · CTA primary anchor `#<technology.id>`
+(href không phải anchor → `Link` next-intl) · nút video chỉ khi có `hero.video`; phải: ảnh `rounded-[28px]`,
+grid `11fr/13fr` từ lg) → `ShowcaseOverview` (thẻ `<dl>` 3 số liệu chia vạch + 3 thẻ cột có icon + check list)
+→ `note` (dòng lưu ý BR-004, `text-xs`) → `ShowcaseTechnology` (chữ + CTA trái; phải: 3 node → `VmsMock`
+`aria-hidden` + figcaption "minh hoạ / giả lập") → `ShowcasePhotos` (client, scroll-snap, nút prev/next ≥sm,
+`aria-labelledby`, caption dưới dải ảnh) → `ShowcaseVision` (chữ + thẻ quote có `figcaption` nguồn; ảnh nền
+mờ dần lg+) → `ShowcaseCTA` (thẻ bo góc nền ảnh + overlay teal đậm, nút pill trắng → `/contact`) → RelatedStudies.
+Không render: PageHeader, MetaBar, Challenge/Solution/ResultBlock, ImageGallery, CTABanner.
+
+**Lệch có chủ ý so với layout default (user yêu cầu khớp mockup):** h1 là slogan (tên dự án ở subtitle);
+không MetaBar; exemption craft-floor giới hạn trong biến thể: eyebrow trên heading, gradient text h1,
+`backdrop-blur-sm` thẻ quote.
+
+**Màu có alpha:** token màu là `var()` thuần (không `<alpha-value>`) ⇒ **cấm** `bg-primary/40`, `border-accent/80`…
+(JIT bỏ qua, không sinh CSS). Dùng arbitrary `bg-[rgb(0_158_135/0.4)]` hoặc `opacity-*`.
+
+**Responsive:** base 1 cột (ảnh hero dưới chữ; số liệu stack dọc; 3 cột → 1); md 3 cột thẻ; lg 2 cột hero/
+technology/vision; carousel 78% / 46% (sm) / 4 ảnh (lg). Không scroll ngang (đã đo 390/1440).
+
 ---
 
 ### Screen 10: Tin tức / Blog (danh sách)

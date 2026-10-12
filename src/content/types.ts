@@ -189,8 +189,18 @@ export interface CaseStudyShowcase {
     alerts: { title: string; meta: string }[];
     caption: string;
   };
-  photos: { eyebrow: string; title: string; prevLabel: string; nextLabel: string; items: { src: string; alt: string }[] };
-  vision: { eyebrow: string; title: string; description: string; quote: string; image?: { src: string; alt: string } };
+  photos: {
+    eyebrow: string;
+    title: string;
+    prevLabel: string;
+    nextLabel: string;
+    /** Ghi chú nguồn ảnh (BR-004) — bắt buộc khi ảnh là minh hoạ, không phải ảnh chụp thực tế. */
+    caption?: string;
+    items: { src: string; alt: string }[];
+  };
+  vision: { eyebrow: string; title: string; description: string; quote: string; quoteSource?: string; image?: { src: string; alt: string } };
+  /** Dòng lưu ý dưới thẻ số liệu — nói rõ phương án đề xuất, chưa phải kết quả triển khai (BR-004). */
+  note?: string;
   cta: { title: string; description: string; label: string; href: string; image?: string };
 }
 

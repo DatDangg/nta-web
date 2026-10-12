@@ -1,16 +1,22 @@
 'use client';
 
 import Image from 'next/image';
-import { useRef } from 'react';
+import { useId, useRef } from 'react';
 import type { CaseStudyShowcase } from '@/content/types';
 import { Container } from '@/components/ui/Container';
 import { Eyebrow } from './icons';
 
 type Props = { photos: CaseStudyShowcase['photos'] };
 
-/** Carousel ảnh khu di tích: scroll-snap ngang + 2 nút trước/sau (bàn phím/touch vẫn cuộn được). */
+const ARROW_CLASS = 'flex size-11 items-center justify-center rounded-full border border-border bg-white text-text-primary shadow-sm transition-colors hover:border-primary hover:text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-focus';
+
+/**
+ * Carousel ảnh khu di tích: scroll-snap ngang + 2 nút trước/sau (bàn phím/touch vẫn cuộn được).
+ * `caption` (BR-004) hiển thị dưới dải ảnh khi ảnh là minh hoạ, chưa phải ảnh chụp thực tế.
+ */
 export function ShowcasePhotos({ photos }: Props) {
   const trackRef = useRef<HTMLUListElement>(null);
+  const titleId = useId();
   if (photos.items.length === 0) return null;
 
   const scrollBy = (direction: 1 | -1) => {
@@ -20,27 +26,26 @@ export function ShowcasePhotos({ photos }: Props) {
     track.scrollBy({ left: direction * track.clientWidth * 0.8, behavior: reduced ? 'auto' : 'smooth' });
   };
 
-  const arrowClass = 'flex size-11 items-center justify-center rounded-full border border-border bg-white text-text-primary shadow-sm transition-colors hover:border-primary hover:text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-focus';
-
   return (
-    <section aria-label={photos.title} className="py-10 md:py-12">
+    <section aria-labelledby={titleId} className="py-10 md:py-12">
       <Container className="flex items-end justify-between gap-6">
         <div>
           <Eyebrow>{photos.eyebrow}</Eyebrow>
-          <h2 className="mt-4 text-[clamp(1.75rem,1.4rem+1.3vw,2.375rem)] font-bold leading-tight text-text-primary">{photos.title}</h2>
+          <h2 className="mt-4 text-[clamp(1.75rem,1.4rem+1.3vw,2.375rem)] font-bold leading-tight text-text-primary" id={titleId}>{photos.title}</h2>
         </div>
         <div className="hidden shrink-0 gap-3 sm:flex">
-          <button aria-label={photos.prevLabel} className={arrowClass} onClick={() => scrollBy(-1)} type="button">
+          <button aria-label={photos.prevLabel} className={ARROW_CLASS} onClick={() => scrollBy(-1)} type="button">
             <svg aria-hidden="true" className="size-4" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6" /></svg>
           </button>
-          <button aria-label={photos.nextLabel} className={arrowClass} onClick={() => scrollBy(1)} type="button">
+          <button aria-label={photos.nextLabel} className={ARROW_CLASS} onClick={() => scrollBy(1)} type="button">
             <svg aria-hidden="true" className="size-4" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
           </button>
         </div>
       </Container>
       <Container>
         <ul
-          className="-mx-4 mt-8 flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth px-4 pb-2 [scrollbar-width:none] sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8 [&::-webkit-scrollbar]:hidden"
+          aria-labelledby={titleId}
+          className="-mx-4 mt-8 flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth px-4 pb-2 [scrollbar-width:none] focus-visible:outline focus-visible:outline-2 focus-visible:outline-focus sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8 [&::-webkit-scrollbar]:hidden"
           ref={trackRef}
           tabIndex={0}
         >
@@ -50,6 +55,7 @@ export function ShowcasePhotos({ photos }: Props) {
             </li>
           ))}
         </ul>
+        {photos.caption && <p className="mt-3 text-xs text-text-secondary">{photos.caption}</p>}
       </Container>
     </section>
   );

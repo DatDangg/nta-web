@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { Link } from '@/i18n/navigation';
 import { Breadcrumb, type BreadcrumbItem } from '@/components/shared/Breadcrumb';
 import { buttonStyles } from '@/components/ui/Button';
 import { Container } from '@/components/ui/Container';
@@ -13,6 +14,7 @@ type Props = { hero: CaseStudyShowcase['hero']; breadcrumbs: BreadcrumbItem[] };
  */
 export function ShowcaseHero({ hero, breadcrumbs }: Props) {
   const isAnchor = hero.primaryCta.href.startsWith('#');
+  const primaryClass = `${buttonStyles('primary', 'lg')} gap-2 shadow-[0_10px_24px_rgb(0_158_135/0.28)]`;
   return (
     <section className="relative isolate overflow-hidden bg-gradient-to-b from-[#effaf7] via-white to-white pb-10 pt-8 md:pb-14 lg:pt-10">
       <div aria-hidden="true" className="pointer-events-none absolute -left-24 top-40 -z-10 size-72 rounded-full bg-[radial-gradient(circle,rgb(0_158_135/0.10),transparent_70%)]" />
@@ -27,10 +29,17 @@ export function ShowcaseHero({ hero, breadcrumbs }: Props) {
           <p className="mt-4 text-lg font-semibold text-text-primary">{hero.subtitle}</p>
           <p className="mt-3 max-w-[56ch] leading-relaxed text-text-secondary">{hero.description}</p>
           <div className="mt-8 flex flex-wrap items-center gap-4">
-            <a className={`${buttonStyles('primary', 'lg')} gap-2 shadow-[0_10px_24px_rgb(0_158_135/0.28)]`} href={hero.primaryCta.href} {...(isAnchor ? {} : { rel: 'noopener' })}>
-              {hero.primaryCta.label}
-              <ArrowRight />
-            </a>
+            {isAnchor ? (
+              <a className={primaryClass} href={hero.primaryCta.href}>
+                {hero.primaryCta.label}
+                <ArrowRight />
+              </a>
+            ) : (
+              <Link className={primaryClass} href={hero.primaryCta.href}>
+                {hero.primaryCta.label}
+                <ArrowRight />
+              </Link>
+            )}
             {hero.video && (
               <a className="group inline-flex min-h-11 items-center gap-3 font-medium text-text-primary" href={hero.video.href} rel="noopener noreferrer" target="_blank">
                 <span aria-hidden="true" className="flex size-11 items-center justify-center rounded-full border border-border bg-white text-primary shadow-sm transition-colors group-hover:border-primary">

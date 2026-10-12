@@ -546,9 +546,19 @@
           "reviewReport": ".context/review-reports/change-home-hero-banner-restyle-phase-1-task-01-round-3-review.md",
           "changeRequest": "spec/changes/archive/2026-10-12-home-hero-banner-restyle.md",
           "note": "MODIFY post-build (UI) — user gửi 2 ảnh: 'ảnh 2 là goal cần đạt, ảnh 1 là ảnh nền' → restyle Hero trang chủ giống ảnh mẫu. R1 (session trước, PASS): thay ảnh hero-banner.jpg full-bleed (bỏ khung rounded/bg-surface-sunken) + alt vi/en. R2 (session này, FAIL 3 MAJOR + 5 MINOR): thêm headline 2 màu (heroTitle→heroTitleLead+heroTitleAccent teal), HeroVisual.tsx MỚI (crop 2:1→6/5 object-[70%_50%] + overlay sáng dịu hologram + 5 panel kính ListPanel/ChartPanel/StatPanel + wordmark NTA, lg+ aria-hidden), home.ts +heroPanels vi/en, CTA primary + arrow SVG, nền gradient trắng→xanh, grid 0.85fr/1.15fr. MAJOR: object-position-[70%_50%] + bg-primary/40 là class Tailwind v3 không sinh CSS (silent) → fix object-[70%_50%] + bg-primary opacity-40 (verify CSS artifact: object-position:70% 50% ✓, .opacity-40 ✓); MAJOR hygiene: KHÔNG commit next.config.ts (distDir .next-build)/tsconfig/next-env/.next-build (của session khác) — commit explicit file list. R3 PASS (0 CRITICAL/MAJOR, 4 MINOR non-blocking). Verify primary: typecheck PASS, lint 0 error (1 pre-existing), build 53/53; DOM-eval 3001 (accent #009e87, gradient, arrow, no overflow-x, panels hidden <lg). spec 3.0.0 KHÔNG bump (R-01/R-02 giữ) — scope v19→v20. Doc: design-spec Screen1 + copy h1 + responsive md. Residual: chưa soi mắt desktop thật (screenshot block — window không visible); md 768 headline wrap nhiều dòng; .next-build chưa gitignored (task hygiene riêng)."
+        },
+        {
+          "id": "change-oc-eo-case-study-showcase-phase-1-task-01",
+          "layer": 1,
+          "status": "done",
+          "reviewLevel": "NORMAL",
+          "reviewResult": "PASS",
+          "reviewReport": ".context/review-reports/change-oc-eo-case-study-showcase-phase-1-task-01-round-2-review.md",
+          "changeRequest": "spec/changes/archive/2026-10-12-oc-eo-case-study-showcase.md",
+          "note": "MODIFY post-build (UI + content) — user gửi mockup + ảnh minh hoạ: trang chi tiết Óc Eo – Ba Thê dạng showcase, rồi thay ảnh thẻ /case-studies (field cover) + khối featured trang chủ (home.ts). ⚠ Round 1 làm trực tiếp ngoài workflow (session Cowork) và đã vào commit 1e90308 (gộp file ngoài scope — ghi nhận, không rewrite); change doc/task/spec ghi bù theo yêu cầu user. r1 NORMAL FAIL (4 MAJOR: class /NN trên màu var không sinh CSS; carousel crop AI không ghi minh hoạ; lệch R-08/Screen 9 chưa ghi nhận; commit hygiene) → fix (VmsMock, rgb arbitrary, caption/alt minh hoạ, note, quoteSource, Link, a11y) → r2 NORMAL PASS (0 CRITICAL/MAJOR mở; MINOR-10/11/13/14 non-blocking). Verify snapshot đúng scope: typecheck PASS, lint 0 errors (1 warning pre-existing), build PASS, CSS artifact + Playwright 5 route PASS. spec 3.0.0→3.1.0 (MINOR, +R-08b) — scope v20→v21; design-spec Screen 9 biến thể showcase; error-memory Error 7. Concurrency: hunk motion (CountUp/split-line) trên ShowcaseHero/ShowcaseOverview của change site-wide-motion chưa commit → loại khỏi commit này. Residual: ảnh carousel placeholder, nút video ẩn tới khi có URL."
         }
       ],
-      "specVersion": "3.0.0",
+      "specVersion": "3.1.0",
       "planDir": "tasks/nta-website/",
       "layerPlanDiagram": "docs/diagrams/layer-plan.html",
       "initialBuildCompletedAt": "2026-10-10T03:15:00+07:00",
@@ -563,7 +573,7 @@
         "report": ".context/review-reports/feature-nta-website-layer-4-round-1-spec-review.md"
       },
       "note": "Initial build hoàn tất: Layer 0..4 (totalLayers 5 = layer-plan 'Layer 0 → 4'). 27 req R-01..R-27 implemented. R-22 (Lighthouse Perf/LCP/CLS) + R-23 (viewport 375/768/1280) PARTIAL — đo ở gate DevOps/prod (bước 6). Chưa push (forbidden_branch main, auto_push false). Post-build: ai-solution-content (spec 1.1.0) + domain-ntavietnam (domain → ntavietnam.tech, spec 2.0.0, scope v6) + deploy-platform-docker-vps (Cloud Run → docker-vps, spec 3.0.0, scope v7) + cleanup-gcp-drift-comment-permission (dọn nốt drift GCP, spec 3.0.0 KHÔNG bump, scope v8) + hrm-solution-content (5 ảnh mockup + sections/useCases/faq qua cờ renderExtendedContent; spec 3.0.0 KHÔNG bump; cần user duyệt copy trước production). + enterprise-solution-docs-web-ready (viết lại 4 docs/reference README theo 8 heading web-ready; docs-only 0 dòng code; spec 3.0.0 KHÔNG bump; scope v8→v9; caveat: builder+reviewer chạy inline do env chặn subagent lồng → primary nên re-run reviewer độc lập). + publish-solution-screenshots (3 ảnh BoxAI + nội dung đầy đủ CRM/LMS/DentGo vi+en + ScreenshotSection vào trang AI + i18n key; spec 3.0.0 KHÔNG bump; scope v9→v10; reviewer STRICT round-1 PASS 0 CRITICAL/MAJOR/3 MINOR; verify lint/typecheck/build PASS do primary chạy lại; cần user xem ảnh BoxAI tiếng Anh + đọc lại copy). + replace-remaining-placeholder-images (change 2026-10-12: T01 assets 3 PNG mock + 9 SVG + pipeline; T02 wiring hero/solutions AI/case-study/blog/about; T03 /contact bỏ map + placeholder; spec 3.0.0 KHÔNG bump, scope v11→v12; T04 /products dùng ảnh user cung cấp — khung 9/16 theo user chốt (poster dọc, giữ chữ); change đã archive). + home-footer-redesign (restyle dải CTA + Footer toàn site theo ảnh user + 2 ảnh nền; chỉ link route tồn tại; spec 3.0.0 KHÔNG bump; scope v18→v19; reviewer STRICT r1 PASS 0 CRITICAL/MAJOR, 2 MINOR — 1 đã fix; concurrency: vi.json/en.json + design-spec.md còn hunk session hero-banner).",
-      "lastUpdated": "2026-10-12T18:10:00+07:00"
+      "lastUpdated": "2026-10-13"
     }
   ],
   "bugs": []

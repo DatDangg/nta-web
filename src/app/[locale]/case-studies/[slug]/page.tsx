@@ -48,11 +48,6 @@ export default async function CaseStudyDetailPage({ params }: { params: Promise<
     headline: study.title, description: study.result, inLanguage: locale === 'en' ? 'en-US' : 'vi-VN',
     author: { '@type': 'Organization', name: 'NTA' }, publisher: { '@type': 'Organization', name: 'NTA' },
   };
-  const labels = {
-    client: t('meta.client'), sector: t('meta.sector'), year: t('meta.year'),
-  };
-  const cta = await getTranslations('solutions.ai');
-
   const breadcrumbJsonLd = createBreadcrumbJsonLd([{ name: locale === 'en' ? 'Home' : 'Trang chủ', path: locale === 'en' ? '/en' : '/' }, { name: t('title'), path: `${locale === 'en' ? '/en' : ''}/case-studies` }, { name: study.title, path: `${locale === 'en' ? '/en' : ''}/case-studies/${slug}` }]);
 
   // Bố cục landing (ảnh mẫu Óc Eo): hero riêng có breadcrumb, CTA thẻ bo góc thay CTABanner.
@@ -65,8 +60,13 @@ export default async function CaseStudyDetailPage({ params }: { params: Promise<
     </>;
   }
 
+  const labels = {
+    client: t('meta.client'), sector: t('meta.sector'), year: t('meta.year'),
+  };
+  const cta = await getTranslations('solutions.ai');
+
   return <>
-    <JsonLd data={createBreadcrumbJsonLd([{ name: locale === 'en' ? 'Home' : 'Trang chủ', path: locale === 'en' ? '/en' : '/' }, { name: t('title'), path: `${locale === 'en' ? '/en' : ''}/case-studies` }, { name: study.title, path: `${locale === 'en' ? '/en' : ''}/case-studies/${slug}` }])} />
+    <JsonLd data={breadcrumbJsonLd} />
     <PageHeader breadcrumbs={[{ label: t('title'), href: '/case-studies' }, { label: study.title }]} description={study.result} title={study.title} />
     <script dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }} type="application/ld+json" />
     <div>

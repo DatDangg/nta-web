@@ -1,3 +1,4 @@
+import { Container } from '@/components/ui/Container';
 import type { BreadcrumbItem } from '@/components/shared/Breadcrumb';
 import type { CaseStudyShowcase } from '@/content/types';
 import { ShowcaseCTA } from './ShowcaseCTA';
@@ -15,6 +16,11 @@ export function ShowcaseLayout({ showcase, breadcrumbs }: Props) {
     <>
       <ShowcaseHero breadcrumbs={breadcrumbs} hero={showcase.hero} />
       <ShowcaseOverview pillars={showcase.pillars} stats={showcase.stats} />
+      {showcase.note && (
+        <Container>
+          <p className="-mt-4 mb-6 text-xs leading-relaxed text-text-secondary md:-mt-6">{showcase.note}</p>
+        </Container>
+      )}
       <div className="bg-gradient-to-b from-white via-[#f6fbfa] to-white">
         <ShowcaseTechnology technology={showcase.technology} tiles={showcase.photos.items} />
       </div>
