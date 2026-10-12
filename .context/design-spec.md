@@ -19,7 +19,7 @@ kiểu Apple, dựa trên Tailwind + system SF Pro/Inter, motion fade/slide ti�
 
 - Sticky top (`--z-header`), cao **64px mobile / 72px desktop** (cap 80px), nền `background` + `backdrop-blur`
   sau khi scroll, border-bottom `--color-border` mảnh.
-- Desktop (≥1024px): logo (trái, mark `logo-mark.png`, không kèm wordmark "NTA") · nav ngang 1 dòng
+- Desktop (≥1024px): logo (trái, lockup `logo-lockup.png`: mark + wordmark "NTA" + tagline "ELEVATING INTELLIGENCE", `h-10 w-auto`) · nav ngang 1 dòng
   (Giải pháp [dropdown enterprise/AI] · Sản phẩm · Case Study · Tin tức · Về NTA · Liên hệ) ·
   language toggle `VI | EN` · CTA "Liên hệ tư vấn" (button pill, sm).
 - Mobile (<1024px): logo + hamburger. Drawer full-height bên phải: nav list + language toggle + CTA,

@@ -1,50 +1,48 @@
 {
   "specVersion": "3.0.0",
-  "scopeVersion": 16,
-  "generatedAt": "2026-10-12T14:35:00+07:00",
+  "scopeVersion": 18,
+  "generatedAt": "2026-10-12T15:20:00+07:00",
   "trigger": "feature-update",
-  "workItem": "change-hairstyle-ai-gallery-screenshots",
+  "workItem": "change-brand-logo-lockup",
   "specRefs": [],
   "changed": {
     "files": [
-      "src/content/products/vi/hair-style-ai.mdx",
-      "src/content/products/en/hair-style-ai.mdx",
-      "public/images/products/hair-style-ai-try-on.jpg",
-      "public/images/products/hair-style-ai-analysis.jpg",
-      "public/images/products/hair-style-ai-rating.jpg",
-      "spec/updates/2026-10-12-hairstyle-ai-gallery-screenshots.md",
+      "src/components/layout/BrandLogo.tsx",
+      "public/images/brand/logo-lockup.png",
+      ".context/design-spec.md",
+      "spec/updates/2026-10-12-brand-logo-lockup.md",
       "spec/CHANGELOG.md",
       "spec/test-scope/current.json"
     ],
     "modules": [
-      "src/content/products/{vi,en}/hair-style-ai (`screenshots` 1 → 4 ảnh: Welcome → Try On → Analysis → Rating)",
-      "public/images/products (3 asset mới 941×1672)"
+      "src/components/layout/BrandLogo.tsx (LOGO_MARK_SRC 480×397 h-9 → LOGO_LOCKUP_SRC 488×137 h-10)",
+      "public/images/brand/logo-lockup.png (asset cũ nền trắng đục 2000×750 → ảnh user crop 488×137 PNG RGBA trong suốt)"
     ]
   },
   "impact": {
     "direct": [
-      "/products + /en/products: carousel sản phẩm `hair-style-ai` render 4 slide ảnh + 4 dots + nút prev/next (trước: 1 ảnh, không có dots/arrow)."
+      "Header (mọi route, VI+EN): logo góc trái render lockup đầy đủ (mark + chữ NTA + tagline) thay cho mark-only.",
+      "Footer (mọi route, VI+EN): logo render lockup đầy đủ; khối logo link home tappable cao ~40px."
     ],
     "dependents": [
-      "ScreenshotCarousel.tsx — KHÔNG đổi; đã hỗ trợ nhiều slide sẵn (dots/prev-next xuất hiện khi length > 1).",
-      "products/page.tsx — KHÔNG đổi; truyền `product.screenshots` nguyên trạng.",
-      "cards/AppCard.tsx — dùng `screenshots[0]` = ảnh Welcome (không đổi hành vi card).",
-      "src/content/home.ts:18,30 — card home `hair-style-ai` dùng `image` riêng (ảnh Welcome) — KHÔNG đổi.",
-      "i18n `products.screenshotAlt` — giữ alt chung interpolate `{title}` cho mọi slide (không đổi schema)."
+      "BrandLogo — 2 caller Header.tsx:51 (<BrandLogo priority />) + Footer.tsx:21 (<BrandLogo />); không có caller khác (grep).",
+      "Header.tsx / Footer.tsx / MobileNav.tsx — KHÔNG đổi; Header vẫn tự chuyển SVG chevron.",
+      "src/lib/seo/jsonld.ts — KHÔNG đổi (Organization logo vẫn /images/brand/logo-square.png).",
+      "i18n vi.json/en.json — KHÔNG đổi (nav.homeLabel giữ nguyên)."
     ],
     "regression": [
-      "Card home `hair-style-ai` vẫn 1 ảnh Welcome (home.ts không đổi).",
-      "Carousel `music-app` không đổi.",
-      "Khung `aspect-[9/16]` khớp tỉ lệ ảnh 941×1672 ⇒ `object-cover` không crop.",
-      "Dots/prev-next chỉ hiện khi `length > 1` — không hồi quy ở trang khác."
+      "Accessible name link home giữ nguyên: aria-label = 'NTA, trang chủ' (VI) / 'NTA, home' (EN).",
+      "JSON-LD Organization logo vẫn logo-square.png; favicon/apple-icon (src/app/icon.png, apple-icon.png) không đổi.",
+      "Không còn tham chiếu logo-mark.png trong src/ (0 reference — file giữ lại, không xoá).",
+      "Layout Header (sticky 64/72px) + Footer không vỡ: logo h-10 = 40px < chiều cao header."
     ]
   },
   "acceptance": [
-    "`hair-style-ai.mdx` (vi + en) có 4 screenshot theo đúng thứ tự: hair-style-ai.jpg → -try-on.jpg → -analysis.jpg → -rating.jpg.",
-    "HTML build `/products` + `/en/products`: carousel hair-style-ai render đủ 4 ảnh + 4 dots + prev/next.",
-    "Home card `hair-style-ai` vẫn dùng ảnh Welcome (`home.ts` không đổi).",
-    "4 file ảnh tồn tại trong `public/images/products/`; next/image không lỗi tải.",
-    "npm run lint (0 errors, 1 warning pre-existing `src/components/mdx/index.tsx`) / typecheck / build PASS (test_command: null → skip, no test configured)."
+    "public/images/brand/logo-lockup.png = ảnh user đã crop sát nội dung (488×137, PNG RGBA nền trong suốt).",
+    "BrandLogo render <Image src='/images/brand/logo-lockup.png' width={488} height={137} className='h-10 w-auto' alt='' aria-hidden='true'>, prop priority vẫn truyền từ Header.",
+    "Header + Footer (VI+EN) render lockup; a11y name link home vẫn 'NTA, trang chủ' / 'NTA, home'.",
+    "JSON-LD vẫn logo-square.png; .context/design-spec.md:22 đã reconcile.",
+    "npm run lint (0 errors, 1 warning pre-existing src/components/mdx/index.tsx) / npm run typecheck / npm run build PASS; HTML build vi/en: logo-lockup.png = 9, logo-mark.png = 0, >NTA< = 0 (test_command: null → skip test)."
   ],
   "risk": "low"
 }
