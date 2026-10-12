@@ -2,6 +2,7 @@ import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 import { buttonStyles } from '@/components/ui/Button';
 import { Container } from '@/components/ui/Container';
+import { BrandLogo } from './BrandLogo';
 import { LanguageToggle } from './LanguageToggle';
 
 const columns = [
@@ -17,6 +18,7 @@ export function Footer() {
   return (
     <footer className="bg-background-alt">
       <Container className="py-12 md:py-16">
+        <Link aria-label={nav('homeLabel')} className="mb-10 inline-flex" href="/"><BrandLogo /></Link>
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
           {columns.map((column) => <section key={column.title}><h2 className="mb-4 text-base font-semibold">{t(column.title)}</h2><ul className="space-y-3">{column.links.map(([key, href]) => <li key={key}><Link className="text-sm text-text-secondary hover:text-primary" href={href}>{nav(key)}</Link></li>)}</ul></section>)}
           <section><h2 className="mb-4 text-base font-semibold">{t('contactGroup')}</h2><div className="mt-4 flex items-center gap-4"><a aria-label="Facebook" className="flex size-11 items-center justify-center text-text-primary" href="https://www.facebook.com/" rel="noreferrer"><svg aria-hidden="true" className="size-5" fill="currentColor" viewBox="0 0 24 24"><path d="M13.5 21v-8h2.7l.4-3.1h-3.1v-2c0-.9.3-1.5 1.6-1.5h1.7V3.6c-.3 0-1.3-.1-2.5-.1-2.5 0-4.2 1.5-4.2 4.3v2.1H7.3V13h2.8v8h3.4Z" /></svg></a><LanguageToggle /></div></section>

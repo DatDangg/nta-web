@@ -22,8 +22,8 @@ type AiSectionProps = {
 /**
  * Section AI — nền tối (spec §5.3).
  *
- * ⚠ Trên nền `ink`, KHÔNG dùng `text-primary` (#0071e3, chỉ đạt 3.4:1 so với #1d1d1f —
- * dưới WCAG AA). Dùng nhóm token `ink-*` và `accent-ink` #64b5ff (≈7.4:1).
+ * ⚠ Trên nền `ink`, KHÔNG dùng `text-primary` (#009e87 — dù đạt ~5.3:1 so với #111827,
+ * ưu tiên nhóm token `ink-*` và `accent-ink` #21d9ad ≈9.8:1 cho link/CTA nổi bật).
  *
  * **Sai lệch so với spec §5.3 (đã chốt 2026-11):** spec bảo ảnh crop AI đặt ở cột phải,
  * 2 cột bằng nhau. Thực tế crop là **1223×284, tỉ lệ 4.31** — dải rất ngang, rất thấp:

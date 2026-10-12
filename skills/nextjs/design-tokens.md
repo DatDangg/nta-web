@@ -25,10 +25,12 @@ và motion fade/slide tiết chế.
 ```css
 :root {
   /* ── Brand ── */
-  --color-primary:          #0071E3;  /* CTA, link, accent (Apple blue) */
-  --color-primary-hover:     #0077ED;  /* hover CTA/link */
-  --color-primary-active:    #0066CC;  /* pressed/active (derived từ primary, đậm hơn) */
-  --color-focus:            #0071E3;  /* focus ring */
+  --color-primary:          #009E87;  /* CTA, link, accent (NTA teal) */
+  --color-primary-hover:     #007C6B;  /* hover CTA/link */
+  --color-primary-active:    #00695A;  /* pressed/active (derived từ primary, đậm hơn) */
+  --color-primary-light:    #E6F8F3;  /* tint nền nhạt (badge/section nhấn) */
+  --color-accent:           #21D9AD;  /* accent sáng — nổi bật trên nền tối */
+  --color-focus:            #009E87;  /* focus ring */
 
   /* ── Background & surface ── */
   --color-background:       #FFFFFF;  /* nền trang */
@@ -37,7 +39,7 @@ và motion fade/slide tiết chế.
   --color-surface-sunken:   #F5F5F7;  /* khối phụ, skeleton, code block */
 
   /* ── Text ── */
-  --color-text-primary:     #1D1D1F;  /* heading, body */
+  --color-text-primary:     #111827;  /* heading, body (--foreground) */
   --color-text-secondary:   #6E6E73;  /* label, caption, meta */
   --color-text-inverse:     #FFFFFF;  /* text trên primary/ảnh tối */
 
@@ -66,21 +68,27 @@ và motion fade/slide tiết chế.
 
 | Cặp | Ratio | Kết luận |
 |---|---|---|
-| `#1D1D1F` trên `#FFFFFF` | 16.7:1 | ✅ AAA |
-| `#1D1D1F` trên `#F5F5F7` | 15.6:1 | ✅ AAA |
+| `#111827` trên `#FFFFFF` | 17.7:1 | ✅ AAA |
+| `#111827` trên `#F5F5F7` | 16.6:1 | ✅ AAA |
 | `#6E6E73` trên `#FFFFFF` | 5.07:1 | ✅ AA body |
 | `#6E6E73` trên `#F5F5F7` | 4.66:1 | ✅ AA body (đáy — không nhạt hơn nữa) |
-| `#0071E3` text trên `#FFFFFF` | 4.70:1 | ✅ AA body |
-| `#FFFFFF` trên `#0071E3` (CTA) | 4.70:1 | ✅ AA body |
-| `#FFFFFF` trên `#0066CC` (active) | 5.5:1 | ✅ AA |
+| `#009E87` text trên `#FFFFFF` | 3.37:1 | ⚠️ **dưới AA body 4.5:1** → chỉ dùng cho large text ≥24px / UI component |
+| `#FFFFFF` trên `#009E87` (CTA) | 3.37:1 | ⚠️ **dưới AA body** (đạt large-text/UI 3:1) |
+| `#FFFFFF` trên `#007C6B` (hover/CTA đậm) | 5.13:1 | ✅ AA body |
+| `#FFFFFF` trên `#00695A` (active) | 6.3:1 | ✅ AA |
+| `#21D9AD` trên `#111827` (accent-ink) | 9.8:1 | ✅ AAA |
 | `#FF3B30` / `#34C759` / `#FF9500` text trên trắng | 3.55 / 2.22 / 2.07:1 | ❌ → **chỉ dùng làm icon/marker**; text trạng thái dùng `*-ink` |
+
+> **Lưu ý AA (R-24):** `--color-primary` `#009E87` trên nền trắng chỉ đạt **3.37:1** — **không đủ AA cho
+> text thường (14–16px)**. Nếu siết AA, đổi các chỗ dùng `text-primary`/`bg-primary` cho text/CTA nhỏ sang
+> `--color-primary-hover` `#007C6B` (5.13:1) — giữ nguyên hex brand, chỉ đổi ánh xạ interactive.
 
 ### Usage rules (khóa màu — taste-skill §4.2)
 
-- **1 accent duy nhất** = `#0071E3` cho toàn site (CTA/link/focus/active-nav). Không đổi accent giữa trang.
+- **1 accent duy nhất** = `#009E87` cho toàn site (CTA/link/focus/active-nav). Không đổi accent giữa trang.
 - Semantic `error/success/warning` **chỉ cho form + trạng thái**; text trạng thái bắt buộc dùng `*-ink`.
 - Badge/tag trạng thái: nền tint (`color-mix` 10%) + text `*-ink`, KHÔNG nền màu đặc + text trắng.
-- Không gradient text, không neon/glow, không pure black `#000` (text đã là `#1D1D1F`).
+- Không gradient text, không neon/glow, không pure black `#000` (text đã là `#111827`).
 - Light-only: trang khóa theme light (không dark mode ở v1) — toàn bộ trang 1 theme, section chỉ đổi nền
   trong cùng family (`#FFFFFF` ↔ `#F5F5F7`).
 
@@ -289,13 +297,15 @@ src/app/[locale]/...         # / = VI, /en/... = EN
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #0071E3;
-  --color-primary-hover: #0077ED;
-  --color-primary-active: #0066CC;
+  --color-primary: #009E87;
+  --color-primary-hover: #007C6B;
+  --color-primary-active: #00695A;
+  --color-primary-light: #E6F8F3;
+  --color-accent: #21D9AD;
   --color-background: #ffffff;
   --color-background-alt: #f5f5f7;
   --color-surface: #ffffff;
-  --color-text-primary: #1d1d1f;
+  --color-text-primary: #111827;
   --color-text-secondary: #6e6e73;
   --color-border: #d2d2d7;
   --color-error-ink: #d70015;
@@ -342,7 +352,8 @@ src/app/[locale]/...         # / = VI, /en/... = EN
 - [x] Palette khớp `docs/DESIGN.md` 100% (primary/bg/alt/text/border/semantic giữ nguyên hex gốc;
       `primary-active` + `*-ink` là bổ sung derived, ghi rõ nguồn).
 - [x] 1 accent duy nhất, light-only theme lock, shape rule ghi rõ, shadow tint theo nền.
-- [x] Mọi cặp text/chủ yếu đạt WCAG AA (bảng §1) — không gray-on-gray, không white-on-white.
+- [ ] ⚠️ Mọi cặp text/chủ yếu đạt WCAG AA (bảng §1) — **còn 1 ngoại lệ**: `--color-primary` `#009E87`
+      trên `#FFFFFF` = 3.37:1 (đủ large-text/UI, **chưa đủ AA cho text thường**). Xem note bảng §1.
 - [x] Fluid type (clamp) + mobile-first breakpoint đúng thang đã chốt (R-23).
 - [x] Motion 150–400ms, motivated, có reduced-motion gate (R-24).
 - [x] i18n pattern 1 intent = 1 label, VI mặc định (R-20).

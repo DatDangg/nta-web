@@ -3,7 +3,7 @@ import { BASE_URL as SITE_URL } from '@/lib/seo';
 export function createOrganizationJsonLd() {
   return {
     '@context': 'https://schema.org', '@type': 'Organization', name: 'NTA',
-    url: SITE_URL, logo: `${SITE_URL}/images/og-default.png`,
+    url: SITE_URL, logo: `${SITE_URL}/images/brand/logo-square.png`,
   };
 }
 

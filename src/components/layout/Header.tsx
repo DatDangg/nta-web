@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { Link, usePathname } from '@/i18n/navigation';
 import { buttonStyles } from '@/components/ui/Button';
 import { Container } from '@/components/ui/Container';
+import { BrandLogo } from './BrandLogo';
 import { LanguageToggle } from './LanguageToggle';
 import { MobileNav } from './MobileNav';
 
@@ -47,7 +48,7 @@ export function Header() {
   return (
     <header className={`sticky top-0 z-header border-b border-border transition-[background-color,backdrop-filter] ${scrolled ? 'bg-background/85 backdrop-blur-md' : 'bg-background'}`}>
       <Container className="flex h-16 items-center justify-between lg:h-[72px]">
-        <Link aria-label={t('homeLabel')} className="flex min-h-11 items-center px-2 text-xl font-semibold tracking-tight text-text-primary" href="/">NTA</Link>
+        <Link aria-label={t('homeLabel')} className="flex min-h-11 items-center px-2" href="/"><BrandLogo priority /></Link>
         <nav aria-label={t('label')} className="hidden items-center gap-5 lg:flex">
           <div className="group relative" onBlur={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setSolutionsOpen(false); }} onMouseEnter={() => setSolutionsOpen(true)} onMouseLeave={(event) => { if (!event.currentTarget.contains(document.activeElement)) setSolutionsOpen(false); }}>
             <button aria-expanded={solutionsOpen} aria-haspopup="true" className={`relative flex min-h-11 items-center gap-1 text-sm hover:text-primary ${routeIsActive('/solutions') ? 'text-primary after:absolute after:inset-x-0 after:bottom-1 after:h-0.5 after:bg-primary' : ''}`} onClick={() => setSolutionsOpen(!solutionsOpen)} onFocus={() => setSolutionsOpen(true)} onKeyDown={(event) => { if (event.key === 'ArrowDown') { event.preventDefault(); setSolutionsOpen(true); document.getElementById('desktop-solutions-enterprise')?.focus(); } }} ref={solutionsButton} type="button">{t('solutions')}<span aria-hidden="true">⌄</span></button>

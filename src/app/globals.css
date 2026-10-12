@@ -4,15 +4,17 @@
 
 :root {
   color-scheme: light;
-  --color-primary: #0071e3;
-  --color-primary-hover: #0077ed;
-  --color-primary-active: #0066cc;
-  --color-focus: #0071e3;
+  --color-primary: #009e87;
+  --color-primary-hover: #007c6b;
+  --color-primary-active: #00695a;
+  --color-primary-light: #e6f8f3;
+  --color-accent: #21d9ad;
+  --color-focus: #009e87;
   --color-background: 255 255 255;
   --color-background-alt: #f5f5f7;
   --color-surface: #ffffff;
   --color-surface-sunken: #f5f5f7;
-  --color-text-primary: #1d1d1f;
+  --color-text-primary: #111827;
   --color-text-secondary: #6e6e73;
   --color-text-inverse: #ffffff;
   --color-border: #d2d2d7;
@@ -25,17 +27,16 @@
   --color-success-ink: #0f7b31;
   --color-warning: #ff9500;
   --color-warning-ink: #a85c00;
-  /* Nền tối cho section AI. Giá trị `--color-ink` trùng `--color-text-primary` (#1d1d1f)
-     — đồng nhất với bảng màu Apple. 4 token "ink-*" đi kèm đặt chữ/viền/nền thẻ trên nền này. */
-  --color-ink: #1d1d1f;
+  /* Nền tối cho section AI. Giá trị `--color-ink` trùng `--color-text-primary` (#111827)
+     — đồng nhất với `--foreground` của bảng màu thương hiệu. 4 token "ink-*" đi kèm đặt chữ/viền/nền thẻ trên nền này. */
+  --color-ink: #111827;
   --color-ink-surface: #2c2c2e;
   --color-ink-border: #48484a;
   --color-ink-text: #f5f5f7;
   --color-ink-text-secondary: #a1a1a6;
-  /* Link/CTA trên nền tối. BẮT BUỘC dùng token này thay --color-primary (#0071e3):
-     #0071e3 trên #1d1d1f chỉ đạt contrast ≈3.4:1 — dưới WCAG AA 4.5:1 cho text thường.
-     #64b5ff đạt ≈7.4:1. */
-  --color-accent-ink: #64b5ff;
+  /* Link/CTA trên nền tối (ink). `--color-primary` (#009e87) trên #111827 đạt 5.3:1,
+     nhưng `accent` (#21d9ad) đạt 9.8:1 nên dùng `accent-ink` cho link/CTA nổi bật trên nền tối. */
+  --color-accent-ink: #21d9ad;
   --bg-gradient-soft: linear-gradient(180deg, #ffffff 0%, #f5f5f7 100%);
   --font-sans: var(--font-inter, Inter), -apple-system, BlinkMacSystemFont,
     "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;

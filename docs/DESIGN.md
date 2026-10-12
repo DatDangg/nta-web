@@ -18,16 +18,19 @@
 
 ## Brand & Visual Identity
 
-### Color Palette (đề xuất — light minimal Apple)
+### Color Palette (NTA teal — light minimal)
 
 | Token | Value | Usage |
 |-------|-------|-------|
-| Primary | `#0071E3` | CTA, link, accent (Apple blue) |
-| Primary Hover | `#0077ED` | Hover CTA/link |
+| Primary | `#009E87` | CTA, link, accent (NTA teal) |
+| Primary Hover | `#007C6B` | Hover CTA/link (đậm hơn) |
+| Primary Active | `#00695A` | Pressed/active |
+| Primary Light | `#E6F8F3` | Tint nền nhạt (badge/section nhấn) |
+| Accent | `#21D9AD` | Accent sáng — nổi bật trên nền tối (`accent-ink`) |
 | Background | `#FFFFFF` | Nền trang (trắng) |
-| Background Alt | `#F5F5F7` | Section xen kẽ (xám nhạt Apple) |
+| Background Alt | `#F5F5F7` | Section xen kẽ (xám nhạt) |
 | Surface | `#FFFFFF` | Card, panel |
-| Text Primary | `#1D1D1F` | Heading, body (gần đen) |
+| Text Primary | `#111827` | Heading, body (`--foreground`) |
 | Text Secondary | `#6E6E73` | Label, caption (xám) |
 | Border | `#D2D2D7` | Divider, viền input |
 | Error | `#FF3B30` | Trạng thái lỗi |

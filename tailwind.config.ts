@@ -15,6 +15,8 @@ const config: Config = {
         primary: 'var(--color-primary)',
         'primary-hover': 'var(--color-primary-hover)',
         'primary-active': 'var(--color-primary-active)',
+        'primary-light': 'var(--color-primary-light)',
+        accent: 'var(--color-accent)',
         background: 'rgb(var(--color-background) / <alpha-value>)',
         'background-alt': 'var(--color-background-alt)',
         surface: 'var(--color-surface)',
@@ -33,8 +35,8 @@ const config: Config = {
         'warning-ink': 'var(--color-warning-ink)',
         overlay: 'var(--color-overlay)',
         skeleton: 'var(--color-skeleton)',
-        // Nền tối + token đi kèm (spec §2.1). `accent-ink` BẮT BUỘC cho link/CTA trên nền ink:
-        // `primary` (#0071e3) chỉ đạt 3.4:1 trên nền #1d1d1f, dưới WCAG AA.
+        // Nền tối + token đi kèm (spec §2.1). `accent-ink` nổi bật hơn trên nền ink:
+        // `primary` (#009e87) đạt ~5.3:1 trên #111827, `accent` (#21d9ad) đạt ~9.8:1.
         ink: 'var(--color-ink)',
         'ink-surface': 'var(--color-ink-surface)',
         'ink-border': 'var(--color-ink-border)',
