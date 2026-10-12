@@ -63,9 +63,10 @@
     "suggestionsLabel": "Gợi ý trang"
   },
   "home": {
-    "heroTitle": "Giải pháp số hóa cho doanh nghiệp Việt",
+    "heroTitleLead": "Giải pháp số hoá cho",
+    "heroTitleAccent": "doanh nghiệp Việt",
     "heroDescription": "NTA mang giải pháp quản trị, trí tuệ nhân tạo và ứng dụng di động tới doanh nghiệp và cơ quan nhà nước.",
-    "heroImageAlt": "Giao diện minh hoạ — tổng quan hệ thống quản trị doanh nghiệp kết nối",
+    "heroImageAlt": "Minh hoạ robot AI vận hành hệ thống quản trị doanh nghiệp",
     "solutionsTitle": "Giải pháp phù hợp với nhu cầu của bạn",
     "productsTitle": "Sản phẩm tiêu biểu",
     "caseStudyTitle": "Câu chuyện khách hàng",

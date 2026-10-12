@@ -45,7 +45,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
   return (
     <>
-      <Hero />
+      <Hero panels={home.heroPanels} />
       <SolutionGridHome solutions={home.solutionCards} title={t('solutionsTitle')} />
       <ProductStrip products={home.featuredProducts} title={t('productsTitle')} />
       <CaseStudyHighlight study={home.featuredCase} title={t('caseStudyTitle')} />

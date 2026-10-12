@@ -112,8 +112,12 @@ File component ≤ 300 dòng, function ≤ 50 dòng → tách sub-component khi 
 **Route:** `/` — R-01, R-02, R-03
 
 **Layout (5 section, 5 family):**
-1. **Hero** (centered stack): h1 `--text-hero` 1 dòng desktop / 2 dòng mobile · subtext `body-lg` `max-w-[65ch]` ·
-   2 CTA (primary + outline). Ảnh hero phía dưới chữ (kiểu Apple product page), `priority`, `rounded-lg`.
+1. **Hero** (split 2 cột từ `md`): h1 2 màu (lead đen + accent teal) · subtext `body-lg` `max-w-[60ch]` ·
+   2 CTA (primary có mũi tên + outline). Ảnh minh hoạ bên phải **tràn ra mép phải section** (full-bleed qua `.hero-bleed-right`),
+   KHÔNG khung bo góc/nền xám, `priority`; mobile (< `md`) ảnh xếp dưới chữ, full cột.
+   Ảnh `hero-banner.jpg` crop 2:1→6/5 (object-cover, object-position 70%) tập trung robot; lớp phủ sáng mờ dịu
+   hologram baked-in; **5 panel kính + wordmark NTA nổi** trên ảnh (chỉ `lg+`, `aria-hidden`). Nền gradient
+   trắng→xanh nhạt (`bg-gradient-to-b from-white via-white to-[#e8f0f3]`).
 2. **3 mảng giải pháp**: grid 3 `SolutionCard` — mỗi card có **ảnh thật** + `h3` + 1 dòng mô tả + link
    "Tìm hiểu thêm". KHÔNG 3 card icon+heading+text y hệt (anti-slop). Card `rounded-lg`, hover lift.
 3. **Sản phẩm tiêu biểu**: **horizontal scroll-snap strip** (khác family với grid phía trên),
@@ -130,7 +134,7 @@ File component ≤ 300 dòng, function ≤ 50 dòng → tách sub-component khi 
 |---|---|
 | base <640 | hamburger; hero stack dọc (title→sub→2 CTA full-width), ảnh dưới; cards 1 cột; strip swipe; case split 1 cột; CTA stack |
 | sm ≥640 | strip hiện ~1.5 card |
-| md ≥768 | hero 2 cột (text 55% / ảnh 45%); solution 2 cột; strip 2.5 card |
+| md ≥768 | hero 2 cột (text 42.5% / ảnh 57.5%); solution 2 cột; strip 2.5 card |
 | lg ≥1024 | nav ngang đầy đủ; hero 2 cột rộng; solution 3 cột; strip 3 card + arrow; case 50/50 |
 | xl ≥1280 | container 1280px, spacing `4xl`, ảnh hero lớn hơn |
 | 2xl ≥1536 | giữ container, whitespace tăng, không phóng to chữ ngoài clamp |
@@ -141,7 +145,7 @@ File component ≤ 300 dòng, function ≤ 50 dòng → tách sub-component khi 
 ảnh alt mô tả; focus ring thấy trên card; reduced-motion → hiện đủ nội dung không animate.
 
 **Copy (VI / EN):**
-- h1 VI: "Giải pháp số hóa cho doanh nghiệp Việt" · EN: "Digital solutions for Vietnamese businesses"
+- h1 VI: lead "Giải pháp số hoá cho" + accent "doanh nghiệp Việt" · EN: lead "Digital solutions for" + accent "Vietnamese businesses"
 - sub VI: "NTA mang giải pháp quản trị, trí tuệ nhân tạo và ứng dụng di động tới doanh nghiệp và cơ quan nhà nước." · EN: "NTA brings management, AI and mobile app solutions to enterprises and government agencies."
 - CTA: "Liên hệ tư vấn"/"Contact us" + "Xem giải pháp"/"View solutions" (canonical, không đổi label ở section khác).
 - Card titles VI: "Giải pháp Doanh nghiệp" / "Giải pháp AI" / "Ứng dụng AI" (EN: "Enterprise Solutions" / "AI Solutions" / "AI Apps").

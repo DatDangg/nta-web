@@ -63,9 +63,10 @@
     "suggestionsLabel": "Suggested pages"
   },
   "home": {
-    "heroTitle": "Digital solutions for Vietnamese businesses",
+    "heroTitleLead": "Digital solutions for",
+    "heroTitleAccent": "Vietnamese businesses",
     "heroDescription": "NTA brings management, AI and mobile app solutions to enterprises and government agencies.",
-    "heroImageAlt": "Illustrative interface — connected enterprise management overview",
+    "heroImageAlt": "Illustration of an AI robot operating an enterprise management system",
     "solutionsTitle": "Solutions for your needs",
     "productsTitle": "Featured products",
     "caseStudyTitle": "Customer story",

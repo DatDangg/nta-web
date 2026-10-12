@@ -4,6 +4,18 @@ export interface HomeContent {
   solutionCards: { title: string; description: string; href: string; image: string; alt: string; shot?: boolean }[];
   featuredProducts: { slug: string; title: string; description: string; image: string; alt: string }[];
   featuredCase: { title: string; description: string; href: string; image: string; alt: string };
+  /**
+   * 5 panel kính nổi trên ảnh hero (so với ảnh mẫu ảnh 2) + wordmark NTA trên đế robot.
+   * Chỉ hiển thị từ breakpoint `lg` trở lên — mobile giữ ảnh full cột, không overlay.
+   */
+  heroPanels: {
+    wordmark: string;
+    ai: { title: string; items: string[] };
+    chart: { title: string; subtitle: string };
+    management: { title: string; items: string[] };
+    performance: { value: string };
+    apps: { title: string; items: string[] };
+  };
 }
 
 const homeContent: Record<Locale, HomeContent> = {
@@ -18,6 +30,14 @@ const homeContent: Record<Locale, HomeContent> = {
       { slug: 'hair-style-ai', title: 'Kiểu tóc AI', description: 'Xem trước các phong cách tóc khác nhau.', image: '/images/products/hair-style-ai.jpg', alt: 'Giao diện minh hoạ — HairStyle AI: thử nhiều kiểu tóc bằng AI' },
     ],
     featuredCase: { title: 'Phương án AI camera và flycam tại Óc Eo – Ba Thê', description: 'Đề xuất kết hợp camera AI tại biên và flycam tuần tra để hỗ trợ bảo vệ khu di tích.', href: '/case-studies/oc-eo-learning', image: '/images/illustrations/oc-eo-architecture.svg', alt: 'Minh họa sơ đồ kiến trúc ba tầng cho phương án Óc Eo – Ba Thê' },
+    heroPanels: {
+      wordmark: 'NTA',
+      ai: { title: 'Trí tuệ nhân tạo', items: ['LLM & GenAI', 'Tự động hoá quy trình', 'Phân tích dữ liệu', 'Trợ lý AI doanh nghiệp'] },
+      chart: { title: 'AI', subtitle: 'Từ dữ liệu đến giá trị thực' },
+      management: { title: 'Quản trị doanh nghiệp', items: ['ERP / CRM', 'Quản lý nhân sự', 'Quản lý vận hành', 'Báo cáo thông minh'] },
+      performance: { value: '+86%' },
+      apps: { title: 'Ứng dụng di động', items: ['App doanh nghiệp', 'App dịch vụ công', 'Tích hợp hệ thống', 'Trải nghiệm hiện đại'] },
+    },
   },
   en: {
     solutionCards: [
@@ -30,6 +50,14 @@ const homeContent: Record<Locale, HomeContent> = {
       { slug: 'hair-style-ai', title: 'Hair-style AI', description: 'Preview different hairstyle options.', image: '/images/products/hair-style-ai.jpg', alt: 'Illustrative interface — HairStyle AI: try different hairstyles with AI' },
     ],
     featuredCase: { title: 'Proposed AI camera and drone plan for Óc Eo – Ba Thê', description: 'A proposal combining edge AI cameras and drone patrols to support heritage-site protection.', href: '/en/case-studies/oc-eo-learning', image: '/images/illustrations/oc-eo-architecture.svg', alt: 'Illustration of the three-layer architecture for the Óc Eo – Ba Thê proposal' },
+    heroPanels: {
+      wordmark: 'NTA',
+      ai: { title: 'Artificial Intelligence', items: ['LLM & GenAI', 'Process automation', 'Data analytics', 'AI business assistant'] },
+      chart: { title: 'AI', subtitle: 'From data to real value' },
+      management: { title: 'Business management', items: ['ERP / CRM', 'HR management', 'Operations', 'Smart reporting'] },
+      performance: { value: '+86%' },
+      apps: { title: 'Mobile apps', items: ['Business apps', 'Public services', 'System integration', 'Modern experience'] },
+    },
   },
 };
 
