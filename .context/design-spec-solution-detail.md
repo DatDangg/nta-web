@@ -841,7 +841,16 @@ Mỗi mô tả là **hai câu ngắn**, không lặp tiêu đề.
 | 3 | Assessment follows each required step. An AI assistant suggests comment wording the moment a teacher needs it. |
 | 4 | Drag-and-drop timetables. Lesson plans drafted and approved online. Digital records signed and issued inside the system. |
 
-**Tiêu đề 4 tính năng** giữ nguyên như bản ở §5.1 (khối 1–4).
+**Tiêu đề 4 tính năng** — VI giữ nguyên như bản ở §5.1 (khối 1–4).
+
+**Bảng tiêu đề EN — user chốt 2026-10-12** (đóng MINOR "EN feature titles không có nguồn trong spec"):
+
+| # | Tiêu đề EN |
+|---|---|
+| 1 | Multi-school management & dashboards |
+| 2 | Student, parent and staff records |
+| 3 | Student assessment with AI comment suggestions |
+| 4 | Timetables, lesson plans and digital records |
 
 ### 11.3 Bento pháp quy — số hiệu đã chốt
 

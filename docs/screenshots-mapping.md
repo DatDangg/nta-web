@@ -155,6 +155,17 @@ bản cũ (bản cũ có 56px padding mỗi phía, không đổi bề rộng n�
 | DentGo | `04-lich-hen` | 2656×2446 | 1.086 | A |
 | DentGo | `05-kho-vat-tu` | 2656×1800 | **1.476** | A (ngang nhất) |
 
+### Ảnh crop dùng trên web (đo 2026-10-12)
+
+| Sản phẩm | Ảnh | Kích thước | Tỉ lệ | Dùng ở | Ghi chú |
+|---|---|---|---|---|---|
+| CRM | `01-tong-quan-crop` | 2059×618 | 3.332 | `features[0]` (F1) | Crop lại (user yêu cầu 2026-10-12): gồm **thẻ chào "Hôm nay thế nào?" + dải 4 thẻ chỉ số**. Bản cũ chỉ có dải 4 thẻ, tỉ lệ 6.556 → ở 375px cao ~52px, nhãn không đọc được. |
+| DentGo | `01-tong-quan-crop` | 2056×600 | 3.427 | (chưa dùng) | 6 thẻ chỉ số ca làm |
+| LMS | `04-danh-gia-ai-tt27-crop` | 2656×2296 | 1.157 | `compliance.items[0].image` | Ảnh ô lớn bento |
+
+> Tỉ lệ crop CRM phải khớp `ratio` trong `src/content/solutions/{vi,en}/crm.mdx` —
+> `ShotImage` dùng `ratio` để chọn nhánh hiển thị, sai số → ảnh bị cắt/fade oan.
+
 **Ngưỡng nhánh A/B vẫn là 1.0**, không đổi. Các trường hợp biên vẫn giữ nguyên tính chất:
 `hrm/08` dọc nhất (0.719), `dentgo/05` ngang nhất (1.476), `hrm/01` gần vuông (1.065).
 
@@ -168,8 +179,13 @@ Chạy `node scripts/screenshots/.tmp/audit-text.mjs` (script tạm trong `.tmp/
 thị trên từng màn — bắt `[object Object]`, `undefined`/`NaN`, lỗi encoding, UI tiếng Anh lọt,
 và tên/brand/URL thật của khách hàng demo. Kết quả ngày 2026-10-11: **0 vấn đề trên 26 màn**.
 
-## Chưa nối vào web
+## Trạng thái nối vào web (cập nhật 2026-10-12)
 
-Bộ ảnh v2 mới chỉ **sinh file**, chưa sửa `.mdx` — trang web vẫn đang dùng ảnh cũ.
+Bộ ảnh v2 **đã nối vào web** trong change `2026-10-11-solution-detail-redesign`:
+
+- `heroShot` (ảnh `01-tong-quan`) + `features[].image` + `screenshots` còn lại trong 8 file `.mdx`
+  enterprise — xem `.context/design-spec-solution-detail.md` §7 (bảng alt VI/EN).
+- Trang AI (`boxai`/`flycam`/`custom-ai`) vẫn dùng bộ ảnh riêng (JPG có nền), không thuộc bộ v2 này.
+
 Việc thay `screenshots:` trong `src/content/solutions/{vi,en}/{hrm,lms,crm,dentgo}.mdx` sang
 `/images/solutions/v2/...` là **change request riêng** (đụng nội dung đã publish + ảnh hiển thị trên web).
