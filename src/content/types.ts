@@ -212,14 +212,20 @@ export interface CaseStudyShowcase {
   cta: { title: string; description: string; label: string; href: string; image?: string };
 }
 
+/** Key danh mục blog cố định (R-09a). Nhãn hiển thị lấy từ i18n `blog.categories.<key>`. */
+export type BlogCategory = 'ai-tech' | 'practical' | 'customer-stories' | 'nta-news' | 'trends' | 'guides';
+
 export interface Post {
   slug: string;
   title: string;
+  /** ISO `YYYY-MM-DD`. */
   date: string;
-  category: string;
+  category: BlogCategory;
   excerpt: string;
   cover: string;
   body: string;
+  /** Tính lúc load từ `body` — không khai báo trong frontmatter. */
+  readingMinutes: number;
 }
 
 export interface MdxDocument {

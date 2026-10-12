@@ -1,5 +1,5 @@
 ---
-spec_version: 3.1.0
+spec_version: 3.2.0
 updated_at: 2026-10-13
 ---
 
@@ -132,10 +132,53 @@ _(cập nhật 2026-10-09: đổi domain đích sang `ntavietnam.tech` — chang
 - **R-09:** Danh sách `/blog` + chi tiết `/blog/[slug]`, phân trang hoặc lazy-load.
   Priority: Medium (theo FR-060). `[reverse-engineered from docs]`
   — nguồn: `docs/BRD.md:103-105` (FR-060), `docs/DESIGN.md:121-123`
-  - Empty state cho list chưa specify — `[cần xác nhận]` khi implement.
+  - Empty state: xem R-09a §Trạng thái.
   - Ngày hiển thị trên card blog **list** dùng **cùng format locale** với detail (design S11):
-    VI `dd/mm/yyyy` (`08/10/2026`), EN `Oct 8, 2026` — **1 nguồn util dùng chung**
-    (`src/lib/format/date.ts`). _(clarify 2026-10-09 — fix C-L2-1)_
+    ~~VI `dd/mm/yyyy` (`08/10/2026`)~~ → **VI `08 Th10, 2026`** (ngày 2 chữ số + ` Th` + tháng KHÔNG pad 0 + `, ` + năm; vd `15 Th3, 2026`; ghép tay, không dùng
+    `Intl` vi-VN vì ra "thg"), EN `Oct 8, 2026`; tính theo ngày ISO trong frontmatter (không lệch timezone)
+    — **1 nguồn util dùng chung** (`src/lib/format/date.ts`). _(clarify 2026-10-09 — fix C-L2-1; đổi format VI
+    2026-10-13 — change `blog-listing-redesign`, áp dụng cả list + detail)_
+- **R-09a:** Trang danh sách `/blog` (+ `/en/blog`) bố cục "newsroom" theo mockup
+  `spec/changes/assets/2026-10-13-blog-listing-redesign/mockup-blog-listing.png`:
+  1. **Hero** — nền ảnh sóng xanh ngọc (tối ưu webp, không chặn LCP), breadcrumb pill (Trang chủ › Tin tức),
+     tiêu đề 2 dòng (dòng 2 phần nhấn màu primary), mô tả ngắn, minh hoạ SVG/CSS trang trí (`aria-hidden`).
+  2. **Thanh lọc** — 7 chip danh mục cố định: Tất cả · AI & Công nghệ · Ứng dụng thực tiễn · Câu chuyện khách hàng ·
+     Hoạt động NTA · Xu hướng · Hướng dẫn (chip active nền primary); ô tìm kiếm lọc theo tiêu đề + tóm tắt
+     (không phân biệt hoa/thường, dấu tiếng Việt). Trạng thái phản ánh trên URL `?category=<key>&q=<text>&page=<n>`;
+     đổi lọc/tìm → về trang 1. Chip không có bài vẫn hiện; kết quả rỗng → empty state + nút xoá bộ lọc.
+  3. **Khối nổi bật** (khi KHÔNG lọc/tìm): bài mới nhất dạng lớn (ảnh, badge danh mục, ngày, thời gian đọc,
+     tiêu đề, tóm tắt, "Đọc thêm →"), tối đa 2 bài kế tiếp dạng nhỏ, thẻ "NỔI BẬT — Cập nhật mới nhất từ NTA"
+     với nút "Xem tất cả bài viết" cuộn tới mục 4 và xoá bộ lọc. Thiếu bài → khối co lại, không chèn bài giả.
+  4. **"Bài viết mới nhất"** — lưới thẻ (1 / 2 / 3 / 4 cột ở base / md / lg / xl) gồm các bài còn lại sau khối nổi bật,
+     phân trang; rỗng → ẩn mục. Khi đang lọc/tìm → ẩn khối nổi bật, lưới hiển thị toàn bộ kết quả.
+  - **Danh mục** là key cố định trong frontmatter (`ai-tech | practical | customer-stories | nta-news | trends | guides`),
+    nhãn hiển thị lấy từ i18n (vi/en) — dùng chung cho badge list + detail.
+  - **Thời gian đọc** tự tính từ số từ của bài (~200 từ/phút, tối thiểu 1 phút), hiển thị "5 phút đọc" / "5 min read".
+  - **Chi tiết hành vi (chốt sau spec-validation round 1):**
+    - *Tiêu đề:* `h1` = tiêu đề 2 dòng của hero (VI "Tin tức & Cập nhật / về AI và ứng dụng thực tiễn", EN
+      "News & Updates / on AI and real-world applications"); metadata title giữ "Tin tức | NTA" / "Blog | NTA".
+      Nhãn chip EN: All · AI & Technology · Practical applications · Customer stories · NTA activities · Trends · Guides.
+    - *Phân trang:* page size **12**. Không lọc/tìm: khối nổi bật (3 bài mới nhất) chỉ hiện ở trang 1 và KHÔNG tính vào
+      page size; lưới = các bài từ thứ 4 trở đi, chia 12/trang. Đang lọc/tìm: lưới = toàn bộ kết quả, 12/trang.
+    - *URL:* "Tất cả" = không có `category`; `category` không thuộc 6 key → coi như "Tất cả"; `q` được trim, rỗng → bỏ
+      khỏi URL; `page` không hợp lệ/vượt → kẹp về [1, tổng trang]; đổi chip/từ khoá → bỏ `page`. Cập nhật URL bằng
+      `replace` (không thêm history), tìm kiếm theo lúc gõ (debounce ~300ms). Canonical `/blog` không kèm query.
+    - *Tìm kiếm:* kết hợp với chip danh mục theo AND; trường = tiêu đề + tóm tắt; chuẩn hoá: trim, lowercase, NFD bỏ dấu, `đ`→`d`; khớp chuỗi con.
+    - *Thời gian đọc:* số token tách theo khoảng trắng của body MDX, `ceil(từ/200)`, tối thiểu 1.
+    - *Trạng thái:* 0 bài → empty state hiện có (S10) thay toàn bộ phần dưới hero; lọc/tìm rỗng → "Không có bài viết phù
+      hợp" + nút xoá bộ lọc. Bài ≤3 → mục "Bài viết mới nhất" ẩn và nút "Xem tất cả bài viết" cuộn tới thanh lọc.
+    - *Responsive:* khối nổi bật xl: 3 cột (lớn · 2 nhỏ · thẻ NỔI BẬT); md–lg: bài lớn full-width, 2 nhỏ thành 2 cột,
+      thẻ NỔI BẬT full-width; base: 1 cột theo thứ tự lớn → nhỏ → NỔI BẬT. Lưới: 1 / 2 (md) / 3 (lg) / 4 (xl) cột.
+      Hàng chip cuộn ngang trong khung riêng ở mobile, trang không scroll ngang.
+    - *A11y:* chip = `button aria-pressed` trong `role="group"` có nhãn; ô tìm kiếm có `label` (sr-only) +
+      `type="search"`; số kết quả trong `role="status"`; "Xem tất cả" chuyển focus tới tiêu đề mục đích, tôn trọng
+      `prefers-reduced-motion`; minh hoạ hero `aria-hidden`.
+    - *Kiểu dữ liệu:* `Post.category` là union 6 key; key lạ → build fail. Bài liên quan ở detail = cùng key.
+    - *Design:* màu/typography dùng design tokens hiện có, không hardcode màu mockup; ảnh nền hero dùng bản webp.
+    - *Blast radius:* thẻ mới là component riêng (`src/components/blog/`); `PostCard` (dùng ở RelatedPosts) chỉ đổi
+      nhãn badge sang i18n + chuỗi ngày.
+  - **Ngoài phạm vi:** khối "Đăng ký nhận tin" (chưa có backend — làm sau). BR-004: không thêm bài/ảnh minh hoạ giả.
+  — nguồn: change `spec/changes/2026-10-13-blog-listing-redesign.md` (user chốt 6 quyết định 2026-10-13).
 - `[cần xác nhận]` blog là static file hay cần CMS (Open Question — `docs/BRD.md:177`)
 
 ### Module 8 — Liên hệ

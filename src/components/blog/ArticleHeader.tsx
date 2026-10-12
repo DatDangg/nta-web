@@ -12,7 +12,7 @@ export async function ArticleHeader({ post, locale }: { post: Post; locale: Loca
     <header className="mx-auto w-full max-w-container px-4 py-12 sm:px-6 md:py-16 lg:px-8">
       <Breadcrumb items={[{ label: t('title'), href: '/blog' }, { label: post.title }]} />
       <div className="mx-auto mt-8 max-w-[720px]">
-        <Badge>{post.category}</Badge>
+        <Badge>{t(`categories.${post.category}`)}</Badge>
         <h1 className="mt-5 text-display font-bold leading-tight" data-motion-off><SplitText text={post.title} /></h1>
         <div className="mt-5 flex flex-wrap gap-x-4 gap-y-2 text-sm text-text-secondary">
           <time dateTime={post.date}>{date}</time>

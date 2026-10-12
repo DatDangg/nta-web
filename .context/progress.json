@@ -2,7 +2,7 @@
   "mode": "feature",
   "activeWorkItem": {
     "type": "feature",
-    "slug": "nta-website"
+    "slug": "blog-listing-redesign"
   },
   "features": [
     {
@@ -574,6 +574,45 @@
       },
       "note": "Initial build hoàn tất: Layer 0..4 (totalLayers 5 = layer-plan 'Layer 0 → 4'). 27 req R-01..R-27 implemented. R-22 (Lighthouse Perf/LCP/CLS) + R-23 (viewport 375/768/1280) PARTIAL — đo ở gate DevOps/prod (bước 6). Chưa push (forbidden_branch main, auto_push false). Post-build: ai-solution-content (spec 1.1.0) + domain-ntavietnam (domain → ntavietnam.tech, spec 2.0.0, scope v6) + deploy-platform-docker-vps (Cloud Run → docker-vps, spec 3.0.0, scope v7) + cleanup-gcp-drift-comment-permission (dọn nốt drift GCP, spec 3.0.0 KHÔNG bump, scope v8) + hrm-solution-content (5 ảnh mockup + sections/useCases/faq qua cờ renderExtendedContent; spec 3.0.0 KHÔNG bump; cần user duyệt copy trước production). + enterprise-solution-docs-web-ready (viết lại 4 docs/reference README theo 8 heading web-ready; docs-only 0 dòng code; spec 3.0.0 KHÔNG bump; scope v8→v9; caveat: builder+reviewer chạy inline do env chặn subagent lồng → primary nên re-run reviewer độc lập). + publish-solution-screenshots (3 ảnh BoxAI + nội dung đầy đủ CRM/LMS/DentGo vi+en + ScreenshotSection vào trang AI + i18n key; spec 3.0.0 KHÔNG bump; scope v9→v10; reviewer STRICT round-1 PASS 0 CRITICAL/MAJOR/3 MINOR; verify lint/typecheck/build PASS do primary chạy lại; cần user xem ảnh BoxAI tiếng Anh + đọc lại copy). + replace-remaining-placeholder-images (change 2026-10-12: T01 assets 3 PNG mock + 9 SVG + pipeline; T02 wiring hero/solutions AI/case-study/blog/about; T03 /contact bỏ map + placeholder; spec 3.0.0 KHÔNG bump, scope v11→v12; T04 /products dùng ảnh user cung cấp — khung 9/16 theo user chốt (poster dọc, giữ chữ); change đã archive). + home-footer-redesign (restyle dải CTA + Footer toàn site theo ảnh user + 2 ảnh nền; chỉ link route tồn tại; spec 3.0.0 KHÔNG bump; scope v18→v19; reviewer STRICT r1 PASS 0 CRITICAL/MAJOR, 2 MINOR — 1 đã fix; concurrency: vi.json/en.json + design-spec.md còn hunk session hero-banner).",
       "lastUpdated": "2026-10-13"
+    },
+    {
+      "slug": "blog-listing-redesign",
+      "status": "in_progress",
+      "changeFile": "spec/changes/2026-10-13-blog-listing-redesign.md",
+      "classification": "MODIFY + ADDITIVE",
+      "specVersion": "3.2.0",
+      "specValidation": {
+        "verdict": "PASS",
+        "round": 2,
+        "report": ".context/review-reports/feature-blog-listing-redesign-spec-validation.md"
+      },
+      "phases": [
+        {
+          "phase": 1,
+          "status": "in_progress",
+          "tasks": [
+            {
+              "id": "phase-1-task-01",
+              "status": "done",
+              "review": {
+                "level": "STRICT",
+                "verdict": "PASS",
+                "round": 1,
+                "report": ".context/review-reports/feature-blog-listing-redesign-phase-1-task-01-round-1-review.md"
+              }
+            },
+            {
+              "id": "phase-1-task-02",
+              "status": "pending"
+            },
+            {
+              "id": "phase-1-task-03",
+              "status": "pending"
+            }
+          ]
+        }
+      ],
+      "updatedAt": "2026-10-13"
     }
   ],
   "bugs": []

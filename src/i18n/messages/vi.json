@@ -167,7 +167,17 @@
     "copied": "Đã sao chép",
     "related": "Bài viết liên quan",
     "ctaTitle": "Cùng tìm giải pháp phù hợp",
-    "ctaDescription": "Trao đổi với đội ngũ NTA về mục tiêu và nhu cầu số hóa của tổ chức."
+    "ctaDescription": "Trao đổi với đội ngũ NTA về mục tiêu và nhu cầu số hóa của tổ chức.",
+    "categories": {
+      "all": "Tất cả",
+      "ai-tech": "AI & Công nghệ",
+      "practical": "Ứng dụng thực tiễn",
+      "customer-stories": "Câu chuyện khách hàng",
+      "nta-news": "Hoạt động NTA",
+      "trends": "Xu hướng",
+      "guides": "Hướng dẫn"
+    },
+    "readingTime": "{minutes} phút đọc"
   },
   "contact": {
     "title": "Liên hệ",

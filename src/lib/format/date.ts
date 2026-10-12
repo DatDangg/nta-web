@@ -1,19 +1,14 @@
 import type { Locale } from '@/content/types';
 
-const localeTag: Record<Locale, string> = {
-  vi: 'vi-VN',
-  en: 'en-US',
-};
-
-const dateOptions: Record<Locale, Intl.DateTimeFormatOptions> = {
-  vi: { day: '2-digit', month: '2-digit', year: 'numeric' },
-  en: { month: 'short', day: 'numeric', year: 'numeric' },
-};
+const englishDateFormat = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
 
 /**
- * Single source of truth for blog post date display (design S11).
- * VI → "08/10/2026", EN → "Oct 8, 2026".
+ * Single source of truth for blog post date display (R-09, list + detail).
+ * VI → "08 Th10, 2026" (built by hand: Intl vi-VN prints "thg"), EN → "Oct 8, 2026".
+ * Reads the ISO `YYYY-MM-DD` parts directly so the shown day never shifts with the server/browser timezone.
  */
 export function formatPostDate(isoDate: string, locale: Locale): string {
-  return new Intl.DateTimeFormat(localeTag[locale], dateOptions[locale]).format(new Date(isoDate));
+  const [year, month, day] = isoDate.slice(0, 10).split('-').map(Number);
+  if (locale === 'vi') return `${String(day).padStart(2, '0')} Th${month}, ${year}`;
+  return englishDateFormat.format(new Date(Date.UTC(year, month - 1, day)));
 }

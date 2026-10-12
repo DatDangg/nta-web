@@ -167,7 +167,17 @@
     "copied": "Copied",
     "related": "Related posts",
     "ctaTitle": "Find the right solution together",
-    "ctaDescription": "Talk with the NTA team about your organization's goals and digital needs."
+    "ctaDescription": "Talk with the NTA team about your organization's goals and digital needs.",
+    "categories": {
+      "all": "All",
+      "ai-tech": "AI & Technology",
+      "practical": "Practical applications",
+      "customer-stories": "Customer stories",
+      "nta-news": "NTA activities",
+      "trends": "Trends",
+      "guides": "Guides"
+    },
+    "readingTime": "{minutes} min read"
   },
   "contact": {
     "title": "Contact",

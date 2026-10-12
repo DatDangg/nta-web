@@ -1,10 +1,29 @@
 import type { Locale, MdxDocument, Post } from '@/content/types';
+import { isBlogCategory } from '@/lib/blog/categories';
 import { assertRequiredFields, loadMdxDirectory } from './load-mdx';
 import { isLocale } from './slug';
 
+type PostFile = Omit<Post, 'readingMinutes'>;
+
+const WORDS_PER_MINUTE = 200;
+
+/** Token tách theo khoảng trắng (tiếng Việt: mỗi âm tiết = 1 token), ceil(tokens/200), tối thiểu 1 phút. */
+export function estimateReadingMinutes(body: string): number {
+  const tokenCount = body.split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.ceil(tokenCount / WORDS_PER_MINUTE));
+}
+
+function toPost(file: PostFile, filePath: string): Post {
+  assertRequiredFields(file, ['slug', 'title', 'date', 'category', 'excerpt', 'cover', 'body'], filePath);
+  if (!isBlogCategory(file.category)) {
+    throw new Error(`Invalid content file ${filePath}: unknown category "${String(file.category)}"`);
+  }
+  return { ...file, readingMinutes: estimateReadingMinutes(file.body) };
+}
+
 export async function getAllPosts(locale: Locale): Promise<Post[]> {
-  const posts = await loadMdxDirectory<Post>('blog', locale);
-  return posts.map((post) => assertRequiredFields(post, ['slug', 'title', 'date', 'category', 'excerpt', 'cover', 'body'], `src/content/blog/${locale}/${post.slug}.mdx`))
+  const files = await loadMdxDirectory<PostFile>('blog', locale);
+  return files.map((file) => toPost(file, `src/content/blog/${locale}/${file.slug}.mdx`))
     .sort((first, second) => second.date.localeCompare(first.date));
 }
 
