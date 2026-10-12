@@ -1,7 +1,7 @@
 import type { Locale } from './types';
 
 export interface HomeContent {
-  solutionCards: { title: string; description: string; href: string; image: string; alt: string }[];
+  solutionCards: { title: string; description: string; href: string; image: string; alt: string; shot?: boolean }[];
   featuredProducts: { slug: string; title: string; description: string; image: string; alt: string }[];
   featuredCase: { title: string; description: string; href: string; image: string; alt: string };
 }
@@ -9,7 +9,7 @@ export interface HomeContent {
 const homeContent: Record<Locale, HomeContent> = {
   vi: {
     solutionCards: [
-      { title: 'Giải pháp Doanh nghiệp', description: 'Chuẩn hóa vận hành, nhân sự, đào tạo và nghiệp vụ.', href: '/solutions/enterprise', image: '/images/solutions/enterprise.svg', alt: 'Minh họa các quy trình doanh nghiệp được kết nối' },
+      { title: 'Giải pháp Doanh nghiệp', description: 'Chuẩn hóa vận hành, nhân sự, đào tạo và nghiệp vụ.', href: '/solutions/enterprise', image: '/images/solutions/v2/lms/01-tong-quan.png', alt: 'Bảng điều khiển quản lý trường học đa trường: chỉ số học sinh, giáo viên và danh sách các trường', shot: true },
       { title: 'Giải pháp AI', description: 'Đưa AI vào vận hành và trải nghiệm khách hàng.', href: '/solutions/ai', image: '/images/solutions/ai.svg', alt: 'Minh họa dữ liệu được phân tích bằng AI' },
       { title: 'Ứng dụng AI', description: 'Ứng dụng di động AI phục vụ nhu cầu hằng ngày.', href: '/products', image: '/images/solutions/apps.svg', alt: 'Minh họa ứng dụng AI trên điện thoại' },
     ],
@@ -21,7 +21,7 @@ const homeContent: Record<Locale, HomeContent> = {
   },
   en: {
     solutionCards: [
-      { title: 'Enterprise Solutions', description: 'Standardize operations, HR, training and workflows.', href: '/en/solutions/enterprise', image: '/images/solutions/enterprise.svg', alt: 'Illustration of connected enterprise workflows' },
+      { title: 'Enterprise Solutions', description: 'Standardize operations, HR, training and workflows.', href: '/en/solutions/enterprise', image: '/images/solutions/v2/lms/01-tong-quan.png', alt: 'Multi-school management dashboard: student and staff figures with the school list', shot: true },
       { title: 'AI Solutions', description: 'Apply AI to operations and customer experience.', href: '/en/solutions/ai', image: '/images/solutions/ai.svg', alt: 'Illustration of data analyzed with AI' },
       { title: 'AI Apps', description: 'Mobile AI apps for everyday needs.', href: '/en/products', image: '/images/solutions/apps.svg', alt: 'Illustration of an AI mobile app' },
     ],

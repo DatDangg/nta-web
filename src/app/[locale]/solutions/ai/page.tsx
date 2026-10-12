@@ -52,7 +52,7 @@ export default async function AiSolutionsPage({ params }: { params: Promise<{ lo
           <ul className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {solutions.map((solution, index) => (
               <li className={solutions.length === 3 && index === 2 ? 'md:col-span-2 lg:col-span-1' : ''} key={solution.slug}>
-                <Reveal><SolutionCard imageAlt={t('imageAlt', { title: solution.title })} solution={solution} /></Reveal>
+                <Reveal><SolutionCard imageAlt={t('imageAlt', { title: solution.title })} shot={solution.cardImage !== undefined} solution={solution} /></Reveal>
               </li>
             ))}
           </ul>

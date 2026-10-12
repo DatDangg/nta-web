@@ -7,6 +7,8 @@ type SolutionItem = {
   href: string;
   image: string;
   alt: string;
+  /** Ảnh giao diện thật → dùng khung ảnh bám trên + fade (xem `SolutionCard`). */
+  shot?: boolean;
 };
 
 export async function SolutionGridHome({ solutions, title }: { solutions: SolutionItem[]; title: string }) {
@@ -23,6 +25,7 @@ export async function SolutionGridHome({ solutions, title }: { solutions: Soluti
               imageSrc={solution.image}
               key={solution.href}
               href={solution.href.replace(/^\/en(?=\/)/, '')}
+              shot={solution.shot ?? false}
               solution={{ ...solution, slug: solution.href.split('/').at(-1) ?? solution.href, category: 'enterprise', features: [], benefits: [] }}
             />
           ))}

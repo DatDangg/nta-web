@@ -1,5 +1,14 @@
 export const cardLinkClass = 'group block rounded-lg text-text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-focus motion-safe:transition-[transform,box-shadow] motion-safe:duration-base motion-safe:ease-out-expo motion-safe:hover:-translate-y-1 motion-safe:hover:shadow-sm';
 export const cardImageClass = 'aspect-[16/10] w-full rounded-lg bg-surface-sunken object-cover';
+
+/**
+ * Khung ảnh cho **thẻ dùng ảnh giao diện thật** (change `2026-10-12-solution-card-real-images`).
+ *
+ * Tách riêng `cardImageClass` vì khung này **cắt đáy** để mọi thẻ cao đều nhau, còn
+ * `cardImageClass` dùng `object-cover` cho ảnh SVG phẳng của thẻ sản phẩm / case study.
+ * KHÔNG gộp: đổi khung này sẽ kéo theo `AppCard` / `ProductCard` / `CaseStudyCard`.
+ */
+export const cardShotFrameClass = 'aspect-[16/10] w-full overflow-hidden rounded-t-lg bg-surface-sunken';
 export const cardImageWideClass = 'aspect-[16/9] w-full rounded-lg bg-surface-sunken object-cover';
 export const cardImageSizes = '(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw';
 export const cardGridClass = 'grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3';

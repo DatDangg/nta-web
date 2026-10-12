@@ -44,7 +44,7 @@ export default async function EnterpriseSolutionsPage({ params }: { params: Prom
             {enterpriseSolutions.map((solution) => (
               <li key={solution.slug}>
                 <Reveal>
-                  <SolutionCard imageAlt={t('imageAlt', { title: solution.title })} solution={solution} />
+                  <SolutionCard imageAlt={t('imageAlt', { title: solution.title })} shot={solution.cardImage !== undefined} solution={solution} />
                 </Reveal>
               </li>
             ))}

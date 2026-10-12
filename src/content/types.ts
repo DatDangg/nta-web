@@ -28,6 +28,20 @@ export interface Feature {
 export type LegacyFeature = string;
 
 /**
+ * Ảnh dùng ở **thẻ giải pháp** (danh sách / trang chủ) — khác `image` (SVG placeholder).
+ *
+ * `image` chỉ phục vụ thẻ; OG/Twitter dùng `/images/og-default.png` cố định, nên thêm field
+ * này không đụng metadata. Thẻ nào không khai `cardImage` thì giữ placeholder `image`.
+ */
+export interface CardShot {
+  src: string;
+  /** Alt mô tả giao diện (rule §7); HRM phải có tiền tố "Giao diện minh hoạ —". */
+  alt: string;
+  /** Tỉ lệ đo sẵn — dùng cho `next/image` tính kích thước nội tại (chống layout shift). */
+  ratio?: number;
+}
+
+/**
  * Ảnh hero của trang chi tiết giải pháp (khác `image` — `image` là SVG đại diện cho OG/JSON-LD).
  *
  * `maxWidth` chỉ ghi khi ảnh gần vuông cần giới hạn bề rộng riêng (spec §3: HRM 1.06 →
@@ -63,6 +77,12 @@ export interface Solution {
   highlights?: { value: string; label: string }[];
   faq?: { question: string; answer: string }[];
   image?: string;
+  /**
+   * Ảnh thật cho thẻ giải pháp. Thiếu → thẻ dùng `image` (placeholder SVG) như cũ.
+   * `image` không phục vụ OG (Twitter/OG dùng `/images/og-default.png` cố định) nên field
+   * này không ảnh hưởng metadata. Xem change `2026-10-12-solution-card-real-images`.
+   */
+  cardImage?: CardShot;
   /**
    * Ảnh hero (khung macOS) — khác `image` (SVG cho OG). Thiếu → hero chỉ có text + CTA,
    * KHÔNG render khung ảnh rỗng (spec §3).
