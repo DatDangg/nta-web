@@ -1,3 +1,4 @@
+import { CountUp } from '@/components/motion/CountUp';
 import { Container } from '@/components/ui/Container';
 
 type Metric = { value: string; label: string };
@@ -15,7 +16,7 @@ export function ResultBlock({ title, content, metrics }: ResultBlockProps) {
           <ul className="mt-8 grid grid-cols-2 gap-6 md:grid-cols-4">
             {metrics.slice(0, 4).map((metric) => (
               <li key={`${metric.value}-${metric.label}`}>
-                <p className="text-display font-bold text-primary">{metric.value}</p>
+                <p className="text-display font-bold text-primary"><CountUp value={metric.value} /></p>
                 <p className="mt-2 text-sm text-text-secondary">{metric.label}</p>
               </li>
             ))}

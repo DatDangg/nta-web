@@ -52,7 +52,7 @@ export function CTABanner({ title, description, variant = 'primary', href = '/co
 
   return (
     <section className={`relative overflow-hidden py-12 text-text-inverse md:py-16 ${base}`}>
-      <Image alt="" aria-hidden className="object-cover" fill sizes="100vw" src="/images/home/footer-cta-bg.jpg" />
+      <Image alt="" aria-hidden className="cta-bg-drift object-cover" fill sizes="100vw" src="/images/home/footer-cta-bg.jpg" />
       <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-r from-black/45 via-black/25 to-transparent" />
       <Container className="relative flex flex-col items-start gap-6 md:flex-row md:items-center md:justify-between">
         <div className="max-w-3xl">
@@ -68,9 +68,9 @@ export function CTABanner({ title, description, variant = 'primary', href = '/co
             ))}
           </ul>
         </div>
-        <Link className={`${buttonStyles('inverse', 'md')} shrink-0 gap-2 whitespace-nowrap`} href={href}>
+        <Link className={`${buttonStyles('inverse', 'md')} group shrink-0 gap-2 whitespace-nowrap`} href={href}>
           {t('contact')}
-          <svg aria-hidden="true" className="size-4" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
+          <svg aria-hidden="true" className="size-4 transition-transform duration-base ease-out-expo group-hover:translate-x-1" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24">
             <path d="M5 12h14M13 6l6 6-6 6" />
           </svg>
         </Link>

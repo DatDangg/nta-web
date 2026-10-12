@@ -1,8 +1,10 @@
+import type { CSSProperties } from 'react';
 import { Container } from '@/components/ui/Container';
 import { Breadcrumb } from '@/components/shared/Breadcrumb';
 import { Link } from '@/i18n/navigation';
 import { buttonStyles } from '@/components/ui/Button';
 import { ShotImage } from './ShotImage';
+import { SplitText } from '@/components/motion/SplitText';
 
 export interface HeroBreadcrumb {
   label: string;
@@ -71,11 +73,11 @@ export function SolutionHero({
       <Container size="narrow">
         <div className="text-center">
           <Breadcrumb centered items={breadcrumbs} />
-          <h1 className="mt-6 text-display font-bold tracking-tight text-text-primary">{title}</h1>
-          <p className="mx-auto mt-4 max-w-[62ch] text-body-lg text-text-secondary">
+          <h1 className="mt-6 text-display font-bold tracking-tight text-text-primary" data-motion-off><SplitText text={title} /></h1>
+          <p className="motion-load mx-auto mt-4 max-w-[62ch] text-body-lg text-text-secondary" data-motion-off style={{ '--d': '350ms' } as CSSProperties}>
             {description}
           </p>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
+          <div className="motion-load mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center" style={{ '--d': '500ms' } as CSSProperties}>
             {/* `Link` của next-intl: tự thêm tiền tố locale + prefetch. KHÔNG dùng
                 `localizedPath()` ở đây — hàm đó trả URL tuyệt đối theo NEXT_PUBLIC_SITE_URL,
                 nên trên preview (Vercel) bấm nút sẽ nhảy sang domain production. */}
@@ -100,7 +102,7 @@ export function SolutionHero({
               alt trước, caption sau. */}
           {/* mx-auto BẮT BUỘC khi imageMaxW hẹp hơn Container (HRM 960px) —
               không thì figure dính mép trái thay vì căn giữa. */}
-          <figure className={`${imageMaxW} mx-auto`}>
+          <figure className={`${imageMaxW} motion-load mx-auto`} data-motion-off style={{ '--d': '650ms' } as CSSProperties}>
             <ShotImage
               alt={imageAlt ?? ''}
               height={1440}

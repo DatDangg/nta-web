@@ -3,6 +3,7 @@ import { getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/navigation';
 import { buttonStyles } from '@/components/ui/Button';
 import { FocusMain } from '@/components/shared/FocusMain';
+import { SplitText } from '@/components/motion/SplitText';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('notFound');
@@ -25,7 +26,7 @@ export default async function NotFoundPage() {
   return (
     <section className="mx-auto flex min-h-[50vh] min-h-[50dvh] max-w-[560px] flex-col items-center justify-center px-4 py-16 text-center sm:px-6">
       <FocusMain />
-      <h1 className="text-display font-semibold tracking-tight text-text-primary">{t('heading')}</h1>
+      <h1 className="text-display font-semibold tracking-tight text-text-primary" data-motion-off><SplitText text={t('heading')} /></h1>
       <p className="mt-4 max-w-[48ch] text-base leading-7 text-text-secondary">{t('message')}</p>
       <Link className={`${buttonStyles('primary', 'lg')} mt-8 w-full md:w-auto`} href="/">
         {t('homeLink')}

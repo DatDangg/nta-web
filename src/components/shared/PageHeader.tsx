@@ -1,6 +1,7 @@
 import type { BreadcrumbItem } from './Breadcrumb';
 import { Breadcrumb } from './Breadcrumb';
 import { Container } from '@/components/ui/Container';
+import { SplitText } from '@/components/motion/SplitText';
 
 interface PageHeaderProps {
   title: string;
@@ -19,8 +20,8 @@ export function PageHeader({ title, description, breadcrumbs, variant = 'left' }
             nếu không breadcrumb lệch trái giữa chừng so với tiêu đề. */}
         <div className={centered ? 'mx-auto max-w-3xl' : ''}>
           <Breadcrumb centered={centered} items={breadcrumbs} />
-          <h1 className="mt-6 text-display font-bold leading-tight text-text-primary">{title}</h1>
-          <p className={`mt-4 text-body-lg leading-relaxed text-text-secondary ${centered ? 'mx-auto max-w-[65ch]' : 'max-w-[65ch]'}`}>{description}</p>
+          <h1 className="mt-6 text-display font-bold leading-tight text-text-primary" data-motion-off><SplitText text={title} /></h1>
+          <p data-motion-off style={{ '--d': '350ms' } as React.CSSProperties} className={`motion-load mt-4 text-body-lg leading-relaxed text-text-secondary ${centered ? 'mx-auto max-w-[65ch]' : 'max-w-[65ch]'}`}>{description}</p>
         </div>
       </Container>
     </header>

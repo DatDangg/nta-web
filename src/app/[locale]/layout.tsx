@@ -8,6 +8,13 @@ import { Footer } from '@/components/layout/Footer';
 import { createOrganizationJsonLd, createWebSiteJsonLd } from '@/lib/seo/jsonld';
 import { BASE_URL } from '@/lib/seo';
 import { Inter } from 'next/font/google';
+import { MotionRoot } from '@/components/motion/MotionRoot';
+import { ScrollTopButton } from '@/components/motion/ScrollTopButton';
+import { AUTO_MOTION_CSS } from '@/lib/motion/auto-motion';
+
+// Failsafe: nếu sau 4s `MotionRoot` vẫn chưa chạy (JS lỗi/chặn) → `motion-off` để không có
+// nội dung nào bị auto-motion giữ ở trạng thái ẩn.
+const JS_FLAG_SCRIPT = "document.documentElement.classList.add('js');setTimeout(function(){var h=document.documentElement;if(!h.classList.contains('motion-ready'))h.classList.add('motion-off')},4000)";
 
 const inter = Inter({
   subsets: ['latin', 'vietnamese'],
@@ -56,7 +63,8 @@ export default async function LocaleLayout({
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([
           createOrganizationJsonLd(), createWebSiteJsonLd(locale),
         ]).replace(/</g, '\\u003c') }} />
-        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
+        <script dangerouslySetInnerHTML={{ __html: JS_FLAG_SCRIPT }} />
+        <style dangerouslySetInnerHTML={{ __html: AUTO_MOTION_CSS }} />
         <NextIntlClientProvider messages={messages}>
           <a className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-modal focus:rounded-full focus:bg-background focus:px-4 focus:py-3 focus:text-primary" href="#main">
             {locale === 'vi' ? 'Bỏ qua tới nội dung' : 'Skip to content'}
@@ -64,6 +72,8 @@ export default async function LocaleLayout({
           <Header />
           <main id="main" tabIndex={-1}>{children}</main>
           <Footer />
+          <ScrollTopButton />
+          <MotionRoot />
         </NextIntlClientProvider>
       </body>
     </html>

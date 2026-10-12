@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react';
 import Image from 'next/image';
 import { Link } from '@/i18n/navigation';
 import { Breadcrumb, type BreadcrumbItem } from '@/components/shared/Breadcrumb';
@@ -22,9 +23,9 @@ export function ShowcaseHero({ hero, breadcrumbs }: Props) {
         <div>
           <Breadcrumb items={breadcrumbs} />
           <div className="mt-4"><Eyebrow>{hero.eyebrow}</Eyebrow></div>
-          <h1 className="mt-5 text-[clamp(2rem,1.3rem+2vw,3rem)] font-bold leading-[1.15] tracking-[-0.02em] text-text-primary">
-            <span className="block">{hero.titleLead}</span>
-            <span className="block bg-gradient-to-r from-[#0fa3b1] via-[#0b9488] to-[#0d9a6c] bg-clip-text pb-[0.06em] text-transparent">{hero.titleAccent}</span>
+          <h1 data-motion-off className="mt-5 text-[clamp(2rem,1.3rem+2vw,3rem)] font-bold leading-[1.15] tracking-[-0.02em] text-text-primary">
+            <span className="split-line block">{hero.titleLead}</span>
+            <span className="split-line block" style={{ '--split-delay': '120ms' } as CSSProperties}><span className="block bg-gradient-to-r from-[#0fa3b1] via-[#0b9488] to-[#0d9a6c] bg-clip-text pb-[0.06em] text-transparent">{hero.titleAccent}</span></span>
           </h1>
           <p className="mt-4 text-lg font-semibold text-text-primary">{hero.subtitle}</p>
           <p className="mt-3 max-w-[56ch] leading-relaxed text-text-secondary">{hero.description}</p>

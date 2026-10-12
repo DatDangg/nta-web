@@ -1,8 +1,12 @@
 import Image from 'next/image';
-import type { ReactNode } from 'react';
+import { CountUp } from '@/components/motion/CountUp';
+import type { CSSProperties, ReactNode } from 'react';
 import type { HomeContent } from '@/content/home';
 
 const HERO_SRC = '/images/home/hero-banner.jpg';
+
+/** Độ trễ cho hiệu ứng bật-lên + trôi nhẹ của panel kính (`.hero-pop` trong globals.css). */
+const popDelay = (ms: number) => ({ '--d': `${ms}ms` }) as CSSProperties;
 
 type HeroPanels = HomeContent['heroPanels'];
 
@@ -57,15 +61,16 @@ function IconPhone() {
 
 type ListPanelProps = {
   className: string;
+  delay: number;
   icon: ReactNode;
   items: string[];
   title: string;
 };
 
 // Panel danh sách (Trí tuệ nhân tạo / Quản trị doanh nghiệp / Ứng dụng di động).
-function ListPanel({ className, icon, items, title }: ListPanelProps) {
+function ListPanel({ className, delay, icon, items, title }: ListPanelProps) {
   return (
-    <div className={`${GLASS} ${className}`}>
+    <div className={`${GLASS} hero-pop ${className}`} style={popDelay(delay)}>
       <p className="flex items-center gap-[0.5cqw] text-[0.95cqw] font-semibold leading-tight">
         <span className="text-primary">{icon}</span>
         {title}
@@ -87,17 +92,17 @@ function ListPanel({ className, icon, items, title }: ListPanelProps) {
 
 // Panel "AI" + biểu đồ cột (cột phụ dùng `opacity-40` — `bg-primary/40` không sinh CSS vì
 // color là var() thiếu <alpha-value>).
-function ChartPanel({ className, subtitle, title }: { className: string; subtitle: string; title: string }) {
+function ChartPanel({ className, delay, subtitle, title }: { className: string; delay: number; subtitle: string; title: string }) {
   return (
-    <div className={`${GLASS} ${className}`}>
+    <div className={`${GLASS} hero-pop ${className}`} style={popDelay(delay)}>
       <p className="text-[3cqw] font-bold leading-none text-text-primary">{title}</p>
       <p className="mt-[0.4cqw] text-[0.85cqw] text-text-secondary">{subtitle}</p>
       <div className="mt-[1cqw] flex h-[9cqw] items-end gap-[0.5cqw]">
         {[30, 44, 38, 58, 50, 72, 100].map((h, i) => (
           <span
             key={i}
-            style={{ height: `${h}%` }}
-            className={`flex-1 rounded-t-[0.25cqw] bg-gradient-to-t from-primary to-accent ${i === 6 ? '' : 'opacity-60'}`}
+            style={{ height: `${h}%`, '--i': i } as CSSProperties}
+            className={`hero-bar flex-1 rounded-t-[0.25cqw] bg-gradient-to-t from-primary to-accent ${i === 6 ? '' : 'opacity-60'}`}
           />
         ))}
       </div>
@@ -106,13 +111,14 @@ function ChartPanel({ className, subtitle, title }: { className: string; subtitl
 }
 
 // Panel hiệu suất: số liệu lớn + đường tăng trưởng.
-function StatPanel({ className, label, value }: { className: string; label: string; value: string }) {
+function StatPanel({ className, delay, label, value }: { className: string; delay: number; label: string; value: string }) {
   return (
-    <div className={`${GLASS} ${className}`}>
+    <div className={`${GLASS} hero-pop ${className}`} style={popDelay(delay)}>
       <p className="text-[0.75cqw] text-text-secondary">{label}</p>
-      <p className="mt-[0.2cqw] text-[1.7cqw] font-bold leading-none text-primary">{value}</p>
+      <p className="mt-[0.2cqw] text-[1.7cqw] font-bold leading-none text-primary"><CountUp value={value} /></p>
       <svg viewBox="0 0 100 40" className="mt-[0.6cqw] w-full text-primary">
         <polyline
+          className="hero-line"
           fill="none"
           stroke="currentColor"
           strokeWidth={3}
@@ -135,18 +141,18 @@ export function HeroBackground({ panels, imageAlt }: HeroBackgroundProps) {
   return (
     <div className="absolute inset-0 -z-10 hidden lg:block">
       <div className="absolute inset-y-0 right-0 aspect-[1787/880] h-full [container-type:inline-size]">
-        <Image alt={imageAlt} className="object-cover" fill priority sizes="(min-width: 1024px) 120vw, 1px" src={HERO_SRC} />
+        <Image alt={imageAlt} className="motion-load-zoom object-cover" fill priority sizes="(min-width: 1024px) 120vw, 1px" src={HERO_SRC} />
 
         {/* Che mép trái khung ảnh (thấy được khi màn hình rộng hơn khung). */}
         <div aria-hidden className="absolute inset-y-0 left-0 w-[30%] bg-gradient-to-r from-white to-transparent" />
 
         {/* 5 panel kính + wordmark NTA — vị trí % theo khung ảnh, khớp ảnh mẫu. */}
         <div aria-hidden className="absolute inset-0 text-text-primary">
-          <ListPanel className="left-[46%] top-[15%] w-[15.5%]" icon={<IconBrain />} items={panels.ai.items} title={panels.ai.title} />
-          <ChartPanel className="left-[70.5%] top-[14%] w-[17%]" subtitle={panels.chart.subtitle} title={panels.chart.title} />
-          <StatPanel className="left-[88.5%] top-[33%] w-[9%]" label={panels.performance.label} value={panels.performance.value} />
-          <ListPanel className="left-[45.5%] top-[50%] w-[13.5%]" icon={<IconGrid />} items={panels.management.items} title={panels.management.title} />
-          <ListPanel className="left-[83%] top-[55%] w-[14.5%]" icon={<IconPhone />} items={panels.apps.items} title={panels.apps.title} />
+          <ListPanel className="left-[46%] top-[15%] w-[15.5%]" delay={300} icon={<IconBrain />} items={panels.ai.items} title={panels.ai.title} />
+          <ChartPanel className="left-[70.5%] top-[14%] w-[17%]" delay={450} subtitle={panels.chart.subtitle} title={panels.chart.title} />
+          <StatPanel className="left-[88.5%] top-[33%] w-[9%]" delay={600} label={panels.performance.label} value={panels.performance.value} />
+          <ListPanel className="left-[45.5%] top-[50%] w-[13.5%]" delay={750} icon={<IconGrid />} items={panels.management.items} title={panels.management.title} />
+          <ListPanel className="left-[83%] top-[55%] w-[14.5%]" delay={900} icon={<IconPhone />} items={panels.apps.items} title={panels.apps.title} />
 
           <p className="absolute left-[73%] top-[56%] -translate-x-1/2 text-[4cqw] font-black tracking-tight text-white drop-shadow-[0_0.2cqw_0.6cqw_rgb(0_80_70/0.55)]">
             {panels.wordmark}

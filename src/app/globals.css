@@ -77,6 +77,8 @@
   --z-header: 40;
   --z-drawer: 50;
   --z-modal: 60;
+  /* Easing chung cho hiệu ứng chuyển động (trang tham chiếu Sync dùng cùng đường cong). */
+  --ease-motion: cubic-bezier(0.19, 1, 0.22, 1);
 }
 
 *,
@@ -92,7 +94,7 @@
 }
 
 .reveal-item {
-  transition: opacity 400ms cubic-bezier(0.16, 1, 0.3, 1), transform 400ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 900ms var(--ease-motion), transform 1000ms var(--ease-motion);
 }
 
 /*
@@ -112,7 +114,151 @@
 
 html.js .reveal:not(.revealed) .reveal-item {
   opacity: 0;
-  transform: translateY(16px);
+  transform: translateY(40px);
+}
+
+/* ==========================================================================
+ * MOTION — bộ hiệu ứng toàn site (tham chiếu: Sync/ThemeREX AI Technologies + Helpdesk).
+ * Auto-reveal khi cuộn: xem `src/lib/motion/auto-motion.ts` (CSS sinh từ cùng selector với JS).
+ * Mọi hiệu ứng ở đây tắt theo `prefers-reduced-motion` (rule cuối file).
+ * ========================================================================== */
+
+/* Chuyển trang (app/[locale]/template.tsx). */
+.page-enter {
+  animation: motion-page-enter 700ms var(--ease-motion) backwards;
+}
+@keyframes motion-page-enter {
+  from { opacity: 0; transform: translate3d(0, 14px, 0); }
+}
+
+/* Tiêu đề tách từ (components/motion/SplitText.tsx). */
+.split-word {
+  display: inline-block;
+  animation: motion-word-in 1000ms var(--ease-motion) backwards;
+  animation-delay: var(--split-delay, 0ms);
+}
+/* Dòng (hero trang chủ): giữ nguyên gradient của span vì transform đặt trên chính span. */
+.split-line {
+  animation: motion-word-in 1100ms var(--ease-motion) backwards;
+  animation-delay: var(--split-delay, 0ms);
+}
+@keyframes motion-word-in {
+  from { opacity: 0; transform: translate3d(0, 0.55em, 0); filter: blur(8px); }
+}
+
+/* Phần tử xuất hiện ngay khi tải trang (hero) — `--d` là độ trễ. */
+.motion-load {
+  animation: motion-load-in 1000ms var(--ease-motion) backwards;
+  animation-delay: var(--d, 0ms);
+}
+@keyframes motion-load-in {
+  from { opacity: 0; transform: translate3d(0, 40px, 0); }
+}
+.motion-load-zoom {
+  animation: motion-load-zoom 1400ms var(--ease-motion) backwards;
+  animation-delay: var(--d, 0ms);
+}
+/* Không làm mờ (opacity) — ảnh hero là LCP, chỉ thu nhỏ dần để không trễ LCP. */
+@keyframes motion-load-zoom {
+  from { transform: scale(1.08); }
+}
+
+/* Panel kính hero: bật lên rồi trôi nhẹ liên tục (dùng `translate` riêng để không đè `transform`). */
+.hero-pop {
+  animation:
+    motion-pop-in 1000ms var(--ease-motion) backwards,
+    motion-float 7s ease-in-out infinite;
+  animation-delay: var(--d, 0ms), calc(var(--d, 0ms) + 1000ms);
+}
+@keyframes motion-pop-in {
+  from { opacity: 0; transform: translate3d(0, 30px, 0) scale(0.92); }
+}
+@keyframes motion-float {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -0.6cqw; }
+}
+.hero-bar {
+  transform-origin: bottom;
+  animation: motion-bar-grow 1200ms var(--ease-motion) backwards;
+  animation-delay: calc(700ms + var(--i, 0) * 80ms);
+}
+@keyframes motion-bar-grow {
+  from { transform: scaleY(0); }
+}
+.hero-line {
+  stroke-dasharray: 160;
+  animation: motion-line-draw 1600ms var(--ease-motion) 900ms backwards;
+}
+@keyframes motion-line-draw {
+  from { stroke-dashoffset: 160; }
+}
+
+/* Ảnh trong thẻ: phóng nhẹ khi hover (trx_hover_zoom của trang tham chiếu). */
+a.group .overflow-hidden > img {
+  transition: transform 1000ms var(--ease-motion);
+}
+@media (hover: hover) {
+  a.group:hover .overflow-hidden > img {
+    transform: scale(1.06);
+  }
+}
+
+/* Nền ảnh dải CTA trôi chậm (Ken Burns nhẹ). */
+.cta-bg-drift {
+  animation: motion-drift 24s ease-in-out infinite alternate;
+}
+@keyframes motion-drift {
+  from { transform: scale(1); }
+  to { transform: scale(1.08) translate3d(-1.5%, 0, 0); }
+}
+
+/* Thanh tiến độ cuộn dưới header — CSS scroll-driven, trình duyệt chưa hỗ trợ thì ẩn. */
+.scroll-progress { display: none; }
+@supports (animation-timeline: scroll()) {
+  .scroll-progress {
+    display: block;
+    transform-origin: left;
+    animation: motion-scroll-progress linear both;
+    animation-timeline: scroll(root);
+  }
+}
+@keyframes motion-scroll-progress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+/* Dải chữ chạy (components/motion/Marquee.tsx). */
+.marquee {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: motion-marquee var(--marquee-duration, 30s) linear infinite;
+}
+.marquee-reverse .marquee-track { animation-direction: reverse; }
+.marquee:hover .marquee-track { animation-play-state: paused; }
+.marquee-list {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+}
+.marquee-item {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  padding-right: 2rem;
+  white-space: nowrap;
+}
+@keyframes motion-marquee {
+  to { transform: translate3d(-50%, 0, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation: none; }
+  .marquee { overflow-x: auto; }
+  .scroll-progress { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {

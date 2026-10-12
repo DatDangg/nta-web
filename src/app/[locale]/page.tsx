@@ -6,6 +6,7 @@ import { Hero } from '@/components/home/Hero';
 import { ProductStrip } from '@/components/home/ProductStrip';
 import { SolutionGridHome } from '@/components/home/SolutionGridHome';
 import { CTABanner } from '@/components/shared/CTABanner';
+import { Marquee } from '@/components/motion/Marquee';
 import { getHomeContent } from '@/content/home';
 import type { Locale } from '@/content/types';
 import { createLocaleAlternates, localizedPath } from '@/lib/seo';
@@ -46,6 +47,13 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   return (
     <>
       <Hero panels={home.heroPanels} />
+      {/* Dải chữ chạy (running line) — tái dùng nhãn năng lực của panel hero, không thêm copy mới. */}
+      <section className="border-y border-border bg-background-alt py-5 md:py-6">
+        <Marquee
+          className="text-h3 font-semibold tracking-tight text-text-primary"
+          items={[...home.heroPanels.ai.items, ...home.heroPanels.management.items, ...home.heroPanels.apps.items]}
+        />
+      </section>
       <SolutionGridHome solutions={home.solutionCards} title={t('solutionsTitle')} />
       <ProductStrip products={home.featuredProducts} title={t('productsTitle')} />
       <CaseStudyHighlight study={home.featuredCase} title={t('caseStudyTitle')} />

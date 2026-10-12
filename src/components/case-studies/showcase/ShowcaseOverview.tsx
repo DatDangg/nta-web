@@ -1,3 +1,4 @@
+import { CountUp } from '@/components/motion/CountUp';
 import { Container } from '@/components/ui/Container';
 import type { CaseStudyShowcase } from '@/content/types';
 import { CheckDot, ShowcaseIconBadge } from './icons';
@@ -15,7 +16,7 @@ export function ShowcaseOverview({ stats, pillars }: Props) {
               <ShowcaseIconBadge icon={stat.icon} size="lg" />
               <div className="min-w-0">
                 <dt className="sr-only">{stat.label}</dt>
-                <dd className="text-2xl font-bold tracking-tight text-text-primary">{stat.value}</dd>
+                <dd className="text-2xl font-bold tracking-tight text-text-primary"><CountUp value={stat.value} /></dd>
                 <dd aria-hidden="true" className="mt-1 text-sm leading-snug text-text-secondary">{stat.label}</dd>
               </div>
             </div>

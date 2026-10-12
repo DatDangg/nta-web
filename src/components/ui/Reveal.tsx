@@ -38,7 +38,7 @@ export function Reveal({ children, className = '', stagger = false }: RevealProp
         <div
           key={index}
           className="reveal-item"
-          style={{ transitionDelay: stagger ? `${index * 60}ms` : '0ms' }}
+          style={{ transitionDelay: stagger ? `${Math.min(index, 8) * 90}ms` : '0ms' }}
         >
           {child}
         </div>
