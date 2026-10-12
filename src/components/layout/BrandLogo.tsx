@@ -5,17 +5,18 @@ const LOGO_MARK_WIDTH = 480;
 const LOGO_MARK_HEIGHT = 397;
 
 /**
- * Logo thương hiệu NTA (mark + wordmark "NTA") dùng chung cho Header/Footer.
+ * Logo thương hiệu NTA — chỉ dùng mark, không kèm wordmark chữ "NTA".
+ * Dùng chung cho Header/Footer.
  *
  * Mark là glyph "N" dạng kính (xanh cyan) nền trong suốt — `logo-mark.png` đã được trim
- * sát viền nên đặt cạnh wordmark chỉ cần `gap`, không cần padding thủ công.
+ * sát viền nên không cần padding thủ công.
  *
- * `alt=""` + `aria-hidden`: phần chữ "NTA" và `aria-label` ở `<Link>` bao ngoài đã đủ
- * ngữ nghĩa cho screen reader, thêm alt sẽ đọc trùng.
+ * `alt=""` + `aria-hidden`: tên thương hiệu do `aria-label` ở `<Link>` bao ngoài mang
+ * (`homeLabel` = "NTA, trang chủ" / "NTA, home"), thêm alt sẽ đọc trùng.
  */
 export function BrandLogo({ className = '', priority = false }: { className?: string; priority?: boolean }) {
   return (
-    <span className={`inline-flex items-center gap-2 ${className}`.trim()}>
+    <span className={`inline-flex items-center ${className}`.trim()}>
       <Image
         alt=""
         aria-hidden="true"
@@ -25,7 +26,6 @@ export function BrandLogo({ className = '', priority = false }: { className?: st
         src={LOGO_MARK_SRC}
         width={LOGO_MARK_WIDTH}
       />
-      <span className="text-xl font-semibold tracking-tight text-text-primary">NTA</span>
     </span>
   );
 }

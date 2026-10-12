@@ -1,43 +1,44 @@
 {
   "specVersion": "3.0.0",
-  "scopeVersion": 14,
-  "generatedAt": "2026-10-12T05:00:00+07:00",
+  "scopeVersion": 15,
+  "generatedAt": "2026-10-12T06:50:00+07:00",
   "trigger": "feature-update",
-  "workItem": "change-products-carousel-image-size",
+  "workItem": "change-brand-logo-wordmark-removal",
   "specRefs": [],
   "changed": {
     "files": [
-      "src/components/products/ScreenshotCarousel.tsx",
-      "spec/updates/2026-10-12-products-carousel-image-size.md",
+      "src/components/layout/BrandLogo.tsx",
+      "spec/updates/2026-10-12-brand-logo-wordmark-removal.md",
       "spec/CHANGELOG.md",
       "spec/test-scope/current.json"
     ],
     "modules": [
-      "src/components/products/ScreenshotCarousel (slide 1 ảnh/slide `w-full` + `sizes` khớp cột media)"
+      "src/components/layout/BrandLogo (bỏ wordmark text \"NTA\" + `gap-2`; chỉ còn `<Image logo-mark.png>`)"
     ]
   },
   "impact": {
     "direct": [
-      "/products + /en/products: carousel mỗi ảnh chiếm trọn cột media (thay vì 1/3) → poster 9/16 to lên ≈3×, không crop."
+      "Header + Footer trên MỌI route, cả 2 locale (VI+EN): logo thương hiệu chỉ còn mark, không còn chữ \"NTA\"."
     ],
     "dependents": [
-      "AppCard (truyền `media`) — bố cục `md:grid-cols-2` KHÔNG đổi.",
-      "products/page.tsx (`lg:grid-cols-2`) KHÔNG đổi.",
-      "cardStyles.cardPosterImageClass (`aspect-[9/16]`) dùng chung ProductCard — KHÔNG sửa; ProductCard (trang chủ) ngoài scope."
+      "Header.tsx:51 (`<BrandLogo priority />`) — KHÔNG đổi; vẫn render mark.",
+      "Footer.tsx:21 (`<BrandLogo />`) — KHÔNG đổi; vẫn render mark.",
+      "A11y: `aria-label` của `<Link>` bao ngoài = `homeLabel` (`\"NTA, trang chủ\"`/`\"NTA, home\"`) — giữ nguyên brand name cho screen reader.",
+      "SEO: `src/lib/seo/jsonld.ts` vẫn `logo-square.png`; `Organization.name`/`WebSite.name` = \"NTA\" — KHÔNG đổi.",
+      "Asset `logo-lockup.png` (icon + NTA + tagline) vẫn unused — KHÔNG thêm reference."
     ],
     "regression": [
-      "Grep `ScreenshotCarousel` = chỉ 1 caller (`/products` + `/en/products`) → không lan sang trang khác.",
-      "Grep `md:w-1/2|lg:w-1/3` trong `src/` = 0 match.",
-      "Carousel dots/arrows/scroll-snap/a11y (min-h-11 min-w-11, aria-current, role=region) giữ nguyên.",
-      "Khung `aspect-[9/16]` không crop poster (tỉ lệ ảnh gốc 941×1672/1671 ≈ 9/16)."
+      "Grep `BrandLogo` trong `src/` = đúng 2 caller (Header/Footer) → không lan route/API/data.",
+      "Grep `>NTA<` / `NTA</span>` trong `src/` = 0 match (chỉ còn trong comment docblock).",
+      "`Header.tsx`/`Footer.tsx`/`MobileNav.tsx` không bị sửa; layout `inline-flex items-center` giữ, mark `h-9 w-auto` không méo (tỉ lệ 480:397)."
     ]
   },
   "acceptance": [
-    "Slide carousel là 1 ảnh/slide (`w-full shrink-0 snap-start`), không còn `md:w-1/2 lg:w-1/3`.",
-    "Ảnh poster to lên rõ rệt (≈3×) trong cột media; không crop (khung aspect-[9/16] giữ).",
-    "Bố cục card 2 cột giữ nguyên (AppCard + products/page.tsx không đổi grid).",
-    "`sizes` next/image khớp layout 1-up: `(min-width: 1024px) 256px, (min-width: 768px) 45vw, 100vw`.",
-    "`/products` + `/en/products`: HTML build xác nhận md:w-1/2=0, lg:w-1/3=0, w-full shrink-0 snap-start=2, sizes 256px=2, aspect-[9/16]=2.",
+    "BrandLogo không còn render text \"NTA\" trong DOM; chỉ còn `<Image src=\"/images/brand/logo-mark.png\">`.",
+    "Header (VI+EN) + Footer (VI+EN) vẫn render mark, layout không vỡ.",
+    "Accessible name của link home giữ `\"NTA, trang chủ\"` / `\"NTA, home\"`.",
+    "JSON-LD vẫn `logo-square.png`; `logo-lockup.png` vẫn unused.",
+    "HTML build VI `/vi`: `>NTA<` = 0, `logo-mark.png` = 9, `aria-label=\"NTA, trang chủ\"` còn.",
     "npm run lint / typecheck / build PASS (test_command: null → skip, no test configured)."
   ],
   "risk": "low"
