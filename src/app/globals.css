@@ -110,28 +110,6 @@
   mask-image: linear-gradient(to bottom, black 78%, transparent 100%);
 }
 
-/*
- * Hero trang chủ: ảnh minh hoạ tràn ra MÉP PHẢI viewport trên desktop (full-bleed).
- *
- * Ảnh nằm trong `Container` (`mx-auto w-full max-w-container` = 1280px + padding ngang), nên để
- * chạm mép phải viewport cần bù lại: lề căn giữa `(100vw - min(100vw, 1280px)) / 2` CỘNG padding
- * phải của container (`sm:px-6` = 1.5rem / `lg:px-8` = 2rem). Kết quả là margin-right ÂM.
- * Section bọc `overflow-hidden` để phần tràn không tạo scroll ngang.
- * Mobile (< md) KHÔNG áp: ảnh full cột trong padding, xếp dưới chữ.
- * ⚠ 1280px phải khớp `maxWidth.container` trong `tailwind.config.ts`.
- */
-@media (min-width: 768px) {
-  .hero-bleed-right {
-    margin-right: calc((min(100vw, 1280px) - 100vw) / 2 - 1.5rem);
-  }
-}
-
-@media (min-width: 1024px) {
-  .hero-bleed-right {
-    margin-right: calc((min(100vw, 1280px) - 100vw) / 2 - 2rem);
-  }
-}
-
 html.js .reveal:not(.revealed) .reveal-item {
   opacity: 0;
   transform: translateY(16px);

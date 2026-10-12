@@ -148,7 +148,50 @@ export interface CaseStudy {
   result: string;
   metrics?: { value: string; label: string }[];
   gallery: { src: string; alt: string }[];
+  /** Ảnh thẻ ở danh sách case study. Thiếu → dùng `gallery[0]` như cũ. */
+  cover?: string;
   related: string[];
+  /**
+   * Bố cục trang chi tiết: `default` (MetaBar + 3 block chữ + gallery) · `showcase` (landing
+   * kiểu ảnh mẫu Óc Eo: hero ảnh lớn, thẻ số liệu, 3 cột, khối công nghệ, carousel ảnh, tầm nhìn).
+   * Thiếu cờ → `default`. `showcase` bắt buộc có field `showcase`.
+   */
+  layout?: 'default' | 'showcase';
+  showcase?: CaseStudyShowcase;
+}
+
+export type ShowcaseIcon = 'area' | 'camera' | 'calendar' | 'challenge' | 'solution' | 'result';
+
+export interface CaseStudyShowcase {
+  hero: {
+    /** Nhãn ngắn cho breadcrumb (thiếu → dùng `title`). */
+    breadcrumbLabel?: string;
+    eyebrow: string;
+    titleLead: string;
+    titleAccent: string;
+    subtitle: string;
+    description: string;
+    image: { src: string; alt: string };
+    primaryCta: { label: string; href: string };
+    /** Chỉ render nút "Xem video" khi có URL thật — không để nút chết. */
+    video?: { label: string; href: string };
+  };
+  stats: { icon: ShowcaseIcon; value: string; label: string }[];
+  pillars: { icon: ShowcaseIcon; title: string; items: string[] }[];
+  technology: {
+    id?: string;
+    eyebrow: string;
+    title: string;
+    description: string;
+    cta?: { label: string; href: string };
+    nodes: string[];
+    /** Danh sách cảnh báo trên màn VMS minh hoạ — dữ liệu giả lập, có caption nói rõ. */
+    alerts: { title: string; meta: string }[];
+    caption: string;
+  };
+  photos: { eyebrow: string; title: string; prevLabel: string; nextLabel: string; items: { src: string; alt: string }[] };
+  vision: { eyebrow: string; title: string; description: string; quote: string; image?: { src: string; alt: string } };
+  cta: { title: string; description: string; label: string; href: string; image?: string };
 }
 
 export interface Post {

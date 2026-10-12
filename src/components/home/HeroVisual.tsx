@@ -1,43 +1,82 @@
-'use client';
-
 import Image from 'next/image';
-import { useState } from 'react';
+import type { ReactNode } from 'react';
 import type { HomeContent } from '@/content/home';
 
 const HERO_SRC = '/images/home/hero-banner.jpg';
 
 type HeroPanels = HomeContent['heroPanels'];
 
-// Panel kính chung: nền trắng mờ + blur + viền sáng + bóng nhẹ (khớp ảnh mẫu ảnh 2).
+/*
+ * Hero dùng TOÀN BỘ ảnh hero-banner (1787×880) làm nền.
+ *
+ * Khung ảnh (`frame`) luôn giữ đúng tỉ lệ ảnh gốc, cao = cao section, neo MÉP PHẢI. Nhờ vậy robot +
+ * khối NTA luôn ở cùng vị trí tương đối trong khung, và các panel kính đặt bằng % của khung
+ * khớp đúng lên ảnh ở mọi bề rộng màn hình. Viewport hẹp hơn khung → phần thành phố bên trái bị cắt;
+ * viewport rộng hơn → nền trắng của section lấp bên trái, gradient che mép ảnh.
+ *
+ * Cỡ chữ/padding trong panel dùng đơn vị `cqw` (container query) theo bề rộng khung, để panel co
+ * giãn cùng ảnh thay vì vỡ chữ.
+ */
+
+// Panel kính chung: nền trắng mờ + blur + viền sáng + bóng nhẹ.
 const GLASS =
-  'absolute rounded-xl border border-white/70 bg-white/85 shadow-lg backdrop-blur-sm';
+  'absolute rounded-[0.9cqw] border border-white/80 bg-white/80 p-[0.85cqw] shadow-[0_0.6cqw_2cqw_rgb(15_60_70/0.12)] backdrop-blur-md';
+
+const iconProps = {
+  'aria-hidden': true,
+  className: 'h-[1.25cqw] w-[1.25cqw] shrink-0',
+  fill: 'none',
+  stroke: 'currentColor',
+  strokeWidth: 1.8,
+  viewBox: '0 0 24 24',
+} as const;
+
+function IconBrain() {
+  return (
+    <svg {...iconProps}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 3.75A3.75 3.75 0 0 0 6 7.5c-1.03.2-1.9 1-2.3 2.1-.4 1.1-.2 2.3.5 3.2-.7.8-1 1.9-.7 3 .3 1 1.1 1.8 2.1 2.1.3 1.3 1.4 2.4 2.9 2.4 1 0 1.9-.4 2.5-1.1m-5.9-15A3.75 3.75 0 0 1 18 7.5c1.03.2 1.9 1 2.3 2.1.4 1.1.2 2.3-.5 3.2.7.8 1 1.9.7 3-.3 1-1.1 1.8-2.1 2.1-.3 1.3-1.4 2.4-2.9 2.4-1 0-1.9-.4-2.5-1.1" />
+    </svg>
+  );
+}
+
+function IconGrid() {
+  return (
+    <svg {...iconProps}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z" />
+    </svg>
+  );
+}
+
+function IconPhone() {
+  return (
+    <svg {...iconProps}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
+    </svg>
+  );
+}
 
 type ListPanelProps = {
   className: string;
-  icon: React.ReactNode;
-  itemIcon: 'dot' | 'check';
+  icon: ReactNode;
   items: string[];
   title: string;
 };
 
 // Panel danh sách (Trí tuệ nhân tạo / Quản trị doanh nghiệp / Ứng dụng di động).
-function ListPanel({ className, icon, itemIcon, items, title }: ListPanelProps) {
+function ListPanel({ className, icon, items, title }: ListPanelProps) {
   return (
-    <div className={`${GLASS} ${className} p-3`}>
-      <p className="flex items-center gap-1.5 text-[13px] font-semibold leading-tight">
-        <span aria-hidden className="shrink-0 text-primary">{icon}</span>
+    <div className={`${GLASS} ${className}`}>
+      <p className="flex items-center gap-[0.5cqw] text-[0.95cqw] font-semibold leading-tight">
+        <span className="text-primary">{icon}</span>
         {title}
       </p>
-      <ul className="mt-2 space-y-1.5">
+      <ul className="mt-[0.7cqw] space-y-[0.45cqw]">
         {items.map((item) => (
-          <li key={item} className="flex items-center gap-1.5 text-[11px] leading-tight">
-            {itemIcon === 'check' ? (
-              <svg aria-hidden className="h-3 w-3 shrink-0 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-              </svg>
-            ) : (
-              <span aria-hidden className="h-1 w-1 shrink-0 rounded-full bg-primary" />
-            )}
+          <li
+            key={item}
+            className="flex items-center gap-[0.5cqw] rounded-[0.4cqw] bg-white/70 px-[0.5cqw] py-[0.35cqw] text-[0.75cqw] leading-tight text-text-secondary"
+          >
+            <span className="h-[0.4cqw] w-[0.4cqw] shrink-0 rounded-full bg-primary" />
             {item}
           </li>
         ))}
@@ -46,19 +85,19 @@ function ListPanel({ className, icon, itemIcon, items, title }: ListPanelProps) 
   );
 }
 
-// Panel AI + biểu đồ cột (cột phụ dùng `bg-primary opacity-40` —
-// `bg-primary/40` KHÔNG sinh CSS vì color là var() thiếu <alpha-value>).
+// Panel "AI" + biểu đồ cột (cột phụ dùng `opacity-40` — `bg-primary/40` không sinh CSS vì
+// color là var() thiếu <alpha-value>).
 function ChartPanel({ className, subtitle, title }: { className: string; subtitle: string; title: string }) {
   return (
-    <div className={`${GLASS} ${className} p-3`}>
-      <p className="text-2xl font-bold leading-none text-text-primary">{title}</p>
-      <p className="mt-1 text-[10px] text-text-secondary">{subtitle}</p>
-      <div aria-hidden className="mt-2 flex h-12 items-end gap-1">
-        {[38, 62, 48, 78, 92, 70].map((h, i) => (
+    <div className={`${GLASS} ${className}`}>
+      <p className="text-[3cqw] font-bold leading-none text-text-primary">{title}</p>
+      <p className="mt-[0.4cqw] text-[0.85cqw] text-text-secondary">{subtitle}</p>
+      <div className="mt-[1cqw] flex h-[9cqw] items-end gap-[0.5cqw]">
+        {[30, 44, 38, 58, 50, 72, 100].map((h, i) => (
           <span
             key={i}
             style={{ height: `${h}%` }}
-            className={`flex-1 rounded-sm bg-primary ${i === 4 ? '' : 'opacity-40'}`}
+            className={`flex-1 rounded-t-[0.25cqw] bg-gradient-to-t from-primary to-accent ${i === 6 ? '' : 'opacity-60'}`}
           />
         ))}
       </div>
@@ -66,124 +105,71 @@ function ChartPanel({ className, subtitle, title }: { className: string; subtitl
   );
 }
 
-// Panel hiệu suất: số liệu lớn + biểu đồ đường.
-function StatPanel({ className, value }: { className: string; value: string }) {
+// Panel hiệu suất: số liệu lớn + đường tăng trưởng.
+function StatPanel({ className, label, value }: { className: string; label: string; value: string }) {
   return (
-    <div className={`${GLASS} ${className} p-3`}>
-      <p className="text-2xl font-bold leading-none text-primary">{value}</p>
-      <svg aria-hidden viewBox="0 0 100 36" className="mt-1 w-full text-primary">
+    <div className={`${GLASS} ${className}`}>
+      <p className="text-[0.75cqw] text-text-secondary">{label}</p>
+      <p className="mt-[0.2cqw] text-[1.7cqw] font-bold leading-none text-primary">{value}</p>
+      <svg viewBox="0 0 100 40" className="mt-[0.6cqw] w-full text-primary">
         <polyline
           fill="none"
           stroke="currentColor"
-          strokeWidth={2.5}
+          strokeWidth={3}
           strokeLinecap="round"
           strokeLinejoin="round"
-          points="0,30 18,22 36,26 54,14 72,18 100,4"
+          points="0,34 20,28 38,31 56,20 74,22 100,6"
         />
-        <path d="M96 4h6v6" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     </div>
   );
 }
 
-const ICON_CLASS = 'h-4 w-4';
-const iconProps = {
-  'aria-hidden': true,
-  className: ICON_CLASS,
-  fill: 'none',
-  stroke: 'currentColor',
-  strokeWidth: 1.8,
-  viewBox: '0 0 24 24',
-} as const;
-
-function ListIconGrid() {
-  return (
-    <svg {...iconProps}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z" />
-    </svg>
-  );
-}
-
-function ListIconPhone() {
-  return (
-    <svg {...iconProps}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
-    </svg>
-  );
-}
-
-function ListIconBrain() {
-  return (
-    <svg {...iconProps}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M9.75 3.75A3.75 3.75 0 0 0 6 7.5c-1.03.2-1.9 1-2.3 2.1-.4 1.1-.2 2.3.5 3.2-.7.8-1 1.9-.7 3 .3 1 1.1 1.8 2.1 2.1.3 1.3 1.4 2.4 2.9 2.4 1 0 1.9-.4 2.5-1.1m-5.9-15A3.75 3.75 0 0 1 18 7.5c1.03.2 1.9 1 2.3 2.1.4 1.1.2 2.3-.5 3.2.7.8 1 1.9.7 3-.3 1-1.1 1.8-2.1 2.1-.3 1.3-1.4 2.4-2.9 2.4-1 0-1.9-.4-2.5-1.1" />
-    </svg>
-  );
-}
-
-type HeroVisualProps = {
+type HeroBackgroundProps = {
   panels: HeroPanels;
   imageAlt: string;
 };
 
-export function HeroVisual({ panels, imageAlt }: HeroVisualProps) {
-  const [failed, setFailed] = useState(false);
-
-  if (failed) {
-    // Fallback giữ tỉ lệ khung (khớp aspect 6/5), không sập layout.
-    return <div aria-label={imageAlt} className="aspect-[6/5] w-full" role="img" />;
-  }
-
+/** Nền ảnh full-bleed + panel kính (chỉ lg+). Decorative với panel; ảnh có alt. */
+export function HeroBackground({ panels, imageAlt }: HeroBackgroundProps) {
   return (
-    // Crop 2:1 → 6/5 (1.2:1) tập trung vào robot + panel, bỏ phần thành phố bên trái
-    // (giống ảnh mẫu ảnh 2: phần ảnh gần vuông, robot lớn giữa khung).
-    // `overflow-hidden` + `object-cover` cắt mềm; `object-[70%_50%]` giữ robot lệch phải.
-    <div className="relative aspect-[6/5] w-full overflow-hidden">
-      <Image
-        alt={imageAlt}
-        className="object-cover object-[70%_50%]"
-        fill
-        onError={() => setFailed(true)}
-        priority
-        sizes="(min-width: 768px) 60vw, 100vw"
-        src={HERO_SRC}
-      />
+    <div className="absolute inset-0 -z-10 hidden lg:block">
+      <div className="absolute inset-y-0 right-0 aspect-[1787/880] h-full [container-type:inline-size]">
+        <Image alt={imageAlt} className="object-cover" fill priority sizes="(min-width: 1024px) 120vw, 1px" src={HERO_SRC} />
 
-      {/* Lớp phủ sáng mờ dịu hologram baked-in trong ảnh 1, nâng ảnh theo phong cách ảnh 2.
-          Gradient trái→phải: trái (nơi panel) sáng hơn. */}
-      <div aria-hidden className="absolute inset-0 bg-gradient-to-r from-white/55 via-white/20 to-white/5" />
+        {/* Che mép trái khung ảnh (thấy được khi màn hình rộng hơn khung). */}
+        <div aria-hidden className="absolute inset-y-0 left-0 w-[30%] bg-gradient-to-r from-white to-transparent" />
 
-      {/* 5 panel kính nổi + wordmark NTA — CHỈ desktop (lg+), decorative (aria-hidden).
-          Vị trí là % của khung ảnh (tương đối), tinh chỉnh theo ảnh mẫu ảnh 2. */}
-      <div aria-hidden className="absolute inset-0 hidden text-text-primary lg:block">
-        <ListPanel
-          className="left-[6%] top-[10%] w-[27%]"
-          icon={<ListIconBrain />}
-          itemIcon="dot"
-          items={panels.ai.items}
-          title={panels.ai.title}
-        />
-        <ChartPanel className="left-[38%] top-[7%] w-[30%]" subtitle={panels.chart.subtitle} title={panels.chart.title} />
-        <ListPanel
-          className="left-[5%] top-[47%] w-[27%]"
-          icon={<ListIconGrid />}
-          itemIcon="check"
-          items={panels.management.items}
-          title={panels.management.title}
-        />
-        <StatPanel className="left-[71%] top-[26%] w-[25%]" value={panels.performance.value} />
-        <ListPanel
-          className="left-[70%] top-[54%] w-[28%]"
-          icon={<ListIconPhone />}
-          itemIcon="dot"
-          items={panels.apps.items}
-          title={panels.apps.title}
-        />
+        {/* 5 panel kính + wordmark NTA — vị trí % theo khung ảnh, khớp ảnh mẫu. */}
+        <div aria-hidden className="absolute inset-0 text-text-primary">
+          <ListPanel className="left-[46%] top-[15%] w-[15.5%]" icon={<IconBrain />} items={panels.ai.items} title={panels.ai.title} />
+          <ChartPanel className="left-[70.5%] top-[14%] w-[17%]" subtitle={panels.chart.subtitle} title={panels.chart.title} />
+          <StatPanel className="left-[88.5%] top-[33%] w-[9%]" label={panels.performance.label} value={panels.performance.value} />
+          <ListPanel className="left-[45.5%] top-[50%] w-[13.5%]" icon={<IconGrid />} items={panels.management.items} title={panels.management.title} />
+          <ListPanel className="left-[83%] top-[55%] w-[14.5%]" icon={<IconPhone />} items={panels.apps.items} title={panels.apps.title} />
 
-        {/* Wordmark NTA trên đế robot (giữa) */}
-        <p className="absolute left-1/2 top-[54%] -translate-x-1/2 text-4xl font-black tracking-tight text-white drop-shadow-[0_2px_6px_rgb(0_0_0/0.45)]">
-          {panels.wordmark}
-        </p>
+          <p className="absolute left-[73%] top-[56%] -translate-x-1/2 text-[4cqw] font-black tracking-tight text-white drop-shadow-[0_0.2cqw_0.6cqw_rgb(0_80_70/0.55)]">
+            {panels.wordmark}
+          </p>
+        </div>
       </div>
+
+      {/* Phủ trắng mờ vùng thành phố bên trái để chữ dễ đọc (theo bề rộng section, không theo khung). */}
+      <div
+        aria-hidden
+        className="absolute inset-0 bg-[linear-gradient(90deg,#fff_0%,rgb(255_255_255/0.94)_28%,rgb(255_255_255/0.6)_42%,rgb(255_255_255/0)_56%)]"
+      />
+      {/* Mờ đáy chuyển sang section kế tiếp. */}
+      <div aria-hidden className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-white to-transparent" />
+    </div>
+  );
+}
+
+/** Mobile/tablet (< lg): ảnh xếp dưới chữ, crop vào robot, mờ mép trên. */
+export function HeroMobileImage({ imageAlt }: { imageAlt: string }) {
+  return (
+    <div className="relative aspect-[4/3] w-full [mask-image:linear-gradient(to_bottom,transparent,black_20%)] md:aspect-[16/9] lg:hidden">
+      <Image alt={imageAlt} className="object-cover object-[72%_50%]" fill sizes="100vw" src={HERO_SRC} />
     </div>
   );
 }

@@ -13,7 +13,7 @@ const SOCIALS = [
   },
   {
     id: 'linkedin',
-    href: 'https://www.linkedin.com/',
+    href: 'https://www.linkedin.com/company/nta-solution',
     path: 'M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9h4v12H3zM10 9h3.8v1.7h.06c.53-.95 1.83-1.95 3.77-1.95 4.03 0 4.78 2.5 4.78 5.75V21h-4v-5.1c0-1.22-.02-2.8-1.7-2.8-1.7 0-1.96 1.33-1.96 2.7V21h-4z',
   },
   {

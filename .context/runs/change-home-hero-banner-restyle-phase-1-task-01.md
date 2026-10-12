@@ -6,23 +6,34 @@
 ```yaml
 workItem: change/home-hero-banner-restyle
 phaseTask: phase-1-task-01
-step: close-out
+step: done
 agent: primary
-status: awaiting
+status: done
 attempt: 3
 interrupted: false
-updatedAt: 2026-10-12T18:15:00+07:00
-filesTouched: [src/components/home/Hero.tsx, src/app/globals.css, src/i18n/messages/vi.json, src/i18n/messages/en.json, .context/design-spec.md, src/content/home.ts, src/app/[locale]/page.tsx, spec/changes/2026-10-12-home-hero-banner-restyle.md, spec/updates/2026-10-12-home-hero-banner-restyle.md, spec/CHANGELOG.md, spec/test-scope/current.json, .context/progress.json]
-filesNew: [spec/changes/archive/2026-10-12-home-hero-banner-restyle.md, public/images/home/hero-banner.jpg, tasks/change-home-hero-banner/**, src/components/home/HeroVisual.tsx, spec/updates/2026-10-12-home-hero-banner-restyle.md, .context/review-reports/change-home-hero-banner-restyle-phase-1-task-01-round-{1,2,3}-review.md]
+updatedAt: 2026-10-12T18:30:00+07:00
+filesTouched: [src/components/home/Hero.tsx, src/app/globals.css, src/i18n/messages/vi.json, src/i18n/messages/en.json, .context/design-spec.md, src/content/home.ts, src/app/[locale]/page.tsx, spec/CHANGELOG.md, spec/test-scope/current.json, .context/progress.json]
+filesNew: [src/components/home/HeroVisual.tsx, public/images/home/hero-banner.jpg, spec/changes/archive/2026-10-12-home-hero-banner-restyle.md, spec/updates/2026-10-12-home-hero-banner-restyle.md, tasks/change-home-hero-banner/**, .context/review-reports/change-home-hero-banner-restyle-phase-1-task-01-round-{1,2,3}-review.md]
 evidence:
   reportPath: .context/review-reports/change-home-hero-banner-restyle-phase-1-task-01-round-3-review.md
   round: 3
   verdict: PASS
-next: "commit explicit file list (KHÔNG add -A; loại next.config/tsconfig/next-env/.next-build + file session khác) → verify 3000 restart"
+commit: c113401
+next: "user soi mắt desktop (1024+/1440) so với target-banner-2.jpg — residual duy nhất: chưa render thật; nếu lệch vị trí panel → tinh chỉnh % trong HeroVisual"
 loopSignal: none
 approvals: []
 batchQueue: []
 ```
+
+## Notes / WIP reasoning
+
+- **DONE**: commit `c113401` (21 files, 885+) — chỉ file scope change này.
+- home.ts staged đúng 28 dòng heroPanels (hunk `.jpg→.png` session khác giữ nguyên working tree);
+  không add next.config/tsconfig/next-env/.next-build/kill-local/house-*.jpg/png.
+- spec 3.0.0 KHÔNG bump — scope v19→v20 (test-scope + CHANGELOG + spec/updates đã ghi).
+- Change file → `spec/changes/archive/`, status done. progress.json entry done + review round 3 PASS.
+- Dev server 3000 cũ chết (500 HMR cache) → đã kill + start lại (sh_12f6b6e67001);
+  server verify 3001 (sh_12f589cb) sẽ dừng dọn.
 
 ## Notes / WIP reasoning
 

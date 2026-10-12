@@ -5,19 +5,19 @@
 ```yaml
 workItem: change/hairstyle-ai-gallery-screenshots
 phaseTask: phase-1-task-01
-step: closeout
+step: done
 agent: null
-status: awaiting
+status: done
 attempt: 0
 interrupted: false
-updatedAt: 2026-10-12T14:55:00+07:00
+updatedAt: 2026-10-12T15:00:00+07:00
 filesTouched: [spec/CHANGELOG.md, src/content/products/en/hair-style-ai.mdx, src/content/products/vi/hair-style-ai.mdx, spec/test-scope/current.json, .context/progress.json]
 filesNew: [public/images/products/hair-style-ai-try-on.jpg, public/images/products/hair-style-ai-analysis.jpg, public/images/products/hair-style-ai-rating.jpg, spec/updates/2026-10-12-hairstyle-ai-gallery-screenshots.md, spec/changes/archive/2026-10-12-hairstyle-ai-gallery-screenshots.md, tasks/change-hairstyle-ai-gallery-screenshots/phase-1-task-01.md, .context/review-reports/change-hairstyle-ai-gallery-screenshots-phase-1-task-01-round-1-review.md, .context/runs/change-hairstyle-ai-gallery-screenshots.md]
 evidence:
   reportPath: .context/review-reports/change-hairstyle-ai-gallery-screenshots-phase-1-task-01-round-1-review.md
   round: 1
   verdict: PASS
-next: "commit (chỉ file change này) → journal done."
+next: "DONE — committed eff61dd. Không còn việc."
 loopSignal: none
 approvals: []
 batchQueue: []

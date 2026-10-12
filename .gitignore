@@ -4,6 +4,9 @@ dist/
 build/
 .DS_Store
 .next/
+.next-build/
+Claude outputs/
+kill-local.ps1
 *.tsbuildinfo
 logs/
 *.log

@@ -7,6 +7,7 @@ import { MetaBar } from '@/components/case-studies/MetaBar';
 import { RelatedStudies } from '@/components/case-studies/RelatedStudies';
 import { ResultBlock } from '@/components/case-studies/ResultBlock';
 import { SolutionBlock } from '@/components/case-studies/SolutionBlock';
+import { ShowcaseLayout } from '@/components/case-studies/showcase/ShowcaseLayout';
 import { CTABanner } from '@/components/shared/CTABanner';
 import { PageHeader } from '@/components/shared/PageHeader';
 import { getAllCaseStudies, getCaseStudyBySlug } from '@/lib/content/case-studies';
@@ -51,6 +52,18 @@ export default async function CaseStudyDetailPage({ params }: { params: Promise<
     client: t('meta.client'), sector: t('meta.sector'), year: t('meta.year'),
   };
   const cta = await getTranslations('solutions.ai');
+
+  const breadcrumbJsonLd = createBreadcrumbJsonLd([{ name: locale === 'en' ? 'Home' : 'Trang chủ', path: locale === 'en' ? '/en' : '/' }, { name: t('title'), path: `${locale === 'en' ? '/en' : ''}/case-studies` }, { name: study.title, path: `${locale === 'en' ? '/en' : ''}/case-studies/${slug}` }]);
+
+  // Bố cục landing (ảnh mẫu Óc Eo): hero riêng có breadcrumb, CTA thẻ bo góc thay CTABanner.
+  if (study.layout === 'showcase' && study.showcase) {
+    return <>
+      <JsonLd data={breadcrumbJsonLd} />
+      <script dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }} type="application/ld+json" />
+      <ShowcaseLayout breadcrumbs={[{ label: t('title'), href: '/case-studies' }, { label: study.showcase.hero.breadcrumbLabel ?? study.title }]} showcase={study.showcase} />
+      <RelatedStudies categoryLabel={(item) => t(`categories.${item.category}`)} imageAlt={(item) => t('imageAlt', { title: item.title })} studies={related} title={t('related')} />
+    </>;
+  }
 
   return <>
     <JsonLd data={createBreadcrumbJsonLd([{ name: locale === 'en' ? 'Home' : 'Trang chủ', path: locale === 'en' ? '/en' : '/' }, { name: t('title'), path: `${locale === 'en' ? '/en' : ''}/case-studies` }, { name: study.title, path: `${locale === 'en' ? '/en' : ''}/case-studies/${slug}` }])} />

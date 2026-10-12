@@ -13,7 +13,7 @@ interface CaseStudyCardProps {
 
 export function CaseStudyCard({ caseStudy, imageAlt, categoryLabel }: CaseStudyCardProps) {
   const locale = useLocale();
-  const image = caseStudy.gallery[0];
+  const image = caseStudy.cover ? { src: caseStudy.cover } : caseStudy.gallery[0];
   return (
     <Link className={`${cardLinkClass} p-4`} href={`/case-studies/${caseStudy.slug}`}>
       {image ? <Image alt={imageAlt} className={cardImageClass} height={600} sizes={cardImageSizes} src={image.src} width={960} /> : <div aria-hidden="true" className={cardImageClass} />}
