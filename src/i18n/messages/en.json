@@ -120,7 +120,7 @@
   "products": {
     "title": "Apps",
     "intro": "NTA mobile apps bring AI-enabled experiences closer to everyday users.",
-    "screenshotAlt": "Screenshot of {title}",
+    "screenshotAlt": "Illustrative interface — {title}",
     "previousScreenshot": "Previous screenshot",
     "nextScreenshot": "Next screenshot",
     "carouselRoleDescription": "carousel",

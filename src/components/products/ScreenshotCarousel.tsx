@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { useRef, useState } from 'react';
+import { CARD_POSTER_IMAGE_RATIO, cardPosterImageClass } from '@/components/cards/cardStyles';
 
 interface ScreenshotCarouselProps {
   screenshots: string[];
@@ -61,9 +62,9 @@ export function ScreenshotCarousel({ screenshots, title, imageAlt, previousLabel
           {screenshots.map((screenshot) => (
             <div className="w-full shrink-0 snap-start md:w-1/2 lg:w-1/3" key={screenshot}>
               {failedImages.includes(screenshot) ? (
-                <div aria-label={imageAlt} className="aspect-[16/10] rounded-lg bg-surface-sunken xl:aspect-[4/5]" role="img" />
+                <div aria-label={imageAlt} className={cardPosterImageClass} role="img" />
               ) : (
-                <Image alt={imageAlt} className="aspect-[16/10] w-full rounded-lg bg-surface-sunken object-cover xl:aspect-[4/5]" height={1200} loading="lazy" onError={() => markImageFailed(screenshot)} sizes="(min-width: 1024px) 17vw, (min-width: 768px) 50vw, 100vw" src={screenshot} width={960} />
+                <Image alt={imageAlt} className={cardPosterImageClass} height={CARD_POSTER_IMAGE_RATIO.height} loading="lazy" onError={() => markImageFailed(screenshot)} sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw" src={screenshot} width={CARD_POSTER_IMAGE_RATIO.width} />
               )}
             </div>
           ))}

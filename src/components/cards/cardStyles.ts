@@ -2,11 +2,20 @@ export const cardLinkClass = 'group block rounded-lg text-text-primary focus-vis
 export const cardImageClass = 'aspect-[16/10] w-full rounded-lg bg-surface-sunken object-cover';
 
 /**
+ * Khung ảnh **poster sản phẩm** (tỉ lệ dọc 9/16).
+ *
+ * Ảnh onboarding của 2 app (`music-app`/`hair-style-ai`) là poster dọc 941×1672 có chữ khắc sẵn.
+ * Khung 16/10 (`cardImageClass`) sẽ cắt mất chữ ở đáy poster, nên thẻ sản phẩm dùng riêng khung này
+ * để hiện đủ ảnh (user chốt 2026-10-12). Ảnh cùng tỉ lệ khung ⇒ `object-cover` không cắt gì.
+ */
+export const cardPosterImageClass = 'aspect-[9/16] w-full rounded-lg bg-surface-sunken object-cover';
+
+/**
  * Khung ảnh cho **thẻ dùng ảnh giao diện thật** (change `2026-10-12-solution-card-real-images`).
  *
  * Tách riêng `cardImageClass` vì khung này **cắt đáy** để mọi thẻ cao đều nhau, còn
- * `cardImageClass` dùng `object-cover` cho ảnh SVG phẳng của thẻ sản phẩm / case study.
- * KHÔNG gộp: đổi khung này sẽ kéo theo `AppCard` / `ProductCard` / `CaseStudyCard`.
+ * `cardImageClass` dùng `object-cover` cho ảnh SVG phẳng (thẻ case study, fallback `AppCard`).
+ * KHÔNG gộp: đổi khung này sẽ kéo theo `AppCard` / `CaseStudyCard`.
  */
 export const cardShotFrameClass = 'aspect-[16/10] w-full overflow-hidden rounded-t-lg bg-surface-sunken';
 export const cardImageWideClass = 'aspect-[16/9] w-full rounded-lg bg-surface-sunken object-cover';
@@ -18,3 +27,6 @@ export const cardGridClass = 'grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols
 export const CARD_IMAGE_RATIO = { width: 1600, height: 1000 } as const;
 export const CARD_IMAGE_WIDE_RATIO = { width: 1600, height: 900 } as const;
 export const SQUARE_IMAGE_RATIO = { width: 400, height: 400 } as const;
+
+// Khung poster sản phẩm 9/16 — khớp `cardPosterImageClass` và ảnh gốc 941×1672.
+export const CARD_POSTER_IMAGE_RATIO = { width: 900, height: 1600 } as const;

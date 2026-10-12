@@ -61,7 +61,14 @@ User đã quyết (2026-10-12): **dùng ảnh của user, ép size, KHÔNG cắt
 - Chụp screenshot `/products` + thẻ sản phẩm trang chủ (VI+EN, 375+1440) gửi user
 
 ## Feature Verification
-- Acceptance: **PENDING** · Verify: **PENDING** · Reviewer: **PENDING**
+- Acceptance: DONE · Verify: PASS · Reviewer: PENDING
+- **Quyết định user 2026-10-12 (thay spec gốc 16/10):** ảnh poster dọc 941×1672 (9:16) có chữ ở đáy — khung 16/10 cắt đáy sẽ **mất chữ** (vi phạm acceptance "không mất chữ"). User chốt **khung theo tỉ lệ poster 9/16**, hiện đủ ảnh, không cắt.
+- Files: `public/images/products/hair-style-ai.jpg` (JPEG 941×1672, nguyên bản) · `public/images/products/ai-music-app.png` (PNG 941×1671, nguyên bản — giữ PNG thay vì đổi .jpg để khỏi re-encode).
+- Wiring: `cardStyles.ts` +`cardPosterImageClass` (`aspect-[9/16]`); `ProductCard` (home) dùng khung mới; `ScreenshotCarousel` (`/products`) đổi khung `16/10`/`xl:4/5` → `9/16`; `home.ts` 2 thẻ (vi+en) + 4 `.mdx` screenshots; i18n `products.screenshotAlt` → prefix "Giao diện minh hoạ — "/"Illustrative interface — ". Xoá 2 SVG preview cũ.
+- `cardImageClass` (16/10, dùng chung) **KHÔNG sửa** — thêm class riêng đúng như change §6.
+- Verify (primary, thật): lint PASS (0 errors/1 warning pre-existing) · typecheck PASS · build PASS. HTML `/`+`/en`+`/products`+`/en/products`: render `ai-music-app.png` + `hair-style-ai.jpg` + class `aspect-[9/16]`; alt VI có prefix (grep xác nhận). `grep` src = 0 ref SVG preview cũ.
+- Doc impact: **no doc impact** (DESIGN không ghi tỉ lệ ảnh thẻ).
+- `check-left-align`: skip (không có script trong repo). Chưa chụp screenshot gửi user (môi trường không có browser viewport emulation) — user đã xem 2 ảnh gốc khi gửi.
 
 ## Retry / Escalation
 - Attempt: 0 · Escalation: sau 3 attempt fail → `architecture_review_needed`

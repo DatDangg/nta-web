@@ -25,8 +25,12 @@
   Reviewer shell bị deny → kiểm chứng tĩnh; primary đã chạy verify thật.
 - Commit T02 `b41ddf0`. Spec publish scope v12.
 
-## step: T04 `/products` — status=blocked ⛔ (chờ user)
-- 2 ảnh user cung cấp **chưa có** trong `public/images/products/` (chỉ có `music-app-preview.svg` + `hair-style-ai-preview.svg`).
-- Task-04 quy định: file chưa có → **DỪNG**, báo orchestrator, KHÔNG tự dùng ảnh thay thế.
-- Cần user copy: `public/images/products/ai-music-app.jpg` + `public/images/products/hair-style-ai.jpg`.
-- Change file **giữ pending** (chưa archive) vì T04 chưa xong.
+## step: T04 `/products` — status=awaiting (chờ reviewer)
+- Ảnh user gửi qua hội thoại → trích bytes từ `opencode.db` (`session_message.files[].data` base64) →
+  `public/images/products/hair-style-ai.jpg` (941×1672) + `public/images/products/ai-music-app.png` (941×1671).
+- **Quyết định user (2026-10)** thay spec gốc: poster dọc 9:16, chữ ở đáy → khung 16/10 cắt đáy sẽ mất chữ.
+  User chốt **khung theo tỉ lệ poster 9/16**. ⇒ thêm `cardPosterImageClass`, ProductCard (home) + ScreenshotCarousel
+  (/products) dùng `aspect-[9/16]`; KHÔNG sửa `cardImageClass` (16/10 dùng chung).
+- Wiring: `home.ts` 2 thẻ (vi+en); 4 `.mdx` screenshots; i18n `products.screenshotAlt` prefix; xoá 2 SVG preview cũ.
+- Verify (primary, thật): lint/typecheck/build PASS; HTML `/`, `/en`, `/products` render ảnh mới + `aspect-[9/16]`; alt VI có prefix. Doc impact: none.
+- Next: reviewer NORMAL. Cancel sẽ redo bước này.

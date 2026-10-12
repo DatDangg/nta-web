@@ -14,8 +14,8 @@ const homeContent: Record<Locale, HomeContent> = {
       { title: 'Ứng dụng AI', description: 'Ứng dụng di động AI phục vụ nhu cầu hằng ngày.', href: '/products', image: '/images/illustrations/ai-apps.svg', alt: 'Minh hoạ ứng dụng AI trên điện thoại' },
     ],
     featuredProducts: [
-      { slug: 'music-app', title: 'Ứng dụng nhạc AI', description: 'Tạo và khám phá âm nhạc có hỗ trợ AI.', image: '/images/products/music-app-preview.svg', alt: 'Màn hình minh họa ứng dụng nhạc AI' },
-      { slug: 'hair-style-ai', title: 'Kiểu tóc AI', description: 'Xem trước các phong cách tóc khác nhau.', image: '/images/products/hair-style-ai-preview.svg', alt: 'Màn hình minh họa ứng dụng thử kiểu tóc AI' },
+      { slug: 'music-app', title: 'Ứng dụng nhạc AI', description: 'Tạo và khám phá âm nhạc có hỗ trợ AI.', image: '/images/products/ai-music-app.png', alt: 'Giao diện minh hoạ — AI Music Generator: gợi ý sáng tác nhạc với AI' },
+      { slug: 'hair-style-ai', title: 'Kiểu tóc AI', description: 'Xem trước các phong cách tóc khác nhau.', image: '/images/products/hair-style-ai.jpg', alt: 'Giao diện minh hoạ — HairStyle AI: thử nhiều kiểu tóc bằng AI' },
     ],
     featuredCase: { title: 'Phương án AI camera và flycam tại Óc Eo – Ba Thê', description: 'Đề xuất kết hợp camera AI tại biên và flycam tuần tra để hỗ trợ bảo vệ khu di tích.', href: '/case-studies/oc-eo-learning', image: '/images/illustrations/oc-eo-architecture.svg', alt: 'Minh họa sơ đồ kiến trúc ba tầng cho phương án Óc Eo – Ba Thê' },
   },
@@ -26,8 +26,8 @@ const homeContent: Record<Locale, HomeContent> = {
       { title: 'AI Apps', description: 'Mobile AI apps for everyday needs.', href: '/en/products', image: '/images/illustrations/ai-apps.svg', alt: 'Illustration of an AI mobile app' },
     ],
     featuredProducts: [
-      { slug: 'music-app', title: 'AI music app', description: 'Create and explore AI-assisted music.', image: '/images/products/music-app-preview.svg', alt: 'Preview screen for the AI music app' },
-      { slug: 'hair-style-ai', title: 'Hair-style AI', description: 'Preview different hairstyle options.', image: '/images/products/hair-style-ai-preview.svg', alt: 'Preview screen for the Hair-style AI app' },
+      { slug: 'music-app', title: 'AI music app', description: 'Create and explore AI-assisted music.', image: '/images/products/ai-music-app.png', alt: 'Illustrative interface — AI Music Generator: AI-assisted music ideas' },
+      { slug: 'hair-style-ai', title: 'Hair-style AI', description: 'Preview different hairstyle options.', image: '/images/products/hair-style-ai.jpg', alt: 'Illustrative interface — HairStyle AI: try different hairstyles with AI' },
     ],
     featuredCase: { title: 'Proposed AI camera and drone plan for Óc Eo – Ba Thê', description: 'A proposal combining edge AI cameras and drone patrols to support heritage-site protection.', href: '/en/case-studies/oc-eo-learning', image: '/images/illustrations/oc-eo-architecture.svg', alt: 'Illustration of the three-layer architecture for the Óc Eo – Ba Thê proposal' },
   },

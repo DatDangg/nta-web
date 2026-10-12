@@ -120,7 +120,7 @@
   "products": {
     "title": "Sản phẩm app",
     "intro": "Các ứng dụng di động của NTA mang trải nghiệm AI đến gần hơn với người dùng.",
-    "screenshotAlt": "Ảnh ứng dụng {title}",
+    "screenshotAlt": "Giao diện minh hoạ — {title}",
     "previousScreenshot": "Ảnh trước",
     "nextScreenshot": "Ảnh tiếp theo",
     "carouselRoleDescription": "băng chuyền",
