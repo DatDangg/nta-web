@@ -1,45 +1,50 @@
 {
   "specVersion": "3.0.0",
-  "scopeVersion": 15,
-  "generatedAt": "2026-10-12T06:50:00+07:00",
+  "scopeVersion": 16,
+  "generatedAt": "2026-10-12T14:35:00+07:00",
   "trigger": "feature-update",
-  "workItem": "change-brand-logo-wordmark-removal",
+  "workItem": "change-hairstyle-ai-gallery-screenshots",
   "specRefs": [],
   "changed": {
     "files": [
-      "src/components/layout/BrandLogo.tsx",
-      "spec/updates/2026-10-12-brand-logo-wordmark-removal.md",
+      "src/content/products/vi/hair-style-ai.mdx",
+      "src/content/products/en/hair-style-ai.mdx",
+      "public/images/products/hair-style-ai-try-on.jpg",
+      "public/images/products/hair-style-ai-analysis.jpg",
+      "public/images/products/hair-style-ai-rating.jpg",
+      "spec/updates/2026-10-12-hairstyle-ai-gallery-screenshots.md",
       "spec/CHANGELOG.md",
       "spec/test-scope/current.json"
     ],
     "modules": [
-      "src/components/layout/BrandLogo (bỏ wordmark text \"NTA\" + `gap-2`; chỉ còn `<Image logo-mark.png>`)"
+      "src/content/products/{vi,en}/hair-style-ai (`screenshots` 1 → 4 ảnh: Welcome → Try On → Analysis → Rating)",
+      "public/images/products (3 asset mới 941×1672)"
     ]
   },
   "impact": {
     "direct": [
-      "Header + Footer trên MỌI route, cả 2 locale (VI+EN): logo thương hiệu chỉ còn mark, không còn chữ \"NTA\"."
+      "/products + /en/products: carousel sản phẩm `hair-style-ai` render 4 slide ảnh + 4 dots + nút prev/next (trước: 1 ảnh, không có dots/arrow)."
     ],
     "dependents": [
-      "Header.tsx:51 (`<BrandLogo priority />`) — KHÔNG đổi; vẫn render mark.",
-      "Footer.tsx:21 (`<BrandLogo />`) — KHÔNG đổi; vẫn render mark.",
-      "A11y: `aria-label` của `<Link>` bao ngoài = `homeLabel` (`\"NTA, trang chủ\"`/`\"NTA, home\"`) — giữ nguyên brand name cho screen reader.",
-      "SEO: `src/lib/seo/jsonld.ts` vẫn `logo-square.png`; `Organization.name`/`WebSite.name` = \"NTA\" — KHÔNG đổi.",
-      "Asset `logo-lockup.png` (icon + NTA + tagline) vẫn unused — KHÔNG thêm reference."
+      "ScreenshotCarousel.tsx — KHÔNG đổi; đã hỗ trợ nhiều slide sẵn (dots/prev-next xuất hiện khi length > 1).",
+      "products/page.tsx — KHÔNG đổi; truyền `product.screenshots` nguyên trạng.",
+      "cards/AppCard.tsx — dùng `screenshots[0]` = ảnh Welcome (không đổi hành vi card).",
+      "src/content/home.ts:18,30 — card home `hair-style-ai` dùng `image` riêng (ảnh Welcome) — KHÔNG đổi.",
+      "i18n `products.screenshotAlt` — giữ alt chung interpolate `{title}` cho mọi slide (không đổi schema)."
     ],
     "regression": [
-      "Grep `BrandLogo` trong `src/` = đúng 2 caller (Header/Footer) → không lan route/API/data.",
-      "Grep `>NTA<` / `NTA</span>` trong `src/` = 0 match (chỉ còn trong comment docblock).",
-      "`Header.tsx`/`Footer.tsx`/`MobileNav.tsx` không bị sửa; layout `inline-flex items-center` giữ, mark `h-9 w-auto` không méo (tỉ lệ 480:397)."
+      "Card home `hair-style-ai` vẫn 1 ảnh Welcome (home.ts không đổi).",
+      "Carousel `music-app` không đổi.",
+      "Khung `aspect-[9/16]` khớp tỉ lệ ảnh 941×1672 ⇒ `object-cover` không crop.",
+      "Dots/prev-next chỉ hiện khi `length > 1` — không hồi quy ở trang khác."
     ]
   },
   "acceptance": [
-    "BrandLogo không còn render text \"NTA\" trong DOM; chỉ còn `<Image src=\"/images/brand/logo-mark.png\">`.",
-    "Header (VI+EN) + Footer (VI+EN) vẫn render mark, layout không vỡ.",
-    "Accessible name của link home giữ `\"NTA, trang chủ\"` / `\"NTA, home\"`.",
-    "JSON-LD vẫn `logo-square.png`; `logo-lockup.png` vẫn unused.",
-    "HTML build VI `/vi`: `>NTA<` = 0, `logo-mark.png` = 9, `aria-label=\"NTA, trang chủ\"` còn.",
-    "npm run lint / typecheck / build PASS (test_command: null → skip, no test configured)."
+    "`hair-style-ai.mdx` (vi + en) có 4 screenshot theo đúng thứ tự: hair-style-ai.jpg → -try-on.jpg → -analysis.jpg → -rating.jpg.",
+    "HTML build `/products` + `/en/products`: carousel hair-style-ai render đủ 4 ảnh + 4 dots + prev/next.",
+    "Home card `hair-style-ai` vẫn dùng ảnh Welcome (`home.ts` không đổi).",
+    "4 file ảnh tồn tại trong `public/images/products/`; next/image không lỗi tải.",
+    "npm run lint (0 errors, 1 warning pre-existing `src/components/mdx/index.tsx`) / typecheck / build PASS (test_command: null → skip, no test configured)."
   ],
   "risk": "low"
 }

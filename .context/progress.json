@@ -1,6 +1,9 @@
 {
   "mode": "feature",
-  "activeWorkItem": { "type": "feature", "slug": "nta-website" },
+  "activeWorkItem": {
+    "type": "feature",
+    "slug": "nta-website"
+  },
   "features": [
     {
       "slug": "nta-website",
@@ -10,7 +13,56 @@
       "currentPhase": 0,
       "totalLayers": 5,
       "currentLayer": 4,
-      "completedTasks": ["layer-0-task-01", "layer-0-task-02", "layer-0-task-03", "layer-0-task-04", "layer-0-task-05", "layer-0-task-06", "layer-1-task-01", "layer-1-task-02", "layer-1-task-03", "layer-1-task-04", "layer-1-task-05", "fix-layer1-dead-links-phase-1-task-01", "layer-2-task-01", "layer-2-task-02", "layer-2-task-03", "layer-2-task-04", "layer-2-task-05", "layer-2-task-06", "layer-2-task-07", "fix-blog-list-date-format-phase-1-task-01", "layer-3-task-01", "layer-3-task-02", "layer-3-task-03", "layer-4-task-01", "layer-4-task-02", "layer-4-task-03", "layer-4-task-04", "change-ai-solution-content-phase-1-task-01", "change-ai-solution-content-phase-1-task-02", "change-domain-ntavietnam-phase-1-task-01", "change-deploy-platform-docker-vps-phase-1-task-01", "change-cleanup-gcp-drift-comment-permission-phase-1-task-01", "change-hrm-solution-content-phase-1-task-01", "change-enterprise-solution-docs-web-ready-phase-1-task-01", "change-publish-solution-screenshots-phase-1-task-01", "change-solution-detail-redesign-phase-1-task-01", "change-solution-detail-redesign-phase-1-task-02", "change-solution-detail-redesign-phase-1-task-03", "change-solution-detail-redesign-phase-1-task-04", "change-solution-detail-redesign-phase-1-task-05", "change-solution-detail-redesign-phase-1-task-06", "change-replace-placeholder-images-phase-1-task-01", "change-replace-placeholder-images-phase-1-task-02", "change-replace-placeholder-images-phase-1-task-03", "change-replace-placeholder-images-phase-1-task-04", "change-products-carousel-image-size-phase-1-task-01", "change-brand-logo-wordmark-removal-phase-1-task-01"],
+      "completedTasks": [
+        "layer-0-task-01",
+        "layer-0-task-02",
+        "layer-0-task-03",
+        "layer-0-task-04",
+        "layer-0-task-05",
+        "layer-0-task-06",
+        "layer-1-task-01",
+        "layer-1-task-02",
+        "layer-1-task-03",
+        "layer-1-task-04",
+        "layer-1-task-05",
+        "fix-layer1-dead-links-phase-1-task-01",
+        "layer-2-task-01",
+        "layer-2-task-02",
+        "layer-2-task-03",
+        "layer-2-task-04",
+        "layer-2-task-05",
+        "layer-2-task-06",
+        "layer-2-task-07",
+        "fix-blog-list-date-format-phase-1-task-01",
+        "layer-3-task-01",
+        "layer-3-task-02",
+        "layer-3-task-03",
+        "layer-4-task-01",
+        "layer-4-task-02",
+        "layer-4-task-03",
+        "layer-4-task-04",
+        "change-ai-solution-content-phase-1-task-01",
+        "change-ai-solution-content-phase-1-task-02",
+        "change-domain-ntavietnam-phase-1-task-01",
+        "change-deploy-platform-docker-vps-phase-1-task-01",
+        "change-cleanup-gcp-drift-comment-permission-phase-1-task-01",
+        "change-hrm-solution-content-phase-1-task-01",
+        "change-enterprise-solution-docs-web-ready-phase-1-task-01",
+        "change-publish-solution-screenshots-phase-1-task-01",
+        "change-solution-detail-redesign-phase-1-task-01",
+        "change-solution-detail-redesign-phase-1-task-02",
+        "change-solution-detail-redesign-phase-1-task-03",
+        "change-solution-detail-redesign-phase-1-task-04",
+        "change-solution-detail-redesign-phase-1-task-05",
+        "change-solution-detail-redesign-phase-1-task-06",
+        "change-replace-placeholder-images-phase-1-task-01",
+        "change-replace-placeholder-images-phase-1-task-02",
+        "change-replace-placeholder-images-phase-1-task-03",
+        "change-replace-placeholder-images-phase-1-task-04",
+        "change-products-carousel-image-size-phase-1-task-01",
+        "change-brand-logo-wordmark-removal-phase-1-task-01",
+        "change-hairstyle-ai-gallery-screenshots-phase-1-task-01"
+      ],
       "inProgressTask": null,
       "tasks": [
         {
@@ -441,14 +493,32 @@
           "reviewReport": ".context/review-reports/change-brand-logo-wordmark-removal-phase-1-task-01-round-1-review.md",
           "changeRequest": "spec/changes/archive/2026-10-12-brand-logo-wordmark-removal.md",
           "note": "MODIFY post-build (UI/brand component dùng chung) — user báo bỏ wordmark 'NTA' khỏi logo, chỉ giữ mark. Fix BrandLogo.tsx (1 file +6/−6): bỏ `<span>NTA</span>` + `gap-2`, cập nhật docblock. Header+Footer (VI+EN) giữ mark; brand name a11y giữ qua aria-label link home 'NTA, trang chủ'/'NTA, home'; jsonld logo-square.png + logo-lockup.png không đụng. r1 STRICT PASS (0 CRITICAL/MAJOR; 2 MINOR non-blocking: footer logo tappable ≈43.5px <44 AAA → task riêng; .context/design-spec.md:22 stale → đã reconcile). Verify primary chạy thật: typecheck PASS, lint 0 errors (1 warning pre-existing mdx no-img-element), build PASS với distDir tách riêng (build fail khi trùng .next với next dev — đã chứng minh HEAD cũng fail, không do diff); HTML .next-build VI /vi: >NTA<=0, logo-mark.png=9, aria-label 'NTA, trang chủ' còn. spec 3.0.0 KHÔNG bump (chỉ thành phần hiển thị, không đổi req) — scope v14→v15. Doc impact: none (docs/ không mô tả logo). Residual: MINOR #1 footer touch target; chưa render browser thật."
+        },
+        {
+          "id": "change-hairstyle-ai-gallery-screenshots-phase-1-task-01",
+          "layer": 1,
+          "status": "done",
+          "reviewLevel": "NORMAL",
+          "reviewResult": "PASS",
+          "reviewReport": ".context/review-reports/change-hairstyle-ai-gallery-screenshots-phase-1-task-01-round-1-review.md",
+          "changeRequest": "spec/changes/archive/2026-10-12-hairstyle-ai-gallery-screenshots.md",
+          "note": "MODIFY post-build (content/asset) ? user \"th?m c?i n?y v?o trong c?i ?nh ch? hair style AI ?i\" + 3 ?nh onboarding. 3 asset m?i 941?1672 (try-on/analysis/rating) + `screenshots` hair-style-ai (vi+en) 1?4 theo th? t? dots: Welcome ? Try On ? Analysis ? Rating. KH?NG ??i home.ts (card home = ?nh Welcome)/ScreenshotCarousel/products page/i18n. r1 NORMAL PASS (0 CRITICAL/MAJOR; MINOR info: next/image ratio 900?1600 vs th?t 941?1672 pre-existing ngo?i diff; alt chung cho 4 slide ?? x?c nh?n ngo?i scope). Verify primary ch?y th?t: lint 0 errors (1 warning pre-existing mdx no-img-element), typecheck PASS, build PASS; HTML vi/en products render ?? 4 ?nh hair-style-ai + 4 dots. spec 3.0.0 KH?NG bump (R-07 kh?ng gi?i h?n s? ?nh, kh?ng ??i req) ? scope v15?v16. Doc impact: none. Residual: ch?a render browser th?t."
         }
       ],
       "specVersion": "3.0.0",
       "planDir": "tasks/nta-website/",
       "layerPlanDiagram": "docs/diagrams/layer-plan.html",
       "initialBuildCompletedAt": "2026-10-10T03:15:00+07:00",
-      "specPublished": { "scopeVersion": 15, "trigger": "feature-update", "path": "spec/test-scope/current.json", "note": "Publish ngày 2026-10-12 sau T01 (change brand-logo-wordmark-removal) PASS review — spec 3.0.0 KHÔNG bump (chỉ bỏ wordmark hiển thị, không đổi requirement/behavior), scope v14→v15. Change file đã archive." },
-      "layer4PhaseReview": { "verdict": "PASS", "report": ".context/review-reports/feature-nta-website-layer-4-round-1-spec-review.md" },
+      "specPublished": {
+        "scopeVersion": 15,
+        "trigger": "feature-update",
+        "path": "spec/test-scope/current.json",
+        "note": "Publish ngày 2026-10-12 sau T01 (change brand-logo-wordmark-removal) PASS review — spec 3.0.0 KHÔNG bump (chỉ bỏ wordmark hiển thị, không đổi requirement/behavior), scope v14→v15. Change file đã archive."
+      },
+      "layer4PhaseReview": {
+        "verdict": "PASS",
+        "report": ".context/review-reports/feature-nta-website-layer-4-round-1-spec-review.md"
+      },
       "note": "Initial build hoàn tất: Layer 0..4 (totalLayers 5 = layer-plan 'Layer 0 → 4'). 27 req R-01..R-27 implemented. R-22 (Lighthouse Perf/LCP/CLS) + R-23 (viewport 375/768/1280) PARTIAL — đo ở gate DevOps/prod (bước 6). Chưa push (forbidden_branch main, auto_push false). Post-build: ai-solution-content (spec 1.1.0) + domain-ntavietnam (domain → ntavietnam.tech, spec 2.0.0, scope v6) + deploy-platform-docker-vps (Cloud Run → docker-vps, spec 3.0.0, scope v7) + cleanup-gcp-drift-comment-permission (dọn nốt drift GCP, spec 3.0.0 KHÔNG bump, scope v8) + hrm-solution-content (5 ảnh mockup + sections/useCases/faq qua cờ renderExtendedContent; spec 3.0.0 KHÔNG bump; cần user duyệt copy trước production). + enterprise-solution-docs-web-ready (viết lại 4 docs/reference README theo 8 heading web-ready; docs-only 0 dòng code; spec 3.0.0 KHÔNG bump; scope v8→v9; caveat: builder+reviewer chạy inline do env chặn subagent lồng → primary nên re-run reviewer độc lập). + publish-solution-screenshots (3 ảnh BoxAI + nội dung đầy đủ CRM/LMS/DentGo vi+en + ScreenshotSection vào trang AI + i18n key; spec 3.0.0 KHÔNG bump; scope v9→v10; reviewer STRICT round-1 PASS 0 CRITICAL/MAJOR/3 MINOR; verify lint/typecheck/build PASS do primary chạy lại; cần user xem ảnh BoxAI tiếng Anh + đọc lại copy). + replace-remaining-placeholder-images (change 2026-10-12: T01 assets 3 PNG mock + 9 SVG + pipeline; T02 wiring hero/solutions AI/case-study/blog/about; T03 /contact bỏ map + placeholder; spec 3.0.0 KHÔNG bump, scope v11→v12; T04 /products dùng ảnh user cung cấp — khung 9/16 theo user chốt (poster dọc, giữ chữ); change đã archive).",
       "lastUpdated": "2026-10-12T06:50:00+07:00"
     }
