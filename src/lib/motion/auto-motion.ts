@@ -30,6 +30,8 @@ const EXCLUDE = [
   'details *',
   `${LIST_PARENTS} > * *`, // phần tử nằm TRONG một item → đi cùng item, không tách riêng
   ':is(form, figure, blockquote, table) *',
+  // Ảnh `priority` của next/image (hero, LCP) → hiện ngay, không chờ JS/IntersectionObserver.
+  'img[fetchpriority="high"]',
 ].join(', ');
 
 const not = `:not(${EXCLUDE})`;
@@ -49,8 +51,10 @@ export const AUTO_MOTION_SELECTOR = [MOTION_TITLE, MOTION_BLOCK, MOTION_ITEM, MO
 
 /** Thời lượng (ms) — JS dùng để biết lúc nào gắn `data-motion-done` (gỡ transition). */
 export const MOTION_DURATION_MS = 1000;
-export const MOTION_STAGGER_MS = 90;
-export const MOTION_MAX_STAGGER_STEPS = 8;
+export const MOTION_STAGGER_MS = 70;
+export const MOTION_MAX_STAGGER_STEPS = 6;
+/** Chờ ảnh trong cụm tải xong tối đa bao lâu (ms) trước khi vẫn cho cụm xuất hiện. */
+export const MOTION_IMAGE_WAIT_MS = 800;
 
 /*
  * CSS: chỉ ẩn khi `html.js` (script inline thêm trước khi paint) và chưa bị `motion-off`
