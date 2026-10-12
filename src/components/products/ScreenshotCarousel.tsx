@@ -60,11 +60,11 @@ export function ScreenshotCarousel({ screenshots, title, imageAlt, previousLabel
       <div className="relative">
         <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth motion-reduce:snap-none motion-reduce:scroll-auto" onScroll={updateActiveIndex} ref={slidesRef}>
           {screenshots.map((screenshot) => (
-            <div className="w-full shrink-0 snap-start md:w-1/2 lg:w-1/3" key={screenshot}>
+            <div className="w-full shrink-0 snap-start" key={screenshot}>
               {failedImages.includes(screenshot) ? (
                 <div aria-label={imageAlt} className={cardPosterImageClass} role="img" />
               ) : (
-                <Image alt={imageAlt} className={cardPosterImageClass} height={CARD_POSTER_IMAGE_RATIO.height} loading="lazy" onError={() => markImageFailed(screenshot)} sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw" src={screenshot} width={CARD_POSTER_IMAGE_RATIO.width} />
+                <Image alt={imageAlt} className={cardPosterImageClass} height={CARD_POSTER_IMAGE_RATIO.height} loading="lazy" onError={() => markImageFailed(screenshot)} sizes="(min-width: 1024px) 256px, (min-width: 768px) 45vw, 100vw" src={screenshot} width={CARD_POSTER_IMAGE_RATIO.width} />
               )}
             </div>
           ))}
