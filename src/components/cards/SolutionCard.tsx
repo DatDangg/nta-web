@@ -37,27 +37,27 @@ export function SolutionCard({ solution, imageAlt, href, imageSrc, shot = false 
     <>
       <h3 className="text-h3 font-semibold leading-tight">{solution.title}</h3>
       <p className="mt-2 line-clamp-2 text-text-secondary">{solution.description}</p>
-      <span aria-hidden="true" className="mt-4 inline-flex min-h-11 items-center gap-2 text-primary-active">{t('learnMore')} <span className="motion-safe:transition-transform motion-safe:group-hover:translate-x-1">→</span></span>
+      <span aria-hidden="true" className="mt-auto pt-4 inline-flex min-h-11 items-center gap-2 text-primary-active">{t('learnMore')} <span className="motion-safe:transition-transform motion-safe:group-hover:translate-x-1">→</span></span>
     </>
   );
 
   if (shot && shotSrc) {
     return (
-      <Link className={`${cardLinkClass} overflow-hidden p-0`} href={href ?? `/solutions/${solution.category}/${solution.slug}`}>
+      <Link className={`${cardLinkClass} flex h-full flex-col overflow-hidden p-0`} href={href ?? `/solutions/${solution.category}/${solution.slug}`}>
         <CardShotImage alt={shotAlt} frameClassName={cardShotFrameClass} ratio={shotRatio} sizes={cardImageSizes} src={shotSrc} />
-        <div className="p-4">{body}</div>
+        <div className="flex flex-1 flex-col p-4">{body}</div>
       </Link>
     );
   }
 
   return (
-    <Link className={`${cardLinkClass} p-4`} href={href ?? `/solutions/${solution.category}/${solution.slug}`}>
+    <Link className={`${cardLinkClass} flex h-full flex-col p-4`} href={href ?? `/solutions/${solution.category}/${solution.slug}`}>
       {placeholder ? (
         <HomeImage alt={imageAlt} className={cardImageClass} height={CARD_IMAGE_RATIO.height} sizes={cardImageSizes} src={placeholder} width={CARD_IMAGE_RATIO.width} />
       ) : (
         <div aria-hidden="true" className={cardImageClass} />
       )}
-      {body}
+      <div className="flex flex-1 flex-col">{body}</div>
     </Link>
   );
 }

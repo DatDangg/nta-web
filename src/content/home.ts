@@ -9,9 +9,9 @@ export interface HomeContent {
 const homeContent: Record<Locale, HomeContent> = {
   vi: {
     solutionCards: [
-      { title: 'Giải pháp Doanh nghiệp', description: 'Chuẩn hóa vận hành, nhân sự, đào tạo và nghiệp vụ.', href: '/solutions/enterprise', image: '/images/solutions/v2/lms/01-tong-quan.png', alt: 'Bảng điều khiển quản lý trường học đa trường: chỉ số học sinh, giáo viên và danh sách các trường', shot: true },
-      { title: 'Giải pháp AI', description: 'Đưa AI vào vận hành và trải nghiệm khách hàng.', href: '/solutions/ai', image: '/images/illustrations/ai-analysis.svg', alt: 'Minh hoạ dữ liệu được phân tích bằng AI' },
-      { title: 'Ứng dụng AI', description: 'Ứng dụng di động AI phục vụ nhu cầu hằng ngày.', href: '/products', image: '/images/illustrations/ai-apps.svg', alt: 'Minh hoạ ứng dụng AI trên điện thoại' },
+      { title: 'Giải pháp Doanh nghiệp', description: 'Chuẩn hóa vận hành, nhân sự, đào tạo và nghiệp vụ.', href: '/solutions/enterprise', image: '/images/illustrations/home-enterprise.jpg', alt: 'Minh hoạ điện thoại với biểu đồ tăng trưởng, hồ sơ nhân sự, cài đặt và lưới ứng dụng' },
+      { title: 'Giải pháp AI', description: 'Đưa AI vào vận hành và trải nghiệm khách hàng.', href: '/solutions/ai', image: '/images/illustrations/home-ai.jpg', alt: 'Minh hoạ khối AI với các biểu tượng tạo sinh, hội thoại, tài liệu và mã nguồn' },
+      { title: 'Ứng dụng AI', description: 'Ứng dụng di động AI phục vụ nhu cầu hằng ngày.', href: '/products', image: '/images/illustrations/home-apps.jpg', alt: 'Minh hoạ cửa sổ ứng dụng với bảng điều khiển biểu đồ tăng trưởng và nhóm người dùng' },
     ],
     featuredProducts: [
       { slug: 'music-app', title: 'Ứng dụng nhạc AI', description: 'Tạo và khám phá âm nhạc có hỗ trợ AI.', image: '/images/products/ai-music-app.png', alt: 'Giao diện minh hoạ — AI Music Generator: gợi ý sáng tác nhạc với AI' },
@@ -21,9 +21,9 @@ const homeContent: Record<Locale, HomeContent> = {
   },
   en: {
     solutionCards: [
-      { title: 'Enterprise Solutions', description: 'Standardize operations, HR, training and workflows.', href: '/en/solutions/enterprise', image: '/images/solutions/v2/lms/01-tong-quan.png', alt: 'Multi-school management dashboard: student and staff figures with the school list', shot: true },
-      { title: 'AI Solutions', description: 'Apply AI to operations and customer experience.', href: '/en/solutions/ai', image: '/images/illustrations/ai-analysis.svg', alt: 'Illustration of data analyzed with AI' },
-      { title: 'AI Apps', description: 'Mobile AI apps for everyday needs.', href: '/en/products', image: '/images/illustrations/ai-apps.svg', alt: 'Illustration of an AI mobile app' },
+      { title: 'Enterprise Solutions', description: 'Standardize operations, HR, training and workflows.', href: '/en/solutions/enterprise', image: '/images/illustrations/home-enterprise.jpg', alt: 'Illustration of a phone with a growth chart, staff profile, settings and app grid' },
+      { title: 'AI Solutions', description: 'Apply AI to operations and customer experience.', href: '/en/solutions/ai', image: '/images/illustrations/home-ai.jpg', alt: 'Illustration of an AI block with generative, chat, document and code icons' },
+      { title: 'AI Apps', description: 'Mobile AI apps for everyday needs.', href: '/en/products', image: '/images/illustrations/home-apps.jpg', alt: 'Illustration of an app window with a growth-chart dashboard and a group of users' },
     ],
     featuredProducts: [
       { slug: 'music-app', title: 'AI music app', description: 'Create and explore AI-assisted music.', image: '/images/products/ai-music-app.png', alt: 'Illustrative interface — AI Music Generator: AI-assisted music ideas' },
