@@ -36,7 +36,7 @@ const homeContent: Record<Locale, HomeContent> = {
       chart: { title: 'AI', subtitle: 'Từ dữ liệu đến giá trị thực' },
       management: { title: 'Quản trị doanh nghiệp', items: ['ERP / CRM', 'Quản lý nhân sự', 'Quản lý vận hành', 'Báo cáo thông minh'] },
       performance: { label: 'Hiệu suất', value: '+86%' },
-      apps: { title: 'Ứng dụng di động', items: ['App doanh nghiệp', 'App dịch vụ công', 'Tích hợp hệ thống', 'Trải nghiệm hiện đại'] },
+      apps: { title: 'Giải pháp & ứng dụng', items: ['App doanh nghiệp', 'Camera giám sát', 'Tích hợp hệ thống', 'Trải nghiệm hiện đại'] },
     },
   },
   en: {
@@ -56,7 +56,7 @@ const homeContent: Record<Locale, HomeContent> = {
       chart: { title: 'AI', subtitle: 'From data to real value' },
       management: { title: 'Business management', items: ['ERP / CRM', 'HR management', 'Operations', 'Smart reporting'] },
       performance: { label: 'Performance', value: '+86%' },
-      apps: { title: 'Mobile apps', items: ['Business apps', 'Public services', 'System integration', 'Modern experience'] },
+      apps: { title: 'Solutions & apps', items: ['Business apps', 'Surveillance cameras', 'System integration', 'Modern experience'] },
     },
   },
 };

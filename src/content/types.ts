@@ -160,7 +160,10 @@ export interface CaseStudy {
   showcase?: CaseStudyShowcase;
 }
 
-export type ShowcaseIcon = 'area' | 'camera' | 'calendar' | 'challenge' | 'solution' | 'result';
+export type ShowcaseIcon = 'area' | 'camera' | 'calendar' | 'challenge' | 'solution' | 'result' | 'modules';
+
+/** Icon cho nút sơ đồ ở khối công nghệ (thiếu → theo thứ tự camera · drone · vms như Óc Eo). */
+export type ShowcaseNodeIcon = 'camera' | 'drone' | 'vms' | 'calendar' | 'records' | 'inventory';
 
 export interface CaseStudyShowcase {
   hero: {
@@ -171,7 +174,8 @@ export interface CaseStudyShowcase {
     titleAccent: string;
     subtitle: string;
     description: string;
-    image: { src: string; alt: string };
+    /** `width`/`height` = kích thước gốc của ảnh (thiếu → 1590×989 như ảnh Óc Eo). */
+    image: { src: string; alt: string; width?: number; height?: number };
     primaryCta: { label: string; href: string };
     /** Chỉ render nút "Xem video" khi có URL thật — không để nút chết. */
     video?: { label: string; href: string };
@@ -184,9 +188,11 @@ export interface CaseStudyShowcase {
     title: string;
     description: string;
     cta?: { label: string; href: string };
-    nodes: string[];
-    /** Danh sách cảnh báo trên màn VMS minh hoạ — dữ liệu giả lập, có caption nói rõ. */
-    alerts: { title: string; meta: string }[];
+    nodes: (string | { label: string; icon: ShowcaseNodeIcon })[];
+    /** Danh sách cảnh báo trên màn VMS minh hoạ — dữ liệu giả lập, có caption nói rõ. Bỏ qua khi có `screen`. */
+    alerts?: { title: string; meta: string }[];
+    /** Ảnh chụp giao diện phần mềm thay cho màn VMS dựng HTML (vd DentGo). Có `screen` → không render VmsMock. */
+    screen?: { src: string; alt: string; width: number; height: number };
     caption: string;
   };
   photos: {
@@ -196,6 +202,8 @@ export interface CaseStudyShowcase {
     nextLabel: string;
     /** Ghi chú nguồn ảnh (BR-004) — bắt buộc khi ảnh là minh hoạ, không phải ảnh chụp thực tế. */
     caption?: string;
+    /** `screen` = ảnh chụp giao diện: viền + nền trắng + căn trên để không cắt mất phần đầu màn hình. */
+    variant?: 'photo' | 'screen';
     items: { src: string; alt: string }[];
   };
   vision: { eyebrow: string; title: string; description: string; quote: string; quoteSource?: string; image?: { src: string; alt: string } };

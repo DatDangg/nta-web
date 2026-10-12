@@ -1,15 +1,17 @@
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
-import { SolutionCard } from '@/components/cards/SolutionCard';
-import { CaseStudyTeaser } from '@/components/solutions/CaseStudyTeaser';
+import { GlassVisual } from '@/components/listing/GlassVisual';
+import { ListingExplorer } from '@/components/listing/ListingExplorer';
+import { ListingHero } from '@/components/listing/ListingHero';
+import type { ListingCta } from '@/components/listing/types';
 import { CTABanner } from '@/components/shared/CTABanner';
-import { PageHeader } from '@/components/shared/PageHeader';
-import { Reveal } from '@/components/ui/Reveal';
+import { listingCtas, listingLabels, listingPages } from '@/content/listings';
 import type { Locale } from '@/content/types';
 import { getAllCaseStudies } from '@/lib/content/case-studies';
 import { getAllSolutions } from '@/lib/content/solutions';
 import { aiSlugs } from '@/lib/content/slug';
+import { toSolutionItems } from '@/lib/content/solution-listing';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { createBreadcrumbJsonLd } from '@/lib/seo/jsonld';
 import { createLocaleAlternates, localizedPath } from '@/lib/seo';
@@ -35,30 +37,35 @@ export default async function AiSolutionsPage({ params }: { params: Promise<{ lo
   const [t, allSolutions, caseStudies] = await Promise.all([
     getTranslations('solutions.ai'), getAllSolutions(locale), getAllCaseStudies(locale),
   ]);
-  const aiSolutions = allSolutions.filter((solution) => solution.category === 'ai');
-  const solutions = aiSlugs.flatMap((slug) => {
-    const solution = aiSolutions.find((candidate) => candidate.slug === slug);
-    return solution ? [solution] : [];
-  });
-  const caseStudy = caseStudies.find((item) => item.slug === 'oc-eo-learning') ?? null;
+  const copy = listingPages[locale].ai;
+  const items = toSolutionItems(locale, allSolutions, aiSlugs, (title) => t('imageAlt', { title }));
+  const caseStudy = caseStudies.find((item) => item.slug === 'oc-eo-learning');
+  // Thẻ cuối lưới dẫn sang case study Óc Eo (thay khối CaseStudyTeaser cũ); không có → mời liên hệ.
+  const cta: ListingCta = caseStudy
+    ? { ...listingCtas[locale].ai, description: caseStudy.title, href: `/case-studies/${caseStudy.slug}`, icon: 'landmark' }
+    : { title: t('ctaTitle'), description: t('ctaDescription'), label: locale === 'en' ? 'Contact us' : 'Liên hệ tư vấn', href: '/contact', icon: 'chat' };
 
   return (
     <>
       <JsonLd data={createBreadcrumbJsonLd([{ name: locale === 'en' ? 'Home' : 'Trang chủ', path: locale === 'en' ? '/en' : '/' }, { name: t('title'), path: `${locale === 'en' ? '/en' : ''}/solutions/ai` }])} />
-      <PageHeader breadcrumbs={[{ label: t('title') }]} description={t('description')} title={t('title')} variant="centered" />
-      <section aria-labelledby="ai-solutions-list-title" className="bg-background-alt py-12 md:py-16 xl:py-24">
-        <div className="mx-auto w-full max-w-container px-4 sm:px-6 lg:px-8">
-          <h2 className="sr-only" id="ai-solutions-list-title">{t('title')}</h2>
-          <ul className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {solutions.map((solution, index) => (
-              <li className={solutions.length === 3 && index === 2 ? 'md:col-span-2 lg:col-span-1' : ''} key={solution.slug}>
-                <Reveal><SolutionCard imageAlt={t('imageAlt', { title: solution.title })} shot={solution.cardImage !== undefined} solution={solution} /></Reveal>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-      <CaseStudyTeaser caseStudy={caseStudy} linkLabel={t('caseStudyLink')} title={t('caseStudyTitle')} />
+      <ListingHero
+        accent={copy.accent}
+        breadcrumbs={copy.crumbs.map((label) => ({ label }))}
+        description={copy.description}
+        highlights={copy.highlights}
+        lead={copy.lead}
+        title={copy.title}
+        visual={<GlassVisual card={copy.glassCard} tiles={copy.tiles} />}
+      >
+        <ListingExplorer
+          ariaLabel={copy.ariaLabel}
+          categories={copy.categories}
+          columns={2}
+          cta={cta}
+          items={items}
+          labels={{ ...listingLabels[locale], searchPlaceholder: copy.searchPlaceholder }}
+        />
+      </ListingHero>
       <CTABanner description={t('ctaDescription')} title={t('ctaTitle')} variant="alt" />
     </>
   );

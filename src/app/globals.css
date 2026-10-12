@@ -255,6 +255,24 @@ a.group .overflow-hidden > img {
 @keyframes motion-marquee {
   to { transform: translate3d(-50%, 0, 0); }
 }
+/* Trang danh sách (components/listing): ô kính/ô icon bật lên rồi trôi nhẹ. Dùng `translate`
+   riêng để không đè `transform` (góc xoay) đặt inline trên phần tử. */
+.listing-float {
+  animation:
+    motion-pop-in 1000ms var(--ease-motion) backwards,
+    listing-float 6s ease-in-out infinite;
+  animation-delay: var(--d, 0ms), calc(var(--d, 0ms) + 1000ms);
+}
+@keyframes listing-float {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -10px; }
+}
+/* Thẻ hiện lại khi đổi bộ lọc / tìm kiếm. */
+.listing-card-in {
+  animation: motion-load-in 700ms var(--ease-motion) backwards;
+  animation-delay: var(--d, 0ms);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .marquee-track { animation: none; }
   .marquee { overflow-x: auto; }

@@ -1,8 +1,8 @@
 'use client';
 
 import Image from 'next/image';
-import { useRef, useState } from 'react';
-import { CARD_POSTER_IMAGE_RATIO, cardPosterImageClass } from '@/components/cards/cardStyles';
+import { type KeyboardEvent, useRef, useState } from 'react';
+import { CARD_POSTER_IMAGE_RATIO } from '@/components/cards/cardStyles';
 
 interface ScreenshotCarouselProps {
   screenshots: string[];
@@ -53,43 +53,65 @@ export function ScreenshotCarousel({ screenshots, title, imageAlt, previousLabel
     setFailedImages((current) => current.includes(source) ? current : [...current, source]);
   }
 
+  function handleKeyDown(event: KeyboardEvent<HTMLElement>) {
+    if (screenshots.length < 2 || event.target !== event.currentTarget) return;
+    if (event.key === 'ArrowLeft') { event.preventDefault(); showPrevious(); }
+    if (event.key === 'ArrowRight') { event.preventDefault(); showNext(); }
+  }
+
   if (screenshots.length === 0) return null;
+  const hasMultiple = screenshots.length > 1;
 
   return (
-    <section aria-label={title} aria-roledescription={ariaRoleDescription} role="region" tabIndex={0}>
-      <div className="relative">
-        <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth motion-reduce:snap-none motion-reduce:scroll-auto" onScroll={updateActiveIndex} ref={slidesRef}>
-          {screenshots.map((screenshot) => (
-            <div className="w-full shrink-0 snap-start" key={screenshot}>
-              {failedImages.includes(screenshot) ? (
-                <div aria-label={imageAlt} className={cardPosterImageClass} role="img" />
-              ) : (
-                <Image alt={imageAlt} className={cardPosterImageClass} height={CARD_POSTER_IMAGE_RATIO.height} loading="lazy" onError={() => markImageFailed(screenshot)} sizes="(min-width: 1024px) 256px, (min-width: 768px) 45vw, 100vw" src={screenshot} width={CARD_POSTER_IMAGE_RATIO.width} />
-              )}
-            </div>
-          ))}
-        </div>
-        {screenshots.length > 1 && (
-          <div className="absolute inset-x-2 top-1/2 flex -translate-y-1/2 justify-between">
-            <button aria-label={previousLabel} className="min-h-11 min-w-11 rounded-full bg-background text-text-primary shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-focus" onClick={showPrevious} type="button">‹</button>
-            <button aria-label={nextLabel} className="min-h-11 min-w-11 rounded-full bg-background text-text-primary shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-focus" onClick={showNext} type="button">›</button>
+    <section aria-label={title} aria-roledescription={ariaRoleDescription} className="rounded-3xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-focus" onKeyDown={handleKeyDown} role="region" tabIndex={0}>
+      <div className="flex items-center justify-center gap-2 sm:gap-5">
+        {hasMultiple ? <ArrowButton direction="previous" label={previousLabel} onClick={showPrevious} /> : <span aria-hidden="true" className="w-11 shrink-0" />}
+        <div className="w-[200px] shrink-0 overflow-hidden rounded-[28px] bg-surface-sunken shadow-[0_40px_80px_-24px_rgb(17_24_39/0.35)] ring-1 ring-black/5 sm:w-[260px] lg:w-[280px]">
+          <div className="flex snap-x snap-mandatory overflow-x-auto scroll-smooth [scrollbar-width:none] motion-reduce:snap-none motion-reduce:scroll-auto [&::-webkit-scrollbar]:hidden" onScroll={updateActiveIndex} ref={slidesRef}>
+            {screenshots.map((screenshot) => (
+              <div className="w-full shrink-0 snap-start" key={screenshot}>
+                {failedImages.includes(screenshot) ? (
+                  <div aria-label={imageAlt} className={phoneImageClass} role="img" />
+                ) : (
+                  <Image alt={imageAlt} className={phoneImageClass} height={CARD_POSTER_IMAGE_RATIO.height} loading="lazy" onError={() => markImageFailed(screenshot)} sizes="(min-width: 1024px) 280px, 260px" src={screenshot} width={CARD_POSTER_IMAGE_RATIO.width} />
+                )}
+              </div>
+            ))}
           </div>
-        )}
+        </div>
+        {hasMultiple ? <ArrowButton direction="next" label={nextLabel} onClick={showNext} /> : <span aria-hidden="true" className="w-11 shrink-0" />}
       </div>
-      <div className="mt-3 flex justify-center gap-2">
+      {hasMultiple && <div className="mt-4 flex min-h-11 items-center justify-center">
         {screenshots.map((screenshot, index) => (
           <button
             aria-current={index === activeIndex ? 'true' : undefined}
             aria-label={`${title} ${index + 1}`}
-            className="min-h-11 min-w-11 p-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-focus"
+            className="group/dot flex min-h-11 min-w-8 items-center justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-focus"
             key={screenshot}
             onClick={() => scrollToIndex(index)}
             type="button"
           >
-            <span aria-hidden="true" className={`block h-2 w-2 rounded-full ${index === activeIndex ? 'bg-primary' : 'bg-border'}`} />
+            <span aria-hidden="true" className={`block h-2 rounded-full motion-safe:transition-all motion-safe:duration-base ${index === activeIndex ? 'w-6 bg-text-primary' : 'w-2 bg-black/15 group-hover/dot:bg-black/30'}`} />
           </button>
         ))}
-      </div>
+      </div>}
     </section>
+  );
+}
+
+const phoneImageClass = 'aspect-[9/16] w-full bg-surface-sunken object-cover';
+
+function ArrowButton({ direction, label, onClick }: { direction: 'previous' | 'next'; label: string; onClick: () => void }) {
+  return (
+    <button
+      aria-label={label}
+      className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-background/80 text-text-primary shadow-sm ring-1 ring-black/5 backdrop-blur motion-safe:transition-[background-color,transform] motion-safe:duration-fast hover:bg-background motion-safe:hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+      onClick={onClick}
+      type="button"
+    >
+      <svg aria-hidden="true" fill="none" height="18" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.25" viewBox="0 0 24 24" width="18">
+        <path d={direction === 'previous' ? 'm15 18-6-6 6-6' : 'm9 18 6-6-6-6'} />
+      </svg>
+    </button>
   );
 }

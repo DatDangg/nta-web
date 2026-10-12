@@ -1,10 +1,10 @@
 import { Section } from '@/components/ui/Section';
 
-export function FeatureList({ features, title }: { features: string[]; title: string }) {
+export function FeatureList({ features, title, id }: { features: string[]; title: string; id?: string }) {
   // Grid 2 cột → giữ default (1280), giới hạn từng cột bằng max-w-[65ch].
 // Dùng prose ở đây sẽ bóp mỗi cột còn ~340px, chữ bẻ dòng từng từ.
 return (
-    <Section>
+    <Section className="scroll-mt-24" id={id}>
       <h2 className="text-h2 font-semibold">{title}</h2>
       <ul className="mt-6 grid gap-4 sm:grid-cols-2">
         {features.map((feature) => (

@@ -42,6 +42,14 @@ const PATHS: Record<ShowcaseIcon, ReactNode> = {
       <rect height="14" rx="1" width="3.5" x="15.5" y="4" />
     </>
   ),
+  modules: (
+    <>
+      <rect height="7" rx="1.5" width="7" x="3" y="3" />
+      <rect height="7" rx="1.5" width="7" x="14" y="3" />
+      <rect height="7" rx="1.5" width="7" x="3" y="14" />
+      <rect height="7" rx="1.5" width="7" x="14" y="14" />
+    </>
+  ),
 };
 
 export function ShowcaseIconBadge({ icon, size = 'md' }: { icon: ShowcaseIcon; size?: 'md' | 'lg' }) {

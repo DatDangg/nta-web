@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import type { CaseStudyShowcase } from '@/content/types';
 
-type Props = { alerts: CaseStudyShowcase['technology']['alerts']; tiles: { src: string; alt: string }[] };
+type Props = { alerts: NonNullable<CaseStudyShowcase['technology']['alerts']>; tiles: { src: string; alt: string }[] };
 
 /**
  * Màn hình VMS minh hoạ (dựng bằng HTML, `aria-hidden`): cột camera · bản đồ · danh sách cảnh báo.

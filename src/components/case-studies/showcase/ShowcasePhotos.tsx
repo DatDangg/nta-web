@@ -18,6 +18,7 @@ export function ShowcasePhotos({ photos }: Props) {
   const trackRef = useRef<HTMLUListElement>(null);
   const titleId = useId();
   if (photos.items.length === 0) return null;
+  const isScreen = photos.variant === 'screen';
 
   const scrollBy = (direction: 1 | -1) => {
     const track = trackRef.current;
@@ -50,8 +51,8 @@ export function ShowcasePhotos({ photos }: Props) {
           tabIndex={0}
         >
           {photos.items.map((photo) => (
-            <li className="relative aspect-[4/3] w-[78%] shrink-0 snap-start overflow-hidden rounded-xl sm:w-[46%] lg:w-[calc((100%-3rem)/4)]" key={photo.src}>
-              <Image alt={photo.alt} className="object-cover transition-transform duration-slow hover:scale-[1.03]" fill sizes="(min-width: 1024px) 25vw, (min-width: 640px) 46vw, 78vw" src={photo.src} />
+            <li className={`relative aspect-[4/3] w-[78%] shrink-0 snap-start overflow-hidden rounded-xl sm:w-[46%] lg:w-[calc((100%-3rem)/4)] ${isScreen ? 'border border-border bg-white shadow-sm' : ''}`} key={photo.src}>
+              <Image alt={photo.alt} className={`object-cover transition-transform duration-slow hover:scale-[1.03] ${isScreen ? 'object-left-top' : ''}`} fill sizes="(min-width: 1024px) 25vw, (min-width: 640px) 46vw, 78vw" src={photo.src} />
             </li>
           ))}
         </ul>

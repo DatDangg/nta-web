@@ -23,6 +23,7 @@ import { enterpriseSlugs, getEnterpriseStaticParams, isEnterpriseSlug, isLocale 
 import { JsonLd } from '@/components/seo/JsonLd';
 import { createBreadcrumbJsonLd } from '@/lib/seo/jsonld';
 import { createLocaleAlternates, localizedPath } from '@/lib/seo';
+import { detailTiles } from '@/content/listings';
 
 type EnterpriseSlug = (typeof enterpriseSlugs)[number];
 
@@ -31,6 +32,16 @@ const enterpriseBrandNames: Record<EnterpriseSlug, string> = {
   hrm: 'HRM',
   lms: 'LMS',
   dentgo: 'DentGo',
+};
+
+/**
+ * Link demo trực tiếp của từng giải pháp — có link thì nút CTA chính thành "Xem demo"
+ * (mở tab mới); chưa có (HRM) thì giữ "Đăng ký demo" → /contact.
+ */
+const enterpriseDemoUrls: Partial<Record<EnterpriseSlug, string>> = {
+  crm: 'https://cms.dragonhotpotvietnam.com/',
+  dentgo: 'http://demo1.76.13.214.188.sslip.io:8080/',
+  lms: 'http://187.52.119.50:3002/',
 };
 
 export function generateStaticParams() {
@@ -69,7 +80,8 @@ export default async function EnterpriseSolutionDetailPage({ params }: { params:
   const extended = solution.renderExtendedContent === true;
   const hasRelated = relatedSolutions.length > 0;
   const isLmsLayout = solution.layout === 'lms';
-  const crumbs = [{ label: t('title'), href: '/solutions/enterprise' }, { label: solution.title }];
+  const demoUrl = isEnterpriseSlug(solution.slug) ? enterpriseDemoUrls[solution.slug] : undefined;
+  const crumbs = [{ label: t('title'), href: '/solutions/enterprise' }, { label: isEnterpriseSlug(solution.slug) ? enterpriseBrandNames[solution.slug] : solution.title }];
 
   const jsonLd = (
     <JsonLd data={createBreadcrumbJsonLd([{ name: locale === 'en' ? 'Home' : 'Trang chủ', path: locale === 'en' ? '/en' : '/' }, { name: t('title'), path: `${locale === 'en' ? '/en' : ''}/solutions/enterprise` }, { name: solution.title, path: `${locale === 'en' ? '/en' : ''}/solutions/enterprise/${slug}` }])} />
@@ -85,7 +97,8 @@ export default async function EnterpriseSolutionDetailPage({ params }: { params:
       imageAlt={solution.heroShot?.alt}
       imageMaxW={solution.heroShot?.maxWidth ?? 'max-w-full'}
       imageRatio={solution.heroShot?.ratio}
-      primaryCta={{ href: '/contact', label: t('demoCta') }}
+      primaryCta={demoUrl ? { href: demoUrl, label: t('viewDemoCta'), external: true } : { href: '/contact', label: t('demoCta') }}
+      tiles={detailTiles(locale, solution.slug)}
       secondaryCta={{
         ariaLabel: t('featuresCtaAria'),
         href: '#features',
@@ -119,7 +132,7 @@ export default async function EnterpriseSolutionDetailPage({ params }: { params:
         ) : null}
         {audience ? <AudienceCards cards={audience.cards} title={audience.title} /> : null}
         <FaqAccordion items={solution.faq ?? []} title={t('faqTitle')} />
-        {cta ? <LmsCtaBlock button={cta.button} description={cta.description} title={cta.title} /> : null}
+        {cta ? <LmsCtaBlock button={cta.button} demoUrl={demoUrl} description={cta.description} title={cta.title} /> : null}
         <CTAForm />
       </>
     );
@@ -173,15 +186,22 @@ export default async function EnterpriseSolutionDetailPage({ params }: { params:
  * `Link` của next-intl + href tương đối: giữ đúng domain khi xem preview (Vercel), không
  * nhảy sang production như `localizedPath()`.
  */
-function LmsCtaBlock({ title, description, button }: { title: string; description: string; button: string }) {
+function LmsCtaBlock({ title, description, button, demoUrl }: { title: string; description: string; button: string; demoUrl?: string }) {
+  const className = `${buttonStyles('primary', 'lg')} w-full sm:w-auto`;
   return (
     <Section spacing="large">
       <div className="flex flex-col items-center gap-6 text-center">
         <h2 className="text-h2 font-bold">{title}</h2>
         <p className="max-w-[52ch] text-body-lg text-text-secondary">{description}</p>
-        <Link className={`${buttonStyles('primary', 'lg')} w-full sm:w-auto`} href="/contact">
-          {button}
-        </Link>
+        {demoUrl ? (
+          <a className={className} href={demoUrl} rel="noopener noreferrer" target="_blank">
+            {button}
+          </a>
+        ) : (
+          <Link className={className} href="/contact">
+            {button}
+          </Link>
+        )}
       </div>
     </Section>
   );

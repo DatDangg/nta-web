@@ -1,10 +1,9 @@
-import type { CSSProperties } from 'react';
-import { Container } from '@/components/ui/Container';
-import { Breadcrumb } from '@/components/shared/Breadcrumb';
 import { Link } from '@/i18n/navigation';
 import { buttonStyles } from '@/components/ui/Button';
-import { ShotImage } from './ShotImage';
-import { SplitText } from '@/components/motion/SplitText';
+import { DetailHero, splitTitle } from '@/components/listing/DetailHero';
+import type { GlassTile } from '@/components/listing/GlassVisual';
+import { ListingIcon } from '@/components/listing/icons';
+import { ratioToSize } from '@/content/listings';
 
 export interface HeroBreadcrumb {
   label: string;
@@ -12,115 +11,75 @@ export interface HeroBreadcrumb {
 }
 
 type SolutionHeroProps = {
-  /** Đường dẫn breadcrumb đầy đủ (không cần `Trang chủ` — `Breadcrumb` tự thêm). */
+  /** Đường dẫn breadcrumb đầy đủ (không cần `Trang chủ` — `Breadcrumb` tự thêm icon nhà). */
   breadcrumbs: HeroBreadcrumb[];
   title: string;
   description: string;
-  /** Ảnh sản phẩm. Rỗng → bỏ qua hẳn khối ảnh, không để khung rỗng. */
+  /** Ảnh sản phẩm. Rỗng → hero chỉ có chữ + CTA, không để khung rỗng. */
   image?: string;
   imageAlt?: string;
-  /** Tỉ lệ ảnh đo sẵn — quyết định cơ chế hiển thị, xem `shotLayout`. */
+  /** Tỉ lệ ảnh đo sẵn — dùng tính kích thước nội tại cho next/image. */
   imageRatio?: number;
-  /**
-   * Giới hạn bề rộng riêng cho ảnh gần vuông.
-   *
-   * Ảnh ~1.06 ở bề rộng 1280 sẽ cao ~1200px, chiếm gần hết viewport. `max-w-[960px]`
-   * co nó còn ~906px rồi `max-h` xử lý tiếp — nhỏ hơn ảnh 1.36 nhưng không méo, không mất khung.
-   */
+  /** Giữ để tương thích chỗ gọi cũ — khung kính mới tự giới hạn bề rộng. */
   imageMaxW?: string;
-  /**
-   * Chú thích dưới ảnh hero (`<figcaption>` trong `<figure>`) — chỉ HRM dùng
-   * ("Giao diện minh hoạ" / "Illustrative interface", spec §7). Thiếu → không caption.
-   */
+  /** Chú thích dưới ảnh hero — chỉ HRM dùng ("Giao diện minh hoạ", spec §7). */
   caption?: string;
   /**
-   * Đường dẫn TƯƠNG ĐỐI, không có tiền tố locale — `Link` của next-intl tự thêm
-   * (`/contact` → `/contact` ở VI, `/en/contact` ở EN). KHÔNG truyền URL tuyệt đối.
+   * Đường dẫn TƯƠNG ĐỐI, không có tiền tố locale — `Link` của next-intl tự thêm.
+   * KHÔNG truyền URL tuyệt đối (preview sẽ nhảy sang domain production) — trừ khi
+   * `external: true` (vd. link demo): khi đó render `<a>` mở tab mới.
    */
-  primaryCta: { label: string; href: string };
+  primaryCta: { label: string; href: string; external?: boolean };
   secondaryCta: { label: string; href: string; ariaLabel?: string };
+  /** Ô icon trôi quanh ảnh (thiếu → bộ mặc định). */
+  tiles?: GlassTile[];
 };
 
+const defaultTiles: GlassTile[] = [
+  { icon: 'sparkles', theme: 'teal' },
+  { icon: 'chart', theme: 'sky' },
+  { icon: 'shield', theme: 'violet' },
+];
+
 /**
- * Hero dùng chung cho cả 4 trang giải pháp.
- *
- * **2 container, 2 mục đích khác nhau** (spec §3):
- * - phần **text** dùng `size="narrow"` (520px) để **căn giữa** — đây là khối duy nhất
- *   trên site được thiết kế theo trục giữa.
- * - phần **ảnh** dùng `default` (1280px) để ảnh tràn rộng. Dùng `narrow` cho ảnh sẽ bóp
- *   thành dải hẹp 520px, lệch tỉ lệ giữa các trang.
- *
- * Breadcrumb căn giữa theo trục của hero — không thì nó lệch trái giữa chừng so với H1.
+ * Hero trang chi tiết giải pháp (Doanh nghiệp + AI) — cùng phong cách trang danh sách:
+ * chữ trái (tiêu đề tách phần nhấn), ảnh giao diện trong khung kính bên phải.
  */
-export function SolutionHero({
-  breadcrumbs,
-  title,
-  description,
-  image,
-  imageAlt,
-  imageRatio,
-  imageMaxW = 'max-w-full',
-  caption,
-  primaryCta,
-  secondaryCta,
-}: SolutionHeroProps) {
-  // Hero dùng `max-h` lớn hơn zig-zag (640 vs 420) vì ảnh có trọn bề rộng 1280.
-  // Nguồn duy nhất — không thêm `max-h-*` ở nơi khác (xem `MAX_H` bên dưới).
-  const MAX_H = 'max-h-[420px] lg:max-h-[640px]';
+export function SolutionHero({ breadcrumbs, title, description, image, imageAlt, imageRatio, caption, primaryCta, secondaryCta, tiles = defaultTiles }: SolutionHeroProps) {
+  const { lead, accent } = splitTitle(title);
+  const isAnchor = secondaryCta.href.startsWith('#');
+  const primaryClass = `${buttonStyles('primary', 'lg')} w-full gap-2 shadow-[0_10px_24px_-6px_rgb(0_158_135/0.55)] sm:w-auto`;
+  const secondaryClass = `${buttonStyles('outline', 'lg')} w-full bg-white/70 backdrop-blur sm:w-auto`;
 
   return (
-    <header className="bg-gradient-soft py-hero">
-      <Container size="narrow">
-        <div className="text-center">
-          <Breadcrumb centered items={breadcrumbs} />
-          <h1 className="mt-6 text-display font-bold tracking-tight text-text-primary" data-motion-off><SplitText text={title} /></h1>
-          <p className="motion-load mx-auto mt-4 max-w-[62ch] text-body-lg text-text-secondary" data-motion-off style={{ '--d': '350ms' } as CSSProperties}>
-            {description}
-          </p>
-          <div className="motion-load mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center" style={{ '--d': '500ms' } as CSSProperties}>
-            {/* `Link` của next-intl: tự thêm tiền tố locale + prefetch. KHÔNG dùng
-                `localizedPath()` ở đây — hàm đó trả URL tuyệt đối theo NEXT_PUBLIC_SITE_URL,
-                nên trên preview (Vercel) bấm nút sẽ nhảy sang domain production. */}
-            <Link className={`${buttonStyles('primary', 'lg')} w-full sm:w-auto`} href={primaryCta.href}>
+    <DetailHero
+      actions={(
+        <>
+          {primaryCta.external ? (
+            <a className={primaryClass} href={primaryCta.href} rel="noopener noreferrer" target="_blank">
               {primaryCta.label}
+              <ListingIcon className="size-4" name="arrow" strokeWidth={2.2} />
+            </a>
+          ) : (
+            <Link className={primaryClass} href={primaryCta.href}>
+              {primaryCta.label}
+              <ListingIcon className="size-4" name="arrow" strokeWidth={2.2} />
             </Link>
-            <Link
-              aria-label={secondaryCta.ariaLabel}
-              className={`${buttonStyles('outline', 'lg')} w-full sm:w-auto`}
-              href={secondaryCta.href}
-            >
-              {secondaryCta.label}
-            </Link>
-          </div>
-        </div>
-      </Container>
-
-      {image ? (
-        <Container className="mt-12 sm:mt-16">
-          {/* Caption chỉ render khi có (`caption` prop) — HRM là mock vẽ tay nên mọi ảnh
-              phải nói rõ (spec §7). Figure/figcaption semantic để screen reader đọc
-              alt trước, caption sau. */}
-          {/* mx-auto BẮT BUỘC khi imageMaxW hẹp hơn Container (HRM 960px) —
-              không thì figure dính mép trái thay vì căn giữa. */}
-          <figure className={`${imageMaxW} motion-load mx-auto`} data-motion-off style={{ '--d': '650ms' } as CSSProperties}>
-            <ShotImage
-              alt={imageAlt ?? ''}
-              height={1440}
-              maxH={MAX_H}
-              priority
-              ratio={imageRatio}
-              skin={`${imageMaxW} mx-auto rounded-lg border border-border shadow-lg`}
-              sizes="(max-width: 1024px) 100vw, 1280px"
-              src={image}
-            />
-            {caption ? (
-              <figcaption className="mt-3 text-body-sm text-text-secondary text-center">
-                {caption}
-              </figcaption>
-            ) : null}
-          </figure>
-        </Container>
-      ) : null}
-    </header>
+          )}
+          {isAnchor ? (
+            <a aria-label={secondaryCta.ariaLabel} className={secondaryClass} href={secondaryCta.href}>{secondaryCta.label}</a>
+          ) : (
+            <Link aria-label={secondaryCta.ariaLabel} className={secondaryClass} href={secondaryCta.href}>{secondaryCta.label}</Link>
+          )}
+        </>
+      )}
+      breadcrumbs={breadcrumbs}
+      caption={caption}
+      description={description}
+      media={image ? { src: image, alt: imageAlt ?? '', ...ratioToSize(imageRatio ?? 1.6), frame: 'window', alignTop: true } : undefined}
+      tiles={tiles}
+      titleAccent={accent}
+      titleLead={lead}
+    />
   );
 }

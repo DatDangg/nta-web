@@ -1,13 +1,15 @@
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
-import { SolutionCard } from '@/components/cards/SolutionCard';
+import { GlassVisual } from '@/components/listing/GlassVisual';
+import { ListingExplorer } from '@/components/listing/ListingExplorer';
+import { ListingHero } from '@/components/listing/ListingHero';
 import { CTABanner } from '@/components/shared/CTABanner';
-import { PageHeader } from '@/components/shared/PageHeader';
-import { Reveal } from '@/components/ui/Reveal';
-import { solutionOverview } from '@/content/solutions/overview';
+import { listingCtas, listingLabels, listingPages } from '@/content/listings';
 import type { Locale } from '@/content/types';
 import { getAllSolutions } from '@/lib/content/solutions';
+import { enterpriseSlugs } from '@/lib/content/slug';
+import { toSolutionItems } from '@/lib/content/solution-listing';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { createBreadcrumbJsonLd } from '@/lib/seo/jsonld';
 import { createLocaleAlternates, localizedPath } from '@/lib/seo';
@@ -31,26 +33,30 @@ export default async function EnterpriseSolutionsPage({ params }: { params: Prom
   if (locale !== 'vi' && locale !== 'en') notFound();
   setRequestLocale(locale);
   const [t, solutions] = await Promise.all([getTranslations('solutions.enterprise'), getAllSolutions(locale)]);
-  const enterpriseSolutions = solutions.filter((solution) => solution.category === 'enterprise');
+  const copy = listingPages[locale].enterprise;
+  const items = toSolutionItems(locale, solutions, enterpriseSlugs, (title) => t('imageAlt', { title }));
 
   return (
     <>
       <JsonLd data={createBreadcrumbJsonLd([{ name: locale === 'en' ? 'Home' : 'Trang chủ', path: locale === 'en' ? '/en' : '/' }, { name: t('title'), path: `${locale === 'en' ? '/en' : ''}/solutions/enterprise` }])} />
-      <PageHeader breadcrumbs={[{ label: t('title') }]} description={t('description')} title={t('title')} variant="centered" />
-      <section aria-labelledby="enterprise-solutions-list-title" className="bg-background-alt py-12 md:py-16 xl:py-24">
-        <div className="mx-auto w-full max-w-container px-4 sm:px-6 lg:px-8">
-          <h2 className="sr-only" id="enterprise-solutions-list-title">{t('title')}</h2>
-          <ul className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-2">
-            {enterpriseSolutions.map((solution) => (
-              <li key={solution.slug}>
-                <Reveal>
-                  <SolutionCard imageAlt={t('imageAlt', { title: solution.title })} shot={solution.cardImage !== undefined} solution={solution} />
-                </Reveal>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
+      <ListingHero
+        accent={copy.accent}
+        breadcrumbs={copy.crumbs.map((label) => ({ label }))}
+        description={copy.description}
+        highlights={copy.highlights}
+        lead={copy.lead}
+        title={copy.title}
+        visual={<GlassVisual card={copy.glassCard} tiles={copy.tiles} />}
+      >
+        <ListingExplorer
+          ariaLabel={copy.ariaLabel}
+          categories={copy.categories}
+          columns={2}
+          cta={{ ...listingCtas[locale].enterprise, href: '/solutions/ai', icon: 'sparkles' }}
+          items={items}
+          labels={{ ...listingLabels[locale], searchPlaceholder: copy.searchPlaceholder }}
+        />
+      </ListingHero>
       <CTABanner description={t('ctaDescription')} title={t('ctaTitle')} variant="alt" />
     </>
   );

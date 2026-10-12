@@ -151,7 +151,7 @@ export function HeroBackground({ panels, imageAlt }: HeroBackgroundProps) {
           <ListPanel className="left-[46%] top-[15%] w-[15.5%]" delay={300} icon={<IconBrain />} items={panels.ai.items} title={panels.ai.title} />
           <ChartPanel className="left-[70.5%] top-[14%] w-[17%]" delay={450} subtitle={panels.chart.subtitle} title={panels.chart.title} />
           <StatPanel className="left-[88.5%] top-[33%] w-[9%]" delay={600} label={panels.performance.label} value={panels.performance.value} />
-          <ListPanel className="left-[45.5%] top-[50%] w-[13.5%]" delay={750} icon={<IconGrid />} items={panels.management.items} title={panels.management.title} />
+          <ListPanel className="left-[45.5%] top-[50%] w-[16%]" delay={750} icon={<IconGrid />} items={panels.management.items} title={panels.management.title} />
           <ListPanel className="left-[83%] top-[55%] w-[14.5%]" delay={900} icon={<IconPhone />} items={panels.apps.items} title={panels.apps.title} />
 
           <p className="absolute left-[73%] top-[56%] -translate-x-1/2 text-[4cqw] font-black tracking-tight text-white drop-shadow-[0_0.2cqw_0.6cqw_rgb(0_80_70/0.55)]">

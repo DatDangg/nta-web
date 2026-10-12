@@ -1,6 +1,7 @@
 import { Container } from '@/components/ui/Container';
 import type { BreadcrumbItem } from '@/components/shared/Breadcrumb';
 import type { CaseStudyShowcase } from '@/content/types';
+import type { GlassTile } from '@/components/listing/GlassVisual';
 import { ShowcaseCTA } from './ShowcaseCTA';
 import { ShowcaseHero } from './ShowcaseHero';
 import { ShowcaseOverview } from './ShowcaseOverview';
@@ -8,13 +9,13 @@ import { ShowcasePhotos } from './ShowcasePhotos';
 import { ShowcaseTechnology } from './ShowcaseTechnology';
 import { ShowcaseVision } from './ShowcaseVision';
 
-type Props = { showcase: CaseStudyShowcase; breadcrumbs: BreadcrumbItem[] };
+type Props = { showcase: CaseStudyShowcase; breadcrumbs: BreadcrumbItem[]; tiles?: GlassTile[] };
 
 /** Bố cục `layout: showcase` cho trang chi tiết case study (ảnh mẫu Óc Eo – Ba Thê). */
-export function ShowcaseLayout({ showcase, breadcrumbs }: Props) {
+export function ShowcaseLayout({ showcase, breadcrumbs, tiles }: Props) {
   return (
     <>
-      <ShowcaseHero breadcrumbs={breadcrumbs} hero={showcase.hero} />
+      <ShowcaseHero breadcrumbs={breadcrumbs} hero={showcase.hero} tiles={tiles} />
       <ShowcaseOverview pillars={showcase.pillars} stats={showcase.stats} />
       {showcase.note && (
         <Container>

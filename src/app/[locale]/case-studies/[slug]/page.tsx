@@ -9,7 +9,8 @@ import { ResultBlock } from '@/components/case-studies/ResultBlock';
 import { SolutionBlock } from '@/components/case-studies/SolutionBlock';
 import { ShowcaseLayout } from '@/components/case-studies/showcase/ShowcaseLayout';
 import { CTABanner } from '@/components/shared/CTABanner';
-import { PageHeader } from '@/components/shared/PageHeader';
+import { DetailHero } from '@/components/listing/DetailHero';
+import { detailTiles } from '@/content/listings';
 import { getAllCaseStudies, getCaseStudyBySlug } from '@/lib/content/case-studies';
 import { isLocale } from '@/lib/content/slug';
 import { JsonLd } from '@/components/seo/JsonLd';
@@ -55,7 +56,7 @@ export default async function CaseStudyDetailPage({ params }: { params: Promise<
     return <>
       <JsonLd data={breadcrumbJsonLd} />
       <script dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }} type="application/ld+json" />
-      <ShowcaseLayout breadcrumbs={[{ label: t('title'), href: '/case-studies' }, { label: study.showcase.hero.breadcrumbLabel ?? study.title }]} showcase={study.showcase} />
+      <ShowcaseLayout breadcrumbs={[{ label: t('title'), href: '/case-studies' }, { label: study.showcase.hero.breadcrumbLabel ?? study.title }]} showcase={study.showcase} tiles={detailTiles(locale, study.slug)} />
       <RelatedStudies categoryLabel={(item) => t(`categories.${item.category}`)} imageAlt={(item) => t('imageAlt', { title: item.title })} studies={related} title={t('related')} />
     </>;
   }
@@ -64,10 +65,19 @@ export default async function CaseStudyDetailPage({ params }: { params: Promise<
     client: t('meta.client'), sector: t('meta.sector'), year: t('meta.year'),
   };
   const cta = await getTranslations('solutions.ai');
+  const cover = study.cover ? { src: study.cover, alt: t('imageAlt', { title: study.title }) } : study.gallery[0];
 
   return <>
     <JsonLd data={breadcrumbJsonLd} />
-    <PageHeader breadcrumbs={[{ label: t('title'), href: '/case-studies' }, { label: study.title }]} description={study.result} title={study.title} />
+    <DetailHero
+      breadcrumbs={[{ label: t('title'), href: '/case-studies' }, { label: study.title }]}
+      description={study.result}
+      eyebrow={[t(`categories.${study.category}`), study.sector, String(study.year)].filter(Boolean).join(' · ')}
+      media={cover ? { src: cover.src, alt: cover.alt, width: 1590, height: 989, frame: 'photo' } : undefined}
+      subtitle={study.client}
+      tiles={detailTiles(locale, study.slug)}
+      titleLead={study.title}
+    />
     <script dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }} type="application/ld+json" />
     <div>
       {/* Mỗi block tự giới hạn bề rộng trong <Container> của riêng mình. KHÔNG bọc wrapper 720px
