@@ -16,12 +16,18 @@
   alt (ảnh giờ có 2 lớp: thẻ chào + dải chỉ số → alt phải mô tả cả hai).
 - Kiểm tra 375: nhãn phải đọc được.
 
-## step: T7-C — change: ảnh placeholder ở thẻ giải pháp — status=pending
-- Yêu cầu user (đã gửi trước): `/solutions/enterprise`, thẻ giải pháp trang chủ, `RelatedSolutions`, …
-  — bản EN hiện **nhãn tiếng Việt**.
-- Yêu cầu: dùng ảnh v2 `01-tong-quan` · ảnh **bám mép trên + fade đáy** · **không cắt 2 bên** ·
-  thẻ không có ảnh thật thì **giữ placeholder** nhưng **nhãn đúng ngôn ngữ**.
-- Bước bắt buộc: **khảo sát + liệt kê trước** (ghi vào journal) rồi mới code.
+## step: T7-A/B — status=awaiting ✅ DONE → commit `61cb49e` trên nhánh `redesign/solution-detail`
+- A: 4 tiêu đề EN LMS theo bảng user chốt + ghi bảng vào spec §11.2 (đóng MINOR).
+- B: crop lại `crm/01-tong-quan-crop.png` → 2059×618 ratio **3.332** (thẻ chào + dải 4 thẻ chỉ số).
+  Alt VI/EN viết lại · `ratio` trong `crm.mdx` VI/EN · `docs/screenshots-mapping.md` thêm bảng
+  "ảnh crop dùng trên web" + sửa mục "Chưa nối vào web".
+- Verify: build 51/51 exit 0 · `verify-t7.mjs` 12/12 · soi 375: crop cao ~110px, nhãn đọc được.
+- **Nhánh mới `redesign/solution-detail`** (tạo từ `main`, chưa push). `main` vẫn giữ T1–T6.
+
+## Change mới — `spec/changes/2026-10-12-solution-card-real-images.md` — status=awaiting ⏸ CHECKPOINT USER
+- Khảo sát ĐỦ đã ghi trong change file §2 (component · ảnh · nơi dùng · field mdx · ảnh hưởng lan).
+- **CHƯA code gì.** Chờ user duyệt danh sách + chốt 3 câu hỏi (placeholder AI/trang chủ · chữ VI
+  trong SVG · ảnh HRM vuông trong khung 16/10).
 
 ## Quy tắc môi trường (đã mắc 2 lần — bắt buộc tuân thủ)
 **kill mọi node process → xóa `.next` → build → copy `static`+`public` vào `.next/standalone` → start.**
