@@ -466,7 +466,9 @@ for (const slug of targets) {
     const shots = only ? conf.shots.filter((s) => only.includes(s.name.split("-")[0])) : conf.shots;
     for (const shot of shots) {
       const route = typeof shot.route === "function" ? shot.route(fixture) : shot.route;
-      const url = conf.mode === "mock" ? `${BASE}/mock-hrm/?screen=${shot.screen}` : joinUrl(conf, route);
+      const url = conf.mode === "mock"
+        ? `${BASE}${conf.mockPath ?? "/mock-hrm/"}${conf.mockPath ? "" : `?screen=${shot.screen}`}`
+        : joinUrl(conf, route);
       // Bề rộng chụp: mặc định 1328 (khung chuẩn). Shot bảng nhiều cột đặt `appWidth` rộng
       // hơn để không cắt cột — wrapper tự co ảnh về đúng 1328 nên khung vẫn đồng nhất.
       const appW = shot.appWidth ?? APP_WIDTH;
@@ -475,7 +477,10 @@ for (const slug of targets) {
       if (debug) log(`  · [${shot.name}]`);
 
       if (conf.mode === "mock") {
-        await cdp.waitUntil(sessionId, 'window.__READY__ === true && document.fonts.status === "loaded"');
+        await cdp.waitUntil(
+          sessionId,
+          conf.mockPath ? 'document.fonts.status === "loaded"' : 'window.__READY__ === true && document.fonts.status === "loaded"'
+        );
       } else {
         await cdp.waitUntil(sessionId, 'document.readyState === "complete"');
         if (shot.wait) {
@@ -567,7 +572,7 @@ for (const slug of targets) {
       // Ảnh app do fixture/mocks trả về; ảnh 404 là lỗi thật → phải dừng, không "chụp đại".
       if (!probe) {
         const img = await assertImagesReady(cdp, sessionId, `${slug}/${shot.name}`, { settleMs: 30_000 });
-        log(`    · ảnh sẵn sàng ${img.ready}/${img.total}`);
+        log(`    · ảnh sẵn sàng ${img.ready}/${img.total}; CSS background ${img.backgroundTotal} đã kiểm tra`);
       }
       const app = await fullPagePng(cdp, sessionId, appW, maxH);
       if (app.truncated) log(`    · cắt chiều cao ${app.rawHeight} → ${maxH}px (bỏ đuôi dài)`);

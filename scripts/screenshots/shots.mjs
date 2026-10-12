@@ -17,6 +17,21 @@
  */
 
 export const SHOTS = {
+  enterprise: {
+    mode: "mock", mockPath: "/mock-enterprise/", title: "NTA · Nền tảng vận hành doanh nghiệp",
+    fixture: "hrm.json", outDir: "public/images/solutions/v2",
+    shots: [{ screen: "overview", name: "enterprise-hero" }],
+  },
+  flycam: {
+    mode: "mock", mockPath: "/mock-flycam/", title: "NTA Flycam · Điều hành nhiệm vụ bay",
+    fixture: "hrm.json", outDir: "public/images/solutions/v2/flycam",
+    shots: [{ screen: "overview", name: "01-tong-quan" }],
+  },
+  talvra: {
+    mode: "mock", mockPath: "/mock-talvra/", title: "Talvra · Trợ lý AI doanh nghiệp",
+    fixture: "hrm.json", outDir: "public/images/solutions/v2/talvra",
+    shots: [{ screen: "overview", name: "01-tong-quan" }],
+  },
   hrm: {
     mode: "mock",
     title: "NTA HRM · Quản trị nhân sự",

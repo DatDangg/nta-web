@@ -28,9 +28,15 @@ const MIME = {
 export function startServer(port = 5599, root = ROOT) {
   const server = http.createServer((req, res) => {
     const url = new URL(req.url ?? "/", "http://127.0.0.1");
-    let filePath = path.join(root, decodeURIComponent(url.pathname));
+    const pathname = decodeURIComponent(url.pathname);
+    const servesPublicAsset = pathname.startsWith("/public/");
+    const publicRoot = path.resolve(root, "..", "..");
+    let filePath = servesPublicAsset
+      ? path.resolve(root, "..", "..", `.${pathname}`)
+      : path.join(root, pathname);
     if (url.pathname.endsWith("/")) filePath = path.join(filePath, "index.html");
-    if (!path.resolve(filePath).startsWith(path.resolve(root))) {
+    const allowedRoot = servesPublicAsset ? publicRoot : root;
+    if (!path.resolve(filePath).startsWith(path.resolve(allowedRoot))) {
       res.writeHead(403, { "content-type": "text/plain" }).end("forbidden");
       return;
     }

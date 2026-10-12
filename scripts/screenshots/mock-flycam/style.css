@@ -1,0 +1,171 @@
+*{box-sizing:border-box}
+
+html,body{margin:0;background:#f3f6fa;color:#17243a;font:14px Inter,"Segoe UI",sans-serif}
+
+.app{height:849px;width:1328px;display:flex;background:#f5f7fb}
+
+aside{width:218px;background:#fff;border-right:1px solid #e7ebf1;padding:24px 15px;position:relative}
+
+.logo{font-size:20px;font-weight:800;color:#1b5da9;padding:0 12px 28px}
+
+.logo span{margin-left:5px;color:#49a9ce}
+
+.nav{padding:13px 12px;margin:4px 0;border-radius:9px;color:#748198;font-size:12px}
+
+.nav.active{background:#e9f2ff;color:#1c63b7;font-weight:700}
+
+.aside-foot{position:absolute;bottom:24px;left:26px;font-size:11px;color:#46556b}
+
+.aside-foot i{display:inline-block;width:8px;height:8px;border-radius:50%;background:#25a87a}
+
+.aside-foot small{margin-left:13px;color:#99a4b3;font-size:9px}
+
+.main{flex:1;padding:28px 29px}
+
+.main header{display:flex;align-items:center;gap:15px;margin-bottom:23px}
+
+.main header>div{flex:1}
+
+.main header small{font-size:9px;color:#9aa5b4;letter-spacing:1px}
+
+.main h1{font-size:22px;margin:6px 0 0}
+
+.main button{border:0;border-radius:8px;background:#1768bf;color:white;padding:11px 15px;font-size:11px;font-weight:700}
+
+.bell{color:#6f7e92;margin:0 12px}
+
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-bottom:16px}
+
+.kpis article,.card{background:#fff;border:1px solid #e6ebf2;border-radius:10px;box-shadow:0 2px 5px #20365108}
+
+.kpis article{padding:15px 17px;display:grid;gap:7px}
+
+.kpis small{font-size:9px;color:#8693a5}
+
+.kpis strong{font-size:24px}
+
+.kpis sup{font-size:10px;color:#9aa6b5}
+
+.kpis em{font-size:9px;color:#8795a6;font-style:normal}
+
+.kpis em.green{color:#299775}
+
+.kpis em.orange,.warn{color:#da8a26}
+
+.grid{display:grid;grid-template-columns:1.3fr 1fr;grid-template-rows:330px 220px;gap:14px}
+
+.card{overflow:hidden}
+
+.card-head{height:46px;padding:0 15px;display:flex;align-items:center;justify-content:space-between;font-size:11px}
+
+.card-head span{font-size:9px;color:#8491a2}
+
+.map{grid-row:span 1}
+
+.schematic{height:270px;position:relative;margin:0 12px 12px;background:#f0f5f3;border-radius:7px;overflow:hidden;background-image:linear-gradient(24deg,transparent 48%,#dce8e1 49%,#dce8e1 50%,transparent 51%),linear-gradient(140deg,transparent 46%,#e0e9e3 47%,#e0e9e3 48%,transparent 49%),linear-gradient(90deg,#edf3f1 1px,transparent 1px),linear-gradient(#edf3f1 1px,transparent 1px);background-size:auto,auto,38px 38px,38px 38px}
+
+.land{position:absolute;inset:0}
+
+.water{position:absolute;width:150px;height:310px;right:-40px;top:-35px;background:#d8edf3;transform:rotate(23deg);border-radius:50%}
+
+.zone{position:absolute;border:1px dashed #51a987;background:#61bd8c20;border-radius:45%;transform:rotate(-22deg)}
+
+.z1{left:22%;top:26%;width:180px;height:95px}
+
+.z2{left:53%;top:48%;width:130px;height:70px;border-color:#e2ae56;background:#f2c86b18}
+
+.road{position:absolute;background:#fff;height:7px;border:1px solid #e4ebe6;transform:rotate(-18deg)}
+
+.r1{width:500px;left:-20px;top:100px}
+
+.r2{width:400px;left:100px;top:200px;transform:rotate(24deg)}
+
+.r3{width:350px;left:140px;top:36px;transform:rotate(52deg)}
+
+.schematic svg{position:absolute;inset:0;width:100%;height:100%;fill:none;stroke:#458ce0;stroke-width:3;stroke-dasharray:7 5}
+
+.schematic svg path:nth-child(2){stroke:#30a98b}
+
+.schematic svg path:nth-child(3){stroke:#e3a64b}
+
+.pin,.station{position:absolute;z-index:2;background:white;border-radius:50%;padding:5px;color:#2472c3;box-shadow:0 2px 5px #193a5124;font-size:11px}
+
+.p1{left:14%;top:65%}
+
+.p2{left:62%;top:36%}
+
+.p3{left:45%;top:72%;color:#208c73}
+
+.station{left:37%;top:24%;color:#df9d31}
+
+.map-legend{position:absolute;bottom:8px;left:9px;background:#fffffff0;padding:7px 9px;border-radius:5px;font-size:8px;color:#718096}
+
+.map-legend i,.map-legend b,.map-legend span{display:inline-block;width:7px;height:7px;border-radius:50%;background:#458ce0}
+
+.map-legend b{background:#70ba8f}
+
+.video{grid-column:2;grid-row:1}
+
+.live{color:#dd665c!important}
+
+.live i{display:inline-block;width:6px;height:6px;border-radius:50%;background:#e36d62}
+
+.frame{height:220px;margin:0 12px;background:#d7e9f5;position:relative;overflow:hidden;border-radius:6px}
+
+.sky{position:absolute;inset:0 0 52% ;background:linear-gradient(#c3e0f3,#e9f4fa)}
+
+.horizon{position:absolute;top:44%;height:2px;width:100%;background:#aec6cc}
+
+.hill{position:absolute;bottom:10%;width:80%;height:57%;border-radius:50% 55% 0 0;background:#a9ceb8}
+
+.h1{left:-22%;transform:rotate(-8deg)}
+
+.h2{right:-32%;bottom:3%;background:#8fb89f;transform:rotate(9deg)}
+
+.crosshair{position:absolute;left:50%;top:45%;color:#ffffffb8;font-size:24px}
+
+.rec{position:absolute;top:9px;left:10px;color:#fff;font-size:8px;text-shadow:0 1px 3px #333}
+
+.frame-caption{position:absolute;right:8px;bottom:7px;color:#fff;font-size:7px;letter-spacing:1px;text-shadow:0 1px 4px #333}
+
+.video-foot{display:flex;justify-content:space-between;padding:8px 14px;color:#728095;font-size:8px}
+
+.alerts{grid-column:1;grid-row:2}
+
+.alerts .count{border-radius:50%;background:#fff2e2;color:#d28c34;padding:5px 8px}
+
+.alert{height:48px;border-top:1px solid #f0f2f6;display:flex;align-items:center;gap:9px;padding:0 14px}
+
+.alert>i{font-style:normal;border-radius:6px;padding:5px 7px;font-weight:bold}
+
+.amber{background:#fff4e2;color:#d79837}
+
+.red{background:#fff0ef;color:#d96860}
+
+.blue{background:#edf4ff;color:#5285ca}
+
+.alert div{display:grid;gap:4px;flex:1}
+
+.alert b{font-size:9px}
+
+.alert small,.alert time{font-size:8px;color:#929eae}
+
+.all{text-align:right;padding:6px 14px;color:#347bc7;font-size:8px}
+
+.fleet{grid-column:2;grid-row:2}
+
+.fleet-row{height:47px;border-top:1px solid #f0f2f6;display:flex;align-items:center;gap:8px;padding:0 13px;font-size:8px}
+
+.fleet-row b{font-size:9px}
+
+.fleet-row span{color:#8290a2}
+
+.fleet-row small{color:#a0aaba;flex:1}
+
+.fleet-row strong{color:#338c71}
+
+.fleet-row strong.low{color:#d88b37}
+
+.dot{width:6px;height:6px;border-radius:50%;background:#32a87e}
+
+.dot.off{background:#dda14d}

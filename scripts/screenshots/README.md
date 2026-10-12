@@ -1,4 +1,4 @@
-# scripts/screenshots — pipeline chụp ảnh 4 trang giải pháp
+# scripts/screenshots — pipeline chụp ảnh trang giải pháp
 
 Sinh ảnh minh hoạ cho `/solutions/{ai,enterprise}` trên website NTA: **HRM (mock)**, **LMS (iSmartSchool)**,
 **CRM (Dragon Hotpot)**, **DentGo Smile**. Ảnh ra là **cửa sổ macOS** thống nhất: 1328px nội dung,
@@ -16,6 +16,21 @@ node scripts/screenshots/capture.mjs lms --probe      # chỉ ghi lại API th�
 node scripts/screenshots/capture.mjs lms --debug      # in console error của app + request đã chặn
 node scripts/screenshots/capture.mjs hrm --no-crops   # bỏ ảnh crop
 ```
+
+### Mock bổ sung (offline)
+
+Ba mock HTML/CSS dưới đây dùng cùng pipeline khung macOS, nền trong suốt và được lưu cùng repo:
+
+```bash
+node scripts/screenshots/capture.mjs enterprise  # collage giao diện LMS/CRM/DentGo v2
+node scripts/screenshots/capture.mjs flycam       # dashboard điều hành bay, sơ đồ tuyến bay
+node scripts/screenshots/capture.mjs talvra       # chat trợ lý AI tra cứu chính sách nội bộ
+```
+
+Mock source: `mock-enterprise/`, `mock-flycam/`, `mock-talvra/` (mỗi thư mục có `index.html` và
+`style.css`). Mở xem qua `node scripts/screenshots/serve.mjs`, lần lượt tại
+`/mock-enterprise/`, `/mock-flycam/`, `/mock-talvra/`. Enterprise tải ba ảnh giao diện v2 có sẵn
+qua đường dẫn `/public/images/solutions/v2/`; không tạo lại hoặc sửa các ảnh nguồn đó.
 
 ## Ảnh ra đâu
 

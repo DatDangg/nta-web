@@ -88,10 +88,30 @@ export async function loadAndDecodeImages(cdp, sessionId, { selector = "img", se
           alt: i.alt || '',
         };
       });
+      const backgroundUrls = new Set();
+      for (const element of document.querySelectorAll('*')) {
+        const background = getComputedStyle(element).backgroundImage;
+        for (const match of background.matchAll(/url\\((.*?)\\)/g)) {
+          const source = match[1].trim().replace(/^["']|["']$/g, "");
+          if (source) backgroundUrls.add(new URL(source, document.baseURI).href);
+        }
+      }
+      const backgrounds = await Promise.all([...backgroundUrls].map(async (src) => {
+        const image = new Image();
+        image.src = src;
+        try {
+          await image.decode();
+          return { src, naturalWidth: image.naturalWidth };
+        } catch {
+          return { src, naturalWidth: 0 };
+        }
+      }));
       return {
         settled: ${"true"},
         total: rows.length,
         broken: rows.filter(r => !r.complete || r.naturalWidth === 0),
+        backgrounds,
+        brokenBackgrounds: backgrounds.filter(image => image.naturalWidth === 0),
       };
     })()`
   );
@@ -136,5 +156,15 @@ export async function assertImagesReady(cdp, sessionId, label, { selector = "img
     );
   }
 
-  return { total: res.total, ready: res.ready, allowed: res.broken.length };
+  if (res.brokenBackgrounds.length) {
+    const detail = res.brokenBackgrounds.map((image) => `    ✗ ${image.src}`).join("\n");
+    throw new Error(`[images-ready] ${label}: ${res.brokenBackgrounds.length} CSS background image(s) failed to load.\n${detail}`);
+  }
+
+  return {
+    total: res.total,
+    ready: res.ready,
+    allowed: res.broken.length,
+    backgroundTotal: res.backgrounds.length,
+  };
 }

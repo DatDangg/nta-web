@@ -1,0 +1,95 @@
+*{box-sizing:border-box}
+
+html,body{margin:0;background:#f5f6f9;color:#202839;font:14px Inter,"Segoe UI",sans-serif}
+
+.app{width:1328px;height:849px;display:flex;background:#fff}
+
+aside{width:260px;background:#f8f9fb;border-right:1px solid #e9ecf1;padding:22px 15px;position:relative}
+
+.brand{font-size:19px;font-weight:750;margin:0 8px 27px;color:#27364a}
+
+.brand i{font-style:normal;color:#7658d3;margin-right:6px}
+
+aside button{width:100%;height:37px;border:1px solid #e2e5eb;background:white;border-radius:8px;color:#455166;text-align:left;padding-left:11px;font-size:10px;margin-bottom:27px}
+
+.label{font-size:8px;letter-spacing:1px;color:#9aa3b1;padding-left:9px}
+
+.history{font-size:10px;color:#6c7687;padding:11px 9px;border-radius:7px;margin-top:3px}
+
+.history.active{background:#edeaf8;color:#5e4bb0}
+
+.bottom{position:absolute;bottom:19px;left:16px;right:16px;border-top:1px solid #e5e8ed;padding-top:14px;display:flex;align-items:center;gap:9px;font-size:10px}
+
+.avatar{width:29px;height:29px;border-radius:50%;background:#e9e3ff;color:#7254c1;display:grid;place-items:center;font-size:8px;font-weight:700}
+
+.bottom span{display:grid;gap:3px}
+
+.bottom small{font-size:8px;color:#929baa}
+
+.bottom b{margin-left:auto;color:#8f98a7;font-size:9px}
+
+.chat{flex:1;position:relative;display:flex;flex-direction:column}
+
+.chat header{height:65px;border-bottom:1px solid #edf0f3;padding:0 34px;display:flex;align-items:center;justify-content:space-between}
+
+.chat header div{display:grid;gap:5px}
+
+.chat header b{font-size:12px}
+
+.chat header small{font-size:8px;color:#919baa}
+
+.chat header span{font-size:11px;color:#808b9a}
+
+.thread{width:700px;margin:31px auto 0;flex:1}
+
+.date{text-align:center;color:#a0a8b3;font-size:8px;letter-spacing:.7px;margin-bottom:25px}
+
+.user-msg{margin-left:auto;width:480px;padding:13px 15px;border-radius:12px 12px 3px 12px;background:#f1eff9;color:#3c3d50;font-size:11px;line-height:1.7}
+
+.assistant{display:flex;gap:11px;margin-top:26px}
+
+.spark{width:25px;height:25px;border-radius:8px;background:#eee9ff;color:#7658d3;display:grid;place-items:center}
+
+.answer{flex:1;font-size:10px;line-height:1.8;color:#465164}
+
+.answer>b{font-size:10px;color:#293549}
+
+.answer p{margin:10px 0}
+
+.answer strong{color:#38324e}
+
+.source{border:1px solid #e6e8ed;border-radius:9px;margin-top:15px;overflow:hidden}
+
+.source-head{height:36px;background:#fafbfc;border-bottom:1px solid #eceef2;display:flex;align-items:center;gap:8px;padding:0 11px}
+
+.source-head span{color:#7560be}
+
+.source-head b{font-size:9px}
+
+.source-head small{margin-left:auto;color:#929baa;font-size:8px}
+
+.doc{height:48px;display:flex;align-items:center;gap:9px;padding:0 11px;border-bottom:1px solid #f0f1f4}
+
+.doc:last-child{border-bottom:0}
+
+.doc>i{font-style:normal;font-size:7px;font-weight:bold;color:#ce635a;background:#fff0ee;padding:5px;border-radius:4px}
+
+.doc>i.doc2{color:#5480c0;background:#edf4ff}
+
+.doc span{display:grid;gap:3px}
+
+.doc span b{font-size:9px;font-weight:600}
+
+.doc span small,.doc em{font-size:8px;color:#929baa;font-style:normal}
+
+.doc em{margin-left:auto}
+
+.feedback{color:#9aa3b0;font-size:8px;margin-top:12px}
+
+.composer{width:700px;height:77px;border:1px solid #e4e7ec;border-radius:11px;margin:0 auto 23px;padding:10px 12px;box-shadow:0 3px 12px #27365009}
+
+.placeholder{color:#a0a8b3;font-size:10px}
+
+.compose-foot{display:flex;align-items:center;justify-content:space-between;margin-top:15px;color:#959eac;font-size:8px}
+
+.compose-foot button{width:24px;height:24px;border:0;border-radius:7px;background:#7056c6;color:#fff;font-size:15px}
