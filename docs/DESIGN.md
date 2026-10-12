@@ -126,7 +126,7 @@ Font stack: `-apple-system, BlinkMacSystemFont, "SF Pro Display", Inter, "Segoe 
 
 ### Screen: Tin tức / Blog
 - **Route:** `/blog` + `/blog/[slug]`
-- **Components:** PageHeader, PostList, PostCard, Pagination; detail: ArticleHeader, ArticleBody, ShareBar, RelatedPosts
+- **Components:** list: ListingHero + BlogNewsVisual, BlogListing (chip danh mục + tìm kiếm qua URL), FeaturedPosts, BlogPostCard, Pagination (R-09a, 2026-10-13); detail: ArticleHeader, ArticleBody, ShareBar, RelatedPosts (PostCard)
 
 ### Screen: Liên hệ
 - **Route:** `/contact`
@@ -213,8 +213,8 @@ Font stack: `-apple-system, BlinkMacSystemFont, "SF Pro Display", Inter, "Segoe 
 ### Screen: Blog (list + detail)
 - **Mobile:** list 1 cột; detail 1 cột, chữ 16–18px.
 - **Tablet:** list 2 cột; detail ~680px.
-- **Desktop:** list 3 cột + sidebar; detail ~720px.
-- **Large:** list 3–4 cột.
+- **Desktop:** khối nổi bật 3 cột (lớn · 2 nhỏ · thẻ NỔI BẬT) + lưới 3 cột (lg) / 4 cột (xl); detail ~720px.
+- **Large:** lưới 4 cột.
 
 ### Screen: Liên hệ
 - **Mobile:** consultation form in a single column.

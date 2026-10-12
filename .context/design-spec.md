@@ -100,7 +100,7 @@ kiểu Apple, dựa trên Tailwind + system SF Pro/Inter, motion fade/slide ti�
 `Button` (primary/secondary/ghost/outline, sm/md/lg, pill) · `Input/Textarea` (label + helper/error) ·
 `Card` (SolutionCard/ProductCard/CaseStudyCard/PostCard, hover lift) · `Section` (default/alt/accent) ·
 `Badge` · `Timeline` · `Nav` (desktop/mobile) · `Breadcrumb` · `PageHeader` · `CTABanner` · `Pagination` ·
-`FilterBar`. Icon: Phosphor SVG, 1 family. MDX body: `@tailwindcss/typography` `prose` + override token.
+`FilterBar` · listing (`ListingHero`, `ListingExplorer`, `GlassVisual`) · blog (`BlogListing`, `FeaturedPosts`, `BlogPostCard`, `BlogNewsVisual`). Icon: Phosphor SVG, 1 family. MDX body: `@tailwindcss/typography` `prose` + override token.
 File component ≤ 300 dòng, function ≤ 50 dòng → tách sub-component khi vượt.
 
 ---
@@ -461,33 +461,45 @@ technology/vision; carousel 78% / 46% (sm) / 4 ảnh (lg). Không scroll ngang (
 
 ### Screen 10: Tin tức / Blog (danh sách)
 
-**Route:** `/blog` — R-09
+**Route:** `/blog` — R-09, **R-09a** _(redesign 2026-10-13 — change `blog-listing-redesign`, mockup
+`spec/changes/assets/2026-10-13-blog-listing-redesign/mockup-blog-listing.png`)_
 
-**Layout (2–3 section):** PageHeader + Breadcrumb · **PostList** (PostCard: ảnh bìa, Badge danh mục, ngày,
-`h2/h3` tiêu đề, 1 dòng tóm tắt) + Pagination (pageSize 9).
+**Layout:** `ListingHero` (nền sóng `hero-waves.jpg`, breadcrumb pill, h1 "Tin tức & Cập nhật" + tagline
+"về **AI và ứng dụng thực tiễn**", mô tả, minh hoạ `BlogNewsVisual` `lg+`) · thanh lọc kính (7 chip + ô tìm kiếm) ·
+khối nổi bật (bài lớn · 2 bài nhỏ · thẻ NỔI BẬT) · "Bài viết mới nhất" (lưới) + Pagination — tất cả nằm chung nền sóng.
 
-**Components:** PageHeader, Breadcrumb, PostCard, Badge, Pagination.
+**Components:** `ListingHero`, `BlogNewsVisual`, `BlogListing` (client), `FeaturedPosts`, `BlogPostCard`
+(`large | compact | grid`), `Pagination`, `EmptyState`. `PostCard` chỉ còn dùng ở RelatedPosts (Screen 11).
 
-**States:** Default · Loading: skeleton grid · Error: (n/a static) ·
-**Empty (chưa có bài):** "Chưa có bài viết nào." / "No posts yet." + link về trang chủ.
+**Data/URL:** `?category=<ai-tech|practical|customer-stories|nta-news|trends|guides>&q=<text>&page=<n>` —
+"Tất cả" = không có `category`; key lạ → Tất cả; `q` trim, rỗng bỏ; `page` kẹp [1, tổng]; đổi lọc → bỏ `page`;
+`history.replaceState` cho chip/từ khoá (không thêm history; `Pagination` chung vẫn push), tìm theo lúc gõ debounce 300ms; lọc AND; tìm tiêu đề + tóm tắt, bỏ dấu + `đ→d`.
+Page size **12**; khối nổi bật (3 bài mới nhất) chỉ ở trang 1 khi không lọc, không tính vào 12.
+
+**States:** Default · 0 bài: EmptyState "Chưa có bài viết nào." + link trang chủ (thay phần dưới hero) ·
+lọc/tìm rỗng: "Không có bài viết phù hợp." + nút "Xóa bộ lọc" · ≤3 bài: ẩn "Bài viết mới nhất", "Xem tất cả" cuộn tới thanh lọc.
 
 **Responsive:**
 | bp | Behavior |
 |---|---|
-| base | list 1 cột (card dọc, ảnh 16:9) |
-| md ≥768 | 2 cột |
-| lg ≥1024 | 3 cột |
-| xl+ | 3 cột (4 chỉ nếu >12 bài, tuỳ content) |
+| base | 1 cột: bài lớn → 2 bài nhỏ → thẻ NỔI BẬT; chip cuộn ngang trong khung, ô tìm kiếm dưới chip |
+| md ≥768 | bài lớn + thẻ NỔI BẬT full-width, 2 bài nhỏ 2 cột; lưới 2 cột |
+| lg ≥1024 | chip + tìm kiếm 1 hàng; lưới 3 cột |
+| xl ≥1280 | khối nổi bật 3 cột (1.38fr · 1fr · 0.86fr); lưới 4 cột |
 
-**Interactions:** card hover lift + title đổi `primary`; pagination `?page=`.
+**Interactions:** chip active nền primary; card hover nhấc + tiêu đề đổi màu; "Xem tất cả bài viết" cuộn + focus tiêu đề
+"Bài viết mới nhất" (tôn trọng `prefers-reduced-motion`).
 
-**A11y:** `<nav aria-label="Phân trang">`; card link bọc khối; ngày `<time dateTime>`; badge không chỉ màu
-(kèm chữ danh mục).
+**A11y:** chip = `button aria-pressed` trong `role="group"` có nhãn; ô tìm kiếm `type="search"` + label sr-only;
+số kết quả `role="status"`; card link bọc khối; ngày `<time dateTime>`; minh hoạ hero `aria-hidden`.
 
-**Copy:** h1 VI "Tin tức" / EN "Blog"; empty VI: "Chưa có bài viết nào. Hãy quay lại sau."
-/ EN: "No posts yet. Check back soon." (không dùng eyebrow "Mới nhất từ blog").
+**Copy:** VI h1 "Tin tức & Cập nhật" / EN "News & Updates"; chip VI Tất cả · AI & Công nghệ · Ứng dụng thực tiễn ·
+Câu chuyện khách hàng · Hoạt động NTA · Xu hướng · Hướng dẫn / EN All · AI & Technology · Practical applications ·
+Customer stories · NTA activities · Trends · Guides; thời gian đọc "N phút đọc" / "N min read"; "Đọc thêm" / "Read more".
+Ngoài phạm vi: thẻ "Đăng ký nhận tin" (chưa có backend).
 
-**SEO:** "Tin tức | NTA" / "Blog | NTA" · JSON-LD: BreadcrumbList + Blog.
+**SEO:** "Tin tức | NTA" / "Blog | NTA" · canonical `/blog` không kèm query · JSON-LD: BreadcrumbList
+(`Blog` JSON-LD chưa có — gap có từ trước, ngoài phạm vi change này).
 
 ---
 
@@ -517,7 +529,7 @@ Empty: không có bài liên quan → ẩn RelatedPosts · Error: ảnh fallback
 **A11y:** `<article>` + `<time>`; share buttons có `aria-label` + icon Phosphor (không icon lạ);
 prose heading hierarchy bắt đầu từ h2 (h1 = title); link nội dung underline offset.
 
-**Copy:** h1 = tiêu đề bài; date format theo locale (`Intl.DateTimeFormat` VI: "08/10/2026", EN: "Oct 8, 2026");
+**Copy:** h1 = tiêu đề bài; date format theo locale (`formatPostDate` VI: "08 Th10, 2026" — ghép tay, EN: "Oct 8, 2026"; R-09 2026-10-13); Badge = nhãn i18n `blog.categories.<key>`;
 related heading VI "Bài viết liên quan" / EN "Related posts"; share label "Chia sẻ" / "Share".
 
 **SEO:** "{Tiêu đề bài} | NTA" · canonical theo locale · JSON-LD: BreadcrumbList + Article

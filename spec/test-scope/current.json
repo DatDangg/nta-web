@@ -1,62 +1,63 @@
 {
-  "specVersion": "3.1.0",
-  "scopeVersion": 21,
+  "specVersion": "3.2.0",
+  "scopeVersion": 22,
   "generatedAt": "2026-10-13T00:00:00+07:00",
   "trigger": "feature-update",
-  "workItem": "change-oc-eo-case-study-showcase",
+  "workItem": "feature-blog-listing-redesign",
   "specRefs": [
-    "R-08b (mới)",
-    "R-08",
-    "R-08a",
+    "R-09a (mới)",
+    "R-09 (clarify ngày VI)",
     "BR-004",
-    "design-spec Screen 9 (biến thể showcase)"
+    "design-spec Screen 10 (redesign) + Screen 11 (ngày/badge)"
   ],
   "changed": {
     "files": [
       "src/content/types.ts",
-      "src/app/[locale]/case-studies/[slug]/page.tsx",
-      "src/components/cards/CaseStudyCard.tsx",
-      "src/components/case-studies/showcase/ShowcaseHero.tsx",
-      "src/components/case-studies/showcase/ShowcaseOverview.tsx",
-      "src/components/case-studies/showcase/ShowcaseTechnology.tsx",
-      "src/components/case-studies/showcase/VmsMock.tsx",
-      "src/components/case-studies/showcase/ShowcasePhotos.tsx",
-      "src/components/case-studies/showcase/ShowcaseVision.tsx",
-      "src/components/case-studies/showcase/ShowcaseCTA.tsx",
-      "src/components/case-studies/showcase/ShowcaseLayout.tsx",
-      "src/components/case-studies/showcase/icons.tsx",
-      "src/content/case-studies/vi/oc-eo-learning.mdx",
-      "src/content/case-studies/en/oc-eo-learning.mdx",
-      "src/content/home.ts",
-      "public/images/cases/oc-eo/*.jpg"
+      "src/lib/content/posts.ts",
+      "src/lib/blog/categories.ts",
+      "src/lib/blog/filter.ts",
+      "src/lib/format/date.ts",
+      "src/app/[locale]/blog/page.tsx",
+      "src/components/blog/BlogListing.tsx",
+      "src/components/blog/FeaturedPosts.tsx",
+      "src/components/blog/BlogPostCard.tsx",
+      "src/components/blog/BlogNewsVisual.tsx",
+      "src/components/blog/ArticleHeader.tsx",
+      "src/components/cards/PostCard.tsx",
+      "src/components/blog/BlogFilter.tsx (xoá)",
+      "src/i18n/messages/vi.json",
+      "src/i18n/messages/en.json",
+      "src/content/blog/{vi,en}/*.mdx (category → key)"
     ],
     "modules": [
-      "Case study detail — biến thể layout showcase (opt-in frontmatter)",
-      "CaseStudyCard — ảnh cover ưu tiên gallery[0]",
-      "Home featured case — ảnh hero.jpg"
+      "Blog listing /blog (hero, lọc chip, tìm kiếm, khối nổi bật, lưới mới nhất)",
+      "Blog data (category key + nhãn i18n, thời gian đọc)",
+      "Format ngày blog (list + detail)"
     ]
   },
   "impact": {
     "direct": [
-      "/case-studies/oc-eo-learning và /en/case-studies/oc-eo-learning — toàn bộ bố cục showcase: hero, 3 số liệu, 3 cột, note, khối công nghệ + VMS minh hoạ, carousel (nút prev/next ≥sm, swipe/keyboard), tầm nhìn, thẻ CTA."
+      "/blog + /en/blog: hero ListingHero (h1 'Tin tức & Cập nhật' / 'News & Updates'), 7 chip, ô tìm kiếm, khối nổi bật (1 lớn + 2 nhỏ + thẻ NỔI BẬT), 'Bài viết mới nhất' (1 bài còn lại), phân trang 12/trang.",
+      "URL: ?category=guides, ?q=du lieu (bỏ dấu khớp 'dữ liệu'), ?category=trends&q=du lieu → rỗng + 'Xóa bộ lọc', ?category=bogus&page=99 → như mặc định, ?q=%20%20 → như mặc định.",
+      "Nút 'Xem tất cả bài viết' cuộn + focus tiêu đề 'Bài viết mới nhất'.",
+      "Thẻ: badge danh mục (nhãn i18n), ngày VI '08 Th10, 2026' / EN 'Oct 8, 2026', '1 phút đọc' / '1 min read', 'Đọc thêm →'."
     ],
     "dependents": [
-      "/case-studies (list + filter) — thẻ Óc Eo dùng hero.jpg; RelatedStudies dùng chung CaseStudyCard.",
-      "/ và /en — khối 'Câu chuyện khách hàng / Customer story' dùng hero.jpg + alt mới."
+      "/blog/[slug] (vi/en): chuỗi ngày mới + badge nhãn danh mục mới; bố cục không đổi; RelatedPosts vẫn 0 bài (4 bài khác danh mục).",
+      "sitemap.xml: không đổi (slug/date)."
     ],
     "regression": [
-      "/case-studies/dental-clinic-operations (vi/en) giữ layout default: PageHeader, MetaBar, Challenge/Solution/Result, gallery, CTABanner.",
-      "Thẻ dental ở list vẫn dùng gallery[0].",
-      "JSON-LD BreadcrumbList + Article có ở cả 2 nhánh.",
-      "CTA hero anchor #giai-phap (vi) / #solution (en) cuộn tới khối công nghệ; CTA 'Xem chi tiết giải pháp' → /solutions/ai/boxai; thẻ CTA → /contact (đúng locale)."
+      "Các trang danh sách khác dùng ListingHero (/products, /case-studies, /solutions/ai, /solutions/enterprise) không đổi.",
+      "/about, /contact (PageHeader) không đổi.",
+      "JSON-LD BreadcrumbList /blog + Article detail giữ nguyên."
     ]
   },
   "acceptance": [
-    "Bố cục khớp ảnh mẫu tasks/change-oc-eo-case-study-showcase/refs/target-showcase-mockup.jpg ở 1440 và 390, vi + en.",
-    "Đường nối 3 node → màn VMS hiển thị (rgba(0,158,135,0.4)); vòng tròn bản đồ màu teal.",
-    "Carousel có caption 'ảnh minh hoạ…' và alt bắt đầu 'Minh hoạ —' / 'Illustration —'; dòng note 'phương án đề xuất' dưới thẻ số liệu; quote có nguồn.",
-    "Không scroll ngang; nút carousel cuộn đúng; 0 console error.",
-    "typecheck PASS, lint 0 errors, build PASS; reviewer round 2 PASS."
+    "Bố cục /blog khớp mockup ở 1440 (trừ thẻ Đăng ký nhận tin — ngoài phạm vi); 768/390 không scroll ngang.",
+    "Lọc chip + tìm kiếm bỏ dấu + deep-link URL đúng; key lạ → Tất cả; lọc rỗng có nút xoá.",
+    "Ngày VI '08 Th10, 2026' ở list + detail; EN 'Oct 8, 2026'.",
+    "vi/en đủ chuỗi; 0 console error.",
+    "typecheck PASS, lint 0 errors, build PASS; reviewer PASS."
   ],
-  "risk": "low"
+  "risk": "medium"
 }

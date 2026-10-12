@@ -148,7 +148,7 @@ _(cập nhật 2026-10-09: đổi domain đích sang `ntavietnam.tech` — chang
      đổi lọc/tìm → về trang 1. Chip không có bài vẫn hiện; kết quả rỗng → empty state + nút xoá bộ lọc.
   3. **Khối nổi bật** (khi KHÔNG lọc/tìm): bài mới nhất dạng lớn (ảnh, badge danh mục, ngày, thời gian đọc,
      tiêu đề, tóm tắt, "Đọc thêm →"), tối đa 2 bài kế tiếp dạng nhỏ, thẻ "NỔI BẬT — Cập nhật mới nhất từ NTA"
-     với nút "Xem tất cả bài viết" cuộn tới mục 4 và xoá bộ lọc. Thiếu bài → khối co lại, không chèn bài giả.
+     với nút "Xem tất cả bài viết" cuộn + focus tới mục 4 (khối này chỉ hiện khi không lọc ⇒ không cần xoá bộ lọc). Thiếu bài → khối co lại, không chèn bài giả.
   4. **"Bài viết mới nhất"** — lưới thẻ (1 / 2 / 3 / 4 cột ở base / md / lg / xl) gồm các bài còn lại sau khối nổi bật,
      phân trang; rỗng → ẩn mục. Khi đang lọc/tìm → ẩn khối nổi bật, lưới hiển thị toàn bộ kết quả.
   - **Danh mục** là key cố định trong frontmatter (`ai-tech | practical | customer-stories | nta-news | trends | guides`),
@@ -163,8 +163,8 @@ _(cập nhật 2026-10-09: đổi domain đích sang `ntavietnam.tech` — chang
     - *Phân trang:* page size **12**. Không lọc/tìm: khối nổi bật (3 bài mới nhất) chỉ hiện ở trang 1 và KHÔNG tính vào
       page size; lưới = các bài từ thứ 4 trở đi, chia 12/trang. Đang lọc/tìm: lưới = toàn bộ kết quả, 12/trang.
     - *URL:* "Tất cả" = không có `category`; `category` không thuộc 6 key → coi như "Tất cả"; `q` được trim, rỗng → bỏ
-      khỏi URL; `page` không hợp lệ/vượt → kẹp về [1, tổng trang]; đổi chip/từ khoá → bỏ `page`. Cập nhật URL bằng
-      `replace` (không thêm history), tìm kiếm theo lúc gõ (debounce ~300ms). Canonical `/blog` không kèm query.
+      khỏi URL; `page` không hợp lệ/vượt → kẹp về [1, tổng trang]; đổi chip/từ khoá → bỏ `page`. Cập nhật URL khi đổi
+      chip/từ khoá bằng `history.replaceState` (không thêm history, không vòng server; phân trang dùng `Pagination` chung — push), tìm kiếm theo lúc gõ (debounce ~300ms). Canonical `/blog` không kèm query.
     - *Tìm kiếm:* kết hợp với chip danh mục theo AND; trường = tiêu đề + tóm tắt; chuẩn hoá: trim, lowercase, NFD bỏ dấu, `đ`→`d`; khớp chuỗi con.
     - *Thời gian đọc:* số token tách theo khoảng trắng của body MDX, `ceil(từ/200)`, tối thiểu 1.
     - *Trạng thái:* 0 bài → empty state hiện có (S10) thay toàn bộ phần dưới hero; lọc/tìm rỗng → "Không có bài viết phù

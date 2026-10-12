@@ -577,8 +577,8 @@
     },
     {
       "slug": "blog-listing-redesign",
-      "status": "in_progress",
-      "changeFile": "spec/changes/2026-10-13-blog-listing-redesign.md",
+      "status": "done",
+      "changeFile": "spec/changes/archive/2026-10-13-blog-listing-redesign.md",
       "classification": "MODIFY + ADDITIVE",
       "specVersion": "3.2.0",
       "specValidation": {
@@ -589,7 +589,7 @@
       "phases": [
         {
           "phase": 1,
-          "status": "in_progress",
+          "status": "done",
           "tasks": [
             {
               "id": "phase-1-task-01",
@@ -613,12 +613,24 @@
             },
             {
               "id": "phase-1-task-03",
-              "status": "pending"
+              "status": "done",
+              "review": {
+                "level": "NORMAL",
+                "verdict": "PASS",
+                "round": 2,
+                "report": ".context/review-reports/feature-blog-listing-redesign-phase-1-task-03-round-2-review.md"
+              }
             }
-          ]
+          ],
+          "specValidation": {
+            "verdict": "PASS",
+            "report": ".context/review-reports/feature-blog-listing-redesign-phase-1-spec-validation.md"
+          }
         }
       ],
-      "updatedAt": "2026-10-13"
+      "updatedAt": "2026-10-13",
+      "completedAt": "2026-10-13",
+      "scopeVersion": 22
     }
   ],
   "bugs": []

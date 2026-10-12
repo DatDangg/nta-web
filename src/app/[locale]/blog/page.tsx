@@ -1,13 +1,11 @@
 import type { Metadata } from 'next';
-import { Suspense } from 'react';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { Link } from '@/i18n/navigation';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { ListingHero } from '@/components/listing/ListingHero';
 import { BlogNewsVisual } from '@/components/blog/BlogNewsVisual';
-import { BlogFilter } from '@/components/blog/BlogFilter';
-import { PostCard } from '@/components/cards/PostCard';
+import { BlogListing } from '@/components/blog/BlogListing';
 import { getAllPosts } from '@/lib/content/posts';
 import type { Locale } from '@/content/types';
 import { JsonLd } from '@/components/seo/JsonLd';
@@ -30,7 +28,6 @@ export default async function BlogPage({ params }: { params: Promise<{ locale: s
   if (locale !== 'vi' && locale !== 'en') notFound();
   setRequestLocale(locale);
   const [t, posts] = await Promise.all([getTranslations('blog'), getAllPosts(locale as Locale)]);
-  const firstPagePosts = posts.slice(0, 9);
   return (
     <>
       <JsonLd data={createBreadcrumbJsonLd([{ name: locale === 'en' ? 'Home' : 'Trang chủ', path: locale === 'en' ? '/en' : '/' }, { name: t('title'), path: `${locale === 'en' ? '/en' : ''}/blog` }])} />
@@ -49,9 +46,7 @@ export default async function BlogPage({ params }: { params: Promise<{ locale: s
             {posts.length === 0 ? (
               <EmptyState message={t('empty')} action={<Link className="mt-4 inline-flex min-h-11 items-center text-primary underline underline-offset-4" href="/">{t('home')}</Link>} />
             ) : (
-              <Suspense fallback={<ul className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">{firstPagePosts.map((post) => <li key={post.slug}><PostCard imageAlt={t('imageAlt', { title: post.title })} post={post} /></li>)}</ul>}>
-                <BlogFilter imageAltTemplate={t('imageAlt', { title: '{title}' })} posts={posts} />
-              </Suspense>
+              <BlogListing posts={posts} />
             )}
           </div>
         </section>

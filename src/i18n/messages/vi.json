@@ -155,7 +155,6 @@
   },
   "blog": {
     "title": "Tin tức",
-    "intro": "Tin tức và chia sẻ từ NTA về giải pháp số, AI và chuyển đổi số.",
     "metadataDescription": "Khám phá tin tức, góc nhìn chuyên môn và chia sẻ thực tế từ NTA về giải pháp số, trí tuệ nhân tạo và chuyển đổi số hữu ích cho các doanh nghiệp Việt Nam.",
     "empty": "Chưa có bài viết nào. Hãy quay lại sau.",
     "home": "Về trang chủ",
@@ -181,7 +180,21 @@
     "heroTitle": "Tin tức & Cập nhật",
     "heroLead": "về",
     "heroAccent": "AI và ứng dụng thực tiễn",
-    "heroDescription": "Những câu chuyện, xu hướng và chia sẻ thực tiễn về AI, công nghệ và cách NTA đồng hành cùng doanh nghiệp trên hành trình chuyển đổi số."
+    "heroDescription": "Những câu chuyện, xu hướng và chia sẻ thực tiễn về AI, công nghệ và cách NTA đồng hành cùng doanh nghiệp trên hành trình chuyển đổi số.",
+    "filterGroupLabel": "Lọc theo danh mục",
+    "searchLabel": "Tìm kiếm bài viết",
+    "searchPlaceholder": "Tìm kiếm bài viết...",
+    "resultCount": "{count, plural, =0 {Không có bài viết phù hợp} other {Có # bài viết}}",
+    "filterEmpty": "Không có bài viết phù hợp.",
+    "clearFilters": "Xóa bộ lọc",
+    "featuredLabel": "Bài viết nổi bật",
+    "highlightEyebrow": "Nổi bật",
+    "highlightTitle": "Cập nhật mới nhất từ NTA",
+    "highlightText": "Những thông tin quan trọng, sự kiện và sản phẩm mới được cập nhật liên tục.",
+    "viewAll": "Xem tất cả bài viết",
+    "latestTitle": "Bài viết mới nhất",
+    "resultsTitle": "Kết quả tìm kiếm",
+    "readMore": "Đọc thêm"
   },
   "contact": {
     "title": "Liên hệ",

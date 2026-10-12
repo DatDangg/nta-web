@@ -155,7 +155,6 @@
   },
   "blog": {
     "title": "Blog",
-    "intro": "News and insights from NTA on digital solutions, AI and digital transformation.",
     "metadataDescription": "Explore NTA news, expert perspectives and practical insights on digital solutions, artificial intelligence and digital transformation for organizations.",
     "empty": "No posts yet. Check back soon.",
     "home": "Go to home",
@@ -181,7 +180,21 @@
     "heroTitle": "News & Updates",
     "heroLead": "on",
     "heroAccent": "AI and real-world applications",
-    "heroDescription": "Stories, trends and practical insights on AI, technology and how NTA supports organizations on their digital transformation journey."
+    "heroDescription": "Stories, trends and practical insights on AI, technology and how NTA supports organizations on their digital transformation journey.",
+    "filterGroupLabel": "Filter by category",
+    "searchLabel": "Search articles",
+    "searchPlaceholder": "Search articles...",
+    "resultCount": "{count, plural, =0 {No matching posts} one {# post} other {# posts}}",
+    "filterEmpty": "No matching posts.",
+    "clearFilters": "Clear filters",
+    "featuredLabel": "Featured posts",
+    "highlightEyebrow": "Featured",
+    "highlightTitle": "The latest from NTA",
+    "highlightText": "Key news, events and new products, updated as they happen.",
+    "viewAll": "View all posts",
+    "latestTitle": "Latest posts",
+    "resultsTitle": "Search results",
+    "readMore": "Read more"
   },
   "contact": {
     "title": "Contact",
