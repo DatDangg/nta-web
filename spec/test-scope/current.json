@@ -1,7 +1,7 @@
 {
   "specVersion": "3.0.0",
-  "scopeVersion": 12,
-  "generatedAt": "2026-10-12T02:30:00+07:00",
+  "scopeVersion": 13,
+  "generatedAt": "2026-10-12T03:15:00+07:00",
   "trigger": "feature-update",
   "workItem": "change-replace-placeholder-images",
   "specRefs": [],
@@ -24,6 +24,13 @@
       "src/app/[locale]/contact/page.tsx",
       "src/components/contact/ContactInfo.tsx",
       "src/components/contact/MapEmbed.tsx",
+      "src/components/cards/cardStyles.ts",
+      "src/components/cards/ProductCard.tsx",
+      "src/components/products/ScreenshotCarousel.tsx",
+      "src/content/products/vi/music-app.mdx",
+      "src/content/products/en/music-app.mdx",
+      "src/content/products/vi/hair-style-ai.mdx",
+      "src/content/products/en/hair-style-ai.mdx",
       "src/components/layout/Footer.tsx",
       "src/i18n/messages/vi.json",
       "src/i18n/messages/en.json",
@@ -42,6 +49,10 @@
       "public/images/about/team-ai.svg",
       "public/images/about/team-domain.svg",
       "public/images/about/team-placeholder.svg",
+      "public/images/products/hair-style-ai.jpg",
+      "public/images/products/ai-music-app.png",
+      "public/images/products/music-app-preview.svg",
+      "public/images/products/hair-style-ai-preview.svg",
       "scripts/screenshots/capture.mjs",
       "scripts/screenshots/serve.mjs",
       "scripts/screenshots/shots.mjs",
@@ -60,6 +71,8 @@
       "src/content/solutions (cardImage 3 solution AI)",
       "src/content/case-studies (gallery dental + Óc Eo)",
       "src/content/about (ảnh đội ngũ)",
+      "src/components/cards/cardStyles + ProductCard + src/components/products/ScreenshotCarousel (khung poster 9/16)",
+      "src/content/products (screenshots 2 app)",
       "src/app/[locale]/contact + src/components/contact + layout/Footer (REMOVE map/placeholder)",
       "src/i18n/messages (heroImageAlt, bỏ contact.placeholders)"
     ]
@@ -69,17 +82,18 @@
       "Hero trang chủ (VI+EN) dùng collage enterprise v2, không cắt 2 bên.",
       "/solutions/ai (VI+EN): 3 thẻ boxai/flycam/talvra dùng cardImage thật (shot) + alt 'Giao diện minh hoạ — '/'Illustrative interface — '.",
       "/blog (VI+EN): 4 ảnh bìa SVG mới cùng bộ; /about: 2 ảnh đội ngũ SVG thay placeholder; case-study dental = 3 ảnh DentGo, Óc Eo = 3 SVG.",
-      "/contact (VI+EN): bỏ ô bản đồ Google Map + dòng '(placeholder)'; footer bỏ dòng placeholder."
+      "/contact (VI+EN): bỏ ô bản đồ Google Map + dòng '(placeholder)'; footer bỏ dòng placeholder.",
+      "/products (VI+EN) + 2 thẻ sản phẩm trang chủ: dùng ảnh thật (poster dọc) trong khung 9/16 — không cắt chữ; alt prefix 'Giao diện minh hoạ — '/'Illustrative interface — '."
     ],
     "dependents": [
       "SolutionCard + cardStyles: tiêu thụ cardImage {src,alt,ratio} (không đổi hành vi — đã có từ trước).",
       "4 trang enterprise giữ cardImage/ảnh v2 (không đổi).",
-      "Trang /products + 2 thẻ sản phẩm CHƯA đổi (T04 blocked — chờ ảnh user)."
+      "Trang /products + 2 thẻ sản phẩm: dùng ảnh user, khung poster 9/16 (thay 16/10 theo user chốt)."
     ],
     "regression": [
       "Ảnh solutions.image (OG) KHÔNG đổi — vẫn SVG placeholder (theo spec).",
       "grep src = 0 ref: solutions/{enterprise,ai,apps}.svg, cases/*-overview.svg, about/team-placeholder.svg.",
-      "build SSG toàn bộ route biên dịch PASS; SVG mới (trừ asset products cũ ngoài scope) không chứa <text>."
+      "build SSG toàn bộ route biên dịch PASS; SVG mới không chứa <text>; 2 SVG preview products đã xoá."
     ]
   },
   "acceptance": [
@@ -89,7 +103,7 @@
     "Gallery dental + Óc Eo = 3 ảnh/trang, alt riêng VI/EN; không còn ref placeholder cũ; team-placeholder.svg đã xoá.",
     "/contact không còn iframe bản đồ, không còn chữ '(placeholder)' (VI+EN).",
     "npm run lint / typecheck / build PASS (test_command: null → skip, no test configured).",
-    "T04 /products: BLOCKED — chờ user copy public/images/products/{ai-music-app,hair-style-ai}.jpg."
+    "T04 /products: 2 thẻ home + 2 app trong ScreenshotCarousel dùng ảnh user (941×1672/1671), khung 9/16 khớp tỉ lệ ⇒ không crop, không mất chữ; alt prefix đúng VI/EN; không còn ref SVG preview cũ."
   ],
   "risk": "medium"
 }

@@ -3,8 +3,8 @@
 **spec_version:** 3.0.0 → 3.0.0 (**KHÔNG bump — không đổi requirement/behavior contract**)
 **Trigger:** feature-update (change-request, class MODIFY render + REMOVE)
 **Change:** `spec/changes/2026-10-12-replace-remaining-placeholder-images.md` (risk MEDIUM)
-**Tasks:** T01 assets · T02 wiring · T03 /contact remove — done, review PASS (T01 NORMAL, T02 STRICT, T03 NORMAL)
-**Chưa làm:** T04 `/products` + 2 thẻ sản phẩm — **BLOCKED** (chờ user copy ảnh vào `public/images/products/`)
+**Tasks:** T01 assets · T02 wiring · T03 /contact remove · T04 /products — **done hết**, review PASS (T01 NORMAL, T02 STRICT, T03 NORMAL, T04 NORMAL)
+**Change file:** đã archive → `spec/changes/archive/2026-10-12-replace-remaining-placeholder-images.md`
 
 ## Requirements
 
@@ -37,7 +37,15 @@
 - Bỏ `MapEmbed` (iframe Google Map cả nước) + 2 dòng/g/key "(placeholder)" (footer + `contact.placeholders`).
 - `docs/DESIGN.md`: reconcile screen "Liên hệ" (bỏ MapEmbed, layout form).
 
-## Test scope (v12)
+### T04 — `/products` + 2 thẻ sản phẩm (ảnh user cung cấp)
+- Ảnh user: `public/images/products/hair-style-ai.jpg` (941×1672) + `ai-music-app.png` (941×1671) — **poster dọc 9:16**.
+- **⚠ Thay spec gốc (user chốt):** spec muốn khung 16/10 cắt đáy; poster có chữ ở đáy nên cắt sẽ **mất chữ**
+  (vi phạm acceptance). User chọn **khung theo tỉ lệ poster 9/16**.
+- Thêm `cardPosterImageClass` (`aspect-[9/16]`); `ProductCard` (home) + `ScreenshotCarousel` (`/products`) dùng khung mới;
+  `cardImageClass` (16/10 dùng chung) **không sửa**. `home.ts` 2 thẻ (vi+en) + 4 `.mdx` `screenshots`;
+  i18n `products.screenshotAlt` → prefix "Giao diện minh hoạ — "/"Illustrative interface — "; xoá 2 SVG preview cũ.
+
+## Test scope (v13)
 
 - **Trang bị đổi ảnh:** `/` (+`/en`), `/solutions/ai` (+detail AI), `/case-studies` (+dental + oc-eo-learning),
   `/blog`, `/about`, `/contact` — VI + EN.
@@ -48,7 +56,7 @@
 
 ## Phân tích
 
-- **Blocked:** T04 cần ảnh user cung cấp (`public/images/products/ai-music-app.jpg`, `hair-style-ai.jpg`) — chưa có trong repo.
+- **Không còn blocker.** T04 dùng ảnh user (`hair-style-ai.jpg`, `ai-music-app.png`) — khung 9/16 theo user chốt (thay spec 16/10) để giữ chữ.
 - Dead asset placeholder cũ (`solutions/{ai,apps,enterprise}.svg`, `cases/*-overview.svg`) còn ship nhưng **không còn reference**;
   dọn ở task riêng (MINOR).
-- Residual: chưa verify bằng mắt (no browser viewport emulation); ratio ảnh đo bằng System.Drawing (boxai 1.954, flycam/talvra 1.396).
+- Residual: chưa verify bằng mắt (no browser viewport emulation); ratio ảnh đo bằng System.Drawing (boxai 1.954, flycam/talvra 1.396; poster 941/1672≈9/16).
