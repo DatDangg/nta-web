@@ -6,7 +6,7 @@ import type { CaseStudyShowcase } from '@/content/types';
 import { Container } from '@/components/ui/Container';
 import { Eyebrow } from './icons';
 
-type Props = { photos: CaseStudyShowcase['photos'] };
+type Props = { photos: NonNullable<CaseStudyShowcase['photos']> };
 
 const ARROW_CLASS = 'flex size-11 items-center justify-center rounded-full border border-border bg-white text-text-primary shadow-sm transition-colors hover:border-primary hover:text-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-focus';
 

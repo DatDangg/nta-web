@@ -13,7 +13,10 @@ import { ShowcaseVision } from './ShowcaseVision';
 
 type Props = { showcase: CaseStudyShowcase; breadcrumbs: BreadcrumbItem[]; tiles?: GlassTile[] };
 
-/** Bố cục `layout: showcase` cho trang chi tiết case study (ảnh mẫu Óc Eo – Ba Thê). */
+/**
+ * Khung chi tiết dùng chung (R-08c). Thứ tự block cố định; block thiếu data → ẩn.
+ * Case study và trang giải pháp/sản phẩm dùng chung khung này, chỉ khác data trong frontmatter.
+ */
 export function ShowcaseLayout({ showcase, breadcrumbs, tiles }: Props) {
   return (
     <>
@@ -24,11 +27,13 @@ export function ShowcaseLayout({ showcase, breadcrumbs, tiles }: Props) {
           <p className="-mt-4 mb-6 text-xs leading-relaxed text-text-secondary md:-mt-6">{showcase.note}</p>
         </Container>
       )}
-      <div className="bg-gradient-to-b from-white via-[#f6fbfa] to-white">
-        <ShowcaseTechnology technology={showcase.technology} tiles={showcase.photos.items} />
-      </div>
-      <ShowcasePhotos photos={showcase.photos} />
-      <ShowcaseVision vision={showcase.vision} />
+      {showcase.technology && (
+        <div className="bg-gradient-to-b from-white via-[#f6fbfa] to-white">
+          <ShowcaseTechnology technology={showcase.technology} tiles={showcase.photos?.items ?? []} />
+        </div>
+      )}
+      {showcase.photos && showcase.photos.items.length > 0 && <ShowcasePhotos photos={showcase.photos} />}
+      {showcase.vision && <ShowcaseVision vision={showcase.vision} />}
       {showcase.features && <ShowcaseFeatures features={showcase.features} />}
       {showcase.faq && <ShowcaseFaq faq={showcase.faq} />}
       <ShowcaseCTA cta={showcase.cta} />

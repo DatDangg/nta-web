@@ -21,13 +21,16 @@ const defaultTiles: GlassTile[] = [
  */
 export function ShowcaseHero({ hero, breadcrumbs, tiles = defaultTiles }: Props) {
   const isAnchor = hero.primaryCta.href.startsWith('#');
+  const isExternal = /^https?:\/\//i.test(hero.primaryCta.href);
+  const externalProps = isExternal ? { rel: 'noopener noreferrer', target: '_blank' } : {};
   const primaryClass = `${buttonStyles('primary', 'lg')} w-full gap-2 shadow-[0_10px_24px_-6px_rgb(0_158_135/0.55)] sm:w-auto`;
   return (
     <DetailHero
+      caption={hero.image.caption}
       actions={(
         <>
-          {isAnchor ? (
-            <a className={primaryClass} href={hero.primaryCta.href}>
+          {isAnchor || isExternal ? (
+            <a className={primaryClass} href={hero.primaryCta.href} {...externalProps}>
               {hero.primaryCta.label}
               <ArrowRight />
             </a>

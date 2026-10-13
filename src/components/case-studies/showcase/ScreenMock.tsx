@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import type { CaseStudyShowcase } from '@/content/types';
 
-type Props = { screen: NonNullable<CaseStudyShowcase['technology']['screen']> };
+type Props = { screen: NonNullable<NonNullable<CaseStudyShowcase['technology']>['screen']> };
 
 /**
  * Màn hình (cùng khung với VmsMock) chứa ảnh chụp giao diện phần mềm thật (vd DentGo) — dùng thay VmsMock khi

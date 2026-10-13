@@ -684,6 +684,17 @@
                 "round": 2,
                 "note": "vòng 1 FAIL (thiếu so sánh HTML + minor) → vòng 2 PASS sau khi có bằng chứng HTML build HEAD vs hiện tại"
               }
+            },
+            {
+              "id": "phase-1-task-02",
+              "status": "done",
+              "scope": "layer 1 — data showcase cho 7 trang giải pháp (vi+en); types optional; hero external CTA + caption",
+              "review": {
+                "level": "NORMAL",
+                "verdict": "PASS",
+                "round": 3,
+                "note": "v1 FAIL (đếm HRM, bằng chứng HTML, caption) → v2 FAIL (đếm HRM) → sửa HRM 3 mục → v3 PASS có điều kiện cho layer 2 (kiểm HTML HRM có 'Giao diện minh hoạ' và 3 features)"
+              }
             }
           ]
         }

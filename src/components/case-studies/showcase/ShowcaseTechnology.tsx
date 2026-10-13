@@ -7,7 +7,7 @@ import { ArrowRight, Eyebrow } from './icons';
 import { ScreenMock } from './ScreenMock';
 import { VmsMock } from './VmsMock';
 
-type Props = { technology: CaseStudyShowcase['technology']; tiles: { src: string; alt: string }[] };
+type Props = { technology: NonNullable<CaseStudyShowcase['technology']>; tiles: { src: string; alt: string }[] };
 
 const NODE_ICONS: Record<ShowcaseNodeIcon, ReactNode> = {
   // Camera cố định

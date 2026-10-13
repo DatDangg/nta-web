@@ -93,6 +93,8 @@ export interface Solution {
    * ảnh HRM là mock vẽ tay nên phải nói rõ). Thiếu → không caption.
    */
   imageCaption?: string;
+  /** Khung chi tiết dùng chung (R-08c) — trang giải pháp opt-in; thiếu → trang giữ layout cũ. */
+  showcase?: CaseStudyShowcase;
   /**
    * Ảnh chụp màn hình còn lại (chưa gắn vào hero/features). Hỗ trợ `string` (alt chung
    * `imageAlt`) hoặc `{src, alt}` (alt riêng theo bảng §7).
@@ -175,14 +177,14 @@ export interface CaseStudyShowcase {
     subtitle: string;
     description: string;
     /** `width`/`height` = kích thước gốc của ảnh (thiếu → 1590×989 như ảnh Óc Eo). */
-    image: { src: string; alt: string; width?: number; height?: number };
+    image: { src: string; alt: string; width?: number; height?: number; /** Chú thích dưới ảnh — bắt buộc khi ảnh là minh hoạ (BR-004). */ caption?: string };
     primaryCta: { label: string; href: string };
     /** Chỉ render nút "Xem video" khi có URL thật — không để nút chết. */
     video?: { label: string; href: string };
   };
   stats: { icon: ShowcaseIcon; value: string; label: string }[];
   pillars: { icon: ShowcaseIcon; title: string; items: string[] }[];
-  technology: {
+  technology?: {
     id?: string;
     eyebrow: string;
     title: string;
@@ -195,7 +197,7 @@ export interface CaseStudyShowcase {
     screen?: { src: string; alt: string; width: number; height: number };
     caption: string;
   };
-  photos: {
+  photos?: {
     eyebrow: string;
     title: string;
     prevLabel: string;
@@ -207,7 +209,7 @@ export interface CaseStudyShowcase {
     items: { src: string; alt: string }[];
   };
   /** `quote` optional (R-08c): thiếu trích dẫn thật → ẩn thẻ trích dẫn (BR-004). */
-  vision: { eyebrow: string; title: string; description: string; quote?: string; quoteSource?: string; image?: { src: string; alt: string } };
+  vision?: { eyebrow: string; title: string; description: string; quote?: string; quoteSource?: string; image?: { src: string; alt: string } };
   /** Dòng lưu ý dưới thẻ số liệu — nói rõ phương án đề xuất, chưa phải kết quả triển khai (BR-004). */
   note?: string;
   /** Lưới tính năng (R-08c) — optional; thiếu → ẩn block. */

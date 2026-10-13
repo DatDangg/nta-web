@@ -3,7 +3,7 @@ import { Container } from '@/components/ui/Container';
 import type { CaseStudyShowcase } from '@/content/types';
 import { Eyebrow } from './icons';
 
-type Props = { vision: CaseStudyShowcase['vision'] };
+type Props = { vision: NonNullable<CaseStudyShowcase['vision']> };
 
 /**
  * "Hướng tới tương lai": chữ trái, thẻ trích dẫn phải, ảnh di tích mờ dần làm nền góc phải.
