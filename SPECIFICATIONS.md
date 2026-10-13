@@ -1,6 +1,6 @@
 ---
-spec_version: 3.10.0
-updated_at: 2026-10-13
+spec_version: 3.11.0
+updated_at: 2026-10-14
 ---
 
 # SPECIFICATIONS.md — NTA Website
@@ -58,8 +58,24 @@ _(cập nhật 2026-10-13: thêm **domain phụ** `ntasolution.vn` (+ `www`) ph�
   `[cần xác nhận]` dưới SSG (không fetch) liệu có cần Loading/Error state — chốt khi implement.
 - **R-02:** Khối 3 mảng giải pháp (Doanh nghiệp / AI / App AI) — 3 card, điều hướng đúng trang, có hover state.
   `[reverse-engineered from docs]` — nguồn: `docs/BRD.md:69-71` (FR-002)
+- **R-02a (3.11.0 — khối Giải pháp trang chủ theo mockup CR-016):** header section dùng chung — eyebrow (`SOLUTIONS ——`) +
+  tiêu đề 2 dòng (dòng 2 màu brand) + mô tả bên phải; 3 thẻ ngang (Giải pháp doanh nghiệp · Giải pháp AI · Ứng dụng AI): icon
+  vuông bo góc, tiêu đề, mô tả, 3 gạch đầu dòng có icon, link "Tìm hiểu … →" ở đáy trỏ `/solutions/enterprise`, `/solutions/ai`,
+  `/products` (EN có tiền tố `/en`); ảnh minh hoạ bên phải thẻ fade vào nền. Chữ VI/EN từ i18n/content, không hardcode;
+  mobile 1 cột, không tràn ngang. Giữ ràng buộc R-02 (3 card, điều hướng đúng trang, hover state).
 - **R-03:** Khối sản phẩm tiêu biểu (≥ 2 sản phẩm tiêu biểu) + CTA cuối trang nổi bật; hiện có 2 app thật theo R-07, section ẩn khi không có sản phẩm.
   `[reverse-engineered from docs]` — nguồn: `docs/BRD.md:73-75` (FR-003)
+- **R-03a (3.11.0 — khối Sản phẩm tiêu biểu theo mockup CR-016):** header eyebrow (`PRODUCTS ——`) + tiêu đề "Sản phẩm **tiêu biểu**"
+  + mô tả + 2 nút ←/→ (carousel ngang: mỗi lần cuộn đúng 1 thẻ; phím ←/→ khi dải thẻ đang focus; vuốt trên mobile). Card dọc dài:
+  poster lớn phía trên, panel trắng phía dưới gồm icon app, tên + mô tả 1 dòng, nút tròn mũi tên màu theo app, hàng chip tính năng
+  màu nhạt theo app; thẻ → `/products/<slug>`. Nút ←/→ có `aria-label`, **disabled khi không cuộn được** theo hướng đó (đã ở mép,
+  sai số 8px; hiện chỉ 2 sản phẩm nên ở desktop có thể cả 2 nút disabled). Giữ ràng buộc R-03 (section ẩn khi không có sản phẩm).
+- **R-03b (3.11.0 — khối Câu chuyện khách hàng theo mockup CR-016):** eyebrow (`CASE STUDY ——`) + tiêu đề "Câu chuyện **khách hàng**"
+  + mô tả 2 dòng; bên phải 2 nút ←/→ (cùng hành vi R-03a) + nút viền "Xem tất cả case study →" → `/case-studies`. Hàng **tối đa 3 thẻ**
+  lấy từ dữ liệu case study theo locale, **cùng thứ tự với `/case-studies`** (năm giảm dần, rồi slug — comparator dùng chung
+  `compareCaseStudies`): ảnh `cover` (fallback ảnh gallery), chip ngành `sector` + icon, tiêu đề, mô tả clamp 2 dòng,
+  "Xem chi tiết →" + nút tròn mũi tên; mỗi thẻ → `/case-studies/<slug>`. Không có case study → section ẩn. Thay khối 1 `featuredCase`
+  cũ (bỏ field `featuredCase` trong `src/content/home.ts`). Song ngữ VI/EN; mobile carousel vuốt, không tràn ngang; alt ảnh + focus visible.
 
 ### Module 2 — Về NTA `/about`
 

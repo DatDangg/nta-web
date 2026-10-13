@@ -1,7 +1,8 @@
 ---
 id: home-sections-redesign
 type: feature
-status: in_progress
+status: done
+closed: 2026-10-14
 created: 2026-10-14
 ---
 
@@ -9,7 +10,7 @@ created: 2026-10-14
 
 ## Yêu cầu
 Sửa UI trang chủ (`src/app/[locale]/page.tsx`) cho 3 section theo 3 ảnh mẫu trong
-`spec/changes/assets/2026-10-14-home-sections-redesign/`:
+`spec/changes/archive/assets/2026-10-14-home-sections-redesign/`:
 
 1. **Giải pháp** (`SolutionGridHome`) — theo ảnh `2.webp` (nửa trên):
    - Eyebrow `SOLUTIONS ——`, tiêu đề 2 dòng "Giải pháp phù hợp với / **nhu cầu của bạn**" (dòng 2 màu teal),

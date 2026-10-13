@@ -1,36 +1,58 @@
 {
-  "specVersion": "3.10.0",
-  "scopeVersion": 38,
-  "generatedAt": "2026-10-14T00:30:00+07:00",
-  "trigger": "bug-fix",
-  "workItem": "feature-about-hero-polish",
+  "specVersion": "3.11.0",
+  "scopeVersion": 39,
+  "generatedAt": "2026-10-14T12:00:00+07:00",
+  "trigger": "feature-update",
+  "workItem": "feature-home-sections-redesign",
   "specRefs": [
-    "R-04a"
+    "R-02a",
+    "R-03a",
+    "R-03b",
+    "R-02",
+    "R-03",
+    "R-08"
   ],
   "changed": {
     "files": [
-      "src/components/about/AboutHero.tsx (fix HeroWaves h-[720px] → h-full + overflow-hidden; ảnh Kim Hoàn bỏ bo góc/shadow, viền fade mask-image, desktop bleed mép phải)"
+      "src/components/home/HomeSectionHeader.tsx (mới — header section dùng chung: eyebrow + tiêu đề 2 dòng + mô tả + slot nút)",
+      "src/components/home/SolutionGridHome.tsx (3 thẻ giải pháp ngang theo mockup)",
+      "src/components/home/ProductStrip.tsx + HomeProductCard.tsx (mới) — card dọc dài + carousel ←/→",
+      "src/components/home/CaseStudyHighlight.tsx + CaseStudyCarousel.tsx + HomeCaseStudyCard.tsx (mới) — tối đa 3 thẻ case study",
+      "src/components/home/HomeScrollArrows.tsx + useScrollButtons.ts (mới) — nút ←/→, disable theo mép (sai số 8px), phím ←/→",
+      "src/lib/content/case-studies.ts (+compareCaseStudies: năm giảm dần, rồi slug)",
+      "src/app/[locale]/case-studies/page.tsx (dùng compareCaseStudies chung)",
+      "src/app/[locale]/page.tsx, src/content/home.ts (bỏ featuredCase), src/i18n/messages/{vi,en}.json"
     ],
     "modules": [
-      "Module 2 — Về NTA /about"
+      "Module 1 — Trang chủ /",
+      "Case study /case-studies (comparator thứ tự dùng chung)"
     ]
   },
   "impact": {
     "direct": [
-      "/about và /en/about: 3 thẻ Sứ mệnh · Tầm nhìn · Giá trị cốt lõi hiện đủ viền trên + bo góc (trước bị lớp nền hero đè) ở 375/768/1280px",
-      "Không còn khoảng trắng thừa lớn dưới hàng chỉ số 50+/30+/99% của hero",
-      "Ảnh tòa Kim Hoàn: không bo góc/không bóng; viền mờ tan vào nền (desktop: chạm mép phải viewport, mép trái + dưới fade; mobile: gọn trong container, fade nhẹ 4 cạnh)",
-      "Mobile 375px: không tràn ngang (scrollWidth == clientWidth)"
+      "/ và /en — khối Giải pháp: eyebrow SOLUTIONS, tiêu đề 2 dòng (dòng 2 màu teal), mô tả bên phải; 3 thẻ (DN · AI · Ứng dụng AI) mỗi thẻ có icon, tiêu đề, mô tả, 3 bullet có icon, ảnh minh hoạ fade; link 'Tìm hiểu …' → /solutions/enterprise, /solutions/ai, /products (EN: /en/...)",
+      "/ và /en — khối Sản phẩm tiêu biểu: eyebrow PRODUCTS + tiêu đề + mô tả + 2 nút ←/→ có aria-label; card dọc (poster trên, panel trắng: icon app, tên + mô tả 1 dòng, nút tròn màu theo app, chip tính năng) link /products/<slug>",
+      "Carousel sản phẩm: nút ← disabled ở đầu, → disabled ở cuối (sai số 8px — scrollLeft ≤ 8 vẫn coi là đầu); bấm nút cuộn đúng 1 thẻ; phím ←/→ khi dải thẻ focus; với 2 sản phẩm ở desktop cả 2 nút có thể disabled; mobile vuốt được",
+      "/ và /en — khối Câu chuyện khách hàng: eyebrow CASE STUDY + tiêu đề + mô tả; tối đa 3 thẻ (ảnh, chip ngành + icon, tiêu đề, mô tả clamp 2 dòng, 'Xem chi tiết →'); thứ tự 3 thẻ trùng 3 thẻ đầu của /case-studies (năm giảm dần, rồi slug); mỗi thẻ link /case-studies/<slug> đúng; nút viền 'Xem tất cả case study →' → /case-studies; nút ←/→ cùng hành vi carousel",
+      "Responsive 375/768/1280px: không tràn ngang (scrollWidth == clientWidth); Giải pháp 1 cột ở mobile; carousel vuốt; focus ring hiện rõ; alt ảnh VI/EN",
+      "VI/EN đều có chữ thật, không còn key i18n thô; không còn khối featuredCase cũ"
     ],
     "dependents": [
-      "ListingHero (/solutions, /products, /case-studies, /blog) và DetailHero dùng chung HeroWaves — HeroWaves không đổi, hero các trang này phải giữ nguyên"
+      "/case-studies và /en/case-studies: thứ tự danh sách vẫn năm giảm dần rồi slug (nay qua compareCaseStudies chung) — không đổi so với trước",
+      "Component dùng chung SolutionCard / ProductCard / CaseStudyCard / ListingCard KHÔNG sửa — /solutions, /products, /case-studies giữ giao diện thẻ cũ"
+    ],
+    "regression": [
+      "Hero trang chủ (R-01) và CTA cuối trang (R-03) giữ nguyên",
+      "Trang chi tiết /products/<slug>, /case-studies/<slug> mở đúng từ thẻ trang chủ"
     ]
   },
   "acceptance": [
-    "Thẻ Sứ mệnh/Tầm nhìn/Giá trị cốt lõi đủ viền ở 375/768/1280px; không có khoảng trắng thừa dưới hero",
-    "Ảnh tòa nhà viền mờ tan vào nền như mockup ở desktop; mobile gọn, không tràn ngang",
-    "ListingHero/DetailHero không đổi",
+    "3 khối trang chủ khớp bố cục mockup CR-016, VI + EN đều có chữ",
+    "Nút ←/→ sản phẩm cuộn 1 thẻ và disabled đúng theo mép (ngưỡng 8px)",
+    "Case study tối đa 3 thẻ, đúng thứ tự như /case-studies, link chi tiết + 'Xem tất cả' đúng",
+    "Link 'Tìm hiểu …' của 3 thẻ giải pháp đúng route",
+    "375/768/1280px không tràn ngang; a11y: alt ảnh, aria-label nút, focus visible",
     "typecheck/lint/build PASS"
   ],
-  "risk": "low"
+  "risk": "medium"
 }
