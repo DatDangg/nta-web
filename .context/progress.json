@@ -2,12 +2,12 @@
   "mode": "feature",
   "activeWorkItem": {
     "type": "feature",
-    "slug": "home-solution-card-image",
+    "slug": "home-solution-card-photo",
     "phaseTask": "phase-1-task-01",
     "step": "close-out",
     "status": "done",
-    "journal": ".context/runs/feature-home-solution-card-image-phase-1.md",
-    "note": "CR-017 done — review PASS, spec 3.11.0 không bump · scope v40"
+    "journal": ".context/runs/feature-home-solution-card-photo-phase-1.md",
+    "note": "CR-018 done — review round 2 PASS, spec 3.11.0 không bump · scope v41"
   },
   "features": [
     {
@@ -1047,6 +1047,21 @@
       "reviewer": {
         "result": "PASS",
         "report": ".context/review-reports/feature-home-solution-card-image-phase-1-task-01-round-1-review.md"
+      }
+    },
+    {
+      "slug": "home-solution-card-photo",
+      "status": "done",
+      "changeFile": "spec/changes/archive/2026-10-14-home-solution-card-photo.md",
+      "classification": "MODIFY (UI)",
+      "tasks": {
+        "phase-1-task-01": "done"
+      },
+      "note": "CR-018 — thẻ Giải pháp trang chủ rộng hơn (container 1400 riêng) + 3 ảnh thật; khung 3:2 phải-dưới md/xl, dải ảnh mobile/lg; spec 3.11.0 không bump · scope v41",
+      "updatedAt": "2026-10-14",
+      "reviewer": {
+        "result": "PASS",
+        "report": ".context/review-reports/feature-home-solution-card-photo-phase-1-task-01-round-2-review.md"
       }
     }
   ],

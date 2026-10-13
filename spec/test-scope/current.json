@@ -1,16 +1,20 @@
 {
   "specVersion": "3.11.0",
-  "scopeVersion": 40,
-  "generatedAt": "2026-10-14T18:00:00+07:00",
+  "scopeVersion": 41,
+  "generatedAt": "2026-10-14T02:10:00+07:00",
   "trigger": "feature-update",
-  "workItem": "feature-home-solution-card-image",
+  "workItem": "feature-home-solution-card-photo",
   "specRefs": [
     "R-02a",
     "R-02"
   ],
   "changed": {
     "files": [
-      "src/components/home/SolutionGridHome.tsx (thẻ Giải pháp trang chủ: ảnh absolute nửa phải 60% full chiều cao, next/image fill object-cover object-[40%_50%]; mask chỉ fade sang trái; bỏ opacity-30; lớp nền trắng gradient sau cột chữ; cột chữ md/xl max-w 56%; min-h 18rem)"
+      "src/components/home/SolutionGridHome.tsx (container riêng max-w-[1400px] chỉ cho khối Giải pháp; 1 khung ảnh aspect-[3/2]: md/xl absolute neo phải-dưới (md 55%, xl 80%), mobile/lg dải ảnh dưới link; mask photoFade fade trái ∩ fade trên; bỏ 2 lớp nền surface; cột chữ md/xl max-w 56%; h3 xl:whitespace-nowrap; md:min-h-[16rem]; sizes mới)",
+      "src/content/home.ts (chỉ image + alt của 3 thẻ solutions VI + EN: ảnh *-photo.webp, alt mô tả nội dung, không tiền tố 'Minh hoạ'/'Illustration')",
+      "public/images/illustrations/home-enterprise-photo.webp (mới, 1536×1024)",
+      "public/images/illustrations/home-ai-photo.webp (mới, 1536×1024)",
+      "public/images/illustrations/home-apps-photo.webp (mới, 1536×1024)"
     ],
     "modules": [
       "Module 1 — Trang chủ / (khối Giải pháp)"
@@ -18,26 +22,31 @@
   },
   "impact": {
     "direct": [
-      "/ và /en — khối Giải pháp, cả 3 thẻ (DN · AI · Ứng dụng AI): ảnh minh hoạ phủ full chiều cao thẻ ở nửa phải (~60% bề rộng), tràn sát mép phải/trên/dưới, bo theo góc thẻ",
-      "Mép trái ảnh fade mượt vào nền trắng thẻ (không thấy viền ảnh); không còn fade từ trên xuống; ảnh không bị mờ opacity-30 ở desktop (lg/xl) và mobile",
-      "Chữ (tiêu đề, mô tả, 3 bullet, link 'Tìm hiểu …') nằm trên nền trắng bên trái, đọc rõ ở 1280 và 1440px, bullet không đè lên phần ảnh đậm",
-      "Mobile 375px và tablet 768px: ảnh vẫn hiện rõ bên phải mờ trái, chữ đọc được, không tràn ngang (scrollWidth == clientWidth)",
-      "1024px (lg, 3 cột hẹp): ảnh vẫn thấy ở phần phải thẻ, chữ đọc được"
+      "/ và /en, khối Giải pháp: container riêng rộng tối đa 1400px (rộng hơn 1280 của các khối khác); ở 1440 mỗi thẻ khoảng 429px, tiêu đề 3 thẻ 1 dòng ở 1280/1440 VI + EN",
+      "Ảnh 3 thẻ dạng ảnh thật: DN = laptop + dashboard + chậu cây; AI = chip AI phát sáng + màn hình camera giao thông; Ứng dụng AI = 2 điện thoại app giám sát camera",
+      "md (768–1023) và xl (≥1280): ảnh tỉ lệ 3:2 neo góc phải-dưới thẻ, fade sang trái + mép trên, nằm ngoài cột chữ bên trái",
+      "Mobile (<768) và lg (1024–1279): ảnh là dải ở đáy thẻ, dưới link 'Tìm hiểu …', tràn sát mép thẻ, không nằm dưới chữ",
+      "Chữ (tiêu đề, mô tả, 3 bullet, link) không đè ảnh ở 375/768/1024/1440, VI + EN",
+      "Ảnh load được (naturalWidth > 0), không tràn ngang (scrollWidth <= clientWidth) ở mọi mốc",
+      "Alt VI/EN mô tả nội dung ảnh, không có tiền tố 'Minh hoạ'/'Illustration'; không caption"
     ],
     "dependents": [
-      "Không có — SolutionGridHome chỉ dùng ở trang chủ; SolutionCard / HomeImage dùng chung không sửa (/solutions giữ giao diện thẻ cũ)"
+      "Không có: SolutionGridHome/SolutionHomeCard chỉ dùng ở trang chủ; HomeSectionHeader, HomeImage, SolutionCard, token max-w-container (tailwind.config.ts) không sửa"
     ],
     "regression": [
+      "Các khối khác của trang chủ (Hero, Sản phẩm tiêu biểu, Câu chuyện khách hàng, CTA) vẫn dùng container 1280 như cũ, giao diện không đổi",
+      "Các trang khác dùng max-w-container (/solutions, /products, /about, /blog, /case-studies, /contact …) không đổi bề rộng",
       "Link 3 thẻ Giải pháp đúng route: /solutions/enterprise, /solutions/ai, /products (EN: /en/solutions/enterprise, /en/solutions/ai, /en/products)",
-      "Header khối Giải pháp (eyebrow SOLUTIONS, tiêu đề 2 dòng, mô tả) và nội dung bullet giữ như CR-016; VI/EN có chữ thật, không key i18n thô",
-      "Các khối khác trang chủ (Hero, Sản phẩm tiêu biểu, Câu chuyện khách hàng, CTA) không đổi",
-      "Ảnh có alt VI/EN; focus ring link thẻ hiện rõ"
+      "Header khối Giải pháp (eyebrow SOLUTIONS, tiêu đề 2 dòng, mô tả) và nội dung bullet giữ như CR-016; VI/EN có chữ thật, không có key i18n thô",
+      "Focus ring link thẻ hiện rõ; hover state thẻ giữ nguyên (R-02)"
     ]
   },
   "acceptance": [
-    "3 thẻ: ảnh full chiều cao nửa phải, fade sang trái, không fade trên, không opacity-30",
-    "Chữ đọc rõ ở 1280/1440px (cột chữ trái nền trắng)",
-    "375/768px: ảnh hiện + chữ đọc được + không tràn ngang",
+    "Thẻ rộng hơn CR-017 ở desktop nhờ container 1400px chỉ cho khối Giải pháp; tiêu đề 'Giải pháp doanh nghiệp' / 'Enterprise Solutions' 1 dòng ở 1440",
+    "Ảnh bên phải: góc phải-dưới ở md/xl; dải dưới link ở mobile/lg; ảnh fade vào nền thẻ",
+    "Chữ không đè ảnh ở 375/768/1024/1440, VI + EN",
+    "Ảnh naturalWidth > 0; overflow ngang = 0",
+    "Alt mô tả nội dung ảnh, không có tiền tố 'Minh hoạ'",
     "Link 3 thẻ đúng route VI/EN",
     "typecheck/lint/build PASS"
   ],

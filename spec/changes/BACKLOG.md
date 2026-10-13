@@ -25,6 +25,7 @@
 | CR-015 | /about: ảnh tòa Kim Hoàn mờ viền tan vào nền như mẫu + fix thẻ Sứ mệnh/Tầm nhìn bị che đầu | MODIFY (UI) + BUG | done (spec 3.10.0 không bump · scope v38) | `archive/2026-10-13-about-hero-polish.md` | 2026-10-13 | 2026-10-14 |
 | CR-016 | Trang chủ: thiết kế lại 3 khối Giải pháp · Sản phẩm (card dọc dài kiểu ảnh 1) · Câu chuyện khách hàng theo mockup | MODIFY (UI) + ADDITIVE | done | `archive/2026-10-14-home-sections-redesign.md` | 2026-10-14 | 2026-10-14 |
 | CR-017 | Trang chủ khối Giải pháp: ảnh minh hoạ to chiếm nửa phải thẻ, mờ dần sang trái như mẫu (follow-up CR-016) | MODIFY (UI) | done (spec 3.11.0 không bump · scope v40) | `archive/2026-10-14-home-solution-card-image.md` | 2026-10-14 | 2026-10-14 |
+| CR-018 | Trang chủ khối Giải pháp: thẻ rộng hơn + ảnh bên phải dạng ảnh thật (laptop / chip AI / điện thoại) như mẫu (follow-up CR-017) | MODIFY (UI) | done (spec 3.11.0 không bump · scope v41) | `archive/2026-10-14-home-solution-card-photo.md` | 2026-10-14 | 2026-10-14 |
 
 ## Quy tắc tracking
 
