@@ -1,7 +1,20 @@
+import type { ListingIconName } from '@/components/listing/icons';
 import type { Locale } from './types';
 
+/** Thẻ khối "Giải pháp" trang chủ (CR-016): icon vuông + tiêu đề + mô tả + 3 gạch đầu dòng + link "Tìm hiểu …". */
+export interface HomeSolutionCard {
+  title: string;
+  description: string;
+  icon: ListingIconName;
+  bullets: { icon: ListingIconName; label: string }[];
+  linkLabel: string;
+  href: string;
+  image: string;
+  alt: string;
+}
+
 export interface HomeContent {
-  solutionCards: { title: string; description: string; href: string; image: string; alt: string; shot?: boolean }[];
+  solutionCards: HomeSolutionCard[];
   featuredProducts: { slug: string; title: string; description: string; image: string; alt: string }[];
   featuredCase: { title: string; description: string; href: string; image: string; alt: string };
   /**
@@ -21,9 +34,42 @@ export interface HomeContent {
 const homeContent: Record<Locale, HomeContent> = {
   vi: {
     solutionCards: [
-      { title: 'Giải pháp Doanh nghiệp', description: 'Chuẩn hóa vận hành, nhân sự, đào tạo và nghiệp vụ.', href: '/solutions/enterprise', image: '/images/illustrations/home-enterprise.png', alt: 'Minh hoạ điện thoại với biểu đồ tăng trưởng, hồ sơ nhân sự, cài đặt và lưới ứng dụng' },
-      { title: 'Giải pháp AI', description: 'Đưa AI vào vận hành và trải nghiệm khách hàng.', href: '/solutions/ai', image: '/images/illustrations/home-ai.png', alt: 'Minh hoạ khối AI với các biểu tượng tạo sinh, hội thoại, tài liệu và mã nguồn' },
-      { title: 'Ứng dụng AI', description: 'Ứng dụng di động AI phục vụ nhu cầu hằng ngày.', href: '/products', image: '/images/illustrations/home-apps.png', alt: 'Minh hoạ cửa sổ ứng dụng với bảng điều khiển biểu đồ tăng trưởng và nhóm người dùng' },
+      {
+        title: 'Giải pháp Doanh nghiệp',
+        description: 'Chuẩn hóa vận hành, nhân sự, đào tạo và nghiệp vụ.',
+        icon: 'building',
+        bullets: [
+          { icon: 'users', label: 'Khách hàng & bán hàng — CRM' },
+          { icon: 'idcard', label: 'Nhân sự & tổ chức — HRM' },
+          { icon: 'graduation', label: 'Trường học, phòng khám — LMS, DentGo' },
+        ],
+        linkLabel: 'Tìm hiểu giải pháp doanh nghiệp',
+        href: '/solutions/enterprise', image: '/images/illustrations/home-enterprise.png', alt: 'Minh hoạ điện thoại với biểu đồ tăng trưởng, hồ sơ nhân sự, cài đặt và lưới ứng dụng',
+      },
+      {
+        title: 'Giải pháp AI',
+        description: 'Đưa AI vào vận hành và trải nghiệm khách hàng.',
+        icon: 'cpu',
+        bullets: [
+          { icon: 'camera', label: 'Camera AI xử lý tại biên — BoxAI' },
+          { icon: 'drone', label: 'Flycam tuần tra tự động' },
+          { icon: 'chat', label: 'Trợ lý AI & AI API Gateway — FridayAI' },
+        ],
+        linkLabel: 'Tìm hiểu giải pháp AI',
+        href: '/solutions/ai', image: '/images/illustrations/home-ai.png', alt: 'Minh hoạ khối AI với các biểu tượng tạo sinh, hội thoại, tài liệu và mã nguồn',
+      },
+      {
+        title: 'Ứng dụng AI',
+        description: 'Ứng dụng di động AI phục vụ nhu cầu hằng ngày.',
+        icon: 'box',
+        bullets: [
+          { icon: 'music', label: 'Tạo nhạc từ ý tưởng — AI Music' },
+          { icon: 'face', label: 'Thử kiểu tóc theo dáng mặt — HairStyle AI' },
+          { icon: 'phone', label: 'Ứng dụng di động cho người dùng cuối' },
+        ],
+        linkLabel: 'Tìm hiểu các ứng dụng AI',
+        href: '/products', image: '/images/illustrations/home-apps.png', alt: 'Minh hoạ cửa sổ ứng dụng với bảng điều khiển biểu đồ tăng trưởng và nhóm người dùng',
+      },
     ],
     featuredProducts: [
       { slug: 'music-app', title: 'Ứng dụng nhạc AI', description: 'Tạo và khám phá âm nhạc có hỗ trợ AI.', image: '/images/products/ai-music-app.png', alt: 'Giao diện minh hoạ — AI Music Generator: gợi ý sáng tác nhạc với AI' },
@@ -41,9 +87,42 @@ const homeContent: Record<Locale, HomeContent> = {
   },
   en: {
     solutionCards: [
-      { title: 'Enterprise Solutions', description: 'Standardize operations, HR, training and workflows.', href: '/en/solutions/enterprise', image: '/images/illustrations/home-enterprise.png', alt: 'Illustration of a phone with a growth chart, staff profile, settings and app grid' },
-      { title: 'AI Solutions', description: 'Apply AI to operations and customer experience.', href: '/en/solutions/ai', image: '/images/illustrations/home-ai.png', alt: 'Illustration of an AI block with generative, chat, document and code icons' },
-      { title: 'AI Apps', description: 'Mobile AI apps for everyday needs.', href: '/en/products', image: '/images/illustrations/home-apps.png', alt: 'Illustration of an app window with a growth-chart dashboard and a group of users' },
+      {
+        title: 'Enterprise Solutions',
+        description: 'Standardize operations, HR, training and workflows.',
+        icon: 'building',
+        bullets: [
+          { icon: 'users', label: 'Customers & sales — CRM' },
+          { icon: 'idcard', label: 'People & organization — HRM' },
+          { icon: 'graduation', label: 'Schools, clinics — LMS, DentGo' },
+        ],
+        linkLabel: 'Explore enterprise solutions',
+        href: '/en/solutions/enterprise', image: '/images/illustrations/home-enterprise.png', alt: 'Illustration of a phone with a growth chart, staff profile, settings and app grid',
+      },
+      {
+        title: 'AI Solutions',
+        description: 'Apply AI to operations and customer experience.',
+        icon: 'cpu',
+        bullets: [
+          { icon: 'camera', label: 'Edge AI cameras — BoxAI' },
+          { icon: 'drone', label: 'Automated drone patrols' },
+          { icon: 'chat', label: 'AI assistant & AI API Gateway — FridayAI' },
+        ],
+        linkLabel: 'Explore AI solutions',
+        href: '/en/solutions/ai', image: '/images/illustrations/home-ai.png', alt: 'Illustration of an AI block with generative, chat, document and code icons',
+      },
+      {
+        title: 'AI Apps',
+        description: 'Mobile AI apps for everyday needs.',
+        icon: 'box',
+        bullets: [
+          { icon: 'music', label: 'Turn ideas into music — AI Music' },
+          { icon: 'face', label: 'Try hairstyles for your face shape — HairStyle AI' },
+          { icon: 'phone', label: 'Mobile apps for everyday users' },
+        ],
+        linkLabel: 'Explore AI apps',
+        href: '/en/products', image: '/images/illustrations/home-apps.png', alt: 'Illustration of an app window with a growth-chart dashboard and a group of users',
+      },
     ],
     featuredProducts: [
       { slug: 'music-app', title: 'AI music app', description: 'Create and explore AI-assisted music.', image: '/images/products/ai-music-app.png', alt: 'Illustrative interface — AI Music Generator: AI-assisted music ideas' },

@@ -67,7 +67,13 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           )}
         />
       </section>
-      <SolutionGridHome solutions={home.solutionCards} title={t('solutionsTitle')} />
+      <SolutionGridHome
+        description={t('solutionsLead')}
+        eyebrow={t('solutionsEyebrow')}
+        solutions={home.solutionCards}
+        titleAccent={t('solutionsTitleAccent')}
+        titleLead={t('solutionsTitleLead')}
+      />
       <ProductStrip products={home.featuredProducts} title={t('productsTitle')} />
       <CaseStudyHighlight study={home.featuredCase} title={t('caseStudyTitle')} />
       <CTABanner description={t('ctaDescription')} title={t('ctaTitle')} variant="primary" />
