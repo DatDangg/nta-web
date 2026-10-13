@@ -1,63 +1,50 @@
 {
-  "specVersion": "3.2.0",
-  "scopeVersion": 22,
+  "specVersion": "3.2.1",
+  "scopeVersion": 23,
   "generatedAt": "2026-10-13T00:00:00+07:00",
   "trigger": "feature-update",
-  "workItem": "feature-blog-listing-redesign",
+  "workItem": "feature-dental-case-study-showcase",
   "specRefs": [
-    "R-09a (mới)",
-    "R-09 (clarify ngày VI)",
-    "BR-004",
-    "design-spec Screen 10 (redesign) + Screen 11 (ngày/badge)"
+    "R-08b.1 (mới)",
+    "R-08b",
+    "BR-004"
   ],
   "changed": {
     "files": [
-      "src/content/types.ts",
-      "src/lib/content/posts.ts",
-      "src/lib/blog/categories.ts",
-      "src/lib/blog/filter.ts",
-      "src/lib/format/date.ts",
-      "src/app/[locale]/blog/page.tsx",
-      "src/components/blog/BlogListing.tsx",
-      "src/components/blog/FeaturedPosts.tsx",
-      "src/components/blog/BlogPostCard.tsx",
-      "src/components/blog/BlogNewsVisual.tsx",
-      "src/components/blog/ArticleHeader.tsx",
-      "src/components/cards/PostCard.tsx",
-      "src/components/blog/BlogFilter.tsx (xoá)",
-      "src/i18n/messages/vi.json",
-      "src/i18n/messages/en.json",
-      "src/content/blog/{vi,en}/*.mdx (category → key)"
+      "src/content/case-studies/{vi,en}/dental-clinic-operations.mdx",
+      "src/content/types.ts (CaseStudyShowcase — field optional)",
+      "src/components/case-studies/showcase/ScreenMock.tsx (mới)",
+      "src/components/case-studies/showcase/ShowcaseHero.tsx",
+      "src/components/case-studies/showcase/ShowcaseTechnology.tsx",
+      "src/components/case-studies/showcase/ShowcasePhotos.tsx",
+      "src/components/case-studies/showcase/ShowcaseLayout.tsx",
+      "src/components/case-studies/showcase/icons.tsx",
+      "public/images/cases/dental/hero.jpg (mới)"
     ],
     "modules": [
-      "Blog listing /blog (hero, lọc chip, tìm kiếm, khối nổi bật, lưới mới nhất)",
-      "Blog data (category key + nhãn i18n, thời gian đọc)",
-      "Format ngày blog (list + detail)"
+      "Case study detail — biến thể showcase",
+      "Case study nha khoa (dental-clinic-operations)"
     ]
   },
   "impact": {
     "direct": [
-      "/blog + /en/blog: hero ListingHero (h1 'Tin tức & Cập nhật' / 'News & Updates'), 7 chip, ô tìm kiếm, khối nổi bật (1 lớn + 2 nhỏ + thẻ NỔI BẬT), 'Bài viết mới nhất' (1 bài còn lại), phân trang 12/trang.",
-      "URL: ?category=guides, ?q=du lieu (bỏ dấu khớp 'dữ liệu'), ?category=trends&q=du lieu → rỗng + 'Xóa bộ lọc', ?category=bogus&page=99 → như mặc định, ?q=%20%20 → như mặc định.",
-      "Nút 'Xem tất cả bài viết' cuộn + focus tiêu đề 'Bài viết mới nhất'.",
-      "Thẻ: badge danh mục (nhãn i18n), ngày VI '08 Th10, 2026' / EN 'Oct 8, 2026', '1 phút đọc' / '1 min read', 'Đọc thêm →'."
+      "/case-studies/dental-clinic-operations + /en: hero (breadcrumb 'Phòng khám nha khoa', h1 2 màu, ảnh minh hoạ DentGo), 3 thẻ số liệu, 3 cột Thách thức/Giải pháp/Thay đổi mang lại, note bảo mật + dữ liệu demo, khối Giải pháp DentGo (3 node + ảnh màn hình), carousel ảnh giao diện, Hướng tới tương lai, thẻ CTA.",
+      "Nút hero 'Khám phá giải pháp' / 'Explore the solution' → /solutions/enterprise/dentgo (EN: /en/solutions/enterprise/dentgo).",
+      "Nút 'Xem chi tiết giải pháp DentGo' trong khối Giải pháp → trang DentGo."
     ],
     "dependents": [
-      "/blog/[slug] (vi/en): chuỗi ngày mới + badge nhãn danh mục mới; bố cục không đổi; RelatedPosts vẫn 0 bài (4 bài khác danh mục).",
-      "sitemap.xml: không đổi (slug/date)."
+      "/case-studies (danh sách): thẻ nha khoa dùng ảnh cover mới."
     ],
     "regression": [
-      "Các trang danh sách khác dùng ListingHero (/products, /case-studies, /solutions/ai, /solutions/enterprise) không đổi.",
-      "/about, /contact (PageHeader) không đổi.",
-      "JSON-LD BreadcrumbList /blog + Article detail giữ nguyên."
+      "/case-studies/oc-eo-learning (+ /en): màn VMS minh hoạ + 3 node camera/flycam/VMS giữ nguyên.",
+      "JSON-LD Article + BreadcrumbList case study giữ nguyên."
     ]
   },
   "acceptance": [
-    "Bố cục /blog khớp mockup ở 1440 (trừ thẻ Đăng ký nhận tin — ngoài phạm vi); 768/390 không scroll ngang.",
-    "Lọc chip + tìm kiếm bỏ dấu + deep-link URL đúng; key lạ → Tất cả; lọc rỗng có nút xoá.",
-    "Ngày VI '08 Th10, 2026' ở list + detail; EN 'Oct 8, 2026'.",
-    "vi/en đủ chuỗi; 0 console error.",
-    "typecheck PASS, lint 0 errors, build PASS; reviewer PASS."
+    "1440 + 390 không scroll ngang; 0 ảnh lỗi; vi/en đủ chuỗi.",
+    "Nút hero + nút khối Giải pháp mở đúng trang DentGo theo locale.",
+    "Óc Eo không regression.",
+    "typecheck PASS, lint 0 error, build PASS; reviewer PASS."
   ],
-  "risk": "medium"
+  "risk": "low"
 }

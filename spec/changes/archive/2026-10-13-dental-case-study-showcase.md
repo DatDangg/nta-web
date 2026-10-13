@@ -1,7 +1,7 @@
 ---
 id: dental-case-study-showcase
 type: feature
-status: pending-review              # code đã làm trong session Cowork 2026-10-13 — chạy /change để reviewer soát + close-out
+status: done                        # close-out 2026-10-13 (code 78548bd + fix href hero)
 created: 2026-10-13
 ---
 
@@ -30,7 +30,11 @@ study óc eo, vào có phần mở ra detail DentGo Solution (/solutions/enterpr
 - [x] Óc Eo vẫn render như cũ (VmsMock + 3 nút camera/flycam/VMS mặc định).
 - [x] BR-004: không bịa số liệu — số liệu dạng mô tả (khu vực, 1 lịch hẹn, 4 phân hệ); `note` + caption nói rõ ảnh dùng dữ liệu demo, chưa có chỉ số xác nhận; quote ghi nguồn "Định hướng … của NTA".
 - [x] `tsc --noEmit` + `eslint` (showcase + types) PASS.
-- [ ] Reviewer PASS · spec delta R-08b (field mới của showcase) · progress/commit.
+- [x] Reviewer PASS (`.context/review-reports/feature-dental-case-study-showcase-phase-1-task-01-round-1-review.md`) · spec delta R-08b.1 (3.2.1) · progress · commit.
 
 ## Cần user xác nhận nội dung
 - Các ý ở cột Thách thức / Thay đổi mang lại được suy ra từ mô tả cũ + trang DentGo, chưa có xác nhận từ khách hàng.
+
+## Close-out (2026-10-13)
+- Review phát hiện nút hero vẫn `#solution` (chưa đúng yêu cầu) → sửa `hero.primaryCta.href` = `/solutions/enterprise/dentgo` (vi/en).
+- Task: `tasks/feature-dental-case-study-showcase/phase-1-task-01.md` · spec 3.2.0 → 3.2.1 · test-scope v23.

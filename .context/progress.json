@@ -2,7 +2,7 @@
   "mode": "feature",
   "activeWorkItem": {
     "type": "feature",
-    "slug": "blog-listing-redesign"
+    "slug": "dental-case-study-showcase"
   },
   "features": [
     {
@@ -631,6 +631,37 @@
       "updatedAt": "2026-10-13",
       "completedAt": "2026-10-13",
       "scopeVersion": 22
+    },
+    {
+      "slug": "dental-case-study-showcase",
+      "status": "done",
+      "changeFile": "spec/changes/archive/2026-10-13-dental-case-study-showcase.md",
+      "classification": "MODIFY",
+      "specVersion": "3.2.1",
+      "phases": [
+        {
+          "phase": 1,
+          "status": "done",
+          "tasks": [
+            {
+              "id": "phase-1-task-01",
+              "status": "done",
+              "review": {
+                "level": "NORMAL",
+                "verdict": "PASS",
+                "round": 1,
+                "report": ".context/review-reports/feature-dental-case-study-showcase-phase-1-task-01-round-1-review.md"
+              }
+            }
+          ]
+        }
+      ],
+      "codeCommits": [
+        "78548bd"
+      ],
+      "updatedAt": "2026-10-13",
+      "completedAt": "2026-10-13",
+      "scopeVersion": 23
     }
   ],
   "bugs": []

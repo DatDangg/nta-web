@@ -9,8 +9,9 @@
 | ID | Tiêu đề | Loại | Trạng thái | Change file | Tạo | Xong |
 |----|---------|------|-----------|-------------|-----|------|
 | CR-001 | Thay ảnh placeholder thẻ giải pháp bằng ảnh giao diện thật | MODIFY + ADDITIVE | blocked (chờ user duyệt danh sách ảnh) | `2026-10-12-solution-card-real-images.md` | 2026-10-12 | |
-| CR-002 | Case study nha khoa dạng showcase + nút mở DentGo | feature | in_progress (code xong, chưa commit — chạy `/change` để review + close-out) | `2026-10-13-dental-case-study-showcase.md` | 2026-10-13 | |
+| CR-002 | Case study nha khoa dạng showcase + nút mở DentGo | feature | done (spec 3.2.1 · scope v23) | `archive/2026-10-13-dental-case-study-showcase.md` | 2026-10-13 | 2026-10-13 |
 | CR-003 | Thiết kế lại UI trang Tin tức theo mockup (hero, lọc danh mục, tìm kiếm, khối nổi bật, đăng ký nhận tin) | MODIFY + ADDITIVE | done (spec 3.2.0 · scope v22) | `archive/2026-10-13-blog-listing-redesign.md` | 2026-10-13 | 2026-10-13 |
+| CR-004 | Tách khung case study (Óc Eo) thành template detail chung cho Giải pháp / Sản phẩm (data MDX, SSG, thêm block Lưới tính năng + FAQ) | MODIFY + ADDITIVE | pending (phạm vi đã chốt: toàn bộ GP + SP; chờ xác nhận dữ liệu staging) | `2026-10-13-shared-detail-showcase-template.md` | 2026-10-13 | |
 
 ## Quy tắc tracking
 

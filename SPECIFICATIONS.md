@@ -1,5 +1,5 @@
 ---
-spec_version: 3.2.0
+spec_version: 3.2.1
 updated_at: 2026-10-13
 ---
 
@@ -126,6 +126,13 @@ _(cập nhật 2026-10-09: đổi domain đích sang `ntavietnam.tech` — chang
   ảnh `cover` (thiếu → `gallery[0]`). Áp dụng đầu tiên: `oc-eo-learning` (vi/en). BR-004: phương án đề xuất phải
   ghi rõ "đề xuất / kỳ vọng / tham chiếu", ảnh minh hoạ phải ghi là minh hoạ. — nguồn: change
   `spec/changes/archive/2026-10-12-oc-eo-case-study-showcase.md`.
+  - **R-08b.1 (3.2.1 — field optional cho showcase, tương thích ngược):** `technology.screen` (ảnh chụp phần mềm
+    thật → render khung màn hình thay màn VMS minh hoạ; có `screen` thì `alerts` không bắt buộc) · `technology.nodes`
+    nhận chuỗi hoặc `{ label, icon }` (icon thêm `calendar` / `records` / `inventory`) · `photos.variant: screen` (ảnh
+    chụp màn hình: viền + căn trên) · `hero.image.width/height` optional · icon số liệu thêm `modules` · nút hero
+    `primaryCta` nhận anchor `#…` hoặc route nội bộ (route → `Link` theo locale). Áp dụng thứ hai: `dental-clinic-operations`
+    (vi/en) — nút hero + nút khối Giải pháp mở `/solutions/enterprise/dentgo`. — nguồn: change
+    `spec/changes/archive/2026-10-13-dental-case-study-showcase.md`.
 
 ### Module 7 — Tin tức / Blog
 
