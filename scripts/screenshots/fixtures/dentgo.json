@@ -4805,5 +4805,667 @@
       "supplier": null,
       "batches": []
     }
-  ]
+  ],
+  "reminderTemplates": {
+    "templates": [
+      {
+        "id": "dbefbb9c-dbc4-42c4-8dec-000e508484e4",
+        "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+        "channel": "ZALO",
+        "scenario": "APPOINTMENT_CONFIRMATION",
+        "name": "Zalo - Xác nhận lịch hẹn mới",
+        "body": "Kính chào {patientName}, {branchName} xác nhận lịch hẹn {serviceName} vào {appointmentTime}.",
+        "isDefault": true,
+        "isActive": true,
+        "deletedAt": null,
+        "createdAt": "2026-08-20T02:00:00.000Z",
+        "updatedAt": "2026-09-15T02:00:00.000Z"
+      },
+      {
+        "id": "7a27354d-79fb-4d3b-8c29-000e78597013",
+        "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+        "channel": "ZALO",
+        "scenario": "APPOINTMENT_REMINDER",
+        "name": "Zalo - Nhắc lịch trước",
+        "body": "Kính chào {patientName}, {branchName} nhắc lịch {serviceName} vào {appointmentTime}. Vui lòng đến trước 10 phút.",
+        "isDefault": true,
+        "isActive": true,
+        "deletedAt": null,
+        "createdAt": "2026-08-20T02:00:00.000Z",
+        "updatedAt": "2026-09-15T02:00:00.000Z"
+      },
+      {
+        "id": "185eaefe-1832-47b2-8a66-000ea02e5b42",
+        "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+        "channel": "ZALO",
+        "scenario": "REVISIT_REMINDER",
+        "name": "Zalo - Nhắc tái khám định kỳ",
+        "body": "Đã 6 tháng kể từ lần cạo vôi gần nhất, {branchName} mời {patientName} đặt lịch kiểm tra định kỳ.",
+        "isDefault": true,
+        "isActive": true,
+        "deletedAt": null,
+        "createdAt": "2026-08-20T02:00:00.000Z",
+        "updatedAt": "2026-09-15T02:00:00.000Z"
+      },
+      {
+        "id": "b69628af-b669-4229-88a3-000ec8034671",
+        "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+        "channel": "ZALO",
+        "scenario": "BIRTHDAY_PROMOTION",
+        "name": "Zalo - Chúc mừng sinh nhật",
+        "body": "Chúc mừng sinh nhật {patientName}! Tặng bạn ưu đãi 20% tẩy trắng răng trong tháng này.",
+        "isDefault": true,
+        "isActive": true,
+        "deletedAt": null,
+        "createdAt": "2026-08-20T02:00:00.000Z",
+        "updatedAt": "2026-09-15T02:00:00.000Z"
+      }
+    ]
+  },
+  "reminderRules": {
+    "rules": [
+      {
+        "id": "54cda260-54a0-4ca0-86e0-000eefd831a0",
+        "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+        "templateId": "dbefbb9c-dbc4-42c4-8dec-000e508484e4",
+        "channel": "ZALO",
+        "scenario": "APPOINTMENT_CONFIRMATION",
+        "minutesBefore": 0,
+        "isActive": true,
+        "useAiDraft": true,
+        "maxAttempts": 3,
+        "deletedAt": null,
+        "createdAt": "2026-08-20T02:10:00.000Z",
+        "updatedAt": "2026-09-15T02:10:00.000Z",
+        "branch": {
+          "id": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+          "code": "MINTAM-HN",
+          "name": "Nha khoa Minh Tâm – Trần Duy Hưng",
+          "address": "Số 12 Trần Duy Hưng, Cầu Giấy, Hà Nội",
+          "phone": "024 7300 0001",
+          "isActive": true,
+          "createdAt": "2025-01-02T03:00:00.000Z",
+          "updatedAt": "2026-09-01T03:00:00.000Z",
+          "deletedAt": null,
+          "nationalDrugSystemCode": null,
+          "nationalDrugSystemPassword": null,
+          "defaultConsumptionWarehouseId": null
+        },
+        "template": {
+          "id": "dbefbb9c-dbc4-42c4-8dec-000e508484e4",
+          "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+          "channel": "ZALO",
+          "scenario": "APPOINTMENT_CONFIRMATION",
+          "name": "Zalo - Xác nhận lịch hẹn mới",
+          "body": "Kính chào {patientName}, {branchName} xác nhận lịch hẹn {serviceName} vào {appointmentTime}.",
+          "isDefault": true,
+          "isActive": true,
+          "deletedAt": null,
+          "createdAt": "2026-08-20T02:00:00.000Z",
+          "updatedAt": "2026-09-15T02:00:00.000Z"
+        }
+      },
+      {
+        "id": "f3051c11-f2d7-4717-851d-000f17ad1ccf",
+        "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+        "templateId": "7a27354d-79fb-4d3b-8c29-000e78597013",
+        "channel": "ZALO",
+        "scenario": "APPOINTMENT_REMINDER",
+        "minutesBefore": 1440,
+        "isActive": true,
+        "useAiDraft": true,
+        "maxAttempts": 3,
+        "deletedAt": null,
+        "createdAt": "2026-08-20T02:10:00.000Z",
+        "updatedAt": "2026-09-15T02:10:00.000Z",
+        "branch": {
+          "id": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+          "code": "MINTAM-HN",
+          "name": "Nha khoa Minh Tâm – Trần Duy Hưng",
+          "address": "Số 12 Trần Duy Hưng, Cầu Giấy, Hà Nội",
+          "phone": "024 7300 0001",
+          "isActive": true,
+          "createdAt": "2025-01-02T03:00:00.000Z",
+          "updatedAt": "2026-09-01T03:00:00.000Z",
+          "deletedAt": null,
+          "nationalDrugSystemCode": null,
+          "nationalDrugSystemPassword": null,
+          "defaultConsumptionWarehouseId": null
+        },
+        "template": {
+          "id": "7a27354d-79fb-4d3b-8c29-000e78597013",
+          "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+          "channel": "ZALO",
+          "scenario": "APPOINTMENT_REMINDER",
+          "name": "Zalo - Nhắc lịch trước",
+          "body": "Kính chào {patientName}, {branchName} nhắc lịch {serviceName} vào {appointmentTime}. Vui lòng đến trước 10 phút.",
+          "isDefault": true,
+          "isActive": true,
+          "deletedAt": null,
+          "createdAt": "2026-08-20T02:00:00.000Z",
+          "updatedAt": "2026-09-15T02:00:00.000Z"
+        }
+      },
+      {
+        "id": "913c95c2-910e-418e-835a-000f3f8207fe",
+        "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+        "templateId": "185eaefe-1832-47b2-8a66-000ea02e5b42",
+        "channel": "ZALO",
+        "scenario": "REVISIT_REMINDER",
+        "minutesBefore": 4320,
+        "isActive": true,
+        "useAiDraft": true,
+        "maxAttempts": 3,
+        "deletedAt": null,
+        "createdAt": "2026-08-20T02:10:00.000Z",
+        "updatedAt": "2026-09-15T02:10:00.000Z",
+        "branch": {
+          "id": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+          "code": "MINTAM-HN",
+          "name": "Nha khoa Minh Tâm – Trần Duy Hưng",
+          "address": "Số 12 Trần Duy Hưng, Cầu Giấy, Hà Nội",
+          "phone": "024 7300 0001",
+          "isActive": true,
+          "createdAt": "2025-01-02T03:00:00.000Z",
+          "updatedAt": "2026-09-01T03:00:00.000Z",
+          "deletedAt": null,
+          "nationalDrugSystemCode": null,
+          "nationalDrugSystemPassword": null,
+          "defaultConsumptionWarehouseId": null
+        },
+        "template": {
+          "id": "185eaefe-1832-47b2-8a66-000ea02e5b42",
+          "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+          "channel": "ZALO",
+          "scenario": "REVISIT_REMINDER",
+          "name": "Zalo - Nhắc tái khám định kỳ",
+          "body": "Đã 6 tháng kể từ lần cạo vôi gần nhất, {branchName} mời {patientName} đặt lịch kiểm tra định kỳ.",
+          "isDefault": true,
+          "isActive": true,
+          "deletedAt": null,
+          "createdAt": "2026-08-20T02:00:00.000Z",
+          "updatedAt": "2026-09-15T02:00:00.000Z"
+        }
+      },
+      {
+        "id": "2f740f73-2f45-4c05-8197-000f6756f32d",
+        "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+        "templateId": "b69628af-b669-4229-88a3-000ec8034671",
+        "channel": "ZALO",
+        "scenario": "BIRTHDAY_PROMOTION",
+        "minutesBefore": 0,
+        "isActive": false,
+        "useAiDraft": true,
+        "maxAttempts": 3,
+        "deletedAt": null,
+        "createdAt": "2026-08-20T02:10:00.000Z",
+        "updatedAt": "2026-09-15T02:10:00.000Z",
+        "branch": {
+          "id": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+          "code": "MINTAM-HN",
+          "name": "Nha khoa Minh Tâm – Trần Duy Hưng",
+          "address": "Số 12 Trần Duy Hưng, Cầu Giấy, Hà Nội",
+          "phone": "024 7300 0001",
+          "isActive": true,
+          "createdAt": "2025-01-02T03:00:00.000Z",
+          "updatedAt": "2026-09-01T03:00:00.000Z",
+          "deletedAt": null,
+          "nationalDrugSystemCode": null,
+          "nationalDrugSystemPassword": null,
+          "defaultConsumptionWarehouseId": null
+        },
+        "template": {
+          "id": "b69628af-b669-4229-88a3-000ec8034671",
+          "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+          "channel": "ZALO",
+          "scenario": "BIRTHDAY_PROMOTION",
+          "name": "Zalo - Chúc mừng sinh nhật",
+          "body": "Chúc mừng sinh nhật {patientName}! Tặng bạn ưu đãi 20% tẩy trắng răng trong tháng này.",
+          "isDefault": true,
+          "isActive": true,
+          "deletedAt": null,
+          "createdAt": "2026-08-20T02:00:00.000Z",
+          "updatedAt": "2026-09-15T02:00:00.000Z"
+        }
+      }
+    ]
+  },
+  "reminderDeliveries": {
+    "deliveries": [
+      {
+        "id": "cdab8924-cd7c-467c-8fd4-000f8f2bde5c",
+        "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+        "channel": "ZALO",
+        "scenario": "APPOINTMENT_CONFIRMATION",
+        "status": "SENT",
+        "messageBody": "Kính chào Nguyễn Thị Lan Hương, Nha khoa Minh Tâm nhắc lịch khám của bạn.",
+        "errorMessage": null,
+        "createdAt": "2026-10-11T09:00:00.000Z",
+        "appointment": {
+          "id": "b8ab03a8-b898-4298-8988-00063944bf58",
+          "startsAt": "2026-10-11T09:00:00.000Z"
+        },
+        "patientProfile": {
+          "id": "8ff34739-8fef-4e2f-8025-0001667c44a7",
+          "fullName": "Nguyễn Thị Lan Hương"
+        },
+        "reminderJob": {
+          "id": "6be302d5-6bb3-40f3-8e11-000fb700c98b"
+        }
+      },
+      {
+        "id": "0a1a7c86-09ea-4b6a-8c4e-000fded5b4ba",
+        "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+        "channel": "ZALO",
+        "scenario": "APPOINTMENT_REMINDER",
+        "status": "SENT",
+        "messageBody": "Kính chào Trần Văn Bình, Nha khoa Minh Tâm nhắc lịch khám của bạn.",
+        "errorMessage": null,
+        "createdAt": "2026-10-11T09:30:00.000Z",
+        "appointment": {
+          "id": "56e27d59-56cf-4d0f-87c5-00066119aa87",
+          "startsAt": "2026-10-11T09:30:00.000Z"
+        },
+        "patientProfile": {
+          "id": "08d12dfd-08cb-480b-8919-000205cff163",
+          "fullName": "Trần Văn Bình"
+        },
+        "reminderJob": {
+          "id": "a851f637-a821-45e1-8a8b-001006aa9fe9"
+        }
+      },
+      {
+        "id": "46896fe8-4658-4058-88c8-00102e7f8b18",
+        "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+        "channel": "ZALO",
+        "scenario": "APPOINTMENT_CONFIRMATION",
+        "status": "SENT",
+        "messageBody": "Kính chào Phạm Thị Thuý, Nha khoa Minh Tâm nhắc lịch khám của bạn.",
+        "errorMessage": null,
+        "createdAt": "2026-10-11T10:00:00.000Z",
+        "appointment": {
+          "id": "f519f70a-f506-4786-8602-000688ee95b6",
+          "startsAt": "2026-10-11T10:00:00.000Z"
+        },
+        "patientProfile": {
+          "id": "4540215f-4539-4cf9-8593-00025579c7c1",
+          "fullName": "Phạm Thị Thuý"
+        },
+        "reminderJob": {
+          "id": "e4c0e999-e48f-4acf-8705-001056547647"
+        }
+      },
+      {
+        "id": "82f8634a-82c6-4546-8542-00107e296176",
+        "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+        "channel": "ZALO",
+        "scenario": "APPOINTMENT_REMINDER",
+        "status": "FAILED",
+        "messageBody": "Kính chào Lê Quang Hải, Nha khoa Minh Tâm nhắc lịch khám của bạn.",
+        "errorMessage": "Khách chưa kết bạn Zalo với phòng khám",
+        "createdAt": "2026-10-11T10:30:00.000Z",
+        "appointment": {
+          "id": "935170bb-933d-41fd-843f-0006b0c380e5",
+          "startsAt": "2026-10-11T10:30:00.000Z"
+        },
+        "patientProfile": {
+          "id": "81af14c1-81a7-41e7-820d-0002a5239e1f",
+          "fullName": "Lê Quang Hải"
+        },
+        "reminderJob": {
+          "id": "212fdcfb-20fd-4fbd-837f-0010a5fe4ca5"
+        }
+      },
+      {
+        "id": "bf6756ac-bf34-4a34-81bc-0010cdd337d4",
+        "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+        "channel": "ZALO",
+        "scenario": "APPOINTMENT_CONFIRMATION",
+        "status": "SENT",
+        "messageBody": "Kính chào Vũ Thị Nhung, Nha khoa Minh Tâm nhắc lịch khám của bạn.",
+        "errorMessage": null,
+        "createdAt": "2026-10-11T14:00:00.000Z",
+        "appointment": {
+          "id": "3188ea6c-3174-4c74-827c-0006d8986c14",
+          "startsAt": "2026-10-11T14:00:00.000Z"
+        },
+        "patientProfile": {
+          "id": "5c5581d4-5c4c-414c-8cc4-00031ca25fac",
+          "fullName": "Vũ Thị Nhung"
+        },
+        "reminderJob": {
+          "id": "5d9ed05d-5d6b-44ab-8ff9-0010f5a82303"
+        }
+      },
+      {
+        "id": "fbd64a0e-fba2-4f22-8e36-00111d7d0e32",
+        "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+        "channel": "ZALO",
+        "scenario": "APPOINTMENT_REMINDER",
+        "status": "SENT",
+        "messageBody": "Kính chào Hoàng Anh Tuấn, Nha khoa Minh Tâm nhắc lịch khám của bạn.",
+        "errorMessage": null,
+        "createdAt": "2026-10-11T14:30:00.000Z",
+        "appointment": {
+          "id": "cfc0641d-cfab-46eb-80b9-0007006d5743",
+          "startsAt": "2026-10-11T14:30:00.000Z"
+        },
+        "patientProfile": {
+          "id": "98c47536-98ba-463a-893e-00036c4c360a",
+          "fullName": "Hoàng Anh Tuấn"
+        },
+        "reminderJob": {
+          "id": "9a0dc3bf-99d9-4999-8c73-00114551f961"
+        }
+      }
+    ]
+  },
+  "zaloQrLogin": {
+    "sessionId": null,
+    "status": "CONNECTED",
+    "qrImageDataUrl": null,
+    "errorMessage": null,
+    "expiresAt": null,
+    "accountId": "38453d70-3810-4410-8ab0-00116d26e490",
+    "runtimeMarker": "zca"
+  },
+  "cashbook": {
+    "funds": [
+      {
+        "id": "d67cb721-d647-4e87-88ed-001194fbcfbf",
+        "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+        "code": "TM",
+        "name": "Tiền mặt quầy lễ tân",
+        "managerText": null,
+        "note": null,
+        "bankCode": null,
+        "bankAccount": null,
+        "accountName": null,
+        "allowCash": true,
+        "allowSwipe": false,
+        "allowTransfer": false,
+        "isProtected": false,
+        "currency": "VND",
+        "openingBalanceVnd": 0,
+        "currentBalanceVnd": 0,
+        "isActive": true,
+        "createdAt": "2026-01-02T08:00:00.000Z",
+        "updatedAt": "2026-09-01T08:00:00.000Z"
+      },
+      {
+        "id": "74b430d2-747e-48fe-872a-0011bcd0baee",
+        "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+        "code": "CK",
+        "name": "Tài khoản ngân hàng",
+        "managerText": null,
+        "note": null,
+        "bankCode": null,
+        "bankAccount": null,
+        "accountName": null,
+        "allowCash": false,
+        "allowSwipe": false,
+        "allowTransfer": true,
+        "isProtected": false,
+        "currency": "VND",
+        "openingBalanceVnd": 0,
+        "currentBalanceVnd": 0,
+        "isActive": true,
+        "createdAt": "2026-01-02T08:00:00.000Z",
+        "updatedAt": "2026-09-01T08:00:00.000Z"
+      },
+      {
+        "id": "12ebaa83-12b5-4375-8567-0011e4a5a61d",
+        "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+        "code": "POS",
+        "name": "Quẹt thẻ POS",
+        "managerText": null,
+        "note": null,
+        "bankCode": null,
+        "bankAccount": null,
+        "accountName": null,
+        "allowCash": false,
+        "allowSwipe": true,
+        "allowTransfer": false,
+        "isProtected": false,
+        "currency": "VND",
+        "openingBalanceVnd": 0,
+        "currentBalanceVnd": 0,
+        "isActive": true,
+        "createdAt": "2026-01-02T08:00:00.000Z",
+        "updatedAt": "2026-09-01T08:00:00.000Z"
+      }
+    ],
+    "categories": [
+      {
+        "id": "b1232434-b0ec-4dec-83a4-00120c7a914c",
+        "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+        "code": "NC1",
+        "name": "Thu tiền điều trị",
+        "type": "INCOME",
+        "allowBoth": false,
+        "groupName": "Thu",
+        "note": null,
+        "sortPosition": 1,
+        "isActive": true,
+        "createdAt": "2026-01-02T08:00:00.000Z",
+        "updatedAt": "2026-09-01T08:00:00.000Z"
+      },
+      {
+        "id": "4f5a9de5-4f23-4863-81e1-0012344f7c7b",
+        "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+        "code": "NC2",
+        "name": "Thu tiền đặt cọc niềng răng",
+        "type": "INCOME",
+        "allowBoth": false,
+        "groupName": "Thu",
+        "note": null,
+        "sortPosition": 2,
+        "isActive": true,
+        "createdAt": "2026-01-02T08:00:00.000Z",
+        "updatedAt": "2026-09-01T08:00:00.000Z"
+      },
+      {
+        "id": "ed921796-ed5a-42da-801e-00125c2467aa",
+        "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+        "code": "NC3",
+        "name": "Chi mua vật tư nha khoa",
+        "type": "EXPENSE",
+        "allowBoth": false,
+        "groupName": "Chi",
+        "note": null,
+        "sortPosition": 3,
+        "isActive": true,
+        "createdAt": "2026-01-02T08:00:00.000Z",
+        "updatedAt": "2026-09-01T08:00:00.000Z"
+      },
+      {
+        "id": "8bc99147-8b91-4d51-8e5b-001283f952d9",
+        "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+        "code": "NC4",
+        "name": "Chi trả labo phục hình",
+        "type": "EXPENSE",
+        "allowBoth": false,
+        "groupName": "Chi",
+        "note": null,
+        "sortPosition": 4,
+        "isActive": true,
+        "createdAt": "2026-01-02T08:00:00.000Z",
+        "updatedAt": "2026-09-01T08:00:00.000Z"
+      },
+      {
+        "id": "2a010af8-29c8-47c8-8c98-0012abce3e08",
+        "branchId": "9e3779b1-9e37-4a77-8e3d-000027d4eb2f",
+        "code": "NC5",
+        "name": "Chi điện nước, văn phòng phẩm",
+        "type": "EXPENSE",
+        "allowBoth": false,
+        "groupName": "Chi",
+        "note": null,
+        "sortPosition": 5,
+        "isActive": true,
+        "createdAt": "2026-01-02T08:00:00.000Z",
+        "updatedAt": "2026-09-01T08:00:00.000Z"
+      }
+    ],
+    "vouchers": [],
+    "transfers": []
+  },
+  "cashTransactions": {
+    "rows": [
+      {
+        "date": "2026-10-01",
+        "counterpartyName": "Nguyễn Thị Lan Hương",
+        "address": "Cầu Giấy, Hà Nội",
+        "phone": "0900 000 101",
+        "incomeVnd": 1500000,
+        "expenseVnd": 0,
+        "internalIncomeVnd": 0,
+        "internalExpenseVnd": 0,
+        "voucherNo": "PT-2610001",
+        "fundName": "Tiền mặt quầy lễ tân",
+        "staffName": "Lê Thị Hồng (Lễ tân)",
+        "reason": "Thanh toán nhổ răng khôn",
+        "note": "",
+        "categoryName": "Thu tiền điều trị",
+        "categorySortPosition": 1
+      },
+      {
+        "date": "2026-10-02",
+        "counterpartyName": "Trần Văn Bình",
+        "address": "Thanh Xuân, Hà Nội",
+        "phone": "0900 000 108",
+        "incomeVnd": 450000,
+        "expenseVnd": 0,
+        "internalIncomeVnd": 0,
+        "internalExpenseVnd": 0,
+        "voucherNo": "PT-2610002",
+        "fundName": "Quẹt thẻ POS",
+        "staffName": "Lê Thị Hồng (Lễ tân)",
+        "reason": "Thanh toán trám composite",
+        "note": "",
+        "categoryName": "Thu tiền điều trị",
+        "categorySortPosition": 1
+      },
+      {
+        "date": "2026-10-03",
+        "counterpartyName": "Lê Quang Hải",
+        "address": "Đống Đa, Hà Nội",
+        "phone": "0900 000 122",
+        "incomeVnd": 3000000,
+        "expenseVnd": 0,
+        "internalIncomeVnd": 0,
+        "internalExpenseVnd": 0,
+        "voucherNo": "PT-2610003",
+        "fundName": "Tài khoản ngân hàng",
+        "staffName": "Lê Thị Hồng (Lễ tân)",
+        "reason": "Thanh toán bọc răng sứ",
+        "note": "",
+        "categoryName": "Thu tiền điều trị",
+        "categorySortPosition": 1
+      },
+      {
+        "date": "2026-10-05",
+        "counterpartyName": "Hoàng Anh Tuấn",
+        "address": "Hà Đông, Hà Nội",
+        "phone": "0900 000 136",
+        "incomeVnd": 1800000,
+        "expenseVnd": 0,
+        "internalIncomeVnd": 0,
+        "internalExpenseVnd": 0,
+        "voucherNo": "PT-2610004",
+        "fundName": "Tiền mặt quầy lễ tân",
+        "staffName": "Lê Thị Hồng (Lễ tân)",
+        "reason": "Thanh toán điều trị tuỷ",
+        "note": "",
+        "categoryName": "Thu tiền điều trị",
+        "categorySortPosition": 1
+      },
+      {
+        "date": "2026-10-06",
+        "counterpartyName": "Bùi Thị Thanh Tâm",
+        "address": "Nam Từ Liêm, Hà Nội",
+        "phone": "0900 000 157",
+        "incomeVnd": 10000000,
+        "expenseVnd": 0,
+        "internalIncomeVnd": 0,
+        "internalExpenseVnd": 0,
+        "voucherNo": "PT-2610005",
+        "fundName": "Tài khoản ngân hàng",
+        "staffName": "Lê Thị Hồng (Lễ tân)",
+        "reason": "Đặt cọc niềng răng mắc cài",
+        "note": "",
+        "categoryName": "Thu tiền đặt cọc niềng răng",
+        "categorySortPosition": 2
+      },
+      {
+        "date": "2026-10-08",
+        "counterpartyName": "Lý Thị Bích Ngọc",
+        "address": "Ba Đình, Hà Nội",
+        "phone": "0900 000 171",
+        "incomeVnd": 350000,
+        "expenseVnd": 0,
+        "internalIncomeVnd": 0,
+        "internalExpenseVnd": 0,
+        "voucherNo": "PT-2610006",
+        "fundName": "Tiền mặt quầy lễ tân",
+        "staffName": "Lê Thị Hồng (Lễ tân)",
+        "reason": "Thanh toán cạo vôi răng",
+        "note": "",
+        "categoryName": "Thu tiền điều trị",
+        "categorySortPosition": 1
+      },
+      {
+        "date": "2026-10-02",
+        "counterpartyName": "Công ty TNHH Vật tư Nha khoa Phương Đông",
+        "address": "Đống Đa, Hà Nội",
+        "phone": "024 0000 0181",
+        "incomeVnd": 0,
+        "expenseVnd": 6850000,
+        "internalIncomeVnd": 0,
+        "internalExpenseVnd": 0,
+        "voucherNo": "PC-2610007",
+        "fundName": "Tài khoản ngân hàng",
+        "staffName": "Nguyễn Thu Hà (Kế toán)",
+        "reason": "Nhập composite, kim tiêm, găng tay",
+        "note": "",
+        "categoryName": "Chi mua vật tư nha khoa",
+        "categorySortPosition": 3
+      },
+      {
+        "date": "2026-10-07",
+        "counterpartyName": "Labo Răng sứ Ánh Dương",
+        "address": "Thanh Xuân, Hà Nội",
+        "phone": "024 0000 0182",
+        "incomeVnd": 0,
+        "expenseVnd": 4200000,
+        "internalIncomeVnd": 0,
+        "internalExpenseVnd": 0,
+        "voucherNo": "PC-2610008",
+        "fundName": "Tài khoản ngân hàng",
+        "staffName": "Nguyễn Thu Hà (Kế toán)",
+        "reason": "Thanh toán 3 mão sứ zirconia",
+        "note": "",
+        "categoryName": "Chi trả labo phục hình",
+        "categorySortPosition": 4
+      },
+      {
+        "date": "2026-10-09",
+        "counterpartyName": "Cửa hàng văn phòng phẩm Minh Anh",
+        "address": "Hoàn Kiếm, Hà Nội",
+        "phone": "024 0000 0183",
+        "incomeVnd": 0,
+        "expenseVnd": 620000,
+        "internalIncomeVnd": 0,
+        "internalExpenseVnd": 0,
+        "voucherNo": "PC-2610009",
+        "fundName": "Tiền mặt quầy lễ tân",
+        "staffName": "Nguyễn Thu Hà (Kế toán)",
+        "reason": "Mua giấy in, mực máy in",
+        "note": "",
+        "categoryName": "Chi điện nước, văn phòng phẩm",
+        "categorySortPosition": 5
+      }
+    ],
+    "totalRows": 9
+  }
 }

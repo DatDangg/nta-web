@@ -15,7 +15,15 @@ node scripts/screenshots/capture.mjs crm --only=03    # chụp lại 1 màn (the
 node scripts/screenshots/capture.mjs lms --probe      # chỉ ghi lại API thật, KHÔNG chụp
 node scripts/screenshots/capture.mjs lms --debug      # in console error của app + request đã chặn
 node scripts/screenshots/capture.mjs hrm --no-crops   # bỏ ảnh crop
+node scripts/screenshots/capture.mjs crm --only=06 --preview  # ảnh ra .tmp/preview/ (rà trước khi ghi vào repo)
 ```
+
+**Chỉ đọc trên hệ thống thật:** ngay sau đăng nhập (và chọn trường với LMS), `prepareLive` khoá ghi —
+mọi request POST/PUT/PATCH/DELETE ra ngoài máy bị `Fetch.failRequest` (kể cả khi `--probe`). Log
+`đã chặn N request ghi` cuối mỗi sản phẩm; `--debug` in từng request bị chặn và mọi API GET
+**không** có rule (`[⚠ không chặn]` — dữ liệu thật có thể lọt vào ảnh, phải thêm rule).
+Giới hạn: `Fetch` chỉ chặn request HTTP của trang — không thấy frame WebSocket sau khi upgrade và request
+phát từ service worker. Script chỉ mở trang + đọc, không bấm nút, nên rủi ro thấp.
 
 ### Mock bổ sung (offline)
 

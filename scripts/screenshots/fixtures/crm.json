@@ -2171,5 +2171,474 @@
     "ordersToday": 86,
     "revenueTodayVnd": 44854864,
     "generatedAt": "2026-10-11T10:00:00.000Z"
+  },
+  "complaints": [
+    {
+      "id": "fb_001",
+      "customerId": "cus_002",
+      "branchId": "br1",
+      "branch": {
+        "id": "br1",
+        "name": "Hồng Phúc Nướng & Lẩu – Cao Thắng",
+        "address": "Số 19 đường Cao Thắng, phường 5, quận 3, TP. Hồ Chí Minh",
+        "phone": "028 7300 1901",
+        "isActive": true,
+        "cukcukBranchId": "ck1000",
+        "cukcukBranchCode": "CS1",
+        "createdAt": "2026-01-05T03:00:00.000Z",
+        "updatedAt": "2026-09-01T03:00:00.000Z",
+        "hours": [],
+        "isOpenNow": true
+      },
+      "kind": "COMPLAINT",
+      "status": "OPEN",
+      "rating": null,
+      "body": "Chờ lên món hơn 25 phút dù đã đặt bàn trước, nhân viên không báo lý do.",
+      "createdAt": "2026-10-11T05:12:00.000Z",
+      "updatedAt": "2026-10-11T06:00:00.000Z",
+      "customer": {
+        "id": "cus_002",
+        "fullName": "Nguyễn Thị Hồng Nhung",
+        "phone": "+840913***117"
+      }
+    },
+    {
+      "id": "fb_002",
+      "customerId": "cus_007",
+      "branchId": "br2",
+      "branch": {
+        "id": "br2",
+        "name": "Hồng Phúc Nướng & Lẩu – Trần Quang Khải",
+        "address": "Số 88 Trần Quang Khải, phường Tân Định, quận 1, TP. Hồ Chí Minh",
+        "phone": "028 7300 1902",
+        "isActive": true,
+        "cukcukBranchId": "ck1001",
+        "cukcukBranchCode": "CS2",
+        "createdAt": "2026-01-05T03:00:00.000Z",
+        "updatedAt": "2026-09-01T03:00:00.000Z",
+        "hours": [],
+        "isOpenNow": true
+      },
+      "kind": "COMPLAINT",
+      "status": "IN_PROGRESS",
+      "rating": null,
+      "body": "Nước lẩu Thái hôm nay mặn hơn mọi lần, đề nghị kiểm tra lại công thức.",
+      "createdAt": "2026-10-10T07:19:00.000Z",
+      "updatedAt": "2026-10-10T08:00:00.000Z",
+      "customer": {
+        "id": "cus_007",
+        "fullName": "Bùi Tiến Dũng",
+        "phone": "+840918***202"
+      }
+    },
+    {
+      "id": "fb_003",
+      "customerId": "cus_012",
+      "branchId": "br3",
+      "branch": {
+        "id": "br3",
+        "name": "Hồng Phúc Nướng & Lẩu – Thảo Điền",
+        "address": "Số 42 Nguyễn Ư Dĩ, phường Thảo Điền, TP. Thủ Đức, TP. Hồ Chí Minh",
+        "phone": "028 7300 1903",
+        "isActive": true,
+        "cukcukBranchId": "ck1002",
+        "cukcukBranchCode": "CS3",
+        "createdAt": "2026-01-05T03:00:00.000Z",
+        "updatedAt": "2026-09-01T03:00:00.000Z",
+        "hours": [],
+        "isOpenNow": true
+      },
+      "kind": "COMPLAINT",
+      "status": "OPEN",
+      "rating": null,
+      "body": "Hoá đơn tính dư 1 phần bò Mỹ, đã được nhân viên xác nhận tại bàn.",
+      "createdAt": "2026-10-09T09:26:00.000Z",
+      "updatedAt": "2026-10-09T10:00:00.000Z",
+      "customer": {
+        "id": "cus_012",
+        "fullName": "Phạm Khánh Linh",
+        "phone": "+840915***287"
+      }
+    },
+    {
+      "id": "fb_004",
+      "customerId": "cus_005",
+      "branchId": "br1",
+      "branch": {
+        "id": "br1",
+        "name": "Hồng Phúc Nướng & Lẩu – Cao Thắng",
+        "address": "Số 19 đường Cao Thắng, phường 5, quận 3, TP. Hồ Chí Minh",
+        "phone": "028 7300 1901",
+        "isActive": true,
+        "cukcukBranchId": "ck1000",
+        "cukcukBranchCode": "CS1",
+        "createdAt": "2026-01-05T03:00:00.000Z",
+        "updatedAt": "2026-09-01T03:00:00.000Z",
+        "hours": [],
+        "isOpenNow": true
+      },
+      "kind": "COMPLAINT",
+      "status": "OPEN",
+      "rating": null,
+      "body": "Khu vực bàn gần cửa sổ bị nóng, điều hoà không đủ mát vào buổi trưa.",
+      "createdAt": "2026-10-08T11:33:00.000Z",
+      "updatedAt": "2026-10-08T12:00:00.000Z",
+      "customer": {
+        "id": "cus_005",
+        "fullName": "Vũ Đình Hải",
+        "phone": "+840916***168"
+      }
+    },
+    {
+      "id": "fb_005",
+      "customerId": "cus_010",
+      "branchId": "br2",
+      "branch": {
+        "id": "br2",
+        "name": "Hồng Phúc Nướng & Lẩu – Trần Quang Khải",
+        "address": "Số 88 Trần Quang Khải, phường Tân Định, quận 1, TP. Hồ Chí Minh",
+        "phone": "028 7300 1902",
+        "isActive": true,
+        "cukcukBranchId": "ck1001",
+        "cukcukBranchCode": "CS2",
+        "createdAt": "2026-01-05T03:00:00.000Z",
+        "updatedAt": "2026-09-01T03:00:00.000Z",
+        "hours": [],
+        "isOpenNow": true
+      },
+      "kind": "COMPLAINT",
+      "status": "IN_PROGRESS",
+      "rating": null,
+      "body": "Điểm tích luỹ của đơn tuần trước chưa được cộng vào tài khoản.",
+      "createdAt": "2026-10-07T13:40:00.000Z",
+      "updatedAt": "2026-10-07T14:00:00.000Z",
+      "customer": {
+        "id": "cus_010",
+        "fullName": "Nguyễn Thu Trang",
+        "phone": "+840913***253"
+      }
+    },
+    {
+      "id": "fb_006",
+      "customerId": "cus_003",
+      "branchId": "br3",
+      "branch": {
+        "id": "br3",
+        "name": "Hồng Phúc Nướng & Lẩu – Thảo Điền",
+        "address": "Số 42 Nguyễn Ư Dĩ, phường Thảo Điền, TP. Thủ Đức, TP. Hồ Chí Minh",
+        "phone": "028 7300 1903",
+        "isActive": true,
+        "cukcukBranchId": "ck1002",
+        "cukcukBranchCode": "CS3",
+        "createdAt": "2026-01-05T03:00:00.000Z",
+        "updatedAt": "2026-09-01T03:00:00.000Z",
+        "hours": [],
+        "isOpenNow": true
+      },
+      "kind": "COMPLAINT",
+      "status": "OPEN",
+      "rating": null,
+      "body": "Nhân viên giao đồ mang về quên bộ nước chấm và đũa dùng một lần.",
+      "createdAt": "2026-10-06T15:47:00.000Z",
+      "updatedAt": "2026-10-06T16:00:00.000Z",
+      "customer": {
+        "id": "cus_003",
+        "fullName": "Lê Văn Hùng",
+        "phone": "+840914***134"
+      }
+    },
+    {
+      "id": "fb_007",
+      "customerId": "cus_008",
+      "branchId": "br1",
+      "branch": {
+        "id": "br1",
+        "name": "Hồng Phúc Nướng & Lẩu – Cao Thắng",
+        "address": "Số 19 đường Cao Thắng, phường 5, quận 3, TP. Hồ Chí Minh",
+        "phone": "028 7300 1901",
+        "isActive": true,
+        "cukcukBranchId": "ck1000",
+        "cukcukBranchCode": "CS1",
+        "createdAt": "2026-01-05T03:00:00.000Z",
+        "updatedAt": "2026-09-01T03:00:00.000Z",
+        "hours": [],
+        "isOpenNow": true
+      },
+      "kind": "COMPLAINT",
+      "status": "RESOLVED",
+      "rating": null,
+      "body": "Đặt bàn 6 người qua điện thoại nhưng đến nơi chỉ có bàn 4 người.",
+      "createdAt": "2026-10-11T17:54:00.000Z",
+      "updatedAt": "2026-10-11T18:00:00.000Z",
+      "customer": {
+        "id": "cus_008",
+        "fullName": "Hoàng Lan Anh",
+        "phone": "+840919***219"
+      }
+    }
+  ],
+  "zaloStatus": {
+    "enabled": true,
+    "connected": true,
+    "oaId": "4207318865120094417",
+    "accessTokenExpiresAt": "2026-10-14T03:00:00.000Z",
+    "reconsentDeadline": "2027-01-08T03:00:00.000Z",
+    "needsReconsent": false,
+    "usingFixtures": false,
+    "channels": [
+      "OA_UID"
+    ],
+    "eventTemplates": [
+      {
+        "event": "loyalty.points_earned",
+        "configured": true,
+        "templateId": "418302",
+        "source": "db"
+      },
+      {
+        "event": "voucher.granted",
+        "configured": true,
+        "templateId": "418317",
+        "source": "db"
+      }
+    ]
+  },
+  "zaloFollowers": {
+    "total": 6,
+    "page": 1,
+    "pageSize": 20,
+    "items": [
+      {
+        "customerId": "cus_001",
+        "fullName": "Trần Quốc Khánh",
+        "phone": "+840912***100",
+        "oaUid": "5700304188611000",
+        "followsCheckedAt": "2026-10-10T02:10:00.000Z"
+      },
+      {
+        "customerId": "cus_004",
+        "fullName": "Phạm Minh Châu",
+        "phone": "+840915***151",
+        "oaUid": "5700304267801037",
+        "followsCheckedAt": "2026-10-09T02:13:00.000Z"
+      },
+      {
+        "customerId": "cus_007",
+        "fullName": "Bùi Tiến Dũng",
+        "phone": "+840918***202",
+        "oaUid": "5700304346991074",
+        "followsCheckedAt": "2026-10-08T02:16:00.000Z"
+      },
+      {
+        "customerId": "cus_010",
+        "fullName": "Nguyễn Thu Trang",
+        "phone": "+840913***253",
+        "oaUid": "5700304426181111",
+        "followsCheckedAt": "2026-10-07T02:19:00.000Z"
+      },
+      {
+        "customerId": "cus_002",
+        "fullName": "Nguyễn Thị Hồng Nhung",
+        "phone": "+840913***117",
+        "oaUid": "5700304505371148",
+        "followsCheckedAt": "2026-10-06T02:22:00.000Z"
+      },
+      {
+        "customerId": "cus_003",
+        "fullName": "Lê Văn Hùng",
+        "phone": "+840914***134",
+        "oaUid": "5700304584561185",
+        "followsCheckedAt": "2026-10-10T02:25:00.000Z"
+      }
+    ]
+  },
+  "zaloDeliveries": {
+    "total": 10,
+    "page": 1,
+    "pageSize": 20,
+    "items": [
+      {
+        "id": "nd_001",
+        "event": "loyalty.points_earned",
+        "channel": "OA_UID",
+        "status": "SENT",
+        "customerId": "cus_001",
+        "employeeId": null,
+        "recipientName": "Trần Quốc Khánh",
+        "providerMessageId": "msg_8800",
+        "errorCode": null,
+        "errorMessage": null,
+        "attempts": 1,
+        "createdAt": "2026-10-11T13:48:00.000Z",
+        "sentAt": "2026-10-11T13:48:00.000Z"
+      },
+      {
+        "id": "nd_002",
+        "event": "voucher.granted",
+        "channel": "OA_UID",
+        "status": "SENT",
+        "customerId": "cus_004",
+        "employeeId": null,
+        "recipientName": "Phạm Minh Châu",
+        "providerMessageId": "msg_8801",
+        "errorCode": null,
+        "errorMessage": null,
+        "attempts": 1,
+        "createdAt": "2026-10-11T12:44:00.000Z",
+        "sentAt": "2026-10-11T12:44:00.000Z"
+      },
+      {
+        "id": "nd_003",
+        "event": "loyalty.points_earned",
+        "channel": "OA_UID",
+        "status": "SENT",
+        "customerId": "cus_007",
+        "employeeId": null,
+        "recipientName": "Bùi Tiến Dũng",
+        "providerMessageId": "msg_8802",
+        "errorCode": null,
+        "errorMessage": null,
+        "attempts": 1,
+        "createdAt": "2026-10-11T11:40:00.000Z",
+        "sentAt": "2026-10-11T11:40:00.000Z"
+      },
+      {
+        "id": "nd_004",
+        "event": "loyalty.points_earned",
+        "channel": "OA_UID",
+        "status": "QUEUED",
+        "customerId": "cus_010",
+        "employeeId": null,
+        "recipientName": "Nguyễn Thu Trang",
+        "providerMessageId": null,
+        "errorCode": null,
+        "errorMessage": null,
+        "attempts": 1,
+        "createdAt": "2026-10-11T10:36:00.000Z",
+        "sentAt": null
+      },
+      {
+        "id": "nd_005",
+        "event": "voucher.granted",
+        "channel": "OA_UID",
+        "status": "SENT",
+        "customerId": "cus_001",
+        "employeeId": null,
+        "recipientName": "Trần Quốc Khánh",
+        "providerMessageId": "msg_8804",
+        "errorCode": null,
+        "errorMessage": null,
+        "attempts": 1,
+        "createdAt": "2026-10-11T09:32:00.000Z",
+        "sentAt": "2026-10-11T09:32:00.000Z"
+      },
+      {
+        "id": "nd_006",
+        "event": "loyalty.points_earned",
+        "channel": "OA_UID",
+        "status": "FAILED",
+        "customerId": "cus_004",
+        "employeeId": null,
+        "recipientName": "Phạm Minh Châu",
+        "providerMessageId": null,
+        "errorCode": "-124",
+        "errorMessage": "Người nhận chưa tương tác với OA trong 7 ngày",
+        "attempts": 3,
+        "createdAt": "2026-10-11T08:28:00.000Z",
+        "sentAt": null
+      },
+      {
+        "id": "nd_007",
+        "event": "loyalty.points_earned",
+        "channel": "OA_UID",
+        "status": "SENT",
+        "customerId": "cus_007",
+        "employeeId": null,
+        "recipientName": "Bùi Tiến Dũng",
+        "providerMessageId": "msg_8806",
+        "errorCode": null,
+        "errorMessage": null,
+        "attempts": 1,
+        "createdAt": "2026-10-11T07:24:00.000Z",
+        "sentAt": "2026-10-11T07:24:00.000Z"
+      },
+      {
+        "id": "nd_008",
+        "event": "voucher.granted",
+        "channel": "OA_UID",
+        "status": "SKIPPED",
+        "customerId": "cus_010",
+        "employeeId": null,
+        "recipientName": "Nguyễn Thu Trang",
+        "providerMessageId": null,
+        "errorCode": "NO_UID",
+        "errorMessage": "Khách chưa liên kết Zalo",
+        "attempts": 1,
+        "createdAt": "2026-10-11T06:20:00.000Z",
+        "sentAt": null
+      },
+      {
+        "id": "nd_009",
+        "event": "loyalty.points_earned",
+        "channel": "OA_UID",
+        "status": "SENT",
+        "customerId": "cus_001",
+        "employeeId": null,
+        "recipientName": "Trần Quốc Khánh",
+        "providerMessageId": "msg_8808",
+        "errorCode": null,
+        "errorMessage": null,
+        "attempts": 1,
+        "createdAt": "2026-10-11T05:16:00.000Z",
+        "sentAt": "2026-10-11T05:16:00.000Z"
+      },
+      {
+        "id": "nd_010",
+        "event": "voucher.granted",
+        "channel": "OA_UID",
+        "status": "SENT",
+        "customerId": "cus_004",
+        "employeeId": null,
+        "recipientName": "Phạm Minh Châu",
+        "providerMessageId": "msg_8809",
+        "errorCode": null,
+        "errorMessage": null,
+        "attempts": 1,
+        "createdAt": "2026-10-11T04:12:00.000Z",
+        "sentAt": "2026-10-11T04:12:00.000Z"
+      }
+    ]
+  },
+  "zaloEventTemplates": {
+    "loyalty.points_earned": {
+      "event": "loyalty.points_earned",
+      "templateId": "418302",
+      "source": "db",
+      "fieldMap": {
+        "customer_name": "customer_name",
+        "points": "points",
+        "balance": "balance",
+        "order_code": "order_code",
+        "invoice_cost": "invoice_cost",
+        "branch_name": "branch_name",
+        "date": "date"
+      },
+      "updatedAt": "2026-09-28T03:00:00.000Z",
+      "updatedByName": "Trần Quốc Khánh"
+    },
+    "voucher.granted": {
+      "event": "voucher.granted",
+      "templateId": "418317",
+      "source": "db",
+      "fieldMap": {
+        "customer_name": "customer_name",
+        "voucher_name": "voucher_name",
+        "voucher_code": "voucher_code",
+        "voucher_value": "voucher_value",
+        "expiry_date": "expiry_date"
+      },
+      "updatedAt": "2026-09-28T03:05:00.000Z",
+      "updatedByName": "Trần Quốc Khánh"
+    }
   }
 }

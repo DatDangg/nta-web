@@ -91,15 +91,24 @@ export const LIVE = {
     // App đa trường: sau khi đăng nhập phải chọn 1 trường thì API mới trả dữ liệu (không thì 403).
     afterLogin: async (cdp, sessionId) => {
       const base = ENV.LMS_URL.replace(/\/$/, "");
-      await cdp.navigate(sessionId, `${base}/select-tenant`);
-      await cdp.waitUntil(sessionId, 'document.body.innerText.includes("chọn trường")', { timeout: 30000, label: "trang chọn trường" });
-      const picked = await cdp.evaluate(
-        sessionId,
-        `(() => { const b = [...document.querySelectorAll("button,a,[role=button]")]
-            .find((e) => /Minh Châu|Phương Nam/i.test(e.innerText || ""));
-          if (!b) return null; b.click(); return (b.innerText || "").replace(/\\s+/g, " ").slice(0, 60); })()`
-      );
-      if (!picked) throw new Error("không thấy nút chọn trường");
+      // Danh sách trường tải sau tiêu đề và đôi khi về rỗng (đăng nhập vào thẳng /dashboard, chưa có
+      // trường → mọi API 403). Thử lại tối đa 3 lần; không chọn được thì DỪNG, không chụp ảnh sai.
+      const PICK = `(() => { const b = [...document.querySelectorAll("button,a,[role=button]")]
+          .find((e) => /Minh Châu|Phương Nam/i.test(e.innerText || ""));
+        if (!b) return null; b.click(); return (b.innerText || "").replace(/\\s+/g, " ").slice(0, 60); })()`;
+      let picked = null;
+      for (let attempt = 1; attempt <= 3 && !picked; attempt++) {
+        // Chờ app lưu token/hydrate store sau đăng nhập — vào trang quá sớm thì danh sách rỗng.
+        await sleep(2500 * attempt);
+        await cdp.navigate(sessionId, `${base}/select-tenant`);
+        await cdp.waitUntil(
+          sessionId,
+          '[...document.querySelectorAll("button,a,[role=button]")].some((e) => /Minh Châu|Phương Nam/i.test(e.innerText || ""))',
+          { timeout: 15000, label: "danh sách trường" }
+        ).catch(() => {});
+        picked = await cdp.evaluate(sessionId, PICK);
+      }
+      if (!picked) throw new Error("không thấy nút chọn trường (đã thử 3 lần)");
       await cdp.waitUntil(sessionId, "location.pathname !== '/select-tenant'", { timeout: 30000, label: "vào được trường" });
       await cdp.waitUntil(sessionId, 'document.readyState === "complete"', { timeout: 60000 }).catch(() => {});
       // App xếp thao tác đăng nhập vào hàng đợi ngoại tuyến → hiện banner "Đã có mạng trở lại"
@@ -111,6 +120,10 @@ export const LIVE = {
       return picked;
     },
     rules: [
+      // Báo cáo liên trường: API trả object thô, không có envelope.
+      { test: /\/consolidated-reporting\/dashboard/, body: (F) => F.consolidatedDashboard },
+      { test: /\/consolidated-reporting\/runs/, body: (F) => F.consolidatedRuns },
+      { test: /\/consolidated-reporting\/comparison/, body: (F) => F.consolidatedComparison },
       { test: /\/workspace\/scope/, body: (F) => F.workspace.scope },
       { test: /\/workspace\/dashboard/, body: (F) => F.workspace },
       { test: /\/tasks\/dashboard/, body: (F) => env(F.taskStats) },
@@ -149,8 +162,13 @@ export const LIVE = {
       // thứ tự quan trọng: email trước, rồi mới tới tên chuỗi (tránh ăn vào trong email)
       ["[\\w.+-]+@dragonhotpot[\\w.-]*", "owner@example.com"],
       ["Sichuan\\s*·\\s*Riverside", "Nướng & Lẩu · Quận 3 · TP.HCM"],
+      // Giá trị mẫu Zalo ("… Quận 1") nằm giữa khối JSON — rule tổng quát bên dưới sẽ ăn tới hết text node.
+      ["Dragon\\s*Hot\\s*Pot\\s*Quận\\s*1", "Hồng Phúc – Cao Thắng"],
       ["Dragon\\s*Hot\\s*Pot[^·]*", "Hồng Phúc Nướng & Lẩu"],
       ["Owner\\s*Admin", "Trần Quốc Khánh"],
+      // Chữ tắt avatar sinh từ tên tài khoản thật ("Owner Admin" → "OA"). Neo cả text node để không
+      // đụng chữ "OA" trong "Zalo OA".
+      ["^\\s*OA\\s*$", "TK"],
       // "CukCuk" là tên hệ POS mà khách hàng thật đang dùng → ghi chung cho trung tính
       ["CukCuk", "POS"],
     ],
@@ -161,6 +179,11 @@ export const LIVE = {
       { test: /\/visits/, body: (F) => ({ data: F.reservations, page: 1, pageSize: F.reservations.length, total: F.reservations.length, totalPages: 1 }) },
       { test: /\/orders/, body: (F) => ({ data: F.orders, page: 1, pageSize: F.orders.length, total: F.orders.length, totalPages: 1 }) },
       { test: /\/branches/, body: (F) => F.branches },
+      { test: /\/feedback/, body: (F) => ({ data: F.complaints, page: 1, pageSize: 100, total: F.complaints.length, totalPages: 1 }) },
+      { test: /\/notifications\/zalo\/status/, body: (F) => F.zaloStatus },
+      { test: /\/notifications\/zalo\/followers/, body: (F) => F.zaloFollowers },
+      { test: /\/notifications\/zalo\/events\/[^/]+\/template/, body: (F, url) => F.zaloEventTemplates[decodeURIComponent(/events\/([^/]+)\/template/.exec(url)[1])] },
+      { test: /\/notifications\/deliveries/, body: (F) => F.zaloDeliveries },
       { test: /\/loyalty\/tiers/, body: () => [{ code: "MEMBER", nameVi: "Thành Viên" }, { code: "GOLD", nameVi: "Vàng" }, { code: "PLATINUM", nameVi: "Bạch Kim" }] },
     ],
   },
@@ -191,15 +214,59 @@ export const LIVE = {
       { test: /\/appointments/, body: (F, url) => ({ appointments: pickAppointments(F.appointments, url) }) },
       { test: /\/visits/, body: (F, url) => ({ visits: pickVisits(F.visits, url) }) },
       { test: /\/inventory\/items/, body: (F) => ({ items: F.inventory }) },
+      { test: /\/reminders\/templates/, body: (F) => F.reminderTemplates },
+      { test: /\/reminders\/rules/, body: (F) => F.reminderRules },
+      { test: /\/reminders\/deliveries/, body: (F) => F.reminderDeliveries },
+      { test: /\/zalo\/zca\/qr-login/, body: (F) => F.zaloQrLogin },
+      { test: /\/reports\/cash-transactions/, body: (F) => F.cashTransactions },
+      { test: /\/operations\/cashbook/, body: (F) => F.cashbook },
+      // Cấu hình + logo của phòng khám thật (dùng cho đầu trang in) → trả rỗng.
+      { test: /\/admin\/settings/, body: () => ({ settings: [] }) },
+      { test: /\/files\/brand-logo/, body: () => ({ file: null }) },
     ],
   },
 };
 
+/* ---------- khoá ghi: chỉ đọc trên hệ thống thật ---------- */
+const READ_METHODS = new Set(["GET", "HEAD", "OPTIONS"]);
+// Làm mới token không ghi dữ liệu nghiệp vụ — để app không tự đăng xuất giữa chừng.
+// So khớp trên pathname (bỏ query) và neo cuối đường dẫn: request ghi có `?x=/auth/refresh` vẫn bị chặn.
+const TOKEN_REFRESH = /\/(auth\/refresh|refresh-token|token\/refresh)\/?$/i;
+const isTokenRefresh = (url) => {
+  try { return TOKEN_REFRESH.test(new URL(url).pathname); } catch { return false; }
+};
+const isLocalUrl = (url) => /^https?:\/\/(127\.0\.0\.1|localhost)(:\d+)?\//i.test(url);
+
+/**
+ * Sau khi đăng nhập xong (`guard.lock()`), mọi request ghi (POST/PUT/PATCH/DELETE…) ra ngoài
+ * máy đều bị `Fetch.failRequest` — app thật là hệ thống của khách hàng, chụp ảnh KHÔNG được
+ * tạo/sửa/xoá bản ghi nào. Trước lock chỉ có form đăng nhập + chọn trường (LMS).
+ * Trả `true` nếu request đã bị chặn.
+ */
+async function blockWrite(cdp, sessionId, p, guard, debug) {
+  const { method, url } = p.request;
+  if (!guard.locked || READ_METHODS.has(method) || isLocalUrl(url) || isTokenRefresh(url)) return false;
+  guard.blocked++;
+  if (debug) console.log(`    [chặn ghi] ${method} ${url.replace(/^https?:\/\/[^/]+/, "").split("?")[0]}`);
+  await cdp.send("Fetch.failRequest", { requestId: p.requestId, errorReason: "BlockedByClient" }, sessionId).catch(() => {});
+  return true;
+}
+
 /* ---------- chặn API ---------- */
-export async function prepareLive(cdp, sessionId, conf, fixture, { debug = false } = {}) {
+/**
+ * `probe: true` → không thay dữ liệu (để ghi shape API thật) nhưng VẪN khoá ghi.
+ * Trả `guard`: gọi `guard.lock()` ngay sau đăng nhập; `guard.blocked` = số request ghi đã chặn.
+ */
+export async function prepareLive(cdp, sessionId, conf, fixture, { debug = false, probe = false } = {}) {
   const cfg = LIVE[conf.product];
+  const guard = { locked: false, blocked: 0, lock() { this.locked = true; } };
   await cdp.send("Fetch.enable", { patterns: [{ urlPattern: "*", requestStage: "Request" }] }, sessionId);
   cdp.on(sessionId, "Fetch.requestPaused", async (p) => {
+    if (await blockWrite(cdp, sessionId, p, guard, debug)) return;
+    if (probe) {
+      await cdp.send("Fetch.continueRequest", { requestId: p.requestId }, sessionId).catch(() => {});
+      return;
+    }
     // Tài nguyên tĩnh cần thay (logo brand nằm trong bundle app) — kiểm tra TRƯỚC apiTest.
     const stat = cfg.staticRules?.find((r) => r.test.test(p.request.url));
     if (stat) {
@@ -236,10 +303,13 @@ export async function prepareLive(cdp, sessionId, conf, fixture, { debug = false
         const body = Buffer.from(JSON.stringify(payload), "utf8").toString("base64");
         await cdp.send("Fetch.fulfillRequest", { requestId: p.requestId, responseCode: 200, responseHeaders: corsHeaders(p.request), body }, sessionId);
       } else {
+        // API không có rule đi thẳng tới server thật → dữ liệu thật có thể lọt vào ảnh.
+        if (isApi && debug) console.log(`    [⚠ không chặn] ${p.request.method} ${p.request.url.replace(/^https?:\/\/[^/]+/, "")}`);
         await cdp.send("Fetch.continueRequest", { requestId: p.requestId }, sessionId);
       }
     } catch { /* request có thể đã bị huỷ khi trang điều hướng */ }
   });
+  return guard;
 }
 
 /** Header CORS cho response tự trả (app và API khác origin — không có sẽ bị browser chặn). */
@@ -349,9 +419,14 @@ export async function login(cdp, sessionId, conf) {
 }
 
 /* ---------- probe: chỉ ghi lại cấu trúc traffic thật (KHÔNG ghi giá trị → không lộ dữ liệu) ---------- */
+// Đệ quy tới độ sâu 3 để thấy field lồng nhau (vẫn chỉ in TÊN field + kiểu, không in giá trị).
 function shape(v, depth = 0) {
-  if (Array.isArray(v)) return `[${v.length}${v.length && depth < 2 ? ` of ${shape(v[0], depth + 1)}` : ""}]`;
-  if (v && typeof v === "object") return `{${Object.keys(v).slice(0, 26).join(",")}}`;
+  if (Array.isArray(v)) return `[${v.length}${v.length && depth < 3 ? ` of ${shape(v[0], depth + 1)}` : ""}]`;
+  if (v && typeof v === "object") {
+    const keys = Object.keys(v).slice(0, 30);
+    if (depth >= 3) return `{${keys.join(",")}}`;
+    return `{${keys.map((k) => (v[k] && typeof v[k] === "object" ? `${k}:${shape(v[k], depth + 1)}` : `${k}:${shape(v[k], 3)}`)).join(",")}}`;
+  }
   return v === null ? "null" : typeof v;
 }
 
@@ -365,19 +440,27 @@ export async function enableProbe(cdp, sessionId, slug) {
     if (p.type !== "XHR" && p.type !== "Fetch") return;
     fs.appendFileSync(file, `→ [${p.request.method}] ${p.request.url}\n`);
   });
-  cdp.on(sessionId, "Network.responseReceived", async (p) => {
+  // Đọc body ở `loadingFinished` (lúc `responseReceived` body có thể chưa tải xong → đọc hụt).
+  const pending = new Map();
+  cdp.on(sessionId, "Network.responseReceived", (p) => {
     if (p.type !== "XHR" && p.type !== "Fetch") return;
     if (!(p.response.mimeType ?? "").includes("json")) {
       fs.appendFileSync(file, `← ${p.response.status} ${p.response.mimeType} ${p.response.url}\n`);
       return;
     }
+    pending.set(p.requestId, p.response);
+  });
+  cdp.on(sessionId, "Network.loadingFinished", async (p) => {
+    const res = pending.get(p.requestId);
+    if (!res) return;
+    pending.delete(p.requestId);
     try {
       const { body } = await cdp.send("Network.getResponseBody", { requestId: p.requestId }, sessionId);
       const json = JSON.parse(body);
       const inner = json && typeof json === "object" && "data" in json ? `\n      data: ${shape(json.data)}` : "";
-      fs.appendFileSync(file, `← ${p.response.status} JSON ${p.response.url}\n    ${shape(json)}${inner}\n`);
+      fs.appendFileSync(file, `← ${res.status} JSON ${res.url}\n    ${shape(json)}${inner}\n`);
     } catch {
-      fs.appendFileSync(file, `← ${p.response.status} JSON (không đọc được body) ${p.response.url}\n`);
+      fs.appendFileSync(file, `← ${res.status} JSON (không đọc được body) ${res.url}\n`);
     }
   });
 }

@@ -333,6 +333,86 @@ const fixture = {
   inventory,
 };
 
+/* ---------- CSKH Zalo (4 quy tắc: danh sách app giới hạn max-h 360px, nhiều hơn sẽ tràn khỏi thẻ khi chụp) — GET /reminders/{templates,rules,deliveries}, /zalo/zca/qr-login ----------
+ * Sinh SAU object `fixture` vì `uid()` đếm tuần tự: thêm ở trên sẽ đổi id các bản ghi cũ. */
+const REMINDER_PLAN = [
+  ["APPOINTMENT_CONFIRMATION", "Zalo - Xác nhận lịch hẹn mới", 0, "Kính chào {patientName}, {branchName} xác nhận lịch hẹn {serviceName} vào {appointmentTime}."],
+  ["APPOINTMENT_REMINDER", "Zalo - Nhắc lịch trước", 1440, "Kính chào {patientName}, {branchName} nhắc lịch {serviceName} vào {appointmentTime}. Vui lòng đến trước 10 phút."],
+  ["REVISIT_REMINDER", "Zalo - Nhắc tái khám định kỳ", 4320, "Đã 6 tháng kể từ lần cạo vôi gần nhất, {branchName} mời {patientName} đặt lịch kiểm tra định kỳ."],
+  ["BIRTHDAY_PROMOTION", "Zalo - Chúc mừng sinh nhật", 0, "Chúc mừng sinh nhật {patientName}! Tặng bạn ưu đãi 20% tẩy trắng răng trong tháng này."],
+];
+const reminderTemplates = REMINDER_PLAN.map(([scenario, name, , body]) => ({
+  id: uid(), branchId: BRANCHES[0].id, channel: "ZALO", scenario, name, body,
+  isDefault: true, isActive: true, deletedAt: null, createdAt: iso("2026-08-20", "02:00:00"), updatedAt: iso("2026-09-15", "02:00:00"),
+}));
+fixture.reminderTemplates = { templates: reminderTemplates };
+fixture.reminderRules = {
+  rules: REMINDER_PLAN.map(([scenario, , minutesBefore], i) => ({
+    id: uid(), branchId: BRANCHES[0].id, templateId: reminderTemplates[i].id, channel: "ZALO", scenario,
+    minutesBefore, isActive: scenario !== "BIRTHDAY_PROMOTION", useAiDraft: true, maxAttempts: 3, deletedAt: null,
+    createdAt: iso("2026-08-20", "02:10:00"), updatedAt: iso("2026-09-15", "02:10:00"),
+    branch: BRANCHES[0], template: reminderTemplates[i],
+  })),
+};
+fixture.reminderDeliveries = {
+  deliveries: appointments.slice(0, 6).map((a, i) => ({
+    id: uid(), branchId: BRANCHES[0].id, channel: "ZALO", scenario: REMINDER_PLAN[i % 2][0],
+    status: i === 3 ? "FAILED" : "SENT", messageBody: `Kính chào ${a.patientDisplayName}, Nha khoa Minh Tâm nhắc lịch khám của bạn.`,
+    errorMessage: i === 3 ? "Khách chưa kết bạn Zalo với phòng khám" : null,
+    createdAt: a.startsAt, appointment: { id: a.id, startsAt: a.startsAt },
+    patientProfile: { id: a.patientProfileId, fullName: a.patientDisplayName }, reminderJob: { id: uid() },
+  })),
+};
+// Trạng thái CONNECTED → app ẩn banner "Quét QR đăng nhập Zalo".
+fixture.zaloQrLogin = { sessionId: null, status: "CONNECTED", qrImageDataUrl: null, errorMessage: null, expiresAt: null, accountId: uid(), runtimeMarker: "zca" };
+
+/* ---------- báo cáo thu/chi/chuyển quỹ — /internal/reports/finance ----------
+ * GET /reports/cash-transactions → {rows, totalRows}; app tự nhóm theo hướng (thu/chi/chuyển quỹ)
+ * và `categoryName`. GET /operations/cashbook chỉ nạp ô lọc (quỹ, nhóm thu chi) — vouchers để rỗng.
+ * GET /admin/settings, /files/brand-logo → rỗng (không tải logo/cấu hình phòng khám thật). */
+const FUNDS = [["TM", "Tiền mặt quầy lễ tân"], ["CK", "Tài khoản ngân hàng"], ["POS", "Quẹt thẻ POS"]].map(([code, name]) => ({
+  id: uid(), branchId: BRANCHES[0].id, code, name, managerText: null, note: null, bankCode: null, bankAccount: null, accountName: null,
+  allowCash: code === "TM", allowSwipe: code === "POS", allowTransfer: code === "CK", isProtected: false, currency: "VND",
+  openingBalanceVnd: 0, currentBalanceVnd: 0, isActive: true, createdAt: iso("2026-01-02"), updatedAt: iso("2026-09-01"),
+}));
+const CASH_CATS = [
+  ["Thu tiền điều trị", "INCOME", 1], ["Thu tiền đặt cọc niềng răng", "INCOME", 2],
+  ["Chi mua vật tư nha khoa", "EXPENSE", 3], ["Chi trả labo phục hình", "EXPENSE", 4], ["Chi điện nước, văn phòng phẩm", "EXPENSE", 5],
+].map(([name, type, sortPosition]) => ({
+  id: uid(), branchId: BRANCHES[0].id, code: `NC${sortPosition}`, name, type, allowBoth: false, groupName: type === "INCOME" ? "Thu" : "Chi",
+  note: null, sortPosition, isActive: true, createdAt: iso("2026-01-02"), updatedAt: iso("2026-09-01"),
+}));
+fixture.cashbook = { funds: FUNDS, categories: CASH_CATS, vouchers: [], transfers: [] };
+const SUPPLIERS = [
+  ["Công ty TNHH Vật tư Nha khoa Phương Đông", "Đống Đa, Hà Nội", "024 0000 0181"],
+  ["Labo Răng sứ Ánh Dương", "Thanh Xuân, Hà Nội", "024 0000 0182"],
+];
+const cashRow = (i, date, cat, who, address, phone, amount, fund, reason) => ({
+  date, counterpartyName: who, address, phone,
+  incomeVnd: cat.type === "INCOME" ? amount : 0, expenseVnd: cat.type === "EXPENSE" ? amount : 0,
+  internalIncomeVnd: 0, internalExpenseVnd: 0,
+  voucherNo: `${cat.type === "INCOME" ? "PT" : "PC"}-2610${String(i + 1).padStart(3, "0")}`,
+  fundName: fund.name, staffName: cat.type === "INCOME" ? "Lê Thị Hồng (Lễ tân)" : "Nguyễn Thu Hà (Kế toán)",
+  reason, note: "", categoryName: cat.name, categorySortPosition: cat.sortPosition,
+});
+const pt = (n) => patients[n];
+// SĐT rõ ràng là giả (đầu 0900 000) — tránh dạng số thật có thể trùng thuê bao.
+const fakePhone = (n) => `0900 000 ${String(101 + n * 7).padStart(3, "0")}`;
+fixture.cashTransactions = (() => {
+  const rows = [
+    cashRow(0, "2026-10-01", CASH_CATS[0], pt(0).fullName, "Cầu Giấy, Hà Nội", fakePhone(0), 1_500_000, FUNDS[0], "Thanh toán nhổ răng khôn"),
+    cashRow(1, "2026-10-02", CASH_CATS[0], pt(1).fullName, "Thanh Xuân, Hà Nội", fakePhone(1), 450_000, FUNDS[2], "Thanh toán trám composite"),
+    cashRow(2, "2026-10-03", CASH_CATS[0], pt(3).fullName, "Đống Đa, Hà Nội", fakePhone(3), 3_000_000, FUNDS[1], "Thanh toán bọc răng sứ"),
+    cashRow(3, "2026-10-05", CASH_CATS[0], pt(5).fullName, "Hà Đông, Hà Nội", fakePhone(5), 1_800_000, FUNDS[0], "Thanh toán điều trị tuỷ"),
+    cashRow(4, "2026-10-06", CASH_CATS[1], pt(8).fullName, "Nam Từ Liêm, Hà Nội", fakePhone(8), 10_000_000, FUNDS[1], "Đặt cọc niềng răng mắc cài"),
+    cashRow(5, "2026-10-08", CASH_CATS[0], pt(10).fullName, "Ba Đình, Hà Nội", fakePhone(10), 350_000, FUNDS[0], "Thanh toán cạo vôi răng"),
+    cashRow(6, "2026-10-02", CASH_CATS[2], SUPPLIERS[0][0], SUPPLIERS[0][1], SUPPLIERS[0][2], 6_850_000, FUNDS[1], "Nhập composite, kim tiêm, găng tay"),
+    cashRow(7, "2026-10-07", CASH_CATS[3], SUPPLIERS[1][0], SUPPLIERS[1][1], SUPPLIERS[1][2], 4_200_000, FUNDS[1], "Thanh toán 3 mão sứ zirconia"),
+    cashRow(8, "2026-10-09", CASH_CATS[4], "Cửa hàng văn phòng phẩm Minh Anh", "Hoàn Kiếm, Hà Nội", "024 0000 0183", 620_000, FUNDS[0], "Mua giấy in, mực máy in"),
+  ];
+  return { rows, totalRows: rows.length };
+})();
+
 const out = path.resolve("scripts/screenshots/fixtures/dentgo.json");
 fs.mkdirSync(path.dirname(out), { recursive: true });
 fs.writeFileSync(out, JSON.stringify(fixture, null, 2));

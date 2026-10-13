@@ -264,6 +264,101 @@ const dashboard = {
   generatedAt: "2026-10-11T10:00:00.000Z",
 };
 
+/* ---------- khiếu nại — GET /api/feedback?kind=COMPLAINT (màn /complaints chỉ hiện OPEN | IN_PROGRESS) ---------- */
+const COMPLAINT_BODIES = [
+  "Chờ lên món hơn 25 phút dù đã đặt bàn trước, nhân viên không báo lý do.",
+  "Nước lẩu Thái hôm nay mặn hơn mọi lần, đề nghị kiểm tra lại công thức.",
+  "Hoá đơn tính dư 1 phần bò Mỹ, đã được nhân viên xác nhận tại bàn.",
+  "Khu vực bàn gần cửa sổ bị nóng, điều hoà không đủ mát vào buổi trưa.",
+  "Điểm tích luỹ của đơn tuần trước chưa được cộng vào tài khoản.",
+  "Nhân viên giao đồ mang về quên bộ nước chấm và đũa dùng một lần.",
+  "Đặt bàn 6 người qua điện thoại nhưng đến nơi chỉ có bàn 4 người.",
+];
+const COMPLAINT_STATUS = ["OPEN", "IN_PROGRESS", "OPEN", "OPEN", "IN_PROGRESS", "OPEN", "RESOLVED"];
+const complaints = COMPLAINT_BODIES.map((body, i) => {
+  const c = customers[(i * 5 + 1) % customers.length];
+  return {
+    id: `fb_${String(i + 1).padStart(3, "0")}`,
+    customerId: c.id,
+    branchId: BRANCHES[i % 3].id,
+    branch: BRANCHES[i % 3],
+    kind: "COMPLAINT",
+    status: COMPLAINT_STATUS[i],
+    rating: null,
+    body,
+    createdAt: `2026-10-${pad2(11 - (i % 6))}T${pad2(5 + i * 2)}:${pad2(12 + i * 7)}:00.000Z`,
+    updatedAt: `2026-10-${pad2(11 - (i % 6))}T${pad2(6 + i * 2)}:00:00.000Z`,
+    customer: { id: c.id, fullName: c.fullName, phone: c.phone },
+  };
+});
+
+/* ---------- thông báo Zalo — /api/notifications/zalo/{status,followers,events/*}, /api/notifications/deliveries ---------- */
+const zaloStatus = {
+  enabled: true,
+  connected: true,
+  oaId: "4207318865120094417",
+  accessTokenExpiresAt: "2026-10-14T03:00:00.000Z",
+  reconsentDeadline: "2027-01-08T03:00:00.000Z",
+  needsReconsent: false,
+  usingFixtures: false,
+  channels: ["OA_UID"],
+  eventTemplates: [
+    { event: "loyalty.points_earned", configured: true, templateId: "418302", source: "db" },
+    { event: "voucher.granted", configured: true, templateId: "418317", source: "db" },
+  ],
+};
+const followerList = customers.filter((c) => c.zalo.followsOA).concat(customers.slice(1, 3));
+const zaloFollowers = {
+  total: followerList.length, page: 1, pageSize: 20,
+  items: followerList.map((c, i) => ({
+    customerId: c.id,
+    fullName: c.fullName,
+    phone: c.phone,
+    oaUid: `57${String(30418861 + i * 7919).padStart(10, "0")}${String(1000 + i * 37)}`,
+    followsCheckedAt: `2026-10-${pad2(10 - (i % 5))}T02:${pad2(10 + i * 3)}:00.000Z`,
+  })),
+};
+const DELIVERY_PLAN = [
+  ["loyalty.points_earned", "SENT"], ["voucher.granted", "SENT"], ["loyalty.points_earned", "SENT"],
+  ["loyalty.points_earned", "QUEUED"], ["voucher.granted", "SENT"], ["loyalty.points_earned", "FAILED"],
+  ["loyalty.points_earned", "SENT"], ["voucher.granted", "SKIPPED"], ["loyalty.points_earned", "SENT"],
+  ["voucher.granted", "SENT"],
+];
+const zaloDeliveries = {
+  total: DELIVERY_PLAN.length, page: 1, pageSize: 20,
+  items: DELIVERY_PLAN.map(([event, status], i) => {
+    const c = customers[(i * 3) % customers.length];
+    const createdAt = `2026-10-11T${pad2(13 - i)}:${pad2(48 - i * 4)}:00.000Z`;
+    return {
+      id: `nd_${String(i + 1).padStart(3, "0")}`,
+      event,
+      channel: "OA_UID",
+      status,
+      customerId: c.id,
+      employeeId: null,
+      recipientName: c.fullName,
+      providerMessageId: status === "SENT" ? `msg_${8800 + i}` : null,
+      errorCode: status === "FAILED" ? "-124" : status === "SKIPPED" ? "NO_UID" : null,
+      errorMessage: status === "FAILED" ? "Người nhận chưa tương tác với OA trong 7 ngày" : status === "SKIPPED" ? "Khách chưa liên kết Zalo" : null,
+      attempts: status === "FAILED" ? 3 : 1,
+      createdAt,
+      sentAt: status === "SENT" ? createdAt : null,
+    };
+  }),
+};
+const zaloEventTemplates = {
+  "loyalty.points_earned": {
+    event: "loyalty.points_earned", templateId: "418302", source: "db",
+    fieldMap: { customer_name: "customer_name", points: "points", balance: "balance", order_code: "order_code", invoice_cost: "invoice_cost", branch_name: "branch_name", date: "date" },
+    updatedAt: "2026-09-28T03:00:00.000Z", updatedByName: "Trần Quốc Khánh",
+  },
+  "voucher.granted": {
+    event: "voucher.granted", templateId: "418317", source: "db",
+    fieldMap: { customer_name: "customer_name", voucher_name: "voucher_name", voucher_code: "voucher_code", voucher_value: "voucher_value", expiry_date: "expiry_date" },
+    updatedAt: "2026-09-28T03:05:00.000Z", updatedByName: "Trần Quốc Khánh",
+  },
+};
+
 const fixture = {
   meta: {
     chain: "Hồng Phúc Nướng & Lẩu",
@@ -276,6 +371,11 @@ const fixture = {
   reservations,
   orders,
   dashboard,
+  complaints,
+  zaloStatus,
+  zaloFollowers,
+  zaloDeliveries,
+  zaloEventTemplates,
 };
 
 const out = path.resolve("scripts/screenshots/fixtures/crm.json");

@@ -435,6 +435,97 @@ const fixture = {
   },
 };
 
+/* ---------- báo cáo hợp nhất liên trường — GET /consolidated-reporting/{dashboard,runs} ----------
+ * API trả object thô (KHÔNG có envelope {success,data}). Số liệu khớp `schools` ở trên
+ * (học sinh / nhân sự / lớp) để màn tổng quan và màn liên trường nói cùng một câu chuyện. */
+const CR_SCHOOLS = schools.map((s, i) => ({ ...s, id: `school_${s.code.toLowerCase()}`, attendance: [97.6, 96.8, 98.1][i], collection: [94.2, 89.5, 91.8][i], billed: s.students * 4_850_000, assets: [312, 205, 118][i], meals: s.students * 21 - [14, 9, 6][i] }));
+const sum = (k) => CR_SCHOOLS.reduce((t, s) => t + s[k], 0);
+// [mã, tên hiển thị (app lấy `name` làm tiêu đề thẻ/bảng), nhóm, đơn vị, giá trị theo trường]
+const CR_METRICS = [
+  ["STUDENT_CURRENT_HEADCOUNT", "Tổng số học sinh", "STUDENT", "học sinh", (s) => s.students],
+  ["TOTAL_STAFF", "Tổng nhân sự", "STAFF", "người", (s) => s.staff],
+  ["CLASS_COUNT", "Số lớp đang hoạt động", "ACADEMIC", "lớp", (s) => s.classes],
+  ["ATTENDANCE_RATE", "Tỷ lệ chuyên cần", "ACADEMIC", "%", (s) => s.attendance],
+  ["FINANCE_COLLECTION_RATE", "Tỷ lệ thu học phí", "FINANCE", "%", (s) => s.collection],
+  ["FINANCE_OUTSTANDING_RECEIVABLE", "Còn phải thu", "FINANCE", "VND", (s) => Math.round((s.billed * (100 - s.collection)) / 100 / 1000) * 1000],
+  ["FINANCE_OVERDUE_RECEIVABLE", "Khoản quá hạn", "FINANCE", "VND", (s) => Math.round((s.billed * (100 - s.collection)) / 400 / 1000) * 1000],
+  ["ASSET_TOTAL_COUNT", "Tài sản được quản lý", "OPERATIONS", "tài sản", (s) => s.assets],
+  ["MEAL_ACTUAL_COUNT", "Suất ăn thực tế", "OPERATIONS", "suất", (s) => s.meals],
+];
+const CR_RUN_ID = "run_2627_t10";
+const crSystemValue = (code, fn) => {
+  if (code === "ATTENDANCE_RATE" || code === "FINANCE_COLLECTION_RATE") {
+    const w = sum("students");
+    return Math.round((CR_SCHOOLS.reduce((t, s) => t + fn(s) * s.students, 0) / w) * 10) / 10;
+  }
+  return CR_SCHOOLS.reduce((t, s) => t + fn(s), 0);
+};
+const crResults = CR_METRICS.flatMap(([code, name, domain, unit, fn], m) => {
+  const def = { id: `md_${m}`, code, name, domain, unit };
+  const row = (schoolId, value, recordCount) => ({
+    id: `res_${m}_${schoolId ?? "all"}`, runId: CR_RUN_ID, metricDefinitionId: def.id, schoolId,
+    rawValue: value, adjustmentValue: 0, eliminationValue: 0, consolidatedValue: value,
+    numerator: null, denominator: null, recordCount, duplicateCount: 0,
+    sourceSystem: "INTERNAL_LMS", sourceSystemId: null, connectorId: null,
+    lastSuccessfulSyncAt: "2026-10-12T22:00:00.000Z", dataFreshnessStatus: "UP_TO_DATE", reconciliationStatus: "MATCHED",
+    reconciliationRunId: null, details: null, status: "OK", calculatedAt: "2026-10-12T22:05:00.000Z", metricDefinition: def,
+  });
+  return [
+    ...CR_SCHOOLS.map((s) => row(s.id, fn(s), s.students + m * 7)),
+    row(null, crSystemValue(code, fn), sum("students") + m * 21),
+  ];
+});
+const crSchoolStatuses = CR_SCHOOLS.map((s, i) => ({
+  id: `rss_${i}`, runId: CR_RUN_ID, schoolId: s.id, dataStatus: "UP_TO_DATE", validationStatus: i === 1 ? "WARNING" : "PASSED",
+  lastSourceUpdatedAt: "2026-10-12T21:40:00.000Z", sourceRecordCount: s.students * 12 + s.staff * 4, sourceSystem: "INTERNAL_LMS",
+  sourceSystemId: null, connectorId: null, lastSuccessfulSyncAt: "2026-10-12T22:00:00.000Z", lastAttemptAt: "2026-10-12T22:00:00.000Z",
+  freshnessThresholdMinutes: 1440, reconciliationStatus: "MATCHED", reconciliationRunId: null,
+  warningCount: i === 1 ? 1 : 0, errorCount: 0, includedInResult: true, createdAt: "2026-10-12T22:00:00.000Z",
+  school: { id: s.id, code: s.code, name: s.name, status: "ACTIVE" },
+}));
+const crRunBase = (version, status, day, month = 10) => ({
+  id: version === 3 ? CR_RUN_ID : `run_2627_v${version}`, tenantId: "tenant_group", reportingScopeId: "scope_lien_truong", academicYearId: AY.id,
+  periodStart: "2026-09-05", periodEnd: `2026-${pad2(month)}-${pad2(day)}`, reportDate: `2026-${pad2(month)}-${pad2(day)}`, dataAsOf: `2026-${pad2(month)}-${pad2(day)}T22:00:00.000Z`,
+  schoolIds: CR_SCHOOLS.map((s) => s.id), status, version, runNumber: `BC-2627-T${month}-0${version}`,
+  startedBy: "usr_bgh", startedAt: `2026-${pad2(month)}-${pad2(day)}T22:00:00.000Z`, completedAt: `2026-${pad2(month)}-${pad2(day)}T22:05:00.000Z`,
+  publishedAt: status === "PUBLISHED" ? `2026-${pad2(month)}-${pad2(day + 1)}T01:30:00.000Z` : null, publishedBy: status === "PUBLISHED" ? "usr_bgh" : null,
+  createdAt: `2026-${pad2(month)}-${pad2(day)}T22:00:00.000Z`, updatedAt: `2026-${pad2(month)}-${pad2(day + 1)}T01:30:00.000Z`, deletedAt: null,
+});
+const crValidation = {
+  id: "val_1", runId: CR_RUN_ID, schoolId: null, ruleCode: "ATTENDANCE_GAP", ruleName: "Thiếu dữ liệu điểm danh",
+  severity: "WARNING", status: "OPEN", affectedCount: 2, message: "2 lớp chưa chốt điểm danh ngày 12/10 tại Trường Tiểu học Hoa Phượng.",
+  details: null, createdAt: "2026-10-12T22:05:00.000Z",
+};
+fixture.consolidatedDashboard = {
+  run: { ...crRunBase(3, "PUBLISHED", 12), results: crResults, validations: [crValidation], schoolStatuses: crSchoolStatuses },
+  metrics: CR_METRICS.map(([code, name, domain, unit, fn]) => ({
+    code, name, domain, value: crSystemValue(code, fn), rawValue: crSystemValue(code, fn), eliminationValue: 0,
+    numerator: null, denominator: null, unit, status: "OK", sourceSystem: "INTERNAL_LMS", sourceSystemId: null, connectorId: null,
+    lastSuccessfulSyncAt: "2026-10-12T22:00:00.000Z", dataFreshnessStatus: "UP_TO_DATE", reconciliationStatus: "MATCHED", reconciliationRunId: null,
+    details: { source: "INTERNAL_LMS", schoolIds: CR_SCHOOLS.map((s) => s.id), aggregation: "SUM", sourceBacked: true },
+  })),
+  validations: [crValidation],
+  schoolStatuses: crSchoolStatuses,
+};
+fixture.consolidatedRuns = [crRunBase(3, "PUBLISHED", 12), crRunBase(2, "COMPLETED_WITH_WARNINGS", 5), crRunBase(1, "PUBLISHED", 28, 9)]
+  .map((r) => ({ ...r, schoolStatuses: crSchoolStatuses, snapshots: [], _count: { results: crResults.length, validations: 1 } }));
+
+/* ---------- so sánh liên trường — GET /consolidated-reporting/comparison (object thô) ----------
+ * App chọn sẵn `metrics[0]` → đặt "Tỷ lệ chuyên cần" lên đầu để bảng mở ra đã có số liệu ý nghĩa. */
+const CMP_ORDER = ["ATTENDANCE_RATE", ...CR_METRICS.map(([code]) => code).filter((c) => c !== "ATTENDANCE_RATE")];
+const cmpMetric = (code) => CR_METRICS.find(([c]) => c === code);
+const cmpSchool = (s) => ({ id: s.id, code: s.code, name: s.name, status: "ACTIVE" });
+fixture.consolidatedComparison = {
+  run: { ...crRunBase(3, "PUBLISHED", 12), results: crResults, schoolStatuses: crSchoolStatuses },
+  metrics: CMP_ORDER.map((code, i) => {
+    const [, name, domain, unit] = cmpMetric(code);
+    return { id: `md_cmp_${i}`, code, name, description: name, domain, aggregationType: "SUM", calculationStrategy: "SOURCE", formulaDescription: "", distinctKey: null, unit, includedStatuses: null, excludedStatuses: null, version: 1, status: "ACTIVE", createdAt: "2026-08-01T00:00:00.000Z", updatedAt: "2026-08-01T00:00:00.000Z" };
+  }),
+  schools: CR_SCHOOLS.map(cmpSchool),
+  rows: CR_SCHOOLS.map((s) => ({ school: cmpSchool(s), metrics: Object.fromEntries(CR_METRICS.map(([code, , , , fn]) => [code, fn(s)])) })),
+  consolidated: Object.fromEntries(CR_METRICS.map(([code, , , , fn]) => [code, crSystemValue(code, fn)])),
+};
+
 const out = path.resolve("scripts/screenshots/fixtures/lms.json");
 fs.mkdirSync(path.dirname(out), { recursive: true });
 fs.writeFileSync(out, JSON.stringify(fixture, null, 2));

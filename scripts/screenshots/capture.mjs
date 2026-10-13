@@ -6,6 +6,7 @@
  *   node scripts/screenshots/capture.mjs all              # cả 4 (3 app cần .env.local + mạng)
  *   node scripts/screenshots/capture.mjs crm --only=03    # chụp lại 1 màn
  *   node scripts/screenshots/capture.mjs lms --probe      # chỉ ghi lại request/response thật, không chụp
+ *   node scripts/screenshots/capture.mjs crm --only=06 --preview  # ảnh ra .tmp/preview/ (rà trước khi ghi vào repo)
  *
  * Luồng mỗi ảnh: mở app @1328 CSS px (dsf 2) → chụp dài hết trang →
  *               render wrapper.html (khung macOS, xem design-tokens.md) → chụp wrapper → ra ảnh 2880px.
@@ -67,6 +68,7 @@ const probe = flags.has("--probe");
 const noCrops = flags.has("--no-crops");
 const debug = flags.has("--debug");
 const dump = flags.has("--dump");
+const preview = flags.has("--preview");
 const log = (...a) => console.log(...a);
 
 /* ---------- Edge ---------- */
@@ -382,6 +384,24 @@ async function cropFromFramed(framedBuf, framedH, rect, k = 1) {
   return sharp(framedBuf).extract({ left, top, width, height }).png().toBuffer();
 }
 
+/**
+ * Bỏ các hàng trong suốt dưới đáy ảnh đã đóng khung. Shot chụp rộng (`appWidth` > 1328) mà trang
+ * ngắn: wrapper co ảnh app nên cửa sổ thấp hơn viewport 900px của wrapper → dải trong suốt dưới đáy.
+ */
+async function trimTransparentBottom(shot) {
+  const { data, info } = await sharp(shot.buf).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+  const rowBytes = info.width * info.channels;
+  let last = info.height - 1;
+  const rowHasPixel = (y) => {
+    for (let x = 3; x < rowBytes; x += info.channels) if (data[y * rowBytes + x] > 0) return true;
+    return false;
+  };
+  while (last > 0 && !rowHasPixel(last)) last--;
+  if (last >= info.height - 1) return shot;
+  const buf = await sharp(shot.buf).extract({ left: 0, top: 0, width: info.width, height: last + 1 }).png().toBuffer();
+  return { ...shot, buf, height: last + 1 };
+}
+
 async function frameShot(cdp, sessionId, { tmpRel, title }) {
   // Thêm "t=" để wrapper KHÔNG dùng ảnh cached của lần chạy trước (URL .tmp/app-*.png không đổi,
   // nên Edge trả ảnh cũ → khung ra ngắn hơn trang thật).
@@ -390,7 +410,7 @@ async function frameShot(cdp, sessionId, { tmpRel, title }) {
   await cdp.navigate(sessionId, url);
   await cdp.waitUntil(sessionId, 'window.__READY__ === true && document.fonts.status === "loaded"', { label: "wrapper sẵn sàng" });
   await sleep(150);
-  return fullPagePng(cdp, sessionId, FRAME_WIDTH);
+  return trimTransparentBottom(await fullPagePng(cdp, sessionId, FRAME_WIDTH));
 }
 
 /* ---------- main ---------- */
@@ -428,6 +448,7 @@ for (const slug of targets) {
   const liveCfg = conf.mode === "live" ? LIVE[conf.product] : null;
 
   const { targetId, sessionId } = await cdp.newPage("about:blank");
+  let guard = null;
   await cdp.send("Page.enable", {}, sessionId);
   await cdp.send("Runtime.enable", {}, sessionId);
   // Bật TRƯỚC mọi lần chụp: không có nó CDP tô trắng phần ngoài layout → hộp trắng quanh ảnh.
@@ -435,11 +456,9 @@ for (const slug of targets) {
 
   try {
     if (conf.mode === "live") {
-      if (probe) {
-        await enableProbe(cdp, sessionId, slug);
-      } else {
-        await prepareLive(cdp, sessionId, conf, fixture, { debug });
-      }
+      if (probe) await enableProbe(cdp, sessionId, slug);
+      // Probe vẫn đi qua prepareLive để khoá ghi (chỉ đọc trên hệ thống thật).
+      guard = await prepareLive(cdp, sessionId, conf, fixture, { debug, probe });
       if (debug) {
         await cdp.send("Log.enable", {}, sessionId);
         cdp.on(sessionId, "Runtime.exceptionThrown", (p) =>
@@ -461,6 +480,8 @@ for (const slug of targets) {
         const step = await liveCfg.afterLogin(cdp, sessionId);
         log(`    → sau đăng nhập: ${step}`);
       }
+      guard.lock();
+      log("    → đã khoá ghi: request POST/PUT/PATCH/DELETE ra ngoài bị chặn");
     }
 
     const shots = only ? conf.shots.filter((s) => only.includes(s.name.split("-")[0])) : conf.shots;
@@ -580,7 +601,8 @@ for (const slug of targets) {
       fs.writeFileSync(path.join(TMP, `app-${slug}-${shot.name}.png`), app.buf);
 
       const framed = await frameShot(cdp, sessionId, { tmpRel, title: conf.title });
-      const outDir = path.join(ROOT, "..", "..", conf.outDir);
+      // `--preview`: ghi vào .tmp/preview/ (gitignored) để rà dữ liệu trước khi ghi đè ảnh trong repo.
+      const outDir = preview ? path.join(TMP, "preview", slug) : path.join(ROOT, "..", "..", conf.outDir);
       fs.mkdirSync(outDir, { recursive: true });
       const mainPath = path.join(outDir, `${shot.name}.png`);
       fs.writeFileSync(mainPath, framed.buf);
@@ -601,6 +623,7 @@ for (const slug of targets) {
     failures++;
     log(`  ✖ ${slug}: ${e.message}`);
   } finally {
+    if (guard?.blocked) log(`    · đã chặn ${guard.blocked} request ghi`);
     try { await cdp.send("Target.closeTarget", { targetId }); } catch { /* đóng cùng tiến trình Edge */ }
   }
 }

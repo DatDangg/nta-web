@@ -77,6 +77,10 @@ export const SHOTS = {
       { route: "/curriculum/lesson-plans", name: "06-giao-an-dien-tu" },
       // crop: bảng học bạ số (cột trạng thái phát hành)
       { route: "/academic-records", name: "07-hoc-ba-so", crop: "table.mobile-scroll-table" },
+      // "08-diem-danh" (/attendance) bỏ: bản LMS hiện tại không có route này (Next.js trả 404) → thay bằng so sánh liên trường.
+      { route: "/consolidated-reporting/comparison", name: "08-so-sanh-lien-truong", crop: { text: "Kết quả đối chiếu" } },
+      // crop: bảng chỉ tiêu theo từng trường + cột "Toàn hệ thống" (khối có chú thích "Dữ liệu theo API")
+      { route: "/consolidated-reporting/dashboard", name: "09-bao-cao-lien-truong", crop: { text: "Dữ liệu theo API" } },
     ],
   },
 
@@ -93,6 +97,9 @@ export const SHOTS = {
       { route: (F) => `/customers/${F.customerDetail.id}`, name: "03-chi-tiet-khach-hang", crop: ".grid.items-start" },
       { route: "/reservations", name: "04-dat-ban", crop: "table.w-full.text-sm" },
       { route: "/orders", name: "05-don-hang", crop: "table.w-full.text-sm" },
+      { route: "/complaints", name: "06-khieu-nai", crop: "table.w-full.text-sm" },
+      // crop: thẻ kết nối OA + mẫu tin tự động (nhật ký gửi ở dưới bị cắt bởi maxHeight)
+      { route: "/settings/zalo-push", name: "07-thong-bao-zalo", crop: { text: "Kết nối Zalo OA" } },
     ],
   },
 
@@ -118,6 +125,11 @@ export const SHOTS = {
       // Lịch hẹn nhóm theo ngày → dài nhất, cắt còn các nhóm ngày đầu (đủ thấy cấu trúc lịch).
       { route: "/internal/schedule", name: "04-lich-hen", crop: "div.rounded-xl.border.bg-card", appWidth: 1700, maxHeight: 1500 },
       { route: "/internal/inventory/items", name: "05-kho-vat-tu", crop: "div.internal-main-scale-canvas", appWidth: 1700, maxHeight: 1100 },
+      // "06-hang-cho" (/internal/queue) bỏ: bản DentGo hiện tại không có route này (trả trang 404) → thay bằng báo cáo tài chính.
+      // Bảng 12 cột (min-width 1700 + sidebar) → chụp rộng 2060 để không cắt cột Lý do / Ghi chú.
+      { route: "/internal/reports/finance", name: "06-bao-cao-tai-chinh", crop: "table", appWidth: 2060, maxHeight: 1500 },
+      // crop: thẻ "Quy tắc gửi tự động" (form + danh sách kịch bản CSKH Zalo)
+      { route: "/internal/customer-care/reminders", name: "07-nhac-lich-cskh", crop: "div.rounded-xl.border.bg-card" },
     ],
   },
 };

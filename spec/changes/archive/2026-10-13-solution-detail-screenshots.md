@@ -1,7 +1,7 @@
 ---
 id: solution-detail-screenshots
 type: feature
-status: pending
+status: done
 created: 2026-10-13
 ---
 
@@ -28,10 +28,10 @@ Bổ sung ảnh cho khung chi tiết dùng chung (block ảnh trượt / công n
 - Không áp dụng (feature).
 
 ## Acceptance (bắt buộc)
-- [ ] CRM / DentGo / LMS có ảnh staging mới trong block ảnh, mọi dữ liệu hiển thị là dữ liệu giả; alt/caption ghi "dữ liệu minh hoạ" (BR-004).
-- [ ] HRM có thêm các màn đã chốt, alt/caption ghi "minh hoạ"; không còn `@ntavietnam.tech` / "Công ty NTA" trong ảnh HRM.
-- [ ] Không có bản ghi nào trên staging bị tạo/sửa/xoá.
-- [ ] Data ảnh nằm trong frontmatter MDX (VI + EN); build/typecheck/lint PASS.
+- [x] CRM / DentGo / LMS có ảnh staging mới trong block ảnh, mọi dữ liệu hiển thị là dữ liệu giả; alt/caption ghi "dữ liệu minh hoạ" (BR-004).
+- [x] HRM có thêm các màn đã chốt, alt/caption ghi "minh hoạ"; không còn `@ntavietnam.tech` / "Công ty NTA" trong ảnh HRM.
+- [x] Không có bản ghi nào trên staging bị tạo/sửa/xoá.
+- [x] Data ảnh nằm trong frontmatter MDX (VI + EN); build/typecheck/lint PASS.
 
 ## Ghi chú
 - Cần từ user khi bắt đầu: link + tài khoản demo CRM / DentGo / LMS (gửi lại qua chat), chốt danh sách màn HRM.
@@ -43,3 +43,10 @@ Bổ sung ảnh cho khung chi tiết dùng chung (block ảnh trượt / công n
   `12-danh-gia-kpi` · `13-bao-cao-bien-dong`. Bỏ "đào tạo" (ít khác biệt, tránh dàn trải).
 - **Staging:** agent KHÔNG nhập mật khẩu. Agent mở link trong browser pane → **user tự đăng nhập** → agent thay dữ liệu bằng DOM phía client + chụp (read-only, không thao tác ghi).
 - Link đang dùng trong MDX (chờ user xác nhận là staging): CRM `https://cms.dragonhotpotvietnam.com/` · DentGo `http://demo1.76.13.214.188.sslip.io:8080/` · LMS `http://187.52.119.50:3002/`.
+
+## Kết quả (2026-10-13)
+- Task 01 (HRM, commit 43faf68): 4 màn mockup 10–13. Task 02: CRM 06-khieu-nai, 07-thong-bao-zalo · DentGo 06-bao-cao-tai-chinh, 07-nhac-lich-cskh · LMS 08-so-sanh-lien-truong, 09-bao-cao-lien-truong.
+- Bỏ DentGo `/internal/queue` và LMS `/attendance` (route 404) → agent chọn màn thay thế (user cần duyệt lại: DentGo 06, LMS 08).
+- Ảnh hiển thị qua `showcase.photos` (carousel) — gồm cả HRM 10–13.
+- Chụp bằng `capture.mjs` (chặn API + fixture giả, write-lock non-GET); không ghi bản ghi nào lên hệ thống. Spec 3.8.0 (reconcile) · scope v35.
+- Câu hỏi mở chuyển từ CR-004 (HTTPS DentGo/LMS, câu chữ FAQ Talvra/LMS) vẫn chờ user.

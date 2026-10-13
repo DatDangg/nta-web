@@ -3,9 +3,7 @@
   "activeWorkItem": {
     "type": "feature",
     "slug": "solution-detail-screenshots",
-    "phaseTask": "phase-1-task-02",
-    "journal": ".context/runs/feature-solution-detail-screenshots-phase-1-task-01.md",
-    "note": "CR-007 — task 01 (HRM) done; task 02 (CRM/DentGo/LMS staging) tiếp theo"
+    "note": "CR-007 DONE + archive (13/10/2026). Không có work item active."
   },
   "features": [
     {
@@ -872,11 +870,19 @@
     },
     {
       "slug": "solution-detail-screenshots",
-      "status": "pending",
-      "changeFile": "spec/changes/2026-10-13-solution-detail-screenshots.md",
+      "status": "done",
+      "changeFile": "spec/changes/archive/2026-10-13-solution-detail-screenshots.md",
       "classification": "ADDITIVE",
-      "note": "CR-007 tách từ CR-004 — chờ link + tài khoản staging, chốt màn HRM",
-      "updatedAt": "2026-10-13"
+      "note": "CR-007 — HRM +4 màn mockup; CRM/DentGo/LMS carousel showcase.photos 3 ảnh dữ liệu giả mỗi trang; spec 3.8.0 · scope v35",
+      "updatedAt": "2026-10-13",
+      "tasks": {
+        "phase-1-task-01": "done",
+        "phase-1-task-02": "done"
+      },
+      "reviewer": {
+        "result": "PASS",
+        "report": ".context/review-reports/feature-solution-detail-screenshots-phase-1-task-02-round-2-review.md"
+      }
     },
     {
       "slug": "contact-page-redesign",
