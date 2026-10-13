@@ -2,8 +2,8 @@
   "mode": "feature",
   "activeWorkItem": {
     "type": "feature",
-    "slug": "contact-page-redesign",
-    "note": "CR-008 DONE + archive (13/10/2026). Không có work item active của phiên này."
+    "slug": "fridayai-solution",
+    "note": "CR-011 DONE + archive (13/10/2026). Không có work item active của phiên này."
   },
   "features": [
     {
@@ -911,6 +911,21 @@
         "phase-1-task-01": "done"
       },
       "note": "CR-010 — mega menu Giải pháp 2 cột, dữ liệu giải pháp thật; no spec delta",
+      "updatedAt": "2026-10-13"
+    },
+    {
+      "slug": "fridayai-solution",
+      "status": "done",
+      "changeFile": "spec/changes/archive/2026-10-13-fridayai-solution.md",
+      "classification": "ADDITIVE",
+      "tasks": {
+        "phase-1-task-01": "done"
+      },
+      "reviewer": {
+        "result": "PASS",
+        "report": ".context/review-reports/feature-fridayai-solution-phase-1-task-01-round-1-review.md"
+      },
+      "note": "CR-011 — giải pháp AI FridayAI (AI API Gateway) ở /solutions/ai/fridayai; spec 3.7.0 · scope v33",
       "updatedAt": "2026-10-13"
     }
   ],

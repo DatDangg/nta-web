@@ -9,6 +9,9 @@ type Props = { cta: CaseStudyShowcase['cta'] };
 
 /** Thẻ CTA bo góc (khác dải CTABanner full-bleed): nền ảnh di tích phủ gradient teal đậm. */
 export function ShowcaseCTA({ cta }: Props) {
+  // Link ngoài (vd FridayAI → fridayaix.com) mở tab mới như nút chính ở hero.
+  const isExternal = /^https?:\/\//i.test(cta.href);
+  const buttonClass = `${buttonStyles('inverse', 'lg')} shrink-0 gap-2 whitespace-nowrap`;
   return (
     <section className="pb-14 md:pb-20">
       <Container>
@@ -20,10 +23,17 @@ export function ShowcaseCTA({ cta }: Props) {
               <h2 className="text-[clamp(1.5rem,1.2rem+1.2vw,2.125rem)] font-bold leading-tight">{cta.title}</h2>
               <p className="mt-3 leading-relaxed text-white/90">{cta.description}</p>
             </div>
-            <Link className={`${buttonStyles('inverse', 'lg')} shrink-0 gap-2 whitespace-nowrap`} href={cta.href}>
-              {cta.label}
-              <ArrowRight />
-            </Link>
+            {isExternal ? (
+              <a className={buttonClass} href={cta.href} rel="noopener noreferrer" target="_blank">
+                {cta.label}
+                <ArrowRight />
+              </a>
+            ) : (
+              <Link className={buttonClass} href={cta.href}>
+                {cta.label}
+                <ArrowRight />
+              </Link>
+            )}
           </div>
         </div>
       </Container>

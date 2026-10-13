@@ -1,5 +1,5 @@
 ---
-spec_version: 3.6.0
+spec_version: 3.7.0
 updated_at: 2026-10-13
 ---
 
@@ -16,7 +16,7 @@ updated_at: 2026-10-13
 
 **NTA Website** — website giới thiệu (marketing/showcase, content-driven) của công ty NTA, giới thiệu
 3 mảng giải pháp: (1) Giải pháp doanh nghiệp (CRM, HRM, LMS, DentGo), (2) Giải pháp AI (BoxAI,
-flycam/drone, AI tùy chỉnh), (3) App AI (music app, hair-style AI). Hướng B2B: khách doanh nghiệp,
+flycam/drone, AI tùy chỉnh, FridayAI), (3) App AI (music app, hair-style AI). Hướng B2B: khách doanh nghiệp,
 cơ quan nhà nước, đối tác. **Không** có đăng nhập người dùng ở v1.
 Nguồn: `BRIEF.md:5-17`, `docs/BRD.md:14-31`.
 
@@ -75,7 +75,7 @@ _(cập nhật 2026-10-13: thêm **domain phụ** `ntasolution.vn` (+ `www`) ph�
 ### Module 4 — Giải pháp AI
 
 - **R-06:** Trang tổng quan `/solutions/ai` + trang con `/solutions/ai/[slug]`
-  (`boxai` | `flycam` | `custom-ai`); mỗi giải pháp có mô tả + case study liên quan nếu có dữ liệu (tùy chọn).
+  (`boxai` | `flycam` | `custom-ai` | `fridayai`); mỗi giải pháp có mô tả + case study liên quan nếu có dữ liệu (tùy chọn).
   `[reverse-engineered from docs]` — nguồn: `docs/BRD.md:88-90` (FR-030), `docs/DESIGN.md:101-107`
 - **R-06a (content — AI tùy chỉnh / Talvra):** trang `custom-ai` trình bày **nền tảng Talvra** (content thật,
   không placeholder): vấn đề của SME, định nghĩa platform, 4 nguyên tắc, 3 template trợ lý
@@ -90,6 +90,15 @@ _(cập nhật 2026-10-13: thêm **domain phụ** `ntasolution.vn` (+ `www`) ph�
 - **R-06c (content — Flycam):** trang `flycam` trình bày **DJI Dock 2 + Matrice 3TD**: thông số thiết bị,
   thời gian phản ứng theo khoảng cách, ba khái niệm diện tích phủ, 4 loại route bay, lịch bay theo cấp dự báo
   cháy (I–V), bộ lọc trigger, KPI, FAQ. — nguồn: change phần B.
+- **R-06e (content — FridayAI, 3.7.0):** trang `fridayai` (+ `/en/…`) trình bày **FridayAI — AI API Gateway, sản phẩm của NTA**
+  (dùng AI giá rẻ): một endpoint cho model Anthropic/OpenAI/Google, tương thích OpenAI SDK (đổi `base_url`),
+  dùng với Cursor/Claude Code, trả theo mức dùng + gói tháng + Enterprise (VAT, SLA, SSO, on-premise),
+  thanh toán MoMo/chuyển khoản/USDT/thẻ, zero-log + không train trên dữ liệu khách. Số liệu độ trễ/uptime ghi rõ
+  "theo số liệu FridayAI"; **không** ghi cứng bảng giá/khuyến mãi trong nội dung (giá đổi liên tục → dẫn sang site).
+  Nút chính hero + nút CTA cuối trang **dẫn sang `https://fridayaix.com/` (tab mới, `rel=noopener noreferrer`)**.
+  Ảnh = ảnh chụp website fridayaix.com (caption ghi nguồn) + logo SVG lấy từ site. Thẻ ở `/solutions/ai` thuộc
+  danh mục lọc mới **"Nền tảng API AI" (`gateway`)**; mega menu Header + sitemap tự có mục mới.
+  — nguồn: change `spec/changes/2026-10-13-fridayai-solution.md` (CR-011).
 - **R-06d (render — trang chi tiết AI):** trang chi tiết AI render `benefits` (lợi ích) + **section nội dung
   có cấu trúc** (kiến trúc / thuật toán / ứng dụng ngành) + chỉ số nổi bật/FAQ tùy chọn; giữ SSG + i18n VI/EN.
   — thiết kế component cập nhật ở `.context/design-spec.md`.

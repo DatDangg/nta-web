@@ -1,65 +1,54 @@
 {
-  "specVersion": "3.6.0",
-  "scopeVersion": 32,
-  "generatedAt": "2026-10-13T18:30:00+07:00",
+  "specVersion": "3.7.0",
+  "scopeVersion": 33,
+  "generatedAt": "2026-10-13T17:45:00+07:00",
   "trigger": "feature-update",
-  "workItem": "feature-contact-page-redesign",
+  "workItem": "feature-fridayai-solution",
   "specRefs": [
-    "R-10",
-    "R-11",
-    "R-13",
-    "R-25"
+    "R-06",
+    "R-06e",
+    "R-08c"
   ],
   "changed": {
     "files": [
-      "src/lib/contact/company-info.ts (MỚI — SĐT/email/địa chỉ/Google Maps + 9 key nhu cầu, 1 nguồn)",
-      "src/lib/api/contact-schema.ts (company ≤150, need enum — tuỳ chọn)",
-      "src/lib/api/forward.ts (chuyển tiếp company, need)",
-      "src/lib/contact/useContactForm.ts (field company/need, options requirePhone/requireNeed/messageMax)",
-      "src/app/[locale]/contact/page.tsx (ListingHero + GlassVisual, lưới 2 card)",
-      "src/components/contact/ContactDetails.tsx (MỚI)",
-      "src/components/contact/ContactForm.tsx (form mới)",
-      "src/components/contact/{ContactInfo,OfficeHours}.tsx (xoá — không dùng)",
-      "src/components/ui/Select.tsx (MỚI)",
-      "src/components/ui/{Input,Textarea}.tsx (showRequiredMark, counter, w-full)",
-      "src/components/listing/icons.tsx (+call, car, headset, mail, pin, train)",
-      "src/components/layout/Footer.tsx (SĐT/email/địa chỉ)",
-      "src/lib/seo/jsonld.ts (Organization + ContactPage: telephone/email/address/contactPoint)",
-      "src/i18n/messages/{vi,en}.json (contact.*, footer.contact*)",
-      "docs/API_SPEC.md"
+      "src/content/solutions/vi/fridayai.mdx (MỚI)",
+      "src/content/solutions/en/fridayai.mdx (MỚI)",
+      "public/images/solutions/fridayai.svg + public/images/solutions/fridayai/* (MỚI — logo + 3 ảnh chụp fridayaix.com)",
+      "src/lib/content/slug.ts (aiSlugs + fridayai)",
+      "src/content/listings.ts (thẻ fridayai, danh mục lọc gateway, mô tả trang AI)",
+      "src/components/case-studies/showcase/ShowcaseCTA.tsx (href http(s) → <a target=_blank rel=noopener noreferrer>)"
     ],
     "modules": [
-      "Module 8 — Liên hệ",
-      "Module 9 — Footer",
-      "API /api/contact"
+      "Module 4 — Giải pháp AI",
+      "Khung chi tiết dùng chung (R-08c)",
+      "Header mega menu",
+      "Sitemap"
     ]
   },
   "impact": {
     "direct": [
-      "/contact và /en/contact: hero, card thông tin (tel:/mailto:/địa chỉ), Google Maps nhúng + link mở Maps, 3 tiện ích văn phòng",
-      "Form /contact: Họ tên*, Email*, SĐT* (9–15 số), Tên doanh nghiệp (≤150), Nhu cầu* (9 mục), Nội dung* 10–500 + bộ đếm; states Default/Validating/Submitting/Success/Error/429",
-      "POST /api/contact nhận company/need; company >150 hoặc need sai → 400 errors.company|need",
-      "Footer mọi trang vi/en: SĐT, email, địa chỉ bấm được"
+      "/solutions/ai/fridayai và /en/solutions/ai/fridayai: 200, title 'FridayAI | NTA', hero + số liệu + 3 pillar + lưới tính năng + chi tiết + carousel 2 ảnh + FAQ 5 câu + CTA",
+      "Nút 'Dùng thử FridayAI' (hero) và 'Đến fridayaix.com' (CTA cuối) mở https://fridayaix.com/ ở tab mới",
+      "/solutions/ai: thẻ FridayAI có ảnh + chip, lọc 'Nền tảng API AI' chỉ còn FridayAI, tìm 'FridayAI' ra thẻ"
     ],
     "dependents": [
-      "CTAForm ở trang chi tiết giải pháp (/solutions/enterprise/[slug], /solutions/ai/[slug]) — vẫn gửi được chỉ với name/email/message",
-      "Mọi trang dùng ListingHero/GlassVisual (icons.tsx thêm icon)",
-      "Organization JSON-LD ở layout (mọi trang)"
+      "Mega menu Giải pháp → nhóm AI có thêm mục FridayAI (vi/en)",
+      "sitemap.xml có /solutions/ai/fridayai + /en (hreflang)",
+      "ShowcaseCTA: các trang showcase cũ có CTA nội bộ (/contact) vẫn mở cùng tab"
     ],
     "regression": [
-      "Rate-limit 429 + honeypot vẫn hoạt động",
-      "Thông báo thành công đổi sang 'phản hồi trong 24h' (cả CTA form)",
-      "Input/Textarea dùng chung: CTA form không đổi bố cục",
-      "/products, /case-studies hero không đổi"
+      "/solutions/ai/boxai|flycam|custom-ai",
+      "/case-studies/oc-eo-learning, /case-studies/dental-clinic-operations (CTA)",
+      "/solutions/enterprise/*",
+      "/products/*"
     ]
   },
   "acceptance": [
-    "SĐT 0335546831 (tel:+84335546831), email admin@ntasolution.vn, địa chỉ Tầng 2 tòa nhà Kim Hoàn, ngõ 19 Duy Tân, Cầu Giấy, Hà Nội hiển thị đúng ở /contact + Footer",
-    "Bản đồ trỏ đúng tòa Kim Hoàn ngõ 19 Duy Tân (iframe lazy, có title) + link Mở Google Maps tab mới",
-    "SĐT + Nhu cầu bắt buộc, nội dung ≤500 ở /contact; API giữ tuỳ chọn",
-    "Không tràn ngang 1440/768/390/375 (1024: blob GlassVisual có từ trước, +8px)",
-    "JSON-LD có telephone/email/PostalAddress",
-    "typecheck + lint + build PASS"
+    "Thẻ FridayAI xuất hiện ở /solutions/ai (vi + en) có ảnh và mô tả",
+    "Trang chi tiết dùng khung chung, không có bảng giá/khuyến mãi cứng trong text",
+    "CTA dẫn sang fridayaix.com tab mới",
+    "Ảnh có alt + caption nguồn",
+    "typecheck/lint/build PASS"
   ],
-  "risk": "medium"
+  "risk": "low"
 }

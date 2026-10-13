@@ -18,6 +18,7 @@
 | CR-008 | Thiết kế lại UI trang Liên hệ theo mockup + cập nhật SĐT/email/địa chỉ thật (Kim Hoàn, ngõ 19 Duy Tân) | MODIFY + ADDITIVE | done (spec 3.6.0 · scope v32) | `archive/2026-10-13-contact-page-redesign.md` | 2026-10-13 | 2026-10-13 |
 | CR-009 | Dải chữ chạy trang chủ: bỏ chữ đậm + thêm icon từng mục (theo ảnh mẫu) | MODIFY (UI) | done (no spec delta) | `archive/2026-10-13-home-marquee-icons.md` | 2026-10-13 | 2026-10-13 |
 | CR-010 | Header: dropdown "Giải pháp" thành mega menu 2 cột theo mockup | MODIFY (UI) | done (no spec delta) | `archive/2026-10-13-header-solutions-megamenu.md` | 2026-10-13 | 2026-10-13 |
+| CR-011 | Thêm giải pháp AI "FridayAI" (AI API Gateway) vào /solutions/ai — nội dung + ảnh lấy từ fridayaix.com | ADDITIVE | done (spec 3.7.0 · scope v33) | `archive/2026-10-13-fridayai-solution.md` | 2026-10-13 | 2026-10-13 |
 
 ## Quy tắc tracking
 

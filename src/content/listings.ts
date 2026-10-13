@@ -128,7 +128,7 @@ export const listingPages: Record<Locale, Record<PageKey, ListingPageCopy>> = {
       title: 'Giải pháp AI',
       lead: 'Trí tuệ nhân tạo',
       accent: 'cho vận hành thực tế',
-      description: 'Ứng dụng AI vào vận hành và trải nghiệm khách hàng — từ camera AI xử lý tại biên, flycam tuần tra tự động đến trợ lý AI theo quy trình riêng của doanh nghiệp.',
+      description: 'Ứng dụng AI vào vận hành và trải nghiệm khách hàng — từ camera AI xử lý tại biên, flycam tuần tra tự động, trợ lý AI theo quy trình riêng của doanh nghiệp đến cổng API AI giá rẻ FridayAI.',
       highlights: [
         { icon: 'cpu', title: 'Xử lý tại biên', text: 'Phân tích video ngay tại hiện trường' },
         { icon: 'drone', title: 'Tuần tra tự động', text: 'Flycam theo lịch và theo cảnh báo' },
@@ -140,6 +140,7 @@ export const listingPages: Record<Locale, Record<PageKey, ListingPageCopy>> = {
         { id: 'vision', label: 'Thị giác máy tính', icon: 'camera' },
         { id: 'drone', label: 'Flycam', icon: 'drone' },
         { id: 'assistant', label: 'Trợ lý AI', icon: 'chat' },
+        { id: 'gateway', label: 'Nền tảng API AI', icon: 'plug' },
       ],
       searchPlaceholder: 'Tìm kiếm giải pháp...',
       ariaLabel: 'Danh sách giải pháp AI',
@@ -216,7 +217,7 @@ export const listingPages: Record<Locale, Record<PageKey, ListingPageCopy>> = {
       title: 'AI Solutions',
       lead: 'Artificial intelligence',
       accent: 'for real-world operations',
-      description: 'AI applied to operations and customer experience — from edge AI cameras and automated drone patrols to AI assistants tailored to your own workflows.',
+      description: 'AI applied to operations and customer experience — from edge AI cameras and automated drone patrols and AI assistants tailored to your own workflows to FridayAI, an affordable AI API gateway.',
       highlights: [
         { icon: 'cpu', title: 'Edge processing', text: 'Video analyzed right on site' },
         { icon: 'drone', title: 'Automated patrols', text: 'Drones on schedule or on alert' },
@@ -228,6 +229,7 @@ export const listingPages: Record<Locale, Record<PageKey, ListingPageCopy>> = {
         { id: 'vision', label: 'Computer vision', icon: 'camera' },
         { id: 'drone', label: 'Drones', icon: 'drone' },
         { id: 'assistant', label: 'AI assistants', icon: 'chat' },
+        { id: 'gateway', label: 'AI API platform', icon: 'plug' },
       ],
       searchPlaceholder: 'Search solutions...',
       ariaLabel: 'AI solution list',
@@ -249,6 +251,7 @@ export const listingItems: Record<Locale, Record<string, ListingItemMeta>> = {
     boxai: { icon: 'camera', theme: 'teal', categories: ['vision'], subtitle: 'Camera AI xử lý ngay tại biên', chips: ['NVIDIA Jetson', '21 thuật toán AI', 'Kết nối VMS'] },
     flycam: { icon: 'drone', theme: 'sky', categories: ['drone'], subtitle: 'Tuần tra theo lịch, xác minh cảnh báo', chips: ['DJI Dock 2', 'Tuần tra waypoint', 'Quan sát nhiệt'] },
     'custom-ai': { icon: 'chat', theme: 'violet', categories: ['assistant'], subtitle: 'Trợ lý AI theo nhu cầu doanh nghiệp', chips: ['Tùy chỉnh quy trình', 'Đa kênh', 'Kiểm duyệt trước'] },
+    fridayai: { icon: 'plug', theme: 'rose', categories: ['gateway'], subtitle: 'Dùng AI giá rẻ qua một endpoint', chips: ['Claude · GPT · Gemini', 'Tương thích OpenAI SDK', 'Trả theo mức dùng'] },
   },
   en: {
     'music-app': { icon: 'music', theme: 'violet', categories: ['creative', 'entertainment'], subtitle: 'Turn your ideas into music with AI', chips: ['Prompt or lyrics', 'Vocal / instrumental', 'Song recognition'] },
@@ -262,6 +265,7 @@ export const listingItems: Record<Locale, Record<string, ListingItemMeta>> = {
     boxai: { icon: 'camera', theme: 'teal', categories: ['vision'], subtitle: 'AI cameras processing at the edge', chips: ['NVIDIA Jetson', '21 AI algorithms', 'VMS integration'] },
     flycam: { icon: 'drone', theme: 'sky', categories: ['drone'], subtitle: 'Scheduled patrols and alert verification', chips: ['DJI Dock 2', 'Waypoint patrols', 'Thermal view'] },
     'custom-ai': { icon: 'chat', theme: 'violet', categories: ['assistant'], subtitle: 'AI assistants built around your needs', chips: ['Custom workflows', 'Multi-channel', 'Reviewed first'] },
+    fridayai: { icon: 'plug', theme: 'rose', categories: ['gateway'], subtitle: 'Affordable AI through one endpoint', chips: ['Claude · GPT · Gemini', 'OpenAI SDK compatible', 'Pay as you go'] },
   },
 };
 

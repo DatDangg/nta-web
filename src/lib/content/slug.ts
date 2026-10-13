@@ -1,7 +1,7 @@
 import type { Locale } from '@/content/types';
 
 export const enterpriseSlugs = ['crm', 'hrm', 'lms', 'dentgo'] as const;
-export const aiSlugs = ['boxai', 'flycam', 'custom-ai'] as const;
+export const aiSlugs = ['boxai', 'flycam', 'custom-ai', 'fridayai'] as const;
 export const productSlugs = ['music-app', 'hair-style-ai'] as const;
 
 export function isLocale(value: string): value is Locale {
