@@ -43,7 +43,7 @@ const homeContent: Record<Locale, HomeContent> = {
           { icon: 'graduation', label: 'Trường học, phòng khám — LMS, DentGo' },
         ],
         linkLabel: 'Tìm hiểu giải pháp doanh nghiệp',
-        href: '/solutions/enterprise', image: '/images/illustrations/home-enterprise.png', alt: 'Minh hoạ điện thoại với biểu đồ tăng trưởng, hồ sơ nhân sự, cài đặt và lưới ứng dụng',
+        href: '/solutions/enterprise', image: '/images/illustrations/home-enterprise-photo.webp', alt: 'Laptop hiển thị bảng điều khiển phân tích kinh doanh trên bàn làm việc cạnh chậu cây xanh',
       },
       {
         title: 'Giải pháp AI',
@@ -55,7 +55,7 @@ const homeContent: Record<Locale, HomeContent> = {
           { icon: 'chat', label: 'Trợ lý AI & AI API Gateway — FridayAI' },
         ],
         linkLabel: 'Tìm hiểu giải pháp AI',
-        href: '/solutions/ai', image: '/images/illustrations/home-ai.png', alt: 'Minh hoạ khối AI với các biểu tượng tạo sinh, hội thoại, tài liệu và mã nguồn',
+        href: '/solutions/ai', image: '/images/illustrations/home-ai-photo.webp', alt: 'Chip AI phát sáng trên bo mạch, phía trên là màn hình camera giao thông nhận diện phương tiện',
       },
       {
         title: 'Ứng dụng AI',
@@ -67,7 +67,7 @@ const homeContent: Record<Locale, HomeContent> = {
           { icon: 'phone', label: 'Ứng dụng di động cho người dùng cuối' },
         ],
         linkLabel: 'Tìm hiểu các ứng dụng AI',
-        href: '/products', image: '/images/illustrations/home-apps.png', alt: 'Minh hoạ cửa sổ ứng dụng với bảng điều khiển biểu đồ tăng trưởng và nhóm người dùng',
+        href: '/products', image: '/images/illustrations/home-apps-photo.webp', alt: 'Hai điện thoại hiển thị ứng dụng giám sát camera và biểu đồ phân tích',
       },
     ],
     featuredProducts: [
@@ -95,7 +95,7 @@ const homeContent: Record<Locale, HomeContent> = {
           { icon: 'graduation', label: 'Schools, clinics — LMS, DentGo' },
         ],
         linkLabel: 'Explore enterprise solutions',
-        href: '/en/solutions/enterprise', image: '/images/illustrations/home-enterprise.png', alt: 'Illustration of a phone with a growth chart, staff profile, settings and app grid',
+        href: '/en/solutions/enterprise', image: '/images/illustrations/home-enterprise-photo.webp', alt: 'Laptop showing a business analytics dashboard on a desk next to a green plant',
       },
       {
         title: 'AI Solutions',
@@ -107,7 +107,7 @@ const homeContent: Record<Locale, HomeContent> = {
           { icon: 'chat', label: 'AI assistant & AI API Gateway — FridayAI' },
         ],
         linkLabel: 'Explore AI solutions',
-        href: '/en/solutions/ai', image: '/images/illustrations/home-ai.png', alt: 'Illustration of an AI block with generative, chat, document and code icons',
+        href: '/en/solutions/ai', image: '/images/illustrations/home-ai-photo.webp', alt: 'Glowing AI chip on a circuit board with a traffic camera screen detecting vehicles above it',
       },
       {
         title: 'AI Apps',
@@ -119,7 +119,7 @@ const homeContent: Record<Locale, HomeContent> = {
           { icon: 'phone', label: 'Mobile apps for everyday users' },
         ],
         linkLabel: 'Explore AI apps',
-        href: '/en/products', image: '/images/illustrations/home-apps.png', alt: 'Illustration of an app window with a growth-chart dashboard and a group of users',
+        href: '/en/products', image: '/images/illustrations/home-apps-photo.webp', alt: 'Two smartphones showing a camera monitoring app and analytics charts',
       },
     ],
     featuredProducts: [
