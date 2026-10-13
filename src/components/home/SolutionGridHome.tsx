@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'react';
-import { HomeImage } from '@/components/shared/HomeImage';
+import Image from 'next/image';
 import { ListingIcon } from '@/components/listing/icons';
 import { Reveal } from '@/components/ui/Reveal';
 import type { HomeSolutionCard } from '@/content/home';
@@ -7,15 +7,13 @@ import { Link } from '@/i18n/navigation';
 import { HomeSectionHeader } from './HomeSectionHeader';
 
 /**
- * Ảnh minh hoạ tan vào nền thẻ: giao 2 gradient (mờ dần sang trái và lên trên).
- * `source-in` là tên cũ (WebKit) của `intersect` — cùng cách làm với `AboutHero`.
+ * Ảnh minh hoạ tan vào nền thẻ: CHỈ mờ dần sang trái (mẫu CR-017 `4.webp`) — mép trên/dưới/phải
+ * giữ nguyên để ảnh tràn sát mép thẻ.
  */
 const illustrationFade = {
-  maskImage: 'linear-gradient(to right, transparent, #000 40%), linear-gradient(to bottom, transparent, #000 35%)',
-  WebkitMaskImage: 'linear-gradient(to right, transparent, #000 40%), linear-gradient(to bottom, transparent, #000 35%)',
-  maskComposite: 'intersect',
-  WebkitMaskComposite: 'source-in',
-} as CSSProperties;
+  maskImage: 'linear-gradient(to right, transparent, #000 50%)',
+  WebkitMaskImage: 'linear-gradient(to right, transparent, #000 50%)',
+} satisfies CSSProperties;
 
 type SolutionGridHomeProps = {
   solutions: HomeSolutionCard[];
@@ -52,20 +50,22 @@ export function SolutionGridHome({ solutions, eyebrow, titleLead, titleAccent, d
 
 /**
  * Thẻ giải pháp riêng của trang chủ (không dùng `SolutionCard` dùng chung).
- * Chữ nằm trên lớp ảnh (`z-10`); ảnh chỉ trang trí phía phải-dưới. Cột chữ chỉ thu hẹp ~60%
- * khi thẻ đủ rộng (md 1 cột, xl 3 cột); lúc hẹp (mobile, lg 3 cột) ảnh nhỏ + mờ để không cạnh tranh chữ.
+ * Ảnh phủ full chiều cao nửa phải thẻ (`-z-10`, tràn sát mép, bo góc nhờ `overflow-hidden`), mờ dần sang trái.
+ * Lớp nền surface→trong suốt (trên ảnh, dưới chữ) ở MỌI breakpoint giữ cột trái gần trắng như mẫu;
+ * ảnh đậm chỉ hiện rõ từ ~60–75% bề rộng thẻ sang phải.
+ * Thẻ rộng (md 1 cột, xl 3 cột): cột chữ 56%. Thẻ hẹp (mobile, lg 3 cột): chữ full bề rộng → nền phủ dài hơn ở lg.
+ * `object-[40%_50%]`: khung ảnh dọc cắt ngang ảnh 3:2 — lệch trái để chủ thể (giữa ảnh) rơi vào phía phải khung, ngoài vùng mờ.
+ * Dùng `next/image` trực tiếp vì `HomeImage` dùng chung không hỗ trợ `fill`.
  */
 function SolutionHomeCard({ solution }: { solution: HomeSolutionCard }) {
   return (
-    <article className="relative isolate flex h-full flex-col overflow-hidden rounded-lg border border-border bg-surface p-5 shadow-xs md:p-6">
-      <div
-        className="pointer-events-none absolute bottom-0 right-0 -z-10 w-[55%] opacity-30 md:w-[48%] md:opacity-100 lg:w-[60%] lg:opacity-30 xl:w-[52%] xl:opacity-100"
-        style={illustrationFade}
-      >
-        <HomeImage alt={solution.alt} className="h-auto w-full" height={1051} sizes="(min-width: 1280px) 220px, (min-width: 768px) 360px, 50vw" src={solution.image} width={1496} />
+    <article className="relative isolate flex h-full min-h-[18rem] flex-col overflow-hidden rounded-lg border border-border bg-surface p-5 shadow-xs md:p-6">
+      <div className="pointer-events-none absolute inset-y-0 right-0 -z-10 w-[60%]" style={illustrationFade}>
+        <Image alt={solution.alt} className="object-cover object-[40%_50%]" fill sizes="(min-width: 1280px) 260px, (min-width: 1024px) 20vw, 60vw" src={solution.image} />
       </div>
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-r from-surface from-40% to-transparent to-75% lg:to-90% xl:to-75%" />
 
-      <div className="flex flex-1 flex-col md:max-w-[60%] lg:max-w-none xl:max-w-[64%]">
+      <div className="flex flex-1 flex-col md:max-w-[56%] lg:max-w-none xl:max-w-[56%]">
         <div className="flex items-start gap-4">
           <span aria-hidden="true" className="flex size-12 shrink-0 items-center justify-center rounded-md border border-[#cdeee6] bg-surface text-primary shadow-[0_8px_20px_-12px_rgb(0_158_135/0.55)]">
             <ListingIcon className="size-6" name={solution.icon} strokeWidth={2} />
