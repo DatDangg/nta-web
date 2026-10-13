@@ -2,7 +2,7 @@
 
 ```yaml
 workItem: feature/home-sections-redesign
-phaseTask: phase-1-task-02
+phaseTask: phase-1-task-03
 step: builder
 agent: builder
 status: awaiting
@@ -12,10 +12,10 @@ updatedAt: 2026-10-14T00:35:00+07:00
 filesTouched: [spec/changes/BACKLOG.md, .context/progress.json]
 filesNew: [spec/changes/2026-10-14-home-sections-redesign.md, tasks/feature-home-sections-redesign/phase-1-task-01.md, tasks/feature-home-sections-redesign/phase-1-task-02.md, tasks/feature-home-sections-redesign/phase-1-task-03.md, .context/runs/feature-home-sections-redesign-phase-1.md]
 evidence:
-  reportPath: .context/review-reports/feature-home-sections-redesign-phase-1-task-01-round-1-review.md
+  reportPath: .context/review-reports/feature-home-sections-redesign-phase-1-task-02-round-1-review.md
   round: 1
   verdict: PASS
-next: "builder phase-1-task-02"
+next: "builder phase-1-task-03 (cân nhắc sửa 2 MINOR task 02 trong task 03 nếu đụng page.tsx) → dừng chờ build terminal user"
 loopSignal: none
 approvals: [{gate: phase_plan, at: 2026-10-14, ok: true}]
 batchQueue: [phase-1-task-01, phase-1-task-02, phase-1-task-03]
@@ -33,3 +33,7 @@ batchQueue: [phase-1-task-01, phase-1-task-02, phase-1-task-03]
 - 2026-10-14 DONE builder attempt 1: typecheck PASS, lint PASS, build BLOCKED(môi trường: Failed to load native binding, cả Git Bash lẫn cmd.exe npm.cmd). Dừng theo chỉ thị coordinator, chưa reviewer/commit.
 - 2026-10-14 build PASS — chạy ở terminal user qua primary session, như CR-015 (59/59 static pages; chỉ warning cũ no-img-element mdx/index.tsx) → START reviewer phase-1-task-01
 - 2026-10-14 DONE reviewer task 01 PASS (NORMAL) → close-out + commit + push
+- 2026-10-14 commit e1ae847 task 01 + push origin main OK → START builder phase-1-task-02
+- 2026-10-14 DONE builder task 02 attempt 1: typecheck PASS, lint PASS; build chờ primary (terminal user)
+- 2026-10-14 build task 02 PASS (terminal user qua primary) → START reviewer phase-1-task-02
+- 2026-10-14 DONE reviewer task 02 PASS (NORMAL) → commit + push; dừng vì chạm giới hạn 40 step

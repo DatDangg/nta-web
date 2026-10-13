@@ -3,11 +3,11 @@
   "activeWorkItem": {
     "type": "feature",
     "slug": "home-sections-redesign",
-    "phaseTask": "phase-1-task-02",
+    "phaseTask": "phase-1-task-03",
     "step": "builder",
     "status": "awaiting",
     "journal": ".context/runs/feature-home-sections-redesign-phase-1.md",
-    "note": "CR-016 task 01 done (review PASS) — kế: builder task 02"
+    "note": "CR-016 task 01+02 done — kế: builder task 03"
   },
   "features": [
     {
@@ -1024,14 +1024,14 @@
       "classification": "MODIFY (UI) + ADDITIVE",
       "tasks": {
         "phase-1-task-01": "done",
-        "phase-1-task-02": "pending",
+        "phase-1-task-02": "done",
         "phase-1-task-03": "pending"
       },
       "note": "CR-016 — trang chủ: Giải pháp · Sản phẩm (card dọc) · Câu chuyện khách hàng theo mockup. Spec delta R-02a/R-03a/R-03b đề xuất (bump 3.11.0 lúc close-out).",
       "updatedAt": "2026-10-14",
       "reviewer": {
         "result": "PASS",
-        "report": ".context/review-reports/feature-home-sections-redesign-phase-1-task-01-round-1-review.md"
+        "report": ".context/review-reports/feature-home-sections-redesign-phase-1-task-02-round-1-review.md"
       }
     }
   ],

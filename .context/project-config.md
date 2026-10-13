@@ -18,7 +18,7 @@ output_language: vi            # vi | en — ngôn ngữ cho docs/summary
 target_branch: main            # ✅ cập nhật 09/10/2026 — staging-direct trên main; remote: git@github.com:DatDangg/nta-web.git
 forbidden_branch: none         # ✅ cập nhật 09/10/2026 — remote đã có, user duyệt push main (trước cấm khi chưa có remote)
 branch_pattern: "main"         # default staging-direct
-auto_push_after_pass: false    # ✅ chốt 08/10/2026 — chỉ commit local, push khi user yêu cầu rõ
+auto_push_after_pass: true     # ✅ cập nhật 13/10/2026 — user bật auto push: push origin main sau khi review + build/typecheck/lint PASS
 
 # ── Package / source ──
 package_manager: npm           # ✅ chốt 08/10/2026
