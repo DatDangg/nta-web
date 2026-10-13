@@ -206,9 +206,14 @@ export interface CaseStudyShowcase {
     variant?: 'photo' | 'screen';
     items: { src: string; alt: string }[];
   };
-  vision: { eyebrow: string; title: string; description: string; quote: string; quoteSource?: string; image?: { src: string; alt: string } };
+  /** `quote` optional (R-08c): thiếu trích dẫn thật → ẩn thẻ trích dẫn (BR-004). */
+  vision: { eyebrow: string; title: string; description: string; quote?: string; quoteSource?: string; image?: { src: string; alt: string } };
   /** Dòng lưu ý dưới thẻ số liệu — nói rõ phương án đề xuất, chưa phải kết quả triển khai (BR-004). */
   note?: string;
+  /** Lưới tính năng (R-08c) — optional; thiếu → ẩn block. */
+  features?: { eyebrow: string; title: string; items: { title: string; description: string; icon?: ShowcaseIcon }[] };
+  /** FAQ (R-08c) — optional; thiếu → ẩn block. Render bằng `<details>`. */
+  faq?: { eyebrow: string; title: string; items: { question: string; answer: string }[] };
   cta: { title: string; description: string; label: string; href: string; image?: string };
 }
 

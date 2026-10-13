@@ -1,5 +1,5 @@
 ---
-spec_version: 3.2.1
+spec_version: 3.3.0
 updated_at: 2026-10-13
 ---
 
@@ -133,6 +133,17 @@ _(cập nhật 2026-10-09: đổi domain đích sang `ntavietnam.tech` — chang
     `primaryCta` nhận anchor `#…` hoặc route nội bộ (route → `Link` theo locale). Áp dụng thứ hai: `dental-clinic-operations`
     (vi/en) — nút hero + nút khối Giải pháp mở `/solutions/enterprise/dentgo`. — nguồn: change
     `spec/changes/archive/2026-10-13-dental-case-study-showcase.md`.
+
+- **R-08c (khung chi tiết dùng chung — 3.3.0):** một khung layout chi tiết duy nhất (`ShowcaseLayout`) cho:
+  trang chi tiết case study showcase `/case-studies/[slug]`, trang chi tiết giải pháp `/solutions/enterprise/[slug]`
+  và `/solutions/ai/[slug]`, và trang chi tiết sản phẩm `/products/[slug]` (route mới). Cùng thứ tự block:
+  hero → thẻ số liệu + 3 pillar → công nghệ + ảnh → carousel ảnh → tầm nhìn → **[lưới tính năng]** → **[FAQ]** → CTA.
+  Mỗi trang chỉ khác **data** trong frontmatter MDX (VI + EN); `page.tsx` chỉ load data + breadcrumb/JSON-LD/metadata.
+  Block lưới tính năng và FAQ là **optional** (thiếu data → ẩn, không vỡ layout). Pillar giải pháp: Vấn đề / Giải pháp / Lợi ích.
+  Số liệu thẻ chỉ dùng số thật của sản phẩm (BR-004); thiếu trích dẫn thật → ẩn thẻ quote tầm nhìn.
+  Giữ nguyên URL hiện có; metadata, canonical/alternates, breadcrumb JSON-LD, sitemap đúng; SSG; không thêm DB/API nội dung (R-15, R-16).
+  Ảnh thiếu → ảnh minh hoạ tự tạo có alt/caption ghi "minh hoạ" (BR-004); ảnh staging CRM/DentGo/LMS phải thay dữ liệu bên trong bằng dữ liệu giả.
+  — nguồn: change `spec/changes/2026-10-13-shared-detail-showcase-template.md` (CR-004).
 
 ### Module 7 — Tin tức / Blog
 

@@ -2,7 +2,7 @@
   "mode": "feature",
   "activeWorkItem": {
     "type": "feature",
-    "slug": "dental-case-study-showcase"
+    "slug": "shared-detail-showcase-template"
   },
   "features": [
     {
@@ -662,6 +662,35 @@
       "updatedAt": "2026-10-13",
       "completedAt": "2026-10-13",
       "scopeVersion": 23
+    },
+    {
+      "slug": "shared-detail-showcase-template",
+      "status": "in_progress",
+      "changeFile": "spec/changes/2026-10-13-shared-detail-showcase-template.md",
+      "classification": "MODIFY + ADDITIVE",
+      "specVersion": "3.3.0",
+      "phases": [
+        {
+          "phase": 1,
+          "status": "in_progress",
+          "tasks": [
+            {
+              "id": "phase-1-task-01",
+              "status": "done",
+              "scope": "layer 0 — khung chung + block optional",
+              "review": {
+                "level": "NORMAL",
+                "verdict": "PASS",
+                "round": 2,
+                "note": "vòng 1 FAIL (thiếu so sánh HTML + minor) → vòng 2 PASS sau khi có bằng chứng HTML build HEAD vs hiện tại"
+              }
+            }
+          ]
+        }
+      ],
+      "codeCommits": [],
+      "updatedAt": "2026-10-13",
+      "scopeVersion": 24
     }
   ],
   "bugs": []
