@@ -1,7 +1,7 @@
 ---
 id: add-domain-ntasolution
 type: feature
-status: in_progress
+status: done
 created: 2026-10-13
 ---
 
@@ -25,14 +25,14 @@ created: 2026-10-13
 - Model deploy: docker-vps — VPS `187.52.119.50` (shared, có nginx + certbot), container `nta-web`.
 
 ## Acceptance (bắt buộc)
-- [ ] nginx vhost mới cho `ntasolution.vn` proxy tới app (cùng app, cùng nội dung)
-- [ ] `www.ntasolution.vn` → 301 về apex `ntasolution.vn` (tránh 3 canonical)
-- [ ] HTTPS hoạt động cho apex + www (certbot Let's Encrypt); `http://` → 301 `https://`
-- [ ] `https://ntasolution.vn/` và `https://ntasolution.vn/en` trả nội dung site (200)
-- [ ] Canonical/trang trả về vẫn `https://ntavietnam.tech` — **không** đổi `NEXT_PUBLIC_SITE_URL`
-- [ ] `https://ntavietnam.tech/` không đổi hành vi (200, HTTPS, cert còn hạn)
-- [ ] KHÔNG sửa `.github/workflows/deploy.yml`, `src/lib/seo.ts`, `public/llms.txt`, sitemap, robots
-- [ ] Cập nhật `docs/runbook/deploy-vps.md` + `.context/project-config.md` (ghi domain phụ)
+- [x] nginx vhost mới cho `ntasolution.vn` proxy tới app (cùng app, cùng nội dung) — `deploy/nginx/ntasolution.vn.conf` đã apply lên VPS (scp + symlink, `nginx -t` OK)
+- [x] `www.ntasolution.vn` → 301 về apex `ntasolution.vn` (tránh 3 canonical) — http www + https www đều 301 `https://ntasolution.vn/` (đã sed block 80 do certbot set `$host`)
+- [x] HTTPS hoạt động cho apex + www (certbot Let's Encrypt); `http://` → 301 `https://` — cert SAN 2 name, exp 2027-01-11
+- [x] `https://ntasolution.vn/` và `https://ntasolution.vn/en` trả nội dung site (200) — + `/api/health` `{"status":"ok"}`
+- [x] Canonical/trang trả về vẫn `https://ntavietnam.tech` — **không** đổi `NEXT_PUBLIC_SITE_URL` (canonical apex+www = ntavietnam.tech; 18 ref ntavietnam trong HTML đều là SEO tag, 0 meta-refresh; `seo.ts` không đổi)
+- [x] `https://ntavietnam.tech/` không đổi hành vi (200, HTTPS, cert còn hạn 2027-01-07; md5 vhost không đổi)
+- [x] KHÔNG sửa `.github/workflows/deploy.yml`, `src/lib/seo.ts`, `public/llms.txt`, sitemap, robots — grep `ntasolution` = 0 trong các file này; `git show ec09807 --name-only` không chứa
+- [x] Cập nhật `docs/runbook/deploy-vps.md` + `.context/project-config.md` (ghi domain phụ) — §3b + troubleshooting + `domain_secondary` (đã reconcile thêm bước sed sau certbot)
 
 ## Ghi chú
 - Triển khai cần **SSH lên VPS** (cùng flow đã làm với `ntavietnam.tech` 09/10/2026: copy vhost → certbot --nginx → reload) — chờ user duyệt SSH trước khi chạy.
@@ -56,3 +56,13 @@ created: 2026-10-13
   (`shared-detail-showcase-template`, đang in_progress) hay app code.
 - **Ngoài phạm vi (giữ nguyên):** `NEXT_PUBLIC_SITE_URL`, `src/lib/seo.ts`, `public/llms.txt`, sitemap, robots,
   `.github/workflows/deploy.yml`, `docker-compose.yml`, vhost/cert của `ntavietnam.tech`.
+
+## Close-out (2026-10-13)
+
+- **Task-01** (repo-side): commit `ec09807` — review PASS NORMAL round 1 (0 CRITICAL/MAJOR).
+- **Task-02** (apply VPS): SSH bằng key user cung cấp; pre-check → scp vhost → `nginx -t` →
+  `certbot --nginx -n --redirect -d apex -d www` SUCCESS → reload → **sed block 80 www** về thẳng apex
+  (certbot set `$host` → 2 hop) → reload → verify matrix PASS toàn bộ (xem task-02 §Evidence).
+  Review PASS **STRICT** round 1 (0 CRITICAL/MAJOR, 10 MINOR — F1–F10 fix/ghi nhận lúc close-out).
+- **Spec:** 3.5.0 (MINOR) · **scope v27** · regression `ntavietnam.tech` = không đổi.
+- Residual: `dhp-cms.genieplatform.cloud` trỏ DNS `187.124.226.230` (khác VPS) — pre-existing, ngoài scope.
