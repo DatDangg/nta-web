@@ -1,0 +1,162 @@
+---
+slug: ai-box-bao-ha
+title: "AI Box safety monitoring at Bao Ha Temple"
+category: ai
+sector: "Heritage & spiritual sites"
+client: "Bao Ha Temple (Lao Cai)"
+year: 2026
+challenge: "Bao Ha Temple is a national historical and cultural relic and a busy pilgrimage site: around 300,000 visits during spring 2026 and more than 136,000 during the 7th-lunar-month festival (Lao Cai Newspaper). Incense, candles and votive paper burn constantly among wooden structures; crowds lead to pushing and scuffles; the rear sanctuary needs protection after hours, while staff cannot watch dozens of screens nonstop."
+solution: "NTA installed 3 AI Boxes on site, reading RTSP streams directly from 48 existing IP cameras. The AI Boxes analyse video locally with four functions: fire detection, fight detection, restricted-area intrusion and people counting; alerts with an annotated snapshot are sent to a central dashboard via webhook."
+result: "The system is live and monitoring 24/7. Temple management receives fire, fight and intrusion alerts in real time and sees crowd density to manage visitor flow during festivals; staff only handle alerts instead of watching every screen. This page does not publish operating statistics."
+metrics:
+  - value: "3 AI Boxes"
+    label: "edge AI processing"
+  - value: "48 cameras"
+    label: "IP cameras analysed"
+  - value: "24/7"
+    label: "automated monitoring and alerts"
+gallery:
+  - src: /images/cases/bao-ha/hero.jpg
+    alt: "Inner gate courtyard of Bao Ha Temple seen from a security camera"
+cover: /images/cases/bao-ha/hero.jpg
+related: []
+layout: showcase
+showcase:
+  hero:
+    breadcrumbLabel: "Bao Ha Temple"
+    eyebrow: "Deployed · 2026"
+    titleLead: "Protecting a sacred site"
+    titleAccent: "with AI at the edge"
+    subtitle: "AI Box solution for Bao Ha Temple, a national historical and cultural relic (Lao Cai)"
+    description: "3 AI Boxes analyse video from the temple's 48 cameras right on site. The system spots fire, fights and restricted-area intrusion early and counts people in real time, then sends alerts with annotated snapshots to a central dashboard within seconds."
+    image:
+      src: /images/cases/bao-ha/hero.jpg
+      alt: "Inner gate courtyard of Bao Ha Temple from a security camera, with the worship hall and a 10-year national intangible heritage sign behind"
+      width: 1364
+      height: 1021
+      caption: "Real footage from the Tam Quan Noi courtyard camera at Bao Ha Temple."
+    primaryCta:
+      label: "Explore the solution"
+      href: "#solution"
+  stats:
+    - icon: modules
+      value: "3 AI Boxes"
+      label: "Edge AI processing — no need to stream all video to a central site"
+    - icon: camera
+      value: "48 cameras"
+      label: "Existing IP cameras analysed continuously by AI"
+    - icon: calendar
+      value: "24/7"
+      label: "Automated monitoring and alerts"
+  pillars:
+    - icon: challenge
+      title: "Challenges"
+      items:
+        - "Seasonal visitor surges: around 300,000 visits in spring 2026 and more than 136,000 during the 7th-lunar-month festival (Lao Cai Newspaper)."
+        - "High fire risk from incense, candles and votive paper burning among wooden structures."
+        - "Pushing and scuffles in the courtyard, gate and incense area when crowds build up."
+        - "The rear sanctuary and donation boxes need after-hours protection; one person cannot watch dozens of screens at once."
+    - icon: solution
+      title: "Deployed solution"
+      items:
+        - "3 AI Boxes read RTSP streams directly from 48 existing IP cameras — no camera replacement, no video sent to the cloud."
+        - "Four zone-based functions: fire detection, fight detection, restricted-area intrusion, people counting."
+        - "Instant alerts via webhook to a central dashboard, with an annotated snapshot."
+        - "Secure remote access over HTTPS to update configuration, zones and models."
+    - icon: result
+      title: "Value delivered"
+      items:
+        - "Fire and security incidents spotted early, before they spread."
+        - "Real-time crowd density to manage visitor flow during festivals."
+        - "Staff only handle alerts instead of watching every screen."
+        - "The temple keeps its solemn atmosphere without adding many on-site personnel."
+  note: "Visitor numbers from Lao Cai Newspaper. “Value delivered” describes what the running system does, not measured statistics."
+  technology:
+    id: solution
+    eyebrow: "Technology"
+    title: "Existing cameras, AI processing on site"
+    description: "Each AI Box runs AI models on a dedicated chip and analyses many camera streams at once. All analysis stays inside the temple's local network; only alert messages (event type, camera, time, bounding box) and one annotated snapshot leave it."
+    cta:
+      label: "See the BoxAI solution"
+      href: "/solutions/ai/boxai"
+    nodes:
+      - label: "48 existing IP cameras"
+        icon: camera
+      - label: "3 edge AI Boxes"
+        icon: ai
+      - label: "Central alert dashboard"
+        icon: vms
+    screen:
+      src: /images/cases/bao-ha/ai-detection.jpg
+      alt: "Camera frame of the Phu Chua courtyard with yellow markers on people detected by the AI Box"
+      width: 1600
+      height: 803
+    caption: "Real footage from the Phu Chua courtyard camera — yellow markers are people detected by the AI Box; faces are blurred."
+  photos:
+    eyebrow: "From the system"
+    title: "Bao Ha Temple through AI cameras"
+    prevLabel: "Previous photo"
+    nextLabel: "Next photo"
+    caption: "Real footage from the temple's camera system; faces have been blurred."
+    items:
+      - src: /images/cases/bao-ha/hero.jpg
+        alt: "Tam Quan Noi courtyard camera: stone courtyard in front of the worship hall"
+      - src: /images/cases/bao-ha/courtyard.jpg
+        alt: "Main courtyard camera: large incense burner in the temple yard at dawn"
+      - src: /images/cases/bao-ha/ai-detection.jpg
+        alt: "Phu Chua courtyard camera: the AI Box marks people walking and resting"
+      - src: /images/cases/bao-ha/shrine.jpg
+        alt: "Worship hall camera: monitoring the altar and donation box area"
+  vision:
+    eyebrow: "Looking ahead"
+    title: "Technology serving\nthe safety of sacred places"
+    description: "AI does not replace the temple's caretakers; it helps them see more and respond faster. On the same AI Box platform, the Bao Ha model can extend to nearby relics, towards a unified local heritage-protection network."
+    quote: "Every safe festival season is a complete one. AI helps the management keep the relic solemn even when tens of thousands of people arrive at once."
+    quoteSource: "NTA's vision for the project"
+    image:
+      src: /images/cases/bao-ha/courtyard.jpg
+      alt: ""
+  features:
+    eyebrow: "AI algorithms"
+    title: "One AI Box, layered algorithms\nfor each area of the temple"
+    items:
+      - icon: modules
+        title: "Object detection"
+        description: "Base layer: a one-stage CNN (YOLO family) detects people and flames in every frame, INT8-quantised to run in real time on the AI Box."
+      - icon: modules
+        title: "Multi-object tracking"
+        description: "Base layer: a Kalman filter and Hungarian matching (SORT/ByteTrack style) give each person a stable ID for counting and direction checks."
+      - icon: challenge
+        title: "Fire detection"
+        description: "A flame region must persist across many frames and tend to grow before an alert fires. Used at: votive-paper burner, offerings store, wooden halls."
+      - icon: challenge
+        title: "Fight detection"
+        description: "Pose keypoints and motion sequences are analysed to recognise scuffles. Used at: courtyard, gate and crowded areas during festivals."
+      - icon: camera
+        title: "Restricted-area intrusion"
+        description: "Virtual fence: checks whether a person's foot point lies inside the restricted polygon, on a time schedule. Used at: rear sanctuary and donation boxes after closing."
+      - icon: area
+        title: "People counting and density"
+        description: "Counts people crossing the gate in both directions, estimates how many are in a zone and alerts above a safe threshold. Used at: gate, main courtyard, incense area."
+  details:
+    eyebrow: "Operations"
+    title: "Timely alerts, fewer false alarms"
+    groups:
+      - title: "Reducing false alarms in a spiritual setting"
+        intro: "Incense smoke and candlelight easily trigger false fire alarms on ordinary AI cameras, so each zone is configured separately."
+        items:
+          - "Exclusion masks around incense burners, candle stands and oil lamps so they never trigger fire alerts."
+          - "Per-camera confidence thresholds and consecutive-frame counts, tuned for day and night lighting."
+          - "The dashboard groups alerts of the same type from the same camera within a time window into one incident, so staff are not flooded."
+      - title: "Event flow"
+        items:
+          - "IP camera → RTSP stream → on-site AI Box analyses each frame."
+          - "Event detected → JSON alert + annotated snapshot sent via webhook."
+          - "The central dashboard lists alerts by type, camera and time for staff to act on."
+  cta:
+    title: "Want to use AI to protect your temple, pagoda or heritage site?"
+    description: "Contact NTA for a site survey and advice on an AI Box solution for temples, pagodas, relics and spiritual tourism sites."
+    label: "Contact us"
+    href: "/contact"
+    image: /images/cases/bao-ha/courtyard.jpg
+---

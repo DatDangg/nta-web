@@ -1,53 +1,50 @@
 {
-  "specVersion": "3.7.0",
-  "scopeVersion": 33,
-  "generatedAt": "2026-10-13T17:45:00+07:00",
+  "specVersion": "3.8.0",
+  "scopeVersion": 34,
+  "generatedAt": "2026-10-13T18:30:00+07:00",
   "trigger": "feature-update",
-  "workItem": "feature-fridayai-solution",
+  "workItem": "feature-ai-box-bao-ha-case-study",
   "specRefs": [
-    "R-06",
-    "R-06e",
-    "R-08c"
+    "R-08b",
+    "R-08b.2",
+    "R-06b"
   ],
   "changed": {
     "files": [
-      "src/content/solutions/vi/fridayai.mdx (MỚI)",
-      "src/content/solutions/en/fridayai.mdx (MỚI)",
-      "public/images/solutions/fridayai.svg + public/images/solutions/fridayai/* (MỚI — logo + 3 ảnh chụp fridayaix.com)",
-      "src/lib/content/slug.ts (aiSlugs + fridayai)",
-      "src/content/listings.ts (thẻ fridayai, danh mục lọc gateway, mô tả trang AI)",
-      "src/components/case-studies/showcase/ShowcaseCTA.tsx (href http(s) → <a target=_blank rel=noopener noreferrer>)"
+      "src/content/case-studies/vi/ai-box-bao-ha.mdx (MỚI)",
+      "src/content/case-studies/en/ai-box-bao-ha.mdx (MỚI)",
+      "public/images/cases/bao-ha/{hero,courtyard,ai-detection,shrine}.jpg (MỚI — ảnh camera thật, đã làm mờ mặt)",
+      "src/content/listings.ts (meta thẻ ai-box-bao-ha vi/en)",
+      "src/content/solutions/{vi,en}/boxai.mdx (đoạn Bảo Hà + relatedCases)"
     ],
     "modules": [
-      "Module 4 — Giải pháp AI",
-      "Khung chi tiết dùng chung (R-08c)",
-      "Header mega menu",
+      "Case studies (showcase R-08b)",
+      "Module 4 — Giải pháp AI (BoxAI)",
       "Sitemap"
     ]
   },
   "impact": {
     "direct": [
-      "/solutions/ai/fridayai và /en/solutions/ai/fridayai: 200, title 'FridayAI | NTA', hero + số liệu + 3 pillar + lưới tính năng + chi tiết + carousel 2 ảnh + FAQ 5 câu + CTA",
-      "Nút 'Dùng thử FridayAI' (hero) và 'Đến fridayaix.com' (CTA cuối) mở https://fridayaix.com/ ở tab mới",
-      "/solutions/ai: thẻ FridayAI có ảnh + chip, lọc 'Nền tảng API AI' chỉ còn FridayAI, tìm 'FridayAI' ra thẻ"
+      "/case-studies/ai-box-bao-ha và /en/case-studies/ai-box-bao-ha: 200, title 'AI Box giám sát an toàn tại đền Bảo Hà | Case Study | NTA'; hero 'Triển khai · 2026' + ảnh camera thật; thẻ số liệu 3 AI Box / 48 camera / 24/7; 3 pillar; khối công nghệ (ảnh camera có marker AI, nút → /solutions/ai/boxai); carousel 4 ảnh; tầm nhìn + quote; lưới 6 thuật toán; khối giảm báo giả + luồng sự kiện; CTA → /contact",
+      "Nút 'Khám phá giải pháp' cuộn tới khối Giải pháp (#giai-phap / #solution)",
+      "/case-studies (vi/en): có thẻ case study Bảo Hà, lọc nhóm AI hiển thị thẻ này"
     ],
     "dependents": [
-      "Mega menu Giải pháp → nhóm AI có thêm mục FridayAI (vi/en)",
-      "sitemap.xml có /solutions/ai/fridayai + /en (hreflang)",
-      "ShowcaseCTA: các trang showcase cũ có CTA nội bộ (/contact) vẫn mở cùng tab"
+      "/solutions/ai/boxai (vi/en): đoạn 'Triển khai thực tế tại Đền Bảo Hà' có 3 AI Box · 48 camera; khối case study liên quan cuối trang trỏ /case-studies/ai-box-bao-ha (trước là Óc Eo)",
+      "sitemap.xml có /case-studies/ai-box-bao-ha + /en (hreflang)"
     ],
     "regression": [
-      "/solutions/ai/boxai|flycam|custom-ai",
-      "/case-studies/oc-eo-learning, /case-studies/dental-clinic-operations (CTA)",
-      "/solutions/enterprise/*",
-      "/products/*"
+      "/case-studies/oc-eo-learning",
+      "/case-studies/dental-clinic-operations",
+      "/solutions/ai (thẻ case study Óc Eo vẫn giữ)",
+      "/solutions/ai/flycam|custom-ai|fridayai"
     ]
   },
   "acceptance": [
-    "Thẻ FridayAI xuất hiện ở /solutions/ai (vi + en) có ảnh và mô tả",
-    "Trang chi tiết dùng khung chung, không có bảng giá/khuyến mãi cứng trong text",
-    "CTA dẫn sang fridayaix.com tab mới",
-    "Ảnh có alt + caption nguồn",
+    "Trang case study vi/en render đủ block, không tràn ngang ở 1440 và 390",
+    "Ảnh có alt + caption ghi ảnh thật; mặt người đã làm mờ",
+    "Không có số liệu vận hành, không nêu tên chip AI Box",
+    "Số lượt khách ghi nguồn Báo Lào Cai",
     "typecheck/lint/build PASS"
   ],
   "risk": "low"

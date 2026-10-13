@@ -2,8 +2,8 @@
   "mode": "feature",
   "activeWorkItem": {
     "type": "feature",
-    "slug": "fridayai-solution",
-    "note": "CR-011 DONE + archive (13/10/2026). Không có work item active của phiên này."
+    "slug": "ai-box-bao-ha-case-study",
+    "note": "CR-012 DONE + archive (13/10/2026). Không có work item active của phiên này."
   },
   "features": [
     {
@@ -926,6 +926,21 @@
         "report": ".context/review-reports/feature-fridayai-solution-phase-1-task-01-round-1-review.md"
       },
       "note": "CR-011 — giải pháp AI FridayAI (AI API Gateway) ở /solutions/ai/fridayai; spec 3.7.0 · scope v33",
+      "updatedAt": "2026-10-13"
+    },
+    {
+      "slug": "ai-box-bao-ha-case-study",
+      "status": "done",
+      "changeFile": "spec/changes/archive/2026-10-13-ai-box-bao-ha-case-study.md",
+      "classification": "ADDITIVE",
+      "tasks": {
+        "phase-1-task-01": "done"
+      },
+      "reviewer": {
+        "result": "PASS",
+        "report": ".context/review-reports/feature-ai-box-bao-ha-case-study-phase-1-task-01-round-1-review.md"
+      },
+      "note": "CR-012 — case study AI Box đền Bảo Hà /case-studies/ai-box-bao-ha (3 AI Box · 48 camera) + cập nhật đoạn Bảo Hà trang BoxAI; spec 3.8.0 · scope v34",
       "updatedAt": "2026-10-13"
     }
   ],
