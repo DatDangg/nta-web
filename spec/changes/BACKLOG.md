@@ -20,7 +20,7 @@
 | CR-010 | Header: dropdown "Giải pháp" thành mega menu 2 cột theo mockup | MODIFY (UI) | done (no spec delta) | `archive/2026-10-13-header-solutions-megamenu.md` | 2026-10-13 | 2026-10-13 |
 | CR-011 | Thêm giải pháp AI "FridayAI" (AI API Gateway) vào /solutions/ai — nội dung + ảnh lấy từ fridayaix.com | ADDITIVE | done (spec 3.7.0 · scope v33) | `archive/2026-10-13-fridayai-solution.md` | 2026-10-13 | 2026-10-13 |
 | CR-012 | Case study mới: AI Box tại đền Bảo Hà (showcase như Óc Eo, ảnh camera thật + bảng thuật toán AI) | ADDITIVE | done (spec 3.8.0 · scope v34) | `archive/2026-10-13-ai-box-bao-ha-case-study.md` | 2026-10-13 | 2026-10-13 |
-| CR-013 | Ảnh carousel bấm phóng to (lightbox) + thiết kế lại thẻ case study (ảnh bị cắt) | MODIFY + ADDITIVE (UI) | in_progress (chờ duyệt phase plan) | `2026-10-13-image-lightbox-case-study-card.md` | 2026-10-13 | |
+| CR-013 | Ảnh carousel bấm phóng to (lightbox) + thiết kế lại thẻ case study (ảnh bị cắt) | MODIFY + ADDITIVE (UI) | done (spec 3.9.0 · scope v36) | `archive/2026-10-13-image-lightbox-case-study-card.md` | 2026-10-13 | 2026-10-13 |
 
 ## Quy tắc tracking
 

@@ -421,6 +421,7 @@ Empty: không có ảnh → ẩn gallery; không có case liên quan → ẩn Re
 
 **Interactions:** reveal theo block (Challenge→Solution→Result); gallery ảnh click mở `next/image` lightbox
 tuỳ chọn (không bắt buộc v1 — nếu làm thì focus trap + Esc); result numbers static (KHÔNG count-up animation).
+_(3.9.0 — R-08d.1: lightbox đã áp dụng cho carousel ảnh `showcase.photos` của khung chi tiết dùng chung; `ImageGallery` biến thể `default` chưa có lightbox.)_
 
 **A11y:** MetaBar `<dl>`; số liệu kèm đơn vị + mô tả text; gallery alt theo ảnh; lightbox (nếu có) trap focus;
 blockquote/service line không dùng em-dash trong attribution.

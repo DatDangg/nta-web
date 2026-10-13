@@ -3,9 +3,7 @@
   "activeWorkItem": {
     "type": "feature",
     "slug": "image-lightbox-case-study-card",
-    "phaseTask": "phase-1-task-02",
-    "journal": ".context/runs/feature-image-lightbox-case-study-card-phase-1-task-02.md",
-    "note": "CR-013 task 01 done; task 02 tiếp theo"
+    "note": "CR-013 DONE + archive (13/10/2026). Không có work item active."
   },
   "features": [
     {
@@ -971,8 +969,8 @@
     },
     {
       "slug": "image-lightbox-case-study-card",
-      "status": "in_progress",
-      "changeFile": "spec/changes/2026-10-13-image-lightbox-case-study-card.md",
+      "status": "done",
+      "changeFile": "spec/changes/archive/2026-10-13-image-lightbox-case-study-card.md",
       "classification": "MODIFY + ADDITIVE (UI)",
       "tasks": {
         "phase-1-task-01": "done",
@@ -982,7 +980,7 @@
         "result": "PASS",
         "report": ".context/review-reports/feature-image-lightbox-case-study-card-phase-1-task-02-round-1-review.md"
       },
-      "note": "CR-013 — task 01 lightbox (c3ca0e6) + task 02 thẻ /case-studies banner 16/10 done; chờ spec-publisher 3.9.0",
+      "note": "CR-013 — lightbox carousel ShowcasePhotos (c3ca0e6) + thẻ /case-studies banner 16/10 (03f371b); spec 3.9.0 (R-08d) · scope v36",
       "updatedAt": "2026-10-13"
     }
   ],

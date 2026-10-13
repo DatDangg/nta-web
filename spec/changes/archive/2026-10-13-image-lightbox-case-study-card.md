@@ -1,7 +1,7 @@
 ---
 id: image-lightbox-case-study-card
 type: feature
-status: in_progress
+status: done
 created: 2026-10-13
 backlog: CR-013
 classification: MODIFY + ADDITIVE (UI)
@@ -77,10 +77,15 @@ Phương án thay thế (không chọn): giữ bố cục ngang nhưng khung ả
 - `.context/design-spec.md` Screen 9 đã ghi "gallery ảnh click mở lightbox" → chỉ ghi chú áp dụng cho carousel showcase.
 
 ## Acceptance (bắt buộc)
-- [ ] Bấm ảnh carousel → mở ảnh lớn (overlay), đóng bằng nút X / Esc / bấm nền, chuyển ảnh trước/sau, dùng được bàn phím + mobile
-- [ ] Thẻ case study thiết kế lại, ảnh không bị cắt mất phần chính; các thẻ vẫn cao đều nhau
-- [ ] Responsive mobile/desktop, không vỡ layout
+- [x] Bấm ảnh carousel → mở ảnh lớn (overlay), đóng bằng nút X / Esc / bấm nền, chuyển ảnh trước/sau, dùng được bàn phím + mobile
+- [x] Thẻ case study thiết kế lại, ảnh không bị cắt mất phần chính; các thẻ vẫn cao đều nhau
+- [x] Responsive mobile/desktop, không vỡ layout
 
 ## Tasks
 - `tasks/feature-image-lightbox-case-study-card/phase-1-task-01.md` — Lightbox cho carousel `ShowcasePhotos`
 - `tasks/feature-image-lightbox-case-study-card/phase-1-task-02.md` — Thiết kế lại thẻ `ListingCard` biến thể `photo` (/case-studies)
+
+## Kết quả (close-out 2026-10-13)
+- Task 01 lightbox `c3ca0e6` (review STRICT PASS) · Task 02 thẻ /case-studies `03f371b` (review NORMAL PASS)
+- typecheck/lint/build PASS (build chạy ở terminal user) · spec 3.9.0 (R-08d) · test-scope v36
+- Residual: chưa smoke test trình duyệt thật (Safari focus, vuốt mobile); finding MINOR ghi trong review reports

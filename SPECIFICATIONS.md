@@ -1,5 +1,5 @@
 ---
-spec_version: 3.8.0
+spec_version: 3.9.0
 updated_at: 2026-10-13
 ---
 
@@ -167,6 +167,17 @@ _(cập nhật 2026-10-13: thêm **domain phụ** `ntasolution.vn` (+ `www`) ph�
     Field optional tương thích ngược cho ảnh app di động: `technology.screen.device: phone` (khung điện thoại), `photos.variant: phone`
     (+ `photos.aspect` tỉ lệ ảnh), icon nút sơ đồ `photo` · `ai` · `music` · `share`. Chưa có link store → nút hero cuộn tới lưới tính năng.
     Nội dung lấy từ ghi chú sản phẩm user gửi 13/10/2026; không dùng ảnh có số liệu chưa kiểm chứng (màn Premium nhạc ghi rating 4.8) hoặc ảnh minh hoạ chưa rõ giấy phép (welcome app tóc) (BR-004).
+
+- **R-08d (3.9.0 — lightbox carousel ảnh + thẻ case study banner):**
+  - **R-08d.1 (lightbox):** carousel ảnh `showcase.photos` (mọi `variant`) trong khung chi tiết dùng chung (R-08c) — bấm ảnh mở
+    **lightbox** (`<dialog>` native, không thêm thư viện): ảnh đủ (`object-contain`), alt/caption + bộ đếm "n / N"; đóng bằng nút X,
+    Esc, bấm nền; chuyển ảnh bằng nút trước/sau, phím ←/→ và vuốt (cảm ứng), vòng lặp đầu↔cuối; focus vào dialog khi mở và trả
+    focus về ảnh đã bấm khi đóng; khoá cuộn trang khi mở; animation chỉ khi `motion-safe` (tôn trọng `prefers-reduced-motion`).
+    Áp dụng cho `/case-studies/[slug]` (showcase), `/solutions/enterprise/[slug]`, `/solutions/ai/[slug]`, `/products/[slug]` (vi/en).
+    **Ngoài phạm vi:** ảnh hero, `ScreenMock`/`VmsMock`, `ImageGallery` của biến thể `default`.
+  - **R-08d.2 (thẻ danh sách `/case-studies`):** `ListingCard` kind `photo` — ảnh cover là banner ngang tỉ lệ 16/10 trên đầu thẻ,
+    nội dung chữ bên dưới full width; các thẻ trong lưới cao đều. Thẻ kind `phone`/`window` (`/products`, `/solutions/*`) không đổi.
+  — nguồn: change `spec/changes/archive/2026-10-13-image-lightbox-case-study-card.md` (CR-013).
 
 ### Module 7 — Tin tức / Blog
 

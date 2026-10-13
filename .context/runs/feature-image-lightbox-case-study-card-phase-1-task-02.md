@@ -12,7 +12,7 @@ updatedAt: 2026-10-13T00:00:00+07:00
 filesTouched: [spec/changes/BACKLOG.md, spec/changes/2026-10-13-image-lightbox-case-study-card.md, .context/progress.json]
 filesNew: [tasks/feature-image-lightbox-case-study-card/phase-1-task-02.md, tasks/feature-image-lightbox-case-study-card/phase-1-task-02.md, .context/runs/feature-image-lightbox-case-study-card-phase-1-task-02.md]
 evidence: {reportPath: .context/review-reports/feature-image-lightbox-case-study-card-phase-1-task-02-round-1-review.md, round: 1, verdict: PASS}
-next: "spec-publisher 3.9.0 (R-08d) + archive change doc + BACKLOG done"
+next: "none — CR-013 done"
 loopSignal: none
 approvals: [{gate: phase_plan, at: 2026-10-13, ok: true}]
 batchQueue: [phase-1-task-02 (lightbox ShowcasePhotos), phase-1-task-02 (ListingCard photo banner 16/10)]
@@ -28,3 +28,4 @@ batchQueue: [phase-1-task-02 (lightbox ShowcasePhotos), phase-1-task-02 (Listing
 ## History
 - 2026-10-13 journal created; task 01 done (c3ca0e6). ▶ START builder phase-1-task-02
 - 2026-10-13 builder xong (typecheck/lint PASS) → reviewer NORMAL r1 PASS (3 MINOR) → build terminal user PASS 59/59 → close-out commit
+- 2026-10-13 spec-publisher 3.9.0 (R-08d) · scope v36 → archive change doc, BACKLOG done → close-out commit
