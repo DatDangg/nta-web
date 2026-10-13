@@ -1,61 +1,55 @@
 {
-  "specVersion": "3.9.0",
-  "scopeVersion": 36,
-  "generatedAt": "2026-10-13T21:00:00+07:00",
+  "specVersion": "3.10.0",
+  "scopeVersion": 37,
+  "generatedAt": "2026-10-13T23:30:00+07:00",
   "trigger": "feature-update",
-  "workItem": "feature-image-lightbox-case-study-card",
+  "workItem": "feature-about-page-redesign",
   "specRefs": [
-    "R-08d",
-    "R-08d.1",
-    "R-08d.2",
-    "R-08c",
-    "R-08"
+    "R-04a",
+    "R-04"
   ],
   "changed": {
     "files": [
-      "src/components/ui/Lightbox.tsx (MỚI — lightbox <dialog> native)",
-      "src/components/case-studies/showcase/ShowcasePhotos.tsx (ảnh carousel bấm mở lightbox)",
-      "src/i18n/messages/vi.json (nhãn lightbox)",
-      "src/i18n/messages/en.json (nhãn lightbox)",
-      "src/components/listing/ListingCard.tsx (kind photo: banner 16/10 trên đầu thẻ)"
+      "src/components/about/AboutHero.tsx (MỚI — hero 2 cột + chỉ số + ảnh tòa Kim Hoàn)",
+      "src/components/about/AboutValues.tsx (MỚI — Sứ mệnh/Tầm nhìn/Giá trị cốt lõi)",
+      "src/components/about/AboutPeople.tsx (MỚI — Con người NTA, ảnh AI tạm)",
+      "src/components/about/MissionBlock.tsx (XOÁ)",
+      "src/components/about/TeamGrid.tsx (id=\"team\")",
+      "src/components/listing/icons.tsx (+ icon target/eye/gem)",
+      "src/app/[locale]/about/page.tsx",
+      "src/i18n/messages/vi.json",
+      "src/i18n/messages/en.json",
+      "public/images/about/building-kim-hoan.webp (MỚI)",
+      "public/images/about/team-people-temp.webp (MỚI, ảnh tạm)"
     ],
     "modules": [
-      "Module 6 — Case studies (khung chi tiết dùng chung R-08c: block carousel ảnh; listing /case-studies)",
-      "Module 3 — Giải pháp (dùng chung carousel trong khung chi tiết)",
-      "Sản phẩm /products/[slug] (dùng chung carousel trong khung chi tiết)"
+      "Module 2 — Về NTA /about"
     ]
   },
   "impact": {
     "direct": [
-      "/case-studies và /en/case-studies: thẻ case study có ảnh cover banner ngang tỉ lệ 16/10 ở đầu thẻ, tiêu đề/mô tả bên dưới full width; ảnh không bị cắt mất phần chính; các thẻ trong cùng hàng cao đều",
-      "/case-studies/[slug] showcase (vd oc-eo-learning, dental-clinic-operations, ai-box-bao-ha; + /en): bấm ảnh carousel mở lightbox",
-      "/solutions/enterprise/[slug] (hrm, crm, dentgo, lms; + /en): bấm ảnh carousel mở lightbox",
-      "/solutions/ai/[slug] có carousel ảnh (+ /en): bấm ảnh mở lightbox",
-      "/products/[slug] (music-app, hair-style-ai; + /en; photos.variant phone): bấm ảnh carousel mở lightbox",
-      "Lightbox: ảnh hiển thị đủ (object-contain), alt/caption + bộ đếm 'n / N'",
-      "Lightbox đóng bằng nút X, phím Esc, bấm nền (bấm vào ảnh không đóng)",
-      "Lightbox chuyển ảnh bằng nút trước/sau, phím ←/→, vuốt trên cảm ứng; ảnh cuối → sau = ảnh đầu, ảnh đầu → trước = ảnh cuối",
-      "Mở lightbox: focus nằm trong dialog; đóng: focus trả về đúng ảnh đã bấm; trang nền không cuộn khi lightbox mở",
-      "prefers-reduced-motion: reduce → không animation"
+      "/about và /en/about: hero 2 cột — breadcrumb pill, H1 \"Về NTA\"/\"About NTA\" (NTA màu brand), tagline, mô tả, 3 chỉ số 50+/30+/99% có icon, ảnh tòa Kim Hoàn thật bên phải (mobile: dưới chữ)",
+      "Khối sứ mệnh: eyebrow \"Sứ mệnh của chúng tôi\" + H2 + 3 thẻ Sứ mệnh · Tầm nhìn · Giá trị cốt lõi (4 bullet); mobile 1 cột",
+      "Khối Con người NTA: ảnh đội ngũ + H2 + mô tả + nút \"Tìm hiểu thêm về đội ngũ →\" cuộn tới khối Đội ngũ (#team)",
+      "Chỉ 1 h1 trên trang; nội dung song ngữ đúng ngôn ngữ",
+      "Mobile 375px: không tràn ngang (scrollWidth == clientWidth)"
     ],
     "dependents": [
-      "Khung ShowcaseLayout (R-08c): thứ tự block không đổi; carousel scroll-snap + nút trước/sau + dots vẫn hoạt động như cũ ngoài lightbox",
-      "Nhãn lightbox đúng ngôn ngữ vi/en"
+      "Khối Năng lực, Đội ngũ, Cột mốc, Đối tác, CTA vẫn hiển thị bên dưới theo thứ tự cũ",
+      "Metadata title/description/canonical/hreflang + BreadcrumbList JSON-LD không đổi"
     ],
     "regression": [
-      "/products listing card (kind phone) không đổi",
-      "/solutions/enterprise listing card (kind window) không đổi",
-      "/solutions/ai listing card không đổi",
-      "Carousel scroll-snap trên mọi trang chi tiết (desktop 1440 + mobile 390), không tràn ngang",
-      "Ngoài phạm vi không có lightbox: ảnh hero, ScreenMock/VmsMock, ImageGallery biến thể default"
+      "Các trang dùng ListingIcon (/products, /solutions/*, /case-studies, /blog) icon cũ không đổi",
+      "Breadcrumb pill / ListingHero trên trang danh sách không đổi",
+      "Header/footer link /about vẫn hoạt động"
     ]
   },
   "acceptance": [
-    "Bấm ảnh carousel → mở ảnh lớn (overlay), đóng bằng nút X / Esc / bấm nền, chuyển ảnh trước/sau, dùng được bàn phím + mobile",
-    "Thẻ case study thiết kế lại, ảnh không bị cắt mất phần chính; các thẻ vẫn cao đều nhau",
-    "Responsive mobile/desktop, không vỡ layout",
-    "Không thêm thư viện mới (package.json không đổi dependencies)",
+    "Bố cục hero / sứ mệnh / con người khớp mockup ở desktop; mobile 1 cột, không tràn ngang",
+    "Ảnh tòa nhà = ảnh Kim Hoàn thật (webp, next/image, alt VI/EN)",
+    "Ảnh đội ngũ = ảnh AI tạm",
+    "Đủ nội dung VI + EN, metadata/breadcrumb JSON-LD giữ nguyên",
     "typecheck/lint/build PASS"
   ],
-  "risk": "medium"
+  "risk": "low"
 }

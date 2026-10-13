@@ -158,6 +158,7 @@ desc: giới thiệu 3 mảng + domain · JSON-LD: Organization + WebSite.
 ### Screen 2: Về NTA
 
 **Route:** `/about` — R-04
+> **CR-014 (3.10.0, R-04a):** đầu trang thay bằng hero 2 cột (ảnh tòa Kim Hoàn) + khối Sứ mệnh/Tầm nhìn/Giá trị cốt lõi + khối Con người NTA (ảnh AI tạm); PageHeader + MissionBlock bỏ, các khối bên dưới giữ nguyên.
 
 **Layout (7 section):** PageHeader (centered, h1 `display` + 1 dòng dẫn) · MissionBlock (statement lớn,
 `h2` centered, `max-w-[48ch]`, KHÔNG card) · CapabilityGrid (4 mục, list/divider KHÔNG card, tránh lặp family

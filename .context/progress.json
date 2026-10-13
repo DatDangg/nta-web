@@ -3,9 +3,7 @@
   "activeWorkItem": {
     "type": "feature",
     "slug": "about-page-redesign",
-    "phaseTask": "phase-1-task-01",
-    "step": "close-out",
-    "note": "CR-014 in_progress — thiết kế lại /about theo mockup (auto proceed)"
+    "note": "CR-014 DONE + archive (13/10/2026). Không có work item active."
   },
   "features": [
     {
@@ -987,13 +985,13 @@
     },
     {
       "slug": "about-page-redesign",
-      "status": "in_progress",
-      "changeFile": "spec/changes/2026-10-13-about-page-redesign.md",
+      "status": "done",
+      "changeFile": "spec/changes/archive/2026-10-13-about-page-redesign.md",
       "classification": "MODIFY + ADDITIVE (UI)",
       "tasks": {
         "phase-1-task-01": "done"
       },
-      "note": "CR-014 — hero 2 cột ảnh tòa Kim Hoàn + sứ mệnh/tầm nhìn/giá trị + con người NTA (ảnh AI tạm)",
+      "note": "CR-014 — /about hero 2 cột ảnh Kim Hoàn + sứ mệnh/tầm nhìn/giá trị + con người NTA (8853984); spec 3.10.0 (R-04a) · scope v37",
       "updatedAt": "2026-10-13",
       "reviewer": {
         "result": "PASS",
