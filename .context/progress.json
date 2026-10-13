@@ -712,13 +712,29 @@
                 "kiểm mobile: ShowcaseCTA + CTAForm gần nhau",
                 "demo DentGo/LMS dùng http:// — chờ người dùng xác nhận HTTPS"
               ]
+            },
+            {
+              "id": "phase-1-task-04",
+              "status": "done",
+              "scope": "layer 2b — HRM + BoxAI/Flycam/Talvra sang ShowcaseLayout; bỏ layout cũ + showcaseSlugs; details/photos từ data cũ; brandName vào MDX; sửa caption en/hrm",
+              "review": {
+                "level": "NORMAL",
+                "verdict": "PASS",
+                "round": 2,
+                "note": "v1 PASS_WITH_CONDITIONS (brand map trong page.tsx, caption BoxAI) → chuyển brandName sang MDX, rút caption → v2 PASS"
+              },
+              "followUps": [
+                "close-out: xoá component cũ hết dùng (FeatureList, BenefitList, SolutionSections, SolutionHighlights, UseCases, FaqList, ScreenshotSection; SolutionHero/FeatureZigZag/BentoCompliance/AiSection/AudienceCards/FaqAccordion chỉ còn ở /dev/components)",
+                "close-out: gom validate showcase vào content loader",
+                "người dùng duyệt câu chữ FAQ Talvra (4 câu mới) và câu FAQ thứ 5 của LMS"
+              ]
             }
           ]
         }
       ],
       "codeCommits": [],
       "updatedAt": "2026-10-13",
-      "scopeVersion": 25
+      "scopeVersion": 26
     }
   ],
   "bugs": []

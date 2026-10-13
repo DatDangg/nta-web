@@ -1,5 +1,6 @@
 ---
 slug: boxai
+brandName: "BoxAI"
 image: /images/solutions/boxai.svg
 cardImage:
   src: /images/solutions/boxai/01-dashboard-quan-tri.jpg
@@ -131,6 +132,59 @@ showcase:
       - icon: area
         title: "Gói theo ngành"
         description: "Di tích, rừng và kiểm lâm, khu công nghiệp và kho bãi. Mỗi gói ưu tiên một nhóm thuật toán khác nhau."
+  details:
+    eyebrow: "Chi tiết"
+    title: "Tình huống sử dụng và chi tiết giải pháp"
+    groups:
+      - title: "Tình huống sử dụng"
+        items:
+          - "Bảo vệ khu di tích khỏi xâm nhập, đào trộm và phá hoại"
+          - "Phát hiện cháy, khói và động vật xâm nhập tại khu vực rộng"
+          - "Giám sát ra vào, trật tự và an toàn tại khu công nghiệp, kho bãi"
+      - title: "Kiến trúc ba tầng"
+        items:
+          - "Camera IP cố định, PTZ hoặc 360° ghi nhận hình ảnh tại các vị trí phù hợp."
+          - "AI Box NVIDIA Jetson xử lý luồng video tại biên; sự kiện được chuyển qua MQTT/TLS hoặc webhook."
+          - "Trung tâm VMS hiển thị camera, bản đồ và cảnh báo; có thể tích hợp luồng flycam để xác minh sự kiện."
+      - title: "Phần cứng và xử lý tại biên"
+        intro: "Cấu hình được lựa chọn theo số camera, tổ hợp thuật toán và kết quả khảo sát."
+        items:
+          - "Jetson Orin NX 16GB Super là cấu hình box chủ lực; Orin Nano Super có thể phù hợp với cụm nhỏ."
+          - "DeepStream xử lý pipeline RTSP, giải mã video, suy luận TensorRT và theo dõi đối tượng."
+          - "Ước tính thiết kế khoảng 16 kênh giải mã 1080p mỗi box; số kênh AI thực tế phụ thuộc độ nặng thuật toán và cần benchmark tại hiện trường."
+      - title: "Danh mục thuật toán theo nhu cầu"
+        intro: "Danh mục gồm 21 thuật toán, chia thành các nhóm bảo vệ tài sản, an toàn cháy nổ, trật tự xã hội, kiểm soát ra vào, xâm nhập và điều tra. Không phải mọi thuật toán đều chạy đồng thời trên mọi cấu hình."
+        items:
+          - "Bảo vệ tài sản: đào trộm, camera bị can thiệp, vật thể bị lấy đi, phá hoại và thay đổi nền đất."
+          - "An toàn và trật tự: phát hiện lửa/khói, âm thanh bất thường, đánh nhau, hành vi vi phạm và tụ tập đông người."
+          - "Kiểm soát ra vào: đếm người, theo dõi phương tiện, nhận diện biển số Việt Nam, vạch ảo và danh sách khuôn mặt."
+          - "Xâm nhập và điều tra: phát hiện xâm nhập ban đêm, động vật, drone lạ, bám đuổi PTZ và vũ khí."
+          - "Ba tính năng nền: dashboard phân tích, cảnh báo tại chỗ và tìm kiếm video theo đặc điểm."
+      - title: "Chọn tổ hợp và số kênh theo tải"
+        intro: "Số kênh là ước tính thiết kế, không phải cam kết mọi kênh chạy đủ 21 thuật toán. Cấu hình cuối cùng cần benchmark mAP và độ trễ với tổ hợp thực tế."
+        items:
+          - "Tải nhẹ như phát hiện và theo dõi người, xe, động vật: ước tính tối đa 16 kênh/box."
+          - "Tải trung bình có cháy/khói, tampering, tripwire hoặc ANPR: khoảng 8–12 kênh/box."
+          - "Tải nặng với pose, hành vi, nhận diện khuôn mặt hoặc nhiều thuật toán kết hợp: khoảng 2–6 kênh/box."
+      - title: "Gói theo ngành"
+        items:
+          - "Di tích: ưu tiên đào trộm, xâm nhập ban đêm, cháy/khói, động vật và bảo vệ kho hiện vật."
+          - "Rừng và kiểm lâm: giám sát cháy, xâm nhập và các tuyến tuần tra theo vùng rủi ro."
+          - "Khu công nghiệp, kho bãi: tập trung xâm nhập, cháy nổ, ra vào và an toàn vận hành."
+      - title: "Triển khai thực tế tại Đền Bảo Hà"
+        intro: "NTA đã triển khai giải pháp tại Đền Bảo Hà. Thông tin được chia sẻ ở đây ở mức định tính; số lượng camera, thiết bị cụ thể và mốc triển khai sẽ được cập nhật sau khi được xác nhận."
+  photos:
+    eyebrow: "Hiện trường"
+    title: "Hệ thống đang vận hành"
+    prevLabel: "Màn hình trước"
+    nextLabel: "Màn hình tiếp"
+    caption: "Ảnh chụp hệ thống đang vận hành tại hiện trường."
+    variant: screen
+    items:
+      - src: "/images/solutions/boxai/02-tasks-channels.jpg"
+        alt: "Màn tác vụ và kênh camera: cây nhóm tác vụ và tường video 3×3 có lớp phân tích AI (vùng, khung người, bộ đếm thời gian)"
+      - src: "/images/solutions/boxai/03-ai-box.jpg"
+        alt: "Thiết bị AI Box NVIDIA Jetson Orin Nano Super đang lắp đặt tại hiện trường"
   faq:
     eyebrow: "Hỏi đáp"
     title: "Câu hỏi thường gặp"

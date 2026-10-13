@@ -1,5 +1,6 @@
 ---
 slug: boxai
+brandName: "BoxAI"
 image: /images/solutions/boxai.svg
 cardImage:
   src: /images/solutions/boxai/01-dashboard-quan-tri.jpg
@@ -131,6 +132,59 @@ showcase:
       - icon: area
         title: "Packages by sector"
         description: "Heritage sites, forestry and rangers, industrial zones and warehouses. Each package prioritises a different set of algorithms."
+  details:
+    eyebrow: "Details"
+    title: "Use cases and solution details"
+    groups:
+      - title: "Use cases"
+        items:
+          - "Protect heritage sites from intrusion, excavation and vandalism"
+          - "Detect fire, smoke and animal intrusion across large areas"
+          - "Monitor access, safety and incidents at industrial sites and warehouses"
+      - title: "Three-layer architecture"
+        items:
+          - "Fixed, PTZ or 360-degree IP cameras capture relevant locations."
+          - "NVIDIA Jetson AI Boxes process video at the edge and publish events through MQTT/TLS or webhooks."
+          - "A central VMS presents cameras, maps and alerts; drone feeds can be integrated to verify incidents."
+      - title: "Hardware and edge processing"
+        intro: "Select the configuration based on camera count, algorithm mix and site survey findings."
+        items:
+          - "Jetson Orin NX 16GB Super is the primary box option; Orin Nano Super may suit smaller clusters."
+          - "DeepStream handles the RTSP, video decoding, TensorRT inference and object-tracking pipeline."
+          - "About 16 channels of 1080p decoding per box is a design estimate. Actual AI throughput depends on algorithm workload and requires on-site benchmarking."
+      - title: "Algorithms selected for each use case"
+        intro: "The catalog contains 21 algorithms across asset protection, fire safety, public order, access control, intrusion and investigation. Not every algorithm runs simultaneously on every configuration."
+        items:
+          - "Asset protection: excavation, camera tampering, left/removed objects, vandalism and scene changes."
+          - "Safety and public order: fire/smoke, audio events, fights, policy violations and unusual crowds."
+          - "Access control: people counting, vehicle tracking, Vietnamese plate recognition, virtual tripwires and face lists."
+          - "Intrusion and investigation: night intrusion, animals, unauthorized drones, PTZ tracking and weapons."
+          - "Three platform capabilities: analytics dashboard, on-site deterrence and smart video search."
+      - title: "Match channel count to workload"
+        intro: "Channel counts are design estimates, not a promise that every channel runs all 21 algorithms. Benchmark mAP and latency with the intended workload before confirming a configuration."
+        items:
+          - "Light workloads such as detecting and tracking people, vehicles or animals: up to an estimated 16 channels per box."
+          - "Medium workloads with fire/smoke, tampering, tripwire or plate recognition: around 8–12 channels per box."
+          - "Heavy workloads with pose, actions, face recognition or several combined algorithms: around 2–6 channels per box."
+      - title: "Packages by sector"
+        items:
+          - "Heritage sites: prioritize excavation, night intrusion, fire/smoke, animals and artifact-store protection."
+          - "Forestry and rangers: monitor fire, intrusion and patrol routes based on risk zones."
+          - "Industrial sites and warehouses: focus on intrusion, fire, access and operational safety."
+      - title: "Deployment at Bao Ha Temple"
+        intro: "NTA has delivered a deployment at Bao Ha Temple. This page shares the project qualitatively; camera counts, specific equipment and dates will be added only after confirmation."
+  photos:
+    eyebrow: "In the field"
+    title: "The system in operation"
+    prevLabel: "Previous screen"
+    nextLabel: "Next screen"
+    caption: "Photos of the system running on site."
+    variant: screen
+    items:
+      - src: "/images/solutions/boxai/02-tasks-channels.jpg"
+        alt: "Tasks and channels screen: task tree and a 3×3 video wall with AI overlays (zones, person boxes, timers)"
+      - src: "/images/solutions/boxai/03-ai-box.jpg"
+        alt: "NVIDIA Jetson Orin Nano Super AI Box being installed on site"
   faq:
     eyebrow: "FAQ"
     title: "Frequently asked questions"

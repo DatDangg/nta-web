@@ -2,39 +2,15 @@ import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { ShowcaseLayout } from '@/components/case-studies/showcase/ShowcaseLayout';
-import { BenefitList } from '@/components/solutions/BenefitList';
-import { FaqList } from '@/components/solutions/FaqList';
-import { FeatureZigZag } from '@/components/solutions/FeatureZigZag';
 import { RelatedSolutions } from '@/components/solutions/RelatedSolutions';
-import { ScreenshotSection } from '@/components/solutions/ScreenshotSection';
-import { SolutionHero } from '@/components/solutions/SolutionHero';
-import { SolutionSections } from '@/components/solutions/SolutionSections';
-import { UseCases } from '@/components/solutions/UseCases';
 import { CTAForm } from '@/components/contact/CTAForm';
 import { Container } from '@/components/ui/Container';
 import { getAllSolutions, getSolutionBySlug } from '@/lib/content/solutions';
-import { enterpriseSlugs, getEnterpriseStaticParams, isEnterpriseSlug, isLocale } from '@/lib/content/slug';
+import { getEnterpriseStaticParams, isLocale } from '@/lib/content/slug';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { createBreadcrumbJsonLd } from '@/lib/seo/jsonld';
 import { createLocaleAlternates, localizedPath } from '@/lib/seo';
 import { detailTiles } from '@/content/listings';
-
-type EnterpriseSlug = (typeof enterpriseSlugs)[number];
-
-const enterpriseBrandNames: Record<EnterpriseSlug, string> = {
-  crm: 'CRM',
-  hrm: 'HRM',
-  lms: 'LMS',
-  dentgo: 'DentGo',
-};
-
-/**
- * Giải pháp đã chuyển sang khung chi tiết dùng chung (`ShowcaseLayout`, R-08c).
- * Data (hero, demo, stats, pillar, tính năng, FAQ, CTA) nằm trong frontmatter MDX.
- * HRM chưa nằm trong danh sách: chờ kiểm HTML (có "Giao diện minh hoạ", đúng 3 tính năng) rồi mới chuyển.
- * CR-004: khi HRM chuyển xong → bỏ Set này, chỉ dựa vào `solution.showcase`.
- */
-const showcaseSlugs: ReadonlySet<EnterpriseSlug> = new Set<EnterpriseSlug>(['crm', 'dentgo', 'lms']);
 
 export function generateStaticParams() {
   return getEnterpriseStaticParams();
@@ -45,7 +21,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   if (!isLocale(locale)) notFound();
   const solution = await getSolutionBySlug(locale, slug);
   if (!solution || solution.category !== 'enterprise') notFound();
-  const brandName = isEnterpriseSlug(solution.slug) ? enterpriseBrandNames[solution.slug] : solution.slug;
+  const brandName = solution.brandName ?? solution.title;
   const metadataTitle = locale === 'vi' ? `Giải pháp ${brandName} | NTA` : `${brandName} Solution | NTA`;
   const path = `/solutions/enterprise/${solution.slug}`;
 
@@ -56,6 +32,11 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   };
 }
 
+/**
+ * Trang chi tiết giải pháp enterprise — khung chi tiết dùng chung (`ShowcaseLayout`, R-08c).
+ * Toàn bộ nội dung (hero, demo, số liệu, pillar, ảnh, tính năng, tình huống sử dụng, FAQ, CTA)
+ * nằm trong block `showcase` của frontmatter MDX; thiếu block → build lỗi thay vì render trang rỗng.
+ */
 export default async function EnterpriseSolutionDetailPage({ params }: { params: Promise<{ locale: string; slug: string }> }) {
   const { locale, slug } = await params;
   if (!isLocale(locale)) notFound();
@@ -66,89 +47,23 @@ export default async function EnterpriseSolutionDetailPage({ params }: { params:
     getAllSolutions(locale),
   ]);
   if (!solution || solution.category !== 'enterprise') notFound();
+  if (!solution.showcase) {
+    throw new Error(`src/content/solutions/${locale}/${solution.slug}.mdx: thiếu block "showcase" (R-08c).`);
+  }
   const relatedSolutions = solution.relatedCases?.length
     ? allSolutions.filter((candidate) => candidate.category === 'enterprise' && candidate.slug !== solution.slug && candidate.relatedCases?.some((relatedCase) => solution.relatedCases?.includes(relatedCase)))
     : [];
-  const extended = solution.renderExtendedContent === true;
-  const hasRelated = relatedSolutions.length > 0;
-  const crumbs = [{ label: t('title'), href: '/solutions/enterprise' }, { label: isEnterpriseSlug(solution.slug) ? enterpriseBrandNames[solution.slug] : solution.title }];
-
-  const jsonLd = (
-    <JsonLd data={createBreadcrumbJsonLd([{ name: locale === 'en' ? 'Home' : 'Trang chủ', path: locale === 'en' ? '/en' : '/' }, { name: t('title'), path: `${locale === 'en' ? '/en' : ''}/solutions/enterprise` }, { name: solution.title, path: `${locale === 'en' ? '/en' : ''}/solutions/enterprise/${slug}` }])} />
-  );
-
-  // ── Khung chi tiết dùng chung: UI cố định, data từ MDX (R-08c). ──
-  if (isEnterpriseSlug(solution.slug) && showcaseSlugs.has(solution.slug) && solution.showcase) {
-    return (
-      <>
-        {jsonLd}
-        <ShowcaseLayout breadcrumbs={crumbs} showcase={solution.showcase} tiles={detailTiles(locale, solution.slug)} />
-        {hasRelated && (
-          <Container className="pb-12">
-            <RelatedSolutions solutions={relatedSolutions} title={t('relatedTitle')} />
-          </Container>
-        )}
-        <CTAForm />
-      </>
-    );
-  }
-
-  // ── Layout chung cũ (HRM, đến khi chuyển sang khung chung). ──
-  const hero = (
-    <SolutionHero
-      breadcrumbs={crumbs}
-      caption={solution.imageCaption}
-      description={solution.description}
-      image={solution.heroShot?.src}
-      imageAlt={solution.heroShot?.alt}
-      imageMaxW={solution.heroShot?.maxWidth ?? 'max-w-full'}
-      imageRatio={solution.heroShot?.ratio}
-      primaryCta={{ href: '/contact', label: t('demoCta') }}
-      tiles={detailTiles(locale, solution.slug)}
-      secondaryCta={{
-        ariaLabel: t('featuresCtaAria'),
-        href: '#features',
-        label: t('featuresCta'),
-      }}
-      title={solution.title}
-    />
-  );
+  const crumbs = [{ label: t('title'), href: '/solutions/enterprise' }, { label: solution.brandName ?? solution.title }];
 
   return (
     <>
-      {jsonLd}
-      {hero}
-      {/* Chỉ chia 2 cột khi THỰC SỰ có related — giữ cột phải rỗng sẽ làm nội dung lệch trái.
-          KHÔNG bọc Container ở cấp này: nó sẽ giới hạn bề rộng của mọi <Section> bên trong,
-          khiến nền xen kẽ không tràn full-width (spec §1 L2). Container thuộc về từng Section.
-          Nhánh 2 cột chỉ cần padding cho cột sidebar (nội dung chính tự có Container trong Section). */}
-      <div
-        className={
-          hasRelated
-            ? 'grid grid-cols-1 gap-10 px-4 sm:px-6 lg:grid-cols-[minmax(0,1fr)_18.75rem] lg:px-8 xl:gap-16'
-            : ''
-        }
-      >
-        <div className="min-w-0">
-          <FeatureZigZag caption={solution.imageCaption} features={solution.features} id="features" />
-          <BenefitList benefits={solution.benefits} title={t('benefitsTitle')} />
-          <SolutionSections sections={extended ? solution.sections ?? [] : []} />
-          <UseCases cases={extended ? solution.useCases ?? [] : []} title={t('useCasesTitle')} />
-          <FaqList faq={extended ? solution.faq ?? [] : []} title={t('faqTitle')} />
-          <ScreenshotSection
-            caption={solution.imageCaption}
-            imageAlt={solution.title}
-            images={solution.screenshots ?? []}
-            shotFrame
-            title={t('screenshotsTitle')}
-          />
-        </div>
-        {hasRelated && (
-          <div className="pb-12 lg:py-12">
-            <RelatedSolutions solutions={relatedSolutions} title={t('relatedTitle')} />
-          </div>
-        )}
-      </div>
+      <JsonLd data={createBreadcrumbJsonLd([{ name: locale === 'en' ? 'Home' : 'Trang chủ', path: locale === 'en' ? '/en' : '/' }, { name: t('title'), path: `${locale === 'en' ? '/en' : ''}/solutions/enterprise` }, { name: solution.title, path: `${locale === 'en' ? '/en' : ''}/solutions/enterprise/${slug}` }])} />
+      <ShowcaseLayout breadcrumbs={crumbs} showcase={solution.showcase} tiles={detailTiles(locale, solution.slug)} />
+      {relatedSolutions.length > 0 && (
+        <Container className="pb-12">
+          <RelatedSolutions solutions={relatedSolutions} title={t('relatedTitle')} />
+        </Container>
+      )}
       <CTAForm />
     </>
   );

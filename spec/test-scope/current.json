@@ -1,11 +1,11 @@
 {
   "specVersion": "3.4.0",
-  "scopeVersion": 25,
-  "generatedAt": "2026-10-13T18:00:00+07:00",
+  "scopeVersion": 26,
+  "generatedAt": "2026-10-13T20:00:00+07:00",
   "trigger": "feature-update",
   "workItem": "feature-shared-detail-showcase-template",
   "specRefs": [
-    "R-08c (sửa: block tình huống sử dụng & kết nối)",
+    "R-08c",
     "R-08b",
     "R-08b.1",
     "R-21",
@@ -13,36 +13,38 @@
   ],
   "changed": {
     "files": [
-      "src/app/[locale]/solutions/enterprise/[slug]/page.tsx (CRM/DentGo/LMS → ShowcaseLayout; bỏ enterpriseDemoUrls + nhánh LMS riêng)",
-      "src/components/case-studies/showcase/ShowcaseDetails.tsx (mới)",
-      "src/components/case-studies/showcase/ShowcaseLayout.tsx",
-      "src/content/types.ts (showcase.details?)",
-      "src/content/solutions/{vi,en}/{crm,dentgo,lms}.mdx (showcase.details)"
+      "src/app/[locale]/solutions/enterprise/[slug]/page.tsx (mọi slug → ShowcaseLayout; bỏ layout cũ; thiếu showcase → build lỗi)",
+      "src/app/[locale]/solutions/ai/[slug]/page.tsx (→ ShowcaseLayout; giữ CaseStudyLink + CTAForm)",
+      "src/components/case-studies/showcase/ShowcaseDetails.tsx (nhóm chỉ có đoạn dẫn vẫn hiển thị)",
+      "src/content/types.ts (details.groups.items optional)",
+      "src/content/solutions/{vi,en}/{hrm,boxai,flycam,custom-ai}.mdx (showcase.details; photos cho HRM, BoxAI)",
+      "src/content/solutions/en/hrm.mdx (caption hero tiếng Anh)",
+      "src/content/solutions/{vi,en}/*.mdx (brandName — title SEO + breadcrumb lấy từ MDX, bỏ map brand trong page.tsx)"
     ],
     "modules": [
-      "Trang chi tiết giải pháp enterprise (layer 2: CRM, DentGo, LMS)"
+      "Trang chi tiết giải pháp HRM + AI (layer 2b)"
     ]
   },
   "impact": {
     "direct": [
-      "/solutions/enterprise/crm|dentgo|lms (vi/en): hero, số liệu, 3 pillar, lưới tính năng, tình huống sử dụng & kết nối, FAQ, CTA, form liên hệ"
+      "/solutions/enterprise/hrm, /solutions/ai/boxai|flycam|custom-ai (vi/en): khung chung, tình huống sử dụng & chi tiết, ảnh (HRM 8 màn minh hoạ, BoxAI 2 ảnh hiện trường), FAQ, CTA, form liên hệ"
     ],
     "dependents": [
-      "/solutions/enterprise/hrm (giữ layout cũ)",
-      "/solutions/ai/*",
       "/case-studies/oc-eo-learning",
-      "/case-studies/dental-clinic-operations"
+      "/case-studies/dental-clinic-operations",
+      "/solutions/enterprise/crm|dentgo|lms"
     ],
     "regression": [
-      "HRM, AI, case study: HTML không đổi",
-      "CRM/DentGo/LMS: title, description, canonical, hreflang, og không đổi; nút demo mở tab mới"
+      "Case study: HTML không đổi",
+      "HRM/AI: title, description, canonical, hreflang, og không đổi",
+      "BoxAI/Flycam vẫn có liên kết case study Óc Eo"
     ]
   },
   "acceptance": [
-    "CRM/DentGo/LMS render bằng ShowcaseLayout, data từ MDX, không hard-code demo URL trong page.tsx",
-    "Tình huống sử dụng (5) + mục kết nối/pháp quy hiển thị lại trong block mới",
-    "Block thiếu data → ẩn",
-    "Form liên hệ vẫn ở cuối trang"
+    "HRM: caption minh hoạ dưới ảnh hero (vi: Giao diện minh hoạ, en: Illustrative interface), đúng 3 tính năng, ảnh có chú thích minh hoạ",
+    "Mọi mục sections/useCases cũ hiển thị trong block tình huống sử dụng & chi tiết",
+    "Block thiếu data → ẩn (Flycam, Talvra không có carousel ảnh)"
   ],
-  "risk": "medium"
+  "risk": "medium",
+  "regression_note": "Head, ld+json, breadcrumb 14 trang giải pháp identical với HEAD"
 }

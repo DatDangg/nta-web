@@ -9,7 +9,7 @@ type Props = { details: NonNullable<CaseStudyShowcase['details']> };
  * cùng phong cách pillar, nằm giữa Lưới tính năng và FAQ. Thiếu data → không render.
  */
 export function ShowcaseDetails({ details }: Props) {
-  const groups = details.groups.filter((group) => group.items.length > 0);
+  const groups = details.groups.filter((group) => (group.items?.length ?? 0) > 0 || Boolean(group.intro));
   if (groups.length === 0) return null;
   return (
     <section className="pb-12 md:pb-16">
@@ -23,6 +23,7 @@ export function ShowcaseDetails({ details }: Props) {
             <article className="rounded-2xl border border-border bg-white p-6 shadow-sm" key={`${index}-${group.title}`}>
               <h3 className="text-lg font-bold text-text-primary">{group.title}</h3>
               {group.intro && <p className="mt-3 text-sm leading-relaxed text-text-secondary">{group.intro}</p>}
+              {group.items && group.items.length > 0 && (
               <ul className="mt-5 space-y-3">
                 {group.items.map((item, itemIndex) => (
                   <li className="flex gap-3 text-sm leading-relaxed text-text-secondary" key={`${itemIndex}-${item}`}>
@@ -31,6 +32,7 @@ export function ShowcaseDetails({ details }: Props) {
                   </li>
                 ))}
               </ul>
+              )}
             </article>
           ))}
         </div>
