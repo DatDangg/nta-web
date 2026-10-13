@@ -9,6 +9,18 @@ import { Container } from '@/components/ui/Container';
 
 const delay = (ms: number) => ({ '--d': `${ms}ms` }) as CSSProperties;
 
+/**
+ * Viền ảnh tòa nhà tan vào nền (mockup CR-015): giao 2 gradient mask — ngang (`--fade-x`) và dọc
+ * (`--fade-y`) — khai báo bằng class theo breakpoint. `source-in` là tên cũ (WebKit) của `intersect`.
+ */
+const fadeMask = {
+  ...delay(300),
+  maskImage: 'var(--fade-x), var(--fade-y)',
+  WebkitMaskImage: 'var(--fade-x), var(--fade-y)',
+  maskComposite: 'intersect',
+  WebkitMaskComposite: 'source-in',
+} as CSSProperties;
+
 const STATS: { key: 'projects' | 'partners' | 'satisfaction'; icon: ListingIconName }[] = [
   { key: 'projects', icon: 'users' },
   { key: 'partners', icon: 'building' },
@@ -24,8 +36,8 @@ export async function AboutHero() {
   const t = await getTranslations('about');
 
   return (
-    <div className="relative isolate bg-[#f7fbfb]">
-      <HeroWaves className="h-[720px]" />
+    <div className="relative isolate overflow-hidden bg-[#f7fbfb]">
+      <HeroWaves className="h-full" />
       <header className="pb-12 pt-8 md:pb-16 lg:pt-10">
         <Container className="grid items-center gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] lg:gap-12">
           <div className="min-w-0">
@@ -55,13 +67,19 @@ export async function AboutHero() {
               ))}
             </ul>
           </div>
-          <div className="motion-load relative aspect-[4/3] overflow-hidden rounded-[28px] shadow-[0_30px_60px_-30px_rgb(15_60_70/0.45)]" data-motion-off style={delay(300)}>
+          {/* lg+: margin phải âm = khoảng container→mép viewport (padding 2rem + phần dư ngoài 1280px) để ảnh
+              chạm mép phải; phần dư do thanh cuộn bị overflow-hidden của wrapper cắt. Mobile: gọn trong container. */}
+          <div
+            className="motion-load relative aspect-[4/3] [--fade-x:linear-gradient(to_right,transparent,#000_10%,#000_90%,transparent)] [--fade-y:linear-gradient(to_bottom,transparent,#000_8%,#000_78%,transparent)] lg:-mr-[max(2rem,calc((100vw_-_1280px)/2_+_2rem))] lg:aspect-auto lg:h-[480px] lg:[--fade-x:linear-gradient(to_right,transparent,#000_30%)] lg:[--fade-y:linear-gradient(to_bottom,transparent,#000_12%,#000_68%,transparent)] xl:h-[520px]"
+            data-motion-off
+            style={fadeMask}
+          >
             <Image
               alt={t('hero.imageAlt')}
               className="object-cover"
               fill
               priority
-              sizes="(min-width: 1280px) 560px, (min-width: 1024px) 45vw, 100vw"
+              sizes="(min-width: 1024px) 48vw, 100vw"
               src="/images/about/building-kim-hoan.webp"
             />
           </div>

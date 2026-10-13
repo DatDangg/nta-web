@@ -2,8 +2,11 @@
   "mode": "feature",
   "activeWorkItem": {
     "type": "feature",
-    "slug": "about-page-redesign",
-    "note": "CR-014 DONE + archive (13/10/2026). Không có work item active."
+    "slug": "about-hero-polish",
+    "phaseTask": "phase-1-task-01",
+    "step": "close-out",
+    "journal": ".context/runs/feature-about-hero-polish-phase-1-task-01.md",
+    "note": "CR-015 in_progress"
   },
   "features": [
     {
@@ -996,6 +999,21 @@
       "reviewer": {
         "result": "PASS",
         "report": ".context/review-reports/feature-about-page-redesign-phase-1-task-01-round-2-review.md"
+      }
+    },
+    {
+      "slug": "about-hero-polish",
+      "status": "in_progress",
+      "changeFile": "spec/changes/2026-10-13-about-hero-polish.md",
+      "classification": "MODIFY (UI) + BUG",
+      "tasks": {
+        "phase-1-task-01": "done"
+      },
+      "note": "CR-015 — /about hero: ảnh Kim Hoàn fade viền + fix HeroWaves h-[720px] đè khối Sứ mệnh",
+      "updatedAt": "2026-10-14",
+      "reviewer": {
+        "result": "PASS",
+        "report": ".context/review-reports/feature-about-hero-polish-phase-1-task-01-round-1-review.md"
       }
     }
   ],
