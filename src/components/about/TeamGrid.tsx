@@ -14,7 +14,7 @@ function TeamPortrait({ member, fallback }: { member: Member; fallback: string }
 
 export function TeamGrid({ members, title, fallback }: { members: Member[]; title: string; fallback: string }) {
   return (
-    <Section variant="alt">
+    <Section className="scroll-mt-24" id="team" variant="alt">
       <Reveal>
         <h2 className="text-h2 font-semibold">{title}</h2>
         <ul className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">

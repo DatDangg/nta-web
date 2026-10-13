@@ -2,8 +2,10 @@
   "mode": "feature",
   "activeWorkItem": {
     "type": "feature",
-    "slug": "image-lightbox-case-study-card",
-    "note": "CR-013 DONE + archive (13/10/2026). Không có work item active."
+    "slug": "about-page-redesign",
+    "phaseTask": "phase-1-task-01",
+    "step": "close-out",
+    "note": "CR-014 in_progress — thiết kế lại /about theo mockup (auto proceed)"
   },
   "features": [
     {
@@ -982,6 +984,21 @@
       },
       "note": "CR-013 — lightbox carousel ShowcasePhotos (c3ca0e6) + thẻ /case-studies banner 16/10 (03f371b); spec 3.9.0 (R-08d) · scope v36",
       "updatedAt": "2026-10-13"
+    },
+    {
+      "slug": "about-page-redesign",
+      "status": "in_progress",
+      "changeFile": "spec/changes/2026-10-13-about-page-redesign.md",
+      "classification": "MODIFY + ADDITIVE (UI)",
+      "tasks": {
+        "phase-1-task-01": "done"
+      },
+      "note": "CR-014 — hero 2 cột ảnh tòa Kim Hoàn + sứ mệnh/tầm nhìn/giá trị + con người NTA (ảnh AI tạm)",
+      "updatedAt": "2026-10-13",
+      "reviewer": {
+        "result": "PASS",
+        "report": ".context/review-reports/feature-about-page-redesign-phase-1-task-01-round-2-review.md"
+      }
     }
   ],
   "bugs": []

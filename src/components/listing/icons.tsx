@@ -9,7 +9,8 @@ export type ListingIconName =
   | 'apps' | 'arrow' | 'bolt' | 'box' | 'building' | 'call' | 'camera' | 'chart' | 'chat' | 'check'
   | 'car' | 'cpu' | 'drone' | 'gear' | 'face' | 'graduation' | 'grid' | 'heart' | 'home' | 'idcard' | 'image'
   | 'headset' | 'landmark' | 'layers' | 'mail' | 'music' | 'pen' | 'phone' | 'plug' | 'plus' | 'search' | 'shield' | 'smile'
-  | 'pin' | 'sparkles' | 'tooth' | 'train' | 'users' | 'workflow';
+  | 'pin' | 'sparkles' | 'tooth' | 'train' | 'users' | 'workflow'
+  | 'target' | 'eye' | 'gem';
 
 const paths: Record<ListingIconName, string> = {
   apps: 'M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 17h6M17 14v6',
@@ -51,6 +52,9 @@ const paths: Record<ListingIconName, string> = {
   train: 'M7 3.5h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-10a2 2 0 0 1 2-2ZM5 11h14M9 14.5h.01M15 14.5h.01M8 21l1.5-3.5M16 21l-1.5-3.5M10 7h4',
   users: 'M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM2 21c.5-3.8 3.4-6 7-6s6.5 2.2 7 6M16 3.5a4 4 0 0 1 0 7.2M18.5 15.3c2 .9 3.2 2.8 3.5 5.7',
   workflow: 'M4 4h6v5H4zM14 15h6v5h-6zM7 9v3.5a2.5 2.5 0 0 0 2.5 2.5H14M14 6.5h3.5A2.5 2.5 0 0 1 20 9v1',
+  target: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18ZM12 16.5a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM12 12.01V12M12 12l7-7M16.5 5H19v2.5',
+  eye: 'M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12ZM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z',
+  gem: 'M6 3.5h12l3.5 5L12 20.5 2.5 8.5 6 3.5ZM2.5 8.5h19M9.5 3.5 8 8.5l4 12 4-12-1.5-5',
 };
 
 type IconProps = SVGProps<SVGSVGElement> & { name: ListingIconName; strokeWidth?: number };

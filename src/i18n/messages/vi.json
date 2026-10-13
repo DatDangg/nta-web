@@ -134,7 +134,31 @@
       "consulting": { "name": "Đội ngũ tư vấn", "role": "Tư vấn giải pháp" },
       "product": { "name": "Đội ngũ sản phẩm", "role": "Phát triển sản phẩm" }
     },
-    "imageFallback": "Ảnh đội ngũ NTA"
+    "imageFallback": "Ảnh đội ngũ NTA",
+    "hero": {
+      "titleLead": "Về", "titleAccent": "NTA",
+      "tagline": "Kiến tạo giá trị từ AI cho một tương lai thông minh hơn",
+      "description": "NTA là doanh nghiệp công nghệ tập trung vào nghiên cứu, phát triển và ứng dụng trí tuệ nhân tạo, đồng hành cùng tổ chức và doanh nghiệp trên hành trình chuyển đổi số, mang lại những giải pháp thực tiễn, hiệu quả và bền vững.",
+      "imageAlt": "Tòa nhà Kim Hoàn — văn phòng NTA"
+    },
+    "stats": {
+      "projects": { "value": "50+", "label": "Dự án triển khai" },
+      "partners": { "value": "30+", "label": "Đối tác doanh nghiệp" },
+      "satisfaction": { "value": "99%", "label": "Khách hàng hài lòng" }
+    },
+    "values": {
+      "titleLead": "Đưa AI vào thực tiễn,", "titleAccent": "tạo giá trị bền vững",
+      "mission": { "title": "Sứ mệnh", "text": "Ứng dụng trí tuệ nhân tạo để giải quyết những bài toán thực tiễn, nâng cao hiệu quả và tạo ra giá trị bền vững cho doanh nghiệp và cộng đồng." },
+      "vision": { "title": "Tầm nhìn", "text": "Trở thành đối tác công nghệ AI tin cậy hàng đầu tại Việt Nam, đồng hành cùng khách hàng kiến tạo một tương lai thông minh hơn." },
+      "core": { "title": "Giá trị cốt lõi", "items": ["Đổi mới sáng tạo", "Lấy khách hàng làm trung tâm", "Chất lượng và hiệu quả", "Phát triển bền vững"] }
+    },
+    "people": {
+      "eyebrow": "Con người NTA",
+      "titleLead": "Chúng tôi tin vào sức mạnh của", "titleAccent": "con người và công nghệ",
+      "description": "NTA quy tụ đội ngũ chuyên gia giàu kinh nghiệm trong lĩnh vực AI, phần mềm và chuyển đổi số, với chung một mục tiêu: tạo ra những giải pháp công nghệ có giá trị thực tiễn, dễ ứng dụng và mang lại tác động tích cực cho xã hội.",
+      "cta": "Tìm hiểu thêm về đội ngũ",
+      "imageAlt": "Đội ngũ NTA trao đổi về giải pháp AI trong phòng họp"
+    }
   },
   "products": {
     "title": "Sản phẩm app",

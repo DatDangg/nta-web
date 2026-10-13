@@ -1,13 +1,14 @@
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
+import { AboutHero } from '@/components/about/AboutHero';
+import { AboutPeople } from '@/components/about/AboutPeople';
+import { AboutValues } from '@/components/about/AboutValues';
 import { CapabilityGrid } from '@/components/about/CapabilityGrid';
 import { MilestoneTimeline } from '@/components/about/MilestoneTimeline';
-import { MissionBlock } from '@/components/about/MissionBlock';
 import { PartnerLogos } from '@/components/about/PartnerLogos';
 import { TeamGrid } from '@/components/about/TeamGrid';
 import { CTABanner } from '@/components/shared/CTABanner';
-import { PageHeader } from '@/components/shared/PageHeader';
 import { getAboutData } from '@/lib/content/about';
 import type { Locale } from '@/content/types';
 import { JsonLd } from '@/components/seo/JsonLd';
@@ -56,8 +57,9 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
   return (
     <>
       <JsonLd data={createBreadcrumbJsonLd([{ name: locale === 'en' ? 'Home' : 'Trang chủ', path: locale === 'en' ? '/en' : '/' }, { name: t('title'), path: `${locale === 'en' ? '/en' : ''}/about` }])} />
-      <PageHeader breadcrumbs={[{ label: t('title') }]} description={t('description')} title={t('title')} variant="centered" />
-      <MissionBlock mission={about.mission} title={t('missionTitle')} />
+      <AboutHero />
+      <AboutValues />
+      <AboutPeople />
       <CapabilityGrid capabilities={about.capabilities} title={t('capabilitiesTitle')} />
       <TeamGrid fallback={t('imageFallback')} members={team} title={t('teamTitle')} />
       <MilestoneTimeline milestones={about.milestones} title={t('milestonesTitle')} />

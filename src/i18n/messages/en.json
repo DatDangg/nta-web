@@ -134,7 +134,31 @@
       "consulting": { "name": "Consulting team", "role": "Solutions consulting" },
       "product": { "name": "Product team", "role": "Product development" }
     },
-    "imageFallback": "NTA team photo"
+    "imageFallback": "NTA team photo",
+    "hero": {
+      "titleLead": "About", "titleAccent": "NTA",
+      "tagline": "Creating value with AI for a smarter future",
+      "description": "NTA is a technology company focused on researching, developing and applying artificial intelligence, partnering with organizations and businesses on their digital transformation journey to deliver practical, effective and sustainable solutions.",
+      "imageAlt": "Kim Hoan building — NTA office"
+    },
+    "stats": {
+      "projects": { "value": "50+", "label": "Projects delivered" },
+      "partners": { "value": "30+", "label": "Business partners" },
+      "satisfaction": { "value": "99%", "label": "Satisfied clients" }
+    },
+    "values": {
+      "titleLead": "Bringing AI into practice,", "titleAccent": "creating lasting value",
+      "mission": { "title": "Mission", "text": "Apply artificial intelligence to solve real-world problems, improve efficiency and create lasting value for businesses and communities." },
+      "vision": { "title": "Vision", "text": "Become a leading trusted AI technology partner in Vietnam, working alongside our clients to build a smarter future." },
+      "core": { "title": "Core values", "items": ["Innovation", "Customer-centricity", "Quality and efficiency", "Sustainable growth"] }
+    },
+    "people": {
+      "eyebrow": "People of NTA",
+      "titleLead": "We believe in the power of", "titleAccent": "people and technology",
+      "description": "NTA brings together experienced specialists in AI, software and digital transformation who share one goal: building technology solutions that deliver real value, are easy to adopt and create a positive impact on society.",
+      "cta": "Learn more about our team",
+      "imageAlt": "NTA team discussing an AI solution in a meeting room"
+    }
   },
   "products": {
     "title": "Apps",
