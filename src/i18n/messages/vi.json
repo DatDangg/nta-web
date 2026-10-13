@@ -84,11 +84,18 @@
     "productsTitleLead": "Sản phẩm",
     "productsTitleAccent": "tiêu biểu",
     "productsLead": "Những ứng dụng AI do NTA phát triển, giải quyết các bài toán thực tế và mang lại lợi ích rõ ràng cho người dùng.",
-    "caseStudyTitle": "Câu chuyện khách hàng",
+    "caseStudyEyebrow": "CASE STUDY",
+    "caseStudyTitleLead": "Câu chuyện",
+    "caseStudyTitleAccent": "khách hàng",
+    "caseStudyLead": "Đồng hành cùng nhiều doanh nghiệp và tổ chức trong hành trình ứng dụng AI và chuyển đổi số, tạo ra những giá trị thực tế và bền vững.",
+    "viewAllCaseStudies": "Xem tất cả case study",
+    "viewDetail": "Xem chi tiết",
     "ctaTitle": "Cùng tìm giải pháp phù hợp",
     "ctaDescription": "Trao đổi với đội ngũ NTA về mục tiêu và nhu cầu số hóa của tổ chức.",
     "previousProducts": "Sản phẩm trước",
-    "nextProducts": "Sản phẩm tiếp theo"
+    "nextProducts": "Sản phẩm tiếp theo",
+    "previousCases": "Case study trước",
+    "nextCases": "Case study tiếp theo"
   },
   "solutions": {
     "enterprise": {

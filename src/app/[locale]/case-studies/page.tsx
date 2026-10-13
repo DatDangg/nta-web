@@ -6,7 +6,7 @@ import { ListingExplorer } from '@/components/listing/ListingExplorer';
 import { ListingHero } from '@/components/listing/ListingHero';
 import type { ListingItem } from '@/components/listing/types';
 import { CTABanner } from '@/components/shared/CTABanner';
-import { getAllCaseStudies } from '@/lib/content/case-studies';
+import { compareCaseStudies, getAllCaseStudies } from '@/lib/content/case-studies';
 import { listingCtas, listingItems, listingLabels, listingPages } from '@/content/listings';
 import type { Locale } from '@/content/types';
 import { JsonLd } from '@/components/seo/JsonLd';
@@ -29,7 +29,7 @@ export default async function CaseStudiesPage({ params }: { params: Promise<{ lo
   if (locale !== 'vi' && locale !== 'en') notFound();
   setRequestLocale(locale);
   const [t, studies, cta] = await Promise.all([getTranslations('caseStudies'), getAllCaseStudies(locale), getTranslations('solutions.ai')]);
-  studies.sort((left, right) => right.year - left.year || left.slug.localeCompare(right.slug));
+  studies.sort(compareCaseStudies);
   const copy = listingPages[locale].caseStudies;
 
   const items: ListingItem[] = studies.map((study) => {

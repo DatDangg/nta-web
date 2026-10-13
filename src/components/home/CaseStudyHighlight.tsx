@@ -1,34 +1,58 @@
-import { Link } from '@/i18n/navigation';
 import { getTranslations } from 'next-intl/server';
-import { CARD_IMAGE_RATIO } from '@/components/cards/cardStyles';
 import { Container } from '@/components/ui/Container';
-import { Reveal } from '@/components/ui/Reveal';
-import { HomeImage } from '@/components/shared/HomeImage';
+import { listingItems } from '@/content/listings';
+import { compareCaseStudies } from '@/lib/content/case-studies';
+import type { CaseStudy, Locale } from '@/content/types';
+import { CaseStudyCarousel } from './CaseStudyCarousel';
+import { HomeCaseStudyCard, type HomeCaseStudy } from './HomeCaseStudyCard';
 
-type FeaturedStudy = {
-  title: string;
-  description: string;
-  href: string;
-  image: string;
-  alt: string;
-};
+/** Số thẻ tối đa của khối case study trang chủ (CR-016, R-03b). */
+const MAX_HOME_CASE_STUDIES = 3;
 
-export async function CaseStudyHighlight({ study, title }: { study: FeaturedStudy; title: string }) {
-  const t = await getTranslations('common.cta');
+function toHomeCaseStudy(study: CaseStudy, locale: Locale, fallbackAlt: string): HomeCaseStudy {
+  const galleryImage = study.cover ? undefined : study.gallery[0];
+  return {
+    slug: study.slug,
+    title: study.title,
+    // Cùng nguồn mô tả với thẻ ở trang /case-studies để 2 nơi không lệch nhau.
+    description: study.showcase?.hero.description ?? study.result,
+    sector: study.sector,
+    icon: listingItems[locale][study.slug]?.icon ?? 'building',
+    image: study.cover ?? galleryImage?.src,
+    // Ảnh lấy từ gallery thì dùng alt riêng của ảnh đó; ảnh cover dùng alt i18n chung.
+    alt: galleryImage?.alt || fallbackAlt,
+  };
+}
+
+/** Khối "Câu chuyện khách hàng" trang chủ theo mockup CR-016 `3.webp`: tối đa 3 thẻ, nút ←/→, "Xem tất cả". */
+export async function CaseStudyHighlight({ studies, locale }: { studies: CaseStudy[]; locale: Locale }) {
+  const [t, tCases] = await Promise.all([getTranslations('home'), getTranslations('caseStudies')]);
+  // Sort trên bản copy để khớp thứ tự trang /case-studies, không đổi mảng của caller.
+  const cards = [...studies]
+    .sort(compareCaseStudies)
+    .slice(0, MAX_HOME_CASE_STUDIES)
+    .map((study) => toHomeCaseStudy(study, locale, tCases('imageAlt', { title: study.title })));
+
+  if (cards.length === 0) return null;
+
   return (
-    <section className="bg-background-alt py-12 md:py-16 xl:py-24">
+    <section aria-labelledby="home-cases-title" className="bg-background-alt py-12 md:py-16 xl:py-24">
       <Container>
-        <Reveal>
-          <h2 className="mb-8 text-h2 font-bold leading-tight">{title}</h2>
-          <article className="grid overflow-hidden rounded-lg bg-background md:grid-cols-2">
-            <HomeImage alt={study.alt} className="aspect-[16/10] h-full w-full bg-surface-sunken object-cover" height={CARD_IMAGE_RATIO.height} sizes="(min-width: 768px) 50vw, 100vw" src={study.image} width={CARD_IMAGE_RATIO.width} />
-            <div className="flex flex-col items-start justify-center p-6 md:p-8 xl:p-12">
-              <h3 className="text-h3 font-semibold leading-tight">{study.title}</h3>
-              <p className="mt-4 text-text-secondary">{study.description}</p>
-              <Link className="mt-5 inline-flex min-h-11 items-center text-primary underline-offset-4 hover:underline" href={study.href.replace(/^\/en(?=\/)/, '')}>{t('viewCaseStudies')}</Link>
-            </div>
-          </article>
-        </Reveal>
+        <CaseStudyCarousel
+          description={t('caseStudyLead')}
+          eyebrow={t('caseStudyEyebrow')}
+          titleAccent={t('caseStudyTitleAccent')}
+          titleLead={t('caseStudyTitleLead')}
+        >
+          {cards.map((study) => (
+            <HomeCaseStudyCard
+              className="w-[85%] shrink-0 snap-start md:w-[calc(50%-0.75rem)] lg:w-[calc((100%-3rem)/3)]"
+              key={study.slug}
+              study={study}
+              viewDetailLabel={t('viewDetail')}
+            />
+          ))}
+        </CaseStudyCarousel>
       </Container>
     </section>
   );

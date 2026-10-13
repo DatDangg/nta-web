@@ -84,11 +84,18 @@
     "productsTitleLead": "Featured",
     "productsTitleAccent": "products",
     "productsLead": "AI apps built by NTA to solve real-world problems and deliver clear value to the people who use them.",
-    "caseStudyTitle": "Customer story",
+    "caseStudyEyebrow": "CASE STUDY",
+    "caseStudyTitleLead": "Customer",
+    "caseStudyTitleAccent": "stories",
+    "caseStudyLead": "Partnering with businesses and organizations on their AI and digital transformation journeys to create real, lasting value.",
+    "viewAllCaseStudies": "View all case studies",
+    "viewDetail": "View details",
     "ctaTitle": "Find the right solution together",
     "ctaDescription": "Talk with the NTA team about your organization’s goals and digital needs.",
     "previousProducts": "Previous products",
-    "nextProducts": "Next products"
+    "nextProducts": "Next products",
+    "previousCases": "Previous case studies",
+    "nextCases": "Next case studies"
   },
   "solutions": {
     "enterprise": {

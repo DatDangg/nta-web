@@ -10,6 +10,7 @@ import { ListingIcon, type ListingIconName } from '@/components/listing/icons';
 import { Marquee } from '@/components/motion/Marquee';
 import { getHomeContent } from '@/content/home';
 import { listingItems } from '@/content/listings';
+import { getAllCaseStudies } from '@/lib/content/case-studies';
 import type { Locale } from '@/content/types';
 import { createLocaleAlternates, localizedPath } from '@/lib/seo';
 
@@ -48,9 +49,10 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   if (locale !== 'vi' && locale !== 'en') notFound();
   setRequestLocale(locale);
 
-  const [t, home] = await Promise.all([
+  const [t, home, caseStudies] = await Promise.all([
     getTranslations('home'),
     Promise.resolve(getHomeContent(locale)),
+    getAllCaseStudies(locale),
   ]);
 
   return (
@@ -78,15 +80,18 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       <ProductStrip
         description={t('productsLead')}
         eyebrow={t('productsEyebrow')}
-        products={home.featuredProducts.map((product) => {
+        products={home.featuredProducts.flatMap((product) => {
           // Icon/theme/subtitle/chips dùng chung dữ liệu với trang /products để 2 nơi không lệch nhau.
-          const { icon, theme, subtitle, chips } = listingItems[locale][product.slug];
-          return { slug: product.slug, title: product.title, image: product.image, alt: product.alt, icon, theme, subtitle, chips };
+          // Slug chưa có trong listingItems → bỏ qua thẻ đó thay vì crash cả trang chủ.
+          const meta = listingItems[locale][product.slug];
+          if (!meta) return [];
+          const { icon, theme, subtitle, chips } = meta;
+          return [{ slug: product.slug, title: product.title, image: product.image, alt: product.alt, icon, theme, subtitle, chips }];
         })}
         titleAccent={t('productsTitleAccent')}
         titleLead={t('productsTitleLead')}
       />
-      <CaseStudyHighlight study={home.featuredCase} title={t('caseStudyTitle')} />
+      <CaseStudyHighlight locale={locale} studies={caseStudies} />
       <CTABanner description={t('ctaDescription')} title={t('ctaTitle')} variant="primary" />
     </>
   );
