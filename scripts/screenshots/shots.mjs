@@ -47,6 +47,10 @@ export const SHOTS = {
       { screen: "org", name: "07-co-cau-to-chuc", crop: ".org" },
       { screen: "proposals", name: "08-quy-trinh-de-xuat", crop: "#stage > .card" },
       { screen: "directory", name: "09-tra-cuu-doi-ngu", crop: ".three-col" },
+      { screen: "recruitment", name: "10-tuyen-dung", crop: ".kanban" },
+      { screen: "contracts", name: "11-hop-dong-lao-dong", crop: "table.data" },
+      { screen: "kpi", name: "12-danh-gia-kpi", crop: "table.data" },
+      { screen: "turnover", name: "13-bao-cao-bien-dong", crop: ".two-col" },
     ],
   },
 

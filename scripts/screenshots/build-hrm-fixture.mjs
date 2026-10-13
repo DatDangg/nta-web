@@ -259,6 +259,145 @@ const RECRUITING = [
   ["NV-2605", "Chuyên viên Content", "Phòng Marketing", "Hà Nội", 1, "Đang mở"],
 ];
 
+/* ---------- tuyển dụng: pipeline ứng viên (màn 10) ---------- */
+// Mỗi vòng: tổng số ứng viên đang ở vòng + vài thẻ tiêu biểu. Vị trí lấy từ RECRUITING.
+const PIPELINE = [
+  { stage: "Ứng tuyển", total: 46, cards: [
+    ["Trịnh Minh Tuấn", "Frontend Developer", "Website tuyển dụng", "09/10/2026", "Mới"],
+    ["Phan Ngọc Ánh", "Nhân viên kinh doanh", "Giới thiệu nội bộ", "09/10/2026", "Mới"],
+    ["Cao Đức Thịnh", "Backend Developer", "Trang việc làm", "08/10/2026", "Mới"],
+    ["Mai Thùy Linh", "Chuyên viên Content", "Website tuyển dụng", "08/10/2026", "Mới"],
+  ] },
+  { stage: "Sàng lọc", total: 19, cards: [
+    ["Lâm Quốc Huy", "Backend Developer", "Trang việc làm", "06/10/2026", "Đạt CV"],
+    ["Tạ Thu Hằng", "Chuyên viên HCNS (C&B)", "Giới thiệu nội bộ", "05/10/2026", "Đạt CV"],
+    ["Hồ Văn Lực", "Nhân viên kinh doanh", "Website tuyển dụng", "05/10/2026", "Chờ test"],
+  ] },
+  { stage: "Phỏng vấn", total: 9, cards: [
+    ["Kiều Anh Dũng", "Frontend Developer", "Trang việc làm", "Vòng 2 · 14/10/2026", "Đã hẹn"],
+    ["Đinh Bảo Ngọc", "Chuyên viên Content", "Website tuyển dụng", "Vòng 1 · 13/10/2026", "Đã hẹn"],
+    ["La Thanh Sơn", "Nhân viên kinh doanh", "Giới thiệu nội bộ", "Vòng 1 · 15/10/2026", "Chờ xác nhận"],
+  ] },
+  { stage: "Offer", total: 3, cards: [
+    ["Âu Minh Châu", "Backend Developer", "Trang việc làm", "Gửi 07/10/2026", "Chờ phản hồi"],
+    ["Quách Gia Bảo", "Nhân viên kinh doanh", "Website tuyển dụng", "Gửi 08/10/2026", "Đã nhận lời"],
+  ] },
+  { stage: "Nhận việc", total: 2, cards: [
+    ["Văn Thị Kim Oanh", "Frontend Developer", "Giới thiệu nội bộ", "Nhận việc 15/10/2026", "Đã ký HĐ thử việc"],
+    ["Lưu Hoàng Phúc", "Nhân viên kinh doanh", "Trang việc làm", "Nhận việc 01/11/2026", "Đã ký HĐ thử việc"],
+  ] },
+];
+const recruitmentPipeline = PIPELINE.map((col) => ({
+  stage: col.stage,
+  total: col.total,
+  cards: col.cards.map((c) => ({ fullName: c[0], position: c[1], source: c[2], note: c[3], tag: c[4] })),
+}));
+
+/* ---------- hợp đồng lao động sắp hết hạn (màn 11) ---------- */
+const TODAY = new Date(2026, 9, 10); // mốc dữ liệu 10/10/2026
+const daysLeft = (ddmmyyyy) => {
+  const [d, m, y] = ddmmyyyy.split("/").map(Number);
+  return Math.round((new Date(y, m - 1, d) - TODAY) / 86_400_000);
+};
+// [họ tên, phòng ban, loại HĐ, số HĐ, hiệu lực, hết hạn, trạng thái]
+const CONTRACTS = [
+  ["Phạm Minh Khoa", "Phòng Công nghệ", "Thử việc", "TV-2026/031", "21/08/2026", "20/10/2026", "Chờ đánh giá"],
+  ["Lý Hoàng Nam", "Phòng Công nghệ", "XĐ thời hạn 12 tháng", "HĐ-2025/118", "18/10/2025", "17/10/2026", "Chờ gia hạn"],
+  ["Ngô Hải Yến", "Phòng Kinh doanh", "XĐ thời hạn 24 tháng", "HĐ-2024/052", "01/11/2024", "31/10/2026", "Chờ gia hạn"],
+  ["Dương Thu Thảo", "Phòng Marketing", "XĐ thời hạn 24 tháng", "HĐ-2024/061", "10/11/2024", "09/11/2026", "Đã gửi phụ lục"],
+  ["Trương Văn Khải", "Phòng Kinh doanh", "XĐ thời hạn 12 tháng", "HĐ-2025/131", "15/11/2025", "14/11/2026", "Chờ gia hạn"],
+  ["Nguyễn Thị Bích Ngọc", "Phòng Chăm sóc khách hàng", "XĐ thời hạn 12 tháng", "HĐ-2025/140", "24/11/2025", "23/11/2026", "Chờ gia hạn"],
+  ["Hà Minh Trí", "Phòng Công nghệ", "XĐ thời hạn 24 tháng", "HĐ-2024/077", "02/12/2024", "01/12/2026", "Đã gia hạn"],
+  ["Tôn Nữ Diệu Linh", "Phòng Hành chính", "XĐ thời hạn 12 tháng", "HĐ-2025/152", "08/12/2025", "07/12/2026", "Chờ ký"],
+];
+const contracts = CONTRACTS.map((c) => ({
+  fullName: c[0], department: c[1], type: c[2], number: c[3],
+  startDate: c[4], endDate: c[5], daysLeft: daysLeft(c[5]), status: c[6],
+}));
+const contractSummary = {
+  active: HEADCOUNT.total,
+  indefinite: 141,
+  fixedTerm: 39,
+  probation: 6,
+  expiring30: contracts.filter((c) => c.daysLeft <= 30).length,
+  expiring60: contracts.filter((c) => c.daysLeft <= 60).length,
+};
+
+/* ---------- đánh giá KPI quý III/2026 (màn 12) ---------- */
+// [họ tên, phòng ban, % mục tiêu hoàn thành, điểm KPI (70%), điểm năng lực (30%), trạng thái]
+const KPI = [
+  ["Đỗ Thị Thanh Hà", "Phòng Kinh doanh", 112, 96, 90, "Đã chốt"],
+  ["Lê Văn Hùng", "Phòng Công nghệ", 104, 92, 94, "Đã chốt"],
+  ["Hoàng Lan Anh", "Phòng Kế toán – Tài chính", 100, 90, 92, "Đã chốt"],
+  ["Phạm Minh Khoa", "Phòng Công nghệ", 98, 88, 84, "Chờ quản lý duyệt"],
+  ["Ngô Hải Yến", "Phòng Kinh doanh", 94, 84, 80, "Chờ quản lý duyệt"],
+  ["Trần Thị Mai Hương", "Phòng Nhân sự", 92, 82, 86, "Đã chốt"],
+  ["Dương Thu Thảo", "Phòng Marketing", 88, 79, 82, "Tự đánh giá"],
+  ["Đặng Quốc Bảo", "Phòng Công nghệ", 81, 74, 78, "Chờ quản lý duyệt"],
+  ["Lý Hoàng Nam", "Phòng Công nghệ", 72, 66, 74, "Tự đánh giá"],
+  ["Bùi Tiến Dũng", "Phòng Kế toán – Tài chính", 63, 58, 70, "Chờ quản lý duyệt"],
+];
+const grade = (score) => (score >= 90 ? "A" : score >= 80 ? "B" : score >= 65 ? "C" : "D");
+const kpiReviews = KPI.map((k) => {
+  const total = Math.round((k[3] * 0.7 + k[4] * 0.3) * 10) / 10;
+  return { fullName: k[0], department: k[1], targetPct: k[2], kpiScore: k[3], skillScore: k[4], total, grade: grade(total), status: k[5] };
+});
+// Phân bố xếp loại toàn công ty (tổng = 186) và tiến độ đánh giá theo phòng ban
+const kpiDistribution = [
+  { grade: "A", label: "Xuất sắc", count: 27 },
+  { grade: "B", label: "Tốt", count: 98 },
+  { grade: "C", label: "Đạt", count: 51 },
+  { grade: "D", label: "Cần cải thiện", count: 10 },
+];
+const kpiProgress = [
+  { department: "Phòng Kinh doanh", done: 36, total: 42 },
+  { department: "Phòng Công nghệ", done: 49, total: 68 },
+  { department: "Phòng Marketing", done: 12, total: 18 },
+  { department: "Phòng Kế toán – Tài chính", done: 16, total: 16 },
+  { department: "Phòng Nhân sự", done: 14, total: 14 },
+];
+
+/* ---------- biến động nhân sự 2026 (màn 13) ---------- */
+// Tuyển mới / nghỉ việc T01–T09/2026 theo phòng ban — tổng khớp MONTHLY_FLOW (51 vào / 23 ra).
+const TURNOVER_BY_DEPT = [
+  ["Phòng Công nghệ", 20, 6],
+  ["Phòng Kinh doanh", 15, 8],
+  ["Phòng Marketing", 5, 3],
+  ["Phòng Chăm sóc khách hàng", 4, 3],
+  ["Phòng Nhân sự", 3, 1],
+  ["Phòng Kế toán – Tài chính", 2, 1],
+  ["Phòng Hành chính", 2, 1],
+  ["Ban Giám đốc", 0, 0],
+];
+const LEAVE_REASONS = [
+  ["Lý do cá nhân / gia đình", 8],
+  ["Thu nhập & phúc lợi", 6],
+  ["Cơ hội nghề nghiệp khác", 5],
+  ["Hết hạn hợp đồng", 3],
+  ["Khác", 1],
+];
+
+function buildTurnover() {
+  const ytd = MONTHLY_FLOW.filter((m) => m.month.endsWith("/26"));
+  const joined = ytd.reduce((s, m) => s + m.joined, 0);
+  const left = ytd.reduce((s, m) => s + m.left, 0);
+  const avgHeadcount = ytd.reduce((s, m) => s + m.total, 0) / ytd.length;
+  const byDepartment = TURNOVER_BY_DEPT.map(([name, inCount, outCount]) => {
+    const headcount = DEPARTMENTS.find((d) => d.name === name).headcount;
+    return { name, headcount, joined: inCount, left: outCount, rate: Math.round((outCount / headcount) * 1000) / 10 };
+  });
+  return {
+    period: "T01 – T09/2026",
+    months: ytd,
+    joined,
+    left,
+    net: joined - left,
+    rate: Math.round((left / avgHeadcount) * 1000) / 10,
+    byDepartment,
+    reasons: LEAVE_REASONS.map(([reason, count]) => ({ reason, count })),
+  };
+}
+
 const fixture = {
   meta: {
     company: "Công ty TNHH Giải pháp Minh Quang",
@@ -276,6 +415,11 @@ const fixture = {
   payroll: { month: MONTH, rows: payrollRows, total: payrollTotal },
   leaveRequests,
   proposals,
+  recruitmentPipeline,
+  contracts,
+  contractSummary,
+  kpi: { period: "Quý III/2026", reviews: kpiReviews, distribution: kpiDistribution, progress: kpiProgress },
+  turnover: buildTurnover(),
 };
 
 const out = path.resolve("scripts/screenshots/fixtures/hrm.json");

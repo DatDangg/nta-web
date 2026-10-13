@@ -37,3 +37,9 @@ Bổ sung ảnh cho khung chi tiết dùng chung (block ảnh trượt / công n
 - Cần từ user khi bắt đầu: link + tài khoản demo CRM / DentGo / LMS (gửi lại qua chat), chốt danh sách màn HRM.
 - Câu hỏi còn mở chuyển từ CR-004: demo DentGo/LMS đang `http://` — có bản HTTPS không; user duyệt câu chữ FAQ Talvra (4 câu mới) và câu FAQ thứ 5 của LMS.
 - Tham chiếu: R-08c, BR-004.
+
+## Quyết định (2026-10-13, /change)
+- **Màn HRM:** user giao agent tự chọn → chốt 4 màn: `10-tuyen-dung` (pipeline ứng viên) · `11-hop-dong-lao-dong` (sắp hết hạn/gia hạn) ·
+  `12-danh-gia-kpi` · `13-bao-cao-bien-dong`. Bỏ "đào tạo" (ít khác biệt, tránh dàn trải).
+- **Staging:** agent KHÔNG nhập mật khẩu. Agent mở link trong browser pane → **user tự đăng nhập** → agent thay dữ liệu bằng DOM phía client + chụp (read-only, không thao tác ghi).
+- Link đang dùng trong MDX (chờ user xác nhận là staging): CRM `https://cms.dragonhotpotvietnam.com/` · DentGo `http://demo1.76.13.214.188.sslip.io:8080/` · LMS `http://187.52.119.50:3002/`.

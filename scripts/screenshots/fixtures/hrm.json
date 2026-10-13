@@ -1495,5 +1495,522 @@
       "status": "Đang chờ duyệt",
       "submittedAt": "24/09/2026"
     }
-  ]
+  ],
+  "recruitmentPipeline": [
+    {
+      "stage": "Ứng tuyển",
+      "total": 46,
+      "cards": [
+        {
+          "fullName": "Trịnh Minh Tuấn",
+          "position": "Frontend Developer",
+          "source": "Website tuyển dụng",
+          "note": "09/10/2026",
+          "tag": "Mới"
+        },
+        {
+          "fullName": "Phan Ngọc Ánh",
+          "position": "Nhân viên kinh doanh",
+          "source": "Giới thiệu nội bộ",
+          "note": "09/10/2026",
+          "tag": "Mới"
+        },
+        {
+          "fullName": "Cao Đức Thịnh",
+          "position": "Backend Developer",
+          "source": "Trang việc làm",
+          "note": "08/10/2026",
+          "tag": "Mới"
+        },
+        {
+          "fullName": "Mai Thùy Linh",
+          "position": "Chuyên viên Content",
+          "source": "Website tuyển dụng",
+          "note": "08/10/2026",
+          "tag": "Mới"
+        }
+      ]
+    },
+    {
+      "stage": "Sàng lọc",
+      "total": 19,
+      "cards": [
+        {
+          "fullName": "Lâm Quốc Huy",
+          "position": "Backend Developer",
+          "source": "Trang việc làm",
+          "note": "06/10/2026",
+          "tag": "Đạt CV"
+        },
+        {
+          "fullName": "Tạ Thu Hằng",
+          "position": "Chuyên viên HCNS (C&B)",
+          "source": "Giới thiệu nội bộ",
+          "note": "05/10/2026",
+          "tag": "Đạt CV"
+        },
+        {
+          "fullName": "Hồ Văn Lực",
+          "position": "Nhân viên kinh doanh",
+          "source": "Website tuyển dụng",
+          "note": "05/10/2026",
+          "tag": "Chờ test"
+        }
+      ]
+    },
+    {
+      "stage": "Phỏng vấn",
+      "total": 9,
+      "cards": [
+        {
+          "fullName": "Kiều Anh Dũng",
+          "position": "Frontend Developer",
+          "source": "Trang việc làm",
+          "note": "Vòng 2 · 14/10/2026",
+          "tag": "Đã hẹn"
+        },
+        {
+          "fullName": "Đinh Bảo Ngọc",
+          "position": "Chuyên viên Content",
+          "source": "Website tuyển dụng",
+          "note": "Vòng 1 · 13/10/2026",
+          "tag": "Đã hẹn"
+        },
+        {
+          "fullName": "La Thanh Sơn",
+          "position": "Nhân viên kinh doanh",
+          "source": "Giới thiệu nội bộ",
+          "note": "Vòng 1 · 15/10/2026",
+          "tag": "Chờ xác nhận"
+        }
+      ]
+    },
+    {
+      "stage": "Offer",
+      "total": 3,
+      "cards": [
+        {
+          "fullName": "Âu Minh Châu",
+          "position": "Backend Developer",
+          "source": "Trang việc làm",
+          "note": "Gửi 07/10/2026",
+          "tag": "Chờ phản hồi"
+        },
+        {
+          "fullName": "Quách Gia Bảo",
+          "position": "Nhân viên kinh doanh",
+          "source": "Website tuyển dụng",
+          "note": "Gửi 08/10/2026",
+          "tag": "Đã nhận lời"
+        }
+      ]
+    },
+    {
+      "stage": "Nhận việc",
+      "total": 2,
+      "cards": [
+        {
+          "fullName": "Văn Thị Kim Oanh",
+          "position": "Frontend Developer",
+          "source": "Giới thiệu nội bộ",
+          "note": "Nhận việc 15/10/2026",
+          "tag": "Đã ký HĐ thử việc"
+        },
+        {
+          "fullName": "Lưu Hoàng Phúc",
+          "position": "Nhân viên kinh doanh",
+          "source": "Trang việc làm",
+          "note": "Nhận việc 01/11/2026",
+          "tag": "Đã ký HĐ thử việc"
+        }
+      ]
+    }
+  ],
+  "contracts": [
+    {
+      "fullName": "Phạm Minh Khoa",
+      "department": "Phòng Công nghệ",
+      "type": "Thử việc",
+      "number": "TV-2026/031",
+      "startDate": "21/08/2026",
+      "endDate": "20/10/2026",
+      "daysLeft": 10,
+      "status": "Chờ đánh giá"
+    },
+    {
+      "fullName": "Lý Hoàng Nam",
+      "department": "Phòng Công nghệ",
+      "type": "XĐ thời hạn 12 tháng",
+      "number": "HĐ-2025/118",
+      "startDate": "18/10/2025",
+      "endDate": "17/10/2026",
+      "daysLeft": 7,
+      "status": "Chờ gia hạn"
+    },
+    {
+      "fullName": "Ngô Hải Yến",
+      "department": "Phòng Kinh doanh",
+      "type": "XĐ thời hạn 24 tháng",
+      "number": "HĐ-2024/052",
+      "startDate": "01/11/2024",
+      "endDate": "31/10/2026",
+      "daysLeft": 21,
+      "status": "Chờ gia hạn"
+    },
+    {
+      "fullName": "Dương Thu Thảo",
+      "department": "Phòng Marketing",
+      "type": "XĐ thời hạn 24 tháng",
+      "number": "HĐ-2024/061",
+      "startDate": "10/11/2024",
+      "endDate": "09/11/2026",
+      "daysLeft": 30,
+      "status": "Đã gửi phụ lục"
+    },
+    {
+      "fullName": "Trương Văn Khải",
+      "department": "Phòng Kinh doanh",
+      "type": "XĐ thời hạn 12 tháng",
+      "number": "HĐ-2025/131",
+      "startDate": "15/11/2025",
+      "endDate": "14/11/2026",
+      "daysLeft": 35,
+      "status": "Chờ gia hạn"
+    },
+    {
+      "fullName": "Nguyễn Thị Bích Ngọc",
+      "department": "Phòng Chăm sóc khách hàng",
+      "type": "XĐ thời hạn 12 tháng",
+      "number": "HĐ-2025/140",
+      "startDate": "24/11/2025",
+      "endDate": "23/11/2026",
+      "daysLeft": 44,
+      "status": "Chờ gia hạn"
+    },
+    {
+      "fullName": "Hà Minh Trí",
+      "department": "Phòng Công nghệ",
+      "type": "XĐ thời hạn 24 tháng",
+      "number": "HĐ-2024/077",
+      "startDate": "02/12/2024",
+      "endDate": "01/12/2026",
+      "daysLeft": 52,
+      "status": "Đã gia hạn"
+    },
+    {
+      "fullName": "Tôn Nữ Diệu Linh",
+      "department": "Phòng Hành chính",
+      "type": "XĐ thời hạn 12 tháng",
+      "number": "HĐ-2025/152",
+      "startDate": "08/12/2025",
+      "endDate": "07/12/2026",
+      "daysLeft": 58,
+      "status": "Chờ ký"
+    }
+  ],
+  "contractSummary": {
+    "active": 186,
+    "indefinite": 141,
+    "fixedTerm": 39,
+    "probation": 6,
+    "expiring30": 4,
+    "expiring60": 8
+  },
+  "kpi": {
+    "period": "Quý III/2026",
+    "reviews": [
+      {
+        "fullName": "Đỗ Thị Thanh Hà",
+        "department": "Phòng Kinh doanh",
+        "targetPct": 112,
+        "kpiScore": 96,
+        "skillScore": 90,
+        "total": 94.2,
+        "grade": "A",
+        "status": "Đã chốt"
+      },
+      {
+        "fullName": "Lê Văn Hùng",
+        "department": "Phòng Công nghệ",
+        "targetPct": 104,
+        "kpiScore": 92,
+        "skillScore": 94,
+        "total": 92.6,
+        "grade": "A",
+        "status": "Đã chốt"
+      },
+      {
+        "fullName": "Hoàng Lan Anh",
+        "department": "Phòng Kế toán – Tài chính",
+        "targetPct": 100,
+        "kpiScore": 90,
+        "skillScore": 92,
+        "total": 90.6,
+        "grade": "A",
+        "status": "Đã chốt"
+      },
+      {
+        "fullName": "Phạm Minh Khoa",
+        "department": "Phòng Công nghệ",
+        "targetPct": 98,
+        "kpiScore": 88,
+        "skillScore": 84,
+        "total": 86.8,
+        "grade": "B",
+        "status": "Chờ quản lý duyệt"
+      },
+      {
+        "fullName": "Ngô Hải Yến",
+        "department": "Phòng Kinh doanh",
+        "targetPct": 94,
+        "kpiScore": 84,
+        "skillScore": 80,
+        "total": 82.8,
+        "grade": "B",
+        "status": "Chờ quản lý duyệt"
+      },
+      {
+        "fullName": "Trần Thị Mai Hương",
+        "department": "Phòng Nhân sự",
+        "targetPct": 92,
+        "kpiScore": 82,
+        "skillScore": 86,
+        "total": 83.2,
+        "grade": "B",
+        "status": "Đã chốt"
+      },
+      {
+        "fullName": "Dương Thu Thảo",
+        "department": "Phòng Marketing",
+        "targetPct": 88,
+        "kpiScore": 79,
+        "skillScore": 82,
+        "total": 79.9,
+        "grade": "C",
+        "status": "Tự đánh giá"
+      },
+      {
+        "fullName": "Đặng Quốc Bảo",
+        "department": "Phòng Công nghệ",
+        "targetPct": 81,
+        "kpiScore": 74,
+        "skillScore": 78,
+        "total": 75.2,
+        "grade": "C",
+        "status": "Chờ quản lý duyệt"
+      },
+      {
+        "fullName": "Lý Hoàng Nam",
+        "department": "Phòng Công nghệ",
+        "targetPct": 72,
+        "kpiScore": 66,
+        "skillScore": 74,
+        "total": 68.4,
+        "grade": "C",
+        "status": "Tự đánh giá"
+      },
+      {
+        "fullName": "Bùi Tiến Dũng",
+        "department": "Phòng Kế toán – Tài chính",
+        "targetPct": 63,
+        "kpiScore": 58,
+        "skillScore": 70,
+        "total": 61.6,
+        "grade": "D",
+        "status": "Chờ quản lý duyệt"
+      }
+    ],
+    "distribution": [
+      {
+        "grade": "A",
+        "label": "Xuất sắc",
+        "count": 27
+      },
+      {
+        "grade": "B",
+        "label": "Tốt",
+        "count": 98
+      },
+      {
+        "grade": "C",
+        "label": "Đạt",
+        "count": 51
+      },
+      {
+        "grade": "D",
+        "label": "Cần cải thiện",
+        "count": 10
+      }
+    ],
+    "progress": [
+      {
+        "department": "Phòng Kinh doanh",
+        "done": 36,
+        "total": 42
+      },
+      {
+        "department": "Phòng Công nghệ",
+        "done": 49,
+        "total": 68
+      },
+      {
+        "department": "Phòng Marketing",
+        "done": 12,
+        "total": 18
+      },
+      {
+        "department": "Phòng Kế toán – Tài chính",
+        "done": 16,
+        "total": 16
+      },
+      {
+        "department": "Phòng Nhân sự",
+        "done": 14,
+        "total": 14
+      }
+    ]
+  },
+  "turnover": {
+    "period": "T01 – T09/2026",
+    "months": [
+      {
+        "month": "T01/26",
+        "total": 162,
+        "joined": 6,
+        "left": 2
+      },
+      {
+        "month": "T02/26",
+        "total": 165,
+        "joined": 5,
+        "left": 2
+      },
+      {
+        "month": "T03/26",
+        "total": 165,
+        "joined": 4,
+        "left": 4
+      },
+      {
+        "month": "T04/26",
+        "total": 171,
+        "joined": 8,
+        "left": 2
+      },
+      {
+        "month": "T05/26",
+        "total": 174,
+        "joined": 5,
+        "left": 2
+      },
+      {
+        "month": "T06/26",
+        "total": 178,
+        "joined": 7,
+        "left": 3
+      },
+      {
+        "month": "T07/26",
+        "total": 181,
+        "joined": 5,
+        "left": 2
+      },
+      {
+        "month": "T08/26",
+        "total": 184,
+        "joined": 6,
+        "left": 3
+      },
+      {
+        "month": "T09/26",
+        "total": 186,
+        "joined": 5,
+        "left": 3
+      }
+    ],
+    "joined": 51,
+    "left": 23,
+    "net": 28,
+    "rate": 13.2,
+    "byDepartment": [
+      {
+        "name": "Phòng Công nghệ",
+        "headcount": 68,
+        "joined": 20,
+        "left": 6,
+        "rate": 8.8
+      },
+      {
+        "name": "Phòng Kinh doanh",
+        "headcount": 42,
+        "joined": 15,
+        "left": 8,
+        "rate": 19
+      },
+      {
+        "name": "Phòng Marketing",
+        "headcount": 18,
+        "joined": 5,
+        "left": 3,
+        "rate": 16.7
+      },
+      {
+        "name": "Phòng Chăm sóc khách hàng",
+        "headcount": 10,
+        "joined": 4,
+        "left": 3,
+        "rate": 30
+      },
+      {
+        "name": "Phòng Nhân sự",
+        "headcount": 14,
+        "joined": 3,
+        "left": 1,
+        "rate": 7.1
+      },
+      {
+        "name": "Phòng Kế toán – Tài chính",
+        "headcount": 16,
+        "joined": 2,
+        "left": 1,
+        "rate": 6.3
+      },
+      {
+        "name": "Phòng Hành chính",
+        "headcount": 12,
+        "joined": 2,
+        "left": 1,
+        "rate": 8.3
+      },
+      {
+        "name": "Ban Giám đốc",
+        "headcount": 6,
+        "joined": 0,
+        "left": 0,
+        "rate": 0
+      }
+    ],
+    "reasons": [
+      {
+        "reason": "Lý do cá nhân / gia đình",
+        "count": 8
+      },
+      {
+        "reason": "Thu nhập & phúc lợi",
+        "count": 6
+      },
+      {
+        "reason": "Cơ hội nghề nghiệp khác",
+        "count": 5
+      },
+      {
+        "reason": "Hết hạn hợp đồng",
+        "count": 3
+      },
+      {
+        "reason": "Khác",
+        "count": 1
+      }
+    ]
+  }
 }

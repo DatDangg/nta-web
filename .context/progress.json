@@ -2,8 +2,10 @@
   "mode": "feature",
   "activeWorkItem": {
     "type": "feature",
-    "slug": "ai-box-bao-ha-case-study",
-    "note": "CR-012 DONE + archive (13/10/2026). Không có work item active của phiên này."
+    "slug": "solution-detail-screenshots",
+    "phaseTask": "phase-1-task-02",
+    "journal": ".context/runs/feature-solution-detail-screenshots-phase-1-task-01.md",
+    "note": "CR-007 — task 01 (HRM) done; task 02 (CRM/DentGo/LMS staging) tiếp theo"
   },
   "features": [
     {
@@ -941,6 +943,22 @@
         "report": ".context/review-reports/feature-ai-box-bao-ha-case-study-phase-1-task-01-round-1-review.md"
       },
       "note": "CR-012 — case study AI Box đền Bảo Hà /case-studies/ai-box-bao-ha (3 AI Box · 48 camera) + cập nhật đoạn Bảo Hà trang BoxAI; spec 3.8.0 · scope v34",
+      "updatedAt": "2026-10-13"
+    },
+    {
+      "slug": "solution-detail-screenshots",
+      "status": "in_progress",
+      "changeFile": "spec/changes/2026-10-13-solution-detail-screenshots.md",
+      "classification": "ADDITIVE",
+      "tasks": {
+        "phase-1-task-01": "done",
+        "phase-1-task-02": "pending"
+      },
+      "reviewer": {
+        "result": "PASS",
+        "report": ".context/review-reports/feature-solution-detail-screenshots-phase-1-task-01-round-2-review.md"
+      },
+      "note": "CR-007 — HRM thêm 4 màn mockup (10–13); task 02 chụp staging CRM/DentGo/LMS",
       "updatedAt": "2026-10-13"
     }
   ],

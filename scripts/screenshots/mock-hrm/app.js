@@ -8,6 +8,7 @@
  * Mở:  /mock-hrm/?screen=<slug>   (xem scripts/screenshots/README.md)
  * Slug: overview · employees · employee-detail · attendance · payroll
  *       leave · org · proposals · directory
+ *       recruitment · contracts · kpi · turnover
  */
 
 /* ---------- tiện ích ---------- */
@@ -28,6 +29,10 @@ const ICONS = {
   briefcase: '<rect x="3" y="7" width="18" height="13" rx="2.5"/><path d="M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7"/>',
   check: '<path d="M4 12.5l5 5L20 6.5"/>',
   building: '<rect x="4" y="3" width="16" height="18" rx="2.4"/><path d="M9 8h2M13 8h2M9 12h2M13 12h2M9 16h6"/>',
+  userPlus: '<circle cx="9" cy="8" r="3.6"/><path d="M2.5 20c0-3.4 2.9-5.4 6.5-5.4 1.6 0 3 .4 4.1 1.1"/><path d="M18 13v7M14.5 16.5h7"/>',
+  file: '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>',
+  target: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2"/>',
+  report: '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
 };
 
 const icon = (name, extra = "") =>
@@ -48,7 +53,9 @@ const badge = (text, tone) => `<span class="badge ${tone}">${text}</span>`;
 const statusTone = (status) =>
   ({ "Đang làm việc": "green", "Thử việc": "blue", "Nghỉ thai sản": "violet",
      "Đã duyệt": "green", "Chờ duyệt": "amber", "Đang chờ duyệt": "amber",
-     "Đang xử lý": "blue", "Từ chối": "red", "Đang mở": "blue" }[status] || "slate");
+     "Đang xử lý": "blue", "Từ chối": "red", "Đang mở": "blue",
+     "Chờ gia hạn": "amber", "Chờ đánh giá": "amber", "Chờ ký": "blue", "Đã gửi phụ lục": "blue", "Đã gia hạn": "green",
+     "Đã chốt": "green", "Chờ quản lý duyệt": "amber", "Tự đánh giá": "slate" }[status] || "slate");
 
 const NAV_MAIN = [
   ["overview", "Tổng quan nhân sự", "grid"],
@@ -56,11 +63,15 @@ const NAV_MAIN = [
   ["attendance", "Chấm công", "clock"],
   ["payroll", "Tính lương", "wallet"],
   ["leave", "Nghỉ phép", "calendar"],
+  ["recruitment", "Tuyển dụng", "userPlus"],
+  ["contracts", "Hợp đồng lao động", "file"],
 ];
 const NAV_MORE = [
   ["org", "Cơ cấu tổ chức", "sitemap"],
   ["proposals", "Quy trình đề xuất", "flow"],
   ["directory", "Tra cứu đội ngũ", "search"],
+  ["kpi", "Đánh giá KPI", "target"],
+  ["turnover", "Báo cáo biến động", "report"],
 ];
 
 /* ---------- shell ---------- */
@@ -652,6 +663,252 @@ const screenDirectory = () => {
   );
 };
 
+/* ---------- 10. Tuyển dụng — pipeline ứng viên ---------- */
+const screenRecruitment = () => {
+  const cols = F.recruitmentPipeline;
+  const totalCandidates = cols.reduce((s, c) => s + c.total, 0);
+  const tagTone = (tag) =>
+    ({ "Mới": "slate", "Đạt CV": "green", "Chờ test": "amber", "Đã hẹn": "blue", "Chờ xác nhận": "amber",
+       "Chờ phản hồi": "amber", "Đã nhận lời": "green", "Đã ký HĐ thử việc": "violet" }[tag] || "slate");
+
+  const columns = cols
+    .map(
+      (c, i) => `<div class="kanban-col">
+        <div class="kanban-head"><span class="kanban-step">${i + 1}</span>${c.stage}<b>${c.total}</b></div>
+        ${c.cards
+          .map(
+            (k) => `<div class="kanban-card">
+              <div class="emp-cell">${avatar({ code: k.fullName, fullName: k.fullName, initials: k.fullName.split(" ").pop()[0] + k.fullName[0] }, 30)}
+                <div><div class="kc-name">${k.fullName}</div><div class="emp-code">${k.position}</div></div></div>
+              <div class="kc-meta"><span>${k.source}</span><span class="mono">${k.note}</span></div>
+              <div>${badge(k.tag, tagTone(k.tag))}</div>
+            </div>`
+          )
+          .join("")}
+        ${c.total > c.cards.length ? `<div class="kanban-more">+ ${c.total - c.cards.length} ứng viên khác</div>` : ""}
+      </div>`
+    )
+    .join("");
+
+  return (
+    pageTitle("Tuyển dụng", "Tuyển dụng / Pipeline ứng viên", btn("Tin tuyển dụng", "briefcase") + btn("Thêm ứng viên", "userPlus", "primary")) +
+    `<div class="stat-strip" style="grid-template-columns:repeat(4,1fr)">
+      <div class="mini-stat"><div class="k">Vị trí đang mở</div><div class="v">${F.recruiting.length}</div></div>
+      <div class="mini-stat"><div class="k">Chỉ tiêu tuyển</div><div class="v">${F.headcount.recruiting}</div></div>
+      <div class="mini-stat"><div class="k">Ứng viên trong pipeline</div><div class="v">${totalCandidates}</div></div>
+      <div class="mini-stat"><div class="k">Lịch phỏng vấn tuần này</div><div class="v" style="color:#1d4ed8">6</div></div>
+    </div>
+    <div class="card">
+      <div class="card-head"><div><div class="card-title">Pipeline ứng viên theo vòng</div>
+        <div class="card-sub">Đợt tuyển dụng Quý IV/2026 · cập nhật 10/10/2026</div></div>
+        <span class="chip-select">Vị trí: Tất cả ${icon("grid", 'width="13" height="13" class="chev"')}</span></div>
+      <div class="card-body"><div class="kanban">${columns}</div></div>
+    </div>`
+  );
+};
+
+/* ---------- 11. Hợp đồng lao động ---------- */
+const screenContracts = () => {
+  const S = F.contractSummary;
+  const leftTone = (d) => (d <= 15 ? "red" : d <= 30 ? "amber" : "slate");
+  // Chỉ hiện hợp đồng khớp bộ lọc "Hết hạn trong: 60 ngày" → số dòng = thẻ "Hết hạn ≤ 60 ngày".
+  const rows = F.contracts
+    .filter((c) => c.daysLeft <= 60)
+    .map(
+      (c) => `<tr>
+        <td><div class="emp-cell">${avatar({ code: c.number, fullName: c.fullName, initials: c.fullName.split(" ").pop()[0] + c.fullName[0] })}<div><div>${c.fullName}</div><div class="emp-code">${c.department}</div></div></div></td>
+        <td>${c.type}</td>
+        <td class="mono">${c.number}</td>
+        <td class="num mono">${c.startDate}</td>
+        <td class="num mono">${c.endDate}</td>
+        <td class="num">${badge(`Còn ${c.daysLeft} ngày`, leftTone(c.daysLeft))}</td>
+        <td>${badge(c.status, statusTone(c.status))}</td>
+      </tr>`
+    )
+    .join("");
+
+  return (
+    pageTitle("Hợp đồng lao động", "Hợp đồng lao động / Sắp hết hạn", btn("Mẫu hợp đồng", "file") + btn("Gia hạn hàng loạt", "check", "primary")) +
+    `<div class="stat-strip" style="grid-template-columns:repeat(6,1fr)">
+      <div class="mini-stat"><div class="k">Đang hiệu lực</div><div class="v">${S.active}</div></div>
+      <div class="mini-stat"><div class="k">Không thời hạn</div><div class="v">${S.indefinite}</div></div>
+      <div class="mini-stat"><div class="k">XĐ thời hạn</div><div class="v">${S.fixedTerm}</div></div>
+      <div class="mini-stat"><div class="k">Thử việc</div><div class="v">${S.probation}</div></div>
+      <div class="mini-stat"><div class="k">Hết hạn ≤ 30 ngày</div><div class="v" style="color:#b91c1c">${S.expiring30}</div></div>
+      <div class="mini-stat"><div class="k">Hết hạn ≤ 60 ngày</div><div class="v" style="color:#b45309">${S.expiring60}</div></div>
+    </div>
+    <div class="card">
+      <div class="card-head"><div><div class="card-title">Hợp đồng sắp hết hạn / chờ gia hạn</div>
+        <div class="card-sub">Tính đến 10/10/2026 · nhắc trước 60 ngày cho quản lý trực tiếp và phòng Nhân sự</div></div>
+        ${badge(`${S.expiring30} hợp đồng cần xử lý trong tháng`, "red")}</div>
+      <div class="card-body" style="padding-bottom:14px"><div class="filters">
+        <span class="chip-select">Loại hợp đồng: Tất cả ${icon("grid", 'width="13" height="13" class="chev"')}</span>
+        <span class="chip-select">Hết hạn trong: 60 ngày ${icon("grid", 'width="13" height="13" class="chev"')}</span>
+        <span class="chip-select">Phòng ban: Tất cả ${icon("grid", 'width="13" height="13" class="chev"')}</span>
+        <span class="search-inline">${icon("search", 'width="15" height="15"')}<span>Tìm theo tên hoặc số hợp đồng…</span></span>
+      </div></div>
+      <div class="table-wrap">
+        <table class="data">
+          <thead><tr><th>Nhân sự</th><th>Loại hợp đồng</th><th>Số HĐ</th><th class="num">Hiệu lực</th>
+            <th class="num">Hết hạn</th><th class="num">Còn lại</th><th>Trạng thái</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+      <div class="table-foot"><span>Hiển thị <b>${S.expiring60}</b> hợp đồng hết hạn trong 60 ngày tới</span>
+        <span class="pager"><button>‹</button><button class="on">1</button><button>›</button></span></div>
+    </div>`
+  );
+};
+
+/* ---------- 12. Đánh giá KPI ---------- */
+const screenKpi = () => {
+  const K = F.kpi;
+  const gradeTone = { A: "green", B: "blue", C: "amber", D: "red" };
+  const totalPeople = K.distribution.reduce((s, d) => s + d.count, 0);
+  const done = K.progress.reduce((s, p) => s + p.done, 0);
+  const reviews = [...K.reviews].sort((a, b) => b.total - a.total);
+
+  const rows = reviews
+    .map(
+      (r) => `<tr>
+        <td><div class="emp-cell">${avatar({ code: r.fullName, fullName: r.fullName, initials: r.fullName.split(" ").pop()[0] + r.fullName[0] })}<div><div>${r.fullName}</div><div class="emp-code">${r.department}</div></div></div></td>
+        <td style="width:180px"><div class="kpi-target"><div class="progress-track"><div class="progress-fill" style="width:${Math.min(r.targetPct, 100)}%;${r.targetPct < 80 ? "background:#d97706" : ""}"></div></div><span class="mono">${r.targetPct}%</span></div></td>
+        <td class="num mono">${r.kpiScore}</td>
+        <td class="num mono">${r.skillScore}</td>
+        <td class="num mono"><b>${r.total.toLocaleString("vi-VN")}</b></td>
+        <td>${badge(`Loại ${r.grade}`, gradeTone[r.grade])}</td>
+        <td>${badge(r.status, statusTone(r.status))}</td>
+      </tr>`
+    )
+    .join("");
+
+  const dist = K.distribution
+    .map(
+      (d) => `<div class="dist-row"><span class="dist-grade ${gradeTone[d.grade]}">${d.grade}</span>
+        <div class="grow"><div class="dist-label">${d.label}<b>${d.count} người · ${Math.round((d.count / totalPeople) * 100)}%</b></div>
+        <div class="progress-track"><div class="progress-fill" style="width:${Math.round((d.count / totalPeople) * 100)}%"></div></div></div></div>`
+    )
+    .join("");
+
+  const prog = K.progress
+    .map(
+      (p) => `<div class="dist-row"><div class="grow"><div class="dist-label">${p.department}<b>${p.done}/${p.total}</b></div>
+        <div class="progress-track"><div class="progress-fill" style="width:${Math.round((p.done / p.total) * 100)}%;${p.done === p.total ? "background:#16a34a" : ""}"></div></div></div></div>`
+    )
+    .join("");
+
+  return (
+    pageTitle(`Đánh giá hiệu suất — ${K.period}`, "Đánh giá KPI / " + K.period, btn("Bộ tiêu chí", "target") + btn("Chốt kỳ đánh giá", "check", "primary")) +
+    `<div class="stat-strip" style="grid-template-columns:repeat(4,1fr)">
+      <div class="mini-stat"><div class="k">Nhân sự trong kỳ</div><div class="v">${totalPeople}</div></div>
+      <div class="mini-stat"><div class="k">Đã hoàn tất đánh giá</div><div class="v" style="color:#15803d">${done}</div></div>
+      <div class="mini-stat"><div class="k">Điểm trung bình</div><div class="v">82,4</div></div>
+      <div class="mini-stat"><div class="k">Hạn chốt kỳ</div><div class="v">20/10/2026</div></div>
+    </div>
+    <div class="two-col" style="grid-template-columns:1fr 1fr">
+      <div class="card">
+        <div class="card-head"><div><div class="card-title">Phân bố xếp loại</div>
+          <div class="card-sub">Toàn công ty · KPI 70% + năng lực 30%</div></div></div>
+        <div class="card-body dist">${dist}</div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div><div class="card-title">Tiến độ đánh giá theo phòng ban</div>
+          <div class="card-sub">Số phiếu đã chốt / tổng nhân sự</div></div>${badge("Còn 10 ngày", "amber")}</div>
+        <div class="card-body dist">${prog}</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-head"><div class="card-title">Kết quả đánh giá cá nhân</div>
+        <a class="btn sm ghost" href="#">Xuất bảng điểm</a></div>
+      <div class="table-wrap"><table class="data">
+        <thead><tr><th>Nhân sự</th><th>Hoàn thành mục tiêu</th><th class="num">Điểm KPI</th><th class="num">Năng lực</th>
+          <th class="num">Tổng điểm</th><th>Xếp loại</th><th>Trạng thái</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table></div>
+      <div class="table-foot"><span>Hiển thị <b>${reviews.length}</b> / ${totalPeople} nhân sự</span>
+        <span class="pager"><button>‹</button><button class="on">1</button><button>2</button><button>…</button><button>19</button><button>›</button></span></div>
+    </div>`
+  );
+};
+
+/* ---------- 13. Báo cáo biến động nhân sự ---------- */
+const screenTurnover = () => {
+  const T = F.turnover;
+  const maxVal = Math.max(...T.months.map((m) => Math.max(m.joined, m.left)));
+  const bars = T.months
+    .map(
+      (m) => `<div class="gbar">
+        <div class="gbar-pair">
+          <span class="gbar-join" style="height:${Math.round((m.joined / maxVal) * 150)}px"><i>${m.joined}</i></span>
+          <span class="gbar-leave" style="height:${Math.round((m.left / maxVal) * 150)}px"><i>${m.left}</i></span>
+        </div>
+        <span class="bar-label">${m.month}</span>
+      </div>`
+    )
+    .join("");
+  const maxReason = Math.max(...T.reasons.map((r) => r.count));
+  const reasons = T.reasons
+    .map(
+      (r) => `<div class="dist-row"><div class="grow"><div class="dist-label">${r.reason}<b>${r.count}</b></div>
+        <div class="progress-track"><div class="progress-fill" style="width:${Math.round((r.count / maxReason) * 100)}%;background:#94a3b8"></div></div></div></div>`
+    )
+    .join("");
+  const rows = T.byDepartment
+    .map(
+      (d) => `<tr>
+        <td>${d.name}</td>
+        <td class="num mono">${d.headcount}</td>
+        <td class="num mono" style="color:#15803d">+${d.joined}</td>
+        <td class="num mono" style="color:#b91c1c">${d.left ? "−" + d.left : "0"}</td>
+        <td class="num mono">${d.joined - d.left >= 0 ? "+" : "−"}${Math.abs(d.joined - d.left)}</td>
+        <td class="num">${badge(`${d.rate.toLocaleString("vi-VN")}%`, d.rate >= 15 ? "red" : d.rate >= 10 ? "amber" : "green")}</td>
+      </tr>`
+    )
+    .join("");
+
+  return (
+    pageTitle("Báo cáo biến động nhân sự", "Báo cáo / Biến động nhân sự", btn(T.period, "calendar") + btn("Xuất báo cáo", "wallet", "primary")) +
+    `<div class="kpi-grid">
+      <div class="card kpi"><div><div class="kpi-label">Nhân sự hiện tại</div><div class="kpi-value">${F.headcount.total}</div>
+        <div class="kpi-hint">Tính đến 30/09/2026</div></div><span class="kpi-icon">${icon("users")}</span></div>
+      <div class="card kpi"><div><div class="kpi-label">Tuyển mới</div><div class="kpi-value">${T.joined}</div>
+        <div class="kpi-hint">${T.period}</div></div><span class="kpi-icon green">${icon("userPlus")}</span></div>
+      <div class="card kpi"><div><div class="kpi-label">Nghỉ việc</div><div class="kpi-value">${T.left}</div>
+        <div class="kpi-hint">Tăng ròng +${T.net} nhân sự</div></div><span class="kpi-icon amber">${icon("report")}</span></div>
+      <div class="card kpi"><div><div class="kpi-label">Tỷ lệ nghỉ việc</div><div class="kpi-value">${T.rate.toLocaleString("vi-VN")}%</div>
+        <div class="kpi-hint">Trên nhân sự bình quân 9 tháng</div></div><span class="kpi-icon violet">${icon("trend")}</span></div>
+    </div>
+    <div class="two-col">
+      <div class="card">
+        <div class="card-head"><div><div class="card-title">Tuyển mới và nghỉ việc theo tháng</div>
+          <div class="card-sub">${T.period} · số người</div></div>${badge("9 tháng", "slate")}</div>
+        <div class="card-body">
+          <div class="legend"><span><i class="dotc" style="background:#134cc9"></i>Tuyển mới</span>
+            <span><i class="dotc" style="background:#f59e0b"></i>Nghỉ việc</span></div>
+          <div class="gbars">${bars}</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div><div class="card-title">Lý do nghỉ việc</div>
+          <div class="card-sub">Theo phỏng vấn thôi việc · ${T.left} trường hợp</div></div></div>
+        <div class="card-body dist">${reasons}
+          <div class="note" style="margin-top:4px">${icon("trend")}
+            <div>Phòng <b>Chăm sóc khách hàng</b> có tỷ lệ nghỉ việc cao nhất — đề xuất rà soát chế độ ca kíp.</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-head"><div class="card-title">Biến động theo phòng ban</div>
+        <a class="btn sm ghost" href="#">Xem chi tiết</a></div>
+      <div class="table-wrap"><table class="data">
+        <thead><tr><th>Phòng ban</th><th class="num">Nhân sự</th><th class="num">Tuyển mới</th><th class="num">Nghỉ việc</th>
+          <th class="num">Tăng ròng</th><th class="num">Tỷ lệ nghỉ việc</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table></div>
+    </div>`
+  );
+};
+
 /* ---------- render ---------- */
 const SCREENS = {
   overview: screenOverview,
@@ -663,6 +920,10 @@ const SCREENS = {
   org: screenOrg,
   proposals: screenProposals,
   directory: screenDirectory,
+  recruitment: screenRecruitment,
+  contracts: screenContracts,
+  kpi: screenKpi,
+  turnover: screenTurnover,
 };
 
 const render = SCREENS[SCREEN] || SCREENS.overview;
