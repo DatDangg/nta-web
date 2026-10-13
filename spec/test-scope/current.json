@@ -1,43 +1,48 @@
 {
-  "specVersion": "3.3.0",
-  "scopeVersion": 24,
-  "generatedAt": "2026-10-13T12:00:00+07:00",
+  "specVersion": "3.4.0",
+  "scopeVersion": 25,
+  "generatedAt": "2026-10-13T18:00:00+07:00",
   "trigger": "feature-update",
   "workItem": "feature-shared-detail-showcase-template",
   "specRefs": [
-    "R-08c (mới)",
+    "R-08c (sửa: block tình huống sử dụng & kết nối)",
     "R-08b",
     "R-08b.1",
+    "R-21",
     "BR-004"
   ],
   "changed": {
     "files": [
-      "src/content/types.ts (CaseStudyShowcase: vision.quote optional, features?, faq?)",
+      "src/app/[locale]/solutions/enterprise/[slug]/page.tsx (CRM/DentGo/LMS → ShowcaseLayout; bỏ enterpriseDemoUrls + nhánh LMS riêng)",
+      "src/components/case-studies/showcase/ShowcaseDetails.tsx (mới)",
       "src/components/case-studies/showcase/ShowcaseLayout.tsx",
-      "src/components/case-studies/showcase/ShowcaseVision.tsx",
-      "src/components/case-studies/showcase/ShowcaseFeatures.tsx (mới)",
-      "src/components/case-studies/showcase/ShowcaseFaq.tsx (mới)"
+      "src/content/types.ts (showcase.details?)",
+      "src/content/solutions/{vi,en}/{crm,dentgo,lms}.mdx (showcase.details)"
     ],
     "modules": [
-      "Khung chi tiết showcase dùng chung (layer 0)"
+      "Trang chi tiết giải pháp enterprise (layer 2: CRM, DentGo, LMS)"
     ]
   },
   "impact": {
     "direct": [
-      "Lưới tính năng / FAQ render khi có data (chưa có data nào ở layer 0 — test bằng fixture ở layer 1)"
+      "/solutions/enterprise/crm|dentgo|lms (vi/en): hero, số liệu, 3 pillar, lưới tính năng, tình huống sử dụng & kết nối, FAQ, CTA, form liên hệ"
     ],
     "dependents": [
-      "/case-studies/oc-eo-learning (vi/en)",
-      "/case-studies/dental-clinic-operations (vi/en)"
+      "/solutions/enterprise/hrm (giữ layout cũ)",
+      "/solutions/ai/*",
+      "/case-studies/oc-eo-learning",
+      "/case-studies/dental-clinic-operations"
     ],
     "regression": [
-      "Óc Eo + nha khoa: thứ tự block, quote tầm nhìn, hero, carousel không đổi"
+      "HRM, AI, case study: HTML không đổi",
+      "CRM/DentGo/LMS: title, description, canonical, hreflang, og không đổi; nút demo mở tab mới"
     ]
   },
   "acceptance": [
-    "Óc Eo + nha khoa render không đổi sau khi tách khung (layer 0: đã kiểm HTML build)",
-    "Block Lưới tính năng + FAQ optional: thiếu data → ẩn",
-    "Vision thiếu quote → ẩn thẻ trích dẫn, không vỡ layout"
+    "CRM/DentGo/LMS render bằng ShowcaseLayout, data từ MDX, không hard-code demo URL trong page.tsx",
+    "Tình huống sử dụng (5) + mục kết nối/pháp quy hiển thị lại trong block mới",
+    "Block thiếu data → ẩn",
+    "Form liên hệ vẫn ở cuối trang"
   ],
   "risk": "medium"
 }

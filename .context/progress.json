@@ -668,7 +668,7 @@
       "status": "in_progress",
       "changeFile": "spec/changes/2026-10-13-shared-detail-showcase-template.md",
       "classification": "MODIFY + ADDITIVE",
-      "specVersion": "3.3.0",
+      "specVersion": "3.4.0",
       "phases": [
         {
           "phase": 1,
@@ -695,13 +695,30 @@
                 "round": 3,
                 "note": "v1 FAIL (đếm HRM, bằng chứng HTML, caption) → v2 FAIL (đếm HRM) → sửa HRM 3 mục → v3 PASS có điều kiện cho layer 2 (kiểm HTML HRM có 'Giao diện minh hoạ' và 3 features)"
               }
+            },
+            {
+              "id": "phase-1-task-03",
+              "status": "done",
+              "scope": "layer 2 — route CRM/DentGo/LMS sang ShowcaseLayout; block optional ShowcaseDetails (tình huống sử dụng & kết nối); giữ CTAForm; spec 3.4.0",
+              "review": {
+                "level": "NORMAL",
+                "verdict": "PASS",
+                "round": 2,
+                "note": "v1 PASS_WITH_CONDITIONS (MAJOR mất useCases/sections) → thêm block details + giữ CTAForm + so khớp head HEAD → v2 PASS"
+              },
+              "followUps": [
+                "layer 3: thêm ảnh phụ CRM 02-khach-hang, DentGo 02-ho-so-khach-hang vào block photos (đưa vào acceptance close-out)",
+                "chuyển HRM: bỏ showcaseSlugs, chỉ dựa vào solution.showcase",
+                "kiểm mobile: ShowcaseCTA + CTAForm gần nhau",
+                "demo DentGo/LMS dùng http:// — chờ người dùng xác nhận HTTPS"
+              ]
             }
           ]
         }
       ],
       "codeCommits": [],
       "updatedAt": "2026-10-13",
-      "scopeVersion": 24
+      "scopeVersion": 25
     }
   ],
   "bugs": []

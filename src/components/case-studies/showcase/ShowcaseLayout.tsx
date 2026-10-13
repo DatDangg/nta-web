@@ -3,6 +3,7 @@ import type { BreadcrumbItem } from '@/components/shared/Breadcrumb';
 import type { CaseStudyShowcase } from '@/content/types';
 import type { GlassTile } from '@/components/listing/GlassVisual';
 import { ShowcaseCTA } from './ShowcaseCTA';
+import { ShowcaseDetails } from './ShowcaseDetails';
 import { ShowcaseFaq } from './ShowcaseFaq';
 import { ShowcaseFeatures } from './ShowcaseFeatures';
 import { ShowcaseHero } from './ShowcaseHero';
@@ -35,6 +36,7 @@ export function ShowcaseLayout({ showcase, breadcrumbs, tiles }: Props) {
       {showcase.photos && showcase.photos.items.length > 0 && <ShowcasePhotos photos={showcase.photos} />}
       {showcase.vision && <ShowcaseVision vision={showcase.vision} />}
       {showcase.features && <ShowcaseFeatures features={showcase.features} />}
+      {showcase.details && <ShowcaseDetails details={showcase.details} />}
       {showcase.faq && <ShowcaseFaq faq={showcase.faq} />}
       <ShowcaseCTA cta={showcase.cta} />
     </>

@@ -214,6 +214,8 @@ export interface CaseStudyShowcase {
   note?: string;
   /** Lưới tính năng (R-08c) — optional; thiếu → ẩn block. */
   features?: { eyebrow: string; title: string; items: { title: string; description: string; icon?: ShowcaseIcon }[] };
+  /** Tình huống sử dụng & kết nối (R-08c) — optional; mỗi nhóm = tiêu đề + đoạn dẫn (tuỳ chọn) + danh sách. Thiếu → ẩn block. */
+  details?: { eyebrow: string; title: string; groups: { title: string; intro?: string; items: string[] }[] };
   /** FAQ (R-08c) — optional; thiếu → ẩn block. Render bằng `<details>`. */
   faq?: { eyebrow: string; title: string; items: { question: string; answer: string }[] };
   cta: { title: string; description: string; label: string; href: string; image?: string };
