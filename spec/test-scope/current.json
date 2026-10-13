@@ -1,58 +1,45 @@
 {
   "specVersion": "3.11.0",
-  "scopeVersion": 39,
-  "generatedAt": "2026-10-14T12:00:00+07:00",
+  "scopeVersion": 40,
+  "generatedAt": "2026-10-14T18:00:00+07:00",
   "trigger": "feature-update",
-  "workItem": "feature-home-sections-redesign",
+  "workItem": "feature-home-solution-card-image",
   "specRefs": [
     "R-02a",
-    "R-03a",
-    "R-03b",
-    "R-02",
-    "R-03",
-    "R-08"
+    "R-02"
   ],
   "changed": {
     "files": [
-      "src/components/home/HomeSectionHeader.tsx (mới — header section dùng chung: eyebrow + tiêu đề 2 dòng + mô tả + slot nút)",
-      "src/components/home/SolutionGridHome.tsx (3 thẻ giải pháp ngang theo mockup)",
-      "src/components/home/ProductStrip.tsx + HomeProductCard.tsx (mới) — card dọc dài + carousel ←/→",
-      "src/components/home/CaseStudyHighlight.tsx + CaseStudyCarousel.tsx + HomeCaseStudyCard.tsx (mới) — tối đa 3 thẻ case study",
-      "src/components/home/HomeScrollArrows.tsx + useScrollButtons.ts (mới) — nút ←/→, disable theo mép (sai số 8px), phím ←/→",
-      "src/lib/content/case-studies.ts (+compareCaseStudies: năm giảm dần, rồi slug)",
-      "src/app/[locale]/case-studies/page.tsx (dùng compareCaseStudies chung)",
-      "src/app/[locale]/page.tsx, src/content/home.ts (bỏ featuredCase), src/i18n/messages/{vi,en}.json"
+      "src/components/home/SolutionGridHome.tsx (thẻ Giải pháp trang chủ: ảnh absolute nửa phải 60% full chiều cao, next/image fill object-cover object-[40%_50%]; mask chỉ fade sang trái; bỏ opacity-30; lớp nền trắng gradient sau cột chữ; cột chữ md/xl max-w 56%; min-h 18rem)"
     ],
     "modules": [
-      "Module 1 — Trang chủ /",
-      "Case study /case-studies (comparator thứ tự dùng chung)"
+      "Module 1 — Trang chủ / (khối Giải pháp)"
     ]
   },
   "impact": {
     "direct": [
-      "/ và /en — khối Giải pháp: eyebrow SOLUTIONS, tiêu đề 2 dòng (dòng 2 màu teal), mô tả bên phải; 3 thẻ (DN · AI · Ứng dụng AI) mỗi thẻ có icon, tiêu đề, mô tả, 3 bullet có icon, ảnh minh hoạ fade; link 'Tìm hiểu …' → /solutions/enterprise, /solutions/ai, /products (EN: /en/...)",
-      "/ và /en — khối Sản phẩm tiêu biểu: eyebrow PRODUCTS + tiêu đề + mô tả + 2 nút ←/→ có aria-label; card dọc (poster trên, panel trắng: icon app, tên + mô tả 1 dòng, nút tròn màu theo app, chip tính năng) link /products/<slug>",
-      "Carousel sản phẩm: nút ← disabled ở đầu, → disabled ở cuối (sai số 8px — scrollLeft ≤ 8 vẫn coi là đầu); bấm nút cuộn đúng 1 thẻ; phím ←/→ khi dải thẻ focus; với 2 sản phẩm ở desktop cả 2 nút có thể disabled; mobile vuốt được",
-      "/ và /en — khối Câu chuyện khách hàng: eyebrow CASE STUDY + tiêu đề + mô tả; tối đa 3 thẻ (ảnh, chip ngành + icon, tiêu đề, mô tả clamp 2 dòng, 'Xem chi tiết →'); thứ tự 3 thẻ trùng 3 thẻ đầu của /case-studies (năm giảm dần, rồi slug); mỗi thẻ link /case-studies/<slug> đúng; nút viền 'Xem tất cả case study →' → /case-studies; nút ←/→ cùng hành vi carousel",
-      "Responsive 375/768/1280px: không tràn ngang (scrollWidth == clientWidth); Giải pháp 1 cột ở mobile; carousel vuốt; focus ring hiện rõ; alt ảnh VI/EN",
-      "VI/EN đều có chữ thật, không còn key i18n thô; không còn khối featuredCase cũ"
+      "/ và /en — khối Giải pháp, cả 3 thẻ (DN · AI · Ứng dụng AI): ảnh minh hoạ phủ full chiều cao thẻ ở nửa phải (~60% bề rộng), tràn sát mép phải/trên/dưới, bo theo góc thẻ",
+      "Mép trái ảnh fade mượt vào nền trắng thẻ (không thấy viền ảnh); không còn fade từ trên xuống; ảnh không bị mờ opacity-30 ở desktop (lg/xl) và mobile",
+      "Chữ (tiêu đề, mô tả, 3 bullet, link 'Tìm hiểu …') nằm trên nền trắng bên trái, đọc rõ ở 1280 và 1440px, bullet không đè lên phần ảnh đậm",
+      "Mobile 375px và tablet 768px: ảnh vẫn hiện rõ bên phải mờ trái, chữ đọc được, không tràn ngang (scrollWidth == clientWidth)",
+      "1024px (lg, 3 cột hẹp): ảnh vẫn thấy ở phần phải thẻ, chữ đọc được"
     ],
     "dependents": [
-      "/case-studies và /en/case-studies: thứ tự danh sách vẫn năm giảm dần rồi slug (nay qua compareCaseStudies chung) — không đổi so với trước",
-      "Component dùng chung SolutionCard / ProductCard / CaseStudyCard / ListingCard KHÔNG sửa — /solutions, /products, /case-studies giữ giao diện thẻ cũ"
+      "Không có — SolutionGridHome chỉ dùng ở trang chủ; SolutionCard / HomeImage dùng chung không sửa (/solutions giữ giao diện thẻ cũ)"
     ],
     "regression": [
-      "Hero trang chủ (R-01) và CTA cuối trang (R-03) giữ nguyên",
-      "Trang chi tiết /products/<slug>, /case-studies/<slug> mở đúng từ thẻ trang chủ"
+      "Link 3 thẻ Giải pháp đúng route: /solutions/enterprise, /solutions/ai, /products (EN: /en/solutions/enterprise, /en/solutions/ai, /en/products)",
+      "Header khối Giải pháp (eyebrow SOLUTIONS, tiêu đề 2 dòng, mô tả) và nội dung bullet giữ như CR-016; VI/EN có chữ thật, không key i18n thô",
+      "Các khối khác trang chủ (Hero, Sản phẩm tiêu biểu, Câu chuyện khách hàng, CTA) không đổi",
+      "Ảnh có alt VI/EN; focus ring link thẻ hiện rõ"
     ]
   },
   "acceptance": [
-    "3 khối trang chủ khớp bố cục mockup CR-016, VI + EN đều có chữ",
-    "Nút ←/→ sản phẩm cuộn 1 thẻ và disabled đúng theo mép (ngưỡng 8px)",
-    "Case study tối đa 3 thẻ, đúng thứ tự như /case-studies, link chi tiết + 'Xem tất cả' đúng",
-    "Link 'Tìm hiểu …' của 3 thẻ giải pháp đúng route",
-    "375/768/1280px không tràn ngang; a11y: alt ảnh, aria-label nút, focus visible",
+    "3 thẻ: ảnh full chiều cao nửa phải, fade sang trái, không fade trên, không opacity-30",
+    "Chữ đọc rõ ở 1280/1440px (cột chữ trái nền trắng)",
+    "375/768px: ảnh hiện + chữ đọc được + không tràn ngang",
+    "Link 3 thẻ đúng route VI/EN",
     "typecheck/lint/build PASS"
   ],
-  "risk": "medium"
+  "risk": "low"
 }

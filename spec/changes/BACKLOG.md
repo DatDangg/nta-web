@@ -24,6 +24,7 @@
 | CR-014 | Thiết kế lại trang "Về NTA" theo mockup (hero ảnh tòa Kim Hoàn thật + sứ mệnh/tầm nhìn/giá trị + con người NTA ảnh AI tạm) | MODIFY + ADDITIVE (UI) | done (spec 3.10.0 · scope v37) | `archive/2026-10-13-about-page-redesign.md` | 2026-10-13 | 2026-10-13 |
 | CR-015 | /about: ảnh tòa Kim Hoàn mờ viền tan vào nền như mẫu + fix thẻ Sứ mệnh/Tầm nhìn bị che đầu | MODIFY (UI) + BUG | done (spec 3.10.0 không bump · scope v38) | `archive/2026-10-13-about-hero-polish.md` | 2026-10-13 | 2026-10-14 |
 | CR-016 | Trang chủ: thiết kế lại 3 khối Giải pháp · Sản phẩm (card dọc dài kiểu ảnh 1) · Câu chuyện khách hàng theo mockup | MODIFY (UI) + ADDITIVE | done | `archive/2026-10-14-home-sections-redesign.md` | 2026-10-14 | 2026-10-14 |
+| CR-017 | Trang chủ khối Giải pháp: ảnh minh hoạ to chiếm nửa phải thẻ, mờ dần sang trái như mẫu (follow-up CR-016) | MODIFY (UI) | done (spec 3.11.0 không bump · scope v40) | `archive/2026-10-14-home-solution-card-image.md` | 2026-10-14 | 2026-10-14 |
 
 ## Quy tắc tracking
 
