@@ -1,5 +1,5 @@
 ---
-spec_version: 3.4.0
+spec_version: 3.5.0
 updated_at: 2026-10-13
 ---
 
@@ -23,6 +23,7 @@ Nguồn: `BRIEF.md:5-17`, `docs/BRD.md:14-31`.
 Domain: **`ntavietnam.tech`** (canonical `https://ntavietnam.tech` — HTTPS, apex, không `www`) · Song ngữ **VI/EN** · Phong cách **light minimal kiểu Apple**.
 Nguồn: `BRIEF.md:15-16`, `docs/BRD.md:51,167` (quyết định ngày 08/10/2026 — xem `git log`: ab335bb, e7f54aa).
 _(cập nhật 2026-10-09: đổi domain đích sang `ntavietnam.tech` — change `domain-ntavietnam`, `spec/updates/2026-10-09-domain-ntavietnam.md`)_
+_(cập nhật 2026-10-13: thêm **domain phụ** `ntasolution.vn` (+ `www`) phục vụ **cùng nội dung**, KHÔNG redirect giữa 2 domain; canonical/SEO vẫn **`ntavietnam.tech`** — change `add-domain-ntasolution`, `spec/updates/2026-10-13-add-domain-ntasolution.md`)_
 
 ## Scope
 
@@ -295,6 +296,10 @@ Base URL: dev `http://localhost:3000/api` · prod `https://ntavietnam.tech/api` 
   domain `ntavietnam.tech` (live 2026-10-09 — HTTPS apex, không `www`; http→https 301); CI/CD GitHub Actions (self-hosted runner label `nta-web`).
   `[reverse-engineered from docs]` — nguồn: `BRIEF.md:43`, `docs/BRD.md:53,126,127,157`, `.context/project-config.md:51-59`, `docs/runbook/deploy-vps.md`
   - _(cập nhật 2026-10-09: domain `ntavietnam.tech` — change `domain-ntavietnam`; nền tảng deploy reconcile về **docker-vps** — change `deploy-platform-docker-vps` → đã hết drift)._
+  - _(cập nhật 2026-10-13: **domain phụ** `ntasolution.vn` (+ `www`) phục vụ cùng app/nội dung — nginx vhost riêng
+    (`deploy/nginx/ntasolution.vn.conf`) + cert Let's Encrypt apex+www, `www` → 301 apex của chính nó, `http` → 301 `https`;
+    **KHÔNG** redirect sang `ntavietnam.tech` và ngược lại; canonical/`NEXT_PUBLIC_SITE_URL` giữ nguyên.
+    Nguồn: user 13/10/2026 — change `add-domain-ntasolution`.)_
 
 ---
 

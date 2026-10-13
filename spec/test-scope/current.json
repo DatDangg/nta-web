@@ -1,50 +1,45 @@
 {
-  "specVersion": "3.4.0",
-  "scopeVersion": 26,
-  "generatedAt": "2026-10-13T20:00:00+07:00",
+  "specVersion": "3.5.0",
+  "scopeVersion": 27,
+  "generatedAt": "2026-10-13T08:18:47+07:00",
   "trigger": "feature-update",
-  "workItem": "feature-shared-detail-showcase-template",
-  "specRefs": [
-    "R-08c",
-    "R-08b",
-    "R-08b.1",
-    "R-21",
-    "BR-004"
-  ],
+  "workItem": "feature-add-domain-ntasolution",
+  "specRefs": ["R-27", "R-19", "R-21"],
   "changed": {
     "files": [
-      "src/app/[locale]/solutions/enterprise/[slug]/page.tsx (mọi slug → ShowcaseLayout; bỏ layout cũ; thiếu showcase → build lỗi)",
-      "src/app/[locale]/solutions/ai/[slug]/page.tsx (→ ShowcaseLayout; giữ CaseStudyLink + CTAForm)",
-      "src/components/case-studies/showcase/ShowcaseDetails.tsx (nhóm chỉ có đoạn dẫn vẫn hiển thị)",
-      "src/content/types.ts (details.groups.items optional)",
-      "src/content/solutions/{vi,en}/{hrm,boxai,flycam,custom-ai}.mdx (showcase.details; photos cho HRM, BoxAI)",
-      "src/content/solutions/en/hrm.mdx (caption hero tiếng Anh)",
-      "src/content/solutions/{vi,en}/*.mdx (brandName — title SEO + breadcrumb lấy từ MDX, bỏ map brand trong page.tsx)"
+      "deploy/nginx/ntasolution.vn.conf (MỚI — vhost domain phụ: block 80 apex proxy → 127.0.0.1:3005 + block www → 301 apex; certbot sinh block 443 trên VPS)",
+      "docs/runbook/deploy-vps.md (§3b: copy vhost → certbot -d apex -d www → nginx -t → reload + lệnh kiểm tra 2 hostname)",
+      ".context/project-config.md (thêm domain_secondary: ntasolution.vn)",
+      "SPECIFICATIONS.md (R-27 mở rộng + Overview note; spec 3.4.0 → 3.5.0)"
     ],
     "modules": [
-      "Trang chi tiết giải pháp HRM + AI (layer 2b)"
+      "Hạ tầng nginx + certbot trên VPS 187.52.119.50 (KHÔNG đổi code app, KHÔNG rebuild)"
     ]
   },
   "impact": {
     "direct": [
-      "/solutions/enterprise/hrm, /solutions/ai/boxai|flycam|custom-ai (vi/en): khung chung, tình huống sử dụng & chi tiết, ảnh (HRM 8 màn minh hoạ, BoxAI 2 ảnh hiện trường), FAQ, CTA, form liên hệ"
+      "https://ntasolution.vn/ và https://ntasolution.vn/en (vi/en) → 200, cùng nội dung site",
+      "https://www.ntasolution.vn/* → 301 https://ntasolution.vn/* (apex của chính nó)",
+      "http://ntasolution.vn/* và http://www.ntasolution.vn/* → 301 https:// (certbot)"
     ],
     "dependents": [
-      "/case-studies/oc-eo-learning",
-      "/case-studies/dental-clinic-operations",
-      "/solutions/enterprise/crm|dentgo|lms"
+      "https://ntavietnam.tech/* (canonical — không đổi hành vi, không đổi cert)"
     ],
     "regression": [
-      "Case study: HTML không đổi",
-      "HRM/AI: title, description, canonical, hreflang, og không đổi",
-      "BoxAI/Flycam vẫn có liên kết case study Óc Eo"
+      "canonical / og / hreflang / sitemap.xml / robots.txt / llms.txt vẫn trỏ ntavietnam.tech (KHÔNG được đổi)",
+      "ntavietnam.tech: 200, HTTPS, cert còn hạn (hạn 07/01/2027) — không đổi",
+      "/api/health và /api/contact chạy trên cả 2 hostname (cùng app; X-Forwarded-For/proxy headers giữ nguyên)",
+      "Container/app khác trên VPS shared (ismartschool, crm-dhp, tmfoods) không bị ảnh hưởng; KHÔNG có redirect giữa 2 domain"
     ]
   },
   "acceptance": [
-    "HRM: caption minh hoạ dưới ảnh hero (vi: Giao diện minh hoạ, en: Illustrative interface), đúng 3 tính năng, ảnh có chú thích minh hoạ",
-    "Mọi mục sections/useCases cũ hiển thị trong block tình huống sử dụng & chi tiết",
-    "Block thiếu data → ẩn (Flycam, Talvra không có carousel ảnh)"
+    "https://ntasolution.vn/ và https://ntasolution.vn/en trả 200 với nội dung site",
+    "www.ntasolution.vn → 301 apex ntasolution.vn (cả http lẫn https)",
+    "http:// → 301 https:// cho cả apex + www; cert Let's Encrypt hợp lệ cho cả 2 hostname (không còn SEC_E_WRONG_PRINCIPAL)",
+    "Trang trả về trên domain phụ vẫn có rel=canonical = https://ntavietnam.tech/... và KHÔNG redirect sang domain chính",
+    "ntavietnam.tech không đổi hành vi (200 / HTTPS / cert còn hạn)"
   ],
   "risk": "medium",
-  "regression_note": "Head, ld+json, breadcrumb 14 trang giải pháp identical với HEAD"
+  "regression_note": "Không đổi code app/build (NEXT_PUBLIC_SITE_URL build-time giữ nguyên ⇒ không rebuild, không đổi canonical). Rủi ro chính: sửa nginx trên VPS shared → bắt buộc `nginx -t` trước `reload`; chỉ THÊM vhost, không sửa vhost khác.",
+  "concurrency_note": "scopeVersion 26 (specVersion 3.4.0 · CR-004 shared-detail-showcase-template) còn in_progress — bản v26 nằm ở git HEAD (commit 344bf48). Khi CR-004 publish lại lúc close-out: đọc current.json tại thời điểm đó rồi tăng tiếp, ĐỪNG hardcode 27."
 }

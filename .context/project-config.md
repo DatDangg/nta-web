@@ -66,7 +66,8 @@ vps_host: 187.52.119.50        # ✅ VPS Ubuntu 24.04; shared: ismartschool/crm-
 vps_user: root
 vps_port: 22                   # SSH key auth (key hiện tại trên máy dev)
 vps_deploy_dir: /opt/actions-runner-nta-web/_work/nta-web/nta-web   # workspace self-hosted runner (CI deploy); manual fallback: clone bất kỳ
-domain: ntavietnam.tech  # ✅ live 09/10/2026 — DNS A → 187.52.119.50, HTTPS Let's Encrypt (cert hạn 07/01/2027), http→https 301
+domain: ntavietnam.tech  # ✅ live 09/10/2026 — DNS A → 187.52.119.50, HTTPS Let's Encrypt (cert hạn 07/01/2027), http→https 301; CANONICAL (NEXT_PUBLIC_SITE_URL / seo.ts / sitemap / robots / llms.txt / deploy.yml KHÔNG đổi)
+domain_secondary: ntasolution.vn  # ✅ 13/10/2026 — domain PHỤ (+ www) cùng nội dung, cùng app 127.0.0.1:3005; KHÔNG redirect giữa 2 domain; www → 301 apex (chỉ của chính nó); HTTPS Let's Encrypt apex+www; vhost deploy/nginx/ntasolution.vn.conf (xem docs/runbook/deploy-vps.md §3b)
 internal_port: 3005            # host 127.0.0.1:3005 → container 8080; nginx proxy
 
 # ── Monitoring ──
