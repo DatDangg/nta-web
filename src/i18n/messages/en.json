@@ -195,11 +195,20 @@
   },
   "contact": {
     "title": "Contact",
-    "intro": "Leave your details and the NTA team will reply within 1-2 business days.",
-    "labels": { "name": "Full name", "email": "Email", "phone": "Phone (optional)", "message": "Message" },
+    "intro": "Leave your details and the NTA team will reply within 24 hours.",
+    "labels": { "name": "Full name", "email": "Email", "phone": "Phone", "company": "Company / Organization", "need": "What do you need?", "message": "Message" },
     "helpers": { "name": "Enter 2-100 characters.", "email": "Enter an email address so we can reply.", "phone": "Optional, 9-15 digits.", "message": "Enter 10-2000 characters." },
-    "errors": { "name": "Please enter a name (2-100 characters).", "email": "Enter a valid email address.", "phone": "Phone must contain 9-15 digits.", "message": "Message must contain 10-2000 characters." },
-    "submit": "Send request", "submitting": "Sending…", "successTitle": "Request sent successfully", "success": "Sent. We will reply within 1-2 business days.", "sendAnother": "Send another request", "rateLimit": "You are sending requests too quickly. Please try again later.", "sendError": "We could not send your request. Please try again or contact our hotline.", "summary": "Please check the information you entered.", "retry": "Try again",
-    "consultationTitle": "Get a consultation"
+    "errors": { "name": "Please enter a name (2-100 characters).", "email": "Enter a valid email address.", "phone": "Please enter a phone number (9-15 digits).", "company": "Company name can be up to 150 characters.", "need": "Please choose what you need.", "message": "Message must contain 10-2000 characters.", "messageShort": "Message must contain 10-500 characters." },
+    "submit": "Send request", "submitting": "Sending…", "successTitle": "Request sent successfully", "success": "Sent. We will reply within 24 hours.", "sendAnother": "Send another request", "rateLimit": "You are sending requests too quickly. Please try again later.", "sendError": "We could not send your request. Please try again or contact our hotline.", "summary": "Please check the information you entered.", "retry": "Try again",
+    "consultationTitle": "Get a consultation",
+    "heroTitle": "Contact NTA", "heroLead": "Let's create", "heroAccent": "real-world value together",
+    "heroDescription": "We are always ready to listen and to partner with businesses and organizations on their journey of applying AI and digital transformation.",
+    "glassTitle": "Let's Build", "glassText": "Smarter Together",
+    "info": { "title": "Contact information", "phone": "Phone", "phoneNote": "Mon – Fri, 8:30 – 17:30", "email": "Email", "emailNote": "Reply within 24 hours", "address": "Address" },
+    "map": { "title": "Map of the NTA office — Kim Hoan Building, Lane 19 Duy Tan, Cau Giay, Hanoi", "open": "Open in Google Maps", "newTab": "(opens in a new tab)" },
+    "office": { "title": "NTA office", "parking": "Parking", "parkingNote": "Available in the building", "transit": "Easy to reach", "transitNote": "Near the Metro line", "central": "Central location", "centralNote": "Convenient to get around" },
+    "form": { "eyebrow": "Send us your details", "title": "Leave your contact details", "description": "Fill in the form and the NTA team will get back to you as soon as possible.", "submit": "Send message", "required": "required", "counter": "{count}/{max} characters entered" },
+    "placeholders": { "name": "John Nguyen", "email": "name@company.com", "phone": "0901 234 567", "company": "ABC Co., Ltd.", "need": "Choose an area of interest", "message": "Tell us more about your needs, project or questions..." },
+    "needs": { "crm": "CRM software", "dentgo": "DentGo dental clinic software", "lms": "LMS online learning platform", "hrm": "HRM human resources", "boxai": "BoxAI", "custom-ai": "Custom AI solution", "flycam": "Flycam", "custom-software": "Custom software development", "other": "Other" }
   }
 }

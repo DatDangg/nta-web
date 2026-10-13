@@ -25,8 +25,24 @@ modification (`page.tsx`, `ContactForm.tsx`, i18n, JSON-LD) + addition (componen
 - Lưu ý error-memory Error 7: không dùng opacity modifier trên màu `var()`.
 
 ## Acceptance Criteria
-- [ ] Khớp bố cục mockup ở 1440; 1024/768/390/375 không tràn ngang; `< lg` 1 cột (thông tin → form)
-- [ ] SĐT `tel:0335546831`, email `mailto:admin@ntasolution.vn`, địa chỉ đúng; bản đồ đúng vị trí, lazy, có `title`
-- [ ] SĐT + Nhu cầu bắt buộc, nội dung 10–500 + bộ đếm; đủ states Default/Validating/Submitting/Success/Error/429
-- [ ] 1 `h1`; label gắn đúng input; focus/keyboard OK; vi/en đủ chuỗi; 0 console error
-- [ ] JSON-LD có telephone/email/address; typecheck + lint + build PASS
+- [x] Khớp bố cục mockup ở 1440; 1024/768/390/375 không tràn ngang; `< lg` 1 cột (thông tin → form)
+- [x] SĐT `tel:0335546831`, email `mailto:admin@ntasolution.vn`, địa chỉ đúng; bản đồ đúng vị trí, lazy, có `title`
+- [x] SĐT + Nhu cầu bắt buộc, nội dung 10–500 + bộ đếm; đủ states Default/Validating/Submitting/Success/Error/429
+- [x] 1 `h1`; label gắn đúng input; focus/keyboard OK; vi/en đủ chuỗi; 0 console error
+- [x] JSON-LD có telephone/email/address; typecheck + lint + build PASS
+
+## Điều chỉnh so với plan
+- Hero dùng `GlassVisual` có sẵn (tile chat/headset/mail + thẻ "Let's Build / Smarter Together") thay vì tạo `ContactVisual` mới.
+- Thêm `ui/Select.tsx` + prop `showRequiredMark` / `counter` cho `Input`/`Textarea` (tương thích ngược); thêm 6 icon vào `listing/icons.tsx`.
+- `contact.success`/`intro` đổi "1-2 ngày làm việc" → "24h" theo quyết định user (áp dụng cả CTA form).
+
+## Feature Verification
+- Acceptance: **PASS** · Reviewer: **PASS NORMAL (round 1)** — 0 CRITICAL/MAJOR, 4 MINOR
+- Verify: `bash tools/linux-build.sh verify` = typecheck PASS · lint PASS · build PASS
+- Playwright (snapshot `next start`): 1440/1024/768(en)/390, luồng validate + gửi thành công, JSON-LD, link tel/mailto, iframe lazy
+- Doc impact: no doc impact (UI; API đã cập nhật ở task 01)
+
+## Review
+| Round | Verdict | Report |
+|---|---|---|
+| 1 | **PASS NORMAL** | `.context/review-reports/feature-contact-page-redesign-phase-1-task-02-round-1-review.md` |

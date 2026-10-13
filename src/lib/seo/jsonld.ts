@@ -1,9 +1,31 @@
 import { BASE_URL as SITE_URL } from '@/lib/seo';
+import { COMPANY_CONTACT } from '@/lib/contact/company-info';
+
+/** Thông tin liên hệ của Organization (R-10 §6) — cùng nguồn với trang Liên hệ + Footer. */
+function organizationContact() {
+  const { phone, email, address } = COMPANY_CONTACT;
+  return {
+    telephone: phone.e164,
+    email: email.display,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: address.streetAddress,
+      addressLocality: address.addressLocality,
+      addressRegion: address.addressRegion,
+      addressCountry: address.addressCountry,
+    },
+    contactPoint: {
+      '@type': 'ContactPoint', contactType: 'customer service',
+      telephone: phone.e164, email: email.display, availableLanguage: ['vi', 'en'],
+    },
+  };
+}
 
 export function createOrganizationJsonLd() {
   return {
     '@context': 'https://schema.org', '@type': 'Organization', name: 'NTA',
     url: SITE_URL, logo: `${SITE_URL}/images/brand/logo-square.png`,
+    ...organizationContact(),
   };
 }
 
@@ -38,5 +60,6 @@ export function createContactPageJsonLd(locale: string) {
     '@context': 'https://schema.org', '@type': 'ContactPage',
     url: `${SITE_URL}${locale === 'en' ? '/en' : ''}/contact`,
     name: locale === 'en' ? 'Contact NTA' : 'Liên hệ NTA',
+    mainEntity: { '@type': 'Organization', name: 'NTA', url: SITE_URL, ...organizationContact() },
   };
 }

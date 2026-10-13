@@ -4,9 +4,9 @@
     "type": "feature",
     "slug": "contact-page-redesign",
     "phase": 1,
-    "task": "phase-1-task-02",
+    "task": "phase-1-task-03",
     "status": "in_progress",
-    "note": "CR-008 — plan đã duyệt 13/10/2026; task 01 done."
+    "note": "CR-008 — task 01, 02 done."
   },
   "features": [
     {
@@ -887,10 +887,10 @@
       "specVersion": "3.6.0",
       "tasks": {
         "phase-1-task-01": "done",
-        "phase-1-task-02": "pending",
+        "phase-1-task-02": "done",
         "phase-1-task-03": "pending"
       },
-      "note": "CR-008 — task 01 done (API + dữ liệu liên hệ), đang task 02",
+      "note": "CR-008 — task 02 done (UI /contact), đang task 03 (Footer + close-out)",
       "updatedAt": "2026-10-13"
     },
     {

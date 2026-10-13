@@ -195,11 +195,20 @@
   },
   "contact": {
     "title": "Liên hệ",
-    "intro": "Để lại thông tin, đội ngũ NTA phản hồi trong 1-2 ngày làm việc.",
-    "labels": { "name": "Họ và tên", "email": "Email", "phone": "Số điện thoại", "message": "Nội dung" },
+    "intro": "Để lại thông tin, đội ngũ NTA phản hồi trong 24h.",
+    "labels": { "name": "Họ và tên", "email": "Email", "phone": "Số điện thoại", "company": "Tên doanh nghiệp / Tổ chức", "need": "Nhu cầu của bạn", "message": "Nội dung liên hệ" },
     "helpers": { "name": "Tên gồm 2-100 ký tự.", "email": "Nhập địa chỉ email để chúng tôi phản hồi.", "phone": "Không bắt buộc, gồm 9-15 chữ số.", "message": "Nội dung gồm 10-2000 ký tự." },
-    "errors": { "name": "Vui lòng nhập họ tên (2-100 ký tự).", "email": "Email không hợp lệ.", "phone": "Số điện thoại gồm 9-15 chữ số.", "message": "Nội dung gồm 10-2000 ký tự." },
-    "submit": "Gửi yêu cầu", "submitting": "Đang gửi…", "successTitle": "Gửi yêu cầu thành công", "success": "Đã gửi. Chúng tôi sẽ phản hồi trong 1-2 ngày làm việc.", "sendAnother": "Gửi yêu cầu khác", "rateLimit": "Bạn gửi quá nhanh. Vui lòng thử lại sau.", "sendError": "Không gửi được. Vui lòng thử lại hoặc liên hệ hotline.", "summary": "Vui lòng kiểm tra lại các thông tin đã nhập.", "retry": "Thử lại",
-    "consultationTitle": "Nhận tư vấn"
+    "errors": { "name": "Vui lòng nhập họ tên (2-100 ký tự).", "email": "Email không hợp lệ.", "phone": "Vui lòng nhập số điện thoại (9-15 chữ số).", "company": "Tên doanh nghiệp tối đa 150 ký tự.", "need": "Vui lòng chọn nhu cầu.", "message": "Nội dung gồm 10-2000 ký tự.", "messageShort": "Nội dung gồm 10-500 ký tự." },
+    "submit": "Gửi yêu cầu", "submitting": "Đang gửi…", "successTitle": "Gửi yêu cầu thành công", "success": "Đã gửi. Chúng tôi sẽ phản hồi trong 24h.", "sendAnother": "Gửi yêu cầu khác", "rateLimit": "Bạn gửi quá nhanh. Vui lòng thử lại sau.", "sendError": "Không gửi được. Vui lòng thử lại hoặc liên hệ hotline.", "summary": "Vui lòng kiểm tra lại các thông tin đã nhập.", "retry": "Thử lại",
+    "consultationTitle": "Nhận tư vấn",
+    "heroTitle": "Liên hệ với NTA", "heroLead": "Cùng tạo nên những", "heroAccent": "giá trị thực tiễn",
+    "heroDescription": "Chúng tôi luôn sẵn sàng lắng nghe và đồng hành cùng doanh nghiệp, tổ chức trong hành trình ứng dụng AI và chuyển đổi số.",
+    "glassTitle": "Let's Build", "glassText": "Smarter Together",
+    "info": { "title": "Thông tin liên hệ", "phone": "Điện thoại", "phoneNote": "Thứ 2 – Thứ 6, 8:30 – 17:30", "email": "Email", "emailNote": "Phản hồi trong 24h", "address": "Địa chỉ" },
+    "map": { "title": "Bản đồ văn phòng NTA — tòa nhà Kim Hoàn, ngõ 19 Duy Tân, Cầu Giấy, Hà Nội", "open": "Mở Google Maps", "newTab": "(mở tab mới)" },
+    "office": { "title": "Văn phòng NTA", "parking": "Bãi đỗ xe", "parkingNote": "Có tại tòa nhà", "transit": "Giao thông thuận tiện", "transitNote": "Gần tuyến Metro", "central": "Vị trí trung tâm", "centralNote": "Dễ dàng di chuyển" },
+    "form": { "eyebrow": "Gửi thông tin cho chúng tôi", "title": "Để lại thông tin liên hệ", "description": "Vui lòng điền thông tin, đội ngũ NTA sẽ liên hệ lại trong thời gian sớm nhất.", "submit": "Gửi liên hệ", "required": "bắt buộc", "counter": "Đã nhập {count}/{max} ký tự" },
+    "placeholders": { "name": "Nguyễn Văn A", "email": "name@company.com", "phone": "0901 234 567", "company": "Công ty TNHH ABC", "need": "Chọn lĩnh vực quan tâm", "message": "Chia sẻ thêm về nhu cầu, dự án hoặc câu hỏi của bạn..." },
+    "needs": { "crm": "Phần mềm CRM", "dentgo": "Phần mềm nha khoa DentGo", "lms": "Hệ thống đào tạo trực tuyến LMS", "hrm": "Quản trị nhân sự HRM", "boxai": "BoxAI", "custom-ai": "Giải pháp AI theo yêu cầu", "flycam": "Flycam", "custom-software": "Phát triển phần mềm theo yêu cầu", "other": "Khác" }
   }
 }
