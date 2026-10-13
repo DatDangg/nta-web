@@ -17,6 +17,7 @@
 | CR-007 | Ảnh chụp staging CRM/DentGo/LMS (dữ liệu giả) + dựng thêm màn HRM cho trang chi tiết giải pháp (tách từ CR-004) | ADDITIVE | pending (chờ link + tài khoản staging, chốt màn HRM) | `2026-10-13-solution-detail-screenshots.md` | 2026-10-13 | |
 | CR-008 | Thiết kế lại UI trang Liên hệ theo mockup + cập nhật SĐT/email/địa chỉ thật (Kim Hoàn, ngõ 19 Duy Tân) | MODIFY + ADDITIVE | done (spec 3.6.0 · scope v32) | `archive/2026-10-13-contact-page-redesign.md` | 2026-10-13 | 2026-10-13 |
 | CR-009 | Dải chữ chạy trang chủ: bỏ chữ đậm + thêm icon từng mục (theo ảnh mẫu) | MODIFY (UI) | done (no spec delta) | `archive/2026-10-13-home-marquee-icons.md` | 2026-10-13 | 2026-10-13 |
+| CR-010 | Header: dropdown "Giải pháp" thành mega menu 2 cột theo mockup | MODIFY (UI) | done (no spec delta) | `archive/2026-10-13-header-solutions-megamenu.md` | 2026-10-13 | 2026-10-13 |
 
 ## Quy tắc tracking
 

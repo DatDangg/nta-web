@@ -904,13 +904,13 @@
     },
     {
       "slug": "header-solutions-megamenu",
-      "status": "in_progress",
-      "changeFile": "spec/changes/2026-10-13-header-solutions-megamenu.md",
+      "status": "done",
+      "changeFile": "spec/changes/archive/2026-10-13-header-solutions-megamenu.md",
       "classification": "MODIFY",
       "tasks": {
-        "phase-1-task-01": "pending"
+        "phase-1-task-01": "done"
       },
-      "note": "CR-010 — mega menu Giải pháp; chờ user duyệt plan",
+      "note": "CR-010 — mega menu Giải pháp 2 cột, dữ liệu giải pháp thật; no spec delta",
       "updatedAt": "2026-10-13"
     }
   ],

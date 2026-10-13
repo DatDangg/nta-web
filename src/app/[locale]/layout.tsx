@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
+import { getSolutionsMenu } from '@/lib/content/solutions-menu';
 import { createOrganizationJsonLd, createWebSiteJsonLd } from '@/lib/seo/jsonld';
 import { BASE_URL } from '@/lib/seo';
 import { Inter } from 'next/font/google';
@@ -69,7 +70,7 @@ export default async function LocaleLayout({
           <a className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-modal focus:rounded-full focus:bg-background focus:px-4 focus:py-3 focus:text-primary" href="#main">
             {locale === 'vi' ? 'Bỏ qua tới nội dung' : 'Skip to content'}
           </a>
-          <Header />
+          <Header solutionGroups={await getSolutionsMenu(locale)} />
           <main id="main" tabIndex={-1}>{children}</main>
           <Footer />
           <ScrollTopButton />
