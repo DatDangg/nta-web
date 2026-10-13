@@ -1,26 +1,15 @@
 {
   "specVersion": "3.10.0",
-  "scopeVersion": 37,
-  "generatedAt": "2026-10-13T23:30:00+07:00",
-  "trigger": "feature-update",
-  "workItem": "feature-about-page-redesign",
+  "scopeVersion": 38,
+  "generatedAt": "2026-10-14T00:30:00+07:00",
+  "trigger": "bug-fix",
+  "workItem": "feature-about-hero-polish",
   "specRefs": [
-    "R-04a",
-    "R-04"
+    "R-04a"
   ],
   "changed": {
     "files": [
-      "src/components/about/AboutHero.tsx (MỚI — hero 2 cột + chỉ số + ảnh tòa Kim Hoàn)",
-      "src/components/about/AboutValues.tsx (MỚI — Sứ mệnh/Tầm nhìn/Giá trị cốt lõi)",
-      "src/components/about/AboutPeople.tsx (MỚI — Con người NTA, ảnh AI tạm)",
-      "src/components/about/MissionBlock.tsx (XOÁ)",
-      "src/components/about/TeamGrid.tsx (id=\"team\")",
-      "src/components/listing/icons.tsx (+ icon target/eye/gem)",
-      "src/app/[locale]/about/page.tsx",
-      "src/i18n/messages/vi.json",
-      "src/i18n/messages/en.json",
-      "public/images/about/building-kim-hoan.webp (MỚI)",
-      "public/images/about/team-people-temp.webp (MỚI, ảnh tạm)"
+      "src/components/about/AboutHero.tsx (fix HeroWaves h-[720px] → h-full + overflow-hidden; ảnh Kim Hoàn bỏ bo góc/shadow, viền fade mask-image, desktop bleed mép phải)"
     ],
     "modules": [
       "Module 2 — Về NTA /about"
@@ -28,27 +17,19 @@
   },
   "impact": {
     "direct": [
-      "/about và /en/about: hero 2 cột — breadcrumb pill, H1 \"Về NTA\"/\"About NTA\" (NTA màu brand), tagline, mô tả, 3 chỉ số 50+/30+/99% có icon, ảnh tòa Kim Hoàn thật bên phải (mobile: dưới chữ)",
-      "Khối sứ mệnh: eyebrow \"Sứ mệnh của chúng tôi\" + H2 + 3 thẻ Sứ mệnh · Tầm nhìn · Giá trị cốt lõi (4 bullet); mobile 1 cột",
-      "Khối Con người NTA: ảnh đội ngũ + H2 + mô tả + nút \"Tìm hiểu thêm về đội ngũ →\" cuộn tới khối Đội ngũ (#team)",
-      "Chỉ 1 h1 trên trang; nội dung song ngữ đúng ngôn ngữ",
+      "/about và /en/about: 3 thẻ Sứ mệnh · Tầm nhìn · Giá trị cốt lõi hiện đủ viền trên + bo góc (trước bị lớp nền hero đè) ở 375/768/1280px",
+      "Không còn khoảng trắng thừa lớn dưới hàng chỉ số 50+/30+/99% của hero",
+      "Ảnh tòa Kim Hoàn: không bo góc/không bóng; viền mờ tan vào nền (desktop: chạm mép phải viewport, mép trái + dưới fade; mobile: gọn trong container, fade nhẹ 4 cạnh)",
       "Mobile 375px: không tràn ngang (scrollWidth == clientWidth)"
     ],
     "dependents": [
-      "Khối Năng lực, Đội ngũ, Cột mốc, Đối tác, CTA vẫn hiển thị bên dưới theo thứ tự cũ",
-      "Metadata title/description/canonical/hreflang + BreadcrumbList JSON-LD không đổi"
-    ],
-    "regression": [
-      "Các trang dùng ListingIcon (/products, /solutions/*, /case-studies, /blog) icon cũ không đổi",
-      "Breadcrumb pill / ListingHero trên trang danh sách không đổi",
-      "Header/footer link /about vẫn hoạt động"
+      "ListingHero (/solutions, /products, /case-studies, /blog) và DetailHero dùng chung HeroWaves — HeroWaves không đổi, hero các trang này phải giữ nguyên"
     ]
   },
   "acceptance": [
-    "Bố cục hero / sứ mệnh / con người khớp mockup ở desktop; mobile 1 cột, không tràn ngang",
-    "Ảnh tòa nhà = ảnh Kim Hoàn thật (webp, next/image, alt VI/EN)",
-    "Ảnh đội ngũ = ảnh AI tạm",
-    "Đủ nội dung VI + EN, metadata/breadcrumb JSON-LD giữ nguyên",
+    "Thẻ Sứ mệnh/Tầm nhìn/Giá trị cốt lõi đủ viền ở 375/768/1280px; không có khoảng trắng thừa dưới hero",
+    "Ảnh tòa nhà viền mờ tan vào nền như mockup ở desktop; mobile gọn, không tràn ngang",
+    "ListingHero/DetailHero không đổi",
     "typecheck/lint/build PASS"
   ],
   "risk": "low"
