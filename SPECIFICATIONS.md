@@ -1,5 +1,5 @@
 ---
-spec_version: 3.5.1
+spec_version: 3.6.0
 updated_at: 2026-10-13
 ---
 
@@ -210,15 +210,36 @@ _(cập nhật 2026-10-13: thêm **domain phụ** `ntasolution.vn` (+ `www`) ph�
 
 ### Module 8 — Liên hệ
 
-- **R-10:** `/contact`: form (tên, email, SĐT, nội dung) + hotline + map + thông tin công ty;
-  states: Default / Validating / Submitting / Success / Error.
-  `[reverse-engineered from docs]` — nguồn: `docs/BRD.md:108-110` (FR-070), `docs/DESIGN.md:125-128`
-- `[cần xác nhận]` hotline/email/địa chỉ thật + form gửi về đâu (`docs/BRD.md:174-176`)
+- **R-10:** `/contact` (+ `/en/contact`) bố cục theo mockup
+  `spec/changes/assets/2026-10-13-contact-page-redesign/mockup-contact.png` (CR-008, spec 3.6.0):
+  1. **Hero** — nền sóng dùng chung, breadcrumb pill (Trang chủ › Liên hệ), tiêu đề 2 dòng
+     "Liên hệ với NTA" / "Cùng tạo nên những **giá trị thực tiễn**" (phần nhấn màu primary), mô tả ngắn,
+     minh hoạ trang trí bên phải (`aria-hidden`, chỉ `lg+`).
+  2. **Card thông tin (cột trái desktop)** — 3 mục có icon:
+     Điện thoại `0335546831` (link `tel:`, phụ: "Thứ 2 – Thứ 6, 8:30 – 17:30") ·
+     Email `admin@ntasolution.vn` (link `mailto:`, phụ: "Phản hồi trong 24h") ·
+     Địa chỉ "Tầng 2, tòa nhà Kim Hoàn, ngõ 19 Duy Tân, Cầu Giấy, Hà Nội, Việt Nam".
+     Bản đồ Google Maps nhúng (iframe không API key, `loading="lazy"`, có `title`) trỏ đúng địa chỉ trên
+     + link "Mở Google Maps" (tab mới). Mục "Văn phòng NTA": Bãi đỗ xe (có tại tòa nhà) ·
+     Giao thông thuận tiện (gần tuyến Metro) · Vị trí trung tâm (dễ dàng di chuyển).
+  3. **Card form (cột phải desktop)** — eyebrow "Gửi thông tin cho chúng tôi", tiêu đề "Để lại thông tin liên hệ", mô tả;
+     trường: Họ và tên* · Email* · Số điện thoại* · Tên doanh nghiệp/Tổ chức (tuỳ chọn, ≤150 ký tự) ·
+     Nhu cầu của bạn* (select: Phần mềm CRM · Phần mềm nha khoa DentGo · Hệ thống đào tạo trực tuyến LMS ·
+     Quản trị nhân sự HRM · BoxAI · Giải pháp AI theo yêu cầu · Flycam · Phát triển phần mềm theo yêu cầu · Khác) ·
+     Nội dung liên hệ* (10–500 ký tự, bộ đếm `n/500`). Lưới 2 cột ở `md+`, 1 cột mobile. Không dùng reCAPTCHA
+     (chống spam = honeypot + rate-limit, R-13). Nút "Gửi liên hệ →".
+  4. States giữ nguyên: Default / Validating / Submitting / Success / Error (+ rate-limit) — validate từng trường khi blur,
+     tóm tắt lỗi có link tới trường, focus vào tóm tắt lỗi/tiêu đề thành công.
+  5. **Responsive:** `< lg` xếp 1 cột: card thông tin → card form; không tràn ngang ở 390/375.
+  6. **SEO:** JSON-LD `ContactPage` + `Organization` có `telephone`, `email`, `address` (PostalAddress) khớp mục 2.
+  `[reverse-engineered from docs]` — nguồn gốc: `docs/BRD.md:108-110` (FR-070); thông tin liên hệ do user cung cấp 13/10/2026.
+- `[cần xác nhận]` form gửi về đâu (`docs/BRD.md:176`) — hotline/email/địa chỉ đã chốt ở R-10 §2 (13/10/2026).
 
 ### Module 9 — Điều hướng & Footer
 
 - **R-11:** Header nav (desktop ngang + mobile hamburger/drawer, sticky, active state) + Footer
   (4 cột desktop, pháp lý + social + liên hệ), hoạt động mọi breakpoint.
+  Footer hiển thị SĐT (`tel:`), email (`mailto:`) và địa chỉ văn phòng giống R-10 §2 (1 nguồn dữ liệu dùng chung) — spec 3.6.0.
   `[reverse-engineered from docs]` — nguồn: `docs/BRD.md:113-115` (FR-080), `docs/DESIGN.md:147,219-223`
 - **R-12:** Trang 404: NotFoundMessage + HomeLink (+ SearchHint nếu có).
   `[reverse-engineered from docs]` — nguồn: `docs/DESIGN.md:130-132`
@@ -230,6 +251,11 @@ Base URL: dev `http://localhost:3000/api` · prod `https://ntavietnam.tech/api` 
 - **R-13:** `POST /api/contact` — nhận form (name bắt buộc 2–100 ký tự, email bắt buộc, phone tuỳ chọn
   9–15 số, message bắt buộc 10–2000 ký tự, honeypot phải rỗng). Response: `200 {status:"ok"}` /
   `400 {status:"error",errors}` / `429 {status:"error",message}`.
+  Spec 3.6.0 (CR-008): thêm field tuỳ chọn `company` (chuỗi ≤150 ký tự) và `need` (1 trong các key
+  `crm|dentgo|lms|hrm|boxai|custom-ai|flycam|custom-software|other`); có gửi mà sai → 400 kèm `errors.company|need`.
+  Hai field được chuyển tiếp sang `CONTACT_FORM_TARGET`. Mức bắt buộc riêng của form `/contact`
+  (phone + need bắt buộc, message ≤500) kiểm ở client (R-10 §3); API giữ tuỳ chọn để form CTA rút gọn ở trang giải pháp
+  (name/email/message) vẫn gửi được.
   `[reverse-engineered from docs]` — nguồn: `docs/API_SPEC.md:40-61`
   - `[cần xác nhận]` rate-limit threshold (request/window) chưa doc nào định nghĩa — `docs/API_SPEC.md:60`
 - **R-14:** `GET /api/health` — `{status:"ok",timestamp}` cho health check / uptime (docker-vps).
@@ -311,7 +337,7 @@ Base URL: dev `http://localhost:3000/api` · prod `https://ntavietnam.tech/api` 
 ## `[cần xác nhận]` (Open Questions — chưa phải requirement chốt)
 
 1. Logo NTA + brand color chính thức (`docs/BRD.md:173`) — hiện dùng palette neutral light tạm (`docs/BRD.md:166`).
-2. Hotline / email / địa chỉ thật (`docs/BRD.md:174`).
+2. ~~Hotline / email / địa chỉ thật (`docs/BRD.md:174`)~~ — ĐÃ CHỐT 13/10/2026 (R-10 §2, CR-008).
 3. Danh sách sản phẩm & case study ưu tiên (`docs/BRD.md:175`).
 4. Form liên hệ gửi về đâu — email / CRM / Google Sheet (`docs/BRD.md:176`) — giải quyết Conflict C2.
 5. Blog có cần CMS thật hay trang tĩnh (`docs/BRD.md:177`).

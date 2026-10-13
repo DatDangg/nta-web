@@ -2,8 +2,11 @@
   "mode": "feature",
   "activeWorkItem": {
     "type": "feature",
-    "slug": "add-domain-ntasolution",
-    "note": "CR-005 đã DONE + archive (13/10/2026) — không có work item active nào đang chạy. Các CR còn chờ: CR-001 blocked (chờ duyệt danh sách ảnh), CR-007 pending (chờ link + tài khoản staging), CR-004/CR-006 đã done bởi session khác. Mở việc mới → /change <slug>."
+    "slug": "contact-page-redesign",
+    "phase": 1,
+    "task": "phase-1-task-02",
+    "status": "in_progress",
+    "note": "CR-008 — plan đã duyệt 13/10/2026; task 01 done."
   },
   "features": [
     {
@@ -874,6 +877,20 @@
       "changeFile": "spec/changes/2026-10-13-solution-detail-screenshots.md",
       "classification": "ADDITIVE",
       "note": "CR-007 tách từ CR-004 — chờ link + tài khoản staging, chốt màn HRM",
+      "updatedAt": "2026-10-13"
+    },
+    {
+      "slug": "contact-page-redesign",
+      "status": "in_progress",
+      "changeFile": "spec/changes/2026-10-13-contact-page-redesign.md",
+      "classification": "MODIFY + ADDITIVE",
+      "specVersion": "3.6.0",
+      "tasks": {
+        "phase-1-task-01": "done",
+        "phase-1-task-02": "pending",
+        "phase-1-task-03": "pending"
+      },
+      "note": "CR-008 — task 01 done (API + dữ liệu liên hệ), đang task 02",
       "updatedAt": "2026-10-13"
     },
     {

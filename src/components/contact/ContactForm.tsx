@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/Input';
 import { Textarea } from '@/components/ui/Textarea';
 import { useContactForm, type ContactField } from '@/lib/contact/useContactForm';
 
-const FIELDS: ContactField[] = ['name', 'email', 'phone', 'message'];
+const FIELDS = ['name', 'email', 'phone', 'message'] as const satisfies readonly ContactField[];
 
 export function ContactForm() {
   const t = useTranslations('contact');

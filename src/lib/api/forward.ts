@@ -15,6 +15,8 @@ export async function forwardContactForm(contact: ContactForm): Promise<void> {
       name: contact.name,
       email: contact.email,
       phone: contact.phone,
+      company: contact.company,
+      need: contact.need,
       message: contact.message,
     }),
     signal: AbortSignal.timeout(FORWARD_TIMEOUT_MS),

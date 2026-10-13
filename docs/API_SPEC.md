@@ -44,10 +44,16 @@ Không có auth người dùng ở v1. Chi tiết hardening form/rate-limit: `sk
   "name": "string (bắt buộc, 2–100 ký tự)",
   "email": "string (bắt buộc, định dạng email)",
   "phone": "string (tuỳ chọn, 9–15 số)",
+  "company": "string (tuỳ chọn, ≤150 ký tự) — Tên doanh nghiệp/Tổ chức",
+  "need": "crm|dentgo|lms|hrm|boxai|custom-ai|flycam|custom-software|other (tuỳ chọn) — Nhu cầu",
   "message": "string (bắt buộc, 10–2000 ký tự)",
   "honeypot": "" // trường ẩn chống spam — phải rỗng
 }
 ```
+
+`company` / `need` thêm ở spec 3.6.0 (CR-008), được chuyển tiếp nguyên trạng sang `CONTACT_FORM_TARGET`.
+Form trang `/contact` bắt buộc thêm `phone` + `need` và giới hạn `message` ≤500 ở client; API giữ tuỳ chọn để form CTA
+rút gọn (name/email/message) ở trang chi tiết giải pháp vẫn hợp lệ. Danh sách key `need`: `src/lib/contact/company-info.ts`.
 
 ### POST /api/contact — response
 
