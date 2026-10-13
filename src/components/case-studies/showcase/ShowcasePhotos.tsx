@@ -1,9 +1,12 @@
 'use client';
 
 import Image from 'next/image';
-import { useId, useRef } from 'react';
+import { useId, useRef, useState } from 'react';
+import type { MouseEvent } from 'react';
+import { useTranslations } from 'next-intl';
 import type { CaseStudyShowcase } from '@/content/types';
 import { Container } from '@/components/ui/Container';
+import { Lightbox } from '@/components/ui/Lightbox';
 import { Eyebrow } from './icons';
 
 type Props = { photos: NonNullable<CaseStudyShowcase['photos']> };
@@ -13,10 +16,14 @@ const ARROW_CLASS = 'flex size-11 items-center justify-center rounded-full borde
 /**
  * Carousel ảnh khu di tích: scroll-snap ngang + 2 nút trước/sau (bàn phím/touch vẫn cuộn được).
  * `caption` (BR-004) hiển thị dưới dải ảnh khi ảnh là minh hoạ, chưa phải ảnh chụp thực tế.
+ * Bấm ảnh → `Lightbox` phóng to tại ảnh đó; đóng xong focus quay về đúng nút ảnh đã bấm.
  */
 export function ShowcasePhotos({ photos }: Props) {
   const trackRef = useRef<HTMLUListElement>(null);
+  const openerRef = useRef<HTMLButtonElement | null>(null);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const titleId = useId();
+  const t = useTranslations('common.lightbox');
   if (photos.items.length === 0) return null;
   const isScreen = photos.variant === 'screen';
   const isPhone = photos.variant === 'phone';
@@ -30,6 +37,16 @@ export function ShowcasePhotos({ photos }: Props) {
     if (!track) return;
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     track.scrollBy({ left: direction * track.clientWidth * 0.8, behavior: reduced ? 'auto' : 'smooth' });
+  };
+
+  const openLightbox = (index: number, event: MouseEvent<HTMLButtonElement>) => {
+    openerRef.current = event.currentTarget;
+    setLightboxIndex(index);
+  };
+
+  const closeLightbox = () => {
+    setLightboxIndex(null);
+    openerRef.current?.focus();
   };
 
   return (
@@ -55,14 +72,22 @@ export function ShowcasePhotos({ photos }: Props) {
           ref={trackRef}
           tabIndex={0}
         >
-          {photos.items.map((photo) => (
+          {photos.items.map((photo, index) => (
             <li className={`relative shrink-0 snap-start overflow-hidden ${itemClass}`} key={photo.src} style={isPhone ? { aspectRatio: photos.aspect ?? '9/16' } : undefined}>
-              <Image alt={photo.alt} className={`object-cover transition-transform duration-slow hover:scale-[1.03] ${isScreen ? 'object-left-top' : ''} ${isPhone ? 'object-top' : ''}`} fill sizes={imageSizes} src={photo.src} />
+              <button
+                aria-label={t('open', { alt: photo.alt })}
+                className="absolute inset-0 block cursor-zoom-in rounded-[inherit] focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus"
+                onClick={(event) => openLightbox(index, event)}
+                type="button"
+              >
+                <Image alt={photo.alt} className={`object-cover transition-transform duration-slow hover:scale-[1.03] ${isScreen ? 'object-left-top' : ''} ${isPhone ? 'object-top' : ''}`} fill sizes={imageSizes} src={photo.src} />
+              </button>
             </li>
           ))}
         </ul>
         {photos.caption && <p className="mt-3 text-xs text-text-secondary">{photos.caption}</p>}
       </Container>
+      <Lightbox index={lightboxIndex} items={photos.items} onClose={closeLightbox} onIndexChange={setLightboxIndex} />
     </section>
   );
 }

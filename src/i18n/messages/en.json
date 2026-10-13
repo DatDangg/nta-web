@@ -10,6 +10,14 @@
       "bulletConsulting": "In-depth consulting",
       "bulletSolution": "A suitable solution",
       "bulletDeploy": "Fast deployment"
+    },
+    "lightbox": {
+      "open": "Enlarge image: {alt}",
+      "label": "Enlarged image viewer",
+      "close": "Close",
+      "prev": "Previous image",
+      "next": "Next image",
+      "counter": "{current} / {total}"
     }
   },
   "nav": {

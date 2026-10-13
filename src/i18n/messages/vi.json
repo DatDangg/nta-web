@@ -10,6 +10,14 @@
       "bulletConsulting": "Tư vấn chuyên sâu",
       "bulletSolution": "Giải pháp phù hợp",
       "bulletDeploy": "Triển khai nhanh chóng"
+    },
+    "lightbox": {
+      "open": "Phóng to ảnh: {alt}",
+      "label": "Xem ảnh phóng to",
+      "close": "Đóng",
+      "prev": "Ảnh trước",
+      "next": "Ảnh sau",
+      "counter": "{current} / {total}"
     }
   },
   "nav": {

@@ -2,8 +2,10 @@
   "mode": "feature",
   "activeWorkItem": {
     "type": "feature",
-    "slug": "solution-detail-screenshots",
-    "note": "CR-007 DONE + archive (13/10/2026). Không có work item active."
+    "slug": "image-lightbox-case-study-card",
+    "phaseTask": "phase-1-task-02",
+    "journal": ".context/runs/feature-image-lightbox-case-study-card-phase-1-task-02.md",
+    "note": "CR-013 task 01 done; task 02 tiếp theo"
   },
   "features": [
     {
@@ -965,6 +967,22 @@
         "report": ".context/review-reports/feature-solution-detail-screenshots-phase-1-task-01-round-2-review.md"
       },
       "note": "CR-007 — HRM thêm 4 màn mockup (10–13); task 02 chụp staging CRM/DentGo/LMS",
+      "updatedAt": "2026-10-13"
+    },
+    {
+      "slug": "image-lightbox-case-study-card",
+      "status": "in_progress",
+      "changeFile": "spec/changes/2026-10-13-image-lightbox-case-study-card.md",
+      "classification": "MODIFY + ADDITIVE (UI)",
+      "tasks": {
+        "phase-1-task-01": "done",
+        "phase-1-task-02": "pending"
+      },
+      "reviewer": {
+        "result": "PASS",
+        "report": ".context/review-reports/feature-image-lightbox-case-study-card-phase-1-task-01-round-1-review.md"
+      },
+      "note": "CR-013 — task 01 lightbox done (review STRICT PASS, build PASS); task 02 thẻ /case-studies pending",
       "updatedAt": "2026-10-13"
     }
   ],
