@@ -14,8 +14,8 @@ export const cardPosterImageClass = 'aspect-[9/16] w-full rounded-lg bg-surface-
  * Khung ảnh cho **thẻ dùng ảnh giao diện thật** (change `2026-10-12-solution-card-real-images`).
  *
  * Tách riêng `cardImageClass` vì khung này **cắt đáy** để mọi thẻ cao đều nhau, còn
- * `cardImageClass` dùng `object-cover` cho ảnh SVG phẳng (thẻ case study, fallback `AppCard`).
- * KHÔNG gộp: đổi khung này sẽ kéo theo `AppCard` / `CaseStudyCard`.
+ * `cardImageClass` dùng `object-cover` cho ảnh SVG phẳng (thẻ case study).
+ * KHÔNG gộp: đổi khung này sẽ kéo theo `CaseStudyCard`.
  */
 export const cardShotFrameClass = 'aspect-[16/10] w-full overflow-hidden rounded-t-lg bg-surface-sunken';
 export const cardImageWideClass = 'aspect-[16/9] w-full rounded-lg bg-surface-sunken object-cover';

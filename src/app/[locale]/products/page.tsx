@@ -1,16 +1,13 @@
 import type { Metadata } from 'next';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
-import { AppCard } from '@/components/cards/AppCard';
-import { ComingSoonBadge, DownloadLinks, hasDownloadUrl } from '@/components/products/DownloadLinks';
-import { ScreenshotCarousel } from '@/components/products/ScreenshotCarousel';
+import { hasDownloadUrl } from '@/components/products/DownloadLinks';
 import { CTABanner } from '@/components/shared/CTABanner';
 import { GlassVisual } from '@/components/listing/GlassVisual';
 import { ListingExplorer } from '@/components/listing/ListingExplorer';
 import { ListingHero } from '@/components/listing/ListingHero';
 import type { ListingItem } from '@/components/listing/types';
 import { listingCtas, listingItems, listingLabels, listingPages } from '@/content/listings';
-import { Reveal } from '@/components/ui/Reveal';
 import type { Locale, Product } from '@/content/types';
 import { getAllProducts } from '@/lib/content/products';
 import { productSlugs } from '@/lib/content/slug';
@@ -87,34 +84,6 @@ export default async function ProductsPage({ params }: { params: Promise<{ local
           labels={{ ...listingLabels[locale], searchPlaceholder: copy.searchPlaceholder }}
         />
       </ListingHero>
-      <section aria-labelledby="product-details-title" className="bg-background-alt py-12 md:py-16 xl:py-24">
-        <div className="mx-auto grid w-full max-w-container grid-cols-1 gap-8 px-4 sm:px-6 lg:gap-12 lg:px-8">
-          <h2 className="text-h2 font-bold tracking-tight" id="product-details-title">{detailTitle}</h2>
-          {ordered.map((product, index) => (
-            <div className="scroll-mt-28" id={product.slug} key={product.slug}>
-            <Reveal>
-              <AppCard
-                imageAlt={t('screenshotAlt', { title: product.title })}
-                media={(
-                  <ScreenshotCarousel
-                    ariaRoleDescription={t('carouselRoleDescription')}
-                    imageAlt={t('screenshotAlt', { title: product.title })}
-                    nextLabel={t('nextScreenshot')}
-                    previousLabel={t('previousScreenshot')}
-                    screenshots={product.screenshots}
-                    title={product.title}
-                  />
-                )}
-                downloadLinks={<DownloadLinks downloadLabel={t('download')} product={product} />}
-                index={index + 1}
-                status={hasDownloadUrl(product) ? null : <ComingSoonBadge label={t('comingSoon')} />}
-                product={product}
-              />
-            </Reveal>
-            </div>
-          ))}
-        </div>
-      </section>
       <CTABanner description={t('ctaDescription')} title={t('ctaTitle')} variant="alt" />
     </>
   );

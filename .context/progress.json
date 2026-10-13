@@ -803,6 +803,35 @@
       "updatedAt": "2026-10-13",
       "scopeVersion": 27,
       "note": "CR-005 — ADDITIVE infra/nginx: domain phụ ntasolution.vn (+www) phục vụ CÙNG nội dung, KHÔNG redirect giữa 2 domain; GIỮ ntavietnam.tech làm canonical (không đổi NEXT_PUBLIC_SITE_URL/seo/sitemap/robots/llms.txt/deploy.yml). Spec: 3.5.0 MINOR (mở rộng R-27). Risk LOW-MEDIUM (nginx VPS shared → nginx -t bắt buộc). ✅ User đã duyệt plan + cấp phép SSH 13/10/2026 → task-01 repo-side done (review PASS round 1), task-02 apply VPS đang chạy. Concurrency: CR-004 (shared-detail-showcase-template) vẫn in_progress — entry riêng, KHÔNG bị sửa; commit CR-005 dùng explicit file list."
+    },
+    {
+      "slug": "products-remove-app-details",
+      "status": "done",
+      "changeFile": "spec/changes/archive/2026-10-13-products-remove-app-details.md",
+      "classification": "REMOVE",
+      "specVersion": "3.5.1",
+      "phases": [
+        {
+          "phase": 1,
+          "status": "done",
+          "tasks": [
+            {
+              "id": "phase-1-task-01",
+              "status": "done",
+              "scope": "bỏ khối 'Chi tiết ứng dụng' ở /products + xoá AppCard/ScreenshotCarousel/productThemes + 3 key i18n carousel",
+              "review": {
+                "level": "NORMAL",
+                "verdict": "PASS",
+                "round": 1,
+                "note": "MINOR: DownloadLinks/ComingSoonBadge + key products.download chưa dùng — giữ cho lúc có link store"
+              }
+            }
+          ]
+        }
+      ],
+      "codeCommits": [],
+      "updatedAt": "2026-10-13",
+      "scopeVersion": 29
     }
   ],
   "bugs": []

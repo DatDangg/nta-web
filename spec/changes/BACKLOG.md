@@ -13,6 +13,7 @@
 | CR-003 | Thiết kế lại UI trang Tin tức theo mockup (hero, lọc danh mục, tìm kiếm, khối nổi bật, đăng ký nhận tin) | MODIFY + ADDITIVE | done (spec 3.2.0 · scope v22) | `archive/2026-10-13-blog-listing-redesign.md` | 2026-10-13 | 2026-10-13 |
 | CR-004 | Tách khung case study (Óc Eo) thành template detail chung cho Giải pháp / Sản phẩm (data MDX, SSG, thêm block Lưới tính năng + FAQ) | MODIFY + ADDITIVE | in_progress (2026-10-13: layer 0–3 xong — khung chung, 7 trang giải pháp, 2 trang chi tiết sản phẩm `/products/[slug]` (spec 3.5.1 · scope v28); còn ảnh staging CRM/DentGo/LMS, màn HRM, close-out) | `2026-10-13-shared-detail-showcase-template.md` | 2026-10-13 | |
 | CR-005 | Thêm domain `ntasolution.vn` (+www) truy cập cùng site, GIỮ `ntavietnam.tech` là canonical | ADDITIVE (infra/nginx) | in_progress (2026-10-13: đã classify ADDITIVE + spec 3.5.0 MINOR + plan 2 task; ⏸ chờ user duyệt plan & SSH) | `2026-10-13-add-domain-ntasolution.md` | 2026-10-13 | |
+| CR-006 | Bỏ khối "Chi tiết ứng dụng" ở trang /products | REMOVE | done (reconcile, scope v29) | `archive/2026-10-13-products-remove-app-details.md` | 2026-10-13 | 2026-10-13 |
 
 ## Quy tắc tracking
 

@@ -1,54 +1,40 @@
 {
   "specVersion": "3.5.1",
-  "scopeVersion": 28,
-  "generatedAt": "2026-10-13T15:55:00+07:00",
+  "scopeVersion": 29,
+  "generatedAt": "2026-10-13T16:30:00+07:00",
   "trigger": "feature-update",
-  "workItem": "feature-shared-detail-showcase-template",
+  "workItem": "feature-products-remove-app-details",
   "specRefs": [
-    "R-07",
-    "R-08c",
-    "R-21",
-    "BR-004"
+    "R-07"
   ],
   "changed": {
     "files": [
-      "src/app/[locale]/products/[slug]/page.tsx (MỚI — trang chi tiết sản phẩm, SSG 2 slug)",
-      "src/content/products/{vi,en}/{music-app,hair-style-ai}.mdx (block showcase + mô tả/tính năng theo info user)",
-      "src/content/types.ts (Product.brandName/showcase; screen.device; photos.variant phone + aspect; ShowcaseNodeIcon photo/ai/music/share)",
-      "src/components/case-studies/showcase/{ScreenMock,ShowcasePhotos,ShowcaseTechnology}.tsx (biến thể phone + icon)",
-      "src/lib/content/{slug,products}.ts (productSlugs, isProductSlug, getProductStaticParams)",
-      "src/app/sitemap.ts · src/app/[locale]/products/page.tsx (href thẻ) · src/content/listings.ts (chips)",
-      "public/images/products/v2/{music-app,hair-style-ai}/* (14 ảnh)"
+      "src/app/[locale]/products/page.tsx (bỏ section product-details)",
+      "src/components/cards/AppCard.tsx, src/components/products/ScreenshotCarousel.tsx, src/components/products/productThemes.ts (xoá)",
+      "src/i18n/messages/{vi,en}.json (bỏ previousScreenshot/nextScreenshot/carouselRoleDescription)",
+      "src/components/cards/cardStyles.ts (comment)"
     ],
     "modules": [
-      "Sản phẩm App (R-07)",
-      "Khung chi tiết dùng chung (R-08c)"
+      "Sản phẩm App (R-07)"
     ]
   },
   "impact": {
     "direct": [
-      "/products/music-app, /products/hair-style-ai, /en/products/music-app, /en/products/hair-style-ai → 200, khung chi tiết đủ block",
-      "/products/<slug lạ> → 404",
-      "/products: thẻ app link sang trang chi tiết"
+      "/products, /en/products không còn khối Chi tiết ứng dụng / App details"
     ],
     "dependents": [
-      "ScreenMock / ShowcasePhotos / ShowcaseTechnology dùng chung với case study + 7 trang giải pháp"
+      "thẻ danh sách → /products/[slug]"
     ],
     "regression": [
-      "case study Óc Eo + nha khoa: khối công nghệ khung máy tính + carousel không đổi",
-      "7 trang giải pháp không đổi",
-      "sitemap vẫn đủ route cũ"
+      "hero + bộ lọc + thẻ + CTA của /products giữ nguyên",
+      "trang chi tiết sản phẩm không đổi"
     ]
   },
   "acceptance": [
-    "Title vi `Ứng dụng <tên> | NTA`, en `<tên> App | NTA`; canonical + alternates vi/en đúng",
-    "Breadcrumb JSON-LD Trang chủ › Sản phẩm app › tên app",
-    "Ảnh chụp app hiển thị trong khung điện thoại, carousel không cắt ảnh (nhạc 720/1561, tóc 9/16)",
-    "Mọi ảnh có alt; caption nói rõ ảnh bản thử nghiệm / người mẫu do AI tạo",
-    "Số liệu chỉ lấy từ ghi chú sản phẩm (76 kiểu, 26 màu, 6 dáng mặt; 1.000 ký tự, ~3 phút)",
-    "Không có nút tải/link store khi chưa có link"
+    "/products vi/en 200, không có khối Chi tiết ứng dụng",
+    "2 thẻ link sang /products/music-app, /products/hair-style-ai"
   ],
   "risk": "low",
-  "regression_note": "Thay đổi component chỉ thêm nhánh phone; class/sizes các biến thể cũ giữ nguyên (reviewer đã đối chiếu).",
-  "concurrency_note": "Tăng tiếp từ v27 (CR-005, commit ec09807). Lần publish sau đọc file hiện tại rồi +1."
+  "regression_note": "Chỉ xoá UI; không đổi route/SEO.",
+  "concurrency_note": "Tăng tiếp từ v28. Lần publish sau đọc file hiện tại rồi +1."
 }
