@@ -7,8 +7,8 @@ import type { SVGProps } from 'react';
  */
 export type ListingIconName =
   | 'apps' | 'arrow' | 'bolt' | 'box' | 'building' | 'camera' | 'chart' | 'chat' | 'check'
-  | 'cpu' | 'drone' | 'face' | 'graduation' | 'grid' | 'heart' | 'home' | 'idcard' | 'image'
-  | 'landmark' | 'layers' | 'music' | 'pen' | 'phone' | 'plus' | 'search' | 'shield' | 'smile'
+  | 'cpu' | 'drone' | 'gear' | 'face' | 'graduation' | 'grid' | 'heart' | 'home' | 'idcard' | 'image'
+  | 'landmark' | 'layers' | 'music' | 'pen' | 'phone' | 'plug' | 'plus' | 'search' | 'shield' | 'smile'
   | 'sparkles' | 'tooth' | 'users' | 'workflow';
 
 const paths: Record<ListingIconName, string> = {
@@ -24,6 +24,7 @@ const paths: Record<ListingIconName, string> = {
   cpu: 'M7 7h10v10H7zM10 10h4v4h-4zM9 3v4M15 3v4M9 17v4M15 17v4M3 9h4M3 15h4M17 9h4M17 15h4',
   drone: 'M10 10.5h4v3h-4zM10 10.5 7.5 8M14 10.5 16.5 8M10 13.5 7.5 16M14 13.5l2.5 2.5M5.5 8.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM18.5 8.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM5.5 20.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM18.5 20.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z',
   face: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18ZM5 10c3 0 5.5-1.5 7-4 1.2 2.5 3.8 4 7 4M9.5 14.5c1.4 1.3 3.6 1.3 5 0',
+  gear: 'M12.2 2h-.4a2 2 0 0 0-2 2v.2a2 2 0 0 1-1 1.7l-.4.3a2 2 0 0 1-2 0l-.2-.1a2 2 0 0 0-2.7.7l-.2.4a2 2 0 0 0 .7 2.7l.2.1a2 2 0 0 1 1 1.7v.5a2 2 0 0 1-1 1.7l-.2.1a2 2 0 0 0-.7 2.7l.2.4a2 2 0 0 0 2.7.7l.2-.1a2 2 0 0 1 2 0l.4.3a2 2 0 0 1 1 1.7v.2a2 2 0 0 0 2 2h.4a2 2 0 0 0 2-2v-.2a2 2 0 0 1 1-1.7l.4-.3a2 2 0 0 1 2 0l.2.1a2 2 0 0 0 2.7-.7l.2-.4a2 2 0 0 0-.7-2.7l-.2-.1a2 2 0 0 1-1-1.7v-.5a2 2 0 0 1 1-1.7l.2-.1a2 2 0 0 0 .7-2.7l-.2-.4a2 2 0 0 0-2.7-.7l-.2.1a2 2 0 0 1-2 0l-.4-.3a2 2 0 0 1-1-1.7V4a2 2 0 0 0-2-2ZM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z',
   graduation: 'M2 9.5 12 5l10 4.5-10 4.5L2 9.5ZM6 11.5V16c0 1.4 2.7 3 6 3s6-1.6 6-3v-4.5M22 9.5V15',
   grid: 'M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z',
   heart: 'M12 20s-7.5-4.4-9-9.5C2 7 4.5 4.5 7.5 4.5c2 0 3.5 1.2 4.5 2.7 1-1.5 2.5-2.7 4.5-2.7 3 0 5.5 2.5 4.5 6-1.5 5.1-9 9.5-9 9.5Z',
@@ -35,6 +36,7 @@ const paths: Record<ListingIconName, string> = {
   music: 'M9 18V5l11-2v13M9 18a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM20 16a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z',
   pen: 'M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16v4ZM13.5 6.5l4 4',
   phone: 'M8 2.5h8A1.5 1.5 0 0 1 17.5 4v16a1.5 1.5 0 0 1-1.5 1.5H8A1.5 1.5 0 0 1 6.5 20V4A1.5 1.5 0 0 1 8 2.5ZM11 18.5h2',
+  plug: 'M12 22v-5M9 8V2M15 8V2M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8h12Z',
   plus: 'M12 5v14M5 12h14',
   search: 'M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14ZM20.5 20.5 16 16',
   shield: 'M12 3 4.5 6v5.5c0 4.6 3.2 8.3 7.5 9.5 4.3-1.2 7.5-4.9 7.5-9.5V6L12 3ZM8.8 12l2.2 2.2 4.4-4.4',

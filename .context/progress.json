@@ -875,6 +875,17 @@
       "classification": "ADDITIVE",
       "note": "CR-007 tách từ CR-004 — chờ link + tài khoản staging, chốt màn HRM",
       "updatedAt": "2026-10-13"
+    },
+    {
+      "slug": "home-marquee-icons",
+      "status": "done",
+      "changeFile": "spec/changes/archive/2026-10-13-home-marquee-icons.md",
+      "classification": "MODIFY",
+      "tasks": {
+        "phase-1-task-01": "done"
+      },
+      "note": "CR-009 — marquee trang chủ bỏ bold + icon từng mục; no spec delta",
+      "updatedAt": "2026-10-13"
     }
   ],
   "bugs": []

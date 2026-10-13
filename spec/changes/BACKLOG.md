@@ -15,7 +15,8 @@
 | CR-005 | Thêm domain `ntasolution.vn` (+www) truy cập cùng site, GIỮ `ntavietnam.tech` là canonical | ADDITIVE (infra/nginx) | done (spec 3.5.0 · scope v27→v31) | `archive/2026-10-13-add-domain-ntasolution.md` | 2026-10-13 | 2026-10-13 |
 | CR-006 | Bỏ khối "Chi tiết ứng dụng" ở trang /products | REMOVE | done (reconcile, scope v29) | `archive/2026-10-13-products-remove-app-details.md` | 2026-10-13 | 2026-10-13 |
 | CR-007 | Ảnh chụp staging CRM/DentGo/LMS (dữ liệu giả) + dựng thêm màn HRM cho trang chi tiết giải pháp (tách từ CR-004) | ADDITIVE | pending (chờ link + tài khoản staging, chốt màn HRM) | `2026-10-13-solution-detail-screenshots.md` | 2026-10-13 | |
-| CR-008 | Thiết kế lại UI trang Liên hệ theo mockup + cập nhật SĐT/email/địa chỉ thật (Kim Hoàn, ngõ 19 Duy Tân) | MODIFY + ADDITIVE | pending | `2026-10-13-contact-page-redesign.md` | 2026-10-13 | |
+| CR-008 | Thiết kế lại UI trang Liên hệ theo mockup + cập nhật SĐT/email/địa chỉ thật (Kim Hoàn, ngõ 19 Duy Tân) | MODIFY + ADDITIVE | in_progress (spec 3.6.0 · chờ duyệt plan) | `2026-10-13-contact-page-redesign.md` | 2026-10-13 | |
+| CR-009 | Dải chữ chạy trang chủ: bỏ chữ đậm + thêm icon từng mục (theo ảnh mẫu) | MODIFY (UI) | done (no spec delta) | `archive/2026-10-13-home-marquee-icons.md` | 2026-10-13 | 2026-10-13 |
 
 ## Quy tắc tracking
 

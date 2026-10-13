@@ -6,10 +6,18 @@ import { Hero } from '@/components/home/Hero';
 import { ProductStrip } from '@/components/home/ProductStrip';
 import { SolutionGridHome } from '@/components/home/SolutionGridHome';
 import { CTABanner } from '@/components/shared/CTABanner';
+import { ListingIcon, type ListingIconName } from '@/components/listing/icons';
 import { Marquee } from '@/components/motion/Marquee';
 import { getHomeContent } from '@/content/home';
 import type { Locale } from '@/content/types';
 import { createLocaleAlternates, localizedPath } from '@/lib/seo';
+
+/** Icon cho từng nhãn ở dải chữ chạy — theo đúng thứ tự `items` của mỗi panel hero (vi/en dùng chung). */
+const marqueeIcons: Record<'ai' | 'management' | 'apps', ListingIconName[]> = {
+  ai: ['sparkles', 'gear', 'chart', 'cpu'],
+  management: ['layers', 'users', 'box', 'shield'],
+  apps: ['phone', 'camera', 'plug', 'smile'],
+};
 
 const homeMetadata: Record<Locale, { title: string; description: string }> = {
   vi: {
@@ -50,8 +58,13 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       {/* Dải chữ chạy (running line) — tái dùng nhãn năng lực của panel hero, không thêm copy mới. */}
       <section className="border-y border-border bg-background-alt py-5 md:py-6">
         <Marquee
-          className="text-h3 font-semibold tracking-tight text-text-primary"
-          items={[...home.heroPanels.ai.items, ...home.heroPanels.management.items, ...home.heroPanels.apps.items]}
+          className="text-base font-normal text-text-primary md:text-lg"
+          items={(['ai', 'management', 'apps'] as const).flatMap((panel) =>
+            home.heroPanels[panel].items.map((label, i) => {
+              const icon = marqueeIcons[panel][i];
+              return { label, icon: icon ? <ListingIcon className="size-6" name={icon} /> : undefined };
+            }),
+          )}
         />
       </section>
       <SolutionGridHome solutions={home.solutionCards} title={t('solutionsTitle')} />
