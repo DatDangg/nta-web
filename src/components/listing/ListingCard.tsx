@@ -31,9 +31,10 @@ function CardMedia({ media, glow }: { media: ListingMedia; glow: string }) {
   }
 
   if (media.kind === 'photo') {
+    // Banner ngang 16/10 trên đầu thẻ ở mọi breakpoint: cover case study là ảnh ngang (≈1.34–1.61), khung dọc cũ cắt mất phần lớn ảnh.
     return (
-      <div className="relative mx-6 mb-6 aspect-[16/10] overflow-hidden rounded-[22px] shadow-[0_20px_40px_-24px_rgb(15_40_60/0.5)] ring-1 ring-white/80 sm:absolute sm:inset-y-4 sm:right-4 sm:mx-0 sm:mb-0 sm:aspect-auto sm:w-[44%]">
-        <Image alt={media.alt} className="size-full object-cover object-center" height={media.height} sizes="(min-width: 1024px) 300px, 90vw" src={media.src} width={media.width} />
+      <div className="relative mx-4 mt-4 aspect-[16/10] overflow-hidden rounded-[20px] shadow-[0_20px_40px_-24px_rgb(15_40_60/0.5)] ring-1 ring-white/80">
+        <Image alt={media.alt} className="size-full object-cover object-center" height={media.height} sizes="(min-width: 1280px) 600px, (min-width: 768px) 46vw, 92vw" src={media.src} width={media.width} />
       </div>
     );
   }
@@ -62,15 +63,17 @@ function CardMedia({ media, glow }: { media: ListingMedia; glow: string }) {
 export function ListingCard({ item, style }: { item: ListingItem; style?: CSSProperties }) {
   const theme = listingThemes[item.theme];
   const hasMedia = item.media != null;
+  const isPhoto = item.media?.kind === 'photo';
 
   return (
     <CardLink
-      className={`listing-card-in group relative flex h-full min-h-[350px] flex-col overflow-hidden rounded-[28px] border border-white text-text-primary shadow-[0_20px_44px_-28px_rgb(15_60_70/0.45)] ring-1 ring-black/[0.04] transition-[transform,box-shadow] duration-base ease-out-expo hover:-translate-y-1 hover:shadow-[0_28px_56px_-28px_rgb(15_60_70/0.5)] ${theme.card} ${focusRing}`}
+      className={`listing-card-in group relative flex h-full ${isPhoto ? '' : 'min-h-[350px]'} flex-col overflow-hidden rounded-[28px] border border-white text-text-primary shadow-[0_20px_44px_-28px_rgb(15_60_70/0.45)] ring-1 ring-black/[0.04] transition-[transform,box-shadow] duration-base ease-out-expo hover:-translate-y-1 hover:shadow-[0_28px_56px_-28px_rgb(15_60_70/0.5)] ${theme.card} ${focusRing}`}
       href={item.href}
       label={item.linkLabel}
       style={style}
     >
-      <div className={`relative z-10 flex flex-1 flex-col p-6 sm:p-7 ${hasMedia ? (item.media?.kind === 'phone' ? 'sm:max-w-[64%]' : item.media?.kind === 'photo' ? 'sm:max-w-[56%]' : 'sm:max-w-[50%]') : ''}`}>
+      {isPhoto && item.media && <CardMedia glow={theme.glow} media={item.media} />}
+      <div className={`relative z-10 flex flex-1 flex-col p-6 sm:p-7 ${hasMedia && !isPhoto ? (item.media?.kind === 'phone' ? 'sm:max-w-[64%]' : 'sm:max-w-[50%]') : ''}`}>
         <div className="flex flex-wrap items-center gap-3">
           <span aria-hidden="true" className={`flex size-14 shrink-0 items-center justify-center rounded-[18px] text-white ring-1 ring-white/40 ${theme.tile}`}>
             <ListingIcon className="size-7" name={item.icon} strokeWidth={2} />
@@ -98,7 +101,7 @@ export function ListingCard({ item, style }: { item: ListingItem; style?: CSSPro
           </span>
         </div>
       </div>
-      {item.media && <CardMedia glow={theme.glow} media={item.media} />}
+      {!isPhoto && item.media && <CardMedia glow={theme.glow} media={item.media} />}
     </CardLink>
   );
 }

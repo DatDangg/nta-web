@@ -976,13 +976,13 @@
       "classification": "MODIFY + ADDITIVE (UI)",
       "tasks": {
         "phase-1-task-01": "done",
-        "phase-1-task-02": "pending"
+        "phase-1-task-02": "done"
       },
       "reviewer": {
         "result": "PASS",
-        "report": ".context/review-reports/feature-image-lightbox-case-study-card-phase-1-task-01-round-1-review.md"
+        "report": ".context/review-reports/feature-image-lightbox-case-study-card-phase-1-task-02-round-1-review.md"
       },
-      "note": "CR-013 — task 01 lightbox done (review STRICT PASS, build PASS); task 02 thẻ /case-studies pending",
+      "note": "CR-013 — task 01 lightbox (c3ca0e6) + task 02 thẻ /case-studies banner 16/10 done; chờ spec-publisher 3.9.0",
       "updatedAt": "2026-10-13"
     }
   ],
