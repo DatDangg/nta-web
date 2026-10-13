@@ -3,10 +3,7 @@
   "activeWorkItem": {
     "type": "feature",
     "slug": "contact-page-redesign",
-    "phase": 1,
-    "task": "phase-1-task-03",
-    "status": "in_progress",
-    "note": "CR-008 — task 01, 02 done."
+    "note": "CR-008 DONE + archive (13/10/2026). Không có work item active của phiên này."
   },
   "features": [
     {
@@ -881,17 +878,18 @@
     },
     {
       "slug": "contact-page-redesign",
-      "status": "in_progress",
-      "changeFile": "spec/changes/2026-10-13-contact-page-redesign.md",
+      "status": "done",
+      "changeFile": "spec/changes/archive/2026-10-13-contact-page-redesign.md",
       "classification": "MODIFY + ADDITIVE",
       "specVersion": "3.6.0",
       "tasks": {
         "phase-1-task-01": "done",
         "phase-1-task-02": "done",
-        "phase-1-task-03": "pending"
+        "phase-1-task-03": "done"
       },
-      "note": "CR-008 — task 02 done (UI /contact), đang task 03 (Footer + close-out)",
-      "updatedAt": "2026-10-13"
+      "note": "CR-008 done — spec 3.6.0, scope v32",
+      "updatedAt": "2026-10-13",
+      "scopeVersion": 32
     },
     {
       "slug": "home-marquee-icons",
@@ -902,6 +900,17 @@
         "phase-1-task-01": "done"
       },
       "note": "CR-009 — marquee trang chủ bỏ bold + icon từng mục; no spec delta",
+      "updatedAt": "2026-10-13"
+    },
+    {
+      "slug": "header-solutions-megamenu",
+      "status": "in_progress",
+      "changeFile": "spec/changes/2026-10-13-header-solutions-megamenu.md",
+      "classification": "MODIFY",
+      "tasks": {
+        "phase-1-task-01": "pending"
+      },
+      "note": "CR-010 — mega menu Giải pháp; chờ user duyệt plan",
       "updatedAt": "2026-10-13"
     }
   ],

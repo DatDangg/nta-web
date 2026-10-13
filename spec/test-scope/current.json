@@ -1,64 +1,65 @@
 {
-  "specVersion": "3.5.1",
-  "scopeVersion": 31,
-  "generatedAt": "2026-10-13T17:30:00+07:00",
+  "specVersion": "3.6.0",
+  "scopeVersion": 32,
+  "generatedAt": "2026-10-13T18:30:00+07:00",
   "trigger": "feature-update",
-  "workItem": "feature-add-domain-ntasolution",
+  "workItem": "feature-contact-page-redesign",
   "specRefs": [
-    "R-27",
-    "R-19",
-    "R-21",
-    "R-08c",
-    "R-08c.1"
+    "R-10",
+    "R-11",
+    "R-13",
+    "R-25"
   ],
   "changed": {
     "files": [
-      "deploy/nginx/ntasolution.vn.conf (MỚI — vhost domain phụ: block 80 apex proxy → 127.0.0.1:3005 + block www → 301 apex; trên VPS certbot sinh block 443 + block 80 managed, cần sed www về apex — runbook §3b)",
-      "docs/runbook/deploy-vps.md (§3b: cp → ln -sf → nginx -t → certbot --nginx --redirect 2 domain → sed www block 80 → reload + curl matrix; §7 troubleshooting)",
-      ".context/project-config.md (domain_secondary: ntasolution.vn)",
-      "SPECIFICATIONS.md (R-27 mở rộng; spec 3.5.0 — CR-005; sau đó CR-004 bump 3.5.1)",
-      "src/components/solutions/{AiAssistantPanel,AiSection,AudienceCards,BenefitList,BentoCompliance,FaqAccordion,FaqList,FeatureList,FeatureZigZag,ScreenshotSection,ShotImage,SolutionHero,SolutionHighlights,SolutionSections,UseCases}.tsx + features.ts (xoá) [CR-004]",
-      "src/app/[locale]/dev/components/page.tsx (xoá) [CR-004]",
-      "src/lib/content/{solutions,products}.ts (bắt buộc showcase, WithShowcase<T>) [CR-004]",
-      "src/content/types.ts (WithShowcase) [CR-004]",
-      "src/app/[locale]/{solutions/enterprise,solutions/ai,products}/[slug]/page.tsx (bỏ throw) [CR-004]"
+      "src/lib/contact/company-info.ts (MỚI — SĐT/email/địa chỉ/Google Maps + 9 key nhu cầu, 1 nguồn)",
+      "src/lib/api/contact-schema.ts (company ≤150, need enum — tuỳ chọn)",
+      "src/lib/api/forward.ts (chuyển tiếp company, need)",
+      "src/lib/contact/useContactForm.ts (field company/need, options requirePhone/requireNeed/messageMax)",
+      "src/app/[locale]/contact/page.tsx (ListingHero + GlassVisual, lưới 2 card)",
+      "src/components/contact/ContactDetails.tsx (MỚI)",
+      "src/components/contact/ContactForm.tsx (form mới)",
+      "src/components/contact/{ContactInfo,OfficeHours}.tsx (xoá — không dùng)",
+      "src/components/ui/Select.tsx (MỚI)",
+      "src/components/ui/{Input,Textarea}.tsx (showRequiredMark, counter, w-full)",
+      "src/components/listing/icons.tsx (+call, car, headset, mail, pin, train)",
+      "src/components/layout/Footer.tsx (SĐT/email/địa chỉ)",
+      "src/lib/seo/jsonld.ts (Organization + ContactPage: telephone/email/address/contactPoint)",
+      "src/i18n/messages/{vi,en}.json (contact.*, footer.contact*)",
+      "docs/API_SPEC.md"
     ],
     "modules": [
-      "Hạ tầng nginx + certbot trên VPS 187.52.119.50 (KHÔNG đổi code app, KHÔNG rebuild)",
-      "Khung chi tiết dùng chung (R-08c) [CR-004]"
+      "Module 8 — Liên hệ",
+      "Module 9 — Footer",
+      "API /api/contact"
     ]
   },
   "impact": {
     "direct": [
-      "https://ntasolution.vn/ và https://ntasolution.vn/en (vi/en) → 200, cùng nội dung site",
-      "https://www.ntasolution.vn/* → 301 https://ntasolution.vn/* (apex của chính nó, cả http lẫn https)",
-      "http://ntasolution.vn/* và http://www.ntasolution.vn/* → 301 https://ntasolution.vn/",
-      "Không đổi UI; /dev/components 404 (vốn chỉ chạy ở dev) [CR-004]"
+      "/contact và /en/contact: hero, card thông tin (tel:/mailto:/địa chỉ), Google Maps nhúng + link mở Maps, 3 tiện ích văn phòng",
+      "Form /contact: Họ tên*, Email*, SĐT* (9–15 số), Tên doanh nghiệp (≤150), Nhu cầu* (9 mục), Nội dung* 10–500 + bộ đếm; states Default/Validating/Submitting/Success/Error/429",
+      "POST /api/contact nhận company/need; company >150 hoặc need sai → 400 errors.company|need",
+      "Footer mọi trang vi/en: SĐT, email, địa chỉ bấm được"
     ],
     "dependents": [
-      "https://ntavietnam.tech/* (canonical — không đổi hành vi, không đổi cert)",
-      "Mọi trang dùng getAllSolutions/getAllProducts (danh sách, trang chủ, sitemap) [CR-004]"
+      "CTAForm ở trang chi tiết giải pháp (/solutions/enterprise/[slug], /solutions/ai/[slug]) — vẫn gửi được chỉ với name/email/message",
+      "Mọi trang dùng ListingHero/GlassVisual (icons.tsx thêm icon)",
+      "Organization JSON-LD ở layout (mọi trang)"
     ],
     "regression": [
-      "canonical / og / hreflang / sitemap.xml / robots.txt / llms.txt vẫn trỏ ntavietnam.tech (KHÔNG được đổi)",
-      "ntavietnam.tech: 200, HTTPS, cert còn hạn (hạn 07/01/2027) — không đổi",
-      "/api/health và /api/contact chạy trên cả 2 hostname (cùng app; X-Forwarded-For/proxy headers giữ nguyên)",
-      "Container/site khác trên VPS shared (ismartschool, crm-dhp, tmfoods) không bị ảnh hưởng; KHÔNG có redirect giữa 2 domain",
-      "7 trang giải pháp + 2 trang sản phẩm + 2 case study vi/en 200, hiển thị như trước [CR-004]",
-      "/solutions/enterprise, /solutions/ai, /products, trang chủ không đổi [CR-004]"
+      "Rate-limit 429 + honeypot vẫn hoạt động",
+      "Thông báo thành công đổi sang 'phản hồi trong 24h' (cả CTA form)",
+      "Input/Textarea dùng chung: CTA form không đổi bố cục",
+      "/products, /case-studies hero không đổi"
     ]
   },
   "acceptance": [
-    "https://ntasolution.vn/ và https://ntasolution.vn/en trả 200 với nội dung site",
-    "www.ntasolution.vn → 301 apex ntasolution.vn (cả http lẫn https)",
-    "http:// → 301 https:// cho cả apex + www; cert Let's Encrypt hợp lệ cho cả 2 hostname (không còn SEC_E_WRONG_PRINCIPAL)",
-    "Trang trả về trên domain phụ vẫn có rel=canonical = https://ntavietnam.tech/... và KHÔNG redirect sang domain chính",
-    "ntavietnam.tech không đổi hành vi (200 / HTTPS / cert còn hạn)",
-    "11 trang chi tiết vi/en 200 [CR-004]",
-    "MDX giải pháp/sản phẩm thiếu showcase → build lỗi tại loader [CR-004]",
-    "Không còn import tới component đã xoá [CR-004]"
+    "SĐT 0335546831 (tel:+84335546831), email admin@ntasolution.vn, địa chỉ Tầng 2 tòa nhà Kim Hoàn, ngõ 19 Duy Tân, Cầu Giấy, Hà Nội hiển thị đúng ở /contact + Footer",
+    "Bản đồ trỏ đúng tòa Kim Hoàn ngõ 19 Duy Tân (iframe lazy, có title) + link Mở Google Maps tab mới",
+    "SĐT + Nhu cầu bắt buộc, nội dung ≤500 ở /contact; API giữ tuỳ chọn",
+    "Không tràn ngang 1440/768/390/375 (1024: blob GlassVisual có từ trước, +8px)",
+    "JSON-LD có telephone/email/PostalAddress",
+    "typecheck + lint + build PASS"
   ],
-  "risk": "low",
-  "regression_note": "CR-005: không đổi code app/build (NEXT_PUBLIC_SITE_URL build-time giữ nguyên ⇒ không rebuild, không đổi canonical). Rủi ro chính: sửa nginx trên VPS shared → bắt buộc `nginx -t` trước `reload`; chỉ THÊM vhost, không sửa vhost khác. CR-004: chỉ xoá code chết + dời chỗ kiểm dữ liệu.",
-  "concurrency_note": "Tăng tiếp từ v30 (CR-004 publish trước trong lần close-out cùng ngày). v31 = CR-005 (add-domain-ntasolution) KÈM giữ nguyên nội dung handoff CR-004 ở v30 (R-08c/R-08c.1) — không lose scope nào. Lần publish sau đọc file hiện tại rồi +1."
+  "risk": "medium"
 }

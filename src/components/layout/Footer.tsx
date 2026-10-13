@@ -1,7 +1,10 @@
+import type { ReactNode } from 'react';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
+import { ListingIcon, type ListingIconName } from '@/components/listing/icons';
 import { Container } from '@/components/ui/Container';
+import { COMPANY_CONTACT } from '@/lib/contact/company-info';
 import { BrandLogo } from './BrandLogo';
 import { LanguageToggle } from './LanguageToggle';
 
@@ -25,12 +28,37 @@ const SOCIALS = [
 
 type SocialLabels = Record<(typeof SOCIALS)[number]['id'], string>;
 type Column = { title: string; links: { href: string; label: string }[] };
+type ContactLabels = { title: string; phone: string; email: string; address: string };
 
-function FooterBrand({ homeLabel, labels, tagline }: { homeLabel: string; labels: SocialLabels; tagline: string }) {
+/** SĐT · email · địa chỉ (R-11) — cùng nguồn `company-info.ts` với trang Liên hệ. */
+function FooterContact({ labels }: { labels: ContactLabels }) {
+  const { phone, email, address } = COMPANY_CONTACT;
+  const rows: { icon: ListingIconName; label: string; content: ReactNode }[] = [
+    { icon: 'call', label: labels.phone, content: <a className="hover:text-primary-active" href={phone.href}>{phone.display}</a> },
+    { icon: 'mail', label: labels.email, content: <a className="break-words hover:text-primary-active" href={email.href}>{email.display}</a> },
+    { icon: 'pin', label: labels.address, content: <address className="not-italic">{address.full}</address> },
+  ];
+  return (
+    <section aria-label={labels.title} className="mt-5">
+      <ul className="max-w-xs space-y-2.5 text-sm text-text-secondary">
+        {rows.map((row) => (
+          <li className="flex items-start gap-2.5" key={row.icon}>
+            <ListingIcon className="mt-0.5 size-4 shrink-0 text-primary-active" name={row.icon} />
+            <span className="sr-only">{row.label}: </span>
+            <span className="min-w-0">{row.content}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+function FooterBrand({ homeLabel, labels, tagline, contactLabels }: { homeLabel: string; labels: SocialLabels; tagline: string; contactLabels: ContactLabels }) {
   return (
     <div className="sm:col-span-2 lg:col-span-3">
       <Link aria-label={homeLabel} className="inline-flex" href="/"><BrandLogo /></Link>
       <p className="mt-4 max-w-xs text-sm text-text-secondary">{tagline}</p>
+      <FooterContact labels={contactLabels} />
       <div className="mt-6 flex items-center gap-3">
         {SOCIALS.map(({ id, href, path }) => (
           <a
@@ -96,7 +124,7 @@ function SupportCard({ title, link }: { title: string; link: string }) {
 /**
  * Footer toàn site (VI+EN): nền ảnh sáng trang trí (`footer-bg.jpg`, `alt=""` + `aria-hidden`)
  * phủ trên `bg-background`, cột thương hiệu (logo + tagline + social), 3 cột link, card hỗ trợ
- * dẫn `/contact`, thanh legal (copyright + `LanguageToggle`).
+ * dẫn `/contact`, thông tin liên hệ (SĐT/email/địa chỉ) dưới tagline, thanh legal (copyright + `LanguageToggle`).
  *
  * `Container` là nguồn bề rộng duy nhất — KHÔNG đặt `px-*` ở `<footer>`. Chỉ link tới route
  * đã tồn tại (mục không có trang trong ảnh goal đã lược bỏ).
@@ -140,7 +168,12 @@ export function Footer() {
       <Image alt="" aria-hidden className="object-cover" fill sizes="100vw" src="/images/home/footer-bg.jpg" />
       <Container className="relative py-12 md:py-16">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-12 lg:gap-x-8">
-          <FooterBrand homeLabel={nav('homeLabel')} labels={socialLabels} tagline={t('tagline')} />
+          <FooterBrand
+            contactLabels={{ title: t('contactTitle'), phone: t('contactPhone'), email: t('contactEmail'), address: t('contactAddress') }}
+            homeLabel={nav('homeLabel')}
+            labels={socialLabels}
+            tagline={t('tagline')}
+          />
           <FooterLinks columns={columns} />
           <SupportCard link={t('supportLink')} title={t('supportTitle')} />
         </div>

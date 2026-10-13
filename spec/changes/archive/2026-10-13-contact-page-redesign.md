@@ -1,7 +1,7 @@
 ---
 id: contact-page-redesign
 type: feature
-status: pending
+status: done
 created: 2026-10-13
 ---
 
@@ -32,13 +32,13 @@ Thông tin liên hệ thật (thay toàn bộ dữ liệu mẫu trong mockup):
   `ContactInfo.tsx` / `OfficeHours.tsx` có sẵn nhưng chưa được dùng; site chưa hiển thị SĐT/email/địa chỉ thật ở đâu.
 
 ## Acceptance (bắt buộc)
-- [ ] Trang `/contact` và `/en/contact` khớp bố cục mockup ở desktop; responsive mobile (1 cột: info → form hoặc theo chốt).
-- [ ] SĐT / email / địa chỉ hiển thị đúng như trên; SĐT là link `tel:`, email là link `mailto:`.
-- [ ] Bản đồ trỏ đúng địa chỉ Kim Hoàn, ngõ 19 Duy Tân (không dùng ảnh bản đồ trong mockup).
-- [ ] JSON-LD ContactPage/Organization cập nhật telephone/email/address mới.
-- [ ] Form giữ đủ states Default / Validating / Submitting / Success / Error (R-10); validate client + server khớp nhau.
-- [ ] Text VI + EN đầy đủ trong `src/i18n/messages/*.json`.
-- [ ] build / typecheck / lint PASS.
+- [x] Trang `/contact` và `/en/contact` khớp bố cục mockup ở desktop; responsive mobile (1 cột: info → form hoặc theo chốt).
+- [x] SĐT / email / địa chỉ hiển thị đúng như trên; SĐT là link `tel:`, email là link `mailto:`.
+- [x] Bản đồ trỏ đúng địa chỉ Kim Hoàn, ngõ 19 Duy Tân (không dùng ảnh bản đồ trong mockup).
+- [x] JSON-LD ContactPage/Organization cập nhật telephone/email/address mới.
+- [x] Form giữ đủ states Default / Validating / Submitting / Success / Error (R-10); validate client + server khớp nhau.
+- [x] Text VI + EN đầy đủ trong `src/i18n/messages/*.json`.
+- [x] build / typecheck / lint PASS.
 
 ## Ghi chú
 - Tham chiếu: R-10, R-13 (POST /api/contact), BR-002. Đóng luôn mục `[cần xác nhận] hotline/email/địa chỉ thật` ở Module 8.
@@ -54,3 +54,7 @@ Thông tin liên hệ thật (thay toàn bộ dữ liệu mẫu trong mockup):
      BoxAI · Giải pháp AI theo yêu cầu · Flycam · Phát triển phần mềm theo yêu cầu · Khác.
   (Mục 3 + 7: user chấp nhận đề xuất bằng cách chạy `/change contact-page-redesign`.)
 - Spec delta: `spec/updates/2026-10-13-contact-page-redesign.md` (3.5.1 → 3.6.0). Task: `tasks/feature-contact-page-redesign/`.
+
+## Kết quả (13/10/2026)
+- Spec 3.6.0 · scope v32 · 3 task: `tasks/feature-contact-page-redesign/` (commit task 01, 02, 03).
+- Residual: kiểm vị trí ghim Google Maps trên trang thật; blob trang trí `GlassVisual` tràn 8px ở 1024 (có từ trước, dùng chung).

@@ -39,7 +39,8 @@
     "socialFacebook": "NTA on Facebook",
     "socialLinkedIn": "NTA on LinkedIn",
     "socialYouTube": "NTA on YouTube",
-    "copyright": "© NTA. All rights reserved."
+    "copyright": "© NTA. All rights reserved.",
+    "contactTitle": "Contact information", "contactPhone": "Phone", "contactEmail": "Email", "contactAddress": "Address"
   },
   "interactive": {
     "filter": {

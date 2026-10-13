@@ -39,7 +39,8 @@
     "socialFacebook": "Facebook của NTA",
     "socialLinkedIn": "LinkedIn của NTA",
     "socialYouTube": "YouTube của NTA",
-    "copyright": "© NTA. Bảo lưu mọi quyền."
+    "copyright": "© NTA. Bảo lưu mọi quyền.",
+    "contactTitle": "Thông tin liên hệ", "contactPhone": "Điện thoại", "contactEmail": "Email", "contactAddress": "Địa chỉ"
   },
   "interactive": {
     "filter": {

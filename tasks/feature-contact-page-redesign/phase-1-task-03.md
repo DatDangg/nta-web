@@ -18,5 +18,17 @@ modification (`Footer.tsx`, i18n)
 - Change type: **MODIFY** · Review level: **NORMAL** · Blast radius: footer mọi trang vi/en
 
 ## Acceptance Criteria
-- [ ] Footer mọi trang có SĐT/email/địa chỉ đúng, link bấm được; không tràn ngang 375; vi/en
-- [ ] typecheck + lint + build PASS
+- [x] Footer mọi trang có SĐT/email/địa chỉ đúng, link bấm được; không tràn ngang 375; vi/en
+- [x] typecheck + lint + build PASS
+
+## Feature Verification
+- Acceptance: **PASS** · Reviewer: **PASS NORMAL (round 1)**
+- Verify: `bash tools/linux-build.sh verify` = typecheck PASS · lint PASS · build PASS
+- Playwright footer: /contact 1440, /en 375 + 1024 — 1 link `tel:` trong footer, scrollWidth = viewport
+- Close-out: test-scope v32, change doc → archive, BACKLOG done, progress
+- Doc impact: no doc impact (API_SPEC đã cập nhật ở task 01)
+
+## Review
+| Round | Verdict | Report |
+|---|---|---|
+| 1 | **PASS NORMAL** | `.context/review-reports/feature-contact-page-redesign-phase-1-task-03-round-1-review.md` |
