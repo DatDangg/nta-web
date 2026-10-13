@@ -95,8 +95,16 @@ vhost nginx mới + bước certbot + ghi nhận domain phụ vào config/spec �
 - Decision log: none
 
 ## Commit / Tracking
-- Commit: pending until close-out commit — **explicit file list**, KHÔNG gộp file CR-004/app code
-  (xem change file §Ghi chú + `.context/runs/change-add-domain-ntasolution-phase-1-task-01.md`)
+- Commit: **`ec09807`** (đã commit 13/10/2026) — explicit file list (15 file, verify qua `git show ec09807 --name-only`):
+  `.context/progress.json` · `.context/project-config.md` ·
+  `.context/review-reports/feature-add-domain-ntasolution-phase-1-task-01-round-1-review.md` ·
+  `.context/review-reports/feature-add-domain-ntasolution-spec-validation.md` ·
+  `.context/runs/change-add-domain-ntasolution-phase-1-task-01.md` · `SPECIFICATIONS.md` ·
+  `deploy/nginx/ntasolution.vn.conf` · `docs/runbook/deploy-vps.md` · `spec/CHANGELOG.md` ·
+  `spec/changes/2026-10-13-add-domain-ntasolution.md` · `spec/changes/BACKLOG.md` ·
+  `spec/test-scope/current.json` · `spec/updates/2026-10-13-add-domain-ntasolution.md` ·
+  `tasks/change-add-domain-ntasolution/phase-1-task-01.md` · `tasks/change-add-domain-ntasolution/phase-1-task-02.md`
+  — không chứa `src/**`, `tsconfig.json`, workflow, hay change file của CR-004/CR-006/CR-007
 - Commit source of truth: changed files, timestamp, SHA, rollback point
 - Task source of truth: acceptance/evidence/residual risk/doc impact
 - Progress source of truth: `.context/progress.json`

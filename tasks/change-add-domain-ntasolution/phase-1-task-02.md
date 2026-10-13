@@ -48,17 +48,38 @@ HTTPS hợp lệ cho apex+www, `www` → 301 apex, `http` → 301 `https`, canon
 6. KHÔNG sửa vhost/cert của `ntavietnam.tech`; KHÔNG sửa `.github/workflows/deploy.yml`; KHÔNG rebuild container.
 
 ## Acceptance Criteria
-- [ ] `https://ntasolution.vn/` = 200 + `https://ntasolution.vn/en` = 200 (nội dung site, không phải trang nginx mặc định)
-- [ ] `http://ntasolution.vn/` → 301 `https://ntasolution.vn/`; `http://www.ntasolution.vn/` → 301 `https://ntasolution.vn/`
-- [ ] `https://www.ntasolution.vn/` → 301 `https://ntasolution.vn/` (apex)
-- [ ] Cert Let's Encrypt hợp lệ cho **apex + www** (`curl -sI https://ntasolution.vn` không lỗi;
-      `openssl s_client -servername www.ntasolution.vn` trả cert phủ cả 2 name — hết `SEC_E_WRONG_PRINCIPAL`)
-- [ ] `curl -fsS https://ntasolution.vn/api/health` → `{"status":"ok"...}`
-- [ ] HTML từ domain phụ có `rel="canonical"` = `https://ntavietnam.tech/...` và **KHÔNG** redirect sang domain chính
-- [ ] `https://ntavietnam.tech/` vẫn 200 + HTTPS + cert còn hạn (hành vi không đổi)
-- [ ] `grep -c "ntavietnam.tech" ` trên HTML domain phụ chỉ xuất hiện ở canonical/SEO (không có redirect)
-- [ ] App/container khác trên VPS không bị ảnh hưởng (`nginx -t` OK, `systemctl status nginx` active, 3 site khác vẫn 200 nếu verify được)
-- [ ] `docs/runbook/deploy-vps.md` khớp thực tế đã apply (hoặc ghi rõ không lệch)
+- [x] `https://ntasolution.vn/` = 200 + `https://ntasolution.vn/en` = 200 (nội dung site, không phải trang nginx mặc định)
+- [x] `http://ntasolution.vn/` → 301 `https://ntasolution.vn/`; `http://www.ntasolution.vn/` → 301 `https://ntasolution.vn/`
+      (certbot ban đầu set `https://$host` cho www → đã sed về thẳng apex + reload)
+- [x] `https://www.ntasolution.vn/` → 301 `https://ntasolution.vn/` (apex)
+- [x] Cert Let's Encrypt hợp lệ cho **apex + www** (Subject `CN=ntasolution.vn`, SAN `ntasolution.vn` + `www.ntasolution.vn`,
+      hết hạn **2027-01-11** — hết `SEC_E_WRONG_PRINCIPAL`; cert `ntavietnam.tech` riêng, hết hạn 2027-01-07, không đổi)
+- [x] `curl -fsS https://ntasolution.vn/api/health` → `{"status":"ok","timestamp":"2026-10-13T09:05:33.609Z"}`
+- [x] HTML domain phụ có `rel="canonical"` = `https://ntavietnam.tech` (apex + www) và **KHÔNG** redirect sang domain chính (200 trực tiếp; 0 meta-refresh)
+- [x] `https://ntavietnam.tech/` vẫn 200 + HTTPS + cert còn hạn (NotAfter 2027-01-07; vhost md5 `8557842926f082a76a80431f121324f4` không đổi; http→301 https không đổi)
+- [x] HTML domain phụ: 18 chỗ `ntavietnam.tech` đều là SEO tag (canonical/hreflang/og/twitter/JSON-LD) — không có redirect/meta-refresh
+- [x] VPS không ảnh hưởng site khác: `nginx -t` OK, nginx active, container `nta-web` healthy,
+      tmfoods.genieplatform.cloud 200; dhp-cms.genieplatform.cloud = 000 **do DNS trỏ 187.124.226.230 (IP khác — pre-existing, không phải regression của change này)**; ismartschool containers chạy bình thường
+- [x] `docs/runbook/deploy-vps.md` — cập nhật lệch thực tế (certbot tách block 80 managed + cần sed www → apex) ở close-out
+
+## Evidence (13/10/2026)
+```text
+DNS: ntasolution.vn → 187.52.119.50 · www.ntasolution.vn → CNAME apex → 187.52.119.50
+nginx -t baseline: OK (2 warn tmfoods pre-existing) → sau vhost: OK → sau certbot: OK → sau sed: OK
+certbot: Successfully received + deployed certificate (live/ntasolution.vn, expires 2027-01-11, SAN apex+www)
+reload: RELOAD_OK · systemctl is-active nginx = active · md5 ntavietnam.tech = 8557842926f082a76a80431f121324f4 (GIỮ NGUYÊN)
+http://ntasolution.vn/        301 → https://ntasolution.vn/
+http://www.ntasolution.vn/    301 → https://ntasolution.vn/     (đã fix từ https://www sau khi certbot set $host)
+https://www.ntasolution.vn/   301 → https://ntasolution.vn/
+https://ntasolution.vn/       200 · https://ntasolution.vn/en 200
+https://ntasolution.vn/api/health → {"status":"ok",...}
+canonical: apex + www → rel="canonical" href="https://ntavietnam.tech" (0 meta-refresh)
+https://ntavietnam.tech/ 200 · http://ntavietnam.tech/ 301 → https://ntavietnam.tech/
+cert: CN=ntasolution.vn SAN[ntasolution.vn, www.ntasolution.vn] exp 2027-01-11; CN=ntavietnam.tech exp 2027-01-07 (không đổi)
+site khác: tmfoods.genieplatform.cloud 200 · dhp-cms DNS→187.124.226.230 (ngoài VPS này, pre-existing) · container nta-web Up (healthy)
+ismartschool: containers ismartschool-web (Up 3 days), ismartschool-staging-web/api/postgres/redis/minio (Up 30h), sysupgrade-postgres (Up 5w) — docker ps trước VÀ sau apply không đổi trạng thái
+crm-dhp (site TRÊN box): vhost phản hồi — `curl -H 'Host: dhp-cms.genieplatform.cloud' http://127.0.0.1/` → 301 (từ trong VPS); public `dhp-cms.genieplatform.cloud` trỏ IP khác nên test từ ngoài không tới box này
+```
 
 ## Verification Plan
 - Commands (chạy từ máy dev — curl/PowerShell; `nginx -t` chạy **trên VPS**):
@@ -83,26 +104,34 @@ HTTPS hợp lệ cho apex+www, `www` → 301 apex, `http` → 301 `https`, canon
 - ⚠️ Nếu `nginx -t` FAIL: **KHÔNG reload**, xoá symlink mới (`rm /etc/nginx/sites-enabled/ntasolution.vn`) để trả về trạng thái cũ, ghi evidence, báo user.
 
 ## Feature Verification (feature/update only)
-- Acceptance criteria: pending (điền sau apply)
-- Verify commands + result: pending
-- Reviewer verdict: pending
-- Spec Validator verdict (phase close): pending — pre-plan inline PASS
+- Acceptance criteria: 10/10 (13/10/2026) — xem mục Evidence
+- Verify commands + result: curl matrix (máy dev) PASS toàn bộ + cert SAN/expiry check + nginx -t trên VPS PASS mỗi bước;
+  app code không đổi (không rebuild) — `npm.cmd run typecheck/lint/build` đã PASS ở task-01, task-02 không đụng code
+- Reviewer verdict: **PASS (STRICT, round 1)** — 0 CRITICAL/MAJOR, 10 MINOR (F1–F10 đã fix/ghi nhận lúc close-out)
+  (`.context/review-reports/feature-add-domain-ntasolution-phase-1-task-02-round-1-review.md`)
+- Spec Validator verdict (phase close): **PASS** — `.context/review-reports/feature-add-domain-ntasolution-phase-1-spec-validation.md`
+  (gap test-scope v27 bị CR-004 ghi đè → publish lại v31 kèm giữ scope CR-004)
 
 ## Doc / Decision Impact
-- Doc impact result: pending — dự kiến `docs/runbook/deploy-vps.md` chỉ cập nhật nếu lệch thực tế
+- Doc impact result: `docs/runbook/deploy-vps.md` §3b — thêm bước (3) sed sau certbot (thực tế certbot tách block 80
+  managed với `$host` → cần sửa www về thẳng apex) — reconcile ở close-out
 - Decision log: none
 
 ## Commit / Tracking
-- Commit: pending — **explicit file list**, KHÔNG gộp file CR-004 / app code
-- (Nếu VPS apply không kèm thay đổi repo nào ngoài evidence → ghi evidence vào task file + journal, commit cùng close-out)
+- Commit: pending — close-out commit **explicit file list** (task file + runbook + progress + journal), KHÔNG gộp file CR-004/app code
+- Commit source of truth: changed files, timestamp, SHA, rollback point
+- Task source of truth: acceptance/evidence/residual risk/doc impact (mục Evidence ở trên)
+- Progress source of truth: `.context/progress.json`
+- Rollback (nếu cần sau này): `rm /etc/nginx/sites-enabled/ntasolution.vn && nginx -t && systemctl reload nginx`
+  (domain phụ tắt, domain chính không đổi); cert để lại vô hại hoặc `certbot delete --cert-name ntasolution.vn`
 
 ## DoD (Definition of Done)
-- [ ] Vhost + cert đã apply và verify ngoài PASS (đủ 9 acceptance)
-- [ ] Evidence (nginx -t, certbot, redirect matrix, canonical) lưu trong task file
-- [ ] Regression `ntavietnam.tech` PASS + site khác trên VPS không ảnh hưởng
-- [ ] Reviewer độc lập PASS (STRICT)
-- [ ] `.context/progress.json` updated + Doc Impact reconciled
-- [ ] Commit close-out (explicit file list) sau PASS
+- [x] Vhost + cert đã apply và verify ngoài PASS (đủ acceptance)
+- [x] Evidence (nginx -t, certbot, redirect matrix, canonical) lưu trong task file
+- [x] Regression `ntavietnam.tech` PASS + site khác trên VPS không ảnh hưởng (dhp-cms = DNS trỏ IP khác, pre-existing)
+- [x] Reviewer độc lập PASS (STRICT, round 1)
+- [x] `.context/progress.json` updated + Doc Impact reconciled (runbook §3b thêm bước sed + rollback cert)
+- [ ] Commit close-out (explicit file list) sau PASS — thực hiện ngay sau bước này
 
 ## Files to Create/Modify
 - `docs/runbook/deploy-vps.md` (chỉ khi thực tế lệch)

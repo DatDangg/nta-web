@@ -3,7 +3,7 @@
   "activeWorkItem": {
     "type": "feature",
     "slug": "add-domain-ntasolution",
-    "note": "CR-005 — entry mới, thay pointer activeWorkItem; CR-004 (shared-detail-showcase-template) vẫn in_progress trong features[] (layer 2b task-04 done, chờ layer tiếp) — KHÔNG sửa/xoá"
+    "note": "CR-005 đã DONE + archive (13/10/2026) — không có work item active nào đang chạy. Các CR còn chờ: CR-001 blocked (chờ duyệt danh sách ảnh), CR-007 pending (chờ link + tài khoản staging), CR-004/CR-006 đã done bởi session khác. Mở việc mới → /change <slug>."
   },
   "features": [
     {
@@ -772,26 +772,31 @@
     },
     {
       "slug": "add-domain-ntasolution",
-      "status": "in_progress",
-      "changeFile": "spec/changes/2026-10-13-add-domain-ntasolution.md",
+      "status": "done",
+      "changeFile": "spec/changes/archive/2026-10-13-add-domain-ntasolution.md",
       "classification": "ADDITIVE",
       "specVersion": "3.5.0",
       "specValidation": {
         "verdict": "PASS",
         "round": 1,
         "report": ".context/review-reports/feature-add-domain-ntasolution-spec-validation.md",
-        "note": "inline self-check (env chặn spawn subagent lồng) — primary nên re-run spec-validator độc lập nếu cần second opinion"
+        "note": "pre-plan inline self-check; phase-close chạy lại độc lập → PASS (0 conflict HIGH; gap test-scope bị CR-004 ghi đè → publish v31)",
+        "phaseClose": {
+          "verdict": "PASS",
+          "round": 1,
+          "report": ".context/review-reports/feature-add-domain-ntasolution-phase-1-spec-validation.md"
+        }
       },
       "specPublished": {
-        "scopeVersion": 27,
+        "scopeVersion": 31,
         "trigger": "feature-update",
         "path": "spec/test-scope/current.json",
-        "note": "spec 3.4.0 → 3.5.0 (MINOR) — mở rộng R-27 (domain phụ ntasolution.vn + www); canonical/SEO contract KHÔNG đổi. Concurrency: scope v26 (CR-004) nằm ở git HEAD 344bf48 — CR-004 publish lại ở close-out thì đọc current.json tại thời điểm đó."
+        "note": "spec 3.4.0 → 3.5.0 (MINOR, R-27 domain phụ). CR-004 bump tiếp 3.5.1 + publish v30 giữa chừng → close-out CR-005 publish v31 (specVersion theo SPECIFICATIONS.md hiện tại 3.5.1, KÈM giữ scope CR-004 — không lose handoff)."
       },
       "phases": [
         {
           "phase": 1,
-          "status": "in_progress",
+          "status": "done",
           "tasks": [
             {
               "id": "phase-1-task-01",
@@ -807,18 +812,32 @@
             },
             {
               "id": "phase-1-task-02",
-              "status": "in_progress",
-              "scope": "apply VPS (SSH) — copy vhost → nginx -t → certbot --nginx --redirect -d ntasolution.vn -d www.ntasolution.vn → reload; verify redirect matrix + canonical + regression ntavietnam.tech",
+              "status": "done",
+              "scope": "apply VPS (SSH) — copy vhost → nginx -t → certbot --nginx --redirect -d ntasolution.vn -d www.ntasolution.vn → sed www block 80 về apex → reload; verify redirect matrix + canonical + regression ntavietnam.tech",
               "blockedBy": null,
-              "note": "user ĐÃ duyệt SSH 13/10/2026 (checkpoint phase plan + SSH pass)"
+              "note": "user ĐÃ duyệt SSH 13/10/2026 (checkpoint phase plan + SSH pass)",
+              "review": {
+                "level": "STRICT",
+                "verdict": "PASS",
+                "round": 1,
+                "report": ".context/review-reports/feature-add-domain-ntasolution-phase-1-task-02-round-1-review.md",
+                "note": "0 CRITICAL/MAJOR, 10 MINOR (F1–F10) — fix/ghi nhận lúc close-out. Evidence task file §Evidence: matrix PASS, cert SAN apex+www exp 2027-01-11, md5 vhost ntavietnam.tech không đổi, site khác không regression (dhp-cms DNS trỏ IP khác pre-existing)."
+              }
             }
-          ]
+          ],
+          "specValidation": {
+            "verdict": "PASS",
+            "report": ".context/review-reports/feature-add-domain-ntasolution-phase-1-spec-validation.md"
+          }
         }
       ],
-      "codeCommits": [],
+      "codeCommits": [
+        "ec09807"
+      ],
       "updatedAt": "2026-10-13",
-      "scopeVersion": 27,
-      "note": "CR-005 — ADDITIVE infra/nginx: domain phụ ntasolution.vn (+www) phục vụ CÙNG nội dung, KHÔNG redirect giữa 2 domain; GIỮ ntavietnam.tech làm canonical (không đổi NEXT_PUBLIC_SITE_URL/seo/sitemap/robots/llms.txt/deploy.yml). Spec: 3.5.0 MINOR (mở rộng R-27). Risk LOW-MEDIUM (nginx VPS shared → nginx -t bắt buộc). ✅ User đã duyệt plan + cấp phép SSH 13/10/2026 → task-01 repo-side done (review PASS round 1), task-02 apply VPS đang chạy. Concurrency: CR-004 (shared-detail-showcase-template) vẫn in_progress — entry riêng, KHÔNG bị sửa; commit CR-005 dùng explicit file list."
+      "completedAt": "2026-10-13",
+      "scopeVersion": 31,
+      "note": "CR-005 DONE — ADDITIVE infra/nginx: domain phụ ntasolution.vn (+www) phục vụ CÙNG nội dung, KHÔNG redirect giữa 2 domain; GIỮ ntavietnam.tech canonical (không đổi NEXT_PUBLIC_SITE_URL/seo/sitemap/robots/llms.txt/deploy.yml). Spec 3.5.0 MINOR (R-27); SPECIFICATIONS.md hiện 3.5.1 do CR-004 bump sau (không hạ về). Task-01 = commit ec09807; task-02 apply VPS thật (SSH key user cung cấp) — certbot cert apex+www, sed block 80 www về apex (certbot set $host → 2 hop), verify matrix PASS. Review: NORMAL r1 PASS (task-01) + STRICT r1 PASS (task-02). Residual: dhp-cms DNS trỏ 187.124.226.230 (pre-existing, off-box); commit close-out = commit kèm change file archive + test-scope v31."
     },
     {
       "slug": "products-remove-app-details",

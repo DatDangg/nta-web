@@ -1,43 +1,64 @@
 {
   "specVersion": "3.5.1",
-  "scopeVersion": 30,
-  "generatedAt": "2026-10-13T17:00:00+07:00",
+  "scopeVersion": 31,
+  "generatedAt": "2026-10-13T17:30:00+07:00",
   "trigger": "feature-update",
-  "workItem": "feature-shared-detail-showcase-template",
+  "workItem": "feature-add-domain-ntasolution",
   "specRefs": [
+    "R-27",
+    "R-19",
+    "R-21",
     "R-08c",
     "R-08c.1"
   ],
   "changed": {
     "files": [
-      "src/components/solutions/{AiAssistantPanel,AiSection,AudienceCards,BenefitList,BentoCompliance,FaqAccordion,FaqList,FeatureList,FeatureZigZag,ScreenshotSection,ShotImage,SolutionHero,SolutionHighlights,SolutionSections,UseCases}.tsx + features.ts (xoá)",
-      "src/app/[locale]/dev/components/page.tsx (xoá)",
-      "src/lib/content/{solutions,products}.ts (bắt buộc showcase, WithShowcase<T>)",
-      "src/content/types.ts (WithShowcase)",
-      "src/app/[locale]/{solutions/enterprise,solutions/ai,products}/[slug]/page.tsx (bỏ throw)"
+      "deploy/nginx/ntasolution.vn.conf (MỚI — vhost domain phụ: block 80 apex proxy → 127.0.0.1:3005 + block www → 301 apex; trên VPS certbot sinh block 443 + block 80 managed, cần sed www về apex — runbook §3b)",
+      "docs/runbook/deploy-vps.md (§3b: cp → ln -sf → nginx -t → certbot --nginx --redirect 2 domain → sed www block 80 → reload + curl matrix; §7 troubleshooting)",
+      ".context/project-config.md (domain_secondary: ntasolution.vn)",
+      "SPECIFICATIONS.md (R-27 mở rộng; spec 3.5.0 — CR-005; sau đó CR-004 bump 3.5.1)",
+      "src/components/solutions/{AiAssistantPanel,AiSection,AudienceCards,BenefitList,BentoCompliance,FaqAccordion,FaqList,FeatureList,FeatureZigZag,ScreenshotSection,ShotImage,SolutionHero,SolutionHighlights,SolutionSections,UseCases}.tsx + features.ts (xoá) [CR-004]",
+      "src/app/[locale]/dev/components/page.tsx (xoá) [CR-004]",
+      "src/lib/content/{solutions,products}.ts (bắt buộc showcase, WithShowcase<T>) [CR-004]",
+      "src/content/types.ts (WithShowcase) [CR-004]",
+      "src/app/[locale]/{solutions/enterprise,solutions/ai,products}/[slug]/page.tsx (bỏ throw) [CR-004]"
     ],
     "modules": [
-      "Khung chi tiết dùng chung (R-08c)"
+      "Hạ tầng nginx + certbot trên VPS 187.52.119.50 (KHÔNG đổi code app, KHÔNG rebuild)",
+      "Khung chi tiết dùng chung (R-08c) [CR-004]"
     ]
   },
   "impact": {
     "direct": [
-      "Không đổi UI; /dev/components 404 (vốn chỉ chạy ở dev)"
+      "https://ntasolution.vn/ và https://ntasolution.vn/en (vi/en) → 200, cùng nội dung site",
+      "https://www.ntasolution.vn/* → 301 https://ntasolution.vn/* (apex của chính nó, cả http lẫn https)",
+      "http://ntasolution.vn/* và http://www.ntasolution.vn/* → 301 https://ntasolution.vn/",
+      "Không đổi UI; /dev/components 404 (vốn chỉ chạy ở dev) [CR-004]"
     ],
     "dependents": [
-      "Mọi trang dùng getAllSolutions/getAllProducts (danh sách, trang chủ, sitemap)"
+      "https://ntavietnam.tech/* (canonical — không đổi hành vi, không đổi cert)",
+      "Mọi trang dùng getAllSolutions/getAllProducts (danh sách, trang chủ, sitemap) [CR-004]"
     ],
     "regression": [
-      "7 trang giải pháp + 2 trang sản phẩm + 2 case study vi/en 200, hiển thị như trước",
-      "/solutions/enterprise, /solutions/ai, /products, trang chủ không đổi"
+      "canonical / og / hreflang / sitemap.xml / robots.txt / llms.txt vẫn trỏ ntavietnam.tech (KHÔNG được đổi)",
+      "ntavietnam.tech: 200, HTTPS, cert còn hạn (hạn 07/01/2027) — không đổi",
+      "/api/health và /api/contact chạy trên cả 2 hostname (cùng app; X-Forwarded-For/proxy headers giữ nguyên)",
+      "Container/site khác trên VPS shared (ismartschool, crm-dhp, tmfoods) không bị ảnh hưởng; KHÔNG có redirect giữa 2 domain",
+      "7 trang giải pháp + 2 trang sản phẩm + 2 case study vi/en 200, hiển thị như trước [CR-004]",
+      "/solutions/enterprise, /solutions/ai, /products, trang chủ không đổi [CR-004]"
     ]
   },
   "acceptance": [
-    "11 trang chi tiết vi/en 200",
-    "MDX giải pháp/sản phẩm thiếu showcase → build lỗi tại loader",
-    "Không còn import tới component đã xoá"
+    "https://ntasolution.vn/ và https://ntasolution.vn/en trả 200 với nội dung site",
+    "www.ntasolution.vn → 301 apex ntasolution.vn (cả http lẫn https)",
+    "http:// → 301 https:// cho cả apex + www; cert Let's Encrypt hợp lệ cho cả 2 hostname (không còn SEC_E_WRONG_PRINCIPAL)",
+    "Trang trả về trên domain phụ vẫn có rel=canonical = https://ntavietnam.tech/... và KHÔNG redirect sang domain chính",
+    "ntavietnam.tech không đổi hành vi (200 / HTTPS / cert còn hạn)",
+    "11 trang chi tiết vi/en 200 [CR-004]",
+    "MDX giải pháp/sản phẩm thiếu showcase → build lỗi tại loader [CR-004]",
+    "Không còn import tới component đã xoá [CR-004]"
   ],
   "risk": "low",
-  "regression_note": "Chỉ xoá code chết + dời chỗ kiểm dữ liệu.",
-  "concurrency_note": "Tăng tiếp từ v29. Lần publish sau đọc file hiện tại rồi +1."
+  "regression_note": "CR-005: không đổi code app/build (NEXT_PUBLIC_SITE_URL build-time giữ nguyên ⇒ không rebuild, không đổi canonical). Rủi ro chính: sửa nginx trên VPS shared → bắt buộc `nginx -t` trước `reload`; chỉ THÊM vhost, không sửa vhost khác. CR-004: chỉ xoá code chết + dời chỗ kiểm dữ liệu.",
+  "concurrency_note": "Tăng tiếp từ v30 (CR-004 publish trước trong lần close-out cùng ngày). v31 = CR-005 (add-domain-ntasolution) KÈM giữ nguyên nội dung handoff CR-004 ở v30 (R-08c/R-08c.1) — không lose scope nào. Lần publish sau đọc file hiện tại rồi +1."
 }

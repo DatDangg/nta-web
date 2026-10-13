@@ -42,7 +42,7 @@ curl -fsS http://127.0.0.1:3005/api/health    # {"status":"ok",...}
 # trên VPS (đứng trong repo, vd workspace runner hoặc bản clone thủ công)
 cp deploy/nginx/ntavietnam.tech.conf /etc/nginx/sites-available/ntavietnam.tech
 ln -sf /etc/nginx/sites-available/ntavietnam.tech /etc/nginx/sites-enabled/
-certbot --nginx -d ntavietnam.tech       # cấp cert Let's Encrypt
+certbot --nginx --redirect -d ntavietnam.tech       # cấp cert Let's Encrypt
 nginx -t && systemctl reload nginx
 curl -fsS https://ntavietnam.tech/api/health
 
@@ -63,7 +63,11 @@ cp deploy/nginx/ntasolution.vn.conf /etc/nginx/sites-available/ntasolution.vn
 ln -sf /etc/nginx/sites-available/ntasolution.vn /etc/nginx/sites-enabled/
 nginx -t                                    # (1) phải OK trước khi cấp cert
 certbot --nginx --redirect -d ntasolution.vn -d www.ntasolution.vn   # (2) 1 cert Let's Encrypt apex+www; --redirect = tự bật http→https 301 (non-interactive cũng đạt curl matrix dưới)
+# (3) certbot TÁCH block 80 riêng (managed) với `return 301 https://$host$request_uri` →
+#     http://www sẽ 301 https://www (2 hop). Sửa về thẳng apex (.bak = backup đề phòng):
+sed -i.bak '/if ($host = www.ntasolution.vn)/,/^[[:space:]]*}/ s#return 301 https://$host$request_uri;#return 301 https://ntasolution.vn$request_uri;#' /etc/nginx/sites-available/ntasolution.vn
 nginx -t && systemctl reload nginx
+rm -f /etc/nginx/sites-available/ntasolution.vn.bak   # sau khi verify OK
 ```
 
 Kiểm tra sau khi cấp cert:
@@ -86,6 +90,9 @@ curl -sI https://ntavietnam.tech/        | head -1   # 200 — KHÔNG đổi hà
 - `nginx -t` **bắt buộc** chạy trước `reload`/`certbot` (VPS là **shared** server: ismartschool, crm-dhp, tmfoods).
 - Cert của `ntavietnam.tech` **không** bị đụng: certbot tạo lineage mới (`/etc/letsencrypt/live/ntasolution.vn/`).
 - Chỉ thêm `server` block mới — KHÔNG sửa/xoá vhost của domain/app khác trên VPS.
+- **Rollback domain phụ:** `rm /etc/nginx/sites-enabled/ntasolution.vn && nginx -t && systemctl reload nginx`
+  (domain chính không đổi). Sau đó nếu không dùng nữa, xoá luôn cert tránh `certbot renew` lỗi mỗi 60 ngày:
+  `certbot delete --cert-name ntasolution.vn`.
 
 ## 4. Biến môi trường
 
