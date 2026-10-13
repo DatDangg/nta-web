@@ -19,6 +19,11 @@ export function ShowcasePhotos({ photos }: Props) {
   const titleId = useId();
   if (photos.items.length === 0) return null;
   const isScreen = photos.variant === 'screen';
+  const isPhone = photos.variant === 'phone';
+  const itemClass = isPhone
+    ? 'w-[46%] rounded-2xl border border-border bg-white shadow-sm sm:w-[30%] lg:w-[calc((100%-5rem)/6)]'
+    : `aspect-[4/3] w-[78%] rounded-xl sm:w-[46%] lg:w-[calc((100%-3rem)/4)] ${isScreen ? 'border border-border bg-white shadow-sm' : ''}`;
+  const imageSizes = isPhone ? '(min-width: 1024px) 200px, (min-width: 640px) 30vw, 46vw' : '(min-width: 1024px) 25vw, (min-width: 640px) 46vw, 78vw';
 
   const scrollBy = (direction: 1 | -1) => {
     const track = trackRef.current;
@@ -51,8 +56,8 @@ export function ShowcasePhotos({ photos }: Props) {
           tabIndex={0}
         >
           {photos.items.map((photo) => (
-            <li className={`relative aspect-[4/3] w-[78%] shrink-0 snap-start overflow-hidden rounded-xl sm:w-[46%] lg:w-[calc((100%-3rem)/4)] ${isScreen ? 'border border-border bg-white shadow-sm' : ''}`} key={photo.src}>
-              <Image alt={photo.alt} className={`object-cover transition-transform duration-slow hover:scale-[1.03] ${isScreen ? 'object-left-top' : ''}`} fill sizes="(min-width: 1024px) 25vw, (min-width: 640px) 46vw, 78vw" src={photo.src} />
+            <li className={`relative shrink-0 snap-start overflow-hidden ${itemClass}`} key={photo.src} style={isPhone ? { aspectRatio: photos.aspect ?? '9/16' } : undefined}>
+              <Image alt={photo.alt} className={`object-cover transition-transform duration-slow hover:scale-[1.03] ${isScreen ? 'object-left-top' : ''} ${isPhone ? 'object-top' : ''}`} fill sizes={imageSizes} src={photo.src} />
             </li>
           ))}
         </ul>

@@ -238,8 +238,8 @@ export const listingPages: Record<Locale, Record<PageKey, ListingPageCopy>> = {
 /** Metadata thẻ theo slug (icon, màu, danh mục lọc, phụ đề, chip ngắn). */
 export const listingItems: Record<Locale, Record<string, ListingItemMeta>> = {
   vi: {
-    'music-app': { icon: 'music', theme: 'violet', categories: ['creative', 'entertainment'], subtitle: 'Tạo nhạc từ ý tưởng của bạn với AI', chips: ['Gợi ý theo chủ đề', 'Danh sách yêu thích', 'Nghe lại'] },
-    'hair-style-ai': { icon: 'face', theme: 'rose', categories: ['image', 'lifestyle'], subtitle: 'Thử kiểu tóc mới với AI', chips: ['Kiểu tóc đa dạng', 'Xem trước trên ảnh', 'Lưu lựa chọn'] },
+    'music-app': { icon: 'music', theme: 'violet', categories: ['creative', 'entertainment'], subtitle: 'Tạo nhạc từ ý tưởng của bạn với AI', chips: ['Mô tả hoặc lời ca', 'Có lời / không lời', 'Nhận diện bài hát'] },
+    'hair-style-ai': { icon: 'face', theme: 'rose', categories: ['image', 'lifestyle'], subtitle: 'Thử kiểu tóc mới với AI', chips: ['76 kiểu tóc', 'Gợi ý theo dáng mặt', 'Đổi màu tóc'] },
     'dental-clinic-operations': { icon: 'tooth', theme: 'sky', categories: ['enterprise'], subtitle: '', chips: [] },
     'oc-eo-learning': { icon: 'landmark', theme: 'teal', categories: ['ai'], subtitle: '', chips: [] },
     crm: { icon: 'users', theme: 'sky', categories: ['sales'], subtitle: 'Khách hàng 360° cho chuỗi nhà hàng', chips: ['Hồ sơ khách hàng', 'Đặt bàn', 'Đơn hàng'] },
@@ -251,8 +251,8 @@ export const listingItems: Record<Locale, Record<string, ListingItemMeta>> = {
     'custom-ai': { icon: 'chat', theme: 'violet', categories: ['assistant'], subtitle: 'Trợ lý AI theo nhu cầu doanh nghiệp', chips: ['Tùy chỉnh quy trình', 'Đa kênh', 'Kiểm duyệt trước'] },
   },
   en: {
-    'music-app': { icon: 'music', theme: 'violet', categories: ['creative', 'entertainment'], subtitle: 'Turn your ideas into music with AI', chips: ['Theme suggestions', 'Favorites', 'Replay'] },
-    'hair-style-ai': { icon: 'face', theme: 'rose', categories: ['image', 'lifestyle'], subtitle: 'Try a new hairstyle with AI', chips: ['Many styles', 'Preview on a photo', 'Save picks'] },
+    'music-app': { icon: 'music', theme: 'violet', categories: ['creative', 'entertainment'], subtitle: 'Turn your ideas into music with AI', chips: ['Prompt or lyrics', 'Vocal / instrumental', 'Song recognition'] },
+    'hair-style-ai': { icon: 'face', theme: 'rose', categories: ['image', 'lifestyle'], subtitle: 'Try a new hairstyle with AI', chips: ['76 styles', 'Face-shape picks', 'Hair colour'] },
     'dental-clinic-operations': { icon: 'tooth', theme: 'sky', categories: ['enterprise'], subtitle: '', chips: [] },
     'oc-eo-learning': { icon: 'landmark', theme: 'teal', categories: ['ai'], subtitle: '', chips: [] },
     crm: { icon: 'users', theme: 'sky', categories: ['sales'], subtitle: '360° customers for restaurant chains', chips: ['Customer profiles', 'Reservations', 'Orders'] },

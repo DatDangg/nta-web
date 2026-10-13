@@ -1,5 +1,5 @@
 ---
-spec_version: 3.5.0
+spec_version: 3.5.1
 updated_at: 2026-10-13
 ---
 
@@ -145,6 +145,11 @@ _(cập nhật 2026-10-13: thêm **domain phụ** `ntasolution.vn` (+ `www`) ph�
   Giữ nguyên URL hiện có; metadata, canonical/alternates, breadcrumb JSON-LD, sitemap đúng; SSG; không thêm DB/API nội dung (R-15, R-16).
   Ảnh thiếu → ảnh minh hoạ tự tạo có alt/caption ghi "minh hoạ" (BR-004); ảnh staging CRM/DentGo/LMS phải thay dữ liệu bên trong bằng dữ liệu giả.
   — nguồn: change `spec/changes/2026-10-13-shared-detail-showcase-template.md` (CR-004).
+  - **R-08c.1 (3.5.1 — trang chi tiết sản phẩm app):** `/products/[slug]` (+ `/en/…`) cho `music-app`, `hair-style-ai` render bằng `ShowcaseLayout`,
+    data `showcase` trong `src/content/products/{vi,en}/*.mdx`; slug lạ → 404; thẻ ở `/products` link sang trang chi tiết; sitemap có 2 trang × 2 ngôn ngữ.
+    Field optional tương thích ngược cho ảnh app di động: `technology.screen.device: phone` (khung điện thoại), `photos.variant: phone`
+    (+ `photos.aspect` tỉ lệ ảnh), icon nút sơ đồ `photo` · `ai` · `music` · `share`. Chưa có link store → nút hero cuộn tới lưới tính năng.
+    Nội dung lấy từ ghi chú sản phẩm user gửi 13/10/2026; không dùng ảnh có số liệu chưa kiểm chứng (màn Premium nhạc ghi rating 4.8) hoặc ảnh minh hoạ chưa rõ giấy phép (welcome app tóc) (BR-004).
 
 ### Module 7 — Tin tức / Blog
 

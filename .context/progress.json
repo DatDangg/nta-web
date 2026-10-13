@@ -729,6 +729,23 @@
                 "close-out: gom validate showcase vào content loader",
                 "người dùng duyệt câu chữ FAQ Talvra (4 câu mới) và câu FAQ thứ 5 của LMS"
               ]
+            },
+            {
+              "id": "phase-1-task-05",
+              "status": "done",
+              "scope": "layer 3 — route /products/[slug] (music-app, hair-style-ai) dùng ShowcaseLayout; data showcase vi/en từ info user 13/10; biến thể phone (technology.screen.device, photos.variant/aspect); icon node photo/ai/music/share; sitemap + listing href; 14 ảnh public/images/products/v2",
+              "review": {
+                "level": "NORMAL",
+                "verdict": "PASS",
+                "round": 2,
+                "note": "v1 PASS_WITH_CONDITIONS (ảnh nhạc bị cắt đáy trong carousel, title chưa localize) → thêm photos.aspect + title vi/en → v2 PASS"
+              },
+              "followUps": [
+                "link store khi app lên Google Play / App Store (downloadUrl + nút hero)",
+                "Privacy/Terms Hairstyle AI còn DRAFT — chưa link",
+                "bỏ khối 'Chi tiết ứng dụng' trùng ở /products nếu user muốn",
+                "màn Premium nhạc (rating 4.8, 80% người dùng chọn) + welcome tóc (ảnh minh hoạ chưa rõ giấy phép) không dùng"
+              ]
             }
           ]
         }

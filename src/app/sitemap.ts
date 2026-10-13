@@ -3,12 +3,14 @@ import { routing } from '@/i18n/routing';
 import { getAllPosts } from '@/lib/content/posts';
 import { getAllCaseStudies } from '@/lib/content/case-studies';
 import { getAllSolutions } from '@/lib/content/solutions';
+import { productSlugs } from '@/lib/content/slug';
 import { BASE_URL } from '@/lib/seo';
 
 const ROUTES = ['', 'about', 'solutions/enterprise', 'solutions/ai', 'products', 'case-studies', 'blog', 'contact'];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const paths = new Set(ROUTES);
+  for (const slug of productSlugs) paths.add(`products/${slug}`);
   for (const locale of routing.locales) {
     const [posts, studies, solutions] = await Promise.all([
       getAllPosts(locale), getAllCaseStudies(locale), getAllSolutions(locale),

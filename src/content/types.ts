@@ -133,11 +133,15 @@ export interface Solution {
 
 export interface Product {
   slug: string;
+  /** Tên ngắn cho breadcrumb + title SEO trang chi tiết. Thiếu → dùng `title`. */
+  brandName?: string;
   title: string;
   description: string;
   screenshots: string[];
   downloadUrl?: string | null;
   features?: string[];
+  /** Trang chi tiết `/products/[slug]` (R-08c) — bắt buộc với sản phẩm có route chi tiết. */
+  showcase?: CaseStudyShowcase;
 }
 
 export interface CaseStudy {
@@ -167,7 +171,7 @@ export interface CaseStudy {
 export type ShowcaseIcon = 'area' | 'camera' | 'calendar' | 'challenge' | 'solution' | 'result' | 'modules';
 
 /** Icon cho nút sơ đồ ở khối công nghệ (thiếu → theo thứ tự camera · drone · vms như Óc Eo). */
-export type ShowcaseNodeIcon = 'camera' | 'drone' | 'vms' | 'calendar' | 'records' | 'inventory';
+export type ShowcaseNodeIcon = 'camera' | 'drone' | 'vms' | 'calendar' | 'records' | 'inventory' | 'photo' | 'ai' | 'music' | 'share';
 
 export interface CaseStudyShowcase {
   hero: {
@@ -196,7 +200,14 @@ export interface CaseStudyShowcase {
     /** Danh sách cảnh báo trên màn VMS minh hoạ — dữ liệu giả lập, có caption nói rõ. Bỏ qua khi có `screen`. */
     alerts?: { title: string; meta: string }[];
     /** Ảnh chụp giao diện phần mềm thay cho màn VMS dựng HTML (vd DentGo). Có `screen` → không render VmsMock. */
-    screen?: { src: string; alt: string; width: number; height: number };
+    screen?: {
+      src: string;
+      alt: string;
+      width: number;
+      height: number;
+      /** `phone` = ảnh chụp app di động (khung điện thoại dọc) · thiếu → khung màn hình máy tính. */
+      device?: 'monitor' | 'phone';
+    };
     caption: string;
   };
   photos?: {
@@ -206,8 +217,13 @@ export interface CaseStudyShowcase {
     nextLabel: string;
     /** Ghi chú nguồn ảnh (BR-004) — bắt buộc khi ảnh là minh hoạ, không phải ảnh chụp thực tế. */
     caption?: string;
-    /** `screen` = ảnh chụp giao diện: viền + nền trắng + căn trên để không cắt mất phần đầu màn hình. */
-    variant?: 'photo' | 'screen';
+    /**
+     * `screen` = ảnh chụp giao diện: viền + nền trắng + căn trên để không cắt mất phần đầu màn hình.
+     * `phone` = ảnh chụp app di động: thẻ dọc hẹp, căn trên.
+     */
+    variant?: 'photo' | 'screen' | 'phone';
+    /** Chỉ dùng với `variant: phone`: tỉ lệ rộng/cao ảnh chụp (vd `720/1561`) để thẻ không cắt ảnh. Thiếu → `9/16`. */
+    aspect?: string;
     items: { src: string; alt: string }[];
   };
   /** `quote` optional (R-08c): thiếu trích dẫn thật → ẩn thẻ trích dẫn (BR-004). */

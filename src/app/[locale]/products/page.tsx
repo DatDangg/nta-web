@@ -13,11 +13,11 @@ import { listingCtas, listingItems, listingLabels, listingPages } from '@/conten
 import { Reveal } from '@/components/ui/Reveal';
 import type { Locale, Product } from '@/content/types';
 import { getAllProducts } from '@/lib/content/products';
+import { productSlugs } from '@/lib/content/slug';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { createBreadcrumbJsonLd } from '@/lib/seo/jsonld';
 import { createLocaleAlternates, localizedPath } from '@/lib/seo';
 
-const productSlugs = ['music-app', 'hair-style-ai'];
 const pageMetadata: Record<Locale, Metadata> = {
   vi: { title: 'Sản phẩm App | NTA', description: 'Khám phá các ứng dụng di động do NTA phát triển, từ trải nghiệm âm nhạc hỗ trợ bởi AI đến thử kiểu tóc với AI, mang lại trải nghiệm số thực tế cho người dùng.' },
   en: { title: 'Apps | NTA', description: 'Explore NTA mobile apps, from AI-assisted music experiences to trying different hairstyles with AI, delivering practical digital experiences for everyday users.' },
@@ -52,7 +52,7 @@ export default async function ProductsPage({ params }: { params: Promise<{ local
     const poster = product.screenshots[0];
     return {
       id: product.slug,
-      href: `#${product.slug}`,
+      href: `/products/${product.slug}`,
       title: product.title,
       subtitle: meta?.subtitle,
       description: product.description,

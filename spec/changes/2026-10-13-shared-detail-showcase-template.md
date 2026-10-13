@@ -51,7 +51,17 @@ Hero → Stats (3 số) + 3 pillar → Technology (sơ đồ + ảnh màn) → �
     và 2 sản phẩm (Kiểu tóc AI, Music app; thêm route `/products/[slug]`).
   - Thiếu ảnh → agent **tự tạo ảnh minh hoạ** (mock theo phong cách sản phẩm), mọi ảnh tự tạo phải có alt/caption ghi "minh hoạ" (BR-004).
   - User đã gửi link + tài khoản staging CRM / DentGo / LMS **qua chat** — KHÔNG ghi mật khẩu vào repo/change doc.
-- **Needs-input (chưa chốt):**
-  - CRM: link gửi là domain thật của khách (`cms.dragonhotpotvietnam.com`) — cần xác nhận là staging/dữ liệu demo hay prod; nếu dữ liệu thật phải che toàn bộ thông tin khách.
-  - Dữ liệu trên staging DentGo / LMS có phải dữ liệu demo không.
-  - Danh sách màn HRM cần dựng thêm (hoặc để agent đề xuất).
+- **Chụp ảnh staging CRM / DentGo / LMS (chốt 2026-10-13):** cả 3 là staging, dữ liệu demo. Ảnh dùng trên web vẫn phải
+  **thay toàn bộ thông tin bên trong bằng dữ liệu giả trông như thật** (tên người, SĐT, email, địa chỉ, mã hồ sơ, số tiền,
+  tên tổ chức…) để không trùng dữ liệu khách nếu có.
+  - Cách làm: chỉ thay chữ **trên trình duyệt trước khi chụp** (sửa DOM phía client), KHÔNG tạo/sửa/xoá bản ghi nào trên staging.
+  - Dữ liệu giả: tên/SĐT/địa chỉ kiểu Việt Nam hợp lý, nhất quán giữa các màn của cùng một hệ thống; không dùng tên người/doanh nghiệp có thật.
+  - Rà lại từng ảnh trước khi đưa vào repo: không còn chữ gốc ở tiêu đề tab, avatar, ô tìm kiếm, thông báo, góc màn hình.
+  - Alt/caption ghi "dữ liệu minh hoạ" (BR-004).
+- **HRM (chốt 2026-10-13):** agent tự dựng thêm màn (mockup, cùng phong cách 9 màn `public/images/solutions/v2/hrm/`).
+  Đề xuất ban đầu (chốt danh sách ở checkpoint plan của `/change`): tuyển dụng (pipeline ứng viên) · hợp đồng lao động
+  (sắp hết hạn / gia hạn) · đánh giá hiệu suất (KPI) · đào tạo · báo cáo biến động nhân sự.
+  - Áp quy tắc dữ liệu giả như staging: thay email `@ntavietnam.tech` và tên "Công ty NTA" trong ảnh HRM hiện có/ảnh mới
+    bằng tên tổ chức giả (cảnh báo trong `docs/reference/hrm-mock/README.md`).
+- **Push:** user dặn chưa push (2026-10-13) — chỉ commit local cho tới khi user bảo.
+- **Sản phẩm (2026-10-13, layer 3 xong):** user gửi info + ảnh 2 app qua chat → `/products/music-app`, `/products/hair-style-ai` dùng khung chung (task `phase-1-task-05`). Không dùng màn Premium app nhạc (rating 4.8 chưa kiểm chứng) và màn welcome app tóc (ảnh chưa rõ giấy phép). Chờ link store + Privacy/Terms chính thức.

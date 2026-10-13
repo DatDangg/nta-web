@@ -22,6 +22,14 @@ const NODE_ICONS: Record<ShowcaseNodeIcon, ReactNode> = {
   records: <path d="M7 3h7l4 4v14H7V3Zm7 0v4h4M10 11h5M10 14h5M10 17h3" />,
   // Kho – thu chi
   inventory: <path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Zm0 9 8-4.5M12 12 4 7.5M12 12v9" />,
+  // Chụp ảnh / chọn ảnh
+  photo: <path d="M4 8h3l2-3h6l2 3h3v11H4V8Zm8 8a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z" />,
+  // AI xử lý
+  ai: <path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8L12 3Zm6 11 .9 2.1L21 17l-2.1.9L18 20l-.9-2.1L15 17l2.1-.9L18 14Z" />,
+  // Nghe nhạc
+  music: <path d="M9 18V6l11-2v12M9 18a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm11-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />,
+  // Lưu và chia sẻ
+  share: <path d="M12 3v12m0-12L8 7m4-4 4 4M5 13v6h14v-6" />,
 };
 const DEFAULT_ORDER: ShowcaseNodeIcon[] = ['camera', 'drone', 'vms'];
 

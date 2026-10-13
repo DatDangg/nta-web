@@ -1,45 +1,54 @@
 {
-  "specVersion": "3.5.0",
-  "scopeVersion": 27,
-  "generatedAt": "2026-10-13T08:18:47+07:00",
+  "specVersion": "3.5.1",
+  "scopeVersion": 28,
+  "generatedAt": "2026-10-13T15:55:00+07:00",
   "trigger": "feature-update",
-  "workItem": "feature-add-domain-ntasolution",
-  "specRefs": ["R-27", "R-19", "R-21"],
+  "workItem": "feature-shared-detail-showcase-template",
+  "specRefs": [
+    "R-07",
+    "R-08c",
+    "R-21",
+    "BR-004"
+  ],
   "changed": {
     "files": [
-      "deploy/nginx/ntasolution.vn.conf (MỚI — vhost domain phụ: block 80 apex proxy → 127.0.0.1:3005 + block www → 301 apex; certbot sinh block 443 trên VPS)",
-      "docs/runbook/deploy-vps.md (§3b: copy vhost → certbot -d apex -d www → nginx -t → reload + lệnh kiểm tra 2 hostname)",
-      ".context/project-config.md (thêm domain_secondary: ntasolution.vn)",
-      "SPECIFICATIONS.md (R-27 mở rộng + Overview note; spec 3.4.0 → 3.5.0)"
+      "src/app/[locale]/products/[slug]/page.tsx (MỚI — trang chi tiết sản phẩm, SSG 2 slug)",
+      "src/content/products/{vi,en}/{music-app,hair-style-ai}.mdx (block showcase + mô tả/tính năng theo info user)",
+      "src/content/types.ts (Product.brandName/showcase; screen.device; photos.variant phone + aspect; ShowcaseNodeIcon photo/ai/music/share)",
+      "src/components/case-studies/showcase/{ScreenMock,ShowcasePhotos,ShowcaseTechnology}.tsx (biến thể phone + icon)",
+      "src/lib/content/{slug,products}.ts (productSlugs, isProductSlug, getProductStaticParams)",
+      "src/app/sitemap.ts · src/app/[locale]/products/page.tsx (href thẻ) · src/content/listings.ts (chips)",
+      "public/images/products/v2/{music-app,hair-style-ai}/* (14 ảnh)"
     ],
     "modules": [
-      "Hạ tầng nginx + certbot trên VPS 187.52.119.50 (KHÔNG đổi code app, KHÔNG rebuild)"
+      "Sản phẩm App (R-07)",
+      "Khung chi tiết dùng chung (R-08c)"
     ]
   },
   "impact": {
     "direct": [
-      "https://ntasolution.vn/ và https://ntasolution.vn/en (vi/en) → 200, cùng nội dung site",
-      "https://www.ntasolution.vn/* → 301 https://ntasolution.vn/* (apex của chính nó)",
-      "http://ntasolution.vn/* và http://www.ntasolution.vn/* → 301 https:// (certbot)"
+      "/products/music-app, /products/hair-style-ai, /en/products/music-app, /en/products/hair-style-ai → 200, khung chi tiết đủ block",
+      "/products/<slug lạ> → 404",
+      "/products: thẻ app link sang trang chi tiết"
     ],
     "dependents": [
-      "https://ntavietnam.tech/* (canonical — không đổi hành vi, không đổi cert)"
+      "ScreenMock / ShowcasePhotos / ShowcaseTechnology dùng chung với case study + 7 trang giải pháp"
     ],
     "regression": [
-      "canonical / og / hreflang / sitemap.xml / robots.txt / llms.txt vẫn trỏ ntavietnam.tech (KHÔNG được đổi)",
-      "ntavietnam.tech: 200, HTTPS, cert còn hạn (hạn 07/01/2027) — không đổi",
-      "/api/health và /api/contact chạy trên cả 2 hostname (cùng app; X-Forwarded-For/proxy headers giữ nguyên)",
-      "Container/app khác trên VPS shared (ismartschool, crm-dhp, tmfoods) không bị ảnh hưởng; KHÔNG có redirect giữa 2 domain"
+      "case study Óc Eo + nha khoa: khối công nghệ khung máy tính + carousel không đổi",
+      "7 trang giải pháp không đổi",
+      "sitemap vẫn đủ route cũ"
     ]
   },
   "acceptance": [
-    "https://ntasolution.vn/ và https://ntasolution.vn/en trả 200 với nội dung site",
-    "www.ntasolution.vn → 301 apex ntasolution.vn (cả http lẫn https)",
-    "http:// → 301 https:// cho cả apex + www; cert Let's Encrypt hợp lệ cho cả 2 hostname (không còn SEC_E_WRONG_PRINCIPAL)",
-    "Trang trả về trên domain phụ vẫn có rel=canonical = https://ntavietnam.tech/... và KHÔNG redirect sang domain chính",
-    "ntavietnam.tech không đổi hành vi (200 / HTTPS / cert còn hạn)"
+    "Title vi `Ứng dụng <tên> | NTA`, en `<tên> App | NTA`; canonical + alternates vi/en đúng",
+    "Breadcrumb JSON-LD Trang chủ › Sản phẩm app › tên app",
+    "Ảnh chụp app hiển thị trong khung điện thoại, carousel không cắt ảnh (nhạc 720/1561, tóc 9/16)",
+    "Mọi ảnh có alt; caption nói rõ ảnh bản thử nghiệm / người mẫu do AI tạo",
+    "Số liệu chỉ lấy từ ghi chú sản phẩm (76 kiểu, 26 màu, 6 dáng mặt; 1.000 ký tự, ~3 phút)",
+    "Không có nút tải/link store khi chưa có link"
   ],
-  "risk": "medium",
-  "regression_note": "Không đổi code app/build (NEXT_PUBLIC_SITE_URL build-time giữ nguyên ⇒ không rebuild, không đổi canonical). Rủi ro chính: sửa nginx trên VPS shared → bắt buộc `nginx -t` trước `reload`; chỉ THÊM vhost, không sửa vhost khác.",
-  "concurrency_note": "scopeVersion 26 (specVersion 3.4.0 · CR-004 shared-detail-showcase-template) còn in_progress — bản v26 nằm ở git HEAD (commit 344bf48). Khi CR-004 publish lại lúc close-out: đọc current.json tại thời điểm đó rồi tăng tiếp, ĐỪNG hardcode 27."
+  "risk": "low",
+  "regression_note": "Thay đổi component chỉ thêm nhánh phone; class/sizes các biến thể cũ giữ nguyên (reviewer đã đối chiếu).",
+  "concurrency_note": "Tăng tiếp từ v27 (CR-005, commit ec09807). Lần publish sau đọc file hiện tại rồi +1."
 }

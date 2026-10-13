@@ -5,9 +5,19 @@ type Props = { screen: NonNullable<NonNullable<CaseStudyShowcase['technology']>[
 
 /**
  * Màn hình (cùng khung với VmsMock) chứa ảnh chụp giao diện phần mềm thật (vd DentGo) — dùng thay VmsMock khi
- * case study có `technology.screen`. Ảnh có alt riêng (không `aria-hidden` như VmsMock dựng HTML).
+ * có `technology.screen`. `device: 'phone'` → khung điện thoại dọc cho ảnh chụp app di động.
+ * Ảnh có alt riêng (không `aria-hidden` như VmsMock dựng HTML).
  */
 export function ScreenMock({ screen }: Props) {
+  if (screen.device === 'phone') {
+    return (
+      <div className="mx-auto mt-5 w-[min(56%,220px)] sm:mt-7">
+        <div className="overflow-hidden rounded-[2rem] border-[7px] border-[#1f2937] bg-white shadow-lg">
+          <Image alt={screen.alt} className="h-auto w-full" height={screen.height} sizes="220px" src={screen.src} width={screen.width} />
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="mx-auto mt-5 max-w-[580px] sm:mt-7">
       <div className="overflow-hidden rounded-xl border-[6px] border-[#1f2937] bg-white shadow-lg">
