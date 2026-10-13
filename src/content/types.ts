@@ -4,7 +4,7 @@ export type Locale = 'vi' | 'en';
  * Một tính năng trong `Solution.features`.
  *
  * `image`/`imageAlt`/`ratio` không bắt buộc: feature không có ảnh vẫn hiển thị được
- * (full-width, chữ căn trái) — xem `FeatureZigZag`.
+ * (full-width, chữ căn trái).
  */
 export interface Feature {
   title: string;
@@ -95,7 +95,7 @@ export interface Solution {
    * ảnh HRM là mock vẽ tay nên phải nói rõ). Thiếu → không caption.
    */
   imageCaption?: string;
-  /** Khung chi tiết dùng chung (R-08c) — trang giải pháp opt-in; thiếu → trang giữ layout cũ. */
+  /** Khung chi tiết dùng chung (R-08c). Bắt buộc trong MDX: `getAllSolutions` báo lỗi build khi thiếu. */
   showcase?: CaseStudyShowcase;
   /**
    * Ảnh chụp màn hình còn lại (chưa gắn vào hero/features). Hỗ trợ `string` (alt chung
@@ -140,9 +140,12 @@ export interface Product {
   screenshots: string[];
   downloadUrl?: string | null;
   features?: string[];
-  /** Trang chi tiết `/products/[slug]` (R-08c) — bắt buộc với sản phẩm có route chi tiết. */
+  /** Trang chi tiết `/products/[slug]` (R-08c). Bắt buộc trong MDX: `getAllProducts` báo lỗi build khi thiếu. */
   showcase?: CaseStudyShowcase;
 }
+
+/** Bản ghi đã qua loader: chắc chắn có `showcase` (R-08c). */
+export type WithShowcase<T> = T & { showcase: CaseStudyShowcase };
 
 export interface CaseStudy {
   slug: string;

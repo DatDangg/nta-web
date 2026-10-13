@@ -1,7 +1,7 @@
 ---
 id: shared-detail-showcase-template
 type: feature
-status: pending
+status: done
 created: 2026-10-13
 ---
 
@@ -32,15 +32,15 @@ Hero → Stats (3 số) + 3 pillar → Technology (sơ đồ + ảnh màn) → �
 - Không áp dụng (feature).
 
 ## Acceptance (bắt buộc)
-- [ ] Trang chi tiết case study và các trang trong phạm vi render bằng **cùng 1 component layout**; khác nhau chỉ ở data.
-- [ ] Case study Óc Eo + nha khoa hiển thị không đổi sau khi tách khung (không regression).
-- [ ] Block Lưới tính năng + FAQ là optional; block thiếu data thì ẩn, không vỡ layout.
-- [ ] Data mỗi trang nằm trong frontmatter MDX (VI + EN); không hard-code nội dung/brand/demo URL trong `page.tsx`.
-- [ ] Nội dung LMS hiện có (TT27, AI, đối tượng) không bị mất — nằm trong Lưới tính năng / FAQ.
-- [ ] Stats/pillar/vision tuân BR-004: không số liệu bịa, ảnh minh hoạ có ghi chú.
-- [ ] URL cũ giữ nguyên; metadata, canonical/alternates, breadcrumb JSON-LD, sitemap đúng.
-- [ ] Vẫn SSG, không thêm DB/API nội dung.
-- [ ] Component cũ không còn dùng được xoá; build/typecheck/lint PASS.
+- [x] Trang chi tiết case study và các trang trong phạm vi render bằng **cùng 1 component layout**; khác nhau chỉ ở data.
+- [x] Case study Óc Eo + nha khoa hiển thị không đổi sau khi tách khung (không regression).
+- [x] Block Lưới tính năng + FAQ là optional; block thiếu data thì ẩn, không vỡ layout.
+- [x] Data mỗi trang nằm trong frontmatter MDX (VI + EN); không hard-code nội dung/brand/demo URL trong `page.tsx`.
+- [x] Nội dung LMS hiện có (TT27, AI, đối tượng) không bị mất — nằm trong Lưới tính năng / FAQ.
+- [x] Stats/pillar/vision tuân BR-004: không số liệu bịa, ảnh minh hoạ có ghi chú.
+- [x] URL cũ giữ nguyên; metadata, canonical/alternates, breadcrumb JSON-LD, sitemap đúng.
+- [x] Vẫn SSG, không thêm DB/API nội dung.
+- [x] Component cũ không còn dùng được xoá; build/typecheck/lint PASS.
 
 ## Ghi chú
 - Tham chiếu spec: R-15, R-16, R-21 (SEO), BR-004.
@@ -65,3 +65,5 @@ Hero → Stats (3 số) + 3 pillar → Technology (sơ đồ + ảnh màn) → �
     bằng tên tổ chức giả (cảnh báo trong `docs/reference/hrm-mock/README.md`).
 - **Push:** user dặn chưa push (2026-10-13) — chỉ commit local cho tới khi user bảo.
 - **Sản phẩm (2026-10-13, layer 3 xong):** user gửi info + ảnh 2 app qua chat → `/products/music-app`, `/products/hair-style-ai` dùng khung chung (task `phase-1-task-05`). Không dùng màn Premium app nhạc (rating 4.8 chưa kiểm chứng) và màn welcome app tóc (ảnh chưa rõ giấy phép). Chờ link store + Privacy/Terms chính thức.
+- **Đóng 2026-10-13:** theo yêu cầu user, phần ảnh (chụp staging CRM/DentGo/LMS với dữ liệu giả + dựng thêm màn HRM + ảnh phụ CRM `02-khach-hang`, DentGo `02-ho-so-khach-hang`) tách sang **CR-007** `spec/changes/2026-10-13-solution-detail-screenshots.md`, kèm câu hỏi mở (demo DentGo/LMS `http://`, duyệt FAQ Talvra + câu FAQ 5 LMS). Acceptance ảnh staging/HRM theo dõi ở CR-007.
+- Close-out (`phase-1-task-06`): xoá component layout cũ hết dùng + trang `/dev/components`; kiểm `showcase` gom vào loader (`getAllSolutions`/`getAllProducts`, kiểu `WithShowcase<T>`). Review PASS + spec-validation PASS.

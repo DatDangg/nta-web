@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from 'react';
 /**
  * Ảnh giao diện thật trong **thẻ giải pháp** (change `2026-10-12-solution-card-real-images`).
  *
- * Khác `ShotImage` (trang chi tiết) ở chỗ: đây là **khung tỉ lệ cố định của thẻ**, ảnh rộng bằng
+ * Đây là **khung tỉ lệ cố định của thẻ**, ảnh rộng bằng
  * khung và **bám mép trên**, phần dư ở đáy do khung `overflow-hidden` cắt rồi fade đi.
  *
  * **Tuyệt đối không cắt 2 bên, không `object-cover`** — `object-cover` sẽ cắt mất thanh tiêu đề

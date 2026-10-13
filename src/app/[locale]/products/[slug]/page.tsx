@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
 /**
  * Trang chi tiết sản phẩm app — khung chi tiết dùng chung (`ShowcaseLayout`, R-08c).
- * Toàn bộ nội dung nằm trong block `showcase` của frontmatter MDX; thiếu block → build lỗi.
+ * Toàn bộ nội dung nằm trong block `showcase` của frontmatter MDX; thiếu block → loader báo lỗi lúc build.
  */
 export default async function ProductDetailPage({ params }: { params: Promise<{ locale: string; slug: string }> }) {
   const { locale, slug } = await params;
@@ -37,9 +37,6 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
   setRequestLocale(locale);
   const [t, product] = await Promise.all([getTranslations('products'), getProductBySlug(locale, slug)]);
   if (!product) notFound();
-  if (!product.showcase) {
-    throw new Error(`src/content/products/${locale}/${product.slug}.mdx: thiếu block "showcase" (R-08c).`);
-  }
   const name = product.brandName ?? product.title;
   const base = locale === 'en' ? '/en' : '';
 

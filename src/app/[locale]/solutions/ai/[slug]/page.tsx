@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
 /**
  * Trang chi tiết giải pháp AI — khung chi tiết dùng chung (`ShowcaseLayout`, R-08c).
- * Nội dung nằm trong block `showcase` của frontmatter MDX; thiếu block → build lỗi.
+ * Nội dung nằm trong block `showcase` của frontmatter MDX; thiếu block → loader báo lỗi lúc build.
  */
 export default async function AiSolutionDetailPage({ params }: { params: Promise<{ locale: string; slug: string }> }) {
   const { locale, slug } = await params;
@@ -39,9 +39,6 @@ export default async function AiSolutionDetailPage({ params }: { params: Promise
   setRequestLocale(locale);
   const [t, solution] = await Promise.all([getTranslations('solutions.ai'), getSolutionBySlug(locale, slug)]);
   if (!solution || solution.category !== 'ai') notFound();
-  if (!solution.showcase) {
-    throw new Error(`src/content/solutions/${locale}/${slug}.mdx: thiếu block "showcase" (R-08c).`);
-  }
   const relatedCase = solution.relatedCases?.[0]
     ? await getCaseStudyBySlug(locale, solution.relatedCases[0])
     : null;

@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 /**
  * Trang chi tiết giải pháp enterprise — khung chi tiết dùng chung (`ShowcaseLayout`, R-08c).
  * Toàn bộ nội dung (hero, demo, số liệu, pillar, ảnh, tính năng, tình huống sử dụng, FAQ, CTA)
- * nằm trong block `showcase` của frontmatter MDX; thiếu block → build lỗi thay vì render trang rỗng.
+ * nằm trong block `showcase` của frontmatter MDX; thiếu block → loader báo lỗi lúc build.
  */
 export default async function EnterpriseSolutionDetailPage({ params }: { params: Promise<{ locale: string; slug: string }> }) {
   const { locale, slug } = await params;
@@ -47,9 +47,6 @@ export default async function EnterpriseSolutionDetailPage({ params }: { params:
     getAllSolutions(locale),
   ]);
   if (!solution || solution.category !== 'enterprise') notFound();
-  if (!solution.showcase) {
-    throw new Error(`src/content/solutions/${locale}/${solution.slug}.mdx: thiếu block "showcase" (R-08c).`);
-  }
   const relatedSolutions = solution.relatedCases?.length
     ? allSolutions.filter((candidate) => candidate.category === 'enterprise' && candidate.slug !== solution.slug && candidate.relatedCases?.some((relatedCase) => solution.relatedCases?.includes(relatedCase)))
     : [];

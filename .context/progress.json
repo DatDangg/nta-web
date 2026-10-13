@@ -666,14 +666,14 @@
     },
     {
       "slug": "shared-detail-showcase-template",
-      "status": "in_progress",
-      "changeFile": "spec/changes/2026-10-13-shared-detail-showcase-template.md",
+      "status": "done",
+      "changeFile": "spec/changes/archive/2026-10-13-shared-detail-showcase-template.md",
       "classification": "MODIFY + ADDITIVE",
-      "specVersion": "3.4.0",
+      "specVersion": "3.5.1",
       "phases": [
         {
           "phase": 1,
-          "status": "in_progress",
+          "status": "done",
           "tasks": [
             {
               "id": "phase-1-task-01",
@@ -746,13 +746,29 @@
                 "bỏ khối 'Chi tiết ứng dụng' trùng ở /products nếu user muốn",
                 "màn Premium nhạc (rating 4.8, 80% người dùng chọn) + welcome tóc (ảnh minh hoạ chưa rõ giấy phép) không dùng"
               ]
+            },
+            {
+              "id": "phase-1-task-06",
+              "status": "done",
+              "scope": "close-out — xoá 15 component layout cũ + features.ts + /dev/components; gom kiểm showcase vào loader (WithShowcase<T>); phần ảnh staging/HRM tách sang CR-007",
+              "review": {
+                "level": "NORMAL",
+                "verdict": "PASS",
+                "round": 1,
+                "note": "MINOR: comment còn nhắc ShotImage / dev/components → đã sửa; info: nhánh layout default của case-studies/[slug] gần như không dùng (ngoài phạm vi)"
+              }
             }
           ]
         }
       ],
       "codeCommits": [],
       "updatedAt": "2026-10-13",
-      "scopeVersion": 26
+      "scopeVersion": 30,
+      "specValidation": {
+        "verdict": "PASS",
+        "report": ".context/review-reports/feature-shared-detail-showcase-template-spec-validation.md"
+      },
+      "splitTo": "solution-detail-screenshots (CR-007)"
     },
     {
       "slug": "add-domain-ntasolution",
@@ -832,6 +848,14 @@
       "codeCommits": [],
       "updatedAt": "2026-10-13",
       "scopeVersion": 29
+    },
+    {
+      "slug": "solution-detail-screenshots",
+      "status": "pending",
+      "changeFile": "spec/changes/2026-10-13-solution-detail-screenshots.md",
+      "classification": "ADDITIVE",
+      "note": "CR-007 tách từ CR-004 — chờ link + tài khoản staging, chốt màn HRM",
+      "updatedAt": "2026-10-13"
     }
   ],
   "bugs": []

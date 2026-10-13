@@ -102,7 +102,7 @@
  * trường hợp B: ảnh dọc, tỉ lệ < 1.0). Khung bọc `overflow: hidden` cắt cứng, mask này
  * làm mép cắt mềm lại.
  *
- * ⚠ CHỉ bật khi ảnh THỰC SỰ cao hơn khung. `ShotImage` **đo** `scrollHeight > clientHeight`
+ * ⚠ CHỉ bật khi ảnh THỰC SỰ cao hơn khung. `CardShotImage` **đo** `scrollHeight > clientHeight`
  * lúc render (và theo `ResizeObserver`) rồi mới thêm class này — KHÔNG quyết định theo
  * `ratio` tĩnh, vì việc ảnh có bị cắt còn phụ thuộc bề rộng cột (đổi theo viewport).
  * Fade khi ảnh không bị cắt sẽ xoá viền dưới khung cửa sổ — đúng thứ cơ chế này sinh ra để tránh.

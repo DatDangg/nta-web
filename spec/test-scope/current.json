@@ -1,40 +1,43 @@
 {
   "specVersion": "3.5.1",
-  "scopeVersion": 29,
-  "generatedAt": "2026-10-13T16:30:00+07:00",
+  "scopeVersion": 30,
+  "generatedAt": "2026-10-13T17:00:00+07:00",
   "trigger": "feature-update",
-  "workItem": "feature-products-remove-app-details",
+  "workItem": "feature-shared-detail-showcase-template",
   "specRefs": [
-    "R-07"
+    "R-08c",
+    "R-08c.1"
   ],
   "changed": {
     "files": [
-      "src/app/[locale]/products/page.tsx (bỏ section product-details)",
-      "src/components/cards/AppCard.tsx, src/components/products/ScreenshotCarousel.tsx, src/components/products/productThemes.ts (xoá)",
-      "src/i18n/messages/{vi,en}.json (bỏ previousScreenshot/nextScreenshot/carouselRoleDescription)",
-      "src/components/cards/cardStyles.ts (comment)"
+      "src/components/solutions/{AiAssistantPanel,AiSection,AudienceCards,BenefitList,BentoCompliance,FaqAccordion,FaqList,FeatureList,FeatureZigZag,ScreenshotSection,ShotImage,SolutionHero,SolutionHighlights,SolutionSections,UseCases}.tsx + features.ts (xoá)",
+      "src/app/[locale]/dev/components/page.tsx (xoá)",
+      "src/lib/content/{solutions,products}.ts (bắt buộc showcase, WithShowcase<T>)",
+      "src/content/types.ts (WithShowcase)",
+      "src/app/[locale]/{solutions/enterprise,solutions/ai,products}/[slug]/page.tsx (bỏ throw)"
     ],
     "modules": [
-      "Sản phẩm App (R-07)"
+      "Khung chi tiết dùng chung (R-08c)"
     ]
   },
   "impact": {
     "direct": [
-      "/products, /en/products không còn khối Chi tiết ứng dụng / App details"
+      "Không đổi UI; /dev/components 404 (vốn chỉ chạy ở dev)"
     ],
     "dependents": [
-      "thẻ danh sách → /products/[slug]"
+      "Mọi trang dùng getAllSolutions/getAllProducts (danh sách, trang chủ, sitemap)"
     ],
     "regression": [
-      "hero + bộ lọc + thẻ + CTA của /products giữ nguyên",
-      "trang chi tiết sản phẩm không đổi"
+      "7 trang giải pháp + 2 trang sản phẩm + 2 case study vi/en 200, hiển thị như trước",
+      "/solutions/enterprise, /solutions/ai, /products, trang chủ không đổi"
     ]
   },
   "acceptance": [
-    "/products vi/en 200, không có khối Chi tiết ứng dụng",
-    "2 thẻ link sang /products/music-app, /products/hair-style-ai"
+    "11 trang chi tiết vi/en 200",
+    "MDX giải pháp/sản phẩm thiếu showcase → build lỗi tại loader",
+    "Không còn import tới component đã xoá"
   ],
   "risk": "low",
-  "regression_note": "Chỉ xoá UI; không đổi route/SEO.",
-  "concurrency_note": "Tăng tiếp từ v28. Lần publish sau đọc file hiện tại rồi +1."
+  "regression_note": "Chỉ xoá code chết + dời chỗ kiểm dữ liệu.",
+  "concurrency_note": "Tăng tiếp từ v29. Lần publish sau đọc file hiện tại rồi +1."
 }
