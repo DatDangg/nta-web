@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m:*)",
+      "Bash(git push origin main)",
+      "Bash(node tools/claude-bridge.mjs:*)"
+    ],
+    "deny": [
+      "Bash(git push --force:*)",
+      "Bash(git push -f:*)",
+      "Bash(git push origin --force:*)",
+      "Bash(git push origin -f:*)",
+      "Bash(git push origin main --force:*)",
+      "Bash(git push origin main -f:*)",
+      "Bash(git push origin +main:*)",
+      "Bash(git push --all:*)",
+      "Bash(git push --mirror:*)",
+      "Bash(git push origin --delete:*)",
+      "Bash(git push --delete:*)",
+      "Bash(git branch -D:*)",
+      "Bash(git branch -d:*)",
+      "Bash(git branch --delete:*)",
+      "Bash(git reset --hard:*)",
+      "Bash(git checkout --:*)",
+      "Bash(git rebase:*)",
+      "Bash(git commit --amend:*)",
+      "Bash(git filter-branch:*)",
+      "Bash(git filter-repo:*)",
+      "Bash(npx prisma db push:*)",
+      "Bash(npx prisma migrate reset:*)",
+      "Bash(npx prisma db seed:*)",
+      "Bash(npx drizzle-kit push:*)",
+      "Bash(npx supabase db reset:*)",
+      "Bash(pnpm db:push:*)",
+      "Bash(pnpm db:reset:*)",
+      "Bash(pnpm db:seed:*)",
+      "Bash(npm run db:push:*)",
+      "Bash(npm run db:reset:*)",
+      "Bash(npm run db:seed:*)"
+    ]
+  }
+}

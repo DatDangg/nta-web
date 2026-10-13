@@ -19,7 +19,8 @@
 | "fix bug", "lỗi", "broken", regression, crash (đã biết rõ bug nào) | **Change Request (BUG)** → agent `change-request` · `/change` (hoặc `/bug`) |
 | "soi/kiểm tra màn", "cảm giác nhiều lỗi nhưng không rõ" | **Bug discovery / sweep** → `/bug-check` — READ-ONLY, KHÔNG fix |
 | "thêm/sửa/bỏ/xóa tính năng", "change/update feature" | **Change Request (ADDITIVE/MODIFY/REMOVE)** → agent `change-request` · `/change` (hoặc `/feature`) |
-| thay đổi đã ghi sẵn trong `spec/changes/` | **`/change`** — đọc hết file pending → agent `change-request` |
+| thay đổi đã ghi sẵn trong `spec/changes/` (hoặc trong `spec/changes/BACKLOG.md`) | **`/change`** — đọc hết file pending → agent `change-request` |
+| yêu cầu/bug hậu-build user chat bình thường (mode `maintenance`, KHÔNG gõ lệnh) | **Auto-intake → backlog**: tạo dòng `spec/changes/BACKLOG.md` + change doc `spec/changes/YYYY-MM-DD-<slug>.md` (pending) → báo user "✅ Đã ghi vào backlog — gõ `/change` để xử lý". KHÔNG code ngay |
 | "bắt đầu project", "start", "đưa repo vào pipeline", "khởi tạo dự án" | **Start** → `/start` — chuỗi chạy LIÊN TỤC: đọc spec → brainstorm → design → graph → loop (tự chuyển bước, chỉ dừng ở checkpoint) |
 | "project cũ chưa có spec", "dựng spec từ code", thừa kế codebase | **Spec Init (reverse-engineer)** → `/spec-init` — đọc code → dựng spec + scope (chạy 1 lần đầu) |
 | "config dự án", "setup thông tin", "brainstorm", "clear yêu cầu", sửa branch/package/verify commands/DB/models/deploy | **Brainstorm** → `/brainstorm` — đọc spec/code → clear yêu cầu + design doc + ghi `.context/project-config.md` |
@@ -34,6 +35,8 @@
 | hỏi / điều tra / "tại sao", "how does X work" | **Research-only** — KHÔNG edit nếu user chưa yêu cầu fix |
 
 Không rõ intent → hỏi 1 câu ngắn để phân loại, đừng đoán.
+
+> **Auto-intake backlog (bắt buộc trong maintenance mode):** mọi yêu cầu/bug rõ ràng user gửi qua chat — kể cả dạng nói tự nhiên không gõ lệnh — agent **tự động** ghi vào `spec/changes/BACKLOG.md` + tạo change doc pending rồi báo user gõ `/change` để xử lý tiếp. **Không** gọi builder/code ngay khi chỉ là yêu cầu mới chưa xử lý.
 
 ### Phân biệt command
 
@@ -70,7 +73,7 @@ Không rõ intent → hỏi 1 câu ngắn để phân loại, đừng đoán.
 | **5b** | Observe: test / lint / typecheck / build | — | `.agent/loop.md` | — | kết quả verify (cmd từ `project-config`) | FAIL → 5c |
 | **5c** | Root cause + fix | (`error-analyzer`) | `.agent/error-analyzer.md` | `superpowers/systematic-debugging` | `.context/error-memory.md` | retry max 3 → `BLOCKED` |
 | **5d** | Review độc lập | **`reviewer`** | `.agent/reviewer.md` | `aislop`, `anti-slop`, `open-code-review`, `impeccable`(+`frontend-checklist` web) | `.context/review-reports/<feature\|bug>-<slug>-phase-<N>-task-<NN>-round-<R>-review.md` | PASS → 5e · FAIL → về 5a (max 2 vòng) |
-| **5e** | Close-out task | — | `.agent/loop.md`, `.agent/FEATURE_WORKFLOW.md` §5/§6 | — | Doc Impact/Reconcile → `progress.json` → **commit** (1 task = 1 commit) | — |
+| **5e** | Close-out task | — | `.agent/loop.md`, `.agent/FEATURE_WORKFLOW.md` §6 + `.agent/workflows/state-commit.md` §2.8/§5 | — | Doc Impact/Reconcile → `progress.json` → **commit** (1 task = 1 commit) | — |
 | **5f** | Compact context | — | `.agent/context-manager.md` | — | `.context/compressed-summary.md` | mỗi 3 task + hết layer |
 | **5g** | Hết layer → review phase | **`spec-validator`** | `.agent/spec-validator.md` | — | phase report | ⏸ **checkpoint sau mỗi layer** — Layer N+1 chỉ unlock khi Layer N PASS + user duyệt |
 | **5h** | Hết layer cuối (initial build) → bàn giao test-scope | **`spec-publisher`** | `.agent/spec-publish.md` | — | `spec/test-scope/current.json` (trigger: initial-build, scopeVersion +1) + `spec/CHANGELOG.md` | commit kèm close-out |
@@ -94,11 +97,11 @@ Không rõ intent → hỏi 1 câu ngắn để phân loại, đừng đoán.
 1. **Không sửa triệu chứng trước khi có root cause.** (Iron Law — `skills/superpowers/systematic-debugging.md`)
 2. **Thiếu info** (màn hình / bước tái hiện / expected-actual / role/vai trò) → **hỏi ngắn trước**, không tự giả định.
 3. Bug **không phải sửa 1 dòng** → tạo task: `tasks/bug-<slug>/phase-<N>-task-<NN>.md`.
-4. Fix-loop + `Repro Verification` theo `.agent/FEATURE_WORKFLOW.md` §2 và `/bug`: chỉ `done` khi repro PASS + Reviewer PASS.
+4. Fix-loop + `Repro Verification` theo `.agent/workflows/bug.md` §2 và `/bug`: chỉ `done` khi repro PASS + Reviewer PASS.
 5. Retry/Escalation: sau 3 attempt fail → status `architecture_review_needed`, dừng chờ review kiến trúc/refactor.
 6. **Builder** code + test; **Reviewer** kiểm tra độc lập (không sửa source; chỉ ghi report scoped).
 7. **Cập nhật `.context/progress.json`** (schema maintenance) sau mỗi bước đổi trạng thái bug.
-8. Sau Reviewer PASS + close-out + progress cập nhật, **commit-first** theo `.agent/FEATURE_WORKFLOW.md` §2.8.
+8. Sau Reviewer PASS + close-out + progress cập nhật, **commit-first** theo `.agent/workflows/state-commit.md` §2.8.
    Reviewer FAIL → không commit/push.
 9. **Danh sách bug** hoặc kết quả `/bug-check`, kể cả "fix tất cả defect" → tách từng bug/task,
    tóm tắt số lượng defect, đề xuất thứ tự, nêu bug nào gộp vì cùng root cause, rồi **DỪNG hỏi xác nhận**
@@ -112,7 +115,7 @@ Không rõ intent → hỏi 1 câu ngắn để phân loại, đừng đoán.
 3. Đổi behavior/scope → cập nhật **spec delta** hoặc ghi rõ lý do không cần.
 3b. **★ TỰ ĐỘNG Spec Publisher** (`.agent/spec-publish.md`): sau spec delta → bump `spec_version` + ghi `spec/updates/` + `spec/CHANGELOG.md` + sinh `spec/test-scope/current.json` (tăng `scopeVersion`) cho template test. Không chờ user nhắc.
 4. Tạo `tasks/feature-<slug>/phase-<N>-task-<NN>.md` khi nhiều bước hoặc có risk.
-5. Task phải có `Classification / Risk`, verification summary, và Retry/Escalation theo `/feature` + `.agent/FEATURE_WORKFLOW.md` §3.
+5. Task phải có `Classification / Risk`, verification summary, và Retry/Escalation theo `/feature` + `.agent/workflows/change.md` §3.
 6. Sau 3 attempt fail → status `architecture_review_needed`, dừng chờ review kiến trúc/refactor.
 7. **Builder** code + test; **Reviewer** độc lập; **Spec Validator** cross-check gap so với spec.
 8. **Cập nhật `.context/progress.json`** (schema maintenance).
@@ -127,7 +130,7 @@ Không rõ intent → hỏi 1 câu ngắn để phân loại, đừng đoán.
 - Commit là source of truth cho changed files, timestamp, SHA, rollback point.
 - Task file là source of truth cho root cause, repro/evidence, residual risk, doc impact/reconcile, verification summary.
 - `.context/progress.json` là source of truth cho current status, active/completed phase/task, reviewer result/report path.
-- Commit message convention và body trailer: xem `.agent/FEATURE_WORKFLOW.md` §2.8.
+- Commit message convention và body trailer: xem `.agent/workflows/state-commit.md` §2.8.
 - Commit-first tracking là source of truth; không còn `docs/history/YYYY-MM.md` (đã xoá).
 
 ### Doc Impact & Reconcile Rules
@@ -205,6 +208,7 @@ Primary ghi journal; **subagent không ghi**.
 2. SAU khi subagent trả về: ghi `status=awaiting`, `evidence`, `next`, cập nhật manifest,
    **rồi mới** in `✅ DONE <bước> <phaseTask>`. Ghi journal **TRƯỚC** khi in `✅ DONE`.
 3. `✅ DONE` là **điểm dừng an toàn**. `▶ START ... running` mà cancel → session sau **redo bước đó**.
+4. **Gộp lần ghi thừa:** khi cần ghi journal/progress mà lần ghi trước **liền kề và không kèm mốc bắt buộc** (không phải "trước/sau khi gọi subagent", không phải close-out task/phase, không phải ngay trước commit) → **gộp vào lần ghi kế tiếp**, KHÔNG tạo thêm lượt model riêng. Vẫn bắt buộc giữ nguyên: ghi `status=running` TRƯỚC mỗi subagent và `status=awaiting` + evidence SAU mỗi subagent; `progress.json` phải cập nhật TRƯỚC mỗi commit.
 
 **Banner:** mỗi checkpoint in `▶ START` / `✅ DONE` kèm `[agent: <tên>]` + `phaseTask` + `next`; khi `status=running`
 ghi rõ "cancel sẽ redo bước này". Completion report của subagent **bắt buộc mở đầu bằng `Agent: <tên>`**

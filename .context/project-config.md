@@ -40,6 +40,17 @@ typecheck_command: npm run typecheck
 build_command: npm run build
 migration_command: null        # only used when db_tool != none and migration_required: true
 
+# ── Chạy verify khi agent làm qua Cowork (repo trên Windows, lệnh chạy trong VM Linux) ── ✅ 13/10/2026
+# node_modules của repo là bản Windows → `npm run build` KHÔNG chạy được trong VM (thiếu @next/swc Linux).
+# Dùng wrapper — bản sao ở $HOME/nta-build, node_modules Linux riêng, KHÔNG đụng file/node_modules của user:
+#   bash tools/linux-build.sh verify   # typecheck + lint + build, ~40s (lần đầu mỗi phiên +~25s npm ci)
+#   bash tools/linux-build.sh serve 3100 <lệnh>   # smoke test trên bản build (server sống trong cùng 1 lệnh)
+# - Font Inter: Google Fonts bị egress chặn → wrapper mock bằng file Inter thật từ npm (@fontsource-variable/inter).
+#   KHÔNG stub next/font trong src, KHÔNG chép code lên cloud để build nữa.
+# - Playwright/screenshot: VM không có Chromium → vẫn chạy ở cloud container (chỉ bước này).
+# - Chạy lệnh trên Windows (opencode / terminal của user) thì vẫn dùng các lệnh npm ở trên như cũ.
+cowork_verify_command: bash tools/linux-build.sh verify
+
 # ── Database ──
 db_tool: none                  # none | prisma | drizzle | other ✅ chốt 08/10/2026
 migration_required: false      # v1 website content-driven, không cần DB

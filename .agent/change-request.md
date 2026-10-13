@@ -2,7 +2,7 @@
 
 > ⭐ **Sau khi spec đã có (từ `/spec-init`), MỌI thay đổi đi qua agent này** — feature mới (ADDITIVE/MODIFY/REMOVE) **và** fix bug (BUG). Không có agent/workflow thay thế khác.
 >
-> State: `.context/progress.json` (`features[]`/`bugs[]`). Branch/push model theo `.agent/FEATURE_WORKFLOW.md` §6 (default staging-direct); cấm push thẳng `forbidden_branch`.
+> State: `.context/progress.json` (`features[]`/`bugs[]`). Branch/push model theo `.agent/workflows/state-commit.md` §2.8 + `.agent/FEATURE_WORKFLOW.md` §6 (default staging-direct); cấm push thẳng `forbidden_branch`.
 
 ## Role
 Đọc change request (từ `spec/changes/*.md` qua `/change`, hoặc mô tả trực tiếp qua `/bug`, `/feature`), **classify**, phân tích impact, cập nhật spec + sinh scope bàn giao test, chia phase/task, rồi chạy builder/reviewer/spec-validator tới khi PASS.
@@ -24,7 +24,8 @@ Dùng model `change_request` trong `.context/project-config.md` (`models.change_
 |---|---|
 | `/change` | mọi `spec/changes/*.md` có `status: pending` (bỏ `_TEMPLATE.md`, bỏ `archive/`) |
 | `/bug`, `/feature` | mô tả trong `$ARGUMENTS` |
-| Luôn đọc | `SPECIFICATIONS.md`, `.context/progress.json`, `spec/CHANGELOG.md` |
+| Luôn đọc | `SPECIFICATIONS.md`, `.context/progress.json` |
+| Đọc khi cần | `spec/CHANGELOG.md` chỉ khi bump version (Spec Publisher tự đọc/ghi — xem `.agent/spec-publish.md`) |
 
 ---
 
@@ -62,7 +63,7 @@ Builder → Reviewer (loop tới PASS) → Doc Impact/Reconcile → Progress →
 
 ### 0. BUG — Sửa lỗi sau initial build
 **Khi nào:** hành vi sai so với spec/hiện tại (crash, regression, sai logic).
-**Steps (theo `AGENTS.md` §Bug + `.agent/FEATURE_WORKFLOW.md` §2):**
+**Steps (theo `AGENTS.md` §Bug + `.agent/workflows/bug.md` §2):**
 1. Triage: màn/module, bước tái hiện, expected/actual, role, môi trường. Thiếu → hỏi ngắn.
 2. Reproduce; **root cause trước khi sửa** (Iron Law). Không reproduce được → hỏi, không sửa mò.
 3. Task (`tasks/bug-<slug>/...`) trừ fix 1 dòng; `Classification / Risk` bắt buộc.
@@ -102,7 +103,7 @@ Mọi change (BUG/MODIFY/ADDITIVE/REMOVE) sau khi PASS **phải** để lại `s
 - `impact.direct` / `impact.dependents` / `impact.regression`, `acceptance`, `risk`
 - `specVersion` (= version hiện tại của `SPECIFICATIONS.md`) + `scopeVersion` (tăng 1 mỗi lần sinh)
 
-Chi tiết §2.7b / §3.9b trong `.agent/FEATURE_WORKFLOW.md`. **Trạng thái "đã test đến đâu" do template test tự lưu** — DEV chỉ cấp spec + scope. → Template test chạy `/autotest` (tạo test case theo spec mới: test case → user chốt → chạy ngầm headless → browser từng case; **lần test ĐẦU TIÊN của project (sau initial build) BẮT BUỘC chạy đủ luồng `/autotest`**) và `/retest` (chạy lại test đã có).
+Chi tiết §2.7b trong `.agent/workflows/bug.md` / §3.9b trong `.agent/workflows/change.md`. **Trạng thái "đã test đến đâu" do template test tự lưu** — DEV chỉ cấp spec + scope. → Template test chạy `/autotest` (tạo test case theo spec mới: test case → user chốt → chạy ngầm headless → browser từng case; **lần test ĐẦU TIÊN của project (sau initial build) BẮT BUỘC chạy đủ luồng `/autotest`**) và `/retest` (chạy lại test đã có).
 
 ---
 
@@ -131,12 +132,13 @@ LOW / MEDIUM / HIGH
 
 ## Rules
 
-1. **Always read current state** — đọc `spec/changes/` + progress.json + spec trước khi làm.
+1. **Always read current state** — đọc `spec/changes/` (gồm `BACKLOG.md`) + progress.json + spec trước khi làm.
 2. **Là agent duy nhất cho hậu-build** — mọi feature/bug đều qua đây.
 3. **Always publish spec (tự động)** — sau mỗi change chạy `.agent/spec-publish.md` (bump version nếu requirement đổi + luôn sinh `spec/test-scope/current.json`).
 4. **Never modify completed code directly** — tạo task mới thay vì edit.
 5. **Validate after every change** — spec-validator PASS (feature), root cause có evidence (bug).
 6. **One change at a time** — không batch nhiều change không liên quan.
+7. **Backlog tracking (bắt buộc)** — mỗi change phải có dòng trong `spec/changes/BACKLOG.md`. Khi bắt đầu xử lý → set `in_progress`; xong (status `done` + archive) → set `done` + ngày xong; kẹt cần user → `blocked`. Không xoá dòng đã `done`.
 7. **Impact before action** — analyze trước, execute sau.
 8. **Preserve rollback ability** — mọi change reversible qua git commit-first.
 9. **Ask when ambiguous** — ADDITIVE vs MODIFY vs BUG không rõ → hỏi.
