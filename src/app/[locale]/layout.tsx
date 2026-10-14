@@ -37,8 +37,11 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   };
 }
 
+// Trả [] → không prerender trang nào lúc build (build image không truy cập DB); trang render lần đầu theo yêu cầu.
+// /en/... vào full route cache (ISR on-demand); trang vi (middleware rewrite as-needed) render mỗi request trên data cache
+// có tag — Next 15.5 không cache ISR on-demand cho URL bị rewrite (decisions.md CR-031 P3-T02). Locale lạ vẫn 404 nhờ hasLocale.
 export function generateStaticParams() {
-  return routing.locales.map((locale) => ({ locale }));
+  return [];
 }
 
 export default async function LocaleLayout({

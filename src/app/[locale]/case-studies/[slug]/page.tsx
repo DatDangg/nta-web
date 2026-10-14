@@ -10,15 +10,16 @@ import { SolutionBlock } from '@/components/case-studies/SolutionBlock';
 import { ShowcaseLayout } from '@/components/case-studies/showcase/ShowcaseLayout';
 import { CTABanner } from '@/components/shared/CTABanner';
 import { DetailHero } from '@/components/listing/DetailHero';
-import { detailTiles } from '@/content/listings';
 import { getAllCaseStudies, getCaseStudyBySlug } from '@/lib/content/case-studies';
+import { getDetailTiles } from '@/lib/content/registry';
 import { isLocale } from '@/lib/content/slug';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { createBreadcrumbJsonLd } from '@/lib/seo/jsonld';
 import { createLocaleAlternates, localizedPath } from '@/lib/seo';
 
-export async function generateStaticParams() {
-  return (await getAllCaseStudies('vi')).map(({ slug }) => ({ slug }));
+// Không prerender slug lúc build (build không truy cập DB — decisions.md CR-031 P3-T02): render lần đầu theo yêu cầu rồi cache.
+export function generateStaticParams() {
+  return [];
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string; slug: string }> }): Promise<Metadata> {
@@ -38,7 +39,9 @@ export default async function CaseStudyDetailPage({ params }: { params: Promise<
   const { locale, slug } = await params;
   if (!isLocale(locale)) notFound();
   setRequestLocale(locale);
-  const [t, study, allStudies] = await Promise.all([getTranslations('caseStudies'), getCaseStudyBySlug(locale, slug), getAllCaseStudies(locale)]);
+  const [t, study, allStudies, tiles] = await Promise.all([
+    getTranslations('caseStudies'), getCaseStudyBySlug(locale, slug), getAllCaseStudies(locale), getDetailTiles(locale, slug),
+  ]);
   if (!study) notFound();
   const related = study.related.flatMap((relatedSlug) => {
     const item = allStudies.find((candidate) => candidate.slug === relatedSlug);
@@ -56,7 +59,7 @@ export default async function CaseStudyDetailPage({ params }: { params: Promise<
     return <>
       <JsonLd data={breadcrumbJsonLd} />
       <script dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }} type="application/ld+json" />
-      <ShowcaseLayout breadcrumbs={[{ label: t('title'), href: '/case-studies' }, { label: study.showcase.hero.breadcrumbLabel ?? study.title }]} showcase={study.showcase} tiles={detailTiles(locale, study.slug)} />
+      <ShowcaseLayout breadcrumbs={[{ label: t('title'), href: '/case-studies' }, { label: study.showcase.hero.breadcrumbLabel ?? study.title }]} showcase={study.showcase} tiles={tiles} />
       <RelatedStudies categoryLabel={(item) => t(`categories.${item.category}`)} imageAlt={(item) => t('imageAlt', { title: item.title })} studies={related} title={t('related')} />
     </>;
   }
@@ -75,7 +78,7 @@ export default async function CaseStudyDetailPage({ params }: { params: Promise<
       eyebrow={[t(`categories.${study.category}`), study.sector, String(study.year)].filter(Boolean).join(' · ')}
       media={cover ? { src: cover.src, alt: cover.alt, width: 1590, height: 989, frame: 'photo' } : undefined}
       subtitle={study.client}
-      tiles={detailTiles(locale, study.slug)}
+      tiles={tiles}
       titleLead={study.title}
     />
     <script dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }} type="application/ld+json" />

@@ -6,11 +6,10 @@ import { ListingExplorer } from '@/components/listing/ListingExplorer';
 import { ListingHero } from '@/components/listing/ListingHero';
 import type { ListingCta } from '@/components/listing/types';
 import { CTABanner } from '@/components/shared/CTABanner';
-import { listingCtas, listingLabels, listingPages } from '@/content/listings';
+import { getListingCtas, getListingLabels, getListingPages } from '@/lib/content/registry';
 import type { Locale } from '@/content/types';
 import { getAllCaseStudies } from '@/lib/content/case-studies';
 import { getAllSolutions } from '@/lib/content/solutions';
-import { aiSlugs } from '@/lib/content/slug';
 import { toSolutionItems } from '@/lib/content/solution-listing';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { createBreadcrumbJsonLd } from '@/lib/seo/jsonld';
@@ -34,15 +33,16 @@ export default async function AiSolutionsPage({ params }: { params: Promise<{ lo
   const { locale } = await params;
   if (locale !== 'vi' && locale !== 'en') notFound();
   setRequestLocale(locale);
-  const [t, allSolutions, caseStudies] = await Promise.all([
+  const [t, allSolutions, caseStudies, listingPages, listingCtas, listingLabels] = await Promise.all([
     getTranslations('solutions.ai'), getAllSolutions(locale), getAllCaseStudies(locale),
+    getListingPages(locale), getListingCtas(locale), getListingLabels(locale),
   ]);
-  const copy = listingPages[locale].ai;
-  const items = toSolutionItems(locale, allSolutions, aiSlugs, (title) => t('imageAlt', { title }));
+  const copy = listingPages.ai;
+  const items = await toSolutionItems(locale, allSolutions, 'ai', (title) => t('imageAlt', { title }));
   const caseStudy = caseStudies.find((item) => item.slug === 'heritage-site-ai-camera');
   // Thẻ cuối lưới dẫn sang case study khu di tích (thay khối CaseStudyTeaser cũ); không có → mời liên hệ.
   const cta: ListingCta = caseStudy
-    ? { ...listingCtas[locale].ai, description: caseStudy.title, href: `/case-studies/${caseStudy.slug}`, icon: 'landmark' }
+    ? { ...listingCtas.ai, description: caseStudy.title, href: `/case-studies/${caseStudy.slug}`, icon: 'landmark' }
     : { title: t('ctaTitle'), description: t('ctaDescription'), label: locale === 'en' ? 'Contact us' : 'Liên hệ tư vấn', href: '/contact', icon: 'chat' };
 
   return (
@@ -63,7 +63,7 @@ export default async function AiSolutionsPage({ params }: { params: Promise<{ lo
           columns={2}
           cta={cta}
           items={items}
-          labels={{ ...listingLabels[locale], searchPlaceholder: copy.searchPlaceholder }}
+          labels={{ ...listingLabels, searchPlaceholder: copy.searchPlaceholder }}
         />
       </ListingHero>
       <CTABanner description={t('ctaDescription')} title={t('ctaTitle')} variant="alt" />

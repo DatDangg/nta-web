@@ -3,14 +3,15 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { ShowcaseLayout } from '@/components/case-studies/showcase/ShowcaseLayout';
 import { getProductBySlug } from '@/lib/content/products';
-import { getProductStaticParams, isLocale } from '@/lib/content/slug';
+import { isLocale } from '@/lib/content/slug';
+import { getDetailTiles } from '@/lib/content/registry';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { createBreadcrumbJsonLd } from '@/lib/seo/jsonld';
 import { createLocaleAlternates, localizedPath } from '@/lib/seo';
-import { detailTiles } from '@/content/listings';
 
+// Không prerender slug lúc build (build không truy cập DB — decisions.md CR-031 P3-T02): render lần đầu theo yêu cầu rồi cache.
 export function generateStaticParams() {
-  return getProductStaticParams();
+  return [];
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string; slug: string }> }): Promise<Metadata> {
@@ -35,7 +36,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
   const { locale, slug } = await params;
   if (!isLocale(locale)) notFound();
   setRequestLocale(locale);
-  const [t, product] = await Promise.all([getTranslations('products'), getProductBySlug(locale, slug)]);
+  const [t, product, tiles] = await Promise.all([getTranslations('products'), getProductBySlug(locale, slug), getDetailTiles(locale, slug)]);
   if (!product) notFound();
   const name = product.brandName ?? product.title;
   const base = locale === 'en' ? '/en' : '';
@@ -43,7 +44,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
   return (
     <>
       <JsonLd data={createBreadcrumbJsonLd([{ name: locale === 'en' ? 'Home' : 'Trang chủ', path: locale === 'en' ? '/en' : '/' }, { name: t('title'), path: `${base}/products` }, { name, path: `${base}/products/${product.slug}` }])} />
-      <ShowcaseLayout breadcrumbs={[{ label: t('title'), href: '/products' }, { label: name }]} showcase={product.showcase} tiles={detailTiles(locale, product.slug)} />
+      <ShowcaseLayout breadcrumbs={[{ label: t('title'), href: '/products' }, { label: name }]} showcase={product.showcase} tiles={tiles} />
     </>
   );
 }

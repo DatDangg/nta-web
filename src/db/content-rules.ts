@@ -25,6 +25,10 @@ export const REQUIRED_FIELDS: Partial<Record<ContentCollection, readonly string[
   about: ["mission", "milestones", "partners"],
 };
 
+// Khoá (slug) cố định của bản ghi singleton dạng object — dùng chung web (registry.ts) và seed (tools/db/file-source.ts).
+export const HOME_SLUG = "home";
+export const LISTING_LABELS_SLUG = "labels";
+
 // Collection có URL công khai theo slug (`/blog/[slug]`, `/solutions/...`, `/products/[slug]`, `/case-studies/[slug]`):
 // I-2 (frontmatter slug = khoá) và I-8 (xoá → cần redirect 301).
 export const PUBLIC_URL_COLLECTIONS = ["post", "solution", "product", "case_study"] as const;

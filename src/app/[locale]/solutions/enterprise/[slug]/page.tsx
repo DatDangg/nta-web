@@ -6,14 +6,15 @@ import { RelatedSolutions } from '@/components/solutions/RelatedSolutions';
 import { CTAForm } from '@/components/contact/CTAForm';
 import { Container } from '@/components/ui/Container';
 import { getAllSolutions, getSolutionBySlug } from '@/lib/content/solutions';
-import { getEnterpriseStaticParams, isLocale } from '@/lib/content/slug';
+import { isLocale } from '@/lib/content/slug';
+import { getDetailTiles } from '@/lib/content/registry';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { createBreadcrumbJsonLd } from '@/lib/seo/jsonld';
 import { createLocaleAlternates, localizedPath } from '@/lib/seo';
-import { detailTiles } from '@/content/listings';
 
+// Không prerender slug lúc build (build không truy cập DB — decisions.md CR-031 P3-T02): render lần đầu theo yêu cầu rồi cache.
 export function generateStaticParams() {
-  return getEnterpriseStaticParams();
+  return [];
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string; slug: string }> }): Promise<Metadata> {
@@ -41,10 +42,11 @@ export default async function EnterpriseSolutionDetailPage({ params }: { params:
   const { locale, slug } = await params;
   if (!isLocale(locale)) notFound();
   setRequestLocale(locale);
-  const [t, solution, allSolutions] = await Promise.all([
+  const [t, solution, allSolutions, tiles] = await Promise.all([
     getTranslations('solutions.enterprise'),
     getSolutionBySlug(locale, slug),
     getAllSolutions(locale),
+    getDetailTiles(locale, slug),
   ]);
   if (!solution || solution.category !== 'enterprise') notFound();
   const relatedSolutions = solution.relatedCases?.length
@@ -55,7 +57,7 @@ export default async function EnterpriseSolutionDetailPage({ params }: { params:
   return (
     <>
       <JsonLd data={createBreadcrumbJsonLd([{ name: locale === 'en' ? 'Home' : 'Trang chủ', path: locale === 'en' ? '/en' : '/' }, { name: t('title'), path: `${locale === 'en' ? '/en' : ''}/solutions/enterprise` }, { name: solution.title, path: `${locale === 'en' ? '/en' : ''}/solutions/enterprise/${slug}` }])} />
-      <ShowcaseLayout breadcrumbs={crumbs} showcase={solution.showcase} tiles={detailTiles(locale, solution.slug)} />
+      <ShowcaseLayout breadcrumbs={crumbs} showcase={solution.showcase} tiles={tiles} />
       {relatedSolutions.length > 0 && (
         <Container className="pb-12">
           <RelatedSolutions solutions={relatedSolutions} title={t('relatedTitle')} />

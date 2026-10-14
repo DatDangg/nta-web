@@ -7,10 +7,9 @@ import { GlassVisual } from '@/components/listing/GlassVisual';
 import { ListingExplorer } from '@/components/listing/ListingExplorer';
 import { ListingHero } from '@/components/listing/ListingHero';
 import type { ListingItem } from '@/components/listing/types';
-import { listingCtas, listingItems, listingLabels, listingPages } from '@/content/listings';
+import { getListingCtas, getListingItems, getListingLabels, getListingPages, getRegistrySlugs } from '@/lib/content/registry';
 import type { Locale, Product } from '@/content/types';
 import { getAllProducts } from '@/lib/content/products';
-import { productSlugs } from '@/lib/content/slug';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { createBreadcrumbJsonLd } from '@/lib/seo/jsonld';
 import { createLocaleAlternates, localizedPath } from '@/lib/seo';
@@ -29,7 +28,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   };
 }
 
-function orderProducts(products: Product[]) {
+function orderProducts(products: Product[], productSlugs: readonly string[]) {
   return productSlugs.flatMap((slug) => {
     const product = products.find((item) => item.slug === slug);
     return product ? [product] : [];
@@ -40,12 +39,15 @@ export default async function ProductsPage({ params }: { params: Promise<{ local
   const { locale } = await params;
   if (locale !== 'vi' && locale !== 'en') notFound();
   setRequestLocale(locale);
-  const [t, products] = await Promise.all([getTranslations('products'), getAllProducts(locale)]);
-  const copy = listingPages[locale].products;
-  const ordered = orderProducts(products);
+  const [t, products, productSlugs, listingPages, listingItems, listingCtas, listingLabels] = await Promise.all([
+    getTranslations('products'), getAllProducts(locale), getRegistrySlugs('product'),
+    getListingPages(locale), getListingItems(locale), getListingCtas(locale), getListingLabels(locale),
+  ]);
+  const copy = listingPages.products;
+  const ordered = orderProducts(products, productSlugs);
   const detailTitle = locale === 'en' ? 'App details' : 'Chi tiết ứng dụng';
   const items: ListingItem[] = ordered.map((product) => {
-    const meta = listingItems[locale][product.slug];
+    const meta = listingItems[product.slug];
     const poster = product.screenshots[0];
     return {
       id: product.slug,
@@ -79,9 +81,9 @@ export default async function ProductsPage({ params }: { params: Promise<{ local
         <ListingExplorer
           ariaLabel={copy.ariaLabel}
           categories={copy.categories}
-          cta={{ ...listingCtas[locale].products, href: '/contact', icon: 'plus' }}
+          cta={{ ...listingCtas.products, href: '/contact', icon: 'plus' }}
           items={items}
-          labels={{ ...listingLabels[locale], searchPlaceholder: copy.searchPlaceholder }}
+          labels={{ ...listingLabels, searchPlaceholder: copy.searchPlaceholder }}
         />
       </ListingHero>
       <CTABanner description={t('ctaDescription')} title={t('ctaTitle')} variant="alt" />

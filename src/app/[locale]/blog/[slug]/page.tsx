@@ -6,16 +6,15 @@ import { RelatedPosts } from '@/components/blog/RelatedPosts';
 import { ShareBar } from '@/components/blog/ShareBar';
 import { CTABanner } from '@/components/shared/CTABanner';
 import { mdxComponents } from '@/components/mdx';
-import type { Locale } from '@/content/types';
 import { getAllPosts, getPostBySlug } from '@/lib/content/posts';
 import { RenderMdx } from '@/lib/content/render-mdx';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { createArticleJsonLd, createBreadcrumbJsonLd } from '@/lib/seo/jsonld';
 import { createLocaleAlternates, localizedPath, BASE_URL } from '@/lib/seo';
 
-export async function generateStaticParams({ params }: { params: { locale: string } }) {
-  if (params.locale !== 'vi' && params.locale !== 'en') return [];
-  return (await getAllPosts(params.locale as Locale)).map(({ slug }) => ({ slug }));
+// Không prerender slug lúc build (build không truy cập DB — decisions.md CR-031 P3-T02): render lần đầu theo yêu cầu rồi cache.
+export function generateStaticParams() {
+  return [];
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string; slug: string }> }): Promise<Metadata> {

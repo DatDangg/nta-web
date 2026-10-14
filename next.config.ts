@@ -4,6 +4,9 @@ import createNextIntlPlugin from 'next-intl/plugin';
 const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 const nextConfig: NextConfig = {
   output: 'standalone',
+  // Trang vi render theo request (CR-031 P3-T02) → tắt streaming metadata cho MỌI client: title/canonical/hreflang/og luôn nằm trong <head>
+  // như bản SSG cũ (bot không chạy JS như coccocbot/Zalo/TelegramBot vẫn đọc được). Metadata dùng cùng dữ liệu đã cache với page.
+  htmlLimitedBots: /.*/,
   images: {
     // Chỉ WebP: AVIF encode chậm hơn nhiều lần → lần đầu mỗi ảnh/kích thước (sau mỗi lần deploy,
     // cache rỗng) phải chờ server nén lâu. WebP nén nhanh, dung lượng chênh không đáng kể.

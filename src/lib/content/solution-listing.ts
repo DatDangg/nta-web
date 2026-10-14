@@ -1,16 +1,18 @@
 import type { ListingItem } from '@/components/listing/types';
-import { listingItems, ratioToSize } from '@/content/listings';
+import { ratioToSize } from '@/content/listings';
 import type { Locale, Solution } from '@/content/types';
+import { getListingItems, getRegistrySlugs, type RegistryGroup } from './registry';
 
 /**
- * Đổi danh sách giải pháp (mdx) thành thẻ cho `ListingExplorer`, theo đúng thứ tự `slugs`.
+ * Đổi danh sách giải pháp (mdx) thành thẻ cho `ListingExplorer`, theo thứ tự registry của nhóm `group`.
  * Ảnh thẻ: `cardImage` (ảnh giao diện thật) → fallback `heroShot` → bỏ ảnh.
  */
-export function toSolutionItems(locale: Locale, solutions: Solution[], slugs: readonly string[], fallbackAlt: (title: string) => string): ListingItem[] {
+export async function toSolutionItems(locale: Locale, solutions: Solution[], group: RegistryGroup, fallbackAlt: (title: string) => string): Promise<ListingItem[]> {
+  const [slugs, listingItems] = await Promise.all([getRegistrySlugs(group), getListingItems(locale)]);
   return slugs.flatMap((slug) => {
     const solution = solutions.find((candidate) => candidate.slug === slug);
     if (!solution) return [];
-    const meta = listingItems[locale][slug];
+    const meta = listingItems[slug];
     const shot = solution.cardImage ?? solution.heroShot;
     const featureTitles = solution.features.map((feature) => (typeof feature === 'string' ? feature : feature.title));
     const item: ListingItem = {

@@ -8,8 +8,7 @@ import { SolutionGridHome } from '@/components/home/SolutionGridHome';
 import { CTABanner } from '@/components/shared/CTABanner';
 import { ListingIcon, type ListingIconName } from '@/components/listing/icons';
 import { Marquee } from '@/components/motion/Marquee';
-import { getHomeContent } from '@/content/home';
-import { listingCtas, listingItems } from '@/content/listings';
+import { getHomeContent, getListingCtas, getListingItems } from '@/lib/content/registry';
 import { getAllCaseStudies } from '@/lib/content/case-studies';
 import type { Locale } from '@/content/types';
 import { createLocaleAlternates, localizedPath } from '@/lib/seo';
@@ -49,10 +48,12 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   if (locale !== 'vi' && locale !== 'en') notFound();
   setRequestLocale(locale);
 
-  const [t, home, caseStudies] = await Promise.all([
+  const [t, home, caseStudies, listingCtas, listingItems] = await Promise.all([
     getTranslations('home'),
-    Promise.resolve(getHomeContent(locale)),
+    getHomeContent(locale),
     getAllCaseStudies(locale),
+    getListingCtas(locale),
+    getListingItems(locale),
   ]);
 
   return (
@@ -78,13 +79,13 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         titleLead={t('solutionsTitleLead')}
       />
       <ProductStrip
-        cta={{ ...listingCtas[locale].products, href: '/contact', icon: 'plus' }}
+        cta={{ ...listingCtas.products, href: '/contact', icon: 'plus' }}
         description={t('productsLead')}
         eyebrow={t('productsEyebrow')}
         products={home.featuredProducts.flatMap((product) => {
           // Icon/theme/subtitle/chips dùng chung dữ liệu với trang /products để 2 nơi không lệch nhau.
           // Slug chưa có trong listingItems → bỏ qua thẻ đó thay vì crash cả trang chủ.
-          const meta = listingItems[locale][product.slug];
+          const meta = listingItems[product.slug];
           if (!meta) return [];
           const { icon, theme, subtitle, chips } = meta;
           return [{ slug: product.slug, title: product.title, image: product.image, alt: product.alt, icon, theme, subtitle, chips }];

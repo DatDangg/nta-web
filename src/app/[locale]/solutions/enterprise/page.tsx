@@ -5,10 +5,9 @@ import { GlassVisual } from '@/components/listing/GlassVisual';
 import { ListingExplorer } from '@/components/listing/ListingExplorer';
 import { ListingHero } from '@/components/listing/ListingHero';
 import { CTABanner } from '@/components/shared/CTABanner';
-import { listingCtas, listingLabels, listingPages } from '@/content/listings';
+import { getListingCtas, getListingLabels, getListingPages } from '@/lib/content/registry';
 import type { Locale } from '@/content/types';
 import { getAllSolutions } from '@/lib/content/solutions';
-import { enterpriseSlugs } from '@/lib/content/slug';
 import { toSolutionItems } from '@/lib/content/solution-listing';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { createBreadcrumbJsonLd } from '@/lib/seo/jsonld';
@@ -32,9 +31,11 @@ export default async function EnterpriseSolutionsPage({ params }: { params: Prom
   const { locale } = await params;
   if (locale !== 'vi' && locale !== 'en') notFound();
   setRequestLocale(locale);
-  const [t, solutions] = await Promise.all([getTranslations('solutions.enterprise'), getAllSolutions(locale)]);
-  const copy = listingPages[locale].enterprise;
-  const items = toSolutionItems(locale, solutions, enterpriseSlugs, (title) => t('imageAlt', { title }));
+  const [t, solutions, listingPages, listingCtas, listingLabels] = await Promise.all([
+    getTranslations('solutions.enterprise'), getAllSolutions(locale), getListingPages(locale), getListingCtas(locale), getListingLabels(locale),
+  ]);
+  const copy = listingPages.enterprise;
+  const items = await toSolutionItems(locale, solutions, 'enterprise', (title) => t('imageAlt', { title }));
 
   return (
     <>
@@ -52,9 +53,9 @@ export default async function EnterpriseSolutionsPage({ params }: { params: Prom
           ariaLabel={copy.ariaLabel}
           categories={copy.categories}
           columns={2}
-          cta={{ ...listingCtas[locale].enterprise, href: '/solutions/ai', icon: 'sparkles' }}
+          cta={{ ...listingCtas.enterprise, href: '/solutions/ai', icon: 'sparkles' }}
           items={items}
-          labels={{ ...listingLabels[locale], searchPlaceholder: copy.searchPlaceholder }}
+          labels={{ ...listingLabels, searchPlaceholder: copy.searchPlaceholder }}
         />
       </ListingHero>
       <CTABanner description={t('ctaDescription')} title={t('ctaTitle')} variant="alt" />

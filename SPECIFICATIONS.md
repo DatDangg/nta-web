@@ -389,7 +389,9 @@ Base URL: dev `http://localhost:3000/api` · prod `https://ntavietnam.tech/api` 
   `company-info.ts` (vi + en) — user chốt 14/10/2026 (quyết định #9: bot sửa được mọi chữ trên web).
   Ảnh có sẵn `public/images` **giữ trong repo** (không chuyển); ảnh mới theo R-16d.
   Form liên hệ **forward** qua email/API bên thứ ba, **không lưu DB** (giữ nguyên).
-  Hiệu năng/khả dụng: trang đã cache **không** truy vấn DB; TTFB trang chủ (cache hit) không tệ hơn quá 20% so với trước;
+  Hiệu năng/khả dụng: trang đã cache (route cache hoặc data cache) **không** truy vấn DB; ~~TTFB trang chủ (cache hit) không tệ hơn quá 20% so với trước~~
+  → _(P3-T02, user chốt 14/10/2026)_ build image **không** cần DB nên trang vi (mặc định, `localePrefix: as-needed` → middleware rewrite) render theo request
+  dựa trên data cache (Next 15.5 không cache ISR on-demand cho URL bị rewrite); TTFB đo local khi data cache hit **≤ 50 ms** (trước ~14 ms, sau ~35 ms);
   DB lỗi → trang đã cache vẫn phục vụ, trang chưa cache trả lỗi rõ (không cache trang rỗng) — tính vào mục tiêu ≥ 99.5% của R-27.
   Chuyển nguồn có cờ `CONTENT_SOURCE=file|db` trong giai đoạn chuyển tiếp; sau cutover bỏ cờ + đường đọc file.
   `[reverse-engineered from docs]` (phần form) — nguồn: `docs/ERD.md:16-22,34`, `.context/project-config.md:40-41`

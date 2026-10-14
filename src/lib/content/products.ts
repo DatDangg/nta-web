@@ -1,6 +1,6 @@
 import type { Locale, Product, WithShowcase } from '@/content/types';
 import { assertCollectionFields, describeMdxRecord, loadMdxCollection } from './load-mdx';
-import { isProductSlug } from './slug';
+import { isRegisteredSlug } from './registry';
 
 export async function getAllProducts(locale: Locale): Promise<WithShowcase<Product>[]> {
   const items = await loadMdxCollection<WithShowcase<Product>>('product', locale);
@@ -8,6 +8,6 @@ export async function getAllProducts(locale: Locale): Promise<WithShowcase<Produ
 }
 
 export async function getProductBySlug(locale: Locale, slug: string): Promise<WithShowcase<Product> | null> {
-  if (!isProductSlug(slug)) return null;
+  if (!(await isRegisteredSlug('product', slug))) return null;
   return (await getAllProducts(locale)).find((item) => item.slug === slug) ?? null;
 }

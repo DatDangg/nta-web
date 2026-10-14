@@ -10,6 +10,7 @@ import { COMPANY_CONTACT } from "../../src/lib/contact/company-info";
 import { ABOUT_SLUG, MDX_COLLECTION_DIRECTORIES, readMdxFiles, type MdxCollection } from "../../src/lib/content/mdx-files";
 import { aiSlugs, enterpriseSlugs, productSlugs } from "../../src/lib/content/slug";
 import { CONTENT_LOCALES, type ContentCollection } from "../../src/db/schema";
+import { HOME_SLUG, LISTING_LABELS_SLUG } from "../../src/db/content-rules";
 import enMessages from "../../src/i18n/messages/en.json";
 import viMessages from "../../src/i18n/messages/vi.json";
 
@@ -43,8 +44,7 @@ export const SEED_COLLECTIONS = [
 // Dùng chung với loader web (src/lib/content/load-mdx.ts) → khoá collection/thư mục không lệch.
 export { ABOUT_SLUG, MDX_COLLECTION_DIRECTORIES };
 
-export const HOME_SLUG = "home";
-export const LISTING_LABELS_SLUG = "labels";
+export { HOME_SLUG, LISTING_LABELS_SLUG };
 export const COMPANY_INFO_SLUG = "contact";
 
 export type SlugRegistryGroup = "enterprise" | "ai" | "product";

@@ -1,7 +1,8 @@
 import { getTranslations } from 'next-intl/server';
 import { Container } from '@/components/ui/Container';
-import { listingItems } from '@/content/listings';
+import type { ListingItemMeta } from '@/content/listings';
 import { compareCaseStudies } from '@/lib/content/case-studies';
+import { getListingItems } from '@/lib/content/registry';
 import type { CaseStudy, Locale } from '@/content/types';
 import { CaseStudyCarousel } from './CaseStudyCarousel';
 import { HomeCaseStudyCard, type HomeCaseStudy } from './HomeCaseStudyCard';
@@ -9,7 +10,7 @@ import { HomeCaseStudyCard, type HomeCaseStudy } from './HomeCaseStudyCard';
 /** Số thẻ tối đa của khối case study trang chủ (CR-016, R-03b). */
 const MAX_HOME_CASE_STUDIES = 3;
 
-function toHomeCaseStudy(study: CaseStudy, locale: Locale, fallbackAlt: string): HomeCaseStudy {
+function toHomeCaseStudy(study: CaseStudy, listingItems: Record<string, ListingItemMeta>, fallbackAlt: string): HomeCaseStudy {
   const galleryImage = study.cover ? undefined : study.gallery[0];
   return {
     slug: study.slug,
@@ -17,7 +18,7 @@ function toHomeCaseStudy(study: CaseStudy, locale: Locale, fallbackAlt: string):
     // Cùng nguồn mô tả với thẻ ở trang /case-studies để 2 nơi không lệch nhau.
     description: study.showcase?.hero.description ?? study.result,
     sector: study.sector,
-    icon: listingItems[locale][study.slug]?.icon ?? 'building',
+    icon: listingItems[study.slug]?.icon ?? 'building',
     image: study.cover ?? galleryImage?.src,
     // Ảnh lấy từ gallery thì dùng alt riêng của ảnh đó; ảnh cover dùng alt i18n chung.
     alt: galleryImage?.alt || fallbackAlt,
@@ -26,12 +27,12 @@ function toHomeCaseStudy(study: CaseStudy, locale: Locale, fallbackAlt: string):
 
 /** Khối "Câu chuyện khách hàng" trang chủ theo mockup CR-016 `3.webp`: tối đa 3 thẻ, nút ←/→, "Xem tất cả". */
 export async function CaseStudyHighlight({ studies, locale }: { studies: CaseStudy[]; locale: Locale }) {
-  const [t, tCases] = await Promise.all([getTranslations('home'), getTranslations('caseStudies')]);
+  const [t, tCases, listingItems] = await Promise.all([getTranslations('home'), getTranslations('caseStudies'), getListingItems(locale)]);
   // Sort trên bản copy để khớp thứ tự trang /case-studies, không đổi mảng của caller.
   const cards = [...studies]
     .sort(compareCaseStudies)
     .slice(0, MAX_HOME_CASE_STUDIES)
-    .map((study) => toHomeCaseStudy(study, locale, tCases('imageAlt', { title: study.title })));
+    .map((study) => toHomeCaseStudy(study, listingItems, tCases('imageAlt', { title: study.title })));
 
   if (cards.length === 0) return null;
 

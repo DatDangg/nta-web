@@ -1,4 +1,4 @@
-// Loader MDX web (src/lib/content/*) theo cờ CONTENT_SOURCE — CR-031 P3-T01.
+// Loader MDX web (src/lib/content/*) theo cờ CONTENT_SOURCE — CR-031 P3-T01; registry object TS (registry.ts) — P3-T02.
 // Nằm ở tools/db vì import tools/db/* (tools/ bị .dockerignore loại). `server-only` + `next/cache` được stub
 // (test-stubs/register.ts) vì gói thật chỉ chạy trong Next → test kiểm dữ liệu/lỗi, KHÔNG kiểm data cache của Next
 // (cache + trang đã cache khi tắt DB được kiểm bằng bản build thật — xem Builder report của task).
@@ -17,6 +17,7 @@ import { getAboutData } from "../../src/lib/content/about";
 import { getAllCaseStudies, getCaseStudyBySlug } from "../../src/lib/content/case-studies";
 import { getAllPosts, getMdxDocument, getPostBySlug } from "../../src/lib/content/posts";
 import { getAllProducts, getProductBySlug } from "../../src/lib/content/products";
+import * as registry from "../../src/lib/content/registry";
 import { getAllSolutions, getSolutionBySlug } from "../../src/lib/content/solutions";
 import { getEntries, getEntry } from "../../src/lib/content/store";
 import { readFileSource } from "./file-source";
@@ -65,6 +66,29 @@ async function snapshotLoaders(locale: Locale) {
     solutionBySlug: await pairsBySlug(solutions.map((item) => item.slug), (slug) => getSolutionBySlug(locale, slug)),
     productBySlug: await pairsBySlug(products.map((item) => item.slug), (slug) => getProductBySlug(locale, slug)),
     caseStudyBySlug: await pairsBySlug(caseStudies.map((item) => item.slug), (slug) => getCaseStudyBySlug(locale, slug)),
+    registry: await snapshotRegistry(locale),
+  };
+}
+
+// Mọi getter registry (P3-T02) cho 1 locale, kể cả slug không đăng ký / sai nhóm.
+async function snapshotRegistry(locale: Locale) {
+  const listingItems = await registry.getListingItems(locale);
+  return {
+    enterpriseSlugs: await registry.getRegistrySlugs("enterprise"),
+    aiSlugs: await registry.getRegistrySlugs("ai"),
+    productSlugs: await registry.getRegistrySlugs("product"),
+    registered: [
+      await registry.isRegisteredSlug("ai", "boxai"),
+      await registry.isRegisteredSlug("ai", "crm"),
+      await registry.isRegisteredSlug("product", "khong-ton-tai"),
+    ],
+    listingPages: await registry.getListingPages(locale),
+    listingItems,
+    listingCtas: await registry.getListingCtas(locale),
+    listingLabels: await registry.getListingLabels(locale),
+    home: await registry.getHomeContent(locale),
+    solutionOverview: await registry.getSolutionOverview(locale),
+    detailTiles: await pairsBySlug([...Object.keys(listingItems), "khong-ton-tai"], (slug) => registry.getDetailTiles(locale, slug)),
   };
 }
 
@@ -74,6 +98,11 @@ test("chế độ file (cờ chưa đặt) đọc src/content, không cần DATA
     const posts = await withSource(undefined, () => getAllPosts("vi"));
     assert.ok(posts.length > 0);
     assert.deepEqual(await withSource("file", () => getAllPosts("vi")), posts);
+    // Registry chế độ file = đúng hằng TS hiện tại (cùng thứ tự slug).
+    assert.deepEqual(await withSource(undefined, () => registry.getRegistrySlugs("enterprise")), ["crm", "hrm", "lms", "dentgo"]);
+    assert.deepEqual(await withSource(undefined, () => registry.getRegistrySlugs("product")), ["music-app", "hair-style-ai"]);
+    assert.equal(await withSource(undefined, () => registry.isRegisteredSlug("enterprise", "boxai")), false);
+    assert.ok((await withSource(undefined, () => registry.getHomeContent("en"))).featuredProducts.length > 0);
   } finally {
     restoreEnv("DATABASE_URL");
   }
@@ -94,6 +123,8 @@ test("chế độ db + DB không kết nối được → NÉM lỗi rõ (không
       return true;
     });
     await assert.rejects(withSource("db", () => getAboutData("en")), /\[content-store\]/);
+    await assert.rejects(withSource("db", () => registry.getRegistrySlugs("ai")), /\[content-store\] Không đọc được nội dung slug_registry\/vi/);
+    await assert.rejects(withSource("db", () => registry.getHomeContent("vi")), /\[content-store\]/);
   } finally {
     await closeDb();
     restoreEnv("DATABASE_URL");
@@ -153,5 +184,24 @@ describe("loader chế độ db (DB đã import seed) = chế độ file", { ski
     const posts = await withSource("db", () => getAllPosts("vi"));
     assert.ok(!posts.some((post) => post.slug === first.slug));
     assert.equal(await withSource("db", () => getPostBySlug("vi", first.slug)), null);
+  });
+
+  it("registry db: thiếu key bắt buộc / singleton → lỗi [content-registry] rõ (không TypeError ở trang)", async () => {
+    const hide = (collection: string, slug: string) =>
+      pool?.query("UPDATE content_entries SET deleted_at = now() WHERE collection = $1 AND slug = $2 AND locale = 'en'", [collection, slug]);
+    const restore = () => pool?.query("UPDATE content_entries SET deleted_at = NULL WHERE locale = 'en' AND collection IN ('listing_page', 'listing_cta', 'solution_overview', 'home')");
+    try {
+      await hide("listing_page", "ai");
+      await hide("listing_cta", "caseStudies");
+      await hide("solution_overview", "enterprise");
+      await hide("home", "home");
+      await assert.rejects(withSource("db", () => registry.getListingPages("en")), /\[content-registry\] Thiếu bản ghi listing_page\/en\/ai trong DB/);
+      await assert.rejects(withSource("db", () => registry.getListingCtas("en")), /\[content-registry\] Thiếu bản ghi listing_cta\/en\/caseStudies/);
+      await assert.rejects(withSource("db", () => registry.getSolutionOverview("en")), /\[content-registry\] Thiếu bản ghi solution_overview\/en\/enterprise/);
+      await assert.rejects(withSource("db", () => registry.getHomeContent("en")), /\[content-registry\] Thiếu bản ghi home\/en\/home/);
+    } finally {
+      await restore();
+    }
+    assert.ok((await withSource("db", () => registry.getListingPages("en"))).ai);
   });
 });

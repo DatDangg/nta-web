@@ -132,3 +132,27 @@
   Lưu ý cho P3-T02: hiện các route vẫn SSG — build chế độ `db` cần DB lúc build (trang prerender bằng dữ liệu DB lúc build).
 - **Test loader ngoài Next:** tools/db/test-stubs/register.ts dùng `module.registerHooks` trỏ `server-only`/`next/cache` sang stub (unstable_cache = gọi thẳng) →
   test kiểm dữ liệu + lỗi, không kiểm cache Next (cache kiểm bằng bản build thật trong container).
+
+## 2026-10-14 — CR-031 P3-T02: registry → getter async; chiến lược render không cần DB lúc build (hướng C)
+- **Registry** (src/lib/content/registry.ts, server-only): `getRegistrySlugs/isRegisteredSlug`, `getListingPages/Items/Ctas/Labels`, `getHomeContent`,
+  `getSolutionOverview`, `getDetailTiles` theo cờ CONTENT_SOURCE. `file` = hằng TS cũ (slug.ts/listings.ts/home.ts/overview.ts giữ làm nguồn file + seed);
+  `db` = `getEntries` của store.ts (data cache có tag, sắp theo sort_order, đọc slug_registry bản `vi`). Bản ghi singleton (home, listing_labels) thiếu → ném lỗi rõ.
+  Hàm thuần giữ nguyên: `ratioToSize`, `isLocale`; `detailTiles(meta)` thành hàm thuần nhận meta. `getSolutionOverview` chưa có call site trong src (chỉ seed dùng dữ liệu overview).
+- **Render (user chọn hướng C):** `[locale]/layout` + mọi `[slug]` `generateStaticParams` trả `[]`; `sitemap.ts` `dynamic = 'force-dynamic'`. `next build` không prerender
+  trang nội dung nào → build image không truy cập DB ở cả 2 chế độ cờ. Trang `/en/...` = ISR on-demand (render lần đầu rồi full route cache, `x-nextjs-cache: HIT`).
+  Trang vi render **mỗi request** trên data cache có tag (cache hit không truy vấn DB) — R-16 sửa: TTFB local khi data cache hit ≤ 50 ms.
+- **Nguyên nhân trang vi không cache được:** next-intl `localePrefix: 'as-needed'` → middleware rewrite `/x` → `/vi/x`. Next 15.5.27
+  `build/templates/app-page.js:179-181` chỉ coi là SSG khi `routeModule.match(pathname)` (pathname = req.url GỐC, `route-modules/route-module.js:297`, không khớp
+  pattern `/[locale]/...`) hoặc đường dẫn sau rewrite đã prerender lúc build → ISR on-demand của URL bị rewrite luôn render động (`Cache-Control: private, no-store`).
+- **Phương án bị loại:** (A) `[locale]` prerender vi/en, chỉ `[slug]` on-demand — trang vi `[slug]` vẫn không cache (36.9–37.3 ms vs baseline 13.7 ms) và trang
+  không tham số prerender lúc build → chế độ db cần DB lúc build. (B) Đổi `localePrefix: 'always'` (+301 URL vi cũ) — đổi URL công khai/SEO, ngoài scope.
+  (Fallback "đang build không có DB thì đọc file" không dùng: trang prerender sẽ mang nội dung file sau cutover.)
+- **Số đo local (median TTFB, cache hit):** baseline SSG: `/` 13.4, `/en` 13.3–14.0, `/solutions/ai/boxai` 13.7 ms. Sau — chế độ db: `/` 25.4–31.1, `/solutions/ai/boxai` 23.7–25.9,
+  `/en` 13.7–14.0 ms; chế độ file: `/` 34.6–45.2, `/solutions/ai/boxai` 34.7–41.3, `/en` 14.0–14.5 ms (file đọc lại MDX mỗi request, không data cache — tạm tới phase 5 bỏ cờ).
+  DB dừng → trang đã có data cache vẫn 200; 180 request cache hit → `xact_commit` của DB +2 (gồm 1 query đo) ⇒ không truy vấn DB.
+- **Metadata (review round 1 F1):** `next.config.ts` `htmlLimitedBots: /.*/` → tắt streaming metadata cho MỌI client: title/canonical/hreflang/og luôn trong `<head>` như bản SSG
+  (bot không chạy JS: coccocbot, Zalo, TelegramBot…). Đánh đổi: trang vi chờ metadata trước khi flush head — chế độ db TTFB tăng ~25–31 → ~34–35 ms (vẫn ≤ 50 ms) nên giữ `/.*/` thay vì regex bot.
+- **Memo đọc file (F4):** chế độ `file` trên bản production (`NODE_ENV=production`) memo kết quả đọc MDX theo collection/locale trong process (src/content bất biến trong image);
+  dev/test không memo (sửa MDX thấy ngay); promise lỗi bị bỏ khỏi memo; trả bản sao mảng. Không ảnh hưởng chế độ db (đi qua store/data cache).
+- **Số đo sau round 2 (median/p90, cache hit):** db: `/` 34.6–35.3/39–46, `/solutions/ai/boxai` 34.2–34.8/39–40, `/en` 13.2–13.4 ms. file: `/` 34.2–34.3/40, `/solutions/ai/boxai` 33.8–34.2/38–40,
+  `/en` 13.7–13.8 ms (trước memo + htmlLimitedBots: file `/` 35–45/p90 ~52). 180 request cache hit → `xact_commit` +2 (gồm query đo); DB dừng → trang đã cache vẫn 200.

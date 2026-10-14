@@ -25,6 +25,11 @@
   trong DB, validate loại/dung lượng, chống path traversal. Bot nhận ảnh thuộc CR-030.
 - SỬA **R-16b** (backup gồm thư mục upload), **R-27** (bind mount `/opt/nta-web-data/uploads`, trước ghi volume `nta-web-uploads`).
 
+**Cập nhật P3-T02 (cùng 4.2.0, user chốt 14/10/2026 — hướng C):**
+- SỬA **R-16** (hiệu năng): bỏ ngưỡng "TTFB trang chủ không tệ hơn quá 20%" → TTFB local khi data cache hit ≤ 50 ms; trang vi render
+  theo request trên data cache (giới hạn Next 15.5 với rewrite `as-needed`), không truy vấn DB khi cache hit. Phương án loại: build từ file
+  rồi làm mới từ DB (stale sau deploy), `localePrefix: always` (đổi URL công khai/SEO).
+
 **Ảnh hưởng:** mọi loader `src/lib/content/*.ts` + registry TS (`slug.ts`, `listings.ts`, `home.ts`, `solutions/overview.ts`)
 và các trang/route dùng chúng (≈55 file import); sitemap/hreflang; mega menu; `docker-compose.yml`, `deploy.yml`;
 docs ERD/DESIGN/API_SPEC/runbook/content-bot. Test: toàn bộ trang vi+en (regression parity), endpoint revalidate,

@@ -294,9 +294,8 @@ export function ratioToSize(ratio = 1.6, width = 1600) {
   return { width, height: Math.round(width / ratio) };
 }
 
-/** Ô icon quanh ảnh hero trang chi tiết: icon riêng của mục + 2 ô phụ khác màu. */
-export function detailTiles(locale: Locale, slug: string): GlassTile[] {
-  const meta = listingItems[locale][slug];
+/** Ô icon quanh ảnh hero trang chi tiết: icon riêng của mục + 2 ô phụ khác màu. Hàm thuần — meta lấy qua getDetailTiles (registry.ts). */
+export function detailTiles(meta: ListingItemMeta | undefined): GlassTile[] {
   const main: GlassTile = { icon: meta?.icon ?? 'sparkles', theme: meta?.theme ?? 'teal' };
   const extras: GlassTile[] = [
     { icon: 'chart', theme: 'sky' },

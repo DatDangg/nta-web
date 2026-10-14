@@ -7,7 +7,7 @@ import { ListingHero } from '@/components/listing/ListingHero';
 import type { ListingItem } from '@/components/listing/types';
 import { CTABanner } from '@/components/shared/CTABanner';
 import { compareCaseStudies, getAllCaseStudies } from '@/lib/content/case-studies';
-import { listingCtas, listingItems, listingLabels, listingPages } from '@/content/listings';
+import { getListingCtas, getListingItems, getListingLabels, getListingPages } from '@/lib/content/registry';
 import type { Locale } from '@/content/types';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { createBreadcrumbJsonLd } from '@/lib/seo/jsonld';
@@ -28,12 +28,15 @@ export default async function CaseStudiesPage({ params }: { params: Promise<{ lo
   const { locale } = await params;
   if (locale !== 'vi' && locale !== 'en') notFound();
   setRequestLocale(locale);
-  const [t, studies, cta] = await Promise.all([getTranslations('caseStudies'), getAllCaseStudies(locale), getTranslations('solutions.ai')]);
+  const [t, studies, cta, listingPages, listingItems, listingCtas, listingLabels] = await Promise.all([
+    getTranslations('caseStudies'), getAllCaseStudies(locale), getTranslations('solutions.ai'),
+    getListingPages(locale), getListingItems(locale), getListingCtas(locale), getListingLabels(locale),
+  ]);
   studies.sort(compareCaseStudies);
-  const copy = listingPages[locale].caseStudies;
+  const copy = listingPages.caseStudies;
 
   const items: ListingItem[] = studies.map((study) => {
-    const meta = listingItems[locale][study.slug];
+    const meta = listingItems[study.slug];
     const hero = study.showcase?.hero;
     const cover = study.cover ?? hero?.image.src ?? study.gallery[0]?.src;
     const categoryLabel = t(`categories.${study.category}`);
@@ -70,9 +73,9 @@ export default async function CaseStudiesPage({ params }: { params: Promise<{ lo
           ariaLabel={copy.ariaLabel}
           categories={copy.categories}
           columns={2}
-          cta={{ ...listingCtas[locale].caseStudies, href: '/contact', icon: 'chat' }}
+          cta={{ ...listingCtas.caseStudies, href: '/contact', icon: 'chat' }}
           items={items}
-          labels={{ ...listingLabels[locale], searchPlaceholder: copy.searchPlaceholder }}
+          labels={{ ...listingLabels, searchPlaceholder: copy.searchPlaceholder }}
         />
       </ListingHero>
       <CTABanner description={cta('ctaDescription')} title={cta('ctaTitle')} variant="alt" />

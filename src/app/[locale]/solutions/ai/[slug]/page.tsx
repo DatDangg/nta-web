@@ -4,23 +4,24 @@ import { notFound } from 'next/navigation';
 import { ShowcaseLayout } from '@/components/case-studies/showcase/ShowcaseLayout';
 import { CaseStudyLink } from '@/components/solutions/CaseStudyLink';
 import { CTAForm } from '@/components/contact/CTAForm';
-import { detailTiles } from '@/content/listings';
 import { getCaseStudyBySlug } from '@/lib/content/case-studies';
 import { getSolutionBySlug } from '@/lib/content/solutions';
-import { getAiStaticParams, isAiSlug, isLocale } from '@/lib/content/slug';
+import { isLocale } from '@/lib/content/slug';
+import { getDetailTiles, isRegisteredSlug } from '@/lib/content/registry';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { createBreadcrumbJsonLd } from '@/lib/seo/jsonld';
 import { createLocaleAlternates, localizedPath } from '@/lib/seo';
 
+// Không prerender slug lúc build (build không truy cập DB — decisions.md CR-031 P3-T02): render lần đầu theo yêu cầu rồi cache.
 export function generateStaticParams() {
-  return getAiStaticParams();
+  return [];
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string; slug: string }> }): Promise<Metadata> {
   const { locale, slug } = await params;
-  if (!isLocale(locale) || !isAiSlug(slug)) notFound();
-  const solution = await getSolutionBySlug(locale, slug);
-  if (!solution || solution.category !== 'ai') notFound();
+  if (!isLocale(locale)) notFound();
+  const [isAi, solution] = await Promise.all([isRegisteredSlug('ai', slug), getSolutionBySlug(locale, slug)]);
+  if (!isAi || !solution || solution.category !== 'ai') notFound();
   const path = `/solutions/ai/${slug}`;
   return {
     title: `${solution.brandName ?? solution.title} | NTA`,
@@ -35,10 +36,12 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
  */
 export default async function AiSolutionDetailPage({ params }: { params: Promise<{ locale: string; slug: string }> }) {
   const { locale, slug } = await params;
-  if (!isLocale(locale) || !isAiSlug(slug)) notFound();
+  if (!isLocale(locale)) notFound();
   setRequestLocale(locale);
-  const [t, solution] = await Promise.all([getTranslations('solutions.ai'), getSolutionBySlug(locale, slug)]);
-  if (!solution || solution.category !== 'ai') notFound();
+  const [t, isAi, solution, tiles] = await Promise.all([
+    getTranslations('solutions.ai'), isRegisteredSlug('ai', slug), getSolutionBySlug(locale, slug), getDetailTiles(locale, slug),
+  ]);
+  if (!isAi || !solution || solution.category !== 'ai') notFound();
   const relatedCase = solution.relatedCases?.[0]
     ? await getCaseStudyBySlug(locale, solution.relatedCases[0])
     : null;
@@ -46,7 +49,7 @@ export default async function AiSolutionDetailPage({ params }: { params: Promise
   return (
     <>
       <JsonLd data={createBreadcrumbJsonLd([{ name: locale === 'en' ? 'Home' : 'Trang chủ', path: locale === 'en' ? '/en' : '/' }, { name: t('title'), path: `${locale === 'en' ? '/en' : ''}/solutions/ai` }, { name: solution.title, path: `${locale === 'en' ? '/en' : ''}/solutions/ai/${slug}` }])} />
-      <ShowcaseLayout breadcrumbs={[{ label: t('title'), href: '/solutions/ai' }, { label: solution.brandName ?? solution.title }]} showcase={solution.showcase} tiles={detailTiles(locale, slug)} />
+      <ShowcaseLayout breadcrumbs={[{ label: t('title'), href: '/solutions/ai' }, { label: solution.brandName ?? solution.title }]} showcase={solution.showcase} tiles={tiles} />
       <CaseStudyLink caseStudy={relatedCase} linkLabel={t('caseStudyLink')} title={t('relatedCaseTitle')} />
       <CTAForm />
     </>

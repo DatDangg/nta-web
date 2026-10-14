@@ -23,9 +23,27 @@ function compareByFileName(left: StoredEntry, right: StoredEntry): number {
   return leftName < rightName ? -1 : 1;
 }
 
+// Chế độ file trên bản build production: src/content nằm trong image, không đổi lúc chạy → đọc đĩa 1 lần/process
+// (trang vi render theo request — CR-031 P3-T02). Dev/test không memo để sửa MDX thấy ngay. Lỗi đọc không được giữ lại.
+const fileMemo = new Map<string, Promise<unknown[]>>();
+
+function loadMdxFromFile<T>(collection: MdxCollection, locale: Locale): Promise<T[]> {
+  const directory = MDX_COLLECTION_DIRECTORIES[collection];
+  if (process.env.NODE_ENV !== 'production') return loadMdxDirectory<T>(directory, locale);
+  const key = `${collection}/${locale}`;
+  let pending = fileMemo.get(key);
+  if (!pending) {
+    pending = loadMdxDirectory<T>(directory, locale);
+    pending.catch(() => fileMemo.delete(key));
+    fileMemo.set(key, pending);
+  }
+  // Bản sao mảng: caller được sort/lọc mà không đổi bản đã memo. Record bên trong dùng chung giữa request → coi là chỉ đọc, không mutate.
+  return pending.then((records) => [...records] as T[]);
+}
+
 /** Bản ghi MDX của 1 collection theo cờ CONTENT_SOURCE (file = src/content, db = PostgreSQL). Lỗi DB được ném ra, không trả rỗng. */
 export async function loadMdxCollection<T>(collection: MdxCollection, locale: Locale): Promise<T[]> {
-  if (getContentSource() === 'file') return loadMdxDirectory<T>(MDX_COLLECTION_DIRECTORIES[collection], locale);
+  if (getContentSource() === 'file') return loadMdxFromFile<T>(collection, locale);
   const entries = await getEntries(collection, locale);
   return [...entries].sort(compareByFileName).map((entry) => toMdxRecord<T>(entry));
 }
