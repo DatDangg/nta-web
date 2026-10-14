@@ -19,6 +19,12 @@ type ProductStripProps = {
   cta: ListingCta;
 };
 
+/** Độ rộng 1 thẻ trong dải: mobile 85%, tablet ½ dải (luôn cuộn ngang). */
+const cardWidthBaseClass = 'w-[85%] shrink-0 snap-start md:w-[calc(50%-0.75rem)]';
+/** Đúng 3 thẻ → từ lg mỗi thẻ ⅓ dải (2 gap `md:gap-6` = 3rem) để hiện đủ 1 hàng, không cuộn (CR-022). */
+const cardWidthThreeUpClass = 'w-[85%] shrink-0 snap-start md:w-[calc(50%-0.75rem)] lg:w-[calc((100%-3rem)/3)]';
+const productImageSizesThreeUp = '(min-width: 1024px) 340px, (min-width: 768px) 45vw, 85vw';
+
 /** Khối "Sản phẩm tiêu biểu" trang chủ theo mockup CR-016 (header `2.webp` nửa dưới, thẻ dọc `1.webp`). */
 export function ProductStrip({ products, cta, eyebrow, titleLead, titleAccent, description }: ProductStripProps) {
   const t = useTranslations('home');
@@ -26,6 +32,19 @@ export function ProductStrip({ products, cta, eyebrow, titleLead, titleAccent, d
 
   if (products.length === 0) return null;
   const regionLabel = `${titleLead} ${titleAccent}`;
+  // Thẻ CTA luôn đứng cuối dải; ≤ 3 thẻ vừa 1 hàng ở lg+ nên ẩn cặp ←/→ ở đó (không còn gì để cuộn).
+  const cardCount = products.length + 1;
+  const isThreeUp = cardCount === 3;
+  const cardWidthClass = isThreeUp ? cardWidthThreeUpClass : cardWidthBaseClass;
+  const scrollArrows = (
+    <HomeScrollArrows
+      canNext={canNext}
+      canPrev={canPrev}
+      nextLabel={t('nextProducts')}
+      onScroll={scrollStrip}
+      previousLabel={t('previousProducts')}
+    />
+  );
 
   return (
     <section aria-labelledby="home-products-title" className="bg-background py-12 md:py-16 xl:py-24">
@@ -33,15 +52,7 @@ export function ProductStrip({ products, cta, eyebrow, titleLead, titleAccent, d
         <div className="mx-auto max-w-[1040px]">
           <Reveal>
             <HomeSectionHeader
-              actions={
-                <HomeScrollArrows
-                  canNext={canNext}
-                  canPrev={canPrev}
-                  nextLabel={t('nextProducts')}
-                  onScroll={scrollStrip}
-                  previousLabel={t('previousProducts')}
-                />
-              }
+              actions={cardCount <= 3 ? <div className="flex gap-3 lg:hidden">{scrollArrows}</div> : scrollArrows}
               description={description}
               eyebrow={eyebrow}
               headingId="home-products-title"
@@ -60,12 +71,13 @@ export function ProductStrip({ products, cta, eyebrow, titleLead, titleAccent, d
             >
               {products.map((product) => (
                 <HomeProductCard
-                  className="w-[85%] shrink-0 snap-start md:w-[calc(50%-0.75rem)]"
+                  className={cardWidthClass}
+                  imageSizes={isThreeUp ? productImageSizesThreeUp : undefined}
                   key={product.slug}
                   product={product}
                 />
               ))}
-              <div className="grid w-[85%] shrink-0 snap-start md:w-[calc(50%-0.75rem)]">
+              <div className={`grid ${cardWidthClass}`}>
                 <ListingCtaCard cta={cta} />
               </div>
             </div>

@@ -123,6 +123,9 @@ File component ≤ 300 dòng, function ≤ 50 dòng → tách sub-component khi 
 3. **Sản phẩm tiêu biểu**: **horizontal scroll-snap strip** (khác family với grid phía trên),
     ≥2 `ProductCard` (ảnh screenshot app + tên + 1 dòng), khớp 2 app thật hiện có; ẩn section khi không có sản phẩm, snap `sm:mandatory`, nút mũi tên desktop.
     Cuối dải có 1 thẻ CTA viền đứt "Sắp có thêm ứng dụng mới" → `/contact` (CR-021, tái dùng `ListingCtaCard` + `listingCtas.products`), rộng bằng 1 thẻ sản phẩm.
+    As-built CR-022: từ `lg` (≥1024px) tổng thẻ (sản phẩm + CTA) **≤ 3** → hiện đủ 1 hàng không cuộn (3 thẻ mỗi thẻ ⅓ dải
+    `lg:w-[calc((100%-3rem)/3)]`, ≤2 thẻ ½ dải), cụm nút ←/→ ẩn ở `lg+` (`lg:hidden`), ảnh `sizes` lg 340px; **> 3 thẻ** → giữ cuộn ngang + nút ←/→.
+    Dưới `lg` (mobile 85%, tablet ½ dải) luôn là dải cuộn ngang, nút ←/→ hiện.
 4. **Case study nổi bật**: split 1 lần duy nhất (ảnh trái | text phải): tên dự án, 1 kết quả số thật, link.
 5. **CTABanner accent**: full-width nền `primary`, text inverse, 1 CTA (button trắng, chữ `primary`).
 

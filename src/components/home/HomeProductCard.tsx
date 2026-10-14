@@ -19,7 +19,16 @@ export type HomeFeaturedProduct = {
  * Thẻ sản phẩm dọc của trang chủ (mockup CR-016 `1.webp`) — không dùng `ProductCard` dùng chung.
  * Poster 9:16 cắt `object-top` về khung 6:7 để giữ phần chữ thương hiệu nằm ở đầu ảnh; không phủ chữ lên poster.
  */
-export function HomeProductCard({ product, className = '' }: { product: HomeFeaturedProduct; className?: string }) {
+export function HomeProductCard({
+  product,
+  className = '',
+  imageSizes = '(min-width: 1024px) 508px, (min-width: 768px) 45vw, 85vw',
+}: {
+  product: HomeFeaturedProduct;
+  className?: string;
+  /** `sizes` của poster — dải 3 cột ở lg+ truyền giá trị nhỏ hơn để không tải ảnh 508px (CR-022). */
+  imageSizes?: string;
+}) {
   const theme = listingThemes[product.theme];
 
   return (
@@ -32,7 +41,7 @@ export function HomeProductCard({ product, className = '' }: { product: HomeFeat
           alt={product.alt}
           className="object-cover object-top motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover:scale-[1.02]"
           fill
-          sizes="(min-width: 1024px) 508px, (min-width: 768px) 45vw, 85vw"
+          sizes={imageSizes}
           src={product.image}
         />
       </div>
