@@ -1,10 +1,10 @@
 import type { Locale, Product, WithShowcase } from '@/content/types';
-import { assertRequiredFields, loadMdxDirectory } from './load-mdx';
+import { assertCollectionFields, describeMdxRecord, loadMdxCollection } from './load-mdx';
 import { isProductSlug } from './slug';
 
 export async function getAllProducts(locale: Locale): Promise<WithShowcase<Product>[]> {
-  const items = await loadMdxDirectory<WithShowcase<Product>>('products', locale);
-  return items.map((item) => assertRequiredFields(item, ['slug', 'title', 'description', 'screenshots', 'showcase'], `src/content/products/${locale}/${item.slug}.mdx`));
+  const items = await loadMdxCollection<WithShowcase<Product>>('product', locale);
+  return items.map((item) => assertCollectionFields(item, 'product', describeMdxRecord('product', locale, item.slug)));
 }
 
 export async function getProductBySlug(locale: Locale, slug: string): Promise<WithShowcase<Product> | null> {

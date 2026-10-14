@@ -1,13 +1,13 @@
 {
   "mode": "feature",
   "activeWorkItem": {
-    "type": "bug",
-    "slug": "build-site-url-empty",
-    "phaseTask": "phase-1-task-01",
+    "type": "feature",
+    "slug": "content-database",
+    "phaseTask": "phase-3-task-01",
     "step": "closeout",
     "status": "done",
-    "journal": ".context/runs/bug-build-site-url-empty-phase-1-task-01.md",
-    "note": "done — tiếp P3-T01 CR-031"
+    "journal": ".context/runs/feature-content-database-phase-3-task-01.md",
+    "note": "CR-031 P3-T01 done — dừng, chưa chạy P3-T02"
   },
   "features": [
     {
@@ -1171,7 +1171,7 @@
         "phase-1-task-02": "done",
         "phase-2-task-01": "done",
         "phase-2-task-02": "done",
-        "phase-3-task-01": "pending",
+        "phase-3-task-01": "done",
         "phase-3-task-02": "pending",
         "phase-3-task-03": "pending",
         "phase-4-task-01": "pending",
@@ -1179,9 +1179,9 @@
         "phase-3-task-04": "pending",
         "phase-3-task-05": "pending"
       },
-      "currentPhase": 2,
+      "currentPhase": 3,
       "inProgressTask": null,
-      "note": "Phase 2 done (spec-validator PASS). CHỜ user duyệt checkpoint phase 2 trước phase 3.",
+      "note": "P3-T01 done: store.ts (unstable_cache tag), loader MDX đọc DB khi CONTENT_SOURCE=db (mặc định file). Dừng — P3-T02 khi user bảo. Không bật db trước P3-T03.",
       "updatedAt": "2026-10-15",
       "specValidator": {
         "result": "PASS",
@@ -1192,13 +1192,14 @@
         "phase-1-task-01",
         "phase-1-task-02",
         "phase-2-task-01",
-        "phase-2-task-02"
+        "phase-2-task-02",
+        "phase-3-task-01"
       ],
       "reviewer": {
         "result": "PASS",
         "level": "STRICT",
         "round": 1,
-        "report": ".context/review-reports/feature-content-database-phase-2-task-02-round-1-review.md"
+        "report": ".context/review-reports/feature-content-database-phase-3-task-01-round-1-review.md"
       },
       "phase1SpecValidator": {
         "result": "PASS",

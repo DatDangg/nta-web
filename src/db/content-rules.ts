@@ -15,8 +15,8 @@ export interface ContentRecord {
   sortOrder: number | null;
 }
 
-// Cùng danh sách loader web truyền vào assertRequiredFields (src/lib/content/{posts,solutions,products,case-studies,about}.ts).
-// content-rules.test.ts đọc mã nguồn loader để bắt lệch hai nơi.
+// Nguồn DUY NHẤT của required fields: loader web (src/lib/content/{posts,solutions,products,case-studies,about}.ts)
+// đọc danh sách này qua assertCollectionFields (load-mdx.ts) — content-rules.test.ts bắt loader nào hardcode lại danh sách.
 export const REQUIRED_FIELDS: Partial<Record<ContentCollection, readonly string[]>> = {
   post: ["slug", "title", "date", "category", "excerpt", "cover", "body"],
   solution: ["slug", "title", "description", "features", "benefits", "category", "showcase"],

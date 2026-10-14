@@ -113,3 +113,22 @@
 - **Transaction:** SELECT FOR UPDATE → expectedVersion (lệch → ContentConflictError) → validate (ContentValidationError, không ghi) → UPDATE entry → INSERT content_versions; lỗi bất kỳ huỷ cả hai. Sửa bản ghi đã xoá mềm bị từ chối (rollback trước).
 - **Migration 0001:** ALTER TABLE content_versions ADD COLUMN sort_order integer (nullable, không default) — gate OK không cần marker. Hàng version cũ để NULL; seed import ghi sort_order cho version 1 (prod chưa import).
 - **Test DB của write-path** tạo database riêng nta_repo_test_* rồi xoá (không đụng DB seed-db.test). Test có import tools/db nằm trong tools/db vì tools/ bị .dockerignore loại.
+
+## 2026-10-14 — CR-031 P3-T01: cờ CONTENT_SOURCE + store đọc DB cho loader MDX
+- **Cờ `CONTENT_SOURCE=file|db`** (src/lib/content/source.ts), đọc env lúc gọi (runtime, không đóng băng lúc build). Chưa đặt/rỗng → `file`.
+  **Giá trị lạ → ném lỗi** (không fallback file + log): sau cutover, fallback âm thầm sẽ phục vụ nội dung file cũ trong khi người sửa đang sửa DB;
+  lỗi to lộ ra ngay ở smoke test cutover. Chế độ `file` gọi đúng `loadMdxDirectory` cũ (cùng thứ tự readdir, cùng dữ liệu, cùng nhãn lỗi `src/content/...`).
+- **Store** (src/lib/content/store.ts, server-only): `getEntries(collection, locale)`, `getEntry(collection, slug, locale)` bọc `unstable_cache`
+  (key gồm collection/locale/slug; tag `content`, `content:<collection>`, và `content:<collection>:<slug>` cho getEntry). Danh sách chỉ mang tag collection
+  (lúc đọc chưa biết slug) → P3-T03 revalidate khi sửa 1 bản ghi phải bắn cả `content:<collection>`. Phần query thuần ở src/db/content-read.ts (lọc deleted_at IS NULL,
+  sort sort_order rồi slug theo code point — không phụ thuộc collation Postgres).
+- **Loader MDX chế độ db:** `{...data, body}` rồi đi qua CÙNG hàm validate/map/sort như file (toPost, assertCollectionFields, sort date; compareCaseStudies ở caller).
+  Thứ tự mặc định = sort theo tên file `<slug>.mdx` (khớp readdir NTFS/thứ tự chữ). Không dùng thứ tự key jsonb. `getXBySlug` vẫn tìm trong danh sách (cùng code path file);
+  `getEntry` có sẵn cho task sau. Required fields: loader dùng `REQUIRED_FIELDS` (src/db/content-rules.ts) qua `assertCollectionFields` — nguồn duy nhất.
+  `MDX_COLLECTION_DIRECTORIES`/`ABOUT_SLUG` chuyển về src/lib/content/mdx-files.ts, tools/db/file-source.ts re-export.
+- **DB lỗi:** store bọc lỗi thành `[content-store] Không đọc được nội dung <collection>/<locale>[/<slug>] từ DB` (cause giữ lỗi gốc, không chứa DATABASE_URL) và NÉM.
+  unstable_cache không lưu kết quả reject → trang đã cache (full route cache / data cache) vẫn 200, trang chưa cache 500, DB lên lại tự phục hồi.
+- **Lazy:** src/db/client.ts không kết nối lúc import; loader chỉ gọi `getDb()` khi `CONTENT_SOURCE=db` → `next build` chế độ file không cần DB.
+  Lưu ý cho P3-T02: hiện các route vẫn SSG — build chế độ `db` cần DB lúc build (trang prerender bằng dữ liệu DB lúc build).
+- **Test loader ngoài Next:** tools/db/test-stubs/register.ts dùng `module.registerHooks` trỏ `server-only`/`next/cache` sang stub (unstable_cache = gọi thẳng) →
+  test kiểm dữ liệu + lỗi, không kiểm cache Next (cache kiểm bằng bản build thật trong container).

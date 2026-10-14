@@ -1,9 +1,9 @@
 import type { AboutData, Locale } from '@/content/types';
-import { assertRequiredFields, loadMdxDirectory } from './load-mdx';
+import { ABOUT_SLUG, assertCollectionFields, describeMdxRecord, loadMdxCollection } from './load-mdx';
 
 export async function getAboutData(locale: Locale): Promise<AboutData | null> {
-  const items = await loadMdxDirectory<AboutData>('about', locale);
+  const items = await loadMdxCollection<AboutData>('about', locale);
   const item = items[0];
   if (!item) return null;
-  return assertRequiredFields(item, ['mission', 'milestones', 'partners'], `src/content/about/${locale}/about.mdx`);
+  return assertCollectionFields(item, 'about', describeMdxRecord('about', locale, ABOUT_SLUG));
 }

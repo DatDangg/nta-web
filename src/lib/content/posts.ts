@@ -1,6 +1,6 @@
 import type { Locale, MdxDocument, Post } from '@/content/types';
 import { isBlogCategory } from '@/lib/blog/categories';
-import { assertRequiredFields, loadMdxDirectory } from './load-mdx';
+import { assertCollectionFields, describeMdxRecord, loadMdxCollection } from './load-mdx';
 import { isLocale } from './slug';
 
 type PostFile = Omit<Post, 'readingMinutes'>;
@@ -14,7 +14,7 @@ export function estimateReadingMinutes(body: string): number {
 }
 
 function toPost(file: PostFile, filePath: string): Post {
-  assertRequiredFields(file, ['slug', 'title', 'date', 'category', 'excerpt', 'cover', 'body'], filePath);
+  assertCollectionFields(file, 'post', filePath);
   if (!isBlogCategory(file.category)) {
     throw new Error(`Invalid content file ${filePath}: unknown category "${String(file.category)}"`);
   }
@@ -22,8 +22,8 @@ function toPost(file: PostFile, filePath: string): Post {
 }
 
 export async function getAllPosts(locale: Locale): Promise<Post[]> {
-  const files = await loadMdxDirectory<PostFile>('blog', locale);
-  return files.map((file) => toPost(file, `src/content/blog/${locale}/${file.slug}.mdx`))
+  const files = await loadMdxCollection<PostFile>('post', locale);
+  return files.map((file) => toPost(file, describeMdxRecord('post', locale, file.slug)))
     .sort((first, second) => second.date.localeCompare(first.date));
 }
 

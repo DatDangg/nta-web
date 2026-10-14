@@ -7,7 +7,7 @@ import { getHomeContent } from "../../src/content/home";
 import { listingCtas, listingItems, listingLabels, listingPages } from "../../src/content/listings";
 import { solutionOverview } from "../../src/content/solutions/overview";
 import { COMPANY_CONTACT } from "../../src/lib/contact/company-info";
-import { readMdxFiles } from "../../src/lib/content/mdx-files";
+import { ABOUT_SLUG, MDX_COLLECTION_DIRECTORIES, readMdxFiles, type MdxCollection } from "../../src/lib/content/mdx-files";
 import { aiSlugs, enterpriseSlugs, productSlugs } from "../../src/lib/content/slug";
 import { CONTENT_LOCALES, type ContentCollection } from "../../src/db/schema";
 import enMessages from "../../src/i18n/messages/en.json";
@@ -40,17 +40,9 @@ export const SEED_COLLECTIONS = [
   "company_info",
 ] as const satisfies readonly ContentCollection[];
 
-export const MDX_COLLECTION_DIRECTORIES = {
-  post: "blog",
-  solution: "solutions",
-  product: "products",
-  case_study: "case-studies",
-  about: "about",
-} as const;
+// Dùng chung với loader web (src/lib/content/load-mdx.ts) → khoá collection/thư mục không lệch.
+export { ABOUT_SLUG, MDX_COLLECTION_DIRECTORIES };
 
-type MdxCollection = keyof typeof MDX_COLLECTION_DIRECTORIES;
-
-export const ABOUT_SLUG = "about";
 export const HOME_SLUG = "home";
 export const LISTING_LABELS_SLUG = "labels";
 export const COMPANY_INFO_SLUG = "contact";

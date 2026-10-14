@@ -28,7 +28,7 @@ test("toàn bộ nội dung file hiện tại qua quy tắc từng bản ghi + �
   assert.deepEqual(missing, []);
 });
 
-test("REQUIRED_FIELDS khớp danh sách loader web truyền vào assertRequiredFields", () => {
+test("loader web lấy required fields từ REQUIRED_FIELDS (không hardcode danh sách riêng)", () => {
   const loaders: Record<string, string> = {
     post: "posts.ts",
     solution: "solutions.ts",
@@ -38,10 +38,10 @@ test("REQUIRED_FIELDS khớp danh sách loader web truyền vào assertRequiredF
   };
   for (const [collection, file] of Object.entries(loaders)) {
     const source = readFileSync(path.join("src/lib/content", file), "utf8");
-    const match = /assertRequiredFields\(\w+,\s*\[([^\]]*)\]/.exec(source);
-    assert.ok(match, file);
-    const fields = [...match[1].matchAll(/'([^']+)'/g)].map((item) => item[1]);
-    assert.deepEqual(fields, REQUIRED_FIELDS[collection as keyof typeof REQUIRED_FIELDS], file);
+    // Loader lấy danh sách qua assertCollectionFields(record, '<collection>', …) → REQUIRED_FIELDS là nguồn duy nhất.
+    assert.ok(REQUIRED_FIELDS[collection as keyof typeof REQUIRED_FIELDS], collection);
+    assert.match(source, new RegExp(`assertCollectionFields\\(\\w+,\\s*'${collection}'`), file);
+    assert.doesNotMatch(source, /assertRequiredFields\(/, file);
   }
 });
 

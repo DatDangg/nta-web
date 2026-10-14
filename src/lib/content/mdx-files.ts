@@ -5,6 +5,20 @@ import path from 'node:path';
 import matter from 'gray-matter';
 import type { Locale } from '@/content/types';
 
+// Collection MDX (tên collection trong content_entries) → thư mục trong src/content.
+export const MDX_COLLECTION_DIRECTORIES = {
+  post: 'blog',
+  solution: 'solutions',
+  product: 'products',
+  case_study: 'case-studies',
+  about: 'about',
+} as const;
+
+export type MdxCollection = keyof typeof MDX_COLLECTION_DIRECTORIES;
+
+// Khoá DB (slug) của singleton about — file là about/<locale>/about.mdx.
+export const ABOUT_SLUG = 'about';
+
 export interface MdxFile {
   fileName: string;
   frontmatter: Record<string, unknown>;
