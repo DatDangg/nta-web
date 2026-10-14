@@ -98,17 +98,27 @@ class GuardTest(unittest.TestCase):
         items = generate.validate_items(load_items(), self.allowed)
         self.assertEqual(len(items), 6)
 
-    def test_unknown_url_fails(self):
+    def assert_item_dropped(self, items, bad_index):
+        """Tin #bad_index bị loại riêng, 5 tin còn lại vẫn đăng; thêm 1 tin hỏng nữa → dưới MIN → FAIL."""
+        result = generate.validate_items(items, self.allowed)
+        self.assertEqual(len(result), 5)
+        self.assertNotIn(items[bad_index]["title_vi"], [r["title_vi"] for r in result])
+        broken = copy.deepcopy(items)
+        broken[(bad_index + 1) % len(broken)]["url"] = "https://evil.example.com/other"
+        with self.assertRaisesRegex(generate.GuardError, "số tin"):
+            generate.validate_items(broken, self.allowed)
+
+    def test_unknown_url_item_dropped(self):
         items = load_items()
         items[0]["url"] = "https://evil.example.com/phish"
-        with self.assertRaisesRegex(generate.GuardError, "không có trong .clean.md"):
-            generate.validate_items(items, self.allowed)
+        self.assert_item_dropped(items, 0)
+        result = generate.validate_items(items, self.allowed)
+        self.assertNotIn("https://evil.example.com/phish", [r["url"] for r in result])
 
-    def test_non_http_url_fails(self):
+    def test_non_http_url_item_dropped(self):
         items = load_items()
         items[0]["url"] = "javascript:alert(1)"
-        with self.assertRaises(generate.GuardError):
-            generate.validate_items(items, self.allowed)
+        self.assert_item_dropped(items, 0)
 
     def test_too_few_items_fails(self):
         with self.assertRaisesRegex(generate.GuardError, "số tin"):
@@ -119,27 +129,25 @@ class GuardTest(unittest.TestCase):
         with self.assertRaisesRegex(generate.GuardError, "số tin"):
             generate.validate_items(items, self.allowed)
 
-    def test_too_many_items_fails(self):
+    def test_too_many_items_truncated(self):
         allowed = {generate.normalize_url(f"https://example.com/n{i}"): f"https://example.com/n{i}" for i in range(13)}
         items = [dict(load_items()[0], url=f"https://example.com/n{i}") for i in range(13)]
-        with self.assertRaisesRegex(generate.GuardError, "số tin"):
-            generate.validate_items(items, allowed)
+        self.assertEqual(len(generate.validate_items(items, allowed)), generate.MAX_ITEMS)
 
-    def test_empty_or_long_text_fails(self):
+    def test_empty_or_long_text_item_dropped(self):
         items = load_items()
         items[1]["summary_en"] = "  "
-        with self.assertRaises(generate.GuardError):
-            generate.validate_items(items, self.allowed)
+        self.assert_item_dropped(items, 1)
         items = load_items()
         items[1]["title_vi"] = "x" * (generate.TITLE_MAX + 1)
-        with self.assertRaises(generate.GuardError):
-            generate.validate_items(items, self.allowed)
+        self.assertEqual(len(generate.validate_items(items, self.allowed)), 5)
 
-    def test_url_smuggled_in_text_fails(self):
+    def test_url_smuggled_in_text_item_dropped(self):
         items = load_items()
         items[2]["summary_vi"] = "Xem thêm tại https://evil.example.com ngay hôm nay nhé."
-        with self.assertRaisesRegex(generate.GuardError, "chứa URL"):
-            generate.validate_items(items, self.allowed)
+        result = generate.validate_items(items, self.allowed)
+        self.assertEqual(len(result), 5)
+        self.assertFalse(any("evil.example.com" in r["summary_vi"] for r in result))
 
     def test_rendered_url_is_original_not_llm_variant(self):
         items = load_items()
@@ -223,6 +231,7 @@ class CliTest(unittest.TestCase):
             bad = os.path.join(tmp, "bad.json")
             items = load_items()
             items[3]["url"] = "https://arxiv.org/abs/9999.99999"
+            items[4]["url"] = "https://evil.example.com/x"  # 2 tin hỏng → còn 4 < MIN
             with open(bad, "w", encoding="utf-8") as fh:
                 json.dump({"items": items}, fh)
             code, _, err = run_main(["render", "--content-dir", tmp, "--now", self.NOW,

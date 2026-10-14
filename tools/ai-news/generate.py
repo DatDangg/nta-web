@@ -117,31 +117,42 @@ def _require_text(item: dict, key: str, min_len: int, max_len: int, index: int) 
 
 
 def validate_items(raw_items, allowed_urls: dict) -> list:
-    """Kiểm tra toàn bộ tin; bất kỳ vi phạm nào → GuardError (không đăng gì)."""
+    """Tin vi phạm (URL lạ, text sai) bị LOẠI riêng; còn dưới MIN_ITEMS tin hợp lệ → GuardError (không đăng gì).
+    Bài chỉ chứa tin đã qua guard nên mọi URL trong bài vẫn có trong .clean.md."""
     if not isinstance(raw_items, list):
         raise GuardError("JSON phải có 'items' dạng list")
     items, seen = [], set()
     for index, item in enumerate(raw_items, start=1):
-        if not isinstance(item, dict):
-            raise GuardError(f"tin #{index}: không phải object")
-        url = item.get("url")
-        if not isinstance(url, str) or not url.lower().startswith(("http://", "https://")):
-            raise GuardError(f"tin #{index}: url không hợp lệ")
-        key = normalize_url(url)
-        if key not in allowed_urls:
-            raise GuardError(f"tin #{index}: URL không có trong .clean.md → nghi bịa: {url[:120]}")
+        try:
+            checked = _validate_item(item, allowed_urls, index)
+        except GuardError as exc:
+            log(f"loại {exc}")
+            continue
+        key = normalize_url(checked["url"])
         if key in seen:
             continue
         seen.add(key)
-        items.append({
-            "url": allowed_urls[key],
-            "source": _require_text(item, "source", 2, SOURCE_MAX, index),
-            **{f: _require_text(item, f, 5, TITLE_MAX, index) for f in ("title_vi", "title_en")},
-            **{f: _require_text(item, f, SUMMARY_MIN, SUMMARY_MAX, index) for f in ("summary_vi", "summary_en")},
-        })
-    if not (MIN_ITEMS <= len(items) <= MAX_ITEMS):
-        raise GuardError(f"số tin {len(items)} ngoài khoảng {MIN_ITEMS}-{MAX_ITEMS}")
-    return items
+        items.append(checked)
+    if len(items) < MIN_ITEMS:
+        raise GuardError(f"số tin hợp lệ {len(items)} < {MIN_ITEMS}")
+    return items[:MAX_ITEMS]
+
+
+def _validate_item(item, allowed_urls: dict, index: int) -> dict:
+    if not isinstance(item, dict):
+        raise GuardError(f"tin #{index}: không phải object")
+    url = item.get("url")
+    if not isinstance(url, str) or not url.lower().startswith(("http://", "https://")):
+        raise GuardError(f"tin #{index}: url không hợp lệ")
+    key = normalize_url(url)
+    if key not in allowed_urls:
+        raise GuardError(f"tin #{index}: URL không có trong .clean.md → nghi bịa: {url[:120]}")
+    return {
+        "url": allowed_urls[key],
+        "source": _require_text(item, "source", 2, SOURCE_MAX, index),
+        **{f: _require_text(item, f, 5, TITLE_MAX, index) for f in ("title_vi", "title_en")},
+        **{f: _require_text(item, f, SUMMARY_MIN, SUMMARY_MAX, index) for f in ("summary_vi", "summary_en")},
+    }
 
 
 # ---------- render MDX ----------
@@ -247,7 +258,7 @@ def parse_llm_json(content: str) -> list:
 
 
 def call_llm(messages: list, api_key: str, model: str, base_url: str) -> str:
-    body = json.dumps({"model": model, "messages": messages, "temperature": 0.2, "max_tokens": 6000}).encode()
+    body = json.dumps({"model": model, "messages": messages, "temperature": 0.2, "max_tokens": 16000}).encode()
     request = urllib.request.Request(
         f"{base_url.rstrip('/')}/chat/completions", data=body, method="POST",
         headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json",
@@ -257,7 +268,9 @@ def call_llm(messages: list, api_key: str, model: str, base_url: str) -> str:
         try:
             with urllib.request.urlopen(request, timeout=REQUEST_TIMEOUT_S) as response:
                 payload = json.loads(response.read().decode("utf-8"))
-            return payload["choices"][0]["message"]["content"] or ""
+            choice = payload["choices"][0]
+            log(f"LLM xong, finish_reason={choice.get('finish_reason')}")
+            return choice["message"]["content"] or ""
         except urllib.error.HTTPError as exc:
             retryable = exc.code == 429 or exc.code >= 500
             log(f"LLM HTTP {exc.code} (lần {attempt}/{MAX_ATTEMPTS})")

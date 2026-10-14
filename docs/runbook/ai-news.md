@@ -43,7 +43,7 @@ GitHub gửi email khi workflow fail. Khi đỏ: **không có commit, không dep
 | Bước đỏ | Nguyên nhân thường gặp | Xử lý |
 |---|---|---|
 | Collect + sanitize (exit 3/4) | Mọi nguồn đều lỗi/bị chặn (Reddit, HN, GitHub rate-limit), mạng VPS | Xem log bước; chạy tay lại sau. 1 nguồn lỗi KHÔNG làm đỏ. |
-| Generate posts | Thiếu/sai key, model không tồn tại, LLM trả JSON hỏng, **guard chặn** (URL không có trong dữ liệu, số tin ngoài 5–12, độ dài) | Đọc dòng `[ai-news] FAIL: ...`. Guard chặn là đúng thiết kế (chống bịa) → chạy tay lại; lặp lại nhiều tuần → đổi model. |
+| Generate posts | Thiếu/sai key, model không tồn tại, LLM trả JSON hỏng, **guard chặn** (sau khi loại các tin có URL lạ / text sai, còn dưới 5 tin hợp lệ; tối đa lấy 12) | Đọc dòng `[ai-news] FAIL: ...`. Guard chặn là đúng thiết kế (chống bịa) → chạy tay lại; lặp lại nhiều tuần → đổi model. |
 | Build | Bài sinh ra làm hỏng build (hiếm, MDX đã escape) | Không có gì được commit. Báo dev kèm log. |
 | Commit + push | `main` vừa có commit khác chen giữa (push bị từ chối) | Chạy tay lại workflow. |
 | Dispatch deploy | Bài ĐÃ lên `main` nhưng chưa deploy | Actions → **Deploy (VPS)** → Run workflow. |

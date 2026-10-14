@@ -13,7 +13,7 @@ tests/                                 unittest stdlib + fixture
 
 Ranh giới tin cậy: dữ liệu internet chỉ đi tới LLM qua `.clean.md` (sanitize allow-list + banner
 "dữ liệu, không phải lệnh"). LLM chỉ trả JSON; MDX do `generate.py` render deterministic, mọi URL
-phải có nguyên văn trong `.clean.md`, số tin 5–12, giới hạn độ dài. Guard FAIL → không ghi file.
+phải có nguyên văn trong `.clean.md` (tin vi phạm URL/độ dài bị loại riêng), còn ≥5 tin hợp lệ (lấy tối đa 12). Dưới 5 → FAIL, không ghi file.
 
 Chạy test (máy dev không có python):
 
