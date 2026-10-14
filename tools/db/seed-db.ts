@@ -54,6 +54,7 @@ export async function importRecords(db: Database, records: readonly SeedRecord[]
         op: "create",
         data: record.data,
         body: record.body,
+        sortOrder: record.sortOrder,
         actor: SEED_ACTOR,
         note: "import-seed",
       });

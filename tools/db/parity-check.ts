@@ -1,8 +1,8 @@
-// So khớp DB ↔ file (thuần, không I/O) + ràng buộc toàn vẹn I-1..I-6 (docs/content-bot/08-data-model.md §4).
+// So khớp DB ↔ file (thuần, không I/O) + ràng buộc toàn vẹn I-1..I-6 (quy tắc từng bản ghi ở src/db/content-rules.ts) (docs/content-bot/08-data-model.md §4).
 import { isDeepStrictEqual } from "node:util";
-import { BLOG_CATEGORIES } from "../../src/lib/blog/categories";
-import { CONTENT_LOCALES, isContentCollection } from "../../src/db/schema";
-import { MDX_COLLECTION_DIRECTORIES, recordKey, type SeedRecord } from "./file-source";
+import { checkRecord, registryProblem, registryTargetCollection } from "../../src/db/content-rules";
+import { CONTENT_LOCALES } from "../../src/db/schema";
+import { recordKey, type SeedRecord } from "./file-source";
 
 export interface ParityIssue {
   key: string;
@@ -66,68 +66,39 @@ function checkLocalePairs(records: readonly SeedRecord[]): ParityIssue[] {
   return issues;
 }
 
-function checkUniqueAndEnums(records: readonly SeedRecord[]): ParityIssue[] {
+// Unique (I-5) + quy tắc từng bản ghi dùng chung với write-path (whitelist, required fields, I-2, I-6).
+function checkEachRecord(records: readonly SeedRecord[]): ParityIssue[] {
   const issues: ParityIssue[] = [];
   const seen = new Set<string>();
   for (const record of records) {
     const key = recordKey(record);
     if (seen.has(key)) issues.push({ key, problem: "I-5 slug trùng trong collection/locale" });
     seen.add(key);
-    if (!isContentCollection(record.collection)) issues.push({ key, problem: "I-6 collection ngoài whitelist" });
-    if (!(CONTENT_LOCALES as readonly string[]).includes(record.locale)) {
-      issues.push({ key, problem: "I-6 locale không hợp lệ" });
-    }
-    const category = record.data.category;
-    if (record.collection === "post" && !(BLOG_CATEGORIES as readonly unknown[]).includes(category)) {
-      issues.push({ key, problem: `I-6 category blog không hợp lệ: ${String(category)}` });
-    }
-    if (record.collection === "solution" && category !== "enterprise" && category !== "ai") {
-      issues.push({ key, problem: `I-6 category giải pháp không hợp lệ: ${String(category)}` });
-    }
+    for (const problem of checkRecord(record)) issues.push({ key, problem });
   }
   return issues;
 }
 
-function checkSlugField(records: readonly SeedRecord[]): ParityIssue[] {
-  const issues: ParityIssue[] = [];
-  for (const record of records) {
-    const isMdx = record.collection !== "about" && record.collection in MDX_COLLECTION_DIRECTORIES;
-    if (isMdx && record.data.slug !== record.slug) {
-      issues.push({
-        key: recordKey(record),
-        problem: `I-2 frontmatter slug "${String(record.data.slug)}" ≠ khoá "${record.slug}"`,
-      });
-    }
-  }
-  return issues;
-}
-
+// I-3/I-4 hai chiều: solution/product phải có trong registry đúng nhóm; hàng registry phải có bản ghi nội dung.
 function checkSlugRegistry(records: readonly SeedRecord[]): ParityIssue[] {
   const groupByKey = new Map<string, unknown>();
+  const contentKeys = new Set<string>();
   for (const record of records) {
     if (record.collection === "slug_registry") groupByKey.set(`${record.locale}/${record.slug}`, record.data.group);
+    else contentKeys.add(recordKey(record));
   }
   const issues: ParityIssue[] = [];
   for (const record of records) {
-    if (record.collection !== "solution" && record.collection !== "product") continue;
-    const group = groupByKey.get(`${record.locale}/${record.slug}`);
-    const key = recordKey(record);
-    if (group === undefined) {
-      issues.push({ key, problem: "I-3 slug không có trong slug_registry" });
-    } else if (record.collection === "product" && group !== "product") {
-      issues.push({ key, problem: `I-3 sản phẩm nằm ở nhóm registry "${String(group)}"` });
-    } else if (record.collection === "solution" && group !== record.data.category) {
-      issues.push({ key, problem: `I-4 category "${String(record.data.category)}" ≠ nhóm registry "${String(group)}"` });
+    const problem = registryProblem(record, groupByKey.get(`${record.locale}/${record.slug}`));
+    if (problem) issues.push({ key: recordKey(record), problem });
+    const target = record.collection === "slug_registry" ? registryTargetCollection(record.data.group) : null;
+    if (target && !contentKeys.has(recordKey({ ...record, collection: target }))) {
+      issues.push({ key: recordKey(record), problem: `I-3 registry trỏ tới ${target} chưa có bản ghi` });
     }
   }
   return issues;
 }
 
 export function checkInvariants(records: readonly SeedRecord[]): ParityIssue[] {
-  return [
-    ...checkLocalePairs(records),
-    ...checkSlugField(records),
-    ...checkSlugRegistry(records),
-    ...checkUniqueAndEnums(records),
-  ];
+  return [...checkLocalePairs(records), ...checkSlugRegistry(records), ...checkEachRecord(records)];
 }

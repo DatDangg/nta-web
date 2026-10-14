@@ -104,6 +104,15 @@ describe("checkMigrationSql — cho qua migration additive", () => {
     assert.deepEqual(result.findings, []);
     assert.equal(result.blocked, false);
   });
+
+  it("migration thật drizzle/0001 (ADD COLUMN sort_order nullable trên bảng cũ) → pass không cần marker", () => {
+    const sql = readFileSync(path.join(process.cwd(), "drizzle", "0001_aromatic_rattler.sql"), "utf8");
+    const result = checkMigrationSql(sql);
+    assert.deepEqual(splitStatements(sql), ['ALTER TABLE "content_versions" ADD COLUMN "sort_order" integer']);
+    assert.deepEqual(result.findings, []);
+    assert.equal(result.approved, false);
+    assert.equal(result.blocked, false);
+  });
 });
 
 describe("checkMigrationSql — dòng duyệt HIGH_RISK_MIGRATION", () => {

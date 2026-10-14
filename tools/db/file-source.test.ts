@@ -68,11 +68,12 @@ test("compareRecords reports changed, missing and extra records", () => {
   assert.match(compareRecords([sample], [sample, extra])[0].problem, /thừa trong DB/);
 });
 
-test("checkInvariants flags missing locale, slug mismatch, registry and enum problems", () => {
+test("checkInvariants flags missing locale, slug mismatch, registry, enum and required-field problems", () => {
   const problems = checkInvariants([
     { ...sample, data: { ...sample.data, slug: "other", category: "weird" } },
   ]).map((issue) => issue.problem.slice(0, 3));
-  assert.deepEqual(problems.sort(), ["I-1", "I-2", "I-3", "I-6"]);
+  // "Inv" = thiếu field bắt buộc (sample không đủ field loader yêu cầu) — quy tắc chung với write-path (content-rules.ts).
+  assert.deepEqual(problems.sort(), ["I-1", "I-2", "I-3", "I-6", "Inv"]);
 });
 
 test("production database URLs are refused without --confirm-prod", () => {

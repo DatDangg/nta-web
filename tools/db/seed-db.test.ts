@@ -35,9 +35,10 @@ test("import seed is idempotent and parity passes", { skip }, async () => {
     assert.deepEqual(compareRecords(records, await readDatabaseRecords(db)), []);
 
     const versions = await pool.query<{ count: string }>(
-      "select count(*) from content_versions v join content_entries e on e.id = v.entry_id where v.actor = 'seed' and v.op = 'create' and v.version = 1",
+      "select count(*) from content_versions v join content_entries e on e.id = v.entry_id where v.actor = 'seed' and v.op = 'create' and v.version = 1 and v.sort_order is not distinct from e.sort_order",
     );
-    assert.ok(Number(versions.rows[0].count) >= records.length);
+    // Mỗi bản ghi seed đúng 1 dòng version 1 (import lần 2 không ghi thêm), snapshot sort_order khớp entry (MINOR-1).
+    assert.equal(Number(versions.rows[0].count), records.length);
   } finally {
     await pool.end();
   }

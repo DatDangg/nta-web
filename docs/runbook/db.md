@@ -61,6 +61,8 @@ umask 077
 ENVF="$(mktemp /root/nta-compose-env.XXXXXX)"        # ngoài repo, mode 600
 read -rs PW && printf 'POSTGRES_PASSWORD=%s\n' "$PW" >> "$ENVF"
 read -rs RS && printf 'REVALIDATE_SECRET=%s\n' "$RS" >> "$ENVF"; unset PW RS
+# Đích forward form liên hệ: compose cho phép trống, nhưng THIẾU dòng này thì `up` tạo lại nta-web với giá trị rỗng → form mất đích.
+read -rs CT && printf 'CONTACT_FORM_TARGET=%s\n' "$CT" >> "$ENVF"; unset CT
 docker compose --env-file "$ENVF" ps                   # ... lệnh compose cần chạy
 shred -u "$ENVF" 2>/dev/null || rm -f "$ENVF"          # xoá ngay khi xong
 ```
@@ -204,12 +206,39 @@ chạy lại = 0 bản ghi mới, bản ghi đã sửa qua bot/CLI không bị g
 
 ```sh
 npm run db:import-seed -- --dry-run      # chỉ in số bản ghi theo collection/locale, không cần DB
-DATABASE_URL=... npm run db:import-seed  # in "chèn N, bỏ qua M"
-DATABASE_URL=... npm run db:parity       # deep-equal DB ↔ file (vi+en) + I-1..I-6; exit 1 nếu lệch/thiếu/thừa, in field lệch đầu tiên
+# Không gõ URL có mật khẩu thẳng trên dòng lệnh (lộ shell history / ps): đọc ẩn vào biến, dùng xong unset.
+read -rs DATABASE_URL && export DATABASE_URL   # dán postgres://... (không hiện, không vào history)
+npm run db:import-seed                   # in "chèn N, bỏ qua M"
+npm run db:parity                        # deep-equal DB ↔ file (vi+en) + I-1..I-6 + required fields; exit 1 nếu lệch/thiếu/thừa
+unset DATABASE_URL
 ```
 
 - DB prod (host `nta-db`, database `nta_web`, hoặc host không phải loopback) → import **từ chối** nếu thiếu cờ `--confirm-prod`.
   Cờ này chỉ dùng ở cutover (P4-T01) sau khi user duyệt; trước đó luôn backup (`docker exec nta-db-backup /scripts/backup.sh pre-migrate-before-import-<UTC>`).
 - Số bản ghi 14/10/2026: 68 mỗi locale, tổng 136 (post 5, solution 9, product 2, case_study 2, about 1, listing_page 4, listing_item 13,
   listing_cta 4, listing_labels 1, home 1, solution_overview 2, slug_registry 11, ui_messages 12, company_info 1 — × vi/en).
-- Test có DB: `TEST_DATABASE_URL=postgres://...@127.0.0.1:<port>/<db_test> npm test` (không đặt → test cần DB được skip).
+- Test có DB: `read -rs TEST_DATABASE_URL && export TEST_DATABASE_URL && npm test` với URL Postgres local `127.0.0.1:<port>/<db_test>`
+  (không đặt → test cần DB được skip; URL trỏ prod → từ chối chạy). `tools/db/content-repo.test.ts` tự tạo/xoá database `nta_repo_test_*`
+  → user DB test cần quyền CREATEDB.
+
+## 9. CLI nội dung (`npm run db:cli`) — xem / lịch sử / rollback
+
+`tools/db/content-cli.ts` dùng chung write-path với bot (`src/db/content-repo.ts`): mỗi lần ghi = 1 transaction (`SELECT … FOR UPDATE`
+→ kiểm `expectedVersion` → validate → version + 1 → dòng `content_versions` cùng transaction). Rollback **không sửa/xoá lịch sử**: ghi snapshot
+(data/body/sort_order) của version cũ thành version mới `op=rollback`; bản ghi đang xoá mềm được khôi phục. Đặt `DATABASE_URL` bằng `read -rs`
+như §8 — không gõ mật khẩu trên dòng lệnh; CLI không in URL.
+
+```sh
+npm run db:cli -- list [--collection post] [--locale vi] [--deleted]   # id, collection/locale/slug, version, [đã xoá]
+npm run db:cli -- show solution/vi/crm                                 # JSON bản ghi (id hoặc collection/locale/slug, kể cả đã xoá)
+npm run db:cli -- history solution/vi/crm                              # v1 create seed … / v2 update bot:… / …
+npm run db:cli -- rollback solution/vi/crm --to 1 --expected-version 2 [--note "lý do"]
+```
+
+- `--expected-version` = version hiện tại thấy ở `history`; lệch (vừa có người sửa) → `conflict`, exit 1, không ghi gì — xem lại history rồi chạy lại.
+- Snapshot được validate lại như lúc sửa (required fields, I-2/I-3/I-4/I-6/I-7) — sai → từ chối, exit 1.
+- DB prod: lệnh ghi (`rollback`) **từ chối** nếu thiếu `--confirm-prod`; trước đó backup
+  `docker exec nta-db-backup /scripts/backup.sh pre-migrate-before-rollback-<UTC>`. `list/show/history` chỉ đọc.
+- Sau rollback trên prod, web chỉ thấy nội dung mới khi revalidate (lệnh `revalidate` thêm ở P3-T03) hoặc deploy lại.
+- Xoá bản ghi có URL công khai (post, solution, product, case_study) → write-path từ chối nếu thiếu cờ xác nhận (I-8); luôn cần thêm redirect 301
+  trong `next.config.ts` + deploy. Đổi slug = tạo bản ghi mới + xoá mềm bản cũ (không đổi khoá tại chỗ).

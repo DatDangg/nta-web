@@ -33,6 +33,10 @@ cleanup() {
   docker exec "$BACKUP_CONTAINER" dropdb --if-exists "$TARGET_DB" && echo "== đã xoá DB tạm $TARGET_DB"
 }
 trap cleanup EXIT
+# sh không chạy trap EXIT khi bị tín hiệu → đổi tín hiệu thành exit để DB tạm vẫn được xoá (Ctrl-C, mất SSH).
+trap 'exit 130' INT
+trap 'exit 143' TERM
+trap 'exit 129' HUP
 
 docker exec "$BACKUP_CONTAINER" /scripts/restore-check.sh "/backups/$DUMP_NAME" "$TARGET_DB"
 

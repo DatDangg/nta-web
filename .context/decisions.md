@@ -103,3 +103,13 @@
   dữ liệu DB. I-6 chỉ kiểm enum có danh sách runtime (collection, locale, blog category, solution category); enum icon/theme chỉ là type TS → chưa kiểm.
 - **Chạy thử migration trên bản restore** (`deploy/db/migrate-on-restore.sh`, MAJOR-2): build image `migrator` của commit hiện tại, chạy với
   `DATABASE_URL` trỏ `nta_restore_*`, mật khẩu đọc từ env container `nta-db` → không cần secret GitHub trên VPS (MAJOR-1).
+
+## 2026-10-14 — CR-031 P2-T02: write-path có version + rollback + CLI
+- **Quy tắc dùng chung:** src/db/content-rules.ts (thuần) — whitelist collection/locale, required fields (REQUIRED_FIELDS, kiểm qua assertRequiredFields; test đọc mã loader để bắt lệch), I-2 (slug a-z0-9-, frontmatter slug = khoá với post/solution/product/case_study), I-3/I-4 (registryProblem, hai chiều), I-6 (category blog/solution/case study, nhóm registry, icon showcase + icon nút công nghệ — danh sách runtime dựng từ Record<Union, true> nên không lệch type TS; không có enum theme trong types.ts), I-7 trích đường dẫn ảnh. tools/db/parity-check.ts và src/db/content-repo.ts cùng gọi các hàm này.
+- **I-1:** tạo/sửa 1 locale khi locale kia chưa có → CHO PHÉP + trả warning (bot tạo vi rồi en tuần tự); parity vẫn báo thiếu cặp.
+- **I-7:** /uploads/* phải là bản ghi asset còn sống có data.path = đường dẫn (P3-T05 theo quy ước này hoặc cập nhật); ảnh khác phải là file trong public/; đường dẫn có .. bị chặn; bản ghi asset không tự kiểm.
+- **I-8:** xoá mềm bản ghi có URL công khai (post/solution/product/case_study) bị từ chối nếu thiếu confirmPublicUrlChange; có cờ → ghi + warning cần redirect 301 trong next.config.ts + deploy. updateEntry KHÔNG đổi khoá (collection/slug/locale); đổi slug = tạo bản ghi mới + xoá mềm bản cũ (content_versions không lưu slug nên đổi khoá tại chỗ làm lịch sử khó đọc/rollback sai).
+- **Rollback:** ghi snapshot data/body/sort_order của version cũ thành version mới op rollback; toVersion phải < version hiện tại; snapshot validate lại như update. Entry đang xoá mềm → rollback KHÔI PHỤC (deleted_at NULL) + warning — kết quả rollback luôn là bản ghi còn sống.
+- **Transaction:** SELECT FOR UPDATE → expectedVersion (lệch → ContentConflictError) → validate (ContentValidationError, không ghi) → UPDATE entry → INSERT content_versions; lỗi bất kỳ huỷ cả hai. Sửa bản ghi đã xoá mềm bị từ chối (rollback trước).
+- **Migration 0001:** ALTER TABLE content_versions ADD COLUMN sort_order integer (nullable, không default) — gate OK không cần marker. Hàng version cũ để NULL; seed import ghi sort_order cho version 1 (prod chưa import).
+- **Test DB của write-path** tạo database riêng nta_repo_test_* rồi xoá (không đụng DB seed-db.test). Test có import tools/db nằm trong tools/db vì tools/ bị .dockerignore loại.

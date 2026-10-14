@@ -67,4 +67,9 @@ test("content_versions references content_entries and is unique per (entry_id, v
     ["entry_id", "version"],
   );
   assert.deepEqual(config.checks.map((item) => item.name), ["content_versions_op_check"]);
+  // MINOR-1 (phase 1): rollback phải khôi phục cả thứ tự → snapshot sort_order, nullable (migration additive).
+  const sortOrder = config.columns.find((column) => column.name === "sort_order");
+  assert.ok(sortOrder);
+  assert.equal(sortOrder.notNull, false);
+  assert.equal(sortOrder.hasDefault, false);
 });

@@ -92,6 +92,8 @@ export const contentVersions = pgTable(
     op: text("op").$type<ContentVersionOp>().notNull(),
     data: jsonb("data").notNull(),
     body: text("body"),
+    // Snapshot thứ tự để rollback khôi phục đúng vị trí (migration 0001, nullable — hàng cũ để NULL).
+    sortOrder: integer("sort_order"),
     // `seed`, `cli:<user>`, `bot:<telegram-id>`
     actor: text("actor").notNull(),
     note: text("note"),
