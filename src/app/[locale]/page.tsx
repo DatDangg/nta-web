@@ -9,7 +9,7 @@ import { CTABanner } from '@/components/shared/CTABanner';
 import { ListingIcon, type ListingIconName } from '@/components/listing/icons';
 import { Marquee } from '@/components/motion/Marquee';
 import { getHomeContent } from '@/content/home';
-import { listingItems } from '@/content/listings';
+import { listingCtas, listingItems } from '@/content/listings';
 import { getAllCaseStudies } from '@/lib/content/case-studies';
 import type { Locale } from '@/content/types';
 import { createLocaleAlternates, localizedPath } from '@/lib/seo';
@@ -78,6 +78,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         titleLead={t('solutionsTitleLead')}
       />
       <ProductStrip
+        cta={{ ...listingCtas[locale].products, href: '/contact', icon: 'plus' }}
         description={t('productsLead')}
         eyebrow={t('productsEyebrow')}
         products={home.featuredProducts.flatMap((product) => {

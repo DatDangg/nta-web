@@ -1,6 +1,8 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
+import { ListingCtaCard } from '@/components/listing/ListingCard';
+import type { ListingCta } from '@/components/listing/types';
 import { Reveal } from '@/components/ui/Reveal';
 import { HomeProductCard, type HomeFeaturedProduct } from './HomeProductCard';
 import { HomeScrollArrows } from './HomeScrollArrows';
@@ -13,10 +15,12 @@ type ProductStripProps = {
   titleLead: string;
   titleAccent: string;
   description: string;
+  /** Thẻ CTA viền đứt cuối dải (CR-021) — cùng nội dung thẻ cuối lưới /products. */
+  cta: ListingCta;
 };
 
 /** Khối "Sản phẩm tiêu biểu" trang chủ theo mockup CR-016 (header `2.webp` nửa dưới, thẻ dọc `1.webp`). */
-export function ProductStrip({ products, eyebrow, titleLead, titleAccent, description }: ProductStripProps) {
+export function ProductStrip({ products, cta, eyebrow, titleLead, titleAccent, description }: ProductStripProps) {
   const t = useTranslations('home');
   const { stripRef, canPrev, canNext, scrollStrip, handleStripKeyDown } = useScrollButtons();
 
@@ -61,6 +65,9 @@ export function ProductStrip({ products, eyebrow, titleLead, titleAccent, descri
                   product={product}
                 />
               ))}
+              <div className="grid w-[85%] shrink-0 snap-start md:w-[calc(50%-0.75rem)]">
+                <ListingCtaCard cta={cta} />
+              </div>
             </div>
           </Reveal>
         </div>
