@@ -109,7 +109,7 @@ Font stack: `-apple-system, BlinkMacSystemFont, "SF Pro Display", Inter, "Segoe 
 ### Screen: Chi tiết giải pháp AI
 - **Route:** `/solutions/ai/[slug]` (`boxai` | `flycam` | `custom-ai`)
 - **Components:** PageHeader, FeatureList, BenefitList, SolutionSections, SolutionHighlights, UseCases, FaqList, ScreenshotSection, CaseStudyLink, CTAForm
-- **Content data (MDX VI/EN):** `sections` / `highlights` / `faq` optional fields render bởi SolutionSections/SolutionHighlights/FaqList (rỗng → ẩn). Nội dung 3 trang: Talvra (custom-ai), BoxAI + Đền Bảo Hà (định tính), Flycam — theo spec delta R-06a..e.
+- **Content data (MDX VI/EN):** `sections` / `highlights` / `faq` optional fields render bởi SolutionSections/SolutionHighlights/FaqList (rỗng → ẩn). Nội dung 3 trang: Talvra (custom-ai), BoxAI (định tính), Flycam — theo spec delta R-06a..e.
 
 ### Screen: Sản phẩm App
 - **Route:** `/products`

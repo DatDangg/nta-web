@@ -119,8 +119,10 @@ _(cập nhật 2026-10-13: thêm **domain phụ** `ntasolution.vn` (+ `www`) ph�
 - **R-06b (content — BoxAI):** trang `boxai` trình bày giải pháp **AI camera + AI Box (NVIDIA Jetson)**:
   kiến trúc 3 tầng (camera cố định + edge AI box + VMS), phần cứng (Orin NX/Nano, DeepStream), ngân sách
   thuật toán theo kênh, danh mục 21 thuật toán + 3 tính năng nền, gói theo ngành (di tích / rừng / KCN),
-  KPI; **đề cập triển khai thực tế tại Đền Bảo Hà** (đã xác nhận 13/10/2026: 3 AI Box · 48 camera · báo cháy/ẩu đả/xâm nhập/đếm người — chi tiết ở case study R-08b.2).
-  — nguồn: change phần B.
+  KPI. ~~đề cập triển khai thực tế tại Đền Bảo Hà~~ **[DEPRECATED — CR-025, 2026-10-14]**: trang `boxai` (vi/en)
+  **không** còn khối "Triển khai thực tế tại Đền Bảo Hà" (cả `sections` lẫn `showcase.details`) và `relatedCases`
+  không còn `ai-box-bao-ha` (chỉ còn case study khu di tích R-08a, slug mới).
+  — nguồn: change phần B; CR-025 `spec/changes/2026-10-14-remove-bao-ha-anonymize-oc-eo.md`.
 - **R-06c (content — Flycam):** trang `flycam` trình bày **DJI Dock 2 + Matrice 3TD**: thông số thiết bị,
   thời gian phản ứng theo khoảng cách, ba khái niệm diện tích phủ, 4 loại route bay, lịch bay theo cấp dự báo
   cháy (I–V), bộ lọc trigger, KPI, FAQ. — nguồn: change phần B.
@@ -136,7 +138,7 @@ _(cập nhật 2026-10-13: thêm **domain phụ** `ntasolution.vn` (+ `www`) ph�
 - **R-06d (render — trang chi tiết AI):** trang chi tiết AI render `benefits` (lợi ích) + **section nội dung
   có cấu trúc** (kiến trúc / thuật toán / ứng dụng ngành) + chỉ số nổi bật/FAQ tùy chọn; giữ SSG + i18n VI/EN.
   — thiết kế component cập nhật ở `.context/design-spec.md`.
-- **R-06e (link case study):** giải pháp AI liên kết tới case study liên quan (Óc Eo) — thoả AC `docs/BRD.md:90`.
+- **R-06e (link case study):** giải pháp AI liên kết tới case study liên quan (case study khu di tích R-08a — `heritage-site-ai-camera`) — thoả AC `docs/BRD.md:90`.
 
 ### Module 5 — Sản phẩm App
 
@@ -155,6 +157,15 @@ _(cập nhật 2026-10-13: thêm **domain phụ** `ntasolution.vn` (+ `www`) ph�
   bối cảnh (~433 ha, di tích quốc gia đặc biệt), giải pháp kiến trúc 3 tầng (~200 camera), chức năng theo gói,
   kết quả/số liệu, điểm mạnh — đúng format **vấn đề → giải pháp → kết quả**. Category đổi `enterprise` → `ai`;
   giữ nguyên slug `oc-eo-learning`. — nguồn: change `spec/changes/2026-10-09-ai-solution-content.md` phần C.
+  - **R-08a.1 (CR-025, 2026-10-14 — ẩn địa danh + đổi slug):** nội dung hiển thị (vi/en) của case study này **không**
+    được chứa tên địa danh cụ thể ("Óc Eo", "Ba Thê", "núi Ba Thê" hay tên riêng định danh khác) ở mọi field render:
+    `title`, `client`, `challenge`/`solution`/`result`, `gallery[].alt`, `showcase.hero` (breadcrumbLabel, subtitle,
+    description, image.alt), `pillars`, `photos` (title, items[].alt), `vision` (description, quote), metadata/JSON-LD.
+    Thay bằng cách gọi chung **"một khu di tích ở Việt Nam"** (en: **"a heritage site in Vietnam"**). Số liệu mô tả
+    (~433 ha, "khu di tích quốc gia đặc biệt", ~200 camera, 12 tuần) **giữ nguyên**.
+    **Slug đổi** `oc-eo-learning` → **`heritage-site-ai-camera`**; URL cũ `/case-studies/oc-eo-learning`,
+    `/vi/case-studies/oc-eo-learning`, `/en/case-studies/oc-eo-learning` → **redirect 301** sang slug mới cùng locale;
+    sitemap chỉ chứa slug mới; mọi link nội bộ (`relatedCases` boxai/flycam, thẻ cuối `/solutions/ai`, listing meta) trỏ slug mới.
   - ⚠️ **Needs-input (chờ xác nhận):** phần C mô tả số liệu "từ phương án" (dự toán + lộ trình) — cần user xác nhận
     đây là **phương án đề xuất** hay **dự án đã triển khai** để ghi "kết quả" trung thực (BR-004).
   - ✅ ~~Needs-input: số liệu hiện trường Đền Bảo Hà (R-06b)~~ — đã xác nhận 13/10/2026 (CR-012, R-08b.2).
@@ -177,7 +188,11 @@ _(cập nhật 2026-10-13: thêm **domain phụ** `ntasolution.vn` (+ `www`) ph�
     `primaryCta` nhận anchor `#…` hoặc route nội bộ (route → `Link` theo locale). Áp dụng thứ hai: `dental-clinic-operations`
     (vi/en) — nút hero + nút khối Giải pháp mở `/solutions/enterprise/dentgo`. — nguồn: change
     `spec/changes/archive/2026-10-13-dental-case-study-showcase.md`.
-  - **R-08b.2 (3.8.0 — case study AI Box đền Bảo Hà):** thêm case study `ai-box-bao-ha` (vi/en, `layout: showcase`,
+  - **[DEPRECATED — CR-025, 2026-10-14] R-08b.2:** case study `ai-box-bao-ha` **bị gỡ** (MDX vi/en, meta listing,
+    ảnh `/images/cases/bao-ha/*`, mọi link dẫn tới). `/case-studies/ai-box-bao-ha` (vi/en) → **404** bằng trang
+    `src/app/[locale]/not-found.tsx` có sẵn (không redirect); không xuất hiện ở `/case-studies`, trang chủ, trang giải
+    pháp, sitemap. Nội dung gốc (giữ để truy vết):
+    **R-08b.2 (3.8.0 — case study AI Box đền Bảo Hà):** thêm case study `ai-box-bao-ha` (vi/en, `layout: showcase`,
     category `ai`, thẻ listing icon `landmark`) — dự án **đã triển khai**: 3 AI Box, 48 camera IP sẵn có, 4 chức năng đang
     bật (báo cháy, phát hiện ẩu đả, xâm nhập vùng cấm, đếm người). Hero + carousel + khối công nghệ dùng **ảnh camera thật**
     tại đền (mặt người đã làm mờ, caption ghi rõ ảnh thật); lưới tính năng = 2 lớp nền + 4 chức năng; khối chi tiết = giảm

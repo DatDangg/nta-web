@@ -32,6 +32,8 @@
 | CR-022 | Trang chủ khối Sản phẩm: hiện đủ 3 thẻ cùng lúc, chỉ cuộn ngang khi > 3 thẻ (follow-up CR-021) | MODIFY (UI) | done (spec 3.15.0 · scope v45) | `archive/2026-10-14-home-products-show-three.md` | 2026-10-14 | 2026-10-14 |
 | CR-023 | Trang chi tiết Tin tức thiếu style thân bài (`prose` không có tác dụng) → Bản tin AI tuần hiển thị như text thô (vi + en) | BUG (UI) | done (spec 3.15.0 · scope v46) | `archive/2026-10-14-blog-article-typography.md` | 2026-10-14 | 2026-10-14 |
 | CR-024 | Bản tin AI tuần: khung riêng dạng thẻ điểm tin (mỗi tin 1 thẻ, số thứ tự, nút nguồn) — làm sau CR-023 | ADDITIVE (UI) | pending (change doc tạo khi bắt đầu) | — | 2026-10-14 | |
+| CR-025 | Bỏ khối "Triển khai thực tế tại Đền Bảo Hà" (BoxAI) + bỏ case study Bảo Hà; case study Óc Eo bỏ địa danh → "một khu di tích ở Việt Nam" (vi + en) | REMOVE + MODIFY (content) | in_progress | `2026-10-14-remove-bao-ha-anonymize-oc-eo.md` | 2026-10-14 | |
+| CR-026 | Route tiếng Anh slug không tồn tại (/en/case-studies/…, /en/blog/…) trả 500 thay vì 404 (static→dynamic, headers qua next-intl requestLocale) — phát hiện khi smoke CR-025 | BUG (routing) | pending | `2026-10-14-en-dynamic-slug-not-found-500.md` | 2026-10-14 | |
 
 ## Quy tắc tracking
 
