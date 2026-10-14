@@ -33,7 +33,7 @@ web_typecheck_command: npm run typecheck
 web_lint_command: npm run lint
 api_typecheck_command: null    # không tách api — website Next.js đơn
 api_lint_command: null
-test_command: null             # v1 chưa có test framework — sẽ chốt lại khi thêm test (/brainstorm <nhóm>)
+test_command: npm test          # ✅ CR-031 P1-T01 — `node --import tsx --test "src/**/*.test.ts"` (node:test built-in + tsx chạy TS/import không đuôi; không thêm framework nặng)
 install_command: npm install
 lint_command: npm run lint     # generic alias (không split web/api)
 typecheck_command: npm run typecheck
@@ -109,7 +109,7 @@ check_commands:
   web_lint: npm run lint        # = web_lint_command
   api_typecheck: null           # không tách api
   api_lint: null
-  test: null                    # = test_command (v1 chưa có test framework)
+  test: npm test                # = test_command (✅ CR-031 P1-T01, node --test + tsx)
   build: npm run build          # = build_command
   migration: npm run db:migrate # = migration_command (CR-031, drizzle)
   docs_inventory: node scripts/generate-inventory.mjs

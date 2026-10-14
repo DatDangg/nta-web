@@ -1,4 +1,6 @@
-.env.local
+.env
+.env*.local
+!.env.example
 node_modules/
 dist/
 build/

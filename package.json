@@ -7,25 +7,33 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "test": "node --import tsx --test \"src/**/*.test.ts\""
   },
   "dependencies": {
+    "drizzle-orm": "^0.45.4",
     "gray-matter": "^4.0.3",
     "next": "^15.5.27",
     "next-intl": "^4.14.9",
     "next-mdx-remote": "^6.0.0",
+    "pg": "^8.23.1",
     "react": "19.1.1",
     "react-dom": "19.1.1"
   },
   "devDependencies": {
     "@types/node": "^22.19.1",
+    "@types/pg": "^8.23.1",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "autoprefixer": "^10.4.22",
+    "drizzle-kit": "^0.31.11",
     "eslint": "^8.57.1",
     "eslint-config-next": "15.5.9",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.18",
+    "tsx": "^4.23.15",
     "typescript": "^5.9.3"
   }
 }

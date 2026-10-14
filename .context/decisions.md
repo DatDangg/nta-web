@@ -51,3 +51,17 @@
 - Màu minh hoạ/thanh lọc dùng hex/rgb arbitrary giống `listing/*` (teal `#0b9f8a`, `#2dd4bf`, `#5eead4`) thay vì chỉ token —
   nhất quán với 4 trang danh sách hiện có; tránh opacity modifier trên màu `var()` (error-memory Error 7). Cần user xác nhận.
 
+
+## 2026-10-14 — CR-031 P1-T01: mô hình bảng nội dung PostgreSQL (document store JSONB)
+- **Quyết định:** 2 bảng — `content_entries` (1 hàng = 1 bản ghi nội dung theo `collection`+`slug`+`locale`, frontmatter/object TS
+  giữ nguyên trong `data` jsonb, MDX ở `body`, thứ tự ở `sort_order`, xoá mềm `deleted_at`, `version` ≥1) và `content_versions`
+  (append-only, UNIQUE(`entry_id`,`version`), `op` CHECK create|update|delete|rollback). Version ghi ở tầng app trong transaction
+  (P2-T02), không dùng trigger DB.
+- **Không tách hàng chục bảng con** (showcase, gallery, milestones…): khớp 1-1 với mô hình file hiện tại, import/parity đơn giản,
+  đổi field nội dung không cần migration. Đánh đổi: ràng buộc field nằm ở tầng app (loader/validator), không ở DB.
+- **`collection` không CHECK ở DB:** whitelist `CONTENT_COLLECTIONS` + `isContentCollection()` export từ `src/db/schema.ts`,
+  validate ở tầng app → mở rộng phạm vi (i18n/company-info…) không cần migration đổi constraint. `locale` vẫn CHECK `vi|en`.
+- **`server-only` đặt ở `src/lib/content/store.ts`**, không ở `src/db/client.ts`, vì script `tools/db` và test chạy bằng node/tsx
+  ngoài Next. `client.ts` lazy: import không mở kết nối, thiếu `DATABASE_URL` chỉ lỗi khi gọi `getDb()` → `next build` không cần DB.
+- **Test runner:** `node --import tsx --test "src/**/*.test.ts"` (node:test built-in; tsx để chạy TS + import không đuôi như phần
+  còn lại của repo). Không thêm Jest/Vitest.
