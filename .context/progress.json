@@ -7,7 +7,7 @@
     "step": "closeout",
     "status": "done",
     "journal": ".context/runs/bug-ai-news-write-db-phase-1-task-01.md",
-    "note": "CR-034 code+review PASS (round 2), spec 4.2.1 · scope v49; còn: smoke prod bằng workflow_dispatch ai-news (user duyệt Q3) trước cron 19/10/2026"
+    "note": "CR-034 done + archived 2026-10-15 (smoke prod PASS: publish-db xanh, w42 vi+en 200). Còn CR-031: B10 + P5-T02 + close-out (scope v50+)"
   },
   "features": [
     {
@@ -1270,7 +1270,7 @@
       "slug": "ai-news-write-db",
       "title": "Bài AI news hằng tuần không lên web sau cutover DB (workflow chỉ ghi file)",
       "status": "done",
-      "changeFile": "spec/changes/2026-10-15-ai-news-write-db.md",
+      "changeFile": "spec/changes/archive/2026-10-15-ai-news-write-db.md",
       "classification": "BUG (ops/CI ghi DB prod)",
       "risk": "HIGH",
       "related": "CR-034 · CR-019 R-09c · CR-031 · CR-033",
@@ -1287,7 +1287,9 @@
       },
       "specVersion": "4.2.1",
       "scopeVersion": 49,
-      "residualRisk": "F4 2 locale 2 transaction (tự lành khi chạy lại); chưa smoke prod; backup ops vẫn ảnh hưởng vòng giữ tới khi CR-033 xong"
+      "residualRisk": "F4 2 locale 2 transaction (tự lành khi chạy lại); chưa smoke prod; backup ops vẫn ảnh hưởng vòng giữ tới khi CR-033 xong",
+      "prodSmoke": "PASS 2026-10-15 (workflow_dispatch ai-news, publish-db xanh, /blog + /en/blog w42 200)",
+      "archived": "2026-10-15"
     }
   ]
 }
