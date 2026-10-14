@@ -18,7 +18,7 @@ evidence:
   verdict: PASS   # phần A; F2-F6 sửa inline, F1 chờ user trước B9
 next: "CHỜ USER phần B: B1 Content ops → parity (gửi log) → B2 backup → B3 xác nhận import → …"
 loopSignal: none
-approvals: [{gate: phase_done, phase: 3, at: 2026-10-14, ok: true}]
+approvals: [{gate: phase_done, phase: 3, at: 2026-10-14, ok: true}, {gate: F1_smoke_edit, choice: a-local-evidence+revalidate-all, at: 2026-10-14, ok: true, by: "user giao agent chọn"}]
 batchQueue: []
 ```
 
@@ -26,3 +26,4 @@ batchQueue: []
 - 2026-10-14 user duyệt checkpoint phase 3 ("ok làm tiếp P4"). Chia P4-T01: A = chuẩn bị (repo/local, push an toàn) · B = cutover prod (mỗi bước chạm prod hỏi user). ▶ START builder phần A (cancel sẽ redo bước này).
 - 2026-10-14 ✅ DONE builder phần A. ▶ START reviewer STRICT round 1 (cancel sẽ redo).
 - 2026-10-14 ✅ DONE reviewer phần A STRICT PASS. F2-F6 sửa inline (YAML parse + compose config OK). Commit + push phần A (prod vẫn file). DỪNG chờ user B1.
+- 2026-10-14 F1: user giao agent chọn → (a) chấp nhận bằng chứng local (sửa/tạo/xoá mềm → revalidate → web đổi + lịch sử version) + revalidate-all trên prod; thử sửa/rollback trên prod dời sang CR-030 (bot có lệnh sửa). Lý do: không thêm code ngay trước cutover, DB mới nên rủi ro thấp, lệnh sửa sẽ do bot cung cấp.

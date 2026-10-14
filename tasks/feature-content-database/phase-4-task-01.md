@@ -47,7 +47,7 @@
 - typecheck PASS · lint PASS (1 warning cũ mdx no-img-element) · npm test có TEST_DATABASE_URL: 112 tests, 111 pass, 0 fail, 1 skip.
 
 ### Residual risk (phần A)
-- Review phần A STRICT PASS round 1 — F2 (smoke DB dừng), F3 (concurrency), F4 (asset smoke cố ý), F5 (thứ tự B1/B2 + migrate-on-restore), F6 (content-ops chỉ chạy main) sửa inline; F7 (health không kiểm nguồn) chấp nhận; F1 (smoke sửa→rollback trên prod không có lệnh sửa) chờ user chốt trước B9.
+- Review phần A STRICT PASS round 1 — F2 (smoke DB dừng), F3 (concurrency), F4 (asset smoke cố ý), F5 (thứ tự B1/B2 + migrate-on-restore), F6 (content-ops chỉ chạy main) sửa inline; F7 (health không kiểm nguồn) chấp nhận; F1 (smoke sửa→rollback trên prod không có lệnh sửa): chốt 14/10 phương án (a) — bằng chứng local + revalidate-all trên prod; thử sửa/rollback trên prod làm ở CR-030.
 - content-ops.yml chưa chạy thật trên runner — lần đầu chạy `parity` (chỉ đọc).
 - Backup ops dùng nhãn pre-migrate-ops-*, chung vòng giữ 14 bản pre-migrate-* với deploy.
 - `!tools/db` vào context build → cache layer builder web invalid khi tools/db đổi.
