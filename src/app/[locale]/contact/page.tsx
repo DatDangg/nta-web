@@ -7,6 +7,7 @@ import { GlassVisual } from '@/components/listing/GlassVisual';
 import { ListingHero } from '@/components/listing/ListingHero';
 import { Container } from '@/components/ui/Container';
 import type { Locale } from '@/content/types';
+import { getCompanyContact } from '@/lib/contact/company-contact';
 import { createBreadcrumbJsonLd, createContactPageJsonLd } from '@/lib/seo/jsonld';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { createLocaleAlternates, localizedPath } from '@/lib/seo';
@@ -31,6 +32,7 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
   if (locale !== 'vi' && locale !== 'en') notFound();
   setRequestLocale(locale);
   const t = await getTranslations('contact');
+  const contact = await getCompanyContact(locale);
   return <>
     <JsonLd data={createBreadcrumbJsonLd([{ name: locale === 'en' ? 'Home' : 'Trang chủ', path: locale === 'en' ? '/en' : '/' }, { name: t('title'), path: `${locale === 'en' ? '/en' : ''}/contact` }])} />
     <ListingHero
@@ -44,7 +46,7 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
     >
       <Container className="pb-16 md:pb-20 xl:pb-24">
         <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
-          <ContactDetails />
+          <ContactDetails contact={contact} />
           <section aria-labelledby="contact-form-title" className="rounded-2xl border border-border bg-surface p-5 shadow-[0_24px_60px_-32px_rgb(0_110_100/0.35)] sm:p-7">
             <p className="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.08em] text-text-secondary">
               <span aria-hidden="true" className="h-0.5 w-7 rounded-full bg-primary" />
@@ -57,6 +59,6 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
         </div>
       </Container>
     </ListingHero>
-    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(createContactPageJsonLd(locale)).replace(/</g, '\\u003c') }} />
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(createContactPageJsonLd(locale, contact)).replace(/</g, '\\u003c') }} />
   </>;
 }

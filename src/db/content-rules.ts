@@ -28,6 +28,7 @@ export const REQUIRED_FIELDS: Partial<Record<ContentCollection, readonly string[
 // Khoá (slug) cố định của bản ghi singleton dạng object — dùng chung web (registry.ts) và seed (tools/db/file-source.ts).
 export const HOME_SLUG = "home";
 export const LISTING_LABELS_SLUG = "labels";
+export const COMPANY_INFO_SLUG = "contact";
 
 // Collection có URL công khai theo slug (`/blog/[slug]`, `/solutions/...`, `/products/[slug]`, `/case-studies/[slug]`):
 // I-2 (frontmatter slug = khoá) và I-8 (xoá → cần redirect 301).
@@ -94,6 +95,35 @@ function showcaseIconProblems(showcase: Record<string, unknown> | undefined): st
   ];
 }
 
+// company_info render thẳng vào <a href> / <iframe src> (Footer, trang Liên hệ) → chặn scheme lạ ngay ở write-path (review P3-T04 F2).
+// Bản đồ nhúng chỉ cho Google Maps (dữ liệu hiện tại: maps.google.com/maps?…&output=embed).
+const MAP_EMBED_HOSTS = ["maps.google.com", "www.google.com", "google.com"];
+
+function parseUrl(value: unknown): URL | null {
+  if (typeof value !== "string") return null;
+  try {
+    return new URL(value);
+  } catch {
+    return null;
+  }
+}
+
+function companyInfoUrlProblems(data: Record<string, unknown>): string[] {
+  const phoneHref = parseUrl(asRecord(data.phone)?.href);
+  const emailHref = parseUrl(asRecord(data.email)?.href);
+  const map = asRecord(data.map);
+  const embedUrl = parseUrl(map?.embedUrl);
+  const openUrl = parseUrl(map?.openUrl);
+  const problems: string[] = [];
+  if (phoneHref?.protocol !== "tel:") problems.push("I-6 company_info phone.href phải bắt đầu bằng tel:");
+  if (emailHref?.protocol !== "mailto:") problems.push("I-6 company_info email.href phải bắt đầu bằng mailto:");
+  const isGoogleMaps = (url: URL | null) => url?.protocol === "https:" && MAP_EMBED_HOSTS.includes(url.hostname) && url.pathname.startsWith("/maps");
+  const embedIsGoogleMaps = isGoogleMaps(embedUrl);
+  if (!embedIsGoogleMaps) problems.push("I-6 company_info map.embedUrl phải là https Google Maps (maps.google.com|www.google.com/maps)");
+  if (!isGoogleMaps(openUrl)) problems.push("I-6 company_info map.openUrl phải là https Google Maps (maps.google.com|www.google.com/maps)");
+  return problems;
+}
+
 function enumProblems(record: ContentRecord): string[] {
   const { collection, data } = record;
   const problems: string[] = [];
@@ -109,6 +139,7 @@ function enumProblems(record: ContentRecord): string[] {
   if (collection === "slug_registry" && !isOneOf(SLUG_REGISTRY_GROUPS, data.group)) {
     problems.push(`I-6 nhóm slug_registry không hợp lệ: ${String(data.group)}`);
   }
+  if (collection === "company_info") problems.push(...companyInfoUrlProblems(data));
   return [...problems, ...showcaseIconProblems(asRecord(data.showcase))];
 }
 

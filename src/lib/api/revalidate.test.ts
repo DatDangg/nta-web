@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { handleRevalidateRequest, parseRevalidateTarget, type RevalidateDeps } from './revalidate';
+import { handleRevalidateRequest, parseRevalidateTarget, tagsForTarget, type RevalidateDeps } from './revalidate';
 
 const SECRET = 'test-secret-0123456789abcdef';
 
@@ -101,4 +101,10 @@ test('parseRevalidateTarget nhận đúng 2 dạng', () => {
   assert.deepEqual(parseRevalidateTarget({ collection: 'listing_page', slug: 'ai' }), { collection: 'listing_page', slug: 'ai' });
   assert.equal(parseRevalidateTarget({ collection: 'nope' }), 'unknown_collection');
   assert.equal(parseRevalidateTarget({ slug: 'x' }), null);
+});
+
+test('whitelist nhận ui_messages, company_info (P3-T04) → tag collection + bản ghi', () => {
+  assert.deepEqual(parseRevalidateTarget({ collection: 'ui_messages' }), { collection: 'ui_messages' });
+  assert.deepEqual(tagsForTarget({ collection: 'ui_messages', slug: 'footer' }), ['content:ui_messages', 'content:ui_messages:footer']);
+  assert.deepEqual(tagsForTarget({ collection: 'company_info', slug: 'contact' }), ['content:company_info', 'content:company_info:contact']);
 });

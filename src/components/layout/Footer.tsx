@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 import { ListingIcon, type ListingIconName } from '@/components/listing/icons';
 import { Container } from '@/components/ui/Container';
-import { COMPANY_CONTACT } from '@/lib/contact/company-info';
+import type { CompanyContact } from '@/lib/contact/company-info';
 import { BrandLogo } from './BrandLogo';
 import { LanguageToggle } from './LanguageToggle';
 
@@ -30,9 +30,9 @@ type SocialLabels = Record<(typeof SOCIALS)[number]['id'], string>;
 type Column = { title: string; links: { href: string; label: string }[] };
 type ContactLabels = { title: string; phone: string; email: string; address: string };
 
-/** SĐT · email · địa chỉ (R-11) — cùng nguồn `company-info.ts` với trang Liên hệ. */
-function FooterContact({ labels }: { labels: ContactLabels }) {
-  const { phone, email, address } = COMPANY_CONTACT;
+/** SĐT · email · địa chỉ (R-11) — cùng nguồn `getCompanyContact` với trang Liên hệ (layout truyền xuống). */
+function FooterContact({ contact, labels }: { contact: CompanyContact; labels: ContactLabels }) {
+  const { phone, email, address } = contact;
   const rows: { icon: ListingIconName; label: string; content: ReactNode }[] = [
     { icon: 'call', label: labels.phone, content: <a className="hover:text-primary-active" href={phone.href}>{phone.display}</a> },
     { icon: 'mail', label: labels.email, content: <a className="break-words hover:text-primary-active" href={email.href}>{email.display}</a> },
@@ -53,12 +53,12 @@ function FooterContact({ labels }: { labels: ContactLabels }) {
   );
 }
 
-function FooterBrand({ homeLabel, labels, tagline, contactLabels }: { homeLabel: string; labels: SocialLabels; tagline: string; contactLabels: ContactLabels }) {
+function FooterBrand({ homeLabel, labels, tagline, contact, contactLabels }: { homeLabel: string; labels: SocialLabels; tagline: string; contact: CompanyContact; contactLabels: ContactLabels }) {
   return (
     <div className="sm:col-span-2 lg:col-span-3">
       <Link aria-label={homeLabel} className="inline-flex" href="/"><BrandLogo /></Link>
       <p className="mt-4 max-w-xs text-sm text-text-secondary">{tagline}</p>
-      <FooterContact labels={contactLabels} />
+      <FooterContact contact={contact} labels={contactLabels} />
       <div className="mt-6 flex items-center gap-3">
         {SOCIALS.map(({ id, href, path }) => (
           <a
@@ -129,7 +129,7 @@ function SupportCard({ title, link }: { title: string; link: string }) {
  * `Container` là nguồn bề rộng duy nhất — KHÔNG đặt `px-*` ở `<footer>`. Chỉ link tới route
  * đã tồn tại (mục không có trang trong ảnh goal đã lược bỏ).
  */
-export function Footer() {
+export function Footer({ contact }: { contact: CompanyContact }) {
   const t = useTranslations('footer');
   const nav = useTranslations('nav');
   const columns: Column[] = [
@@ -169,6 +169,7 @@ export function Footer() {
       <Container className="relative py-12 md:py-16">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-12 lg:gap-x-8">
           <FooterBrand
+            contact={contact}
             contactLabels={{ title: t('contactTitle'), phone: t('contactPhone'), email: t('contactEmail'), address: t('contactAddress') }}
             homeLabel={nav('homeLabel')}
             labels={socialLabels}

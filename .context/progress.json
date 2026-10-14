@@ -3,11 +3,11 @@
   "activeWorkItem": {
     "type": "feature",
     "slug": "content-database",
-    "phaseTask": "phase-3-task-03",
+    "phaseTask": "phase-3-task-04",
     "step": "closeout",
     "status": "done",
-    "journal": ".context/runs/feature-content-database-phase-3-task-03.md",
-    "note": "CR-031 P3-T03 done — tiếp P3-T04"
+    "journal": ".context/runs/feature-content-database-phase-3-task-04.md",
+    "note": "CR-031 P3-T04 done — tiếp P3-T05"
   },
   "features": [
     {
@@ -1181,7 +1181,7 @@
       },
       "currentPhase": 3,
       "inProgressTask": null,
-      "note": "P3-T03 done: POST /api/revalidate (secret sha256+timingSafeEqual, 503/401/400/429, revalidateTag đủ cho vi data cache + en ISR) + CLI revalidate. Tiếp theo P3-T04 (next-intl messages + company-info DB).",
+      "note": "P3-T04 done: messages next-intl + company-info đọc DB sau cờ, gộp sâu DB đè file (thiếu key → file + warn, user chốt), validate URL company_info. Tiếp P3-T05 (upload ảnh).",
       "updatedAt": "2026-10-14",
       "specValidator": {
         "result": "PASS",
@@ -1195,13 +1195,14 @@
         "phase-2-task-02",
         "phase-3-task-01",
         "phase-3-task-02",
-        "phase-3-task-03"
+        "phase-3-task-03",
+        "phase-3-task-04"
       ],
       "reviewer": {
         "result": "PASS",
         "level": "STRICT",
-        "round": 1,
-        "report": ".context/review-reports/feature-content-database-phase-3-task-03-round-1-review.md"
+        "round": 2,
+        "report": ".context/review-reports/feature-content-database-phase-3-task-04-round-2-review.md"
       },
       "phase1SpecValidator": {
         "result": "PASS",

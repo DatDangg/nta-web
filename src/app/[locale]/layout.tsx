@@ -6,6 +6,7 @@ import { routing } from '@/i18n/routing';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { getSolutionsMenu } from '@/lib/content/solutions-menu';
+import { getCompanyContact } from '@/lib/contact/company-contact';
 import { createOrganizationJsonLd, createWebSiteJsonLd } from '@/lib/seo/jsonld';
 import { BASE_URL } from '@/lib/seo';
 import { Inter } from 'next/font/google';
@@ -56,6 +57,7 @@ export default async function LocaleLayout({
 
   setRequestLocale(locale);
   const messages = await getMessages();
+  const contact = await getCompanyContact(locale);
 
   return (
     // `suppressHydrationWarning`: script dưới đây thêm class `js` vào <html> TRƯỚC khi
@@ -65,7 +67,7 @@ export default async function LocaleLayout({
 <html className={inter.variable} lang={locale} suppressHydrationWarning>
       <body>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([
-          createOrganizationJsonLd(), createWebSiteJsonLd(locale),
+          createOrganizationJsonLd(contact), createWebSiteJsonLd(locale),
         ]).replace(/</g, '\\u003c') }} />
         <script dangerouslySetInnerHTML={{ __html: JS_FLAG_SCRIPT }} />
         <style dangerouslySetInnerHTML={{ __html: AUTO_MOTION_CSS }} />
@@ -75,7 +77,7 @@ export default async function LocaleLayout({
           </a>
           <Header solutionGroups={await getSolutionsMenu(locale)} />
           <main id="main" tabIndex={-1}>{children}</main>
-          <Footer />
+          <Footer contact={contact} />
           <ScrollTopButton />
           <MotionRoot />
         </NextIntlClientProvider>

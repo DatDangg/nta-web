@@ -156,3 +156,16 @@
   dev/test không memo (sửa MDX thấy ngay); promise lỗi bị bỏ khỏi memo; trả bản sao mảng. Không ảnh hưởng chế độ db (đi qua store/data cache).
 - **Số đo sau round 2 (median/p90, cache hit):** db: `/` 34.6–35.3/39–46, `/solutions/ai/boxai` 34.2–34.8/39–40, `/en` 13.2–13.4 ms. file: `/` 34.2–34.3/40, `/solutions/ai/boxai` 33.8–34.2/38–40,
   `/en` 13.7–13.8 ms (trước memo + htmlLimitedBots: file `/` 35–45/p90 ~52). 180 request cache hit → `xact_commit` +2 (gồm query đo); DB dừng → trang đã cache vẫn 200.
+
+## 2026-10-14 — CR-031 P3-T04: chữ giao diện + company-info đọc DB; file seed là bản dự phòng lâu dài (user chốt sau review round 1 F1)
+- **Nguồn:** `CONTENT_SOURCE=db` → messages = bản ghi `ui_messages/<locale>/<namespace>` gộp lại; company-info = `company_info/<locale>/contact`
+  (getter server-only `src/lib/contact/company-contact.ts`, truyền xuống Footer/ContactDetails/JSON-LD qua props). Đọc qua store.ts (tag `content:<collection>`).
+- **Gộp sâu DB đè lên file** (`src/lib/content/shape.ts` `mergeOverFile`, `src/lib/content/ui-data.ts`): key có trong file mà DB chưa có → dùng giá trị file
+  + `console.warn` (1 lần/process/nội dung) liệt kê ≤ 10 đường dẫn. Sai kiểu, chuỗi rỗng (file có chữ), mảng rỗng (file có phần tử), phần tử mảng sai cấu trúc
+  → NÉM lỗi (trang 500, không cache). Key thừa trong DB chấp nhận.
+- **Lý do:** sau cutover, phát hành code thêm key chữ/trường liên hệ trước khi DB được bổ sung không được làm toàn site 500 (review F1). Ngoại lệ có chủ đích
+  cho nguyên tắc "không fallback âm thầm" của cờ CONTENT_SOURCE — chỉ ở mức key, có cảnh báo trong log.
+- **Hệ quả:** `src/i18n/messages/{vi,en}.json` và hằng `COMPANY_CONTACT` (`src/lib/contact/company-info.ts`) được **giữ lâu dài** làm bản dự phòng + chuẩn cấu trúc —
+  **phase 5 KHÔNG xoá** các file này (khác với đường đọc MDX/registry file). Key mới thêm vào file vẫn nên được bổ sung vào DB (cảnh báo log là tín hiệu).
+- **Write-path (F2):** `checkRecord` kiểm `company_info`: `phone.href` = `tel:`, `email.href` = `mailto:`, `map.embedUrl` = https Google Maps
+  (`maps.google.com|www.google.com|google.com`, path `/maps…`), `map.openUrl` = https.

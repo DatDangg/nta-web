@@ -1,6 +1,6 @@
 import { useTranslations } from 'next-intl';
 import { ListingIcon, type ListingIconName } from '@/components/listing/icons';
-import { COMPANY_CONTACT } from '@/lib/contact/company-info';
+import type { CompanyContact } from '@/lib/contact/company-info';
 
 function IconBadge({ name }: { name: ListingIconName }) {
   return (
@@ -12,11 +12,11 @@ function IconBadge({ name }: { name: ListingIconName }) {
 
 /**
  * Card thông tin liên hệ trang `/contact` (R-10 §2): SĐT · Email · Địa chỉ, Google Maps nhúng, tiện ích văn phòng.
- * Dữ liệu từ `company-info.ts` (dùng chung với Footer + JSON-LD).
+ * Dữ liệu `contact` từ `getCompanyContact` (trang truyền xuống; dùng chung với Footer + JSON-LD).
  */
-export function ContactDetails() {
+export function ContactDetails({ contact }: { contact: CompanyContact }) {
   const t = useTranslations('contact');
-  const { phone, email, address, map } = COMPANY_CONTACT;
+  const { phone, email, address, map } = contact;
   const items = [
     { icon: 'call' as const, title: t('info.phone'), value: <a className="hover:text-primary-active hover:underline" href={phone.href}>{phone.display}</a>, note: t('info.phoneNote') },
     { icon: 'mail' as const, title: t('info.email'), value: <a className="break-words hover:text-primary-active hover:underline xl:whitespace-nowrap" href={email.href}>{email.display}</a>, note: t('info.emailNote') },

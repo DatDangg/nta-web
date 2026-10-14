@@ -3,6 +3,7 @@ import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { test } from "node:test";
 import { readFileSource } from "./file-source";
+import { COMPANY_CONTACT } from "../../src/lib/contact/company-info";
 import {
   REQUIRED_FIELDS,
   SHOWCASE_ICONS,
@@ -85,4 +86,24 @@ test("I-7: trích đường dẫn ảnh nội bộ trong data + body, bỏ URL n
     body: '![x](/images/d.png) và <img src="/images/e.svg" />',
   });
   assert.deepEqual(paths, ["/images/a.jpg", "/uploads/2026/b.webp", "/images/d.png", "/images/e.svg"]);
+});
+
+test("I-6 company_info: URL phải đúng scheme (tel/mailto/https) + bản đồ nhúng chỉ Google Maps", () => {
+  const record = (data: unknown): ContentRecord => ({ collection: "company_info", slug: "contact", locale: "vi", data: data as Record<string, unknown>, body: null, sortOrder: null });
+  const contact = structuredClone(COMPANY_CONTACT);
+  assert.deepEqual(checkRecord(record(contact)), []);
+  const bad = {
+    ...contact,
+    phone: { ...contact.phone, href: "javascript:alert(1)" },
+    email: { ...contact.email, href: "https://evil.example" },
+    map: { embedUrl: "https://evil.example/maps?q=x", openUrl: "http://www.google.com/maps" },
+  };
+  assert.deepEqual(checkRecord(record(bad)), [
+    "I-6 company_info phone.href phải bắt đầu bằng tel:",
+    "I-6 company_info email.href phải bắt đầu bằng mailto:",
+    "I-6 company_info map.embedUrl phải là https Google Maps (maps.google.com|www.google.com/maps)",
+    "I-6 company_info map.openUrl phải là https Google Maps (maps.google.com|www.google.com/maps)",
+  ]);
+  assert.match(checkRecord(record({ ...contact, map: { ...contact.map, embedUrl: "http://maps.google.com/maps?q=x" } })).join(), /map\.embedUrl/);
+  assert.match(checkRecord(record({ ...contact, map: undefined })).join(), /map\.embedUrl.*map\.openUrl/);
 });
