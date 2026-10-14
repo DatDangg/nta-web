@@ -1,17 +1,17 @@
 {
-  "specVersion": "3.14.0",
-  "scopeVersion": 44,
-  "generatedAt": "2026-10-14T14:00:00+07:00",
+  "specVersion": "3.15.0",
+  "scopeVersion": 45,
+  "generatedAt": "2026-10-14T16:00:00+07:00",
   "trigger": "feature-update",
-  "workItem": "feature-home-products-coming-soon-card",
+  "workItem": "feature-home-products-show-three",
   "specRefs": [
     "R-03a",
     "R-03"
   ],
   "changed": {
     "files": [
-      "src/components/home/ProductStrip.tsx (prop cta + ListingCtaCard cuối dải, wrapper grid cùng kích thước thẻ sản phẩm)",
-      "src/app/[locale]/page.tsx (truyền listingCtas[locale].products, href /contact, icon plus)"
+      "src/components/home/ProductStrip.tsx (cardCount; đúng 3 thẻ → lg:w-[calc((100%-3rem)/3)]; ≤ 3 thẻ → cụm ←/→ lg:hidden)",
+      "src/components/home/HomeProductCard.tsx (prop imageSizes tuỳ chọn; 3 cột lg+ dùng 340px)"
     ],
     "modules": [
       "Trang chủ — khối Sản phẩm tiêu biểu"
@@ -19,26 +19,25 @@
   },
   "impact": {
     "direct": [
-      "/ và /en: cuối dải Sản phẩm tiêu biểu có thẻ viền đứt \"Sắp có thêm ứng dụng mới\" / \"More apps coming soon\" + mô tả + nút \"Liên hệ đội ngũ NTA\" / \"Contact the NTA team\"",
-      "Nút thẻ CTA dẫn tới /contact (vi) và /en/contact (en)",
-      "Thẻ CTA rộng bằng 1 thẻ sản phẩm (85% mobile, ½ dải từ md), cao bằng hàng, snap như thẻ khác"
+      "/ và /en ở lg+ (1024/1280/1440): 2 thẻ sản phẩm + thẻ CTA \"Sắp có thêm ứng dụng mới\" hiện đủ 1 hàng, không cuộn ngang, cao bằng nhau",
+      "lg+: cụm nút ←/→ khối Sản phẩm không hiện"
     ],
     "dependents": [
-      "Nút ←/→ của khối: với 2 sản phẩm + thẻ CTA, ở desktop nút → bật khi chưa cuộn tới mép phải, disabled ở mép",
-      "Phím ←/→ khi dải đang focus và vuốt mobile cuộn tới được thẻ CTA"
+      "< lg (375/768): dải vẫn cuộn ngang (85% / ½), nút ←/→ hiện, disabled đúng ở mép, phím ←/→ khi dải focus, snap, vuốt",
+      "> 3 thẻ (khi thêm sản phẩm): lg+ quay lại carousel ½ dải + nút ←/→"
     ],
     "regression": [
-      "Thẻ sản phẩm trang chủ (poster, icon, chip, link /products/<slug>) không đổi",
+      "Khối Câu chuyện khách hàng trang chủ (dùng chung useScrollButtons/HomeScrollArrows/HomeSectionHeader) không đổi",
+      "Thẻ sản phẩm (poster, chip, link /products/<slug>) và thẻ CTA (/contact, /en/contact) không đổi",
       "Section ẩn khi không có sản phẩm",
-      "Trang /products: thẻ CTA cuối lưới không đổi",
-      "Không tràn ngang trang ở 375/1440"
+      "Không tràn ngang trang ở 375/768/1024/1440"
     ]
   },
   "acceptance": [
-    "Thẻ hiển thị cuối dải sản phẩm trang chủ vi + en, nội dung giống thẻ CTA trang Sản phẩm",
-    "Viền đứt, kích thước đồng bộ thẻ sản phẩm trang chủ",
-    "Link trỏ /contact như trang Sản phẩm",
-    "Cuộn ngang / nút mũi tên / bàn phím vẫn đúng; responsive mobile ổn"
+    "≤ 3 thẻ: hiện đủ cùng lúc trên 1 hàng (không cần cuộn) ở lg+, cả vi + en",
+    "> 3 thẻ: giữ hành vi cuộn ngang (mũi tên / bàn phím / snap)",
+    "Khi không cuộn được, nút mũi tên ẩn hoặc disabled",
+    "Mobile/tablet (< lg): giữ dải cuộn ngang như hiện tại"
   ],
   "risk": "low"
 }

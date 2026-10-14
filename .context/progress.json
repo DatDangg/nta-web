@@ -2,12 +2,12 @@
   "mode": "feature",
   "activeWorkItem": {
     "type": "feature",
-    "slug": "home-products-coming-soon-card",
+    "slug": "home-products-show-three",
     "phaseTask": "phase-1-task-01",
     "step": "close-out",
     "status": "done",
-    "journal": ".context/runs/feature-home-products-coming-soon-card-phase-1.md",
-    "note": "CR-021 done — review round 2 PASS, spec 3.14.0 · scope v44"
+    "journal": ".context/runs/feature-home-products-show-three-phase-1.md",
+    "note": "CR-022 done — review round 1 PASS, spec 3.15.0 · scope v45"
   },
   "features": [
     {
@@ -70,7 +70,8 @@
         "change-home-solution-card-images-phase-1-task-01",
         "change-home-footer-redesign-phase-1-task-01",
         "change-home-hero-banner-restyle-phase-1-task-01",
-        "home-products-coming-soon-card-phase-1-task-01"
+        "home-products-coming-soon-card-phase-1-task-01",
+        "home-products-show-three-phase-1-task-01"
       ],
       "inProgressTask": null,
       "tasks": [
@@ -1108,6 +1109,21 @@
       "reviewer": {
         "result": "PASS",
         "report": ".context/review-reports/feature-home-products-coming-soon-card-phase-1-task-01-round-2-review.md"
+      }
+    },
+    {
+      "slug": "home-products-show-three",
+      "status": "done",
+      "changeFile": "spec/changes/archive/2026-10-14-home-products-show-three.md",
+      "classification": "MODIFY (UI)",
+      "tasks": {
+        "phase-1-task-01": "done"
+      },
+      "note": "CR-022 — trang chủ khối Sản phẩm: lg+ ≤ 3 thẻ hiện đủ 1 hàng (ẩn ←/→), > 3 thẻ và < lg giữ cuộn ngang; spec 3.14.0 → 3.15.0 (MINOR) · scope v45. Build chưa chạy được trong môi trường agent (native binding)",
+      "updatedAt": "2026-10-14",
+      "reviewer": {
+        "result": "PASS",
+        "report": ".context/review-reports/feature-home-products-show-three-phase-1-task-01-round-1-review.md"
       }
     }
   ],

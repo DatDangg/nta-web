@@ -29,6 +29,7 @@
 | CR-019 | Tự động đăng "Bản tin AI tuần" (vi + en, dạng điểm tin, AI qua OpenCode Go) lên Tin tức qua GitHub Actions hằng tuần trên runner VPS, không duyệt tay | ADDITIVE | done (spec 3.13.0 · scope v43) | `archive/2026-10-14-weekly-ai-news-digest.md` | 2026-10-14 | 2026-10-14 |
 | CR-020 | Trang Về NTA: bỏ khối "Năng lực" và "Đội ngũ" (vi + en); xử lý nút "Tìm hiểu thêm về đội ngũ" đang trỏ `#team` | REMOVE (UI) | done (spec 3.12.0 · scope v42) | `archive/2026-10-14-about-remove-capabilities-team.md` | 2026-10-14 | 2026-10-14 |
 | CR-021 | Trang chủ khối Sản phẩm: thêm thẻ "Sắp có thêm ứng dụng mới" cuối dải như thẻ CTA trang Sản phẩm (vi + en) | ADDITIVE (UI) | done (spec 3.14.0 · scope v44) | `archive/2026-10-14-home-products-coming-soon-card.md` | 2026-10-14 | 2026-10-14 |
+| CR-022 | Trang chủ khối Sản phẩm: hiện đủ 3 thẻ cùng lúc, chỉ cuộn ngang khi > 3 thẻ (follow-up CR-021) | MODIFY (UI) | done (spec 3.15.0 · scope v45) | `archive/2026-10-14-home-products-show-three.md` | 2026-10-14 | 2026-10-14 |
 
 ## Quy tắc tracking
 

@@ -1,5 +1,5 @@
 ---
-spec_version: 3.14.0
+spec_version: 3.15.0
 updated_at: 2026-10-14
 ---
 
@@ -73,7 +73,11 @@ _(cập nhật 2026-10-13: thêm **domain phụ** `ntasolution.vn` (+ `www`) ph�
   **(3.14.0 — CR-021)** Cuối dải, sau thẻ sản phẩm cuối, có **1 thẻ CTA viền đứt "Sắp có thêm ứng dụng mới"** — cùng component,
   nội dung (`listingCtas[locale].products`, vi + en), icon `plus` và đích **`/contact`** (`/en/contact`) như thẻ CTA cuối lưới `/products`;
   rộng bằng 1 thẻ sản phẩm (85% mobile, ½ dải từ `md`), snap như thẻ khác, nằm trong vùng cuộn nên ←/→/phím/vuốt tính cả thẻ này
-  (2 sản phẩm + thẻ CTA → desktop nút → bật được). Thẻ chỉ hiện khi section hiện (không làm section hiện khi không có sản phẩm).
+  ~~(2 sản phẩm + thẻ CTA → desktop nút → bật được)~~ _(thay bởi 3.15.0)_. Thẻ chỉ hiện khi section hiện (không làm section hiện khi không có sản phẩm).
+  **(3.15.0 — CR-022)** Từ `lg` (≥ 1024px): khi tổng số thẻ trong dải (sản phẩm + thẻ CTA) **≤ 3**, các thẻ hiện đủ trên **1 hàng**,
+  không cuộn (đúng 3 thẻ → mỗi thẻ ⅓ dải; ≤ 2 thẻ → ½ dải), cụm nút ←/→ **ẩn** ở `lg+` (nếu hiện thì disabled vì dải không tràn).
+  **> 3 thẻ** → giữ carousel ngang (½ dải mỗi thẻ, nút ←/→, phím ←/→, snap) như trên. Dưới `lg` (mobile 85%, tablet ½ dải) luôn là
+  dải cuộn ngang như cũ, nút ←/→ hiện. Song ngữ VI/EN như nhau.
 - **R-03b (3.11.0 — khối Câu chuyện khách hàng theo mockup CR-016):** eyebrow (`CASE STUDY ——`) + tiêu đề "Câu chuyện **khách hàng**"
   + mô tả 2 dòng; bên phải 2 nút ←/→ (cùng hành vi R-03a) + nút viền "Xem tất cả case study →" → `/case-studies`. Hàng **tối đa 3 thẻ**
   lấy từ dữ liệu case study theo locale, **cùng thứ tự với `/case-studies`** (năm giảm dần, rồi slug — comparator dùng chung
