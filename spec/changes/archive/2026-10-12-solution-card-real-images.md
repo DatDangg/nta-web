@@ -2,7 +2,7 @@
 
 - **Class:** MODIFY (render ảnh trong thẻ) + ADDITIVE (2 field mới trong `Solution`)
 - **Risk:** MEDIUM — `SolutionCard` + `cardImageClass` dùng chung với 3 component khác
-- **Trạng thái:** Khảo sát xong · **CHỜ user duyệt danh sách trước khi code**
+- **Trạng thái:** **closed** — user đóng 15/10/2026, không làm (trước đó: chờ user duyệt danh sách ảnh)
 - **Nhánh:** `redesign/solution-detail` (chưa push, chưa deploy)
 
 ## 1. Vấn đề

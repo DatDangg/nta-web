@@ -8,7 +8,7 @@
 
 | ID | Tiêu đề | Loại | Trạng thái | Change file | Tạo | Xong |
 |----|---------|------|-----------|-------------|-----|------|
-| CR-001 | Thay ảnh placeholder thẻ giải pháp bằng ảnh giao diện thật | MODIFY + ADDITIVE | blocked (chờ user duyệt danh sách ảnh) | `2026-10-12-solution-card-real-images.md` | 2026-10-12 | |
+| CR-001 | Thay ảnh placeholder thẻ giải pháp bằng ảnh giao diện thật | MODIFY + ADDITIVE | closed (không làm — user đóng 15/10) | `archive/2026-10-12-solution-card-real-images.md` | 2026-10-12 | 2026-10-15 |
 | CR-002 | Case study nha khoa dạng showcase + nút mở DentGo | feature | done (spec 3.2.1 · scope v23) | `archive/2026-10-13-dental-case-study-showcase.md` | 2026-10-13 | 2026-10-13 |
 | CR-003 | Thiết kế lại UI trang Tin tức theo mockup (hero, lọc danh mục, tìm kiếm, khối nổi bật, đăng ký nhận tin) | MODIFY + ADDITIVE | done (spec 3.2.0 · scope v22) | `archive/2026-10-13-blog-listing-redesign.md` | 2026-10-13 | 2026-10-13 |
 | CR-004 | Tách khung case study (Óc Eo) thành template detail chung cho Giải pháp / Sản phẩm (data MDX, SSG, thêm block Lưới tính năng + FAQ) | MODIFY + ADDITIVE | done (spec 3.5.1 · scope v30; phần ảnh tách sang CR-007) | `archive/2026-10-13-shared-detail-showcase-template.md` | 2026-10-13 | 2026-10-13 |
@@ -31,7 +31,7 @@
 | CR-021 | Trang chủ khối Sản phẩm: thêm thẻ "Sắp có thêm ứng dụng mới" cuối dải như thẻ CTA trang Sản phẩm (vi + en) | ADDITIVE (UI) | done (spec 3.14.0 · scope v44) | `archive/2026-10-14-home-products-coming-soon-card.md` | 2026-10-14 | 2026-10-14 |
 | CR-022 | Trang chủ khối Sản phẩm: hiện đủ 3 thẻ cùng lúc, chỉ cuộn ngang khi > 3 thẻ (follow-up CR-021) | MODIFY (UI) | done (spec 3.15.0 · scope v45) | `archive/2026-10-14-home-products-show-three.md` | 2026-10-14 | 2026-10-14 |
 | CR-023 | Trang chi tiết Tin tức thiếu style thân bài (`prose` không có tác dụng) → Bản tin AI tuần hiển thị như text thô (vi + en) | BUG (UI) | done (spec 3.15.0 · scope v46) | `archive/2026-10-14-blog-article-typography.md` | 2026-10-14 | 2026-10-14 |
-| CR-024 | Bản tin AI tuần: khung riêng dạng thẻ điểm tin (mỗi tin 1 thẻ, số thứ tự, nút nguồn) — làm sau CR-023 | ADDITIVE (UI) | pending (change doc tạo khi bắt đầu) | — | 2026-10-14 | |
+| CR-024 | Bản tin AI tuần: khung riêng dạng thẻ điểm tin (mỗi tin 1 thẻ, số thứ tự, nút nguồn) — làm sau CR-023 | ADDITIVE (UI) | closed (không làm — user đóng 15/10) | — | 2026-10-14 | 2026-10-15 |
 | CR-025 | Bỏ khối "Triển khai thực tế tại Đền Bảo Hà" (BoxAI) + bỏ case study Bảo Hà; case study Óc Eo bỏ địa danh → "một khu di tích ở Việt Nam" (vi + en) | REMOVE + MODIFY (content) | done (spec 4.0.0 · scope v47) | `archive/2026-10-14-remove-bao-ha-anonymize-oc-eo.md` | 2026-10-14 | 2026-10-14 |
 | CR-026 | Route tiếng Anh slug không tồn tại (/en/case-studies/…, /en/blog/…) trả 500 thay vì 404 (static→dynamic, headers qua next-intl requestLocale) — phát hiện khi smoke CR-025 | BUG (routing) | pending | `2026-10-14-en-dynamic-slug-not-found-500.md` | 2026-10-14 | |
 | CR-027 | Case study khu di tích (vi): chỉnh 2 câu lặp ý ("di sản khu di tích" → "di sản văn hóa"; "của khu di tích" lần 2 → "của nơi đây") — follow-up CR-025 | MODIFY (content) | done (no spec impact) | — (copy fix 1 dòng, không tạo change doc) | 2026-10-14 | 2026-10-14 |
@@ -45,7 +45,7 @@
 
 ## Quy tắc tracking
 
-- **Trạng thái:** `pending` (chưa xử lý) · `in_progress` (đang xử lý) · `done` (xong, change file đã archive) · `blocked` (kẹt, cần user).
+- **Trạng thái:** `pending` (chưa xử lý) · `in_progress` (đang xử lý) · `done` (xong, change file đã archive) · `blocked` (kẹt, cần user) · `closed` (user đóng, không làm — change file chuyển `archive/` nếu có).
 - **Agent intake (tự động, khi user chat yêu cầu/bug trong maintenance mode):**
   1. Tạo change doc `spec/changes/YYYY-MM-DD-<slug>.md` (copy `_TEMPLATE.md`, điền yêu cầu + acceptance từ lời user — thiếu thông tin thì hỏi ngắn 1 lần, KHÔNG bịa).
   2. Thêm 1 dòng vào bảng trên với trạng thái `pending`.
