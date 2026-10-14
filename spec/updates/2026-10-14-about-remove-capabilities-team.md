@@ -1,11 +1,11 @@
 # Spec Update — 2026-10-14 about-remove-capabilities-team
 
-**spec_version:** 3.11.0 → 4.0.0 (MAJOR — đổi ngữ nghĩa R-04, bỏ một phần R-04a)
+**spec_version:** 3.11.0 → 3.12.0 (MINOR — sửa R-04, bỏ một phần R-04a; user chọn MINOR)
 **Trigger:** feature-update · change `about-remove-capabilities-team` (CR-020, REMOVE UI)
 
 ## Requirements
 - **SỬA R-04:** trước: "Đủ 5 khối: sứ mệnh, năng lực, team, milestones (timeline), đối tác". Sau: trang có sứ mệnh/giá trị,
-  con người NTA, milestones (timeline), đối tác, CTA. Khối **Năng lực** và **Đội ngũ** `[DEPRECATED 4.0.0]` — đã gỡ khỏi code.
+  con người NTA, milestones (timeline), đối tác, CTA. Khối **Năng lực** và **Đội ngũ** `[DEPRECATED 3.12.0]` — đã gỡ khỏi code.
 - **SỬA R-04a:** khối Con người NTA **không còn** nút outline "Tìm hiểu thêm về đội ngũ →" (trước cuộn tới `#team`).
   Thứ tự trang: Hero · Giá trị · Con người NTA · Hành trình phát triển · Đối tác · CTA.
 
@@ -25,4 +25,4 @@ User yêu cầu "bỏ cái năng lực với đội ngũ trong cái về NTA đi
 
 ## Doc reconcile
 - `docs/DESIGN.md` Screen Về NTA (components), `.context/design-spec.md` Screen /about (ghi chú CR-020).
-- **Chưa sửa** `docs/BRD.md` FR-010 (intent doc: "sứ mệnh, năng lực, team, milestones, đối tác") — cần user xác nhận sửa intent; hiện R-04 4.0.0 lệch FR-010 (cross-doc conflict ghi nhận).
+- `docs/BRD.md` FR-010 đã sửa khớp R-04 (user duyệt 2026-10-14).

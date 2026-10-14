@@ -3,14 +3,14 @@
 - Change: CR-020 `spec/changes/2026-10-14-about-remove-capabilities-team.md`
 - Classification / Risk: **REMOVE (UI)** · risk **LOW** (1 trang public, không API/schema/auth; data MDX nội bộ chỉ trang /about đọc)
 - Status: done — user duyệt hướng khi gõ /change (PA A: bỏ nút CTA); reviewer round 1 PASS
-- Spec: 3.11.0 → **4.0.0** (MAJOR — đổi ngữ nghĩa R-04 + bỏ nút `#team` của R-04a, theo docs/SPEC_VERSIONING.md "xoá/đổi ngữ nghĩa requirement") · test-scope v41 → **v42** (trigger feature-update)
+- Spec: 3.11.0 → **3.12.0** (MINOR — user chọn MINOR) · test-scope v41 → **v42** (trigger feature-update)
 
-## Spec delta (đã áp dụng vào SPECIFICATIONS.md 4.0.0 — xem file đó cho wording chính thức)
+## Spec delta (đã áp dụng vào SPECIFICATIONS.md 3.12.0 — xem file đó cho wording chính thức)
 
 **R-04 (sửa):**
 > ~~Đủ 5 khối: sứ mệnh, năng lực, team, milestones (timeline), đối tác~~ →
-> **R-04 (4.0.0 — CR-020):** trang gồm: sứ mệnh/giá trị, con người NTA, milestones (timeline), đối tác, CTA; logo đối tác grayscale → màu khi hover.
-> Khối **Năng lực** và **Đội ngũ** (`#team`) đã bỏ `[REMOVED 4.0.0 — CR-020]`.
+> **R-04 (3.12.0 — CR-020):** trang gồm: sứ mệnh/giá trị, con người NTA, milestones (timeline), đối tác, CTA; logo đối tác grayscale → màu khi hover.
+> Khối **Năng lực** và **Đội ngũ** (`#team`) đã bỏ `[REMOVED 3.12.0 — CR-020]`.
 
 **R-04a (sửa câu cuối khối 3 + đuôi):**
 > (3) khối Con người NTA — ảnh đội ngũ (ảnh AI tạm) + eyebrow/tiêu đề/mô tả ~~+ nút outline "Tìm hiểu thêm về đội ngũ →" cuộn tới khối Đội ngũ (`#team`)~~ **(không còn nút — CR-020)**;
@@ -56,10 +56,10 @@ Intent doc: `docs/BRD.md:78-80` FR-010 ("Đủ 5 khối…") — intent, chỉ �
 - Smoke: serve bản build → GET `/about`, `/en/about` 200; DOM không có `#team`, không có 2 heading đã bỏ.
 
 ## Doc impact (close-out)
-- `SPECIFICATIONS.md` R-04/R-04a (4.0.0) + `spec/updates/2026-10-14-about-remove-capabilities-team.md` + `spec/CHANGELOG.md` + `spec/test-scope/current.json` v42 (spec-publisher)
+- `SPECIFICATIONS.md` R-04/R-04a (3.12.0) + `spec/updates/2026-10-14-about-remove-capabilities-team.md` + `spec/CHANGELOG.md` + `spec/test-scope/current.json` v42 (spec-publisher)
 - `docs/DESIGN.md:91` (Components list) + `:196-198` (responsive capability/team) — as-built reconcile
 - `.context/design-spec.md` §about (dòng ~160) — ghi chú CR-020
-- `docs/BRD.md` FR-010 — CHỈ khi user duyệt (intent)
+- `docs/BRD.md` FR-010 — đã sửa (user duyệt 2026-10-14)
 - Không đổi API/schema.
 
 ## Risk / residual

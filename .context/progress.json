@@ -7,7 +7,7 @@
     "step": "close-out",
     "status": "done",
     "journal": ".context/runs/feature-about-remove-capabilities-team-phase-1.md",
-    "note": "CR-020 done — review PASS, spec 4.0.0 · scope v42"
+    "note": "CR-020 done — review PASS, spec 3.12.0 · scope v42"
   },
   "features": [
     {
@@ -1072,7 +1072,7 @@
       "tasks": {
         "phase-1-task-01": "done"
       },
-      "note": "CR-020 — /about bỏ khối Năng lực + Đội ngũ, bỏ nút #team, dọn component/i18n/data/ảnh; spec 3.11.0 → 4.0.0 (MAJOR) · scope v42",
+      "note": "CR-020 — /about bỏ khối Năng lực + Đội ngũ, bỏ nút #team, dọn component/i18n/data/ảnh; spec 3.11.0 → 3.12.0 (MINOR) · scope v42",
       "updatedAt": "2026-10-14",
       "reviewer": {
         "result": "PASS",

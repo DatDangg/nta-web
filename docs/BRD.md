@@ -75,9 +75,9 @@ một nơi tra cứu hồ sơ năng lực, case study và thông tin liên hệ 
 - Acceptance Criteria: Hiển thị ít nhất 3–4 sản phẩm, CTA nổi bật.
 
 ### Module 2: Về NTA
-**FR-010:** Trình bày sứ mệnh, năng lực, team, milestones, đối tác.
+**FR-010:** Trình bày sứ mệnh/giá trị, con người NTA, milestones, đối tác (CR-020, 2026-10-14: bỏ khối năng lực + team — user duyệt).
 - Priority: High
-- Acceptance Criteria: Đủ 5 khối nội dung, có timeline milestones.
+- Acceptance Criteria: Đủ 4 khối nội dung (sứ mệnh/giá trị, con người NTA, milestones, đối tác) + CTA, có timeline milestones.
 
 ### Module 3: Giải pháp Doanh nghiệp
 **FR-020:** Trang tổng quan + 4 trang con CRM / HRM / LMS / DentGo.

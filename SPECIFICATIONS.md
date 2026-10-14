@@ -1,5 +1,5 @@
 ---
-spec_version: 4.0.0
+spec_version: 3.12.0
 updated_at: 2026-10-14
 ---
 
@@ -79,16 +79,16 @@ _(cập nhật 2026-10-13: thêm **domain phụ** `ntasolution.vn` (+ `www`) ph�
 
 ### Module 2 — Về NTA `/about`
 
-- **R-04 (4.0.0 — sửa theo CR-020):** Trang có các khối: sứ mệnh/giá trị, con người NTA, milestones (timeline), đối tác, CTA; logo đối tác grayscale → màu khi hover.
-  ~~năng lực, team~~ **[DEPRECATED 4.0.0 — CR-020: bỏ khối "Năng lực" và "Đội ngũ" khỏi `/about` vi+en]**.
+- **R-04 (3.12.0 — sửa theo CR-020):** Trang có các khối: sứ mệnh/giá trị, con người NTA, milestones (timeline), đối tác, CTA; logo đối tác grayscale → màu khi hover.
+  ~~năng lực, team~~ **[DEPRECATED 3.12.0 — CR-020: bỏ khối "Năng lực" và "Đội ngũ" khỏi `/about` vi+en]**.
   `[reverse-engineered from docs]` — nguồn: `docs/BRD.md:78-80` (FR-010), `docs/DESIGN.md:85-90`
 - **R-04a (3.10.0 — thiết kế lại đầu trang /about theo mockup CR-014):** thứ tự trang: (1) **hero 2 cột** — breadcrumb pill
   (Trang chủ › Về NTA), H1 "Về **NTA**" (NTA màu brand), tagline lớn, đoạn mô tả, 3 chỉ số có icon (50+ dự án · 30+ đối tác ·
   99% hài lòng — lấy từ i18n `about.stats`, chờ user xác nhận số thật); cột phải ảnh **tòa Kim Hoàn thật** (next/image, alt VI/EN);
   nền gradient mint nhạt; (2) **khối sứ mệnh** — eyebrow + tiêu đề "Đưa AI vào thực tiễn, tạo **giá trị bền vững**" + 3 thẻ icon
   Sứ mệnh · Tầm nhìn · Giá trị cốt lõi (4 bullet); (3) **khối Con người NTA** — ảnh đội ngũ (ảnh AI tạm) + eyebrow/tiêu đề/mô tả +
-  ~~nút outline "Tìm hiểu thêm về đội ngũ →" cuộn tới khối Đội ngũ (`#team`)~~ **[bỏ 4.0.0 — CR-020]** (khối không còn nút);
-  sau đó: cột mốc (Hành trình phát triển), đối tác, CTA (R-04). Thứ tự trang 4.0.0: Hero · Giá trị · Con người NTA ·
+  ~~nút outline "Tìm hiểu thêm về đội ngũ →" cuộn tới khối Đội ngũ (`#team`)~~ **[bỏ 3.12.0 — CR-020]** (khối không còn nút);
+  sau đó: cột mốc (Hành trình phát triển), đối tác, CTA (R-04). Thứ tự trang 3.12.0: Hero · Giá trị · Con người NTA ·
   Hành trình phát triển · Đối tác · CTA — không còn khối Năng lực / Đội ngũ.
   PageHeader + MissionBlock cũ bỏ. Song ngữ VI/EN; mobile xếp 1 cột, không tràn ngang; metadata + breadcrumb JSON-LD giữ nguyên.
 

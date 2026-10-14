@@ -1,5 +1,5 @@
 {
-  "specVersion": "4.0.0",
+  "specVersion": "3.12.0",
   "scopeVersion": 42,
   "generatedAt": "2026-10-14T03:00:00+07:00",
   "trigger": "feature-update",

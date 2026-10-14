@@ -29,5 +29,5 @@ Gỡ 2 khối khỏi trang `/about` (vi + en):
 
 ## Kết quả (2026-10-14)
 - Done: bỏ CapabilityGrid + TeamGrid, bỏ nút "Tìm hiểu thêm về đội ngũ" (PA: bỏ nút), dọn component/i18n/data/2 ảnh SVG team.
-- Spec 3.11.0 → 4.0.0 (R-04, R-04a) · test-scope v42 · task `tasks/feature-about-remove-capabilities-team/phase-1-task-01.md` · review round 1 PASS.
-- Còn mở: `docs/BRD.md` FR-010 (intent) vẫn ghi 5 khối — chờ user xác nhận sửa.
+- Spec 3.11.0 → 3.12.0 (R-04, R-04a) · test-scope v42 · task `tasks/feature-about-remove-capabilities-team/phase-1-task-01.md` · review round 1 PASS.
+- `docs/BRD.md` FR-010 đã sửa khớp R-04 (user duyệt 2026-10-14); spec hạ 3.12.0 (MINOR) theo user.
