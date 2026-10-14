@@ -515,10 +515,10 @@ Ngoài phạm vi: thẻ "Đăng ký nhận tin" (chưa có backend).
 **Route:** `/blog/[slug]` — R-09
 
 **Layout:** ArticleHeader (h1 `display`, ngày `<time>`, Badge danh mục, tác giả nếu có, Breadcrumb) ·
-ArticleBody (MDX `prose max-w-[720px]`, ảnh nội dung `w-full rounded-md`) · ShareBar (Facebook, LinkedIn,
+ArticleBody (MDX `max-w-[720px]`, ảnh nội dung `w-full rounded-md`; typography thân bài as-built CR-023: style từng thẻ qua `mdxComponents` (`src/components/mdx/index.tsx`), KHÔNG dùng `@tailwindcss/typography` — h1/h2 → h2 `text-h3` semibold `mt-12 mb-4` (`first:mt-0`), h3 `text-body-lg` semibold, p `my-5 leading-relaxed`, link `text-primary` underline offset 4 + focus-visible outline + `overflow-wrap:anywhere`, ul/ol disc/decimal `pl-6`, marker `text-secondary`, blockquote viền trái `border-strong`, hr `border-border`, code/pre nền `surface-sunken`) · ShareBar (Facebook, LinkedIn,
 copy-link) · RelatedPosts (3 card) · CTABanner (alt).
 
-**Components:** PageHeader/ArticleHeader, Breadcrumb, ArticleBody (prose), ShareBar, RelatedPosts, CTABanner.
+**Components:** PageHeader/ArticleHeader, Breadcrumb, ArticleBody (mdxComponents typography), ShareBar, RelatedPosts, CTABanner.
 
 **States:** Default · **404 slug sai → Screen 13** · Loading: skeleton ảnh bìa ·
 Empty: không có bài liên quan → ẩn RelatedPosts · Error: ảnh fallback.

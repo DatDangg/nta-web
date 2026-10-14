@@ -1,13 +1,13 @@
 {
   "mode": "feature",
   "activeWorkItem": {
-    "type": "feature",
-    "slug": "home-products-show-three",
+    "type": "bug",
+    "slug": "blog-article-typography",
     "phaseTask": "phase-1-task-01",
     "step": "close-out",
     "status": "done",
-    "journal": ".context/runs/feature-home-products-show-three-phase-1.md",
-    "note": "CR-022 done — review round 1 PASS, spec 3.15.0 · scope v45"
+    "journal": ".context/runs/bug-blog-article-typography-phase-1-task-01.md",
+    "note": "CR-023 done — review round 2 PASS, spec 3.15.0 (không bump) · scope v46"
   },
   "features": [
     {
@@ -1127,5 +1127,23 @@
       }
     }
   ],
-  "bugs": []
+  "bugs": [
+    {
+      "slug": "blog-article-typography",
+      "status": "done",
+      "changeFile": "spec/changes/archive/2026-10-14-blog-article-typography.md",
+      "classification": "BUG (UI)",
+      "tasks": {
+        "phase-1-task-01": "done"
+      },
+      "note": "CR-023 — thân bài /blog/[slug] style qua mdxComponents theo token (không thêm @tailwindcss/typography); spec 3.15.0 không bump · scope v46 (bug-fix). M1 contrast link primary → đề xuất CR riêng",
+      "attempt": 0,
+      "updatedAt": "2026-10-14",
+      "reviewer": {
+        "result": "PASS",
+        "round": 2,
+        "report": ".context/review-reports/bug-blog-article-typography-phase-1-task-01-round-2-review.md"
+      }
+    }
+  ]
 }

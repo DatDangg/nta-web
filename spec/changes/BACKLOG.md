@@ -30,6 +30,8 @@
 | CR-020 | Trang Về NTA: bỏ khối "Năng lực" và "Đội ngũ" (vi + en); xử lý nút "Tìm hiểu thêm về đội ngũ" đang trỏ `#team` | REMOVE (UI) | done (spec 3.12.0 · scope v42) | `archive/2026-10-14-about-remove-capabilities-team.md` | 2026-10-14 | 2026-10-14 |
 | CR-021 | Trang chủ khối Sản phẩm: thêm thẻ "Sắp có thêm ứng dụng mới" cuối dải như thẻ CTA trang Sản phẩm (vi + en) | ADDITIVE (UI) | done (spec 3.14.0 · scope v44) | `archive/2026-10-14-home-products-coming-soon-card.md` | 2026-10-14 | 2026-10-14 |
 | CR-022 | Trang chủ khối Sản phẩm: hiện đủ 3 thẻ cùng lúc, chỉ cuộn ngang khi > 3 thẻ (follow-up CR-021) | MODIFY (UI) | done (spec 3.15.0 · scope v45) | `archive/2026-10-14-home-products-show-three.md` | 2026-10-14 | 2026-10-14 |
+| CR-023 | Trang chi tiết Tin tức thiếu style thân bài (`prose` không có tác dụng) → Bản tin AI tuần hiển thị như text thô (vi + en) | BUG (UI) | done (spec 3.15.0 · scope v46) | `archive/2026-10-14-blog-article-typography.md` | 2026-10-14 | 2026-10-14 |
+| CR-024 | Bản tin AI tuần: khung riêng dạng thẻ điểm tin (mỗi tin 1 thẻ, số thứ tự, nút nguồn) — làm sau CR-023 | ADDITIVE (UI) | pending (change doc tạo khi bắt đầu) | — | 2026-10-14 | |
 
 ## Quy tắc tracking
 

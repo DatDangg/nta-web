@@ -46,7 +46,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ local
       <article>
         <ArticleHeader locale={locale} post={post} />
         <div className="mx-auto max-w-[720px] px-4">
-          <div className="prose prose-base max-w-none text-text-primary prose-headings:text-text-primary prose-a:text-primary prose-img:rounded-md prose-li:marker:text-text-secondary">
+          <div className="text-base text-text-primary">
             <RenderMdx components={mdxComponents} source={post.body} />
           </div>
         </div>

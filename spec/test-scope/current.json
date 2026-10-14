@@ -1,43 +1,44 @@
 {
   "specVersion": "3.15.0",
-  "scopeVersion": 45,
-  "generatedAt": "2026-10-14T16:00:00+07:00",
-  "trigger": "feature-update",
-  "workItem": "feature-home-products-show-three",
+  "scopeVersion": 46,
+  "generatedAt": "2026-10-14T18:00:00+07:00",
+  "trigger": "bug-fix",
+  "workItem": "bug-blog-article-typography (phase-1-task-01; change spec/changes/2026-10-14-blog-article-typography.md → archive spec/changes/archive/; CR-023)",
   "specRefs": [
-    "R-03a",
-    "R-03"
+    "R-09",
+    "R-09c"
   ],
   "changed": {
     "files": [
-      "src/components/home/ProductStrip.tsx (cardCount; đúng 3 thẻ → lg:w-[calc((100%-3rem)/3)]; ≤ 3 thẻ → cụm ←/→ lg:hidden)",
-      "src/components/home/HomeProductCard.tsx (prop imageSizes tuỳ chọn; 3 cột lg+ dùng 340px)"
+      "src/components/mdx/index.tsx (mdxComponents: className theo design token cho h2/h3/p/a/ul/ol/li/blockquote/hr/code/pre; link dài wrap)",
+      "src/app/[locale]/blog/[slug]/page.tsx (vùng thân bài MDX)"
     ],
     "modules": [
-      "Trang chủ — khối Sản phẩm tiêu biểu"
+      "Blog — trang chi tiết bài viết /[locale]/blog/[slug]",
+      "MDX renderer (mdxComponents)"
     ]
   },
   "impact": {
     "direct": [
-      "/ và /en ở lg+ (1024/1280/1440): 2 thẻ sản phẩm + thẻ CTA \"Sắp có thêm ứng dụng mới\" hiện đủ 1 hàng, không cuộn ngang, cao bằng nhau",
-      "lg+: cụm nút ←/→ khối Sản phẩm không hiện"
+      "Thân bài /blog/<slug> và /en/blog/<slug>: h2/h3 có cỡ chữ + đậm + khoảng cách trên/dưới rõ, p có khoảng cách đoạn, a màu primary gạch chân, ul/ol có marker, blockquote viền trái, hr có khoảng cách — đúng token",
+      "ai-weekly-2026-w42 (vi + en): tiêu đề từng tin nổi bật, khoảng cách giữa các tin, dòng nguồn là link primary rõ ràng"
     ],
     "dependents": [
-      "< lg (375/768): dải vẫn cuộn ngang (85% / ½), nút ←/→ hiện, disabled đúng ở mép, phím ←/→ khi dải focus, snap, vuốt",
-      "> 3 thẻ (khi thêm sản phẩm): lg+ quay lại carousel ½ dải + nút ←/→"
+      "4 bài blog cũ × 2 locale: first-steps, digital-workflows, learning-content, responsible-ai — không vỡ layout (chỉ thêm khoảng cách/phân cấp)",
+      "Bản tin AI tuần do pipeline R-09c sinh các tuần sau tự nhận style (style nằm ở renderer)"
     ],
     "regression": [
-      "Khối Câu chuyện khách hàng trang chủ (dùng chung useScrollButtons/HomeScrollArrows/HomeSectionHeader) không đổi",
-      "Thẻ sản phẩm (poster, chip, link /products/<slug>) và thẻ CTA (/contact, /en/contact) không đổi",
-      "Section ẩn khi không có sản phẩm",
-      "Không tràn ngang trang ở 375/768/1024/1440"
+      "Trang chi tiết blog: ArticleHeader, ShareBar, RelatedPosts, CTABanner hiển thị không đổi",
+      "Ảnh nội dung trong bài (ArticleImage) không đổi",
+      "Không tràn ngang ở 375/768/1280 (document.documentElement.scrollWidth <= clientWidth), link dài wrap"
     ]
   },
   "acceptance": [
-    "≤ 3 thẻ: hiện đủ cùng lúc trên 1 hàng (không cần cuộn) ở lg+, cả vi + en",
-    "> 3 thẻ: giữ hành vi cuộn ngang (mũi tên / bàn phím / snap)",
-    "Khi không cuộn được, nút mũi tên ẩn hoặc disabled",
-    "Mobile/tablet (< lg): giữ dải cuộn ngang như hiện tại"
+    "Thân bài trang chi tiết Tin tức có style h2/h3, p, a, ul/ol, blockquote, hr (khoảng cách + phân cấp rõ), đúng token",
+    "ai-weekly-2026-w42 vi + en: tiêu đề từng tin nổi bật, khoảng cách giữa các tin, dòng nguồn là link màu primary rõ ràng",
+    "4 bài cũ × 2 locale không vỡ layout (đoạn văn chỉ thêm khoảng cách)",
+    "Bài pipeline tuần sau tự nhận style (style nằm ở renderer, không phụ thuộc nội dung)",
+    "Mobile 375px: không tràn ngang (link dài wrap)"
   ],
   "risk": "low"
 }
