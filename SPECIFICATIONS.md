@@ -1,5 +1,5 @@
 ---
-spec_version: 3.15.0
+spec_version: 4.0.0
 updated_at: 2026-10-14
 ---
 
@@ -156,7 +156,7 @@ _(cập nhật 2026-10-13: thêm **domain phụ** `ntasolution.vn` (+ `www`) ph�
   đào tạo tại Óc Eo" → **dự án AI camera + flycam tại khu di tích Óc Eo – Ba Thê** (content thật, phần C):
   bối cảnh (~433 ha, di tích quốc gia đặc biệt), giải pháp kiến trúc 3 tầng (~200 camera), chức năng theo gói,
   kết quả/số liệu, điểm mạnh — đúng format **vấn đề → giải pháp → kết quả**. Category đổi `enterprise` → `ai`;
-  giữ nguyên slug `oc-eo-learning`. — nguồn: change `spec/changes/2026-10-09-ai-solution-content.md` phần C.
+  giữ nguyên slug `oc-eo-learning` _(thay bởi R-08a.1 — 4.0.0: ẩn địa danh, slug `heritage-site-ai-camera`)_. — nguồn: change `spec/changes/2026-10-09-ai-solution-content.md` phần C.
   - **R-08a.1 (CR-025, 2026-10-14 — ẩn địa danh + đổi slug):** nội dung hiển thị (vi/en) của case study này **không**
     được chứa tên địa danh cụ thể ("Óc Eo", "Ba Thê", "núi Ba Thê" hay tên riêng định danh khác) ở mọi field render:
     `title`, `client`, `challenge`/`solution`/`result`, `gallery[].alt`, `showcase.hero` (breadcrumbLabel, subtitle,
@@ -166,6 +166,10 @@ _(cập nhật 2026-10-13: thêm **domain phụ** `ntasolution.vn` (+ `www`) ph�
     **Slug đổi** `oc-eo-learning` → **`heritage-site-ai-camera`**; URL cũ `/case-studies/oc-eo-learning`,
     `/vi/case-studies/oc-eo-learning`, `/en/case-studies/oc-eo-learning` → **redirect 301** sang slug mới cùng locale;
     sitemap chỉ chứa slug mới; mọi link nội bộ (`relatedCases` boxai/flycam, thẻ cuối `/solutions/ai`, listing meta) trỏ slug mới.
+    **Tên file/thư mục ảnh** của case study này (`public/images/cases/…`, `public/images/illustrations/…`) cũng **không**
+    chứa địa danh (URL ảnh lộ ra trình duyệt): `cases/oc-eo/*` → `cases/heritage-site/*`, `illustrations/oc-eo-*.svg` →
+    `illustrations/heritage-site-*.svg` (user chốt 2026-10-14); ảnh mồ côi `oc-eo-learning-overview.svg` xoá. Comment code
+    nội bộ (không render) ngoài phạm vi ràng buộc này.
   - ⚠️ **Needs-input (chờ xác nhận):** phần C mô tả số liệu "từ phương án" (dự toán + lộ trình) — cần user xác nhận
     đây là **phương án đề xuất** hay **dự án đã triển khai** để ghi "kết quả" trung thực (BR-004).
   - ✅ ~~Needs-input: số liệu hiện trường Đền Bảo Hà (R-06b)~~ — đã xác nhận 13/10/2026 (CR-012, R-08b.2).

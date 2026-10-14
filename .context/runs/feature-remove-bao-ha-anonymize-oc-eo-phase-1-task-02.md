@@ -15,7 +15,7 @@ evidence:
   reportPath: .context/review-reports/feature-remove-bao-ha-anonymize-oc-eo-phase-1-task-02-round-1-review.md
   round: 1
   verdict: PASS
-next: "spec-publisher close-out CR-025"
+next: "none — CR-025 done"
 loopSignal: none
 approvals: []
 batchQueue: []
@@ -26,3 +26,4 @@ batchQueue: []
 - 2026-10-14 task-01 committed bc36b75 → builder task-02 running
 - 2026-10-14 builder DONE: typecheck/lint/build PASS, smoke 301/200/sitemap OK → reviewer r1 running
 - 2026-10-14 reviewer STRICT PASS r1; primary rebuild PASS + curl 301×3/200×2/404 OK; commit
+- 2026-10-14 spec-publisher DONE 4.0.0 / scope v47; close-out commit

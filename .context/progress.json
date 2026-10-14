@@ -4,10 +4,10 @@
     "type": "feature",
     "slug": "remove-bao-ha-anonymize-oc-eo",
     "phaseTask": "close-out",
-    "step": "spec-publisher",
-    "status": "ready",
+    "step": "close-out",
+    "status": "done",
     "journal": ".context/runs/feature-remove-bao-ha-anonymize-oc-eo-phase-1-task-02.md",
-    "note": "CR-025 task-01+02 done, chờ spec-publisher + close-out"
+    "note": "CR-025 done — spec 4.0.0 · scope v47"
   },
   "features": [
     {
@@ -1128,14 +1128,14 @@
     },
     {
       "slug": "remove-bao-ha-anonymize-oc-eo",
-      "status": "in_progress",
-      "changeFile": "spec/changes/2026-10-14-remove-bao-ha-anonymize-oc-eo.md",
+      "status": "done",
+      "changeFile": "spec/changes/archive/2026-10-14-remove-bao-ha-anonymize-oc-eo.md",
       "classification": "REMOVE + MODIFY (content)",
       "tasks": {
         "phase-1-task-01": "done",
         "phase-1-task-02": "done"
       },
-      "note": "CR-025 — bỏ case study Bảo Hà + ẩn địa danh Óc Eo (slug heritage-site-ai-camera, redirect 301)",
+      "note": "CR-025 — bỏ case study Bảo Hà + ẩn địa danh Óc Eo (slug heritage-site-ai-camera, redirect 301); spec 3.15.0 → 4.0.0 (MAJOR) · scope v47; en 404 → 500 pre-existing ghi CR-026",
       "updatedAt": "2026-10-14",
       "reviewer": {
         "result": "PASS",
