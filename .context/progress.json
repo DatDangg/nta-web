@@ -4,10 +4,10 @@
     "type": "feature",
     "slug": "content-database",
     "phaseTask": "phase-2",
-    "step": "spec_validator",
-    "status": "running",
+    "step": "checkpoint",
+    "status": "awaiting_approval",
     "journal": ".context/runs/feature-content-database-phase-2-task-02.md",
-    "note": "spec-validator phase 2 — cancel → redo"
+    "note": "Chờ user duyệt checkpoint phase 2"
   },
   "features": [
     {
@@ -1181,7 +1181,7 @@
       },
       "currentPhase": 2,
       "inProgressTask": null,
-      "note": "P2-T02 done: content-repo (version/rollback/xoá mềm, I-1..I-8), CLI, migration 0001 additive. Tiếp: spec-validator phase 2 → checkpoint user.",
+      "note": "Phase 2 done (spec-validator PASS). CHỜ user duyệt checkpoint phase 2 trước phase 3.",
       "updatedAt": "2026-10-15",
       "specValidator": {
         "result": "PASS",
@@ -1204,6 +1204,11 @@
         "result": "PASS",
         "report": ".context/review-reports/feature-content-database-phase-1-spec-validation.md",
         "note": "2 MAJOR (runbook secret, migrate thử trên DB restore) gộp vào P2-T01; MINOR-1 → P2-T02"
+      },
+      "phase2SpecValidator": {
+        "result": "PASS",
+        "report": ".context/review-reports/feature-content-database-phase-2-spec-validation.md",
+        "note": "4 MINOR: xoá mềm bản ghi bắt buộc/1 locale không chặn; I-3 chéo bản ghi khi đổi group/đồng thời; backup trước import/rollback prod chỉ ở runbook; lịch sử bất biến tầng app"
       }
     }
   ],

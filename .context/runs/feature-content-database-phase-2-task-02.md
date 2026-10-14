@@ -28,3 +28,4 @@ batchQueue: []
 - 2026-10-15T01:30+07:00 ▶ START builder phase-2-task-02.
 - 2026-10-15 ✅ DONE builder (hết step limit; tự báo BLOCKED do docker build --target builder FAIL). change-request kiểm: build --target builder FAIL cả trên clean HEAD (git archive e202ffc) với trang ngẫu nhiên → lỗi môi trường/flaky có sẵn; docker compose build nta-web (như CI) trên working tree PASS 61/61. Test 54 (+8 DB) PASS, typecheck/lint PASS, migration 0001 additive. ▶ START reviewer round 1.
 - 2026-10-15 ✅ DONE reviewer round 1 STRICT PASS (5 MINOR; MINOR-1 path runbook sửa inline). Close-out.
+- 2026-10-15 commit 7e6fdb3 pushed. ✅ DONE spec-validator phase 2 PASS (4 MINOR). DỪNG checkpoint phase_done phase 2.
