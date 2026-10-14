@@ -4,7 +4,9 @@
 //   npm run db:cli -- history <id | collection/locale/slug>
 //   npm run db:cli -- rollback <id | collection/locale/slug> --to <N> --expected-version <M> [--note "..."] [--confirm-prod]
 // `show`/`history` tìm cả bản ghi đã xoá mềm. Lệnh ghi (rollback) trên DB prod cần --confirm-prod (giống import-seed).
-// (Lệnh revalidate thêm ở P3-T03.) Không in DATABASE_URL ra log.
+//   npm run db:cli -- revalidate --collection post [--slug x] | --all   (P3-T03: gọi POST /api/revalidate, không cần DATABASE_URL)
+//     URL endpoint từ REVALIDATE_URL (vd http://127.0.0.1:3005/api/revalidate), secret từ REVALIDATE_SECRET.
+// Không in DATABASE_URL / REVALIDATE_SECRET ra log.
 import { userInfo } from "node:os";
 import { parseArgs } from "node:util";
 import { closeDb, getDb, type Database } from "../../src/db/client";
@@ -21,7 +23,7 @@ import {
 import type { ContentEntry } from "../../src/db/schema";
 import { isProductionDatabaseUrl } from "./seed-db";
 
-const USAGE = "dùng: db:cli -- list|show|history|rollback ... (xem đầu file tools/db/content-cli.ts / docs/runbook/db.md §9)";
+const USAGE = "dùng: db:cli -- list|show|history|rollback|revalidate ... (xem đầu file tools/db/content-cli.ts / docs/runbook/db.md §9)";
 
 const OPTIONS = {
   collection: { type: "string" },
@@ -31,6 +33,8 @@ const OPTIONS = {
   "expected-version": { type: "string" },
   note: { type: "string" },
   "confirm-prod": { type: "boolean" },
+  slug: { type: "string" },
+  all: { type: "boolean" },
 } as const;
 
 type CliValues = ReturnType<typeof parseArgs<{ options: typeof OPTIONS; allowPositionals: true }>>["values"];
@@ -88,7 +92,40 @@ async function runRollback(db: Database, target: string | undefined, values: Cli
   console.log(`[rollback] OK — ${formatEntryLine(result.entry)}`);
 }
 
+function revalidateBody(values: CliValues): { all: true } | { collection: string; slug?: string } {
+  if (values.all) {
+    if (values.collection !== undefined || values.slug !== undefined) throw new UsageError("--all không đi kèm --collection/--slug");
+    return { all: true };
+  }
+  if (!values.collection) throw new UsageError("revalidate cần --collection <c> [--slug <s>] hoặc --all");
+  return values.slug === undefined ? { collection: values.collection } : { collection: values.collection, slug: values.slug };
+}
+
+// Gọi endpoint thay vì revalidateTag trực tiếp: cache nằm trong process Next đang chạy, CLI là process khác.
+async function runRevalidate(values: CliValues): Promise<number> {
+  const body = revalidateBody(values);
+  const url = process.env.REVALIDATE_URL;
+  const secret = process.env.REVALIDATE_SECRET;
+  if (!url || !secret) {
+    console.error("REVALIDATE_URL và REVALIDATE_SECRET phải được đặt (đặt secret bằng read -rs, không gõ trên dòng lệnh)");
+    return 2;
+  }
+  const response = await fetch(url, {
+    method: "POST",
+    headers: { "content-type": "application/json", "x-revalidate-secret": secret },
+    body: JSON.stringify(body),
+  });
+  const text = await response.text();
+  if (!response.ok) {
+    console.error(`[revalidate] FAIL — HTTP ${response.status} ${text}`);
+    return 1;
+  }
+  console.log(`[revalidate] OK — ${text}`);
+  return 0;
+}
+
 async function runCommand(command: string | undefined, args: string[], values: CliValues): Promise<number> {
+  if (command === "revalidate") return runRevalidate(values);
   const connectionString = process.env.DATABASE_URL;
   if (!connectionString) {
     console.error("DATABASE_URL is not set");

@@ -3,11 +3,11 @@
   "activeWorkItem": {
     "type": "feature",
     "slug": "content-database",
-    "phaseTask": "phase-3-task-02",
+    "phaseTask": "phase-3-task-03",
     "step": "closeout",
     "status": "done",
-    "journal": ".context/runs/feature-content-database-phase-3-task-02.md",
-    "note": "CR-031 P3-T02 done — dừng, chưa chạy P3-T03"
+    "journal": ".context/runs/feature-content-database-phase-3-task-03.md",
+    "note": "CR-031 P3-T03 done — tiếp P3-T04"
   },
   "features": [
     {
@@ -1181,7 +1181,7 @@
       },
       "currentPhase": 3,
       "inProgressTask": null,
-      "note": "P3-T02 done (hướng C, user chốt): registry async đọc DB sau cờ, build không cần DB, vi render theo request trên data cache (~34ms), en ISR; htmlLimitedBots /.*/; memo MDX chế độ file prod. R-16 sửa ngưỡng TTFB ≤50ms. Dừng — P3-T03 khi user bảo. Không bật db trước P3-T03.",
+      "note": "P3-T03 done: POST /api/revalidate (secret sha256+timingSafeEqual, 503/401/400/429, revalidateTag đủ cho vi data cache + en ISR) + CLI revalidate. Tiếp theo P3-T04 (next-intl messages + company-info DB).",
       "updatedAt": "2026-10-14",
       "specValidator": {
         "result": "PASS",
@@ -1194,13 +1194,14 @@
         "phase-2-task-01",
         "phase-2-task-02",
         "phase-3-task-01",
-        "phase-3-task-02"
+        "phase-3-task-02",
+        "phase-3-task-03"
       ],
       "reviewer": {
         "result": "PASS",
         "level": "STRICT",
-        "round": 2,
-        "report": ".context/review-reports/feature-content-database-phase-3-task-02-round-2-review.md"
+        "round": 1,
+        "report": ".context/review-reports/feature-content-database-phase-3-task-03-round-1-review.md"
       },
       "phase1SpecValidator": {
         "result": "PASS",

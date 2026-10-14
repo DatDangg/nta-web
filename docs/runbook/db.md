@@ -239,6 +239,8 @@ npm run db:cli -- rollback solution/vi/crm --to 1 --expected-version 2 [--note "
 - Snapshot được validate lại như lúc sửa (required fields, I-2/I-3/I-4/I-6/I-7) — sai → từ chối, exit 1.
 - DB prod: lệnh ghi (`rollback`) **từ chối** nếu thiếu `--confirm-prod`; trước đó backup
   `docker exec nta-db-backup /scripts/backup.sh pre-migrate-before-rollback-<UTC>`. `list/show/history` chỉ đọc.
-- Sau rollback trên prod, web chỉ thấy nội dung mới khi revalidate (lệnh `revalidate` thêm ở P3-T03) hoặc deploy lại.
+- Sau rollback trên prod, web chỉ thấy nội dung mới khi revalidate hoặc deploy lại:
+  `npm run db:cli -- revalidate --collection solution [--slug crm]` (hoặc `--all`) — gọi `POST /api/revalidate`; cần `REVALIDATE_URL`
+  (vd `http://127.0.0.1:3005/api/revalidate`) + `REVALIDATE_SECRET` (đặt bằng `read -rs`, CLI không in secret). Sửa 1 bản ghi → nên revalidate cả collection (danh sách dùng tag collection).
 - Xoá bản ghi có URL công khai (post, solution, product, case_study) → write-path từ chối nếu thiếu cờ xác nhận (I-8); luôn cần thêm redirect 301
   trong `next.config.ts` + deploy. Đổi slug = tạo bản ghi mới + xoá mềm bản cũ (không đổi khoá tại chỗ).
