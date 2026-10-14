@@ -4,6 +4,11 @@ Workflow `.github/workflows/ai-news.yml` — mỗi thứ 2 lúc 08:00 giờ VN (
 tin AI 7 ngày, nhờ OpenCode Go viết 2 bài `src/content/blog/{vi,en}/ai-weekly-YYYY-wNN.mdx` (category `ai-tech`),
 build PASS → commit thẳng `main` → dispatch `deploy.yml`. Code: `tools/ai-news/` (xem `tools/ai-news/README.md`).
 
+> ⚠️ **Từ 14/10/2026 prod đọc nội dung từ DB** (`CONTENT_SOURCE=db`, CR-031 — `docs/runbook/cutover-content-db.md`). Workflow này **vẫn chỉ ghi file**
+> `src/content/blog/*` (`.github/workflows/ai-news.yml` bước commit) → bài mới **không tự hiện trên website** sau deploy.
+> Tạm thời, sau mỗi lần workflow đăng bài: chạy **Content ops** `import-seed` (confirm `IMPORT-SEED-PROD` — chỉ chèn bản ghi chưa có, không ghi đè bản đã sửa;
+> bước parity sau đó có thể đỏ nếu DB đã được sửa qua bot/CLI — không phải lỗi import) → rồi `revalidate-all`. Cho workflow ghi thẳng DB: cần change request riêng (chưa có).
+
 Chạy trên self-hosted runner `nta-web` nhưng **trong container `node:22-trixie`** (Python 3.13 + Node 22 + git) —
 không cài gì lên host VPS. Bước cuối `chown` trả quyền workspace cho user runner (container chạy root).
 

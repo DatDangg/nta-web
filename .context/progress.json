@@ -3,11 +3,11 @@
   "activeWorkItem": {
     "type": "feature",
     "slug": "content-database",
-    "phaseTask": "phase-4-task-01",
-    "step": "cutover",
-    "status": "awaiting",
-    "journal": ".context/runs/feature-content-database-phase-4-task-01.md",
-    "note": "CR-031 P4-T01 B1–B9 xong (prod đọc DB) — chờ B10 sau 03:00 VN"
+    "phaseTask": "phase-5-task-01",
+    "step": "closeout",
+    "status": "done",
+    "journal": ".context/runs/feature-content-database-phase-5-task-01.md",
+    "note": "CR-031 P5-T01 done — chờ B10 + quyết định P5-T02; CR-034 ưu tiên cao"
   },
   "features": [
     {
@@ -1179,10 +1179,10 @@
         "phase-3-task-04": "pending",
         "phase-3-task-05": "pending"
       },
-      "currentPhase": 4,
+      "currentPhase": 5,
       "inProgressTask": null,
-      "note": "P4-T01: prod đã cutover CONTENT_SOURCE=db 14/10 16:38 UTC, B1–B9 đạt; chờ B10 (daily backup + restore thử) → close-out → P5-T01.",
-      "updatedAt": "2026-10-14",
+      "note": "P5-T01 docs done. Còn: P4-T01 B10 (daily backup + restore thử, sau 20:00 UTC), P5-T02 (bỏ cờ, chờ ổn định ≥1 ngày + user đồng ý), close-out CR (spec-validator phase 4/5, spec-publish test-scope v49, archive). CR-034 AI news ưu tiên cao.",
+      "updatedAt": "2026-10-15",
       "specValidator": {
         "result": "PASS",
         "round": 2,
@@ -1197,13 +1197,14 @@
         "phase-3-task-02",
         "phase-3-task-03",
         "phase-3-task-04",
-        "phase-3-task-05"
+        "phase-3-task-05",
+        "phase-5-task-01"
       ],
       "reviewer": {
         "result": "PASS",
-        "level": "STRICT",
+        "level": "NORMAL",
         "round": 1,
-        "report": ".context/review-reports/feature-content-database-phase-4-task-01-round-1-review.md"
+        "report": ".context/review-reports/feature-content-database-phase-5-task-01-round-1-review.md"
       },
       "phase1SpecValidator": {
         "result": "PASS",

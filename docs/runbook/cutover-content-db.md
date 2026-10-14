@@ -1,5 +1,11 @@
 # Runbook — Cutover nội dung sang PostgreSQL (CR-031 P4-T01 phần B)
 
+> **Trạng thái: ĐÃ CUTOVER 14/10/2026.** Variable `CONTENT_SOURCE=db` + Deploy `490f8e1` lúc 16:38 UTC. Đạt B1–B9
+> (import 136/136 + parity PASS, upload-smoke 2 lần, sitemap 52/52 200, DB dừng ngắn trang cache vẫn 200, log 0 dòng `[content-store]`/`[content-shape]`) —
+> bằng chứng `tasks/feature-content-database/phase-4-task-01.md`. **Còn B10** (user: `daily-*.dump` đầu tiên + diễn tập restore).
+> Sửa/rollback nội dung trên prod qua bot dời sang CR-030. Runbook giữ lại cho: lùi về `file` (§4), chạy lại parity/revalidate/backup qua Content ops (§0), dựng lại môi trường.
+> Bỏ hẳn cờ: `tasks/feature-content-database/phase-5-task-02.md` (chờ ổn định ≥ 1 ngày + user đồng ý). Backup ops dùng chung vòng giữ với backup trước-deploy → CR-033 (`db.md` §3).
+
 > Chuyển web từ đọc file (`src/content`, messages, company-info) sang đọc DB `nta-db`. **Thẳng DB prod, không staging** (user chấp nhận).
 > Mọi bước chạy bằng **GitHub Actions** (self-hosted runner trên VPS) — không cần SSH, secret không lộ. Vận hành DB chung: `docs/runbook/db.md`.
 

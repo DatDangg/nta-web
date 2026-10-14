@@ -163,7 +163,7 @@ bản cũ (bản cũ có 56px padding mỗi phía, không đổi bề rộng n�
 | DentGo | `01-tong-quan-crop` | 2056×600 | 3.427 | (chưa dùng) | 6 thẻ chỉ số ca làm |
 | LMS | `04-danh-gia-ai-tt27-crop` | 2656×2296 | 1.157 | `compliance.items[0].image` | Ảnh ô lớn bento |
 
-> Tỉ lệ crop CRM phải khớp `ratio` trong `src/content/solutions/{vi,en}/crm.mdx` —
+> Tỉ lệ crop CRM phải khớp `ratio` trong bản ghi `solution/{vi,en}/crm` (DB, từ CR-031; seed gốc `src/content/solutions/{vi,en}/crm.mdx`) —
 > `ShotImage` dùng `ratio` để chọn nhánh hiển thị, sai số → ảnh bị cắt/fade oan.
 
 **Ngưỡng nhánh A/B vẫn là 1.0**, không đổi. Các trường hợp biên vẫn giữ nguyên tính chất:

@@ -21,21 +21,21 @@ Production:  https://ntavietnam.tech/api
 
 ## Phạm vi API (NTA Website v1)
 
-Website v1 là **content-driven, không có đăng nhập người dùng**. API tối giản:
+Website **không có đăng nhập người dùng**. Route thật (`src/app/api/**`, `src/app/uploads/**`):
 
 | Method | Endpoint | Mục đích | Auth |
 |--------|----------|----------|------|
-| POST | `/api/contact` | Nhận form liên hệ (tên, email, SĐT, nội dung) | công khai + rate-limit |
+| POST | `/api/contact` | Nhận form liên hệ (tên, email, SĐT, nội dung) → forward `CONTACT_FORM_TARGET` (không lưu DB) | công khai + rate-limit |
 | GET | `/api/health` | Health check / uptime | công khai |
-| GET | `/api/posts` | Danh sách bài blog (nếu cần động; v1 có thể là static) | công khai |
-| GET | `/api/case-studies` | Danh sách case study (nếu cần động) | công khai |
+| POST | `/api/revalidate` | Làm mới data cache nội dung DB theo tag (CR-031) | header `x-revalidate-secret` + rate-limit |
+| GET | `/uploads/<sha256>.<ext>` | Phục vụ ảnh upload từ volume (CR-031) | công khai |
 
-> Hầu hết nội dung (trang tĩnh, giải pháp, sản phẩm, case study) render **SSG/SSR** từ file nội dung
-> trong repo — không cần API riêng. Chỉ form liên hệ + health là bắt buộc.
+> Không có API đọc nội dung (posts/case studies…): trang nội dung render phía server, đọc PostgreSQL qua data cache có tag
+> (prod `CONTENT_SOURCE=db` từ 14/10/2026) — kiến trúc ở `docs/DESIGN.md` § Kiến trúc nội dung & render.
 
 ## Authentication
 
-Không có auth người dùng ở v1. Chi tiết hardening form/rate-limit: `skills/security/`.
+Không có auth người dùng. `/api/revalidate` dùng shared secret `REVALIDATE_SECRET` (máy-với-máy). Chi tiết hardening form/rate-limit: `skills/security/`.
 
 ### POST /api/contact — request
 
@@ -72,4 +72,41 @@ rút gọn (name/email/message) ở trang chi tiết giải pháp vẫn hợp l�
 { "status": "ok", "timestamp": "2026-10-07T15:00:00.000Z" }
 ```
 
-> Chi tiết route/validation thật ở `src/app/api/**` khi code được dựng — **code là source of truth**.
+
+### POST /api/revalidate — làm mới data cache nội dung DB (CR-031 P3-T03, spec R-15a)
+
+Code: `src/app/api/revalidate/route.ts` → `src/lib/api/revalidate.ts` (`handleRevalidateRequest`); tag: `src/lib/content/cache-tags.ts`.
+Người gọi: bot CR-030, `npm run db:cli -- revalidate …`, workflow Content ops `revalidate-all`. Chỉ `POST` (method khác → 405). Middleware next-intl không chạy cho `/api/*`.
+
+- **Header:** `x-revalidate-secret: <REVALIDATE_SECRET>` (so constant-time sau khi trim 2 phía).
+- **Body (JSON, đúng 1 trong 2 dạng; key thừa / trộn dạng → 400):**
+
+```jsonc
+{ "all": true }                                   // → tag "content"
+{ "collection": "post" }                           // → tag "content:post"
+{ "collection": "post", "slug": "ten-bai-viet" }   // → tag "content:post" + "content:post:ten-bai-viet"
+// collection ∈ CONTENT_COLLECTIONS (src/db/schema.ts); slug khớp /^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$/
+```
+
+- **Response** (mọi status đều `Cache-Control: no-store`), thứ tự kiểm: rate-limit → secret server → secret request → body:
+
+| Status | Body | Khi nào |
+|---|---|---|
+| 200 | `{ "status": "ok", "revalidated": ["content:post", "content:post:x"] }` | thành công |
+| 400 | `{ "status": "error", "message": "invalid_json" \| "invalid_body" \| "unknown_collection" }` | body không phải JSON / sai dạng / collection ngoài whitelist |
+| 401 | `{ "status": "error", "message": "unauthorized" }` | thiếu/sai header secret |
+| 429 | `{ "status": "error", "message": "too_many_requests" }` | > 30 request / 60 s / IP (`src/lib/api/rate-limit.ts`, in-memory) |
+| 503 | `{ "status": "error", "message": "unavailable" }` | server chưa đặt `REVALIDATE_SECRET` (log lỗi phía server) |
+
+### GET /uploads/&lt;sha256&gt;.&lt;ext&gt; — ảnh upload (CR-031 P3-T05, R-16d)
+
+Code: `src/app/uploads/[...path]/route.ts` → `src/lib/uploads/serve-upload.ts`; đọc `UPLOAD_DIR` (prod `/app/uploads` ← `/opt/nta-web-data/uploads`).
+Không có API upload HTTP — ảnh được lưu bằng `saveImage` (`src/lib/uploads/save-image.ts`, CLI `db:cli -- upload`, bot CR-030).
+
+- Đường dẫn hợp lệ: đúng 1 segment khớp `^[0-9a-f]{64}\.(jpg|png|webp)$`, file thường nằm ngay trong `realpath(UPLOAD_DIR)`.
+- **200:** body ảnh, `Content-Type` theo đuôi, `Cache-Control: public, max-age=31536000, immutable` (tên = hash nội dung), `X-Content-Type-Options: nosniff`.
+- **404:** tên sai mẫu (`..`, `%2e%2e`, `%2F`, `\`, chữ hoa, đuôi lạ), không tồn tại, symlink ra ngoài, không phải file thường —
+  `text/plain`, `Cache-Control: no-store`, `nosniff`. Method khác GET → 405.
+- Xoá mềm bản ghi `asset` không xoá file → URL vẫn 200. `next/image` tối ưu được (`images.localPatterns` gồm `/uploads/**` — `next.config.ts`).
+
+> Chi tiết route/validation thật ở `src/app/api/**`, `src/app/uploads/**`, `src/lib/api/**`, `src/lib/uploads/**` — **code là source of truth**.

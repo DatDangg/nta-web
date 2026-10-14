@@ -15,11 +15,12 @@ Classification: **ADDITIVE + MODIFY (kiến trúc)** · Risk: **HIGH** · Review
 | 8 | `phase-3-task-04` Chữ giao diện next-intl + company-info đọc DB (quyết định #9) | 3,5,7 | không |
 | 9 | `phase-3-task-05` Lưu trữ ảnh upload: volume + `/uploads` + `next/image` không build lại + collection `asset` (quyết định #10) | 2,4 | không (thư mục upload gộp ở task 2) |
 | 10 | `phase-4-task-01` Parity toàn site + cutover prod (backup → migrate → import → deploy → smoke + upload ảnh) | 2–9 | **có** — duyệt deploy prod + xác nhận chạy import |
-| 11 | `phase-5-task-01` Doc reconcile (ERD, DESIGN, API_SPEC, runbook, content-bot, src/content README) | 10 | không |
+| 11 | `phase-5-task-01` Doc reconcile (ERD, DESIGN, API_SPEC, runbook, content-bot → ghi yêu cầu vào CR-030, src/content README) | 10 | không |
+| 12 | `phase-5-task-02` Bỏ cờ `CONTENT_SOURCE` + đường đọc file ở web (MODIFY · HIGH · STRICT; GIỮ messages JSON + `COMPANY_CONTACT` làm dự phòng) | 10, 11 | **có** — prod `db` ổn định ≥ 1 ngày từ 14/10 16:38 UTC + user đồng ý |
 
-Thứ tự: 1 → 2 → … → 11 (cập nhật 14/10/2026: thêm P3-T04, P3-T05 theo quyết định #9/#10). Task 1 **done** (`8084015`). Hết mỗi phase → `spec-validator` + human checkpoint.
+Thứ tự: 1 → 2 → … → 12 (cập nhật 14/10/2026: thêm P3-T04, P3-T05 theo quyết định #9/#10). Task 1 **done** (`8084015`). Hết mỗi phase → `spec-validator` + human checkpoint.
 Phần thao tác VPS của task 2 (secret) chờ user nhưng không chặn task 3–7 (dev dùng Postgres Docker local).
-Production **không đổi nguồn nội dung** cho tới task 8 (cờ `CONTENT_SOURCE` mặc định `file` — xem mục Lưu ý push).
+Production **không đổi nguồn nội dung** cho tới task cutover (cờ `CONTENT_SOURCE` mặc định `file` — xem mục Lưu ý push). **Cập nhật 14/10/2026:** cutover xong ở phase-4-task-01 (task 10), prod = `db`; "task 8" trong các ghi chú bên dưới = task cutover.
 
 ### Lưu ý push (vì `auto_push_after_pass: true` → push main = CI deploy) — sau spec-validator round 1 (M1)
 - **Cờ `CONTENT_SOURCE=file|db` (mặc định `file`)**: task 5–7 thêm đường đọc DB sau cờ → mọi commit push an toàn,

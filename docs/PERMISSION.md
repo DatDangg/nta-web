@@ -23,7 +23,7 @@ Với website tĩnh + 1 endpoint công khai:
 3. **`honeypot`** — trường ẩn phải rỗng; nếu có giá trị → coi là bot, trả 200 giả (không gửi).
 4. **handler** — forward email/lưu tạm, trả `{ status: "ok" }`.
 
-Các route còn lại (trang nội dung) không cần guard — render tĩnh/SSR công khai.
+Các route còn lại (trang nội dung, `GET /uploads/*`) không cần guard — render phía server công khai (đọc DB qua data cache, CR-031). `POST /api/revalidate` dùng shared secret `REVALIDATE_SECRET` + rate-limit (`docs/API_SPEC.md`).
 
 ## Route ↔ permission matrix
 

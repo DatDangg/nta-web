@@ -5,6 +5,11 @@
 > Mọi lệnh dưới chạy **trên VPS**, đứng trong workspace runner:
 > `cd /opt/actions-runner-nta-web/_work/nta-web/nta-web` (hoặc bản clone thủ công).
 
+**Trạng thái (14/10/2026):** prod **đã cutover** — web đọc nội dung từ `nta-db` từ 16:38 UTC (Variable `CONTENT_SOURCE=db`;
+import 136/136, parity PASS — `docs/runbook/cutover-content-db.md`, `tasks/feature-content-database/phase-4-task-01.md`).
+Từ đây **DB là nguồn sự thật** của nội dung: mất DB = mất mọi chỉnh sửa sau cutover → backup/restore dưới đây là thao tác sống còn.
+Còn chờ: B10 (user kiểm `daily-*.dump` đầu tiên + diễn tập restore §4a + §5b).
+
 ## 0. Thành phần
 
 | Service | Vai trò | Ghi chú |
@@ -12,7 +17,7 @@
 | `nta-db` | `postgres:16.15-alpine`, DB `nta_web`, user `nta` | volume `nta-db-data` (tên cố định), RAM ≤ 512 MB, healthcheck `pg_isready` |
 | `nta-db-backup` | sidecar backup hằng ngày 20:00 UTC (03:00 VN) | chạy root; ghi `/opt/nta-web-data/db-backups`; giữ 14 bản mỗi loại |
 | `nta-migrate` | một-lần (profile `tools`): gate destructive + migrate Drizzle | CI: `docker compose run --rm nta-migrate check\|migrate`; tay: §5 |
-| `nta-web` | nhận `DATABASE_URL`, `REVALIDATE_SECRET`, `UPLOAD_DIR=/app/uploads` | mount `/opt/nta-web-data/uploads`; `depends_on nta-db` (healthy); `CONTENT_SOURCE` từ GitHub Variable (mặc định `file`) |
+| `nta-web` | nhận `DATABASE_URL`, `REVALIDATE_SECRET`, `UPLOAD_DIR=/app/uploads` | mount `/opt/nta-web-data/uploads`; `depends_on nta-db` (healthy); `CONTENT_SOURCE` từ GitHub Variable (compose mặc định `file`; **prod = `db` từ 14/10/2026**) |
 | `nta-tools` | một-lần (profile `tools`): import seed / parity / `db:cli` trong mạng compose, uid 1001 | chạy qua workflow Content ops — `docs/runbook/cutover-content-db.md` |
 
 Thư mục host (override qua env `NTA_BACKUP_DIR`, `NTA_UPLOADS_DIR`):
@@ -90,7 +95,12 @@ docker logs --tail 50 nta-db-backup                      # log vòng lặp sidec
 docker ps --filter name=nta                              # nta-db phải (healthy)
 ```
 
-File: `daily-<UTC>.dump` (pg_dump -Fc), `uploads-<UTC>.tar.gz`, `pre-migrate-<sha12>-<run_id>-<attempt>.dump`. Mỗi loại giữ 14 bản mới nhất.
+File: `daily-<UTC>.dump` (pg_dump -Fc), `uploads-<UTC>.tar.gz`, `pre-migrate-<sha12>-<run_id>-<attempt>.dump`,
+`pre-migrate-ops-<lệnh>-<UTC>-<run>.dump` (workflow Content ops tự backup trước lệnh ghi). Mỗi loại giữ 14 bản mới nhất (`deploy/db/backup.sh` `rotate`).
+
+> ⚠️ **CR-033 (pending):** hiện rotate tính theo glob `pre-migrate-*` → backup ops `pre-migrate-ops-*` **dùng chung vòng 14 bản** với backup trước-deploy
+> `pre-migrate-<sha>-*`; mỗi lần chạy Content ops có thể xoá 1 bản trước-deploy cũ (`spec/changes/2026-10-14-ops-backup-rotation.md`).
+> Trước khi CR-033 xong: hạn chế chạy Content ops liên tiếp; cần giữ bản trước-deploy cũ → copy ra ngoài thư mục trước.
 Chạy backup ngay (không chờ lịch): `docker exec nta-db-backup /scripts/backup.sh daily`.
 
 **Bỏ lỡ lịch backup:** sidecar ngủ tới 20:00 UTC; nếu container bị restart/recreate (deploy, reboot) quanh giờ đó thì có thể **không có**
@@ -127,7 +137,21 @@ docker exec nta-db-backup sh -c \
 docker exec nta-db psql -U nta -d nta_web -c 'select count(*) from content_entries'
 ```
 
-Restore ảnh upload: `tar -xzf /opt/nta-web-data/db-backups/uploads-<UTC>.tar.gz -C /opt/nta-web-data/uploads && chown -R 1001:1001 /opt/nta-web-data/uploads`.
+### 4c. Ảnh upload (thư mục `/opt/nta-web-data/uploads`)
+
+- Backup: `daily` của sidecar tạo kèm `uploads-<UTC>.tar.gz` (tar toàn thư mục, giữ 14 bản). Ảnh tên = sha256 nội dung → không bao giờ bị ghi đè; restore chỉ thêm lại file thiếu.
+- Restore (không cần dừng web; route `/uploads` đọc file mỗi request):
+
+```sh
+tar -tzf /opt/nta-web-data/db-backups/uploads-<UTC>.tar.gz | head          # xem trước
+tar -xzf /opt/nta-web-data/db-backups/uploads-<UTC>.tar.gz -C /opt/nta-web-data/uploads
+chown -R 1001:1001 /opt/nta-web-data/uploads                                 # owner = user nextjs (uid 1001) trong image
+```
+
+- Restore DB (4b) và ảnh nên lấy **cùng ngày** (`daily-<UTC>.dump` + `uploads-<UTC>.tar.gz` cùng mốc): bản ghi `asset` trỏ tới file không có → ảnh vỡ (I-7).
+- Asset **xoá mềm** chỉ ẩn bản ghi; file vật lý vẫn còn → `/uploads/<hash>.<ext>` vẫn trả 200 cho ai có URL. Muốn gỡ hẳn ảnh nhạy cảm: xoá file trên volume
+  bằng tay (root) **và** chấp nhận các bản `uploads-*.tar.gz` cũ vẫn chứa ảnh tới khi bị rotate.
+- `upload-smoke` (Content ops) để lại 1 asset `og-default.png` (hash `c5faaa8c…`) làm bằng chứng cutover — vô hại.
 
 Đã diễn tập 14/10/2026 (local Docker, postgres 16.15): 3 `content_entries` + 3 `content_versions` → dump → restore DB tạm khớp số bản ghi;
 xoá dữ liệu rồi chạy lệnh 4b → khôi phục đủ 3/3/1 (`__drizzle_migrations`).

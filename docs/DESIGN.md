@@ -227,3 +227,61 @@ Font stack: `-apple-system, BlinkMacSystemFont, "SF Pro Display", Inter, "Segoe 
 - **Tablet:** footer 2 cột.
 - **Desktop:** header nav ngang; footer 4 cột.
 - **Large:** footer 4–5 cột, container max-width.
+
+---
+
+## Kiến trúc nội dung & render (current-state — CR-031, cập nhật 14/10/2026)
+
+> As-built, kèm pointer code. Quyết định + số đo: `.context/decisions.md` (CR-031 P1-T01 … P3-T05). Schema: `docs/ERD.md`. API: `docs/API_SPEC.md`.
+
+### Nguồn nội dung
+- **Prod đọc PostgreSQL từ 14/10/2026 16:38 UTC** (cutover P4-T01 — `docs/runbook/cutover-content-db.md`, bằng chứng `tasks/feature-content-database/phase-4-task-01.md` B1–B9).
+- Cờ server-only `CONTENT_SOURCE=file|db` (`src/lib/content/source.ts`): đọc env **lúc request**; chưa đặt/rỗng → `file`; giá trị khác → ném lỗi (không fallback âm thầm).
+  Prod lấy từ GitHub **Variable** `CONTENT_SOURCE` (hiện = `db`) qua `.github/workflows/deploy.yml` (bước *Validate CONTENT_SOURCE*) → `docker-compose.yml` (`CONTENT_SOURCE: ${CONTENT_SOURCE:-file}`).
+  Đổi cờ = đổi variable + chạy lại Deploy, không build lại. Bỏ cờ + đường đọc file: `tasks/feature-content-database/phase-5-task-02.md` (chưa làm).
+- `file` = đọc `src/content/*` + hằng TS như trước CR-031 (giữ làm đường lùi); `db` = bảng `content_entries` (bản ghi còn sống).
+- `src/content` là **seed import ban đầu** (`src/content/README.md`), sửa file không đổi website khi cờ = `db`.
+
+### Luồng đọc DB
+1. Loader MDX `src/lib/content/load-mdx.ts` (post/solution/product/case_study/about), registry `src/lib/content/registry.ts`
+   (`getRegistrySlugs`, `getListing*`, `getHomeContent`, `getSolutionOverview`, `getDetailTiles`), chữ giao diện `src/i18n/request.ts`,
+   thông tin công ty `src/lib/contact/company-contact.ts` — tất cả chọn nguồn theo cờ.
+2. Chế độ `db` gọi `src/lib/content/store.ts` (server-only): `getEntries(collection, locale)` / `getEntry(collection, slug, locale)` bọc `unstable_cache`
+   (data cache Next), query thuần ở `src/db/content-read.ts` (lọc `deleted_at IS NULL`, sắp `sort_order` rồi slug).
+3. Dữ liệu đi qua **cùng** hàm validate/map/sort như chế độ file (required fields từ `REQUIRED_FIELDS` — `src/db/content-rules.ts`).
+4. DB lỗi → store **ném** `[content-store] Không đọc được nội dung …` (không trả rỗng): data cache không lưu kết quả lỗi → trang đã cache vẫn 200,
+   trang chưa cache 500, DB lên lại tự phục hồi (R-16).
+
+### Cache tag + revalidate
+- Tag (`src/lib/content/cache-tags.ts`): `content` (toàn bộ) · `content:<collection>` (mọi bản ghi + danh sách) · `content:<collection>:<slug>` (1 bản ghi).
+  Danh sách chỉ mang tag collection → sửa 1 bản ghi phải revalidate cả tag collection.
+- `POST /api/revalidate` (`src/app/api/revalidate/route.ts` → `src/lib/api/revalidate.ts`) gọi `revalidateTag`; bot/CLI gọi sau khi ghi DB
+  (`npm run db:cli -- revalidate …`, workflow Content ops `revalidate-all`). Contract: `docs/API_SPEC.md`.
+
+### Chiến lược render (P3-T02, hướng C)
+- `next build` **không prerender trang nội dung nào** → build image không cần DB ở cả 2 chế độ cờ: `generateStaticParams` trả `[]` ở
+  `src/app/[locale]/layout.tsx` và mọi route `[slug]`; `src/app/sitemap.ts` `dynamic = 'force-dynamic'`. Build chỉ prerender `/_not-found`, icon, `robots.txt`.
+- `/en/...` = ISR on-demand: render lần đầu rồi full route cache (`x-nextjs-cache: HIT`).
+- Tiếng Việt (không tiền tố) render **mỗi request** trên data cache có tag (cache hit không truy vấn DB; TTFB local ~34–35 ms ≤ 50 ms).
+  Lý do: next-intl `localePrefix: 'as-needed'` (`src/i18n/routing.ts`) → middleware rewrite `/x` → `/vi/x`; Next 15.5 chỉ coi ISR khi pathname gốc khớp
+  pattern `[locale]` hoặc đã prerender lúc build → URL bị rewrite luôn render động. Đổi sang `localePrefix: 'always'` sẽ đổi URL công khai/SEO — ngoài scope.
+- `next.config.ts` `htmlLimitedBots: /.*/`: tắt streaming metadata cho mọi client → title/canonical/hreflang/og luôn nằm trong `<head>` (bot không chạy JS).
+
+### Chữ giao diện + thông tin công ty (P3-T04)
+- `db` → messages = gộp các bản ghi `ui_messages/<locale>/<namespace>`; company-info = `company_info/<locale>/contact`.
+- **Gộp sâu DB đè lên file** (`src/lib/content/shape.ts` `mergeOverFile`, `src/lib/content/ui-data.ts`): key file có mà DB thiếu → dùng giá trị file + `console.warn`
+  (1 lần/process, ≤ 10 đường dẫn, tiền tố `[content-shape]`); sai kiểu / chuỗi rỗng / mảng rỗng → ném lỗi.
+- `src/i18n/messages/{vi,en}.json` và `COMPANY_CONTACT` (`src/lib/contact/company-info.ts`) **giữ lâu dài** làm dự phòng + chuẩn cấu trúc (không xoá cả khi bỏ cờ).
+
+### Ảnh upload (P3-T05, R-16d)
+- Lưu: `saveImage` (`src/lib/uploads/save-image.ts`) — JPEG/PNG/WebP theo magic bytes, ≤ 5 MB, cạnh ≤ 8192 px, tên = sha256 + đuôi, ghi file trước rồi
+  bản ghi `asset`; trùng hash → dùng lại. Gọi qua `npm run db:cli -- upload` / bot CR-030 (không có API upload HTTP).
+- Phục vụ: `GET /uploads/<sha256>.<ext>` (`src/app/uploads/[...path]/route.ts` → `src/lib/uploads/serve-upload.ts`) đọc `UPLOAD_DIR`
+  (compose: `/app/uploads` ← bind mount `/opt/nta-web-data/uploads`, owner 1001). `next/image`: `images.localPatterns` = `/images/**`, `/uploads/**` → tối ưu ảnh upload không build lại.
+- Xoá mềm asset không xoá file vật lý → URL hash vẫn trả 200.
+
+### Vận hành
+- Deploy (`.github/workflows/deploy.yml`): DB healthy → backup pre-migrate → gate destructive → migrate (`nta-migrate`, Dockerfile target `migrator`) → web.
+- Content ops (`.github/workflows/content-ops.yml`, chạy tay): `parity` · `backup` · `import-seed` · `revalidate-all` · `upload-smoke` qua service `nta-tools`
+  (Dockerfile target `content-tools`), cùng concurrency với deploy, lệnh ghi cần confirm + tự backup trước.
+- Backup hằng ngày (sidecar `nta-db-backup`): `daily-*.dump` + `uploads-*.tar.gz`. Runbook: `docs/runbook/db.md`.

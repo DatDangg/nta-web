@@ -107,7 +107,9 @@ curl -sI https://ntavietnam.tech/        | head -1   # 200 — KHÔNG đổi hà
 | `HOST_PORT` | runtime | mặc định `3005` |
 | `POSTGRES_PASSWORD` | secret, **bắt buộc** | mật khẩu DB `nta-db` (chỉ chữ + số) → ghép `DATABASE_URL` |
 | `REVALIDATE_SECRET` | secret, **bắt buộc** | `POST /api/revalidate` |
-| `NTA_BACKUP_DIR` / `NTA_UPLOADS_DIR` | runtime | mặc định `/opt/nta-web-data/db-backups` / `/opt/nta-web-data/uploads` |
+| `NTA_BACKUP_DIR` / `NTA_UPLOADS_DIR` | runtime | mặc định `/opt/nta-web-data/db-backups` / `/opt/nta-web-data/uploads` (owner `1001:1001`) |
+| `CONTENT_SOURCE` | runtime, GitHub **Variable** (không phải secret) | `file` (mặc định khi chưa đặt) / `db`. **Prod = `db` từ 14/10/2026** — đổi variable + chạy lại Deploy, không build lại ([`cutover-content-db.md`](cutover-content-db.md)) |
+| `DATABASE_URL` / `UPLOAD_DIR` | runtime (compose tự ghép) | `postgres://nta:<POSTGRES_PASSWORD>@nta-db:5432/nta_web` / `/app/uploads` |
 
 Secret repo (GitHub → Settings → Secrets and variables → Actions): `CONTACT_FORM_TARGET`, `POSTGRES_PASSWORD`, `REVALIDATE_SECRET`.
 
@@ -155,4 +157,5 @@ Không cần secret: dùng thẳng `docker ps` / `docker logs <container>` / `do
 ## 8. Database (`nta-db`) — backup / restore / migrate
 
 Xem [`docs/runbook/db.md`](db.md): secret (lệnh không cần secret / file env tạm), log backup, restore (DB tạm → prod), migrate tay,
-chạy thử migration trên bản restore (§5b), xử lý deploy đỏ do gate destructive, cảnh báo dung lượng, import seed + parity (§8).
+chạy thử migration trên bản restore (§5b), xử lý deploy đỏ do gate destructive, cảnh báo dung lượng, import seed + parity (§8),
+backup/restore ảnh upload (§4c). Prod đọc nội dung từ DB từ 14/10/2026 — lùi về file / Content ops: [`cutover-content-db.md`](cutover-content-db.md).
