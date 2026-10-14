@@ -5,13 +5,12 @@ import { buttonStyles } from '@/components/ui/Button';
 import { FocusMain } from '@/components/shared/FocusMain';
 import { SplitText } from '@/components/motion/SplitText';
 
-export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations('notFound');
-  return {
-    title: t('title'),
-    robots: { index: false, follow: false },
-  };
-}
+// Metadata tĩnh, KHÔNG gọi next-intl: slug sai dưới /en/* (ISR on-demand) resolve metadata not-found khi cache locale
+// còn trống → getTranslations() rơi về headers() → "static to dynamic" → 500 (CR-026/CR-032). Thân trang vẫn dịch theo locale.
+export const metadata: Metadata = {
+  title: { absolute: '404 | NTA' },
+  robots: { index: false, follow: false },
+};
 
 export default async function NotFoundPage() {
   const t = await getTranslations('notFound');

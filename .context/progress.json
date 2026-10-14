@@ -2,12 +2,12 @@
   "mode": "feature",
   "activeWorkItem": {
     "type": "bug",
-    "slug": "ai-news-write-db",
+    "slug": "en-invalid-slug-500",
     "phaseTask": "phase-1-task-01",
     "step": "closeout",
     "status": "done",
-    "journal": ".context/runs/bug-ai-news-write-db-phase-1-task-01.md",
-    "note": "CR-034 done + archived 2026-10-15 (smoke prod PASS: publish-db xanh, w42 vi+en 200). Còn CR-031: B10 + P5-T02 + close-out (scope v50+)"
+    "journal": ".context/runs/bug-en-invalid-slug-500-phase-1-task-01.md",
+    "note": "CR-026+CR-032 code+review PASS (STRICT r1 FAIL evidence → FAST r2 PASS), scope v50, spec 4.2.1 không bump; còn smoke prod sau deploy → archive 2 change doc. CR-031 còn B10 + P5-T02 + close-out (scope v51+)"
   },
   "features": [
     {
@@ -1181,7 +1181,7 @@
       },
       "currentPhase": 5,
       "inProgressTask": null,
-      "note": "P5-T01 docs done. Còn: P4-T01 B10 (daily backup + restore thử, sau 20:00 UTC), P5-T02 (bỏ cờ, chờ ổn định ≥1 ngày + user đồng ý), close-out CR (spec-validator phase 4/5, spec-publish test-scope v50+ (v49 đã dùng cho CR-034), archive). CR-034 AI news ưu tiên cao.",
+      "note": "P5-T01 docs done. Còn: P4-T01 B10 (daily backup + restore thử, sau 20:00 UTC), P5-T02 (bỏ cờ, chờ ổn định ≥1 ngày + user đồng ý), close-out CR (spec-validator phase 4/5, spec-publish test-scope v51+ (v49 CR-034, v50 CR-026/032), archive). CR-034 AI news ưu tiên cao.",
       "updatedAt": "2026-10-15",
       "specValidator": {
         "result": "PASS",
@@ -1290,6 +1290,36 @@
       "residualRisk": "F4 2 locale 2 transaction (tự lành khi chạy lại); chưa smoke prod; backup ops vẫn ảnh hưởng vòng giữ tới khi CR-033 xong",
       "prodSmoke": "PASS 2026-10-15 (workflow_dispatch ai-news, publish-db xanh, /blog + /en/blog w42 200)",
       "archived": "2026-10-15"
+    },
+    {
+      "slug": "en-invalid-slug-500",
+      "title": "URL /en/<section>/<slug sai> trả 500 thay vì 404 (static→dynamic, headers qua next-intl requestLocale)",
+      "severity": "medium",
+      "status": "done",
+      "changeFile": [
+        "spec/changes/2026-10-14-en-dynamic-slug-not-found-500.md",
+        "spec/changes/2026-10-14-en-invalid-slug-500.md"
+      ],
+      "classification": "BUG (routing/i18n)",
+      "risk": "LOW-MEDIUM",
+      "related": "CR-026 · CR-032 · CR-031 P3-T02",
+      "task": "tasks/bug-en-invalid-slug-500/phase-1-task-01.md",
+      "tasks": {
+        "phase-1-task-01": "done"
+      },
+      "attempt": 1,
+      "updatedAt": "2026-10-15",
+      "rootCause": "src/app/[locale]/not-found.tsx:8-9 generateMetadata getTranslations() không locale → src/i18n/request.ts:23 requestLocale → next-intl headers() trên route SSG/ISR en → 500",
+      "reproduced": "Docker build HEAD e3b1b38, CONTENT_SOURCE=file: 5 URL en 500, vi 404; Exp2 bỏ generateMetadata → 404",
+      "expectedReviewLevel": "NORMAL",
+      "scopeVersion": 50,
+      "reviewer": {
+        "level": "STRICT r1 / FAST r2",
+        "result": "PASS",
+        "round": 2,
+        "report": ".context/review-reports/bug-en-invalid-slug-500-phase-1-task-01-round-2-review.md"
+      },
+      "residualRisk": "title 404 cố định cho vi+en; 404 en cache ISR s-maxage (kiểm nginx/CDN prod); key notFound.title không còn dùng (giữ vì parity file/DB)"
     }
   ]
 }

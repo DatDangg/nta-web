@@ -1,67 +1,64 @@
 {
   "specVersion": "4.2.1",
-  "scopeVersion": 49,
-  "generatedAt": "2026-10-15T12:00:00+07:00",
+  "scopeVersion": 50,
+  "generatedAt": "2026-10-15T01:12:00+07:00",
   "trigger": "bug-fix",
-  "workItem": "bug/ai-news-write-db (change spec/changes/2026-10-15-ai-news-write-db.md; CR-034)",
+  "workItem": "bug/en-invalid-slug-500 (gộp CR-026 spec/changes/2026-10-14-en-dynamic-slug-not-found-500.md + CR-032 spec/changes/2026-10-14-en-invalid-slug-500.md; task tasks/bug-en-invalid-slug-500/phase-1-task-01.md)",
   "specRefs": [
-    "R-09c",
-    "R-16",
-    "R-16a",
+    "R-12",
+    "R-20",
+    "R-21",
+    "R-05",
+    "R-06",
+    "R-07",
+    "R-08",
+    "R-08a.1",
+    "R-09",
     "R-15a"
   ],
   "changed": {
     "files": [
-      ".github/workflows/ai-news.yml (job digest xuất publish_slug; job mới publish-db; bỏ dispatch deploy.yml)",
-      "tools/db/publish-post.ts (mới — chèn bài vi+en insert-only qua createEntry)",
-      "tools/db/content-cli.ts (lệnh publish-post --dry-run/--actor/--note/--confirm-prod; kiểm cờ theo lệnh)",
-      "tools/db/publish-post.test.ts (mới, cần TEST_DATABASE_URL)",
-      "tools/db/content-cli.test.ts (mới — từ chối cờ sai lệnh)",
-      "src/db/content-repo.ts (helper kiểm bản ghi mới dùng chung)",
-      "src/lib/content/mdx-files.ts, tools/db/file-source.ts (export parser/thư mục dùng chung)",
-      "Dockerfile (target content-tools có public/ để validate ảnh cover)",
-      "docs/runbook/ai-news.md, docs/DESIGN.md, tools/ai-news/README.md"
+      "src/app/[locale]/not-found.tsx (generateMetadata gọi getTranslations không locale → export const metadata tĩnh: title { absolute: '404 | NTA' }, robots noindex/nofollow; thân trang không đổi)",
+      "src/app/[locale]/not-found.test.ts (mới — test hồi quy tĩnh: not-found không export generateMetadata, có export const metadata)"
     ],
     "modules": [
-      "CI — workflow ai-news (bản tin AI tuần)",
-      "Content ops — CLI tools/db/content-cli.ts",
-      "Nội dung DB — content_entries / content_versions (collection post)",
-      "Tin tức — /blog, /en/blog, /blog/[slug], sitemap"
+      "Trang 404 dùng chung mọi route [locale] (vi + en)",
+      "Route chi tiết en SSG + ISR on-demand: /en/blog/[slug], /en/products/[slug], /en/case-studies/[slug], /en/solutions/ai/[slug], /en/solutions/enterprise/[slug]",
+      "Revalidate nội dung (POST /api/revalidate theo tag) — 404 en giờ được cache ISR"
     ]
   },
   "impact": {
     "direct": [
-      "Chạy mới tạo bài: DB chưa có post/{vi,en}/<slug> → publish-post --dry-run báo cả 2 locale status=missing → backup DB chạy (tên pre-migrate-ops-ai-news-<UTC>-<run>) → publish-post --confirm-prod in created cho vi + en; content_entries có 2 bản version 1, updated_by=workflow:ai-news; content_versions có 2 dòng op=create, actor=workflow:ai-news, note 'ai-news <slug> run <run_id>'",
-      "Sau khi chèn: revalidate --collection post chạy; /blog/<slug> và /en/blog/<slug> HTTP 200; bài xuất hiện ở /blog, /en/blog (lọc ai-tech) và sitemap.xml không cần thao tác tay",
-      "Chạy lại cùng tuần (workflow_dispatch lần 2 hoặc Re-run failed jobs): digest skip (bài đã có trên main) nhưng publish-db vẫn chạy; dry-run báo exists cho cả 2 locale → KHÔNG backup, KHÔNG chèn, 0 ghi DB (số version không đổi); revalidate + smoke vẫn chạy; workflow xanh",
-      "Bài đã sửa trong DB (version ≥ 2): chạy publish-post → exists, nội dung + version giữ nguyên, không có content_versions mới",
-      "Bài đã xoá mềm (deleted_at khác null): chạy publish-post → exists, KHÔNG khôi phục (deleted_at giữ nguyên), không ghi đè, không có content_versions mới; bài vẫn ẩn trên web",
-      "Validate lỗi 1 locale (vd file en thiếu hoặc frontmatter en sai/ảnh cover không tồn tại, vi hợp lệ): publish-post exit ≠ 0, KHÔNG ghi locale nào (vi cũng không được chèn); job publish-db đỏ, không có bản ghi nửa vời",
-      "CLI từ chối cờ không hợp lệ: `content-cli.ts rollback <key> --to 1 --expected-version 2 --dry-run` → lỗi usage, exit 2, không kết nối DB; tương tự `--actor` với lệnh khác publish-post, `--note` với list/show/history/revalidate; `publish-post <slug> --dry-run --note x --actor y` qua được bước kiểm cờ",
-      "publish-post với slug sai định dạng (vd chứa '/' hoặc '..') → lỗi validate, không đọc file ngoài src/content/blog",
-      "publish-post ghi trên DB prod thiếu --confirm-prod → bị từ chối, không ghi"
+      "6 URL en slug sai → HTTP 404 (không còn 500), thân trang not-found tiếng Anh ('Page not found' / 'does not exist or has been moved'), <title>404 | NTA</title>, <meta name=\"robots\" content=\"noindex, nofollow\">: /en/blog/nope, /en/products/nope, /en/case-studies/nope, /en/solutions/ai/nope, /en/solutions/ai/crm (slug enterprise sai nhóm), /en/solutions/enterprise/boxai (slug AI sai nhóm)",
+      "Biến thể slug sai khác dưới /en/*/[slug] cùng hành vi 404 + en + title 404 | NTA + noindex (vd /en/case-studies/xyz-nope, /en/blog/xyz-nope, /en/solutions/ai/xyz-nope)",
+      "Bản vi tương ứng vẫn 404 + thân trang not-found tiếng Việt ('Trang bạn tìm không tồn tại'), title 404 | NTA, noindex: /blog/nope, /products/nope, /case-studies/nope, /case-studies/xyz-nope, /solutions/ai/crm, /solutions/enterprise/boxai",
+      "Log server không có 'Page changed from static to dynamic' sau khi gọi các URL trên",
+      "404 en được cache rồi tạo bài + revalidate → 200: GET /en/blog/<slug-chưa-có> → 404 (lần 2 x-nextjs-cache: HIT); tạo bài slug đó (publish-post) → GET vẫn 404 trước revalidate; POST /api/revalidate (collection post + slug) → GET /en/blog/<slug> 200 với title bài, /blog/<slug> 200"
     ],
     "dependents": [
-      "Workflow ai-news job digest: guard (URL trong .clean.md, số tin, frontmatter, npm run build) vẫn chặn → FAIL thì không commit và publish-db không chạy",
-      "Backup lỗi trong publish-db → dừng trước khi chèn (không ghi DB)",
-      "Job publish-db chỉ chạy trên ref main; secret POSTGRES_PASSWORD/REVALIDATE_SECRET chỉ có ở job publish-db (không ở job digest); không còn bước dispatch deploy.yml",
-      "Concurrency publish-db chung nhóm deploy-nta-web với deploy.yml / content-ops.yml (không chạy song song)",
-      "Image nta-tools (Dockerfile target content-tools) build được và có public/ (validate cover /images/blog/ai-weekly-cover.svg)"
+      "Slug hợp lệ vi + en vẫn 200 với title đúng: /blog/first-steps, /en/blog/first-steps, /products/hair-style-ai, /en/products/hair-style-ai, /case-studies/heritage-site-ai-camera, /en/case-studies/heritage-site-ai-camera, /solutions/ai/boxai, /en/solutions/ai/boxai, /solutions/enterprise/crm, /en/solutions/enterprise/crm",
+      "Redirect 301 giữ nguyên: /case-studies/oc-eo-learning và /vi/case-studies/oc-eo-learning → /case-studies/heritage-site-ai-camera; /en/case-studies/oc-eo-learning → /en/case-studies/heritage-site-ai-camera",
+      "404 ngoài route detail vẫn đúng: /en/nope (en), /nope (vi), /fr/blog → 404, title 404 | NTA"
     ],
     "regression": [
-      "Content ops CLI hiện có vẫn chạy: list/show/history, rollback --to --expected-version [--note] --confirm-prod, upload --alt-vi --alt-en --confirm-prod, revalidate --all / --collection",
-      "deploy.yml không đổi: backup → migrate → build/up web → health vẫn xanh",
-      "import-seed / parity giữa file và DB không đổi; bài ai-weekly-* cũ + 4 bài blog cũ vẫn hiện vi/en",
-      "/blog, /en/blog: lọc danh mục, tìm kiếm, khối nổi bật/mới nhất, trang chi tiết không vỡ"
+      "/, /en, /blog, /en/blog, /sitemap.xml → 200",
+      "Case study đã gỡ /case-studies/ai-box-bao-ha và /en/case-studies/ai-box-bao-ha → 404 (en không còn 500)",
+      "Trang 404 có NotFoundMessage + link về trang chủ đúng ngôn ngữ (R-12)",
+      "Chạy được ở cả CONTENT_SOURCE=db (prod) và file"
     ]
   },
   "acceptance": [
-    "Sau khi workflow chạy, bài tuần có trong DB (vi + en, version 1, actor workflow:ai-news, note có run id) và hiện trên web không cần thao tác tay",
-    "Chạy lại cùng tuần → 0 ghi DB, workflow xanh; bài đã sửa/xoá mềm không bị ghi đè hay khôi phục",
-    "Validate lỗi 1 locale → không ghi locale nào, workflow đỏ",
-    "Backup chạy trước khi ghi (chỉ khi có locale thiếu); lỗi backup/chèn/revalidate/smoke → workflow đỏ",
-    "CLI từ chối cờ không thuộc lệnh (rollback --dry-run) với exit 2, không chạm DB",
-    "typecheck + lint + test PASS (test DB cần TEST_DATABASE_URL)"
+    "Mọi slug sai dưới /en/{blog,products,case-studies,solutions/ai,solutions/enterprise}/[slug] → 404 + nội dung en + title '404 | NTA' + noindex, nofollow (không còn 500)",
+    "Bản vi tương ứng → 404 + nội dung vi + title '404 | NTA' + noindex",
+    "Slug hợp lệ vi + en → 200",
+    "3 redirect 301 oc-eo-learning giữ nguyên đích",
+    "URL en đã 404 (cache ISR) → tạo bài + revalidate → 200, không kẹt 404",
+    "Log server không có 'Page changed from static to dynamic'",
+    "npm test + typecheck + lint PASS; docker build PASS"
   ],
-  "risk": "high"
+  "risk": "medium",
+  "notes": [
+    "Không đổi requirement → specVersion giữ 4.2.1, không có spec/updates/ (theo convention bug-fix không bump, vd CR-023 scope v46)",
+    "Residual: title 404 cố định cho cả vi/en; 404 en có Cache-Control s-maxage=31536000 — cần kiểm nginx/proxy prod không cache 404 ngoài Next (revalidate Next không xoá được cache proxy)"
+  ]
 }

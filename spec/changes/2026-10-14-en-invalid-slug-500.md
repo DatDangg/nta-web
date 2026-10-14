@@ -1,7 +1,7 @@
 ---
 id: en-invalid-slug-500
 type: bug
-status: pending
+status: in_progress   # 2026-10-15 gộp CR-026 + CR-032 → tasks/bug-en-invalid-slug-500/phase-1-task-01.md (chờ duyệt plan)
 created: 2026-10-14
 ---
 
