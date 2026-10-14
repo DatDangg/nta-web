@@ -1,0 +1,2 @@
+# Script chạy trong container Linux — luôn LF kể cả khi checkout trên Windows (core.autocrlf=true).
+*.sh text eol=lf

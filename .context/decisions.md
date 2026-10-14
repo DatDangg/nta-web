@@ -65,3 +65,23 @@
   ngoài Next. `client.ts` lazy: import không mở kết nối, thiếu `DATABASE_URL` chỉ lỗi khi gọi `getDb()` → `next build` không cần DB.
 - **Test runner:** `node --import tsx --test "src/**/*.test.ts"` (node:test built-in; tsx để chạy TS + import không đuôi như phần
   còn lại của repo). Không thêm Jest/Vitest.
+
+## 2026-10-14 — CR-031 P1-T02: chạy migrate trong deploy + backup sidecar
+- **Migrate:** service một-lần `nta-migrate` (compose profile `tools`) build từ stage Dockerfile `migrator` = stage `deps`
+  (node_modules đầy đủ, dùng chung build cache với web → không tốn thêm lớp node_modules) + `drizzle/` + `deploy/db/*.ts`,
+  chạy `node --import tsx deploy/db/migrate.ts check|migrate`. Dùng **drizzle-orm migrator** (lập trình) thay `drizzle-kit migrate`
+  vì cần cùng một kết nối để tính migration chờ (so `meta/_journal.json` với `drizzle.__drizzle_migrations`, đúng điều kiện
+  `created_at < folderMillis` của migrator) rồi gate trước khi apply. Cùng bảng tracking với `npm run db:migrate` (local).
+- **Gate destructive** (`deploy/db/migration-gate.ts`, test `deploy/db/migration-gate.test.ts` trong `npm test`): quét SQL (bỏ comment +
+  chuỗi), chặn DROP/TRUNCATE/UPDATE/DELETE/ALTER TYPE RENAME|DROP; với bảng đã tồn tại thêm ALTER TABLE DROP (trừ DROP DEFAULT/NOT NULL),
+  ALTER COLUMN TYPE, SET NOT NULL, ADD UNIQUE/FOREIGN KEY/PRIMARY KEY, RENAME, CREATE UNIQUE INDEX. Bảng CREATE trong cùng file được bỏ qua
+  (0000 có FK trên bảng vừa tạo). Mở khoá: dòng `-- HIGH_RISK_MIGRATION: approved YYYY-MM-DD by <user>`.
+- **Backup:** sidecar `nta-db-backup` (image `postgres:16.15-alpine` + script, chạy root vì thư mục host root 700), vòng lặp sleep tới
+  20:00 UTC thay cho cron host (VPS dùng chung). Script copy vào image, không bind mount từ workspace runner (checkout có thể thay thư mục).
+  Giữ 14 bản mỗi loại (`daily-*.dump`, `uploads-*.tar.gz`, `pre-migrate-*.dump`); ghi file tạm rồi mv; kiểm `pg_restore --list`.
+  Cảnh báo (không fail) khi trống < 2048 MB. Không backup off-site (user chốt).
+- **Volume DB tên cố định** `nta-db-data` (không phụ thuộc compose project name) → deploy tay từ thư mục khác không tạo DB rỗng mới.
+- `nta-web` **chưa** `depends_on nta-db` (thêm ở cutover) — đã thử dừng `nta-db`, web vẫn health OK.
+- **Fix round 1 (review STRICT):** tên backup pre-migrate `pre-migrate-<sha12>-<run_id>-<run_attempt>` + `backup.sh` không bao giờ ghi đè
+  (trùng tên → FAILED) — re-run cùng commit không làm mất bản trước migrate. Gate quét lexical một lượt (chuỗi/'' escape/dollar-quote/comment)
+  và fail-closed với `DO`, `CREATE FUNCTION|PROCEDURE`, `COPY`, `CALL`, `WITH …`, `$$`, `INSERT … SELECT` (luôn cần marker duyệt).

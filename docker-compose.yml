@@ -1,12 +1,20 @@
-# docker-compose.yml — NTA Website (Next.js standalone) trên VPS.
+# docker-compose.yml — NTA Website (Next.js standalone) + PostgreSQL nội dung (CR-031) trên VPS.
 #
 # Chạy: docker compose up -d --build
 # App bind 127.0.0.1:3005 (chỉ nội bộ) → nginx reverse proxy (HTTPS) đứng trước.
+# DB `nta-db` KHÔNG publish port — chỉ truy cập trong mạng compose (nta-web, nta-migrate, nta-db-backup).
+# VPS dùng chung (ismartschool, crm-dhp, tmfoods): mọi container có tiền tố nta-, không đụng service khác.
+# Vận hành DB (backup, restore, migrate, gate): docs/runbook/db.md
 #
 # Biến môi trường (đọc từ shell/.env, KHÔNG commit giá trị thật):
 #   NEXT_PUBLIC_SITE_URL   build-time, canonical URL (mặc định https://ntavietnam.tech)
 #   CONTACT_FORM_TARGET    server-only, đích forward form (OQ#4 — có thể để trống tạm)
 #   HOST_PORT              port host (mặc định 3005)
+#   POSTGRES_PASSWORD      BẮT BUỘC (secret) — mật khẩu user `nta`; chỉ chữ + số (ghép thẳng vào DATABASE_URL)
+#   REVALIDATE_SECRET      BẮT BUỘC (secret) — dùng cho POST /api/revalidate (CR-031 P3-T03)
+#   NTA_BACKUP_DIR         thư mục backup trên host (mặc định /opt/nta-web-data/db-backups, root 700)
+#   NTA_UPLOADS_DIR        thư mục ảnh upload trên host (mặc định /opt/nta-web-data/uploads, owner 1001:1001 = nextjs)
+#   NTA_DB_VOLUME          tên volume dữ liệu Postgres (mặc định nta-db-data — đặt cố định, không phụ thuộc project name)
 
 services:
   nta-web:
@@ -24,9 +32,80 @@ services:
       PORT: "8080"
       HOSTNAME: 0.0.0.0
       CONTACT_FORM_TARGET: ${CONTACT_FORM_TARGET:-}
+      DATABASE_URL: postgres://nta:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}@nta-db:5432/nta_web
+      REVALIDATE_SECRET: ${REVALIDATE_SECRET:?REVALIDATE_SECRET is required}
+      UPLOAD_DIR: /app/uploads
+    volumes:
+      - ${NTA_UPLOADS_DIR:-/opt/nta-web-data/uploads}:/app/uploads
+    # CHƯA depends_on nta-db: web vẫn đọc nội dung từ file cho tới cutover (CR-031 task 8) — DB lỗi không kéo web xuống.
     healthcheck:
       test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:8080/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 30s
+
+  nta-db:
+    image: postgres:16.15-alpine
+    container_name: nta-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: nta
+      POSTGRES_DB: nta_web
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+    volumes:
+      - nta-db-data:/var/lib/postgresql/data
+    mem_limit: 512m
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nta -d nta_web"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  # Sidecar backup hằng ngày (pg_dump -Fc + tar.gz ảnh upload, giữ 14 bản) — thay cho cron trên host.
+  # Chạy bằng root vì thư mục backup trên host là root:root 700.
+  nta-db-backup:
+    build:
+      context: ./deploy/db
+      dockerfile: Dockerfile.backup
+    image: nta-db-backup:latest
+    container_name: nta-db-backup
+    restart: unless-stopped
+    user: "0:0"
+    depends_on:
+      nta-db:
+        condition: service_started
+    environment:
+      PGHOST: nta-db
+      PGUSER: nta
+      PGDATABASE: nta_web
+      PGPASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+      BACKUP_KEEP: "14"
+      BACKUP_HOUR_UTC: "20"
+      BACKUP_MIN_FREE_MB: "2048"
+    volumes:
+      - ${NTA_BACKUP_DIR:-/opt/nta-web-data/db-backups}:/backups
+      - ${NTA_UPLOADS_DIR:-/opt/nta-web-data/uploads}:/uploads:ro
+    mem_limit: 256m
+
+  # Một-lần: gate destructive + migrate Drizzle. Không chạy khi `up`; dùng:
+  #   docker compose run --rm nta-migrate check|migrate
+  nta-migrate:
+    build:
+      context: .
+      target: migrator
+    image: nta-web-migrate:latest
+    profiles: ["tools"]
+    restart: "no"
+    depends_on:
+      nta-db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://nta:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}@nta-db:5432/nta_web
+    command: ["migrate"]
+    mem_limit: 512m
+
+volumes:
+  nta-db-data:
+    name: ${NTA_DB_VOLUME:-nta-db-data}

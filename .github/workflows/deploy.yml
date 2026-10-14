@@ -2,6 +2,8 @@ name: Deploy (VPS)
 
 # Chạy trên self-hosted GitHub Actions runner đã gắn với repo này (label: nta-web).
 # Trigger: push lên main, hoặc chạy tay (workflow_dispatch).
+# Thứ tự (CR-031): DB healthy → backup pre-migrate → gate destructive → migrate → build/up web → health.
+# Bước DB nào lỗi → dừng, web đang chạy giữ nguyên. Runbook: docs/runbook/db.md
 on:
   workflow_dispatch:
   push:
@@ -18,6 +20,9 @@ env:
   NEXT_PUBLIC_SITE_URL: https://ntavietnam.tech
   HOST_PORT: "3005"
   CONTACT_FORM_TARGET: ${{ secrets.CONTACT_FORM_TARGET }}
+  # Secret chỉ đi qua env → docker compose nội suy; không echo, không `docker compose config` không -q.
+  POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+  REVALIDATE_SECRET: ${{ secrets.REVALIDATE_SECRET }}
 
 jobs:
   deploy:
@@ -26,8 +31,30 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Validate compose (secret bắt buộc)
+        run: docker compose config --quiet
+
+      - name: Start DB + backup sidecar
+        run: |
+          docker compose build nta-db-backup
+          docker compose up -d --wait --wait-timeout 120 nta-db
+          docker compose up -d --no-deps nta-db-backup
+
+      # Tên gồm run id + attempt → "Re-run jobs" cùng commit tạo file MỚI, không ghi đè bản trước migrate của lần chạy đầu.
+      - name: Backup pre-migrate (fail → dừng deploy)
+        run: docker compose run --rm --no-deps nta-db-backup /scripts/backup.sh "pre-migrate-${GITHUB_SHA::12}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+
+      - name: Build migrator
+        run: docker compose --profile tools build nta-migrate
+
+      - name: Gate destructive migration
+        run: docker compose run --rm --no-deps nta-migrate check
+
+      - name: Migrate
+        run: docker compose run --rm --no-deps nta-migrate migrate
+
       - name: Build image
-        run: docker compose build
+        run: docker compose build nta-web
 
       - name: Deploy (recreate)
         run: docker compose up -d --remove-orphans

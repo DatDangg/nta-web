@@ -4,10 +4,10 @@
     "type": "feature",
     "slug": "content-database",
     "phaseTask": "phase-1-task-02",
-    "step": "ready",
-    "status": "blocked_on_user",
-    "journal": ".context/runs/feature-content-database-phase-1-task-01.md",
-    "note": "Chờ user đặt POSTGRES_PASSWORD/REVALIDATE_SECRET + xác nhận /opt/nta-web-data/{db-backups,uploads} + dung lượng"
+    "step": "closeout",
+    "status": "done",
+    "journal": ".context/runs/feature-content-database-phase-1-task-02.md",
+    "note": "CR-031 P1-T02 done — chờ user kiểm deploy VPS; chưa chạy P2"
   },
   "features": [
     {
@@ -1168,7 +1168,7 @@
       "specVersion": "4.2.0 (planning delta)",
       "tasks": {
         "phase-1-task-01": "done",
-        "phase-1-task-02": "pending",
+        "phase-1-task-02": "done",
         "phase-2-task-01": "pending",
         "phase-2-task-02": "pending",
         "phase-3-task-01": "pending",
@@ -1181,7 +1181,7 @@
       },
       "currentPhase": 1,
       "inProgressTask": null,
-      "note": "P1-T01 done (8084015). Plan cập nhật #9 (messages + company-info vào DB) + #10 (lưu trữ ảnh upload): thêm P3-T04, P3-T05 → 11 task. P1-T02 chờ user: secret + thư mục backup/upload + dung lượng.",
+      "note": "P1-T01 done (8084015), P1-T02 done (review STRICT PASS round 2). Phase 1 xong code — chờ deploy CI + user kiểm VPS; spec-validator phase 1 + checkpoint trước P2-T01.",
       "updatedAt": "2026-10-14",
       "specValidator": {
         "result": "PASS",
@@ -1189,12 +1189,14 @@
         "report": ".context/review-reports/feature-content-database-spec-validation.md"
       },
       "completedTasks": [
-        "phase-1-task-01"
+        "phase-1-task-01",
+        "phase-1-task-02"
       ],
       "reviewer": {
         "result": "PASS",
         "level": "STRICT",
-        "report": ".context/review-reports/feature-content-database-phase-1-task-01-round-1-review.md"
+        "round": 2,
+        "report": ".context/review-reports/feature-content-database-phase-1-task-02-round-2-review.md"
       }
     }
   ],

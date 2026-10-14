@@ -20,7 +20,8 @@
 ## 1. Deploy tự động (chuẩn)
 
 Push lên `main` (hoặc chạy tay workflow **Deploy (VPS)**) → self-hosted runner:
-`docker compose build` → `up -d` → health check `127.0.0.1:3005/api/health`.
+DB `nta-db` healthy → backup pre-migrate → gate destructive → migrate → `docker compose build` → `up -d` → health check `127.0.0.1:3005/api/health`
+(chi tiết bước DB: [`db.md`](db.md) §2).
 
 Deploy diễn ra **tại workspace của runner** (giống pattern `ismartschool` trên server này).
 Không cần clone cố định; container project name = `nta-web`.
@@ -31,6 +32,9 @@ Không cần clone cố định; container project name = `nta-web`.
 ssh root@187.52.119.50
 git clone https://github.com/DatDangg/nta-web.git /opt/nta-web-manual
 cd /opt/nta-web-manual
+read -rs POSTGRES_PASSWORD && export POSTGRES_PASSWORD     # bắt buộc (compose báo lỗi nếu thiếu)
+read -rs REVALIDATE_SECRET && export REVALIDATE_SECRET
+# backup + migrate trước khi lên web: db.md §5
 NEXT_PUBLIC_SITE_URL=https://ntavietnam.tech docker compose up -d --build
 curl -fsS http://127.0.0.1:3005/api/health    # {"status":"ok",...}
 # LƯU Ý: cùng project name "nta-web" + container_name "nta-web" → sẽ thay container đang chạy.
@@ -101,33 +105,52 @@ curl -sI https://ntavietnam.tech/        | head -1   # 200 — KHÔNG đổi hà
 | `NEXT_PUBLIC_SITE_URL` | build-time | `https://ntavietnam.tech` — canonical/SEO (inline lúc build) |
 | `CONTACT_FORM_TARGET` | server-only (secret) | đích forward form — **OQ#4 chưa chốt**, tạm để trống |
 | `HOST_PORT` | runtime | mặc định `3005` |
+| `POSTGRES_PASSWORD` | secret, **bắt buộc** | mật khẩu DB `nta-db` (chỉ chữ + số) → ghép `DATABASE_URL` |
+| `REVALIDATE_SECRET` | secret, **bắt buộc** | `POST /api/revalidate` |
+| `NTA_BACKUP_DIR` / `NTA_UPLOADS_DIR` | runtime | mặc định `/opt/nta-web-data/db-backups` / `/opt/nta-web-data/uploads` |
 
-Secret repo (GitHub → Settings → Secrets and variables → Actions): `CONTACT_FORM_TARGET`.
+Secret repo (GitHub → Settings → Secrets and variables → Actions): `CONTACT_FORM_TARGET`, `POSTGRES_PASSWORD`, `REVALIDATE_SECRET`.
 
 ## 5. Rollback
 
+> ⚠️ Từ CR-031, **mọi** lệnh `docker compose` (kể cả `ps`/`logs`) cần `POSTGRES_PASSWORD` + `REVALIDATE_SECRET` trong env
+> (compose nội suy cả file, thiếu → lỗi "... is required"). Export trước theo [`db.md`](db.md) §1
+> (`read -rs ... && export ...`), hoặc `--env-file` trỏ tới file ngoài repo, quyền 600, KHÔNG commit.
+
 ```sh
-# trong workspace/thư mục deploy
+# trong workspace/thư mục deploy (đã export POSTGRES_PASSWORD, REVALIDATE_SECRET)
 git log --oneline -5            # chọn commit tốt trước đó
 git checkout <commit>
 docker compose up -d --build
 curl -fsS http://127.0.0.1:3005/api/health
 ```
 
-Không có DB/migration nên rollback chỉ là deploy lại image/code cũ.
+Rollback code **không** rollback schema DB: migration mặc định chỉ additive (gate chặn thao tác phá hoại chưa duyệt) nên code cũ vẫn chạy với schema mới.
+Cần khôi phục dữ liệu → restore từ `pre-migrate-<sha12>-<run_id>-<attempt>.dump` theo [`db.md`](db.md) §4.
+
+**Rollback về commit TRƯỚC CR-031 P1-T02** (compose chưa có `nta-db`): `docker compose up -d --remove-orphans` (CI) sẽ **gỡ container
+`nta-db` + `nta-db-backup`** như orphan. Volume `nta-db-data` và file backup vẫn còn (không mất dữ liệu) nhưng **backup hằng ngày dừng**.
+Xử lý: rollback bằng `git revert` các commit gây lỗi (giữ service DB trong compose) thay vì checkout commit cũ; nếu đã lỡ gỡ → deploy lại
+commit có service DB (`docker compose up -d nta-db nta-db-backup`) rồi kiểm `docker compose ps nta-db nta-db-backup` + `backup.log` ([`db.md`](db.md) §3).
 
 ## 6. Kiểm tra sau deploy
 
-- `docker compose ps` → container `healthy`
+Lệnh `docker compose` ở §6–§7 cần đã export `POSTGRES_PASSWORD` + `REVALIDATE_SECRET` (xem §5); chỉ đọc thì dùng thẳng `docker ps` / `docker logs <container>`.
+
+- `docker compose ps` (hoặc `docker ps --filter name=nta-`) → container `healthy`
 - `curl -fsS http://127.0.0.1:3005/api/health` → `status: ok`
 - Khi có domain: đo **R-22** (Lighthouse Perf/LCP/CLS) + **R-23** (viewport 375/768/1280)
 - AI-readiness: `curl -fsS https://ntavietnam.tech/llms.txt`, `/robots.txt`, `/sitemap.xml`
 
 ## 7. Troubleshooting
 
-- **Container không start:** `docker compose logs nta-web`; kiểm tra PORT/HOSTNAME.
+- **Container không start:** `docker logs --tail 100 nta-web` (hoặc `docker compose logs nta-web` sau khi export secret, §5); kiểm tra PORT/HOSTNAME.
 - **nginx 502:** app chưa healthy hoặc sai port; kiểm tra `curl 127.0.0.1:3005`.
 - **certbot fail:** DNS chưa trỏ đúng; `dig +short ntavietnam.tech` (domain phụ: `dig +short ntasolution.vn` + `dig +short www.ntasolution.vn`).
 - **`ntasolution.vn` ra trang nginx mặc định:** chưa có vhost khớp `server_name` → rơi vào default server block; cài vhost theo §3b.
 - **`ntasolution.vn` báo lỗi cert (SNI trả cert `ntavietnam.tech`):** chưa cấp cert riêng → chạy `certbot --nginx --redirect -d ntasolution.vn -d www.ntasolution.vn`.
 - **Form không gửi:** `CONTACT_FORM_TARGET` chưa set (OQ#4).
+
+## 8. Database (`nta-db`) — backup / restore / migrate
+
+Xem [`docs/runbook/db.md`](db.md): secret, log backup, restore (DB tạm → prod), migrate tay, xử lý deploy đỏ do gate destructive, cảnh báo dung lượng.

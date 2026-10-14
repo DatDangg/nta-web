@@ -1,0 +1,7 @@
+# Image sidecar nta-db-backup: cùng bản PostgreSQL với nta-db (pg_dump phải ≥ phiên bản server) + script backup.
+# Script được copy vào image (không bind mount từ workspace runner — checkout lại có thể thay thư mục khi container đang chạy).
+FROM postgres:16.15-alpine
+COPY backup.sh backup-loop.sh restore-check.sh /scripts/
+RUN chmod 0755 /scripts/*.sh
+ENTRYPOINT []
+CMD ["/scripts/backup-loop.sh"]
