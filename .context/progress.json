@@ -7,7 +7,7 @@
     "step": "closeout",
     "status": "done",
     "journal": ".context/runs/bug-en-invalid-slug-500-phase-1-task-01.md",
-    "note": "CR-026+CR-032 code+review PASS (STRICT r1 FAIL evidence → FAST r2 PASS), scope v50, spec 4.2.1 không bump; còn smoke prod sau deploy → archive 2 change doc. CR-031 còn B10 + P5-T02 + close-out (scope v51+)"
+    "note": "CR-026+CR-032 done + archived 2026-10-15 (smoke prod PASS). CR-031 còn B10 + P5-T02 + close-out (scope v51+)"
   },
   "features": [
     {
@@ -1297,8 +1297,8 @@
       "severity": "medium",
       "status": "done",
       "changeFile": [
-        "spec/changes/2026-10-14-en-dynamic-slug-not-found-500.md",
-        "spec/changes/2026-10-14-en-invalid-slug-500.md"
+        "spec/changes/archive/2026-10-14-en-dynamic-slug-not-found-500.md",
+        "spec/changes/archive/2026-10-14-en-invalid-slug-500.md"
       ],
       "classification": "BUG (routing/i18n)",
       "risk": "LOW-MEDIUM",
@@ -1319,7 +1319,9 @@
         "round": 2,
         "report": ".context/review-reports/bug-en-invalid-slug-500-phase-1-task-01-round-2-review.md"
       },
-      "residualRisk": "title 404 cố định cho vi+en; 404 en cache ISR s-maxage (kiểm nginx/CDN prod); key notFound.title không còn dùng (giữ vì parity file/DB)"
+      "residualRisk": "title 404 cố định cho vi+en; 404 en cache ISR s-maxage (kiểm nginx/CDN prod); key notFound.title không còn dùng (giữ vì parity file/DB)",
+      "prodSmoke": "PASS 2026-10-15 (6 URL en 404 + title 404 | NTA + noindex, vi 404, hợp lệ 200, 301 ok)",
+      "archived": "2026-10-15"
     }
   ]
 }
