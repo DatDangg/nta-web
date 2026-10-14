@@ -34,6 +34,7 @@
 | CR-024 | Bản tin AI tuần: khung riêng dạng thẻ điểm tin (mỗi tin 1 thẻ, số thứ tự, nút nguồn) — làm sau CR-023 | ADDITIVE (UI) | pending (change doc tạo khi bắt đầu) | — | 2026-10-14 | |
 | CR-025 | Bỏ khối "Triển khai thực tế tại Đền Bảo Hà" (BoxAI) + bỏ case study Bảo Hà; case study Óc Eo bỏ địa danh → "một khu di tích ở Việt Nam" (vi + en) | REMOVE + MODIFY (content) | done (spec 4.0.0 · scope v47) | `archive/2026-10-14-remove-bao-ha-anonymize-oc-eo.md` | 2026-10-14 | 2026-10-14 |
 | CR-026 | Route tiếng Anh slug không tồn tại (/en/case-studies/…, /en/blog/…) trả 500 thay vì 404 (static→dynamic, headers qua next-intl requestLocale) — phát hiện khi smoke CR-025 | BUG (routing) | pending | `2026-10-14-en-dynamic-slug-not-found-500.md` | 2026-10-14 | |
+| CR-027 | Case study khu di tích (vi): chỉnh 2 câu lặp ý ("di sản khu di tích" → "di sản văn hóa"; "của khu di tích" lần 2 → "của nơi đây") — follow-up CR-025 | MODIFY (content) | done (no spec impact) | — (copy fix 1 dòng, không tạo change doc) | 2026-10-14 | 2026-10-14 |
 
 ## Quy tắc tracking
 
