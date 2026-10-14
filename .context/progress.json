@@ -1,13 +1,13 @@
 {
   "mode": "feature",
   "activeWorkItem": {
-    "type": "feature",
-    "slug": "content-database",
-    "phaseTask": "phase-2",
-    "step": "checkpoint",
-    "status": "awaiting_approval",
-    "journal": ".context/runs/feature-content-database-phase-2-task-02.md",
-    "note": "Chờ user duyệt checkpoint phase 2"
+    "type": "bug",
+    "slug": "build-site-url-empty",
+    "phaseTask": "phase-1-task-01",
+    "step": "closeout",
+    "status": "done",
+    "journal": ".context/runs/bug-build-site-url-empty-phase-1-task-01.md",
+    "note": "done — tiếp P3-T01 CR-031"
   },
   "features": [
     {
@@ -1209,6 +1209,11 @@
         "result": "PASS",
         "report": ".context/review-reports/feature-content-database-phase-2-spec-validation.md",
         "note": "4 MINOR: xoá mềm bản ghi bắt buộc/1 locale không chặn; I-3 chéo bản ghi khi đổi group/đồng thời; backup trước import/rollback prod chỉ ở runbook; lịch sử bất biến tầng app"
+      },
+      "phase2Checkpoint": {
+        "approved": true,
+        "at": "2026-10-15",
+        "via": "coordinator relay"
       }
     }
   ],
@@ -1228,6 +1233,21 @@
         "result": "PASS",
         "round": 2,
         "report": ".context/review-reports/bug-blog-article-typography-phase-1-task-01-round-2-review.md"
+      }
+    },
+    {
+      "slug": "build-site-url-empty",
+      "title": "Build hỏng khi NEXT_PUBLIC_SITE_URL rỗng (docker build thiếu build-arg)",
+      "status": "done",
+      "related": "CR-031 (investigate-flaky-build.md)",
+      "tasks": {
+        "phase-1-task-01": "done"
+      },
+      "updatedAt": "2026-10-15",
+      "reviewer": {
+        "result": "PASS",
+        "level": "NORMAL",
+        "report": ".context/review-reports/bug-build-site-url-empty-phase-1-task-01-round-1-review.md"
       }
     }
   ]

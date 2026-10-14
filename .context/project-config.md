@@ -52,6 +52,19 @@ migration_generate_command: npm run db:generate   # ✅ CR-031 — drizzle-kit g
 # - Chạy lệnh trên Windows (opencode / terminal của user) thì vẫn dùng các lệnh npm ở trên như cũ.
 cowork_verify_command: bash tools/linux-build.sh verify
 
+# ── Bằng chứng build trong Docker ── ✅ 15/10/2026 (bug-build-site-url-empty)
+# Khi cần chứng minh "build Docker PASS" (chạy được cả PowerShell lẫn bash, không cần env):
+#   docker build --target builder -t nta-web-buildcheck:tmp .            # thêm --no-cache khi cần bằng chứng next build mới (không dùng cache)
+#   docker rmi nta-web-buildcheck:tmp                                    # xoá image tạm sau khi verify
+# Sau fix, build không truyền arg vẫn khớp CI (ARG mặc định = https://ntavietnam.tech = giá trị compose truyền).
+# Phương án phụ: docker compose build nta-web (cần env giả POSTGRES_PASSWORD/REVALIDATE_SECRET) — ⚠️ compose cố định
+# image nta-web:latest nên GHI ĐÈ tag local đó (-p không đổi tag) và có thể chỉ dùng cache; KHÔNG chạy trên VPS
+# (lần docker compose up kế tiếp sẽ dùng image vừa build).
+# Lý do: trước fix, `docker build` không truyền arg → NEXT_PUBLIC_SITE_URL="" → `new URL("")` ở metadataBase → prerender FAIL
+# (bị tưởng là "flaky"). Đã thêm fallback (src/lib/seo.ts) + ARG mặc định (Dockerfile).
+# Chi tiết: tasks/feature-content-database/investigate-flaky-build.md · tasks/bug-build-site-url-empty/phase-1-task-01.md
+docker_build_evidence_command: docker build --target builder -t nta-web-buildcheck:tmp .
+
 # ── Database ──
 db_tool: drizzle               # ✅ cập nhật 14/10/2026 (CR-031) — PostgreSQL + drizzle-orm/drizzle-kit (trước: none)
 migration_required: true       # ✅ CR-031 — migration gate BẬT
