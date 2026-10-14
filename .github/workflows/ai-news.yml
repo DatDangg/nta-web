@@ -1,0 +1,98 @@
+name: AI News Weekly
+
+# Bản tin AI tuần (CR-019, spec R-09c) — vận hành: docs/runbook/ai-news.md
+# Thu thập → sanitize → OpenCode Go → guard → build PASS → commit main → dispatch deploy.yml.
+# Push bằng GITHUB_TOKEN KHÔNG tự trigger workflow khác → phải dispatch deploy.yml qua REST API.
+on:
+  schedule:
+    - cron: '0 1 * * 1' # 08:00 thứ 2 giờ Việt Nam (UTC+7)
+  workflow_dispatch:
+
+concurrency:
+  group: ai-news-nta-web
+  cancel-in-progress: false
+
+permissions:
+  contents: write # commit + push bài mới lên main
+  actions: write # dispatch deploy.yml
+
+jobs:
+  digest:
+    runs-on: [self-hosted, nta-web]
+    # Chạy trong container: VPS dùng chung, không cài python/node lên host.
+    container: node:22-trixie # engine last30days cần Python 3.12+ (trixie: 3.13; bookworm chỉ 3.11)
+    timeout-minutes: 90
+    env:
+      TZ: Asia/Ho_Chi_Minh
+      NEXT_PUBLIC_SITE_URL: https://ntavietnam.tech
+      PYTHONDONTWRITEBYTECODE: '1'
+      AI_NEWS_WORK: /tmp/ai-news # /tmp riêng của container, mất khi job xong
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: false # token ghi không nằm trên đĩa suốt bước collect/npm ci
+
+      - name: Check this week's post
+        id: check
+        run: python3 tools/ai-news/generate.py check --content-dir src/content/blog
+
+      - name: Collect + sanitize
+        if: steps.check.outputs.status == 'new'
+        env:
+          LAST30DAYS_MEMORY_DIR: ${{ env.AI_NEWS_WORK }}/data
+          AI_NEWS_CLEAN_OUT: ${{ env.AI_NEWS_WORK }}/digest.clean.md
+          AI_NEWS_GH_TOKEN: ${{ github.token }}
+        run: bash tools/ai-news/last30days/scripts/ai-news-digest.sh
+
+      - name: Generate posts (LLM + guard)
+        id: generate
+        if: steps.check.outputs.status == 'new'
+        env:
+          OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
+          AI_NEWS_MODEL: ${{ vars.AI_NEWS_MODEL }}
+        run: >-
+          python3 tools/ai-news/generate.py generate
+          --content-dir src/content/blog
+          --clean "$AI_NEWS_WORK/digest.clean.md"
+
+      - name: Build (gate trước khi đăng)
+        if: steps.generate.outputs.status == 'written'
+        run: |
+          npm ci --cache "$AI_NEWS_WORK/npm-cache" # cache trong /tmp container, không để file root ở $HOME trên host
+          npm run build
+
+      - name: Commit + push
+        if: steps.generate.outputs.status == 'written'
+        env:
+          SLUG: ${{ steps.generate.outputs.slug }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "src/content/blog/vi/$SLUG.mdx" "src/content/blog/en/$SLUG.mdx"
+          git commit -m "content(ai-news): bản tin AI tuần $SLUG"
+          git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:main
+
+      - name: Dispatch deploy
+        if: steps.generate.outputs.status == 'written'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl -fsS -X POST \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/actions/workflows/deploy.yml/dispatches" \
+            -d '{"ref":"main"}'
+          echo "deploy.yml dispatched"
+
+      # Container chạy root → trả quyền workspace cho user runner trên host, nếu không
+      # bước checkout của deploy.yml (chạy trên host) không xoá được file root-owned.
+      - name: Cleanup workspace ownership
+        if: always()
+        run: |
+          rm -rf node_modules .next "$AI_NEWS_WORK"
+          chown -R "$(stat -c '%u:%g' "$GITHUB_WORKSPACE")" "$GITHUB_WORKSPACE" || true
+          chown -R "$(stat -c '%u:%g' "$GITHUB_WORKSPACE")" "$HOME" || true # .gitconfig do git config --global ghi
