@@ -7,7 +7,7 @@
     "step": "cutover",
     "status": "awaiting",
     "journal": ".context/runs/feature-content-database-phase-4-task-01.md",
-    "note": "CR-031 P4-T01 phần A pushed — chờ user B1 (Content ops → parity)"
+    "note": "CR-031 P4-T01 B1–B9 xong (prod đọc DB) — chờ B10 sau 03:00 VN"
   },
   "features": [
     {
@@ -1181,7 +1181,7 @@
       },
       "currentPhase": 4,
       "inProgressTask": null,
-      "note": "P4-T01 phần A done (CONTENT_SOURCE qua GitHub Variable, content-ops.yml, runbook cutover, parity local lệch 0). Chờ user chạy phần B (B1 parity).",
+      "note": "P4-T01: prod đã cutover CONTENT_SOURCE=db 14/10 16:38 UTC, B1–B9 đạt; chờ B10 (daily backup + restore thử) → close-out → P5-T01.",
       "updatedAt": "2026-10-14",
       "specValidator": {
         "result": "PASS",

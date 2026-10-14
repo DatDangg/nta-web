@@ -55,14 +55,15 @@
 
 ## Phần B — cutover production (CHỜ USER) — docs/runbook/cutover-content-db.md §2
 - [ ] B0 (agent) Reviewer STRICT phần A PASS → commit + push (deploy với CONTENT_SOURCE mặc định file — prod không đổi nguồn)
-- [ ] B1 (user bấm) Content ops → parity (applied=2 expected=2; parity FAIL "thiếu" nếu DB rỗng là bình thường)
-- [ ] B2 (user bấm) Content ops → backup — ghi tên file: ……
-- [ ] B3 (USER XÁC NHẬN import lên DB prod)
-- [ ] B4 (user bấm) Content ops → import-seed, confirm IMPORT-SEED-PROD → chèn 136 + parity PASS
-- [ ] B5 (user bấm) Content ops → upload-smoke, confirm UPLOAD-PROD → created + 2 × 200
-- [ ] B6 (USER DUYỆT deploy prod) Variable CONTENT_SOURCE=db → Deploy (VPS) → Run workflow → health OK
-- [ ] B7 (user bấm) Content ops → revalidate-all
-- [ ] B8 (user bấm) Content ops → upload-smoke lần 2 → reused + 200 (ảnh còn sau tạo lại container)
-- [ ] B9 (agent) smoke §3: sitemap 200, 301/404 như cũ (500 CR-032 baseline), /api/health, log [content-shape]/[content-store] = 0, TTFB vi/en
+- [x] B1 (14/10) migration đủ; DB prod 0 bản ghi vs file 136 → FAIL "thiếu" 136 (đúng kỳ vọng trước import) — Content ops → parity (applied=2 expected=2; parity FAIL "thiếu" nếu DB rỗng là bình thường)
+- [x] B2 (14/10 16:12 UTC) Content ops → backup — `pre-migrate-ops-backup-20261014T161237Z-38596085130.dump` (12.0K)
+- [x] B3 (14/10) user xác nhận "ok import"
+- [x] B4 (14/10 16:31 UTC) import-seed: backup `pre-migrate-ops-import-seed-20261014T163129Z-38598787495.dump`, applied=2 expected=2, chèn 136 / bỏ qua 0, parity PASS 136/136
+- [x] B5 (14/10 16:34 UTC) upload-smoke: owner 1001:1001, backup `pre-migrate-ops-upload-smoke-20261014T163435Z-38599228082.dump`, created `/uploads/c5faaa8c307708de611e15d24344d68953654357c0f66301eb9a59dbb1322766.png` (1200x630, 91104 B, asset v1), /uploads 200 + /_next/image 200
+- [x] B6 (14/10 16:38 UTC) Variable CONTENT_SOURCE=db + Deploy 490f8e1: validate in db, backup `pre-migrate-490f8e1f93b0-38599790915-1.dump`, gate/migrate không có chờ, nta-web recreate, health OK
+- Smoke public sau B6 (agent): sitemap 52/52 URL 200; 3 redirect `oc-eo-learning` 301 đúng đích; slug sai vi 404; `/en/*/nope` 500 (CR-032 có sẵn); /api/health 200; next/image ảnh upload 200; /en HIT; TTFB từ máy agent ~0.21–0.25 s vi ≈ en
+- [x] B7 (14/10 16:4x UTC) revalidate-all → `{"status":"ok","revalidated":["content"]}`
+- [x] B8 (14/10 16:49 UTC) upload-smoke lần 2 → reused (file 16:34, owner 1001) + /uploads 200 + /_next/image 200 sau khi nta-web recreate ở B6
+- [x] B9 (14/10) smoke: sitemap 52/52 200 (trước + sau B7), 301 oc-eo đúng, 404 vi, CR-032 500 có sẵn, health 200, next/image upload 200; log nta-web 0 dòng [content-shape]/[content-store] (user SSH); DB dừng ngắn → /, /en, /blog vẫn 200 (user); TTFB từ ngoài ~0.21–0.25 s vi ≈ en; sửa/rollback trên prod dời CR-030 (F1 phương án a)
 - [ ] B10 (user, SSH đọc-only) có daily-*.dump + restore-check.sh vào DB tạm + migrate-on-restore.sh
 - Lùi: Variable CONTENT_SOURCE=file + Deploy; DB giữ nguyên; mọi sửa trong DB biến mất khỏi web khi lùi.
