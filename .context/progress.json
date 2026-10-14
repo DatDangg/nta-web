@@ -2,12 +2,12 @@
   "mode": "feature",
   "activeWorkItem": {
     "type": "feature",
-    "slug": "ai-operations-brain-solution",
-    "phaseTask": "close-out",
-    "step": "close-out",
-    "status": "done",
-    "journal": ".context/runs/feature-ai-operations-brain-solution-phase-1-task-01.md",
-    "note": "CR-028 done — spec 4.1.0 · scope v48"
+    "slug": "content-database",
+    "phaseTask": "plan",
+    "step": "phase_plan_review",
+    "status": "awaiting_approval",
+    "journal": ".context/runs/feature-content-database-plan.md",
+    "note": "CR-031 — spec 4.2.0 delta + spec-validator round 2 PASS; 9 task / 5 phase chờ user duyệt plan"
   },
   "features": [
     {
@@ -1155,6 +1155,36 @@
       "reviewer": {
         "result": "PASS",
         "report": ".context/review-reports/feature-ai-operations-brain-solution-phase-1-task-01-round-1-review.md"
+      }
+    },
+    {
+      "slug": "content-database",
+      "title": "CR-031 — Database PostgreSQL lưu nội dung website (Drizzle, chỉ DB prod)",
+      "status": "planning",
+      "changeFile": "spec/changes/2026-10-14-content-database.md",
+      "classification": "ADDITIVE + MODIFY (kiến trúc/DB/infra)",
+      "risk": "HIGH",
+      "reviewLevel": "STRICT",
+      "specVersion": "4.2.0 (planning delta)",
+      "tasks": {
+        "phase-1-task-01": "pending",
+        "phase-1-task-02": "pending",
+        "phase-2-task-01": "pending",
+        "phase-2-task-02": "pending",
+        "phase-3-task-01": "pending",
+        "phase-3-task-02": "pending",
+        "phase-3-task-03": "pending",
+        "phase-4-task-01": "pending",
+        "phase-5-task-01": "pending"
+      },
+      "currentPhase": 1,
+      "inProgressTask": null,
+      "note": "Chờ duyệt phase plan (tasks/feature-content-database/README.md). CR-030 phụ thuộc.",
+      "updatedAt": "2026-10-14",
+      "specValidator": {
+        "result": "PASS",
+        "round": 2,
+        "report": ".context/review-reports/feature-content-database-spec-validation.md"
       }
     }
   ],

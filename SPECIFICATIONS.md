@@ -1,5 +1,5 @@
 ---
-spec_version: 4.1.0
+spec_version: 4.2.0
 updated_at: 2026-10-14
 ---
 
@@ -29,18 +29,19 @@ _(cập nhật 2026-10-13: thêm **domain phụ** `ntasolution.vn` (+ `www`) ph�
 
 - **In Scope:** 9 nhóm trang (trang chủ, về NTA, giải pháp DN + 4 trang con, giải pháp AI + trang con,
   sản phẩm app, case study, blog, liên hệ, nav/footer) · UI responsive mobile-first light minimal ·
-  SEO cơ bản · song ngữ VI/EN · form liên hệ có chống spam · deploy docker-vps (Docker + nginx trên VPS).
+  SEO cơ bản · song ngữ VI/EN · form liên hệ có chống spam · deploy docker-vps (Docker + nginx trên VPS) ·
+  _(4.2.0 — CR-031)_ nội dung lưu trong **PostgreSQL** (sửa nội dung lên web không cần build lại, có lịch sử phiên bản).
   Nguồn: `docs/BRD.md:47-53`
-- **Out of Scope:** hệ thống đăng nhập / CMS quản trị phức tạp (phase sau) · e-commerce / thanh toán ·
+- **Out of Scope:** hệ thống đăng nhập / CMS quản trị phức tạp (phase sau; CR-031 **không** làm trang admin web — sửa nội dung qua bot Telegram CR-030) · e-commerce / thanh toán ·
   tính năng nghiệp vụ của sản phẩm (CRM/HRM/LMS/DentGo…).
   Nguồn: `docs/BRD.md:55-58`
 
 ## Tech Stack
 
 - **Frontend:** Next.js (App Router) + TypeScript + Tailwind CSS — nguồn: `BRIEF.md:46`, `docs/BRD.md:156`
-- **Nội dung:** file nội dung trong repo (MDX / JSON / TS), render SSG/SSR — nguồn: `docs/ERD.md:20-22`
+- **Nội dung:** ~~file nội dung trong repo (MDX / JSON / TS), render SSG/SSR~~ → _(4.2.0 — CR-031)_ **PostgreSQL** (bảng `content_entries` + `content_versions`, R-16/R-16a); file trong `src/content/` chỉ còn là **seed import ban đầu**, web không đọc nữa; render on-demand + cache, làm mới qua revalidate (R-15a) — nguồn: `spec/changes/2026-10-14-content-database.md`
 - **i18n:** `next-intl` hoặc `next-i18n` (mặc định VI, toggle EN, route `/en/...`) — nguồn: `BRIEF.md:42`
-- **Database/ORM:** none (`db_tool: none`, `migration_required: false`) — nguồn: `.context/project-config.md:40-41`, `docs/ERD.md:16-18`
+- **Database/ORM:** _(4.2.0 — CR-031)_ **PostgreSQL** (container riêng `nta-db` trên VPS dùng chung) + **Drizzle** (`drizzle-orm` + `drizzle-kit`, migration SQL versioned) — `db_tool: drizzle`, `migration_required: true`, **chỉ DB prod** (không có DB staging — quyết định user 14/10/2026) — nguồn: `.context/project-config.md` mục Database
 - **Deploy:** docker-vps — VPS `187.52.119.50` (shared), Docker + nginx + certbot, container `nta-web` tại `127.0.0.1:3005` — nguồn: `.context/project-config.md:51-59`, `docs/runbook/deploy-vps.md`
 - **CI/CD:** GitHub Actions — nguồn: `.context/project-config.md:48`
 - ⚠️ `[cần xác nhận]` package manager (dự kiến npm — `.context/project-config.md:22`)
@@ -369,16 +370,44 @@ Base URL: dev `http://localhost:3000/api` · prod `https://ntavietnam.tech/api` 
   `[reverse-engineered from docs]` — nguồn: `docs/API_SPEC.md:63-67`
 - **R-15:** Không dựng `GET /api/posts` hoặc `GET /api/case-studies` trong v1; nội dung được render từ file tĩnh trong repo.
   API danh sách động nằm ngoài phạm vi v1. Nguồn ban đầu: `docs/API_SPEC.md:30-31` (tùy chọn).
+  _(4.2.0 — CR-031: vẫn **không** dựng API đọc nội dung công khai; nội dung đọc từ DB phía server khi render — xem R-16.)_
+- **R-15a** _(4.2.0 — CR-031, đang triển khai; hiệu lực khi cutover phase 4 PASS)_: `POST /api/revalidate` — làm mới cache
+  nội dung sau khi DB đổi (dùng cho bot CR-030 / CLI bảo trì). Bảo vệ bằng secret server-only `REVALIDATE_SECRET`
+  (header `x-revalidate-secret`, so sánh constant-time; thiếu/sai → `401`, không lộ lý do chi tiết); body
+  `{collection, slug?}` hoặc `{all: true}` (collection ∈ danh sách cố định, sai → `400`); thành công → `200 {status:"ok",revalidated:[...]}`.
+  Không cache, không nhận GET. Nguồn: `spec/changes/2026-10-14-content-database.md` (acceptance "sửa DB → lên web không cần build lại").
 
 ## Database Schema
 
-- **R-16:** v1 **không có DB** — nội dung nằm ở file trong repo (MDX/JSON/TS), render SSG/SSR;
-  form liên hệ **forward** qua email/API bên thứ ba, không lưu DB.
-  `[reverse-engineered from docs]` — nguồn: `docs/ERD.md:16-22,34`, `.context/project-config.md:40-41`
+- **R-16:** ~~v1 **không có DB** — nội dung nằm ở file trong repo (MDX/JSON/TS), render SSG/SSR;~~
+  _(4.2.0 — CR-031, đang triển khai; hiệu lực khi cutover phase 4 PASS)_ **Toàn bộ nội dung** website (blog, giải pháp,
+  sản phẩm, case study, about, thẻ/trang danh sách, nội dung trang chủ, danh mục slug/thứ tự) lưu trong **PostgreSQL**;
+  web đọc nội dung **chỉ từ DB** (file `src/content/**` giữ làm seed import ban đầu, **không còn là nguồn sự thật**).
+  Mọi URL/slug vi + en giữ nguyên; mọi trang hiển thị **y hệt** trước khi chuyển. Sửa nội dung trong DB + gọi R-15a → trang
+  cập nhật **không cần build/deploy lại**; slug mới thêm vào DB có route ngay (không phụ thuộc `generateStaticParams` lúc build).
+  Chữ giao diện cố định (`src/i18n/messages`), thông tin liên hệ công ty (`company-info.ts`) và ảnh (`public/images`)
+  **không** thuộc phạm vi chuyển (giữ trong repo) — trừ khi user chốt khác.
+  Form liên hệ **forward** qua email/API bên thứ ba, **không lưu DB** (giữ nguyên).
+  Hiệu năng/khả dụng: trang đã cache **không** truy vấn DB; TTFB trang chủ (cache hit) không tệ hơn quá 20% so với trước;
+  DB lỗi → trang đã cache vẫn phục vụ, trang chưa cache trả lỗi rõ (không cache trang rỗng) — tính vào mục tiêu ≥ 99.5% của R-27.
+  Chuyển nguồn có cờ `CONTENT_SOURCE=file|db` trong giai đoạn chuyển tiếp; sau cutover bỏ cờ + đường đọc file.
+  `[reverse-engineered from docs]` (phần form) — nguồn: `docs/ERD.md:16-22,34`, `.context/project-config.md:40-41`
+- **R-16a** _(4.2.0 — CR-031)_: **Lịch sử phiên bản nội dung** — mỗi lần tạo/sửa/xoá một bản ghi nội dung ghi 1 dòng
+  bất biến vào bảng lịch sử (số version tăng dần, snapshot dữ liệu đầy đủ, thao tác create|update|delete, nguồn/tác nhân,
+  thời điểm) **trong cùng transaction** với thay đổi; xoá là xoá mềm có lịch sử. Rollback = ghi lại snapshot của version cũ
+  thành version mới (không sửa/xoá dòng lịch sử).
+- **R-16b** _(4.2.0 — CR-031)_: **Backup + khôi phục** — backup `pg_dump` tự động hằng ngày (giữ tối thiểu 14 bản) +
+  backup bắt buộc ngay trước mỗi lần chạy migration; có runbook khôi phục đã chạy thử (restore vào DB tạm + kiểm tra số bản ghi).
+- **R-16c** _(4.2.0 — CR-031)_: **Migration** Drizzle versioned + committed, chạy thẳng lên **DB prod** (không có DB staging —
+  user chấp nhận rủi ro 14/10/2026). Bù rủi ro: backup trước migration (R-16b); giai đoạn đầu chỉ migration **additive**;
+  op destructive (DROP, đổi type, SET NOT NULL, UNIQUE/FK trên data cũ, enum phá hoại, bulk transform) gắn
+  `HIGH_RISK_MIGRATION` và **chỉ chạy khi user duyệt rõ**; cấm `drizzle-kit push`, reset DB, xoá/ghi đè dữ liệu bằng seed.
+  Import seed ban đầu là thao tác **1 lần, chỉ chèn (không ghi đè/xoá)**, chạy sau backup + user xác nhận.
+  Thay cho "verify staging" của migration HIGH_RISK: restore backup mới nhất vào DB tạm rồi chạy thử migration ở đó trước khi chạy prod.
   - ⚠️ Conflict C2 (ghi nhận): `docs/BRD.md:52` ghi "lưu/forward" vs `docs/ERD.md:20-22` "chưa cần lưu DB"
     — spec theo ERD (không lưu DB); phụ thuộc Open Question #4 (form gửi về đâu).
-- Entity ở mức khái niệm (file nội dung, không phải bảng): Solution, Product, CaseStudy, Post,
-  ContactSubmission — `docs/ERD.md:26-34`
+- Entity ở mức khái niệm (_trước 4.2.0_ là file nội dung; _từ 4.2.0_ là bản ghi trong DB — chi tiết `docs/ERD.md`): Solution, Product, CaseStudy, Post,
+  ContactSubmission (không lưu) — `docs/ERD.md:26-34`
 
 ## Authentication
 
@@ -432,6 +461,9 @@ Base URL: dev `http://localhost:3000/api` · prod `https://ntavietnam.tech/api` 
 - **R-27:** Deploy **docker-vps** — VPS `187.52.119.50` (shared; chỉ thêm container mới), Docker + nginx + certbot,
   container `nta-web` tại `127.0.0.1:3005` (host→container 8080); availability target ≥ 99.5% (đo uptime thực tế);
   domain `ntavietnam.tech` (live 2026-10-09 — HTTPS apex, không `www`; http→https 301); CI/CD GitHub Actions (self-hosted runner label `nta-web`).
+  _(4.2.0 — CR-031)_ thêm container **`nta-db`** (PostgreSQL, volume riêng, **không** publish port ra internet; chỉ mạng nội bộ compose)
+  + backup tự động (R-16b); deploy chạy theo thứ tự backup → migrate → chạy app; app không cần DB lúc build image.
+  Secret server-only: `POSTGRES_PASSWORD` / `DATABASE_URL`, `REVALIDATE_SECRET` (không commit, không `NEXT_PUBLIC_*`).
   `[reverse-engineered from docs]` — nguồn: `BRIEF.md:43`, `docs/BRD.md:53,126,127,157`, `.context/project-config.md:51-59`, `docs/runbook/deploy-vps.md`
   - _(cập nhật 2026-10-09: domain `ntavietnam.tech` — change `domain-ntavietnam`; nền tảng deploy reconcile về **docker-vps** — change `deploy-platform-docker-vps` → đã hết drift)._
   - _(cập nhật 2026-10-13: **domain phụ** `ntasolution.vn` (+ `www`) phục vụ cùng app/nội dung — nginx vhost riêng

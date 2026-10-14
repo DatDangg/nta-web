@@ -38,7 +38,8 @@ install_command: npm install
 lint_command: npm run lint     # generic alias (không split web/api)
 typecheck_command: npm run typecheck
 build_command: npm run build
-migration_command: null        # only used when db_tool != none and migration_required: true
+migration_command: npm run db:migrate   # ✅ 14/10/2026 CR-031 — drizzle-kit migrate (SQL versioned trong drizzle/); prod chạy qua deploy (backup pg_dump → migrate → app). CẤM drizzle-kit push
+migration_generate_command: npm run db:generate   # ✅ CR-031 — drizzle-kit generate từ src/db/schema.ts → drizzle/NNNN_*.sql (commit kèm task)
 
 # ── Chạy verify khi agent làm qua Cowork (repo trên Windows, lệnh chạy trong VM Linux) ── ✅ 13/10/2026
 # node_modules của repo là bản Windows → `npm run build` KHÔNG chạy được trong VM (thiếu @next/swc Linux).
@@ -52,10 +53,11 @@ migration_command: null        # only used when db_tool != none and migration_re
 cowork_verify_command: bash tools/linux-build.sh verify
 
 # ── Database ──
-db_tool: none                  # none | prisma | drizzle | other ✅ chốt 08/10/2026
-migration_required: false      # v1 website content-driven, không cần DB
-staging_db: null               # db_tool: none → không áp dụng
-prod_db: null                  # db_tool: none → không áp dụng; nếu thêm DB → phải khác staging_db
+db_tool: drizzle               # ✅ cập nhật 14/10/2026 (CR-031) — PostgreSQL + drizzle-orm/drizzle-kit (trước: none)
+migration_required: true       # ✅ CR-031 — migration gate BẬT
+staging_db: none               # ✅ CR-031 — user quyết định 14/10/2026: KHÔNG có DB staging, bỏ yêu cầu staging_db ≠ prod_db (xem "Ngoại lệ" dưới)
+prod_db: nta-db                # ✅ CR-031 — container PostgreSQL riêng `nta-db` (compose) trên VPS 187.52.119.50, database `nta_web`, volume riêng, KHÔNG publish port; kết nối qua DATABASE_URL (secret)
+db_backup: pg_dump hằng ngày (giữ ≥14 bản) + bắt buộc trước mỗi migration — runbook docs/runbook/db.md (tạo ở CR-031)
 destructive_migration_policy: HIGH_RISK_MIGRATION
 
 # ── Deploy / CI-CD (từ brainstorm; secret nằm ở .env.local) ──
@@ -88,6 +90,11 @@ otel_env: production
   tương thích data, backfill, rollback, kết quả verify staging.
 - Cấm `db push`, `migrate reset`, seed/reset, clone data giữa staging/prod.
 - `staging_db` phải khác `prod_db`; data độc lập; không sync data staging→prod.
+- **Ngoại lệ do user quyết định (14/10/2026, CR-031):** project **chỉ có DB prod** (`staging_db: none`) — migration chạy
+  thẳng lên prod. Bù rủi ro BẮT BUỘC: (1) `pg_dump` ngay trước mỗi lần migrate (deploy fail nếu backup fail);
+  (2) giai đoạn đầu chỉ migration **additive**; (3) op destructive vẫn gắn `HIGH_RISK_MIGRATION` và **chỉ chạy khi user duyệt rõ**
+  (CI chặn nếu thiếu marker duyệt trong file SQL); (4) import seed `src/content` chỉ 1 lần, chỉ chèn, sau backup + user xác nhận.
+  Mục "verify staging" trong báo cáo HIGH_RISK thay bằng: restore bản backup vào DB tạm + chạy migration thử ở đó.
 
 ## Check commands (chạy trước khi báo xong)
 
@@ -104,7 +111,7 @@ check_commands:
   api_lint: null
   test: null                    # = test_command (v1 chưa có test framework)
   build: npm run build          # = build_command
-  migration: null               # = migration_command (db_tool: none)
+  migration: npm run db:migrate # = migration_command (CR-031, drizzle)
   docs_inventory: node scripts/generate-inventory.mjs
 ```
 
@@ -138,5 +145,5 @@ ui:
 ```yaml
 secrets:
   source: env                    # chỉ đọc từ env; KHÔNG hardcode/commit
-  required: [CONTACT_FORM_TARGET]  # ⚠️ OQ#4 chưa chốt hình thức forward — tên env var giữ sẵn; giá trị → .env.local khi chốt
+  required: [CONTACT_FORM_TARGET, POSTGRES_PASSWORD, DATABASE_URL, REVALIDATE_SECRET]  # ✅ 3 secret DB/revalidate thêm ở CR-031 — giá trị đặt trên VPS/runner (user), KHÔNG commit  # ⚠️ OQ#4 chưa chốt hình thức forward — tên env var giữ sẵn; giá trị → .env.local khi chốt
 ```
