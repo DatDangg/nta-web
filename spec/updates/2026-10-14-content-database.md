@@ -30,6 +30,10 @@
   theo request trên data cache (giới hạn Next 15.5 với rewrite `as-needed`), không truy vấn DB khi cache hit. Phương án loại: build từ file
   rồi làm mới từ DB (stale sau deploy), `localePrefix: always` (đổi URL công khai/SEO).
 
+**Cập nhật P3-T04 (cùng 4.2.0, user chốt 14/10/2026):**
+- SỬA **R-16**: messages next-intl + company-info giữ file trong repo lâu dài làm chuẩn cấu trúc + dự phòng; DB gộp sâu đè file, key thiếu → giá trị
+  file + cảnh báo `[content-shape]`, sai kiểu/rỗng → lỗi. Phase 5 không xoá 2 nguồn này. Parity phase 4: log 0 dòng `[content-shape]`.
+
 **Ảnh hưởng:** mọi loader `src/lib/content/*.ts` + registry TS (`slug.ts`, `listings.ts`, `home.ts`, `solutions/overview.ts`)
 và các trang/route dùng chúng (≈55 file import); sitemap/hreflang; mega menu; `docker-compose.yml`, `deploy.yml`;
 docs ERD/DESIGN/API_SPEC/runbook/content-bot. Test: toàn bộ trang vi+en (regression parity), endpoint revalidate,

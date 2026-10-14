@@ -394,6 +394,9 @@ Base URL: dev `http://localhost:3000/api` · prod `https://ntavietnam.tech/api` 
   dựa trên data cache (Next 15.5 không cache ISR on-demand cho URL bị rewrite); TTFB đo local khi data cache hit **≤ 50 ms** (trước ~14 ms, sau ~35 ms);
   DB lỗi → trang đã cache vẫn phục vụ, trang chưa cache trả lỗi rõ (không cache trang rỗng) — tính vào mục tiêu ≥ 99.5% của R-27.
   Chuyển nguồn có cờ `CONTENT_SOURCE=file|db` trong giai đoạn chuyển tiếp; sau cutover bỏ cờ + đường đọc file.
+  _(P3-T04, user chốt 14/10/2026)_ Ngoại lệ: **chữ giao diện** (`src/i18n/messages/{vi,en}.json`) và **thông tin công ty** (`COMPANY_CONTACT`) giữ lâu dài trong repo làm
+  chuẩn cấu trúc + dự phòng — bản DB gộp sâu đè lên file; key có trong file mà DB thiếu → dùng giá trị file + log cảnh báo `[content-shape]`
+  (deploy thêm key mới không làm sập trang); sai kiểu / chuỗi rỗng / mảng rỗng → lỗi rõ. Nội dung còn lại vẫn chỉ đọc từ DB sau cutover.
   `[reverse-engineered from docs]` (phần form) — nguồn: `docs/ERD.md:16-22,34`, `.context/project-config.md:40-41`
 - **R-16a** _(4.2.0 — CR-031)_: **Lịch sử phiên bản nội dung** — mỗi lần tạo/sửa/xoá một bản ghi nội dung ghi 1 dòng
   bất biến vào bảng lịch sử (số version tăng dần, snapshot dữ liệu đầy đủ, thao tác create|update|delete, nguồn/tác nhân,
