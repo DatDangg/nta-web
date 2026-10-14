@@ -39,6 +39,7 @@
 | CR-029 | Trang AI Operations Brain: thay ảnh SVG minh hoạ ở hero bằng ảnh minh hoạ user tạo (webp 1586×992) + thêm `cardImage` cho thẻ ở /solutions/ai (vi + en) — follow-up CR-028 | MODIFY (content) | done (no spec impact) | — (đổi ảnh, không tạo change doc) | 2026-10-14 | 2026-10-14 |
 | CR-030 | Bot Telegram thêm/sửa/xoá nội dung website (Claude API đề xuất → người duyệt → commit main → CI deploy); context bot đã export ở `docs/content-bot/` | ADDITIVE (tooling/VPS) | pending (chờ trả lời 5 câu hỏi) | `2026-10-14-telegram-content-bot.md` | 2026-10-14 | |
 | CR-031 | Thêm database lưu nội dung website (thay file MDX/TS) — nền cho bot Telegram CR-030 | ADDITIVE + MODIFY (kiến trúc/DB/infra) | in_progress (spec 4.2.0 · P1-T01 done · 11 task sau quyết định #9/#10 · P1-T02 chờ user đặt secret + thư mục VPS) | `2026-10-14-content-database.md` | 2026-10-14 | |
+| CR-032 | URL tiếng Anh slug sai (`/en/blog/nope`, `/en/solutions/ai/crm`...) trả 500 thay vì 404 | bug | pending | `2026-10-14-en-invalid-slug-500.md` | 2026-10-14 | |
 
 ## Quy tắc tracking
 
