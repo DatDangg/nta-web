@@ -1,70 +1,54 @@
 {
-  "specVersion": "4.0.0",
-  "scopeVersion": 47,
-  "generatedAt": "2026-10-14T19:00:00+07:00",
+  "specVersion": "4.1.0",
+  "scopeVersion": 48,
+  "generatedAt": "2026-10-14T21:00:00+07:00",
   "trigger": "feature-update",
-  "workItem": "feature-remove-bao-ha-anonymize-oc-eo (phase-1-task-01 bc36b75 + phase-1-task-02 b0d11d1; change spec/changes/2026-10-14-remove-bao-ha-anonymize-oc-eo.md; CR-025)",
+  "workItem": "feature/ai-operations-brain-solution (change spec/changes/2026-10-14-ai-operations-brain-solution.md; CR-028)",
   "specRefs": [
-    "R-06b",
-    "R-06e",
-    "R-08a",
-    "R-08a.1",
-    "R-08b.2"
+    "R-06",
+    "R-06f",
+    "R-08c"
   ],
   "changed": {
     "files": [
-      "src/content/case-studies/{vi,en}/ai-box-bao-ha.mdx (xoá)",
-      "public/images/cases/bao-ha/* (xoá)",
-      "src/content/case-studies/{vi,en}/oc-eo-learning.mdx → heritage-site-ai-camera.mdx (ẩn địa danh, 13 field)",
-      "public/images/cases/oc-eo/* → public/images/cases/heritage-site/*; public/images/illustrations/oc-eo-*.svg → heritage-site-*.svg; xoá oc-eo-learning-overview.svg",
-      "next.config.ts (redirects() 301 cho 3 URL slug cũ)",
-      "src/content/listings.ts (bỏ entry Bảo Hà, slug mới)",
-      "src/content/solutions/{vi,en}/boxai.mdx (bỏ section + showcase item + relatedCases Bảo Hà; link slug mới)",
-      "src/content/solutions/{vi,en}/flycam.mdx (relatedCases slug mới)",
-      "src/app/[locale]/solutions/ai/page.tsx (thẻ cuối trỏ slug mới)"
+      "src/content/solutions/vi/ai-operations-brain.mdx (mới)",
+      "src/content/solutions/en/ai-operations-brain.mdx (mới)",
+      "public/images/solutions/ai-operations-brain.svg (mới, SVG minh hoạ trung tính)",
+      "src/lib/content/slug.ts (aiSlugs thêm ai-operations-brain)",
+      "src/content/listings.ts (thẻ mới + danh mục lọc operations ở /solutions/ai)"
     ],
     "modules": [
-      "Giải pháp AI — /solutions/ai, /solutions/ai/boxai, /solutions/ai/flycam",
-      "Case Study — danh sách /case-studies + chi tiết /case-studies/[slug]",
-      "Trang chủ — khối Câu chuyện khách hàng (R-03b)",
-      "Routing — redirects next.config.ts, 404 not-found.tsx",
-      "SEO — sitemap"
+      "Giải pháp AI — /solutions/ai (listing + filter), /solutions/ai/[slug]",
+      "Header — mega menu nhóm Giải pháp AI",
+      "SEO — sitemap, metadata, hreflang"
     ]
   },
   "impact": {
     "direct": [
-      "/solutions/ai/boxai và /en/solutions/ai/boxai: không còn khối/nhắc 'Đền Bảo Hà' / 'Bao Ha' (sections, showcase.details); relatedCases không có ai-box-bao-ha, chỉ trỏ /case-studies/heritage-site-ai-camera",
-      "/case-studies và /en/case-studies: không có thẻ Bảo Hà; thẻ khu di tích link /case-studies/heritage-site-ai-camera",
-      "/vi/case-studies/ai-box-bao-ha (và /case-studies/ai-box-bao-ha): HTTP 404 + render trang 404 của site (not-found.tsx), không redirect",
-      "/en/case-studies/ai-box-bao-ha: kỳ vọng 404 — KNOWN ISSUE hiện trả 500 (lỗi có từ trước, CR-026 — spec/changes/2026-10-14-en-dynamic-slug-not-found-500.md); ghi nhận, không fail CR-025",
-      "/case-studies/oc-eo-learning, /vi/case-studies/oc-eo-learning, /en/case-studies/oc-eo-learning: HTTP 301, Location: 2 URL vi (không tiền tố và /vi) → /case-studies/heritage-site-ai-camera; /en → /en/case-studies/heritage-site-ai-camera",
-      "/case-studies/heritage-site-ai-camera và /en/case-studies/heritage-site-ai-camera: HTTP 200; HTML (gồm title, meta description, JSON-LD, alt ảnh) không chứa 'Óc Eo', 'Oc Eo', 'Ba Thê', 'Ba The'; có 'một khu di tích ở Việt Nam' (vi) / 'a heritage site in Vietnam' (en); vẫn có số liệu 433 ha / khu di tích quốc gia đặc biệt",
-      "Ảnh trên trang heritage-site-ai-camera load OK (200) từ /images/cases/heritage-site/* và /images/illustrations/heritage-site-*.svg; không src nào chứa 'oc-eo' hay 'bao-ha'",
-      "sitemap.xml: có heritage-site-ai-camera (vi + en), không có oc-eo-learning, không có ai-box-bao-ha"
+      "/solutions/ai/ai-operations-brain (vi): HTTP 200, render bằng khung chi tiết dùng chung (R-08c), đủ nội dung tiếng Việt — vấn đề, 4 lớp công nghệ, vòng lặp an toàn 6 bước, nhóm quy tắc AI Hiến pháp, cơ chế bảo vệ, 7 agent, nguồn dữ liệu, lộ trình 5 giai đoạn, ngành phù hợp, KPI, CTA liên hệ",
+      "/en/solutions/ai/ai-operations-brain: HTTP 200, cùng cấu trúc, nội dung tiếng Anh ('AI Operations Brain')",
+      "Section KPI ghi rõ 'Mục tiêu kỳ vọng khi triển khai' (vi) / 'Target impact (when deployed)' (en) — không trình bày như kết quả đã đạt",
+      "HTML trang (vi + en, gồm metadata/JSON-LD) không chứa tên khách hàng/người cụ thể (vd 'Tuấn Anh'), không có khối ghi chú người duyệt của bản nguồn; không có khối case study liên quan (relatedCases rỗng)",
+      "Ảnh /images/solutions/ai-operations-brain.svg load OK (200)",
+      "CTA cuối trang dẫn tới trang liên hệ nội bộ (/contact, /en/contact)"
     ],
     "dependents": [
-      "/solutions/ai/flycam (+ /en): relatedCases trỏ slug mới, không link gãy",
-      "/solutions/ai (+ /en): thẻ case study cuối trang trỏ slug mới",
-      "Trang chủ / và /en — khối Câu chuyện khách hàng (R-03b): không có thẻ Bảo Hà, thẻ khu di tích link slug mới, thứ tự vẫn theo compareCaseStudies",
-      "Chi tiết case study khác (dental-clinic-operations …): RelatedStudies không link tới ai-box-bao-ha / oc-eo-learning"
+      "/solutions/ai (+ /en): có thẻ AI Operations Brain link đúng trang chi tiết; bộ lọc có danh mục mới 'operations', lọc ra đúng thẻ này; các danh mục cũ vẫn lọc đúng",
+      "Header mega menu (vi + en, desktop + mobile): nhóm Giải pháp AI có mục mới, link đúng locale",
+      "sitemap.xml: có /solutions/ai/ai-operations-brain và /en/solutions/ai/ai-operations-brain; trang có hreflang vi/en + canonical như các trang AI khác"
     ],
     "regression": [
-      "Toàn site (vi + en): không còn link nội bộ nào tới /case-studies/ai-box-bao-ha hoặc /case-studies/oc-eo-learning (crawl link 0 lỗi 404/500 ngoài known issue CR-026)",
-      "Ảnh dashboard BoxAI (01-dashboard-quan-tri.jpg, 02-tasks-channels.jpg) vẫn hiển thị trên /solutions/ai/boxai",
-      "Bố cục showcase case study khu di tích (hero, số liệu, 3 cột, công nghệ, carousel + lightbox R-08d, tầm nhìn, CTA) hiển thị không đổi, không tràn ngang 375/768/1280",
-      "Filter + pagination /case-studies hoạt động, không có ô trống thay cho thẻ đã gỡ"
+      "/solutions/ai/boxai, /solutions/ai/flycam, /solutions/ai/custom-ai, /solutions/ai/fridayai (+ /en): vẫn 200, nội dung + bố cục không đổi",
+      "Lưới /solutions/ai không vỡ bố cục, không tràn ngang 375/768/1280",
+      "Slug AI không tồn tại (vd /solutions/ai/khong-ton-tai) vẫn 404"
     ]
   },
   "acceptance": [
-    "BoxAI vi + en không còn khối/nhắc tới Đền Bảo Hà",
-    "/case-studies (vi + en), trang chủ, trang giải pháp không có case study Bảo Hà; không link gãy",
-    "/vi/case-studies/ai-box-bao-ha → 404 với trang 404 của site; /en/case-studies/ai-box-bao-ha → kỳ vọng 404 (known issue: hiện 500, theo dõi CR-026)",
-    "3 URL slug cũ oc-eo-learning (không tiền tố, /vi, /en) → 301 sang heritage-site-ai-camera cùng locale",
-    "/case-studies/heritage-site-ai-camera vi + en → 200, không chứa 'Óc Eo' / 'Ba Thê' (kể cả metadata, JSON-LD, alt, tên file ảnh); dùng 'một khu di tích ở Việt Nam' / 'a heritage site in Vietnam'",
-    "sitemap chỉ có slug mới heritage-site-ai-camera, không có oc-eo-learning / ai-box-bao-ha"
+    "/solutions/ai/ai-operations-brain và /en/solutions/ai/ai-operations-brain render đủ nội dung, đúng ngôn ngữ, không lỗi build",
+    "Thẻ mới xuất hiện ở /solutions/ai (vi + en) và ở mega menu (lấy từ danh sách chung aiSlugs)",
+    "KPI ghi rõ là mục tiêu; không còn khối ghi chú người duyệt; không có tên khách hàng/người cụ thể",
+    "Sitemap / metadata / hreflang có trang mới như các trang AI khác",
+    "typecheck + lint + build PASS"
   ],
-  "knownIssues": [
-    "CR-026: /en/<dynamic>/<slug-không-tồn-tại> (vd /en/case-studies/ai-box-bao-ha) trả 500 thay vì 404 — lỗi có từ trước CR-025, xử lý ở change riêng spec/changes/2026-10-14-en-dynamic-slug-not-found-500.md"
-  ],
-  "risk": "medium"
+  "risk": "low"
 }

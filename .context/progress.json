@@ -2,12 +2,12 @@
   "mode": "feature",
   "activeWorkItem": {
     "type": "feature",
-    "slug": "remove-bao-ha-anonymize-oc-eo",
+    "slug": "ai-operations-brain-solution",
     "phaseTask": "close-out",
     "step": "close-out",
     "status": "done",
-    "journal": ".context/runs/feature-remove-bao-ha-anonymize-oc-eo-phase-1-task-02.md",
-    "note": "CR-025 done — spec 4.0.0 · scope v47"
+    "journal": ".context/runs/feature-ai-operations-brain-solution-phase-1-task-01.md",
+    "note": "CR-028 done — spec 4.1.0 · scope v48"
   },
   "features": [
     {
@@ -1140,6 +1140,21 @@
       "reviewer": {
         "result": "PASS",
         "report": ".context/review-reports/feature-remove-bao-ha-anonymize-oc-eo-phase-1-task-02-round-1-review.md"
+      }
+    },
+    {
+      "slug": "ai-operations-brain-solution",
+      "status": "done",
+      "changeFile": "spec/changes/archive/2026-10-14-ai-operations-brain-solution.md",
+      "classification": "ADDITIVE (content)",
+      "tasks": {
+        "phase-1-task-01": "done"
+      },
+      "note": "CR-028 — trang Giải pháp AI ai-operations-brain (vi+en), danh mục lọc operations; KPI ghi rõ mục tiêu; spec 4.0.0 → 4.1.0 (MINOR) · scope v48. npm build local fail do quyền cache Windows (HEAD cũng fail) → build Docker PASS 61/61",
+      "updatedAt": "2026-10-14",
+      "reviewer": {
+        "result": "PASS",
+        "report": ".context/review-reports/feature-ai-operations-brain-solution-phase-1-task-01-round-1-review.md"
       }
     }
   ],

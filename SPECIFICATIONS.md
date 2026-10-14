@@ -1,5 +1,5 @@
 ---
-spec_version: 4.0.0
+spec_version: 4.1.0
 updated_at: 2026-10-14
 ---
 
@@ -16,7 +16,7 @@ updated_at: 2026-10-14
 
 **NTA Website** — website giới thiệu (marketing/showcase, content-driven) của công ty NTA, giới thiệu
 3 mảng giải pháp: (1) Giải pháp doanh nghiệp (CRM, HRM, LMS, DentGo), (2) Giải pháp AI (BoxAI,
-flycam/drone, AI tùy chỉnh, FridayAI), (3) App AI (music app, hair-style AI). Hướng B2B: khách doanh nghiệp,
+flycam/drone, AI tùy chỉnh, FridayAI, AI Vận hành Doanh nghiệp), (3) App AI (music app, hair-style AI). Hướng B2B: khách doanh nghiệp,
 cơ quan nhà nước, đối tác. **Không** có đăng nhập người dùng ở v1.
 Nguồn: `BRIEF.md:5-17`, `docs/BRD.md:14-31`.
 
@@ -109,7 +109,7 @@ _(cập nhật 2026-10-13: thêm **domain phụ** `ntasolution.vn` (+ `www`) ph�
 ### Module 4 — Giải pháp AI
 
 - **R-06:** Trang tổng quan `/solutions/ai` + trang con `/solutions/ai/[slug]`
-  (`boxai` | `flycam` | `custom-ai` | `fridayai`); mỗi giải pháp có mô tả + case study liên quan nếu có dữ liệu (tùy chọn).
+  (`boxai` | `flycam` | `custom-ai` | `fridayai` | `ai-operations-brain`); mỗi giải pháp có mô tả + case study liên quan nếu có dữ liệu (tùy chọn).
   `[reverse-engineered from docs]` — nguồn: `docs/BRD.md:88-90` (FR-030), `docs/DESIGN.md:101-107`
 - **R-06a (content — AI tùy chỉnh / Talvra):** trang `custom-ai` trình bày **nền tảng Talvra** (content thật,
   không placeholder): vấn đề của SME, định nghĩa platform, 4 nguyên tắc, 3 template trợ lý
@@ -135,6 +135,17 @@ _(cập nhật 2026-10-13: thêm **domain phụ** `ntasolution.vn` (+ `www`) ph�
   Ảnh = ảnh chụp website fridayaix.com (caption ghi nguồn) + logo SVG lấy từ site. Thẻ ở `/solutions/ai` thuộc
   danh mục lọc mới **"Nền tảng API AI" (`gateway`)**; mega menu Header + sitemap tự có mục mới.
   — nguồn: change `spec/changes/2026-10-13-fridayai-solution.md` (CR-011).
+- **R-06f (content — AI Operations Brain, 4.1.0):** trang `ai-operations-brain` (+ `/en/…`) trình bày giải pháp dạng
+  **năng lực (capability)** "AI Vận hành Doanh nghiệp — bộ não vận hành đa tác vụ" / "AI Operations Brain": nền tảng
+  multi-agent hợp nhất dữ liệu vận hành, phân tích – dự báo – **đề xuất hành động**, ràng buộc bởi **AI Hiến pháp**
+  (policy engine có version) và **con người phê duyệt** trước khi thực thi; vấn đề, 4 lớp công nghệ, vòng lặp an toàn
+  6 bước, nhóm quy tắc Hiến pháp, cơ chế bảo vệ, mô hình 7 agent, nguồn dữ liệu, lộ trình 5 giai đoạn, ngành phù hợp, CTA
+  liên hệ nội bộ. Section KPI **giữ nhưng ghi rõ là "Mục tiêu kỳ vọng khi triển khai" / "Target impact (when deployed)"**,
+  không trình bày như kết quả đã đạt (BR-004). **Không** gắn tên khách hàng/người cụ thể, `relatedCases: []`,
+  **không** xuất hiện khối ghi chú người duyệt của bản nguồn. Ảnh = SVG minh hoạ trung tính (không ảnh khách hàng).
+  Thẻ ở `/solutions/ai` (3 chip theo bản nguồn) thuộc danh mục lọc mới `operations` ("Vận hành doanh nghiệp" /
+  icon `workflow`); mega menu Header + sitemap/hreflang tự có mục mới (theo `aiSlugs`).
+  — nguồn: change `spec/changes/archive/2026-10-14-ai-operations-brain-solution.md` (CR-028).
 - **R-06d (render — trang chi tiết AI):** trang chi tiết AI render `benefits` (lợi ích) + **section nội dung
   có cấu trúc** (kiến trúc / thuật toán / ứng dụng ngành) + chỉ số nổi bật/FAQ tùy chọn; giữ SSG + i18n VI/EN.
   — thiết kế component cập nhật ở `.context/design-spec.md`.
