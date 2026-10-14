@@ -122,7 +122,7 @@ Font stack: `-apple-system, BlinkMacSystemFont, "SF Pro Display", Inter, "Segoe 
 ### Screen: Case Study (chi tiết)
 - **Route:** `/case-studies/[slug]`
 - **Components:** PageHeader, MetaBar (khách hàng, lĩnh vực, năm), ChallengeBlock, SolutionBlock, ResultBlock (số liệu), ImageGallery, RelatedStudies, CTA
-- **Content data:** `oc-eo-learning` = dự án AI camera + flycam khu di tích Óc Eo – Ba Thê (category `ai`, slug giữ nguyên) — viết theo nhánh **phương án đề xuất** (kết quả kỳ vọng/dự toán, BR-004). Featured case ở `src/content/home.ts` cùng context (R-08a).
+- **Content data:** `heritage-site-ai-camera` = dự án AI camera + flycam cho một khu di tích ở Việt Nam, không nêu địa danh (category `ai`; slug cũ `oc-eo-learning` → 301 trong `next.config.ts`, CR-025) — viết theo nhánh **phương án đề xuất** (kết quả kỳ vọng/dự toán, BR-004). Featured case ở `src/content/home.ts` cùng context (R-08a).
 
 ### Screen: Tin tức / Blog
 - **Route:** `/blog` + `/blog/[slug]`

@@ -18,7 +18,7 @@
 
 | # | Vị trí | Vấn đề |
 |---|---|---|
-| 2.1 | Case study (`oc-eo-learning`) | Đoạn mô tả ở đầu trang (`PageHeader.description`) **trùng nguyên văn** với đoạn "Kết quả" (`ResultBlock`). Đọc lại như thể lặp 2 lần. → Rút gọn 1 trong 2, hoặc viết "Kết quả" là số liệu cụ thể hơn (tiến độ, mốc bàn giao) thay vì lặp lại mô tả. |
+| 2.1 | Case study (`heritage-site-ai-camera`) | Đoạn mô tả ở đầu trang (`PageHeader.description`) **trùng nguyên văn** với đoạn "Kết quả" (`ResultBlock`). Đọc lại như thể lặp 2 lần. → Rút gọn 1 trong 2, hoặc viết "Kết quả" là số liệu cụ thể hơn (tiến độ, mốc bàn giao) thay vì lặp lại mô tả. |
 
 ## 3. Dư lặp trong footer
 

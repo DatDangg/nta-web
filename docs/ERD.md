@@ -27,7 +27,7 @@
 |--------|----------|---------------|
 | Solution | Giải pháp (doanh nghiệp: CRM/HRM/LMS/DentGo; AI: BoxAI/Flycam/Custom) | thuộc 1 Category; has many CaseStudy (liên quan) |
 | Product | App AI (Music, Hair-style) | has many Screenshot |
-| CaseStudy | Dự án tiêu biểu (Óc Eo, phòng khám…) | thuộc 1 Solution/Category; has many Image |
+| CaseStudy | Dự án tiêu biểu (khu di tích, phòng khám…) | thuộc 1 Solution/Category; has many Image |
 | Post | Bài blog/tin tức | has many Tag |
 | ContactSubmission | Dữ liệu form liên hệ (transient, forward) | — |
 

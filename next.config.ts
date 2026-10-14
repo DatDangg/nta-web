@@ -12,6 +12,16 @@ const nextConfig: NextConfig = {
     // → giữ bản đã tối ưu 31 ngày thay vì mặc định 60s.
     minimumCacheTTL: 2678400,
   },
+  // Slug case study cũ đã được index/chia sẻ → 301 sang slug mới (CR-025).
+  // Dùng `statusCode: 301` vì `permanent: true` của Next trả 308. Nguồn `/vi/...` trỏ thẳng về
+  // URL không prefix (localePrefix 'as-needed') để tránh redirect 2 bước qua middleware next-intl.
+  async redirects() {
+    return [
+      { source: '/case-studies/oc-eo-learning', destination: '/case-studies/heritage-site-ai-camera', statusCode: 301 },
+      { source: '/vi/case-studies/oc-eo-learning', destination: '/case-studies/heritage-site-ai-camera', statusCode: 301 },
+      { source: '/en/case-studies/oc-eo-learning', destination: '/en/case-studies/heritage-site-ai-camera', statusCode: 301 },
+    ];
+  },
 };
 
 export default withNextIntl(nextConfig);

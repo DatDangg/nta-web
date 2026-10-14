@@ -39,8 +39,8 @@ export default async function AiSolutionsPage({ params }: { params: Promise<{ lo
   ]);
   const copy = listingPages[locale].ai;
   const items = toSolutionItems(locale, allSolutions, aiSlugs, (title) => t('imageAlt', { title }));
-  const caseStudy = caseStudies.find((item) => item.slug === 'oc-eo-learning');
-  // Thẻ cuối lưới dẫn sang case study Óc Eo (thay khối CaseStudyTeaser cũ); không có → mời liên hệ.
+  const caseStudy = caseStudies.find((item) => item.slug === 'heritage-site-ai-camera');
+  // Thẻ cuối lưới dẫn sang case study khu di tích (thay khối CaseStudyTeaser cũ); không có → mời liên hệ.
   const cta: ListingCta = caseStudy
     ? { ...listingCtas[locale].ai, description: caseStudy.title, href: `/case-studies/${caseStudy.slug}`, icon: 'landmark' }
     : { title: t('ctaTitle'), description: t('ctaDescription'), label: locale === 'en' ? 'Contact us' : 'Liên hệ tư vấn', href: '/contact', icon: 'chat' };

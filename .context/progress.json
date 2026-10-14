@@ -3,11 +3,11 @@
   "activeWorkItem": {
     "type": "feature",
     "slug": "remove-bao-ha-anonymize-oc-eo",
-    "phaseTask": "phase-1-task-02",
-    "step": "builder",
+    "phaseTask": "close-out",
+    "step": "spec-publisher",
     "status": "ready",
     "journal": ".context/runs/feature-remove-bao-ha-anonymize-oc-eo-phase-1-task-02.md",
-    "note": "CR-025 task-01 done (commit), task-02 kế tiếp"
+    "note": "CR-025 task-01+02 done, chờ spec-publisher + close-out"
   },
   "features": [
     {
@@ -1133,13 +1133,13 @@
       "classification": "REMOVE + MODIFY (content)",
       "tasks": {
         "phase-1-task-01": "done",
-        "phase-1-task-02": "pending"
+        "phase-1-task-02": "done"
       },
       "note": "CR-025 — bỏ case study Bảo Hà + ẩn địa danh Óc Eo (slug heritage-site-ai-camera, redirect 301)",
       "updatedAt": "2026-10-14",
       "reviewer": {
         "result": "PASS",
-        "report": ".context/review-reports/feature-remove-bao-ha-anonymize-oc-eo-phase-1-task-01-round-1-review.md"
+        "report": ".context/review-reports/feature-remove-bao-ha-anonymize-oc-eo-phase-1-task-02-round-1-review.md"
       }
     }
   ],

@@ -83,4 +83,21 @@ MODIFY (content + slug/URL) — không đổi component/schema.
 - `docs/DESIGN.md:125`, `docs/ERD.md:30`, `docs/backlog-content.md:21` reconcile. Không đổi API.
 
 ## Verification summary
-- (Builder điền)
+- Builder (2026-10-14), attempt 1.
+- Đổi tên: `git mv` mdx vi/en → `heritage-site-ai-camera.mdx` (slug dòng 2); `public/images/cases/oc-eo/` → `heritage-site/` (6 jpg);
+  `illustrations/oc-eo-{architecture,edge-detail,operations-detail}.svg` → `heritage-site-*.svg`; `git rm public/images/cases/oc-eo-learning-overview.svg`
+  (xác nhận mồ côi: grep toàn repo không còn tham chiếu ngoài `.next-build/` cũ; sau build trả 404).
+- Text: thay đúng 13 dòng theo bảng đã duyệt (vi + en); giữ "433 ha", "khu di tích quốc gia đặc biệt"/"Special National Monument", số camera/tuần.
+- Link/lookup: `listings.ts` (vi/en key), `solutions/ai/page.tsx:42` (+ comment :43), `boxai.mdx`/`flycam.mdx` vi/en → slug mới.
+- Redirect: `next.config.ts` `async redirects()` 3 nguồn, `statusCode: 301`.
+- Docs as-built: `docs/DESIGN.md:125`, `docs/ERD.md:30`, `docs/backlog-content.md:21`. `docs/BRD.md` giữ nguyên (user chốt).
+- `npm run typecheck` → PASS · `npm run lint` → PASS (0 error, 1 warning có từ trước ở `src/components/mdx/index.tsx:25`, ngoài diff)
+  · `SWC_NATIVE_BINDING_CACHE=... npm run build` → PASS (59/59 trang; SSG `/vi|en/case-studies/heritage-site-ai-camera`).
+- Smoke `next start -p 3124`: `/case-studies/oc-eo-learning` + `/vi/...` → `301` `location: /case-studies/heritage-site-ai-camera`;
+  `/en/...` → `301` `location: /en/case-studies/heritage-site-ai-camera` (1 bước, không loop). Slug mới vi/en → `200`; HTML 0 match
+  `Óc Eo|Ba Thê|oc-eo|Oc Eo|Ba The`; `<title>` có "một khu di tích ở Việt Nam"/"a heritage site in Vietnam"; "433 ha" có.
+  `sitemap.xml`: có `heritage-site-ai-camera`, 0 `oc-eo-learning`. Href slug mới ở `/solutions/ai`, `/solutions/ai/boxai`,
+  `/solutions/ai/flycam`, `/case-studies`, `/`, `/en/solutions/ai`, `/en/solutions/ai/flycam`. Ảnh `heritage-site/*` → 200. Server đã tắt.
+- Grep: `grep -rn "oc-eo-learning" src` = 0 · `grep -rn "oc-eo" src public` = 0 · `grep -rnE "c Eo|Ba Th" src/content` = 3 —
+  đều là comment nội bộ `src/content/types.ts:167,176,188` (giữ theo ghi chú CR/user), không hiển thị.
+- Residual: `BRIEF.md:13,31` còn "Óc Eo" (intent/brief, ngoài scope task); `.next-build/` cũ còn chuỗi cũ (artifact build, không commit).
