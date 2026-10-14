@@ -12,7 +12,8 @@
 ## Docs (as-built, kèm evidence code)
 - `docs/ERD.md`: PostgreSQL/Drizzle, pointer `src/db/schema.ts` + `drizzle/`, 2 bảng + danh sách collection; bỏ "v1 không DB".
 - `docs/DESIGN.md`: luồng đọc DB + cache tag + revalidate; chiến lược render; build không cần DB.
-- `docs/API_SPEC.md`: `POST /api/revalidate`.
+- `docs/API_SPEC.md`: `POST /api/revalidate` + `GET /uploads/...`.
+- Runbook: thư mục upload, backup/restore ảnh.
 - `docs/runbook/db.md` + `deploy-vps.md`: hoàn thiện sau cutover.
 - `docs/content-bot/08-data-model.md`, `09-web-to-data-map.md`, `02-schemas.md`, `10-server.md`: ánh xạ file → collection/bảng.
   `docs/content-bot/` hiện **untracked, thuộc CR-030** → nếu CR-030 chưa commit thư mục này thì ghi yêu cầu cập nhật vào change doc CR-030, không commit thay.

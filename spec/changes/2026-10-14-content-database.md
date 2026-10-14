@@ -32,6 +32,12 @@ commit → build → deploy. User muốn **làm DB** để lưu nội dung, làm
 6. ORM/migration tool: **Drizzle** (drizzle-orm + drizzle-kit, migration SQL versioned).
 7. File MDX/TS trong `src/content`: **giữ làm seed import ban đầu, web ngừng đọc** (ghi rõ không còn là nguồn sự thật).
 8. Môi trường DB: **chỉ dùng DB prod, không quan tâm staging** (bỏ hẳn yêu cầu DB staging khỏi acceptance).
+9. Phạm vi mở rộng: **bot sửa được mọi chữ trên web** — đưa cả chữ giao diện `src/i18n/messages/{vi,en}.json`
+   và `company-info.ts` vào DB (vi + en).
+10. Ảnh: **bot gửi được ảnh mới lên web**. CR-031 lo phần lưu trữ (volume bền trên VPS, có backup, URL ổn định,
+    hiển thị được qua `next/image`, không cần build lại); CR-030 lo phần bot nhận ảnh từ Telegram và gọi lưu trữ.
+    Ảnh cũ trong `public/images` giữ nguyên, nằm trong repo (user chốt không chuyển sang VPS). Sửa ảnh cũ =
+    upload ảnh mới + đổi đường dẫn trong DB; file cũ không còn dùng thì dọn ở lần dọn repo sau.
 
 ## Acceptance (chốt 2026-10-14)
 - [ ] Mọi trang hiện có hiển thị y hệt sau khi chuyển nguồn sang DB (vi + en, cùng URL)

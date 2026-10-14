@@ -3,11 +3,11 @@
   "activeWorkItem": {
     "type": "feature",
     "slug": "content-database",
-    "phaseTask": "phase-1-task-01",
-    "step": "closeout",
-    "status": "done",
+    "phaseTask": "phase-1-task-02",
+    "step": "ready",
+    "status": "blocked_on_user",
     "journal": ".context/runs/feature-content-database-phase-1-task-01.md",
-    "note": "CR-031 P1-T01 done — review STRICT PASS"
+    "note": "Chờ user đặt POSTGRES_PASSWORD/REVALIDATE_SECRET + xác nhận /opt/nta-web-data/{db-backups,uploads} + dung lượng"
   },
   "features": [
     {
@@ -1175,11 +1175,13 @@
         "phase-3-task-02": "pending",
         "phase-3-task-03": "pending",
         "phase-4-task-01": "pending",
-        "phase-5-task-01": "pending"
+        "phase-5-task-01": "pending",
+        "phase-3-task-04": "pending",
+        "phase-3-task-05": "pending"
       },
       "currentPhase": 1,
       "inProgressTask": null,
-      "note": "P1-T01 done (schema + Drizzle + migration 0000 + npm test). Tiếp: cập nhật plan (#9 messages/company-info, #10 lưu ảnh) → P1-T02 chờ user secret/backup dir.",
+      "note": "P1-T01 done (8084015). Plan cập nhật #9 (messages + company-info vào DB) + #10 (lưu trữ ảnh upload): thêm P3-T04, P3-T05 → 11 task. P1-T02 chờ user: secret + thư mục backup/upload + dung lượng.",
       "updatedAt": "2026-10-14",
       "specValidator": {
         "result": "PASS",

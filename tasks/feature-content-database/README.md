@@ -12,10 +12,12 @@ Classification: **ADDITIVE + MODIFY (kiến trúc)** · Risk: **HIGH** · Review
 | 5 | `phase-3-task-01` Data-access đọc DB có cache tag; loader MDX đọc DB | 3 | không |
 | 6 | `phase-3-task-02` Registry TS (slug/listings/home/overview) → DB; render không cần DB lúc build | 5 | không |
 | 7 | `phase-3-task-03` `POST /api/revalidate` có secret | 5 | không |
-| 8 | `phase-4-task-01` Parity toàn site + cutover prod (backup → migrate → import → deploy → smoke) | 2,3,4,6,7 | **có** — duyệt deploy prod + xác nhận chạy import |
-| 9 | `phase-5-task-01` Doc reconcile (ERD, DESIGN, API_SPEC, runbook, content-bot, src/content README) | 8 | không |
+| 8 | `phase-3-task-04` Chữ giao diện next-intl + company-info đọc DB (quyết định #9) | 3,5,7 | không |
+| 9 | `phase-3-task-05` Lưu trữ ảnh upload: volume + `/uploads` + `next/image` không build lại + collection `asset` (quyết định #10) | 2,4 | không (thư mục upload gộp ở task 2) |
+| 10 | `phase-4-task-01` Parity toàn site + cutover prod (backup → migrate → import → deploy → smoke + upload ảnh) | 2–9 | **có** — duyệt deploy prod + xác nhận chạy import |
+| 11 | `phase-5-task-01` Doc reconcile (ERD, DESIGN, API_SPEC, runbook, content-bot, src/content README) | 10 | không |
 
-Thứ tự: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → 9. Hết mỗi phase → `spec-validator` + human checkpoint.
+Thứ tự: 1 → 2 → … → 11 (cập nhật 14/10/2026: thêm P3-T04, P3-T05 theo quyết định #9/#10). Task 1 **done** (`8084015`). Hết mỗi phase → `spec-validator` + human checkpoint.
 Phần thao tác VPS của task 2 (secret) chờ user nhưng không chặn task 3–7 (dev dùng Postgres Docker local).
 Production **không đổi nguồn nội dung** cho tới task 8 (cờ `CONTENT_SOURCE` mặc định `file` — xem mục Lưu ý push).
 

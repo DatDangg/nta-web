@@ -385,8 +385,9 @@ Base URL: dev `http://localhost:3000/api` · prod `https://ntavietnam.tech/api` 
   web đọc nội dung **chỉ từ DB** (file `src/content/**` giữ làm seed import ban đầu, **không còn là nguồn sự thật**).
   Mọi URL/slug vi + en giữ nguyên; mọi trang hiển thị **y hệt** trước khi chuyển. Sửa nội dung trong DB + gọi R-15a → trang
   cập nhật **không cần build/deploy lại**; slug mới thêm vào DB có route ngay (không phụ thuộc `generateStaticParams` lúc build).
-  Chữ giao diện cố định (`src/i18n/messages`), thông tin liên hệ công ty (`company-info.ts`) và ảnh (`public/images`)
-  **không** thuộc phạm vi chuyển (giữ trong repo) — trừ khi user chốt khác.
+  Phạm vi gồm cả **chữ giao diện** `src/i18n/messages/{vi,en}.json` (next-intl lấy messages từ DB) và **thông tin công ty**
+  `company-info.ts` (vi + en) — user chốt 14/10/2026 (quyết định #9: bot sửa được mọi chữ trên web).
+  Ảnh có sẵn `public/images` **giữ trong repo** (không chuyển); ảnh mới theo R-16d.
   Form liên hệ **forward** qua email/API bên thứ ba, **không lưu DB** (giữ nguyên).
   Hiệu năng/khả dụng: trang đã cache **không** truy vấn DB; TTFB trang chủ (cache hit) không tệ hơn quá 20% so với trước;
   DB lỗi → trang đã cache vẫn phục vụ, trang chưa cache trả lỗi rõ (không cache trang rỗng) — tính vào mục tiêu ≥ 99.5% của R-27.
@@ -396,7 +397,13 @@ Base URL: dev `http://localhost:3000/api` · prod `https://ntavietnam.tech/api` 
   bất biến vào bảng lịch sử (số version tăng dần, snapshot dữ liệu đầy đủ, thao tác create|update|delete, nguồn/tác nhân,
   thời điểm) **trong cùng transaction** với thay đổi; xoá là xoá mềm có lịch sử. Rollback = ghi lại snapshot của version cũ
   thành version mới (không sửa/xoá dòng lịch sử).
-- **R-16b** _(4.2.0 — CR-031)_: **Backup + khôi phục** — backup `pg_dump` tự động hằng ngày (giữ tối thiểu 14 bản) +
+- **R-16d** _(4.2.0 — CR-031, quyết định #10)_: **Lưu trữ ảnh mới** (nền cho bot CR-030 gửi ảnh): ảnh lưu trên volume bền của VPS
+  (ngoài image container, nằm trong backup cùng DB), URL ổn định `/uploads/<tên-theo-hash>.<ext>`, hiển thị được qua `next/image`
+  **không cần build lại**; metadata + lịch sử ảnh ghi trong DB (collection `asset`, có version như R-16a). Hàm lưu ảnh chỉ nhận
+  JPEG/PNG/WebP (kiểm magic bytes, **không** SVG), giới hạn dung lượng (mặc định ≤ 5 MB) và kích thước, tên file do server sinh,
+  chống path traversal; đường phục vụ chỉ đọc trong thư mục upload. Sửa ảnh cũ = upload ảnh mới + đổi đường dẫn trong DB.
+  Phần bot nhận ảnh từ Telegram thuộc CR-030.
+- **R-16b** _(4.2.0 — CR-031)_: **Backup + khôi phục** — backup `pg_dump` + thư mục ảnh upload (R-16d) tự động hằng ngày (giữ tối thiểu 14 bản) +
   backup bắt buộc ngay trước mỗi lần chạy migration; có runbook khôi phục đã chạy thử (restore vào DB tạm + kiểm tra số bản ghi).
 - **R-16c** _(4.2.0 — CR-031)_: **Migration** Drizzle versioned + committed, chạy thẳng lên **DB prod** (không có DB staging —
   user chấp nhận rủi ro 14/10/2026). Bù rủi ro: backup trước migration (R-16b); giai đoạn đầu chỉ migration **additive**;
@@ -462,7 +469,7 @@ Base URL: dev `http://localhost:3000/api` · prod `https://ntavietnam.tech/api` 
   container `nta-web` tại `127.0.0.1:3005` (host→container 8080); availability target ≥ 99.5% (đo uptime thực tế);
   domain `ntavietnam.tech` (live 2026-10-09 — HTTPS apex, không `www`; http→https 301); CI/CD GitHub Actions (self-hosted runner label `nta-web`).
   _(4.2.0 — CR-031)_ thêm container **`nta-db`** (PostgreSQL, volume riêng, **không** publish port ra internet; chỉ mạng nội bộ compose)
-  + backup tự động (R-16b); deploy chạy theo thứ tự backup → migrate → chạy app; app không cần DB lúc build image.
+  + volume ảnh upload `nta-web-uploads` mount vào `nta-web` (R-16d) + backup tự động (R-16b); deploy chạy theo thứ tự backup → migrate → chạy app; app không cần DB lúc build image.
   Secret server-only: `POSTGRES_PASSWORD` / `DATABASE_URL`, `REVALIDATE_SECRET` (không commit, không `NEXT_PUBLIC_*`).
   `[reverse-engineered from docs]` — nguồn: `BRIEF.md:43`, `docs/BRD.md:53,126,127,157`, `.context/project-config.md:51-59`, `docs/runbook/deploy-vps.md`
   - _(cập nhật 2026-10-09: domain `ntavietnam.tech` — change `domain-ntavietnam`; nền tảng deploy reconcile về **docker-vps** — change `deploy-platform-docker-vps` → đã hết drift)._

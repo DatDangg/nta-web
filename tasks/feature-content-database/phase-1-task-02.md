@@ -12,8 +12,11 @@
 1. `docker-compose.yml`: service `nta-db` (`postgres:16-alpine`, pin minor), named volume `nta-db-data`, **không `ports:`** (chỉ mạng compose),
    healthcheck `pg_isready`, `POSTGRES_PASSWORD` bắt buộc (`${POSTGRES_PASSWORD:?}`), `restart: unless-stopped`, giới hạn RAM hợp lý.
    `nta-web` nhận `DATABASE_URL` + `REVALIDATE_SECRET` từ env; **chưa** `depends_on nta-db` (thêm ở task 8 khi bật `CONTENT_SOURCE=db`).
+1b. Volume ảnh upload `nta-web-uploads` (bind mount host, đề xuất `/opt/nta-web-data/uploads`) mount vào `nta-web` tại `UPLOAD_DIR`
+   (vd `/app/uploads`, user `nextjs` ghi được) — R-16d; chưa có code dùng tới ở task này.
 2. Backup tự động bằng **container sidecar** `nta-db-backup` (không cài cron lên host): `pg_dump -Fc` hằng ngày, giữ ≥14 bản,
    ghi ra bind mount host (đề xuất `/opt/nta-web-data/db-backups` — user xác nhận), log thành công/thất bại.
+   Cùng lượt backup: nén thư mục upload (`tar.gz`, cùng chính sách giữ 14 bản) — R-16b.
 3. Service một-lần `nta-migrate` (profile `tools`) chạy migration Drizzle (drizzle-kit hoặc migrator của drizzle-orm — chọn cách đơn giản, ghi decisions.md).
 4. `deploy.yml`: `up -d nta-db` → chờ healthy → **backup pre-migrate** (`pre-migrate-<sha>.dump`; fail → deploy fail)
    → **gate destructive**: script quét migration chưa apply (DROP / ALTER … TYPE / SET NOT NULL / ADD CONSTRAINT UNIQUE|FOREIGN / DROP TYPE / UPDATE|DELETE hàng loạt);
@@ -23,7 +26,7 @@
 
 ## Thao tác của USER (agent không tự làm)
 - Thêm GitHub Secrets (repo DatDangg/nta-web) hoặc env runner: `POSTGRES_PASSWORD`, `REVALIDATE_SECRET` (agent đưa hướng dẫn; user đặt giá trị).
-- Xác nhận thư mục backup trên VPS + dung lượng đĩa trống.
+- Xác nhận thư mục backup + thư mục upload trên VPS + dung lượng đĩa trống.
 
 ## Acceptance
 - `docker compose config` hợp lệ; DB không lộ port; web hiện tại vẫn chạy bình thường.

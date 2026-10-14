@@ -9,7 +9,9 @@
 ## Scope
 1. Import đọc **bằng chính loader file hiện tại** (`src/lib/content/*`, `src/content/*.ts`) — không parse lại → dữ liệu khớp đúng cái web đang render.
    Mapping theo `docs/content-bot/08-data-model.md` §2: Post/Solution/Product/CaseStudy/About (data = frontmatter, body = MDX source),
-   `listingPages/listingItems/listingCtas/listingLabels`, `home`, `solutionOverview`, `slug_registry` (sort_order = thứ tự `slug.ts`).
+   `listingPages/listingItems/listingCtas/listingLabels`, `home`, `solutionOverview`, `slug_registry` (sort_order = thứ tự `slug.ts`),
+   **`ui_messages`** (`src/i18n/messages/{vi,en}.json` — 1 bản ghi/locale/namespace cấp 1) và **`company_info`** (`company-info.ts`, vi + en) — quyết định #9.
+   Bổ sung các collection mới (`ui_messages`, `company_info`, `asset`) vào whitelist app ở `src/db/schema.ts` (không cần migration vì collection không CHECK).
    Cần tách phần đọc file thành module dùng lại được (vì task 5/6 đổi loader sang DB) — vd `tools/db/file-source.ts`.
 2. Mỗi bản ghi: chèn `content_entries` (version 1) + `content_versions` (op `create`, actor `seed`) trong transaction;
    `ON CONFLICT DO NOTHING` — **không ghi đè, không xoá, không TRUNCATE**. Chạy lại = 0 bản ghi mới. Có `--dry-run`.
