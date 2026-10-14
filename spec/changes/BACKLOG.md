@@ -41,7 +41,7 @@
 | CR-031 | Thêm database lưu nội dung website (thay file MDX/TS) — nền cho bot Telegram CR-030 | ADDITIVE + MODIFY (kiến trúc/DB/infra) | in_progress (spec 4.2.0 · phase 1–3 done, P3 spec-validator PASS 14/10 · chờ checkpoint → P4 cutover) | `2026-10-14-content-database.md` | 2026-10-14 | |
 | CR-032 | URL tiếng Anh slug sai (`/en/blog/nope`, `/en/solutions/ai/crm`...) trả 500 thay vì 404 | bug | pending | `2026-10-14-en-invalid-slug-500.md` | 2026-10-14 | |
 | CR-033 | Backup Content ops (`pre-migrate-ops-*`) dùng chung vòng giữ 14 bản → đẩy mất backup trước-deploy | bug (ops) | pending | `2026-10-14-ops-backup-rotation.md` | 2026-10-14 | |
-| CR-034 | Bài AI news hằng tuần không lên web sau cutover DB (workflow vẫn ghi file `src/content/blog`) — ưu tiên cao, trước lượt chạy kế | bug | pending | `2026-10-15-ai-news-write-db.md` | 2026-10-15 | |
+| CR-034 | Bài AI news hằng tuần không lên web sau cutover DB (workflow vẫn ghi file `src/content/blog`) — ưu tiên cao, trước lượt chạy kế | bug | in_progress (P1-T01 plan chờ duyệt — `tasks/bug-ai-news-write-db/phase-1-task-01.md`) | `2026-10-15-ai-news-write-db.md` | 2026-10-15 | |
 
 ## Quy tắc tracking
 

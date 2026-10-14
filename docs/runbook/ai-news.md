@@ -2,15 +2,23 @@
 
 Workflow `.github/workflows/ai-news.yml` — mỗi thứ 2 lúc 08:00 giờ VN (`cron: '0 1 * * 1'` UTC) tự thu thập
 tin AI 7 ngày, nhờ OpenCode Go viết 2 bài `src/content/blog/{vi,en}/ai-weekly-YYYY-wNN.mdx` (category `ai-tech`),
-build PASS → commit thẳng `main` → dispatch `deploy.yml`. Code: `tools/ai-news/` (xem `tools/ai-news/README.md`).
+build PASS → commit file seed thẳng `main` → **chèn bài vào DB prod** (job `publish-db`, CR-034) → revalidate → smoke.
+Code: `tools/ai-news/` (xem `tools/ai-news/README.md`) + lệnh `publish-post` của `tools/db/content-cli.ts`.
 
-> ⚠️ **Từ 14/10/2026 prod đọc nội dung từ DB** (`CONTENT_SOURCE=db`, CR-031 — `docs/runbook/cutover-content-db.md`). Workflow này **vẫn chỉ ghi file**
-> `src/content/blog/*` (`.github/workflows/ai-news.yml` bước commit) → bài mới **không tự hiện trên website** sau deploy.
-> Tạm thời, sau mỗi lần workflow đăng bài: chạy **Content ops** `import-seed` (confirm `IMPORT-SEED-PROD` — chỉ chèn bản ghi chưa có, không ghi đè bản đã sửa;
-> bước parity sau đó có thể đỏ nếu DB đã được sửa qua bot/CLI — không phải lỗi import) → rồi `revalidate-all`. Cho workflow ghi thẳng DB: cần change request riêng (chưa có).
+Prod đọc nội dung từ DB (`CONTENT_SOURCE=db`, CR-031) → bài chỉ hiện khi có bản ghi trong `content_entries`.
+File seed vẫn được commit (lịch sử bài trong git, dedupe tuần `generate.py check`, đường lùi `CONTENT_SOURCE=file`).
+Workflow **không** dispatch `deploy.yml` nữa (DB mode không cần build lại image để hiện bài).
 
-Chạy trên self-hosted runner `nta-web` nhưng **trong container `node:22-trixie`** (Python 3.13 + Node 22 + git) —
-không cài gì lên host VPS. Bước cuối `chown` trả quyền workspace cho user runner (container chạy root).
+Hai job, cùng self-hosted runner `nta-web`:
+
+| Job | Chạy ở | Việc | Secret |
+|---|---|---|---|
+| `digest` | container `node:22-trixie` (Python 3.13 + Node 22 + git, không cài gì lên host). Bước cuối `chown` trả quyền workspace (container chạy root) | check tuần → thu thập → LLM + guard → build → commit/push file → xuất slug bài cần đăng | `OPENCODE_API_KEY` |
+| `publish-db` | host (cần docker), concurrency `deploy-nta-web` (chung deploy/Content ops — không chạy song song backup/migrate), chỉ ref `main` | dry-run → backup (chỉ khi có locale `missing`) → chèn → revalidate `post` → smoke `/blog/<slug>` + `/en/blog/<slug>` | `POSTGRES_PASSWORD`, `REVALIDATE_SECRET` (chỉ job này) |
+
+`publish-db` chạy cả khi `digest` báo `skip` (bài tuần đã có file từ lượt trước) → chạy lại cùng tuần **tự lành** nếu lượt trước chèn DB/revalidate lỗi.
+Chèn là **insert-only** qua write-path chuẩn `createEntry`: bản ghi `post/<locale>/<slug>` đã có (kể cả đã sửa hoặc xoá mềm) → `exists`, không ghi đè, không khôi phục.
+Bản ghi mới: version 1, `updated_by = workflow:ai-news`, `content_versions` op `create` note `ai-news <slug> run <GITHUB_RUN_ID>`.
 
 ## 1. Thêm secret (1 lần, bắt buộc)
 
@@ -20,15 +28,26 @@ GitHub repo → Settings → Secrets and variables → Actions:
 |---|---|---|
 | Secret | `OPENCODE_API_KEY` | API key OpenCode Go. Không commit, không dán vào issue/log. |
 | Variable (tuỳ chọn) | `AI_NEWS_MODEL` | Model OpenCode Go, mặc định `glm-5.3` (vd đổi `kimi-k3`). |
+| Secret (đã có từ CR-031) | `POSTGRES_PASSWORD`, `REVALIDATE_SECRET` | Dùng chung với Deploy / Content ops — job `publish-db` cần. |
 
 Thiếu `OPENCODE_API_KEY` → bước "Generate posts" đỏ, không đăng gì.
 
 ## 2. Chạy tay
 
-Actions → **AI News Weekly** → *Run workflow* (branch `main`). Bài của tuần đã tồn tại → workflow dừng xanh
-ở bước "Check this week's post" (`status=skip`), không ghi đè, không commit.
+Actions → **AI News Weekly** → *Run workflow* (branch `main`). Bài của tuần đã có file → job `digest` xanh
+ở bước "Check this week's post" (`status=skip`), không sinh lại, không commit; job `publish-db` vẫn chạy:
+DB đã có cả 2 locale → dry-run báo `exists`, **không backup, không ghi**, chỉ revalidate + smoke; thiếu locale nào → chèn locale đó.
 
-Muốn đăng lại tuần hiện tại: xoá 2 file `ai-weekly-YYYY-wNN.mdx` của tuần đó (qua commit thường) rồi chạy tay.
+Kiểm kết quả trên VPS: `docker compose run --rm --no-deps nta-tools tools/db/content-cli.ts history post/vi/<slug>`
+(thấy `v1 create workflow:ai-news … — ai-news <slug> run <id>`).
+
+**Đăng lại / thay bài tuần đã đăng — KHÔNG làm bằng file.** Prod đọc DB; file seed `src/content/blog/*` chỉ là lịch sử.
+Xoá hoặc sinh lại file rồi chạy workflow **không đổi bài trên web**: DB đã có `post/{vi,en}/<slug>` → `publish-post` báo `exists`,
+không ghi (kể cả bản đã xoá mềm), workflow vẫn xanh. Công cụ hiện có trên DB (chạy trên VPS qua `nta-tools`, runbook `db.md` §9, backup trước):
+- Xem: `… content-cli.ts history post/vi/<slug>` / `show post/vi/<slug>`.
+- Quay về 1 version cũ (kể cả khôi phục bản đã xoá mềm): `… content-cli.ts rollback post/vi/<slug> --to <N> --expected-version <M> --confirm-prod`, rồi `revalidate --collection post`.
+- **Sửa nội dung / gỡ bài:** CLI chưa có lệnh `update`/`delete` — làm qua bot nội dung (CR-030) khi có, trước đó mở change request (dev ghi qua write-path `updateEntry`/`softDeleteEntry`, có version).
+- Không có cách "xoá rồi chèn lại" bằng `publish-post`: khoá `(post, locale, slug)` giữ cả bản xoá mềm (I-5).
 
 ## 3. Đổi model / endpoint
 
@@ -43,7 +62,11 @@ Muốn đăng lại tuần hiện tại: xoá 2 file `ai-weekly-YYYY-wNN.mdx` c�
 
 ## 5. Workflow đỏ — xử lý
 
-GitHub gửi email khi workflow fail. Khi đỏ: **không có commit, không deploy** (trừ bước push/dispatch, xem dưới).
+GitHub gửi email khi workflow fail. Job `digest` đỏ trước bước push → **không có commit, không ghi DB**.
+Job `publish-db` đỏ (hoặc **cancelled**) → bài đã có trên `main`, chưa/chưa đủ vào DB. Sửa nguyên nhân rồi:
+- **Cách chuẩn — mở run đó → *Re-run failed jobs*** (hoặc *Re-run jobs* nếu bị cancelled): chạy lại riêng `publish-db` với output của `digest` cũ → đúng slug bài đó, **bất kể đã sang tuần mới**. Idempotent (locale đã có → `exists`).
+- *Run workflow* mới chỉ tự lành **trong cùng tuần ISO** (giờ VN): `check` tính slug theo tuần hiện tại → sang tuần sau thì bài tuần cũ không bao giờ được chèn qua run mới — dùng Re-run ở trên.
+- **Cancelled do concurrency:** `publish-db` dùng chung nhóm `deploy-nta-web` với Deploy / Content ops; GitHub chỉ giữ **1 job pending mỗi nhóm** → một deploy/Content ops xếp hàng sau có thể thay chỗ (`publish-db` hiện *cancelled*), và ngược lại. Không phải lỗi bài — Re-run khi nhóm rảnh (và kiểm job bị thay chỗ kia có cần chạy lại không).
 
 | Bước đỏ | Nguyên nhân thường gặp | Xử lý |
 |---|---|---|
@@ -51,7 +74,11 @@ GitHub gửi email khi workflow fail. Khi đỏ: **không có commit, không dep
 | Generate posts | Thiếu/sai key, model không tồn tại, LLM trả JSON hỏng, **guard chặn** (sau khi loại các tin có URL lạ / text sai, còn dưới 5 tin hợp lệ; tối đa lấy 12) | Đọc dòng `[ai-news] FAIL: ...`. Guard chặn là đúng thiết kế (chống bịa) → chạy tay lại; lặp lại nhiều tuần → đổi model. |
 | Build | Bài sinh ra làm hỏng build (hiếm, MDX đã escape) | Không có gì được commit. Báo dev kèm log. |
 | Commit + push | `main` vừa có commit khác chen giữa (push bị từ chối) | Chạy tay lại workflow. |
-| Dispatch deploy | Bài ĐÃ lên `main` nhưng chưa deploy | Actions → **Deploy (VPS)** → Run workflow. |
+| publish-db · Validate compose / nta-db healthy | Thiếu secret `POSTGRES_PASSWORD`/`REVALIDATE_SECRET`; DB không chạy | Kiểm secret / `docker ps` trên VPS (runbook `db.md`) rồi chạy lại. Chưa ghi gì. |
+| publish-db · Kiểm bài (dry-run) | File thiếu 1 locale, frontmatter sai, cover không có trong `public/` (`[cli] FAIL — …`) | Chưa ghi gì (validate **cả 2 locale** trước khi ghi). Sửa file qua commit thường rồi chạy lại. |
+| publish-db · Backup DB | `nta-db-backup` lỗi / đầy đĩa | Dừng trước khi ghi. Xử lý theo runbook `db.md`, chạy lại. |
+| publish-db · Chèn bài | Lỗi DB / I-5 (bản ghi vừa được tạo chen giữa) | Có backup `pre-migrate-ops-ai-news-*`. Chạy lại: locale đã chèn → `exists`, chỉ chèn phần còn thiếu. |
+| publish-db · Revalidate / Smoke | `nta-web` không chạy, secret revalidate sai, trang chưa 200 | Bài đã trong DB. Chạy lại workflow (revalidate luôn chạy), hoặc Content ops → `revalidate-all`. |
 
 Dữ liệu tạm (raw + `.clean.md`) nằm ở `/tmp/ai-news` trong container, mất khi job kết thúc.
 

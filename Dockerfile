@@ -34,6 +34,8 @@ RUN groupadd --system --gid 1001 nextjs && useradd --system --uid 1001 --gid nex
 COPY tsconfig.json ./
 COPY src ./src
 COPY tools/db ./tools/db
+# createEntry kiểm I-7 ảnh tĩnh trong public/ (vd cover /images/blog/ai-weekly-cover.svg của publish-post, CR-034).
+COPY public ./public
 USER nextjs
 ENTRYPOINT ["node", "--import", "tsx"]
 CMD ["tools/db/parity.ts"]

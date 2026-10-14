@@ -3,6 +3,9 @@
 Pipeline chạy bởi `.github/workflows/ai-news.yml` (cron 08:00 thứ 2 giờ VN + chạy tay).
 Vận hành (secret, chạy tay, đổi model, tắt cron, xử lý lỗi): `docs/runbook/ai-news.md`.
 
+Pipeline này chỉ sinh + commit file seed `src/content/blog/{vi,en}/<slug>.mdx`. Prod đọc nội dung từ DB → job `publish-db`
+của cùng workflow đưa bài vào DB bằng `tools/db/content-cli.ts publish-post <slug>` (insert-only, CR-034) rồi revalidate; không dispatch deploy.
+
 ```
 last30days/scripts/ai-news-digest.sh   thu thập 4 topic + GitHub trending → sanitize → 1 file .clean.md
 generate.py check                      slug tuần (ai-weekly-YYYY-wNN, giờ VN); bài đã có → skip

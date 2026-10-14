@@ -57,7 +57,7 @@ const SLUG_REGISTRY: Record<SlugRegistryGroup, readonly string[]> = {
 const UI_MESSAGES: Record<Locale, Record<string, unknown>> = { vi: viMessages, en: enMessages };
 
 // jsonb chỉ giữ được giá trị JSON: Date/undefined/hàm sẽ đổi hoặc mất khi ghi → chặn ngay ở nguồn.
-function toJsonObject(value: unknown, where: string): Record<string, unknown> {
+export function toJsonObject(value: unknown, where: string): Record<string, unknown> {
   const roundTripped: unknown = JSON.parse(JSON.stringify(value));
   if (!isDeepStrictEqual(roundTripped, value) || roundTripped === null || typeof roundTripped !== "object") {
     throw new Error(`${where}: dữ liệu không phải object JSON thuần (Date/undefined/...)`);

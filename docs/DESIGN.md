@@ -241,6 +241,7 @@ Font stack: `-apple-system, BlinkMacSystemFont, "SF Pro Display", Inter, "Segoe 
   Đổi cờ = đổi variable + chạy lại Deploy, không build lại. Bỏ cờ + đường đọc file: `tasks/feature-content-database/phase-5-task-02.md` (chưa làm).
 - `file` = đọc `src/content/*` + hằng TS như trước CR-031 (giữ làm đường lùi); `db` = bảng `content_entries` (bản ghi còn sống).
 - `src/content` là **seed import ban đầu** (`src/content/README.md`), sửa file không đổi website khi cờ = `db`.
+- Ngoại lệ có chủ đích: bản tin AI tuần (CR-019/CR-034) vẫn commit file `src/content/blog/{vi,en}/ai-weekly-*.mdx` **và** chèn vào DB (insert-only, `content-cli publish-post`) — xem § Vận hành.
 
 ### Luồng đọc DB
 1. Loader MDX `src/lib/content/load-mdx.ts` (post/solution/product/case_study/about), registry `src/lib/content/registry.ts`
@@ -283,5 +284,8 @@ Font stack: `-apple-system, BlinkMacSystemFont, "SF Pro Display", Inter, "Segoe 
 ### Vận hành
 - Deploy (`.github/workflows/deploy.yml`): DB healthy → backup pre-migrate → gate destructive → migrate (`nta-migrate`, Dockerfile target `migrator`) → web.
 - Content ops (`.github/workflows/content-ops.yml`, chạy tay): `parity` · `backup` · `import-seed` · `revalidate-all` · `upload-smoke` qua service `nta-tools`
-  (Dockerfile target `content-tools`), cùng concurrency với deploy, lệnh ghi cần confirm + tự backup trước.
+  (Dockerfile target `content-tools`, có `src/` + `tools/db/` + `public/` cho kiểm ảnh I-7), cùng concurrency với deploy, lệnh ghi cần confirm + tự backup trước.
+- AI news (`.github/workflows/ai-news.yml`, cron thứ 2 + chạy tay — `docs/runbook/ai-news.md`): job `digest` (container) sinh + commit file seed;
+  job `publish-db` (host, concurrency `deploy-nta-web`, chỉ `main`) chạy cả khi bài tuần đã có (`skip`, tự lành): `publish-post --dry-run` → backup chỉ khi có locale `missing`
+  → `publish-post` (createEntry, actor `workflow:ai-news`, bản ghi đã có kể cả xoá mềm → `exists`, không ghi đè) → `revalidate --collection post` → smoke. Không dispatch deploy.
 - Backup hằng ngày (sidecar `nta-db-backup`): `daily-*.dump` + `uploads-*.tar.gz`. Runbook: `docs/runbook/db.md`.

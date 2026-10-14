@@ -1,7 +1,7 @@
 ---
 id: ai-news-write-db
 type: bug
-status: pending
+status: in_progress
 created: 2026-10-15
 ---
 

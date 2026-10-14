@@ -7,6 +7,9 @@
 //   npm run db:cli -- revalidate --collection post [--slug x] | --all   (P3-T03: gọi POST /api/revalidate, không cần DATABASE_URL)
 //   npm run db:cli -- upload <file> [--alt-vi "..."] [--alt-en "..."] [--confirm-prod]   (P3-T05: lưu ảnh vào UPLOAD_DIR + bản ghi asset)
 //     URL endpoint từ REVALIDATE_URL (vd http://127.0.0.1:3005/api/revalidate), secret từ REVALIDATE_SECRET.
+//   npm run db:cli -- publish-post <slug> [--dry-run] [--actor workflow:ai-news] [--note "..."] [--confirm-prod]   (CR-034)
+//     Đăng src/content/blog/{vi,en}/<slug>.mdx vào DB — CHỈ chèn; bản đã có (kể cả xoá mềm) → exists. Mỗi locale in 1 dòng
+//     "publish-post post/<locale>/<slug> status=missing|exists|created" (workflow ai-news grep status=missing để quyết định backup).
 // Không in DATABASE_URL / REVALIDATE_SECRET ra log.
 import { readFile } from "node:fs/promises";
 import { userInfo } from "node:os";
@@ -25,9 +28,10 @@ import {
 import type { ContentEntry } from "../../src/db/schema";
 import { ImageRejectedError } from "../../src/lib/uploads/image-file";
 import { saveImage } from "../../src/lib/uploads/save-image";
+import { PUBLISH_POST_ACTOR, defaultPublishNote, publishPost } from "./publish-post";
 import { isProductionDatabaseUrl } from "./seed-db";
 
-const USAGE = "dùng: db:cli -- list|show|history|rollback|upload|revalidate ... (xem đầu file tools/db/content-cli.ts / docs/runbook/db.md §9)";
+const USAGE = "dùng: db:cli -- list|show|history|rollback|upload|revalidate|publish-post ... (xem đầu file tools/db/content-cli.ts / docs/runbook/db.md §9)";
 
 const OPTIONS = {
   collection: { type: "string" },
@@ -41,6 +45,8 @@ const OPTIONS = {
   all: { type: "boolean" },
   "alt-vi": { type: "string" },
   "alt-en": { type: "string" },
+  "dry-run": { type: "boolean" },
+  actor: { type: "string" },
 } as const;
 
 type CliValues = ReturnType<typeof parseArgs<{ options: typeof OPTIONS; allowPositionals: true }>>["values"];
@@ -112,6 +118,20 @@ async function runUpload(db: Database, file: string | undefined, values: CliValu
   console.log(`[upload] OK (${result.status}, ${fileNote}) — ${image.urlPath}  ${image.mime} ${image.width}x${image.height} ${image.bytes}B  ${formatEntryLine(result.asset)}`);
 }
 
+async function runPublishPost(db: Database, slug: string | undefined, values: CliValues): Promise<void> {
+  if (!slug) throw new UsageError("thiếu <slug>");
+  const results = await publishPost(db, {
+    slug,
+    dryRun: values["dry-run"] === true,
+    actor: values.actor ?? PUBLISH_POST_ACTOR,
+    note: values.note ?? defaultPublishNote(slug, process.env.GITHUB_RUN_ID),
+  });
+  for (const result of results) {
+    for (const warning of result.warnings) console.warn(`[cảnh báo] ${result.key}: ${warning}`);
+    console.log(`publish-post ${result.key} status=${result.status}`);
+  }
+}
+
 function revalidateBody(values: CliValues): { all: true } | { collection: string; slug?: string } {
   if (values.all) {
     if (values.collection !== undefined || values.slug !== undefined) throw new UsageError("--all không đi kèm --collection/--slug");
@@ -144,14 +164,32 @@ async function runRevalidate(values: CliValues): Promise<number> {
   return 0;
 }
 
+// Cờ chỉ có nghĩa ở vài lệnh. parseArgs khai báo chung → lệnh khác sẽ lặng lẽ bỏ qua; với cờ như --dry-run thì
+// `rollback … --dry-run` vẫn GHI thật → từ chối ngay thay vì lờ đi.
+const COMMAND_SCOPED_FLAGS: Partial<Record<keyof CliValues, readonly string[]>> = {
+  "dry-run": ["publish-post"],
+  actor: ["publish-post"],
+  note: ["rollback", "publish-post"],
+};
+
+function assertFlagsSupported(command: string | undefined, values: CliValues): void {
+  for (const [flag, commands] of Object.entries(COMMAND_SCOPED_FLAGS)) {
+    if (values[flag as keyof CliValues] !== undefined && !commands.includes(command ?? "")) {
+      throw new UsageError(`--${flag} chỉ dùng với: ${commands.join(", ")}`);
+    }
+  }
+}
+
 async function runCommand(command: string | undefined, args: string[], values: CliValues): Promise<number> {
+  assertFlagsSupported(command, values);
   if (command === "revalidate") return runRevalidate(values);
   const connectionString = process.env.DATABASE_URL;
   if (!connectionString) {
     console.error("DATABASE_URL is not set");
     return 2;
   }
-  if ((command === "rollback" || command === "upload") && isProductionDatabaseUrl(connectionString) && !values["confirm-prod"]) {
+  const isWriteCommand = command === "rollback" || command === "upload" || (command === "publish-post" && !values["dry-run"]);
+  if (isWriteCommand && isProductionDatabaseUrl(connectionString) && !values["confirm-prod"]) {
     console.error("[cli] từ chối: DATABASE_URL trỏ DB prod — lệnh ghi cần cờ --confirm-prod (backup trước, xem runbook §9)");
     return 2;
   }
@@ -162,6 +200,7 @@ async function runCommand(command: string | undefined, args: string[], values: C
     else if (command === "history") await runHistory(db, args[0]);
     else if (command === "rollback") await runRollback(db, args[0], values);
     else if (command === "upload") await runUpload(db, args[0], values);
+    else if (command === "publish-post") await runPublishPost(db, args[0], values);
     else throw new UsageError(`lệnh không hợp lệ: ${command ?? "(trống)"}`);
     return 0;
   } finally {

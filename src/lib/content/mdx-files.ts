@@ -25,6 +25,12 @@ export interface MdxFile {
   body: string;
 }
 
+// Parser DUY NHẤT cho file MDX nội dung (web, seed, publish-post của tools/db) → frontmatter/body không lệch giữa các đường đọc.
+export function parseMdxSource(source: string): Omit<MdxFile, 'fileName'> {
+  const { data, content } = matter(source);
+  return { frontmatter: data, body: content.trim() };
+}
+
 export async function readMdxFiles(directory: string, locale: Locale): Promise<MdxFile[]> {
   const contentDirectory = path.join(process.cwd(), 'src/content', directory, locale);
   const fileNames = (await readdir(contentDirectory)).filter((name) => name.endsWith('.mdx'));
@@ -32,8 +38,7 @@ export async function readMdxFiles(directory: string, locale: Locale): Promise<M
 
   for (const fileName of fileNames) {
     const source = await readFile(path.join(contentDirectory, fileName), 'utf8');
-    const { data, content } = matter(source);
-    files.push({ fileName, frontmatter: data, body: content.trim() });
+    files.push({ fileName, ...parseMdxSource(source) });
   }
 
   return files;

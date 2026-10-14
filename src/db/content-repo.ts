@@ -245,6 +245,17 @@ function throwIfInvalid(validation: Validation): void {
   if (validation.problems.length > 0) throw new ContentValidationError(validation.problems);
 }
 
+export type NewEntryCheck = Pick<CreateEntryInput, "collection" | "slug" | "locale" | "data" | "body" | "publicDir">;
+
+// Chạy đúng bước validate của createEntry nhưng KHÔNG ghi → lệnh tạo nhiều bản ghi (vd cặp vi/en của 1 bài)
+// kiểm được tất cả trước khi ghi bản đầu tiên, tránh ghi nửa vời. Không kiểm I-5 (người gọi tự kiểm tồn tại).
+export async function findNewEntryProblems(db: Database, input: NewEntryCheck): Promise<string[]> {
+  return db.transaction(async (tx) => {
+    const record: ContentRecord = { ...input, body: input.body ?? null, sortOrder: null };
+    return (await validateRecord(tx, record, input.publicDir)).problems;
+  });
+}
+
 export async function createEntry(db: Database, input: CreateEntryInput): Promise<WriteResult> {
   return db.transaction(async (tx) => {
     const record: ContentRecord = {

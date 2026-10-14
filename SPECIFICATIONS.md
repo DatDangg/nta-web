@@ -1,6 +1,6 @@
 ---
-spec_version: 4.2.0
-updated_at: 2026-10-14
+spec_version: 4.2.1
+updated_at: 2026-10-15
 ---
 
 # SPECIFICATIONS.md — NTA Website
@@ -312,8 +312,21 @@ _(cập nhật 2026-10-13: thêm **domain phụ** `ntasolution.vn` (+ `www`) ph�
     tự động từ các nguồn công khai" (vi/en).
   - *Guard trước khi đăng:* mọi URL trong bài phải có trong `.clean.md`; số tin trong khoảng cho phép; frontmatter
     (`slug/title/date/category/excerpt/cover`) + độ dài hợp lệ; `npm run build` PASS. Bất kỳ bước FAIL → không commit,
-    không deploy, workflow đỏ. PASS → commit thẳng `main` + kích hoạt `deploy.yml` (`workflow_dispatch`).
-  - Không duyệt tay (user chốt 2026-10-14, đã được báo rủi ro AI bịa chi tiết). — nguồn: change `spec/changes/2026-10-14-weekly-ai-news-digest.md`.
+    không ghi DB, workflow đỏ. PASS → commit file seed thẳng `main` (lịch sử bài trong git + dedupe tuần theo file).
+  - *Đăng vào DB (4.2.1 — CR-034, vì web đọc nội dung từ DB theo R-16):* job `publish-db` (host runner, chung nhóm
+    concurrency `deploy-nta-web`, chỉ ref `main`; secret DB/revalidate chỉ ở job này) chạy khi bài tuần đã nằm trên `main`
+    (vừa commit **hoặc** đã có từ lượt trước → chạy lại cùng tuần tự lành):
+    1. `content-cli.ts publish-post <slug> --dry-run` — đọc `src/content/blog/{vi,en}/<slug>.mdx` bằng parser chung, validate
+       **cả 2 locale** trước khi ghi bất kỳ bản nào; báo `missing|exists` theo locale. Lỗi validate → đỏ, không ghi locale nào.
+    2. Có locale `missing` → **backup DB trước khi ghi** (lỗi backup → dừng); không thiếu → không backup.
+    3. **Chỉ thêm mới** qua write-path chuẩn `createEntry`: version 1 + `content_versions` (op `create`, actor
+       `workflow:ai-news`, note có run id). Bản ghi đã có — kể cả đã sửa hay **đã xoá mềm** — → `exists`, **không ghi đè,
+       không khôi phục**; chạy lại cùng tuần → 0 ghi, workflow xanh.
+    4. Revalidate collection `post` (luôn chạy) → smoke `/blog/<slug>` + `/en/blog/<slug>` HTTP 200.
+    Không dispatch `deploy.yml` (bài hiện qua DB + revalidate, không cần build lại image). CLI từ chối cờ không thuộc lệnh
+    (vd `rollback --dry-run`) bằng lỗi usage, không chạm DB.
+  - Không duyệt tay (user chốt 2026-10-14, đã được báo rủi ro AI bịa chi tiết). — nguồn: change `spec/changes/2026-10-14-weekly-ai-news-digest.md`
+    + `spec/changes/2026-10-15-ai-news-write-db.md` (CR-034, BUG sau cutover DB).
 - `[cần xác nhận]` blog là static file hay cần CMS (Open Question — `docs/BRD.md:177`)
 
 ### Module 8 — Liên hệ

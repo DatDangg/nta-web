@@ -1,8 +1,9 @@
 name: AI News Weekly
 
 # Bản tin AI tuần (CR-019, spec R-09c) — vận hành: docs/runbook/ai-news.md
-# Thu thập → sanitize → OpenCode Go → guard → build PASS → commit main → dispatch deploy.yml.
-# Push bằng GITHUB_TOKEN KHÔNG tự trigger workflow khác → phải dispatch deploy.yml qua REST API.
+# Job digest: thu thập → sanitize → OpenCode Go → guard → build PASS → commit file seed lên main.
+# Job publish-db (CR-034): prod đọc nội dung từ DB (CONTENT_SOURCE=db) → chèn bài tuần vào DB (insert-only, content-cli publish-post)
+# → revalidate collection post → smoke. KHÔNG dispatch deploy.yml (DB mode không cần build lại image để hiện bài).
 on:
   schedule:
     - cron: '0 1 * * 1' # 08:00 thứ 2 giờ Việt Nam (UTC+7)
@@ -14,7 +15,6 @@ concurrency:
 
 permissions:
   contents: write # commit + push bài mới lên main
-  actions: write # dispatch deploy.yml
 
 jobs:
   digest:
@@ -22,6 +22,9 @@ jobs:
     # Chạy trong container: VPS dùng chung, không cài python/node lên host.
     container: node:22-trixie # engine last30days cần Python 3.12+ (trixie: 3.13; bookworm chỉ 3.11)
     timeout-minutes: 90
+    outputs:
+      # Slug bài tuần đã có trên main (vừa ghi HOẶC đã có từ lượt trước) → publish-db chạy cả khi skip (tự lành). Rỗng = không đăng.
+      publish_slug: ${{ steps.target.outputs.slug }}
     env:
       TZ: Asia/Ho_Chi_Minh
       NEXT_PUBLIC_SITE_URL: https://ntavietnam.tech
@@ -76,23 +79,89 @@ jobs:
           git commit -m "content(ai-news): bản tin AI tuần $SLUG"
           git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:main
 
-      - name: Dispatch deploy
-        if: steps.generate.outputs.status == 'written'
+      # Chỉ khi bài tuần đã nằm trên main: skip (có từ lượt trước) hoặc written (vừa push xong ở bước trên).
+      # Ưu tiên slug của generate: chạy sát nửa đêm CN→T2, generate có thể tính sang tuần sau so với check.
+      - name: Bài cần đăng vào DB
+        id: target
+        if: steps.check.outputs.status == 'skip' || steps.generate.outputs.status == 'written'
         env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          curl -fsS -X POST \
-            -H "Authorization: Bearer $GH_TOKEN" \
-            -H "Accept: application/vnd.github+json" \
-            "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/actions/workflows/deploy.yml/dispatches" \
-            -d '{"ref":"main"}'
-          echo "deploy.yml dispatched"
+          SLUG: ${{ steps.generate.outputs.slug || steps.check.outputs.slug }}
+        run: echo "slug=$SLUG" >> "$GITHUB_OUTPUT"
 
       # Container chạy root → trả quyền workspace cho user runner trên host, nếu không
-      # bước checkout của deploy.yml (chạy trên host) không xoá được file root-owned.
+      # bước checkout của publish-db / deploy.yml (chạy trên host) không xoá được file root-owned.
       - name: Cleanup workspace ownership
         if: always()
         run: |
           rm -rf node_modules .next "$AI_NEWS_WORK"
           chown -R "$(stat -c '%u:%g' "$GITHUB_WORKSPACE")" "$GITHUB_WORKSPACE" || true
           chown -R "$(stat -c '%u:%g' "$GITHUB_WORKSPACE")" "$HOME" || true # .gitconfig do git config --global ghi
+
+  # Chèn bài tuần vào DB prod — chạy trên HOST runner (cần docker; job digest chạy trong container không có docker).
+  # Secret DB/revalidate CHỈ ở job này (không vào job digest có LLM + dữ liệu ngoài). Không echo secret,
+  # không `docker compose config` không -q. Chỉ `run --rm --no-deps` → KHÔNG tạo lại nta-web/nta-db.
+  publish-db:
+    needs: digest
+    # Chỉ code trên main (như Content ops); digest xanh + có slug (cả written lẫn skip → chạy lại cùng tuần tự lành, idempotent).
+    if: github.ref == 'refs/heads/main' && needs.digest.result == 'success' && needs.digest.outputs.publish_slug != ''
+    runs-on: [self-hosted, nta-web]
+    timeout-minutes: 20
+    # Chung nhóm với deploy.yml / content-ops.yml → không chạy song song backup/migrate/recreate.
+    concurrency:
+      group: deploy-nta-web
+      cancel-in-progress: false
+    permissions:
+      contents: read
+    env:
+      HOST_PORT: "3005"
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      REVALIDATE_SECRET: ${{ secrets.REVALIDATE_SECRET }}
+      SLUG: ${{ needs.digest.outputs.publish_slug }}
+    steps:
+      - name: Checkout main (đã có commit bài)
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: false
+
+      - name: Validate compose (secret bắt buộc)
+        run: docker compose config --quiet
+
+      - name: nta-db phải healthy
+        run: |
+          status="$(docker inspect -f '{{.State.Health.Status}}' nta-db 2>/dev/null || echo missing)"
+          echo "nta-db: $status"
+          [ "$status" = "healthy" ]
+
+      - name: Build nta-tools
+        run: docker compose --profile tools build nta-tools
+
+      # Chỉ đọc: validate cả 2 locale + báo missing/exists → quyết định có backup/chèn không. Lỗi validate → đỏ, chưa ghi gì.
+      - name: Kiểm bài (dry-run)
+        id: dryrun
+        run: |
+          out="$(docker compose run --rm --no-deps nta-tools tools/db/content-cli.ts publish-post "$SLUG" --dry-run)"
+          echo "$out"
+          if printf '%s\n' "$out" | grep -q ' status=missing$'; then missing=true; else missing=false; fi
+          echo "missing=$missing" >> "$GITHUB_OUTPUT"
+
+      # Chỉ backup khi thật sự ghi (CR-033: không đẩy mất backup trước-deploy mỗi tuần vô ích). Backup lỗi → dừng.
+      - name: Backup DB
+        if: steps.dryrun.outputs.missing == 'true'
+        run: docker exec nta-db-backup /scripts/backup.sh "pre-migrate-ops-ai-news-$(date -u +%Y%m%dT%H%M%SZ)-${GITHUB_RUN_ID}"
+
+      - name: Chèn bài vào DB (insert-only)
+        if: steps.dryrun.outputs.missing == 'true'
+        run: >-
+          docker compose run --rm --no-deps -e GITHUB_RUN_ID nta-tools
+          tools/db/content-cli.ts publish-post "$SLUG" --actor workflow:ai-news --confirm-prod
+
+      # Luôn chạy (kể cả exists) → lượt trước chèn xong mà revalidate lỗi thì lượt này tự lành.
+      - name: Revalidate collection post
+        run: docker compose run --rm --no-deps nta-tools tools/db/content-cli.ts revalidate --collection post
+
+      - name: Smoke trang bài
+        run: |
+          for page in "/blog/$SLUG" "/en/blog/$SLUG"; do
+            curl -fsS -o /dev/null -w "GET $page → %{http_code}\n" "http://127.0.0.1:${HOST_PORT}${page}"
+          done

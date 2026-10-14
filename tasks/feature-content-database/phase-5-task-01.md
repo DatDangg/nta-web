@@ -22,7 +22,7 @@
 - Intent docs (BRD/PRD) **không** tự sửa.
 
 ## Acceptance
-- Không còn doc as-built nói "không có DB"; spec-validator phase PASS; close-out: test-scope v49, archive change doc, BACKLOG done.
+- Không còn doc as-built nói "không có DB"; spec-validator phase PASS; close-out: test-scope v50+ (v49 đã dùng cho CR-034), archive change doc, BACKLOG done.
 
 ## Thực thi (15/10/2026)
 - **Scope 0 tách sang `phase-5-task-02.md`** (MODIFY · HIGH · STRICT; điều kiện: prod `db` ổn định ≥ 1 ngày từ 14/10 16:38 UTC + user đồng ý;
