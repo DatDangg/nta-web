@@ -2,12 +2,12 @@
   "mode": "feature",
   "activeWorkItem": {
     "type": "feature",
-    "slug": "home-solution-card-photo",
+    "slug": "about-remove-capabilities-team",
     "phaseTask": "phase-1-task-01",
     "step": "close-out",
     "status": "done",
-    "journal": ".context/runs/feature-home-solution-card-photo-phase-1.md",
-    "note": "CR-018 done — review round 2 PASS, spec 3.11.0 không bump · scope v41"
+    "journal": ".context/runs/feature-about-remove-capabilities-team-phase-1.md",
+    "note": "CR-020 done — review PASS, spec 4.0.0 · scope v42"
   },
   "features": [
     {
@@ -1062,6 +1062,21 @@
       "reviewer": {
         "result": "PASS",
         "report": ".context/review-reports/feature-home-solution-card-photo-phase-1-task-01-round-2-review.md"
+      }
+    },
+    {
+      "slug": "about-remove-capabilities-team",
+      "status": "done",
+      "changeFile": "spec/changes/archive/2026-10-14-about-remove-capabilities-team.md",
+      "classification": "REMOVE (UI)",
+      "tasks": {
+        "phase-1-task-01": "done"
+      },
+      "note": "CR-020 — /about bỏ khối Năng lực + Đội ngũ, bỏ nút #team, dọn component/i18n/data/ảnh; spec 3.11.0 → 4.0.0 (MAJOR) · scope v42",
+      "updatedAt": "2026-10-14",
+      "reviewer": {
+        "result": "PASS",
+        "report": ".context/review-reports/feature-about-remove-capabilities-team-phase-1-task-01-round-1-review.md"
       }
     }
   ],
