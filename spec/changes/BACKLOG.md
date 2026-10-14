@@ -37,7 +37,7 @@
 | CR-027 | Case study khu di tích (vi): chỉnh 2 câu lặp ý ("di sản khu di tích" → "di sản văn hóa"; "của khu di tích" lần 2 → "của nơi đây") — follow-up CR-025 | MODIFY (content) | done (no spec impact) | — (copy fix 1 dòng, không tạo change doc) | 2026-10-14 | 2026-10-14 |
 | CR-028 | Thêm trang Giải pháp AI "AI Operations Brain" (slug `ai-operations-brain`, vi + en) từ nội dung user gửi; giữ KPI ghi rõ là mục tiêu, bỏ ghi chú người duyệt | ADDITIVE (content) | done (spec 4.1.0 · scope v48) | `archive/2026-10-14-ai-operations-brain-solution.md` | 2026-10-14 | 2026-10-14 |
 | CR-029 | Trang AI Operations Brain: thay ảnh SVG minh hoạ ở hero bằng ảnh minh hoạ user tạo (webp 1586×992) + thêm `cardImage` cho thẻ ở /solutions/ai (vi + en) — follow-up CR-028 | MODIFY (content) | done (no spec impact) | — (đổi ảnh, không tạo change doc) | 2026-10-14 | 2026-10-14 |
-| CR-029 | Bot Telegram thêm/sửa/xoá nội dung website (Claude API đề xuất → người duyệt → commit main → CI deploy); context bot đã export ở `docs/content-bot/` | ADDITIVE (tooling/VPS) | pending (chờ trả lời 5 câu hỏi) | `2026-10-14-telegram-content-bot.md` | 2026-10-14 | |
+| CR-030 | Bot Telegram thêm/sửa/xoá nội dung website (Claude API đề xuất → người duyệt → commit main → CI deploy); context bot đã export ở `docs/content-bot/` | ADDITIVE (tooling/VPS) | pending (chờ trả lời 5 câu hỏi) | `2026-10-14-telegram-content-bot.md` | 2026-10-14 | |
 
 ## Quy tắc tracking
 
