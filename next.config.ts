@@ -14,6 +14,9 @@ const nextConfig: NextConfig = {
     // Ảnh trong /public không đổi giữa 2 lần deploy (cache bị xoá khi build container mới)
     // → giữ bản đã tối ưu 31 ngày thay vì mặc định 60s.
     minimumCacheTTL: 2678400,
+    // Chỉ tối ưu ảnh tĩnh repo (/images, public/) và ảnh upload trên volume (/uploads, route đọc UPLOAD_DIR — CR-031 R-16d).
+    // Ảnh upload theo hash nên thêm sau build vẫn tối ưu được, không cần build lại.
+    localPatterns: [{ pathname: '/images/**' }, { pathname: '/uploads/**' }],
   },
   // Slug case study cũ đã được index/chia sẻ → 301 sang slug mới (CR-025).
   // Dùng `statusCode: 301` vì `permanent: true` của Next trả 308. Nguồn `/vi/...` trỏ thẳng về

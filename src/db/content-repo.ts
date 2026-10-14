@@ -169,6 +169,8 @@ async function registryValidation(tx: Transaction, record: ContentRecord): Promi
 
 // I-1: cảnh báo (không chặn) khi locale kia chưa có bản còn sống — bot tạo vi rồi en tuần tự.
 async function localePairWarnings(tx: Transaction, record: ContentRecord): Promise<string[]> {
+  // Asset là 1 bản ghi / ảnh (locale cố định, alt vi/en trong data) → không có cặp vi/en.
+  if (record.collection === "asset") return [];
   const others = await tx
     .select({ locale: contentEntries.locale })
     .from(contentEntries)

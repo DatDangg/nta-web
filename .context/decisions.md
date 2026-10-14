@@ -169,3 +169,22 @@
   **phase 5 KHÔNG xoá** các file này (khác với đường đọc MDX/registry file). Key mới thêm vào file vẫn nên được bổ sung vào DB (cảnh báo log là tín hiệu).
 - **Write-path (F2):** `checkRecord` kiểm `company_info`: `phone.href` = `tel:`, `email.href` = `mailto:`, `map.embedUrl` = https Google Maps
   (`maps.google.com|www.google.com|google.com`, path `/maps…`), `map.openUrl` = https.
+
+## 2026-10-14 — CR-031 P3-T05: lưu trữ + phục vụ ảnh upload (quyết định #10, R-16d)
+- **Serve = route handler `GET /uploads/[...path]`** (`src/app/uploads/[...path]/route.ts` → `src/lib/uploads/serve-upload.ts`) đọc `UPLOAD_DIR`
+  (compose: `/app/uploads` ← bind mount `/opt/nta-web-data/uploads`, P1-T02). Không dùng nginx `location /uploads`: phải sửa vhost trên VPS
+  (2 domain) + đồng bộ đường dẫn host — route trong app đơn giản hơn, test được, chạy y hệt local/docker. Next standalone không phục vụ file
+  thêm vào `public/` sau build.
+- **Chặn traversal bằng whitelist tên**: đúng 1 segment khớp `^[0-9a-f]{64}\.(jpg|png|webp)$` (→ `..`, `%2e%2e`, `%2F`, `\`, chữ hoa, đuôi lạ
+  đều 404) + `realpath(file)` phải nằm ngay trong `realpath(UPLOAD_DIR)` (symlink ra ngoài → 404) + phải là file thường. Header:
+  Content-Type theo đuôi, `Cache-Control: public, max-age=31536000, immutable` (tên = hash nội dung), `X-Content-Type-Options: nosniff`;
+  404 `no-store`. Middleware next-intl không chạy (matcher loại đường có dấu chấm). Chỉ GET (method khác 405) — không có API upload HTTP.
+- **next/image:** `images.localPatterns = ['/images/**', '/uploads/**']` (đặt localPatterns thì đường khác bị 400 — ảnh tĩnh hiện tại đều ở
+  `/images`). Optimizer gọi nội bộ route → ảnh upload sau build tối ưu được, không build lại (đã chứng minh standalone + docker).
+- **saveImage** (`src/lib/uploads/save-image.ts`, CLI `db:cli -- upload`, bot CR-030 gọi cùng hàm): magic bytes JPEG/PNG/WebP (không SVG),
+  ≤ 5 MB, mỗi cạnh ≤ 8192 px (đọc header tay, không thêm lib), tên = sha256 + đuôi theo magic bytes, ghi tmp cùng thư mục → rename.
+  Ghi file TRƯỚC, DB SAU (DB lỗi → file mồ côi vô hại, lần sau trùng hash dùng lại).
+- **Bản ghi `asset`:** 1 bản ghi / ảnh — `slug` = sha256, `locale` cố định `vi` (ảnh không theo ngôn ngữ; alt vi/en ở `data.alt`), `data` =
+  `{path, sha256, mime, bytes, width, height, alt, originalName?}`; `checkRecord` kiểm path khớp slug/đuôi/mime + giới hạn; I-1 (cặp vi/en)
+  bỏ qua cho asset. Trùng hash với asset còn sống → dùng lại (không version mới); với asset đã xoá mềm → `rollbackEntry` khôi phục
+  (version mới). Xoá mềm asset không xoá file vật lý.

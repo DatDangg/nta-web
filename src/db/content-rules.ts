@@ -4,6 +4,14 @@
 import type { ShowcaseIcon, ShowcaseNodeIcon } from "../content/types";
 import { BLOG_CATEGORIES } from "../lib/blog/categories";
 import { assertRequiredFields } from "../lib/content/mdx-files";
+import {
+  IMAGE_MIME_BY_EXTENSION,
+  MAX_IMAGE_SIDE,
+  MAX_UPLOAD_BYTES,
+  UPLOAD_FILE_NAME_PATTERN,
+  UPLOAD_URL_PREFIX,
+  type ImageExtension,
+} from "../lib/uploads/image-file";
 import { CONTENT_LOCALES, isContentCollection, type ContentCollection } from "./schema";
 
 export interface ContentRecord {
@@ -143,7 +151,36 @@ function enumProblems(record: ContentRecord): string[] {
   return [...problems, ...showcaseIconProblems(asRecord(data.showcase))];
 }
 
-// Kiểm 1 bản ghi độc lập (không cần bản ghi khác): whitelist, locale, slug, required fields, I-2, I-6.
+// Asset (ảnh upload, R-16d): 1 bản ghi / ảnh, khoá slug = sha256, locale cố định (alt vi/en trong data.alt).
+// Dữ liệu do saveImage (src/lib/uploads/save-image.ts) sinh — kiểm lại để CLI/rollback/bot không ghi được đường dẫn lệch tên file.
+export const ASSET_LOCALE = "vi";
+
+function isIntegerInRange(value: unknown, max: number): boolean {
+  return typeof value === "number" && Number.isInteger(value) && value >= 1 && value <= max;
+}
+
+function assetProblems(record: ContentRecord): string[] {
+  const { data, slug } = record;
+  const problems: string[] = [];
+  if (record.locale !== ASSET_LOCALE) problems.push(`asset: locale phải là ${ASSET_LOCALE}`);
+  if (!/^[0-9a-f]{64}$/.test(slug)) problems.push("asset: slug phải là sha256 hex");
+  if (data.sha256 !== slug) problems.push("asset: data.sha256 ≠ slug");
+  const fileName = typeof data.path === "string" && data.path.startsWith(UPLOAD_URL_PREFIX) ? data.path.slice(UPLOAD_URL_PREFIX.length) : "";
+  const match = UPLOAD_FILE_NAME_PATTERN.exec(fileName);
+  if (!match || match[1] !== slug) problems.push(`asset: data.path phải là ${UPLOAD_URL_PREFIX}<sha256>.<jpg|png|webp> khớp slug`);
+  else if (data.mime !== IMAGE_MIME_BY_EXTENSION[match[2] as ImageExtension]) problems.push("asset: data.mime không khớp đuôi file");
+  if (!isIntegerInRange(data.bytes, MAX_UPLOAD_BYTES)) problems.push(`asset: data.bytes phải là số nguyên 1..${MAX_UPLOAD_BYTES}`);
+  if (!isIntegerInRange(data.width, MAX_IMAGE_SIDE) || !isIntegerInRange(data.height, MAX_IMAGE_SIDE)) {
+    problems.push(`asset: data.width/height phải là số nguyên 1..${MAX_IMAGE_SIDE}`);
+  }
+  const alt = asRecord(data.alt);
+  if (!alt || Object.entries(alt).some(([locale, text]) => !isOneOf(CONTENT_LOCALES, locale) || typeof text !== "string")) {
+    problems.push("asset: data.alt phải là object { vi?: string, en?: string }");
+  }
+  return problems;
+}
+
+// Kiểm 1 bản ghi độc lập (không cần bản ghi khác): whitelist, locale, slug, required fields, I-2, I-6, asset.
 export function checkRecord(record: ContentRecord): string[] {
   if (!isContentCollection(record.collection)) return ["I-6 collection ngoài whitelist"];
   const problems: string[] = [];
@@ -157,6 +194,7 @@ export function checkRecord(record: ContentRecord): string[] {
   }
   const required = requiredFieldProblem(record, record.collection);
   if (required) problems.push(required);
+  if (record.collection === "asset") problems.push(...assetProblems(record));
   return [...problems, ...enumProblems(record)];
 }
 

@@ -155,8 +155,12 @@ describe("content-repo (Postgres)", { skip }, () => {
     assert.equal((await getEntry(db, post.id))?.version, 1);
     assert.equal((await listVersions(db, post.id)).length, 1);
 
-    await createEntry(db, { collection: "asset", slug: "2026-x", locale: "en", data: { path: "/uploads/2026/x.png" }, actor });
-    const ok = await updateEntry(db, { id: post.id, expectedVersion: 1, data: { ...data, cover: "/uploads/2026/x.png" }, actor });
+    // Asset hợp lệ theo luật P3-T05 (slug = sha256, path /uploads/<sha256>.<ext>); file trên volume không kiểm ở write-path.
+    const sha = "c".repeat(64);
+    const assetPath = `/uploads/${sha}.png`;
+    const assetData = { path: assetPath, sha256: sha, mime: "image/png", bytes: 10, width: 1, height: 1, alt: {} };
+    await createEntry(db, { collection: "asset", slug: sha, locale: "vi", data: assetData, actor });
+    const ok = await updateEntry(db, { id: post.id, expectedVersion: 1, data: { ...data, cover: assetPath }, actor });
     assert.equal(ok.entry.version, 2);
   });
 
