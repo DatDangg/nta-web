@@ -15,6 +15,7 @@
 #   NTA_BACKUP_DIR         thư mục backup trên host (mặc định /opt/nta-web-data/db-backups, root 700)
 #   NTA_UPLOADS_DIR        thư mục ảnh upload trên host (mặc định /opt/nta-web-data/uploads, owner 1001:1001 = nextjs)
 #   NTA_DB_VOLUME          tên volume dữ liệu Postgres (mặc định nta-db-data — đặt cố định, không phụ thuộc project name)
+#   CONTENT_SOURCE         runtime, nguồn nội dung file|db (mặc định file) — CI lấy từ GitHub Variable (docs/runbook/cutover-content-db.md)
 
 services:
   nta-web:
@@ -35,9 +36,16 @@ services:
       DATABASE_URL: postgres://nta:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}@nta-db:5432/nta_web
       REVALIDATE_SECRET: ${REVALIDATE_SECRET:?REVALIDATE_SECRET is required}
       UPLOAD_DIR: /app/uploads
+      # Nguồn nội dung (CR-031): biến RUNTIME (đọc lúc request, build không dùng — next build không prerender trang nội dung).
+      # CI lấy từ GitHub Variable `CONTENT_SOURCE` (deploy.yml); thiếu → file. Bật/lùi = đổi variable + chạy lại deploy.
+      CONTENT_SOURCE: ${CONTENT_SOURCE:-file}
     volumes:
       - ${NTA_UPLOADS_DIR:-/opt/nta-web-data/uploads}:/app/uploads
-    # CHƯA depends_on nta-db: web vẫn đọc nội dung từ file cho tới cutover (CR-031 task 8) — DB lỗi không kéo web xuống.
+    # Chỉ ảnh hưởng thứ tự `docker compose up` (Docker tự khởi động lại sau reboot KHÔNG xét depends_on).
+    # An toàn cả ở chế độ file: deploy.yml đã `up --wait nta-db` (fail → dừng) trước bước up web, nên không thêm đường lỗi mới.
+    depends_on:
+      nta-db:
+        condition: service_healthy
     healthcheck:
       test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:8080/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
       interval: 30s
@@ -104,6 +112,29 @@ services:
     environment:
       DATABASE_URL: postgres://nta:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}@nta-db:5432/nta_web
     command: ["migrate"]
+    mem_limit: 512m
+
+  # Một-lần: import seed / parity / CLI nội dung (db:cli) chạy TRONG mạng compose (DB không publish port). Không chạy khi `up`.
+  # Gọi qua .github/workflows/content-ops.yml (secret không lộ); tay: docker compose run --rm --no-deps nta-tools tools/db/parity.ts
+  # uid 1001 = owner thư mục upload (nextjs) → ảnh ghi ra đúng quyền. Revalidate gọi thẳng nta-web trong mạng compose.
+  nta-tools:
+    build:
+      context: .
+      target: content-tools
+    image: nta-web-tools:latest
+    profiles: ["tools"]
+    restart: "no"
+    user: "1001:1001"
+    depends_on:
+      nta-db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://nta:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}@nta-db:5432/nta_web
+      REVALIDATE_URL: http://nta-web:8080/api/revalidate
+      REVALIDATE_SECRET: ${REVALIDATE_SECRET:?REVALIDATE_SECRET is required}
+      UPLOAD_DIR: /app/uploads
+    volumes:
+      - ${NTA_UPLOADS_DIR:-/opt/nta-web-data/uploads}:/app/uploads
     mem_limit: 512m
 
 volumes:

@@ -18,3 +18,5 @@ tasks
 .build.log
 # Pipeline bản tin AI (CR-019) chạy trong CI, không thuộc image runtime.
 tools
+# Trừ tools/db: stage `content-tools` (nta-tools — import/parity/CLI nội dung trên VPS, CR-031 P4-T01) cần.
+!tools/db

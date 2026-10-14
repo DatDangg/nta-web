@@ -24,6 +24,20 @@ USER node
 ENTRYPOINT ["node", "--import", "tsx", "deploy/db/migrate.ts"]
 CMD ["check"]
 
+# Image một-lần cho `nta-tools` (compose profile tools, CR-031 P4-T01): import seed / parity / CLI nội dung chạy TRÊN VPS
+# trong mạng compose (DB không publish port; image web không có tools/). Gọi qua .github/workflows/content-ops.yml.
+# Dùng lại node_modules của stage deps (có tsx) như migrator. uid 1001 = user `nextjs` của image web → ảnh upload ghi ra
+# đúng owner thư mục /opt/nta-web-data/uploads (1001:1001). Phải có user thật (passwd): CLI ghi actor `cli:<user>` qua os.userInfo()
+# — uid không có trong /etc/passwd → uv_os_get_passwd ENOENT (đã gặp khi thử local).
+FROM deps AS content-tools
+RUN groupadd --system --gid 1001 nextjs && useradd --system --uid 1001 --gid nextjs nextjs
+COPY tsconfig.json ./
+COPY src ./src
+COPY tools/db ./tools/db
+USER nextjs
+ENTRYPOINT ["node", "--import", "tsx"]
+CMD ["tools/db/parity.ts"]
+
 # Stage cuối = image web mặc định (compose nta-web không đặt target).
 FROM base AS runner
 ENV NODE_ENV=production PORT=8080 HOSTNAME=0.0.0.0

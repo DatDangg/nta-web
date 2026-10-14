@@ -23,6 +23,9 @@ env:
   # Secret chỉ đi qua env → docker compose nội suy; không echo, không `docker compose config` không -q.
   POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
   REVALIDATE_SECRET: ${{ secrets.REVALIDATE_SECRET }}
+  # Nguồn nội dung (CR-031) — GitHub VARIABLE (không phải secret): Settings → Secrets and variables → Actions → Variables.
+  # Chưa đặt → file. Bật/lùi = đổi variable rồi chạy lại workflow này, không sửa code. Runbook: docs/runbook/cutover-content-db.md
+  CONTENT_SOURCE: ${{ vars.CONTENT_SOURCE || 'file' }}
 
 jobs:
   deploy:
@@ -33,6 +36,14 @@ jobs:
 
       - name: Validate compose (secret bắt buộc)
         run: docker compose config --quiet
+
+      # Giá trị lạ → web ném lỗi lúc request (source.ts) trong khi /api/health vẫn OK → chặn từ đầu, web cũ giữ nguyên.
+      - name: Validate CONTENT_SOURCE (variable)
+        run: |
+          case "$CONTENT_SOURCE" in
+            file|db) echo "CONTENT_SOURCE=$CONTENT_SOURCE" ;;
+            *) echo "CONTENT_SOURCE không hợp lệ: '$CONTENT_SOURCE' (chỉ file|db)"; exit 1 ;;
+          esac
 
       - name: Start DB + backup sidecar
         run: |

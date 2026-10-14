@@ -1,0 +1,121 @@
+name: Content ops (VPS)
+
+# Lệnh vận hành nội dung CR-031 chạy TRÊN VPS (self-hosted runner, label nta-web) — user chỉ cần bấm "Run workflow".
+# DB `nta-db` không publish port, image web không có tools/ → chạy bằng service một-lần `nta-tools` (compose profile tools,
+# Dockerfile target content-tools) trong mạng compose. Secret chỉ đi qua env → compose nội suy; không echo secret,
+# không `docker compose config` không -q. Chỉ dùng `run --rm --no-deps` → KHÔNG tạo lại nta-web/nta-db.
+# Lệnh (whitelist):
+#   backup          backup DB ngay (pre-migrate-ops-<UTC>-<run>) — không đổi dữ liệu
+#   parity          kiểm migration đã apply đủ + parity DB ↔ file (chỉ đọc)
+#   import-seed     backup → import seed (CHỈ chèn) → parity. Bắt buộc confirm = IMPORT-SEED-PROD
+#   revalidate-all  POST /api/revalidate {all:true} tới nta-web trong mạng compose
+#   upload-smoke    kiểm thư mục upload (tồn tại, owner 1001:1001) → backup → upload 1 ảnh mẫu → /uploads + /_next/image 200.
+#                   Bắt buộc confirm = UPLOAD-PROD. Chạy lại sau deploy (container mới) → "reused" + 200 = ảnh còn sau tạo lại container.
+# Runbook: docs/runbook/cutover-content-db.md
+on:
+  workflow_dispatch:
+    inputs:
+      command:
+        description: "Lệnh"
+        required: true
+        type: choice
+        options: [parity, backup, import-seed, revalidate-all, upload-smoke]
+      confirm:
+        description: "Chỉ cho lệnh ghi: import-seed → IMPORT-SEED-PROD · upload-smoke → UPLOAD-PROD"
+        required: false
+        type: string
+        default: ""
+
+# Chung nhóm với deploy.yml → không bao giờ chạy song song với deploy (backup/migrate/recreate).
+concurrency:
+  group: deploy-nta-web
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  HOST_PORT: "3005"
+  POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+  REVALIDATE_SECRET: ${{ secrets.REVALIDATE_SECRET }}
+  # Input đi qua env (không nội suy ${{ }} thẳng vào script → chống chèn lệnh).
+  OPS_COMMAND: ${{ inputs.command }}
+  OPS_CONFIRM: ${{ inputs.confirm }}
+  UPLOADS_HOST_DIR: /opt/nta-web-data/uploads
+  SMOKE_IMAGE: public/images/og-default.png
+
+jobs:
+  ops:
+    # Chỉ chạy code đã review trên main (chặn chạy workflow từ branch khác lên DB prod).
+    if: github.ref == 'refs/heads/main'
+    runs-on: [self-hosted, nta-web]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Kiểm lệnh + xác nhận
+        run: |
+          case "$OPS_COMMAND" in
+            backup|parity|revalidate-all) ;;
+            import-seed) [ "$OPS_CONFIRM" = "IMPORT-SEED-PROD" ] || { echo "import-seed cần confirm = IMPORT-SEED-PROD"; exit 1; } ;;
+            upload-smoke) [ "$OPS_CONFIRM" = "UPLOAD-PROD" ] || { echo "upload-smoke cần confirm = UPLOAD-PROD"; exit 1; } ;;
+            *) echo "lệnh không hợp lệ: $OPS_COMMAND"; exit 1 ;;
+          esac
+
+      - name: Validate compose (secret bắt buộc)
+        run: docker compose config --quiet
+
+      - name: nta-db phải healthy
+        run: |
+          status="$(docker inspect -f '{{.State.Health.Status}}' nta-db 2>/dev/null || echo missing)"
+          echo "nta-db: $status"
+          [ "$status" = "healthy" ]
+
+      - name: Kiểm thư mục upload (tồn tại + owner 1001:1001)
+        if: env.OPS_COMMAND == 'upload-smoke'
+        run: |
+          [ -d "$UPLOADS_HOST_DIR" ] || { echo "thiếu $UPLOADS_HOST_DIR — tạo + chown 1001:1001 (runbook db.md §0)"; exit 1; }
+          owner="$(stat -c '%u:%g' "$UPLOADS_HOST_DIR")"
+          echo "$UPLOADS_HOST_DIR owner $owner"
+          [ "$owner" = "1001:1001" ] || { echo "owner phải 1001:1001: chown 1001:1001 $UPLOADS_HOST_DIR"; exit 1; }
+
+      # Lệnh ghi luôn backup trước; backup lỗi → dừng.
+      - name: Backup DB
+        if: env.OPS_COMMAND == 'backup' || env.OPS_COMMAND == 'import-seed' || env.OPS_COMMAND == 'upload-smoke'
+        run: docker exec nta-db-backup /scripts/backup.sh "pre-migrate-ops-${OPS_COMMAND}-$(date -u +%Y%m%dT%H%M%SZ)-${GITHUB_RUN_ID}"
+
+      - name: Build nta-tools
+        if: env.OPS_COMMAND != 'backup'
+        run: docker compose --profile tools build nta-tools
+
+      - name: Kiểm migration đã apply đủ
+        if: env.OPS_COMMAND == 'parity' || env.OPS_COMMAND == 'import-seed'
+        run: |
+          expected="$(ls drizzle/*.sql | wc -l)"
+          applied="$(docker exec nta-db psql -U nta -d nta_web -tAc 'select count(*) from drizzle.__drizzle_migrations')"
+          echo "migration: applied=$applied expected=$expected"
+          [ "$applied" = "$expected" ]
+
+      - name: Import seed (chỉ chèn)
+        if: env.OPS_COMMAND == 'import-seed'
+        run: docker compose run --rm --no-deps nta-tools tools/db/import-seed.ts --confirm-prod
+
+      - name: Parity DB ↔ file
+        if: env.OPS_COMMAND == 'parity' || env.OPS_COMMAND == 'import-seed'
+        run: docker compose run --rm --no-deps nta-tools tools/db/parity.ts
+
+      - name: Revalidate toàn bộ
+        if: env.OPS_COMMAND == 'revalidate-all'
+        run: docker compose run --rm --no-deps nta-tools tools/db/content-cli.ts revalidate --all
+
+      - name: Upload ảnh mẫu + kiểm hiển thị
+        if: env.OPS_COMMAND == 'upload-smoke'
+        run: |
+          out="$(docker compose run --rm --no-deps -v "$PWD/$SMOKE_IMAGE:/tmp/smoke/smoke.png:ro" nta-tools \
+            tools/db/content-cli.ts upload /tmp/smoke/smoke.png --alt-vi "Ảnh kiểm tra upload" --alt-en "Upload smoke image" --confirm-prod)"
+          echo "$out"
+          path="$(printf '%s\n' "$out" | grep -o '/uploads/[0-9a-f]*\.[a-z]*' | head -n 1)"
+          [ -n "$path" ] || { echo "không đọc được đường dẫn ảnh"; exit 1; }
+          curl -fsS -o /dev/null -w "GET $path → %{http_code} %{content_type}\n" "http://127.0.0.1:${HOST_PORT}${path}"
+          curl -fsS -o /dev/null -w "GET /_next/image → %{http_code} %{content_type}\n" "http://127.0.0.1:${HOST_PORT}/_next/image?url=${path}&w=640&q=75"
+          ls -ln "$UPLOADS_HOST_DIR" 2>/dev/null | tail -n 5 || true

@@ -3,11 +3,11 @@
   "activeWorkItem": {
     "type": "feature",
     "slug": "content-database",
-    "phaseTask": "phase-3-validate",
-    "step": "spec_validator",
+    "phaseTask": "phase-4-task-01",
+    "step": "cutover",
     "status": "awaiting",
-    "journal": ".context/runs/feature-content-database-phase-3-validate.md",
-    "note": "CR-031 hết phase 3 — chờ user duyệt checkpoint"
+    "journal": ".context/runs/feature-content-database-phase-4-task-01.md",
+    "note": "CR-031 P4-T01 phần A pushed — chờ user B1 (Content ops → parity)"
   },
   "features": [
     {
@@ -1179,9 +1179,9 @@
         "phase-3-task-04": "pending",
         "phase-3-task-05": "pending"
       },
-      "currentPhase": 3,
+      "currentPhase": 4,
       "inProgressTask": null,
-      "note": "Phase 3 done + spec-validator PASS — chờ checkpoint user → P4-T01 cutover",
+      "note": "P4-T01 phần A done (CONTENT_SOURCE qua GitHub Variable, content-ops.yml, runbook cutover, parity local lệch 0). Chờ user chạy phần B (B1 parity).",
       "updatedAt": "2026-10-14",
       "specValidator": {
         "result": "PASS",
@@ -1203,7 +1203,7 @@
         "result": "PASS",
         "level": "STRICT",
         "round": 1,
-        "report": ".context/review-reports/feature-content-database-phase-3-task-05-round-1-review.md"
+        "report": ".context/review-reports/feature-content-database-phase-4-task-01-round-1-review.md"
       },
       "phase1SpecValidator": {
         "result": "PASS",
@@ -1224,6 +1224,11 @@
         "result": "PASS",
         "report": ".context/review-reports/feature-content-database-phase-3-spec-validation.md",
         "note": "MAJOR-1 R-16 ghi quyết định P3-T04 (đã sửa); MINOR: xoá bản ghi bắt buộc, metadata Liên hệ ghi cứng, chưa bằng chứng slug mới, R-15a thiếu 503/429, plan P4 cũ, chưa đo kích thước cache post"
+      },
+      "phase3Checkpoint": {
+        "approved": true,
+        "at": "2026-10-14",
+        "via": "user chat"
       }
     }
   ],

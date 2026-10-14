@@ -12,7 +12,8 @@
 | `nta-db` | `postgres:16.15-alpine`, DB `nta_web`, user `nta` | volume `nta-db-data` (tên cố định), RAM ≤ 512 MB, healthcheck `pg_isready` |
 | `nta-db-backup` | sidecar backup hằng ngày 20:00 UTC (03:00 VN) | chạy root; ghi `/opt/nta-web-data/db-backups`; giữ 14 bản mỗi loại |
 | `nta-migrate` | một-lần (profile `tools`): gate destructive + migrate Drizzle | CI: `docker compose run --rm nta-migrate check\|migrate`; tay: §5 |
-| `nta-web` | nhận `DATABASE_URL`, `REVALIDATE_SECRET`, `UPLOAD_DIR=/app/uploads` | mount `/opt/nta-web-data/uploads`; **chưa** phụ thuộc DB tới cutover (task 8) |
+| `nta-web` | nhận `DATABASE_URL`, `REVALIDATE_SECRET`, `UPLOAD_DIR=/app/uploads` | mount `/opt/nta-web-data/uploads`; `depends_on nta-db` (healthy); `CONTENT_SOURCE` từ GitHub Variable (mặc định `file`) |
+| `nta-tools` | một-lần (profile `tools`): import seed / parity / `db:cli` trong mạng compose, uid 1001 | chạy qua workflow Content ops — `docs/runbook/cutover-content-db.md` |
 
 Thư mục host (override qua env `NTA_BACKUP_DIR`, `NTA_UPLOADS_DIR`):
 
@@ -198,6 +199,8 @@ Xử lý:
 - **Không bao giờ** `docker volume rm nta-db-data`, `docker compose down -v` — mất toàn bộ DB.
 
 ## 8. Import nội dung 1 lần (seed từ file) + parity
+
+> Trên VPS không chạy `npm run …` (image web không có `tools/`, DB không publish port) — dùng workflow **Content ops (VPS)** (`parity`, `import-seed`, `revalidate-all`, `upload-smoke`), xem `docs/runbook/cutover-content-db.md`. Lệnh dưới dành cho máy dev.
 
 `tools/db/import-seed.ts` (`npm run db:import-seed`) đọc nội dung file bằng chính loader web (MDX + `listings.ts`, `home.ts`,
 `solutions/overview.ts`, `slug.ts`, `i18n/messages/{vi,en}.json`, `company-info.ts`) → mỗi bản ghi chèn `content_entries` version 1
