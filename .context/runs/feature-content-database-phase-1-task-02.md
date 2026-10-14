@@ -31,3 +31,5 @@ batchQueue: []
 - 2026-10-14 ✅ DONE reviewer round 1 STRICT FAIL (MAJOR-1 pre-migrate dump bị ghi đè khi re-run cùng SHA; 5 MINOR). ▶ START builder fix round 1.
 - 2026-10-14 ✅ DONE builder fix round 1 (MAJOR-1 + 5 MINOR; npm test 39/39). ▶ START reviewer round 2.
 - 2026-10-14 ✅ DONE reviewer round 2 STRICT PASS (MINOR-7 tuỳ chọn: identifier ngoặc kép trong tokenizer gate — follow-up). Close-out.
+- 2026-10-15 user kiểm VPS sau 8794f29: CI xanh, nta-db/nta-web healthy, backup pre-migrate 812B, uploads writable, df /opt trống 39G (80%). ▶ START spec-validator phase 1.
+- 2026-10-15 ✅ DONE spec-validator phase 1 PASS (2 MAJOR gộp vào P2-T01). Checkpoint phase 1 duyệt (user "ok" qua coordinator, điều kiện PASS).

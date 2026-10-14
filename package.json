@@ -10,7 +10,9 @@
     "typecheck": "tsc --noEmit",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
-    "test": "node --import tsx --test \"src/**/*.test.ts\" \"deploy/**/*.test.ts\""
+    "test": "node --import tsx --test \"src/**/*.test.ts\" \"deploy/**/*.test.ts\" \"tools/**/*.test.ts\"",
+    "db:import-seed": "tsx tools/db/import-seed.ts",
+    "db:parity": "tsx tools/db/parity.ts"
   },
   "dependencies": {
     "drizzle-orm": "^0.45.4",

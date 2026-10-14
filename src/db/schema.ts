@@ -29,6 +29,10 @@ export const CONTENT_COLLECTIONS = [
   "home",
   "solution_overview",
   "slug_registry",
+  // Quyết định #9/#10 (CR-031): chữ giao diện next-intl, thông tin liên hệ công ty, ảnh upload.
+  "ui_messages",
+  "company_info",
+  "asset",
 ] as const;
 
 export type ContentCollection = (typeof CONTENT_COLLECTIONS)[number];

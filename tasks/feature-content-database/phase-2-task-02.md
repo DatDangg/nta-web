@@ -18,3 +18,6 @@
 
 ## Acceptance
 - Mọi thay đổi để lại dòng lịch sử cùng transaction; rollback khôi phục đúng snapshot; test PASS.
+
+## Bổ sung từ spec-validator hết phase 1
+- MINOR-1: `content_versions` thiếu `sort_order` → thêm cột (migration additive, nullable) để rollback khôi phục đúng thứ tự.

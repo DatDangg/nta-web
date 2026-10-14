@@ -85,3 +85,21 @@
 - **Fix round 1 (review STRICT):** tên backup pre-migrate `pre-migrate-<sha12>-<run_id>-<run_attempt>` + `backup.sh` không bao giờ ghi đè
   (trùng tên → FAILED) — re-run cùng commit không làm mất bản trước migrate. Gate quét lexical một lượt (chuỗi/'' escape/dollar-quote/comment)
   và fail-closed với `DO`, `CREATE FUNCTION|PROCEDURE`, `COPY`, `CALL`, `WITH …`, `$$`, `INSERT … SELECT` (luôn cần marker duyệt).
+
+## 2026-10-14 — CR-031 P2-T01: import seed + parity (quy ước bản ghi)
+- **Nguồn đọc:** `tools/db/file-source.ts` dùng chính hằng/loader web: MDX qua `src/lib/content/mdx-files.ts` (tách từ `load-mdx.ts`, không
+  `server-only` để chạy bằng tsx; `load-mdx.ts` giữ guard + re-export → web render y nguyên), `listings.ts`, `getHomeContent`, `solutionOverview`,
+  mảng `slug.ts`, `i18n/messages/{vi,en}.json`, `COMPANY_CONTACT`. Giá trị phải là JSON thuần (Date/undefined → lỗi ngay ở nguồn).
+- **Khoá bản ghi:** MDX → slug = tên file (I-2 kiểm `frontmatter.slug` khớp), `data` = frontmatter, `body` = MDX đã trim (như loader);
+  `about` → `about`; `listing_page`/`listing_cta` → key trang (`products|caseStudies|enterprise|ai`); `listing_item` → slug; `listing_labels` → `labels`;
+  `home` → `home`; `solution_overview` → `enterprise|ai`; `ui_messages` → namespace cấp 1; `company_info` → `contact`.
+- **`slug_registry`:** 1 hàng/slug, `data = {group: enterprise|ai|product}`, `sort_order` = vị trí trong mảng của nhóm. Registry và `company_info`
+  không theo ngôn ngữ nhưng `locale` NOT NULL → ghi **cùng dữ liệu cho vi và en** (company-info.ts không có bản dịch; tách field theo locale khi cần ở P3-T04).
+- **`sort_order`** của collection dạng object (`listing_*`, `solution_overview`, `ui_messages`) = thứ tự key trong file; MDX = null (web sắp theo date/year).
+  Lưu ý cho P3: jsonb **không giữ thứ tự key** bên trong `data` — code đọc DB không được dựa vào thứ tự `Object.keys` của data.
+- **Import chỉ INSERT … ON CONFLICT DO NOTHING** (1 transaction/bản ghi gồm entry v1 + version `create`/`seed`), không UPDATE/DELETE/TRUNCATE.
+  Chặn DB prod (host `nta-db`, db `nta_web`, host không loopback) trừ cờ `--confirm-prod` (chỉ P4-T01).
+- **Parity** so `data`/`body`/`sort_order` của hàng còn sống (deleted_at IS NULL) thuộc collection seed — thiếu/thừa/lệch đều FAIL — và chạy I-1..I-6 trên
+  dữ liệu DB. I-6 chỉ kiểm enum có danh sách runtime (collection, locale, blog category, solution category); enum icon/theme chỉ là type TS → chưa kiểm.
+- **Chạy thử migration trên bản restore** (`deploy/db/migrate-on-restore.sh`, MAJOR-2): build image `migrator` của commit hiện tại, chạy với
+  `DATABASE_URL` trỏ `nta_restore_*`, mật khẩu đọc từ env container `nta-db` → không cần secret GitHub trên VPS (MAJOR-1).

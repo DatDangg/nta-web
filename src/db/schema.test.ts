@@ -9,8 +9,16 @@ import {
 } from "./schema";
 
 test("collection whitelist covers current content types and rejects unknown values", () => {
-  assert.equal(CONTENT_COLLECTIONS.length, 12);
-  for (const collection of ["post", "solution", "case_study", "slug_registry"]) {
+  assert.equal(CONTENT_COLLECTIONS.length, 15);
+  for (const collection of [
+    "post",
+    "solution",
+    "case_study",
+    "slug_registry",
+    "ui_messages",
+    "company_info",
+    "asset",
+  ]) {
     assert.equal(isContentCollection(collection), true, collection);
   }
   assert.equal(isContentCollection("Post"), false);

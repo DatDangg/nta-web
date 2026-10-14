@@ -469,7 +469,7 @@ Base URL: dev `http://localhost:3000/api` · prod `https://ntavietnam.tech/api` 
   container `nta-web` tại `127.0.0.1:3005` (host→container 8080); availability target ≥ 99.5% (đo uptime thực tế);
   domain `ntavietnam.tech` (live 2026-10-09 — HTTPS apex, không `www`; http→https 301); CI/CD GitHub Actions (self-hosted runner label `nta-web`).
   _(4.2.0 — CR-031)_ thêm container **`nta-db`** (PostgreSQL, volume riêng, **không** publish port ra internet; chỉ mạng nội bộ compose)
-  + volume ảnh upload `nta-web-uploads` mount vào `nta-web` (R-16d) + backup tự động (R-16b); deploy chạy theo thứ tự backup → migrate → chạy app; app không cần DB lúc build image.
+  + thư mục ảnh upload (bind mount host `/opt/nta-web-data/uploads`) mount vào `nta-web` (R-16d) + backup tự động (R-16b); deploy chạy theo thứ tự backup → migrate → chạy app; app không cần DB lúc build image.
   Secret server-only: `POSTGRES_PASSWORD` / `DATABASE_URL`, `REVALIDATE_SECRET` (không commit, không `NEXT_PUBLIC_*`).
   `[reverse-engineered from docs]` — nguồn: `BRIEF.md:43`, `docs/BRD.md:53,126,127,157`, `.context/project-config.md:51-59`, `docs/runbook/deploy-vps.md`
   - _(cập nhật 2026-10-09: domain `ntavietnam.tech` — change `domain-ntavietnam`; nền tảng deploy reconcile về **docker-vps** — change `deploy-platform-docker-vps` → đã hết drift)._
