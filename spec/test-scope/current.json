@@ -1,55 +1,44 @@
 {
-  "specVersion": "3.13.0",
-  "scopeVersion": 43,
-  "generatedAt": "2026-10-14T13:00:00+07:00",
+  "specVersion": "3.14.0",
+  "scopeVersion": 44,
+  "generatedAt": "2026-10-14T14:00:00+07:00",
   "trigger": "feature-update",
-  "workItem": "feature-weekly-ai-news-digest",
+  "workItem": "feature-home-products-coming-soon-card",
   "specRefs": [
-    "R-09c",
-    "R-09",
-    "R-09a"
+    "R-03a",
+    "R-03"
   ],
   "changed": {
     "files": [
-      ".github/workflows/ai-news.yml (mới)",
-      "tools/ai-news/** (mới: vendor last30days MIT + ai-news-digest.sh, github-trending.sh, sanitize_brief.py đã sửa, generate.py, tests/)",
-      "public/images/blog/ai-weekly-cover.svg (mới)",
-      "docs/runbook/ai-news.md (mới)",
-      ".dockerignore (+tools)"
+      "src/components/home/ProductStrip.tsx (prop cta + ListingCtaCard cuối dải, wrapper grid cùng kích thước thẻ sản phẩm)",
+      "src/app/[locale]/page.tsx (truyền listingCtas[locale].products, href /contact, icon plus)"
     ],
     "modules": [
-      "Module 7 — Tin tức / Blog",
-      "CI/CD (GitHub Actions)"
+      "Trang chủ — khối Sản phẩm tiêu biểu"
     ]
   },
   "impact": {
     "direct": [
-      "Mỗi thứ 2 08:00 VN (hoặc chạy tay) workflow AI News Weekly sinh 2 bài src/content/blog/{vi,en}/ai-weekly-YYYY-wNN.mdx, category ai-tech, cover ai-weekly-cover.svg",
-      "Bài dạng điểm tin: 5–12 mục, mỗi mục tiêu đề + 1–2 câu + link Nguồn/Source; cuối bài ghi chú tổng hợp tự động",
-      "Chạy lại cùng tuần → skip, không bài trùng",
-      "Guard/build FAIL → workflow đỏ, không commit, không deploy"
+      "/ và /en: cuối dải Sản phẩm tiêu biểu có thẻ viền đứt \"Sắp có thêm ứng dụng mới\" / \"More apps coming soon\" + mô tả + nút \"Liên hệ đội ngũ NTA\" / \"Contact the NTA team\"",
+      "Nút thẻ CTA dẫn tới /contact (vi) và /en/contact (en)",
+      "Thẻ CTA rộng bằng 1 thẻ sản phẩm (85% mobile, ½ dải từ md), cao bằng hàng, snap như thẻ khác"
     ],
     "dependents": [
-      "/blog, /en/blog: thẻ bài mới trong lưới Mới nhất/khối nổi bật, lọc chip AI & Công nghệ, tìm kiếm",
-      "/blog/ai-weekly-* chi tiết: render MDX, thời gian đọc, bài liên quan cùng category",
-      "deploy.yml được dispatch sau commit bot"
+      "Nút ←/→ của khối: với 2 sản phẩm + thẻ CTA, ở desktop nút → bật khi chưa cuộn tới mép phải, disabled ở mép",
+      "Phím ←/→ khi dải đang focus và vuốt mobile cuộn tới được thẻ CTA"
     ],
     "regression": [
-      "Danh sách + chi tiết các bài blog hiện có không đổi",
-      "Docker image production không chứa tools/ (dockerignore)",
-      "CI (ci.yml) và deploy.yml không đổi"
+      "Thẻ sản phẩm trang chủ (poster, icon, chip, link /products/<slug>) không đổi",
+      "Section ẩn khi không có sản phẩm",
+      "Trang /products: thẻ CTA cuối lưới không đổi",
+      "Không tràn ngang trang ở 375/1440"
     ]
   },
   "acceptance": [
-    "Workflow cron tuần + workflow_dispatch trên runner nta-web",
-    "1 nguồn lỗi bị bỏ qua, không còn dữ liệu → fail",
-    "LLM chỉ nhận .clean.md có banner dữ liệu-không-phải-lệnh",
-    "Đúng 2 bài vi+en/tuần, frontmatter hợp lệ, không trùng",
-    "Mọi URL trong bài có trong .clean.md; số tin 5–12",
-    "Ghi chú tự động cuối bài + link nguồn từng tin",
-    "Build PASS mới commit + deploy",
-    "Bài hiện trên /vi/blog và /en/blog sau deploy",
-    "Secret OPENCODE_API_KEY chỉ ở GitHub Secrets"
+    "Thẻ hiển thị cuối dải sản phẩm trang chủ vi + en, nội dung giống thẻ CTA trang Sản phẩm",
+    "Viền đứt, kích thước đồng bộ thẻ sản phẩm trang chủ",
+    "Link trỏ /contact như trang Sản phẩm",
+    "Cuộn ngang / nút mũi tên / bàn phím vẫn đúng; responsive mobile ổn"
   ],
-  "risk": "medium"
+  "risk": "low"
 }

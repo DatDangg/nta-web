@@ -2,12 +2,12 @@
   "mode": "feature",
   "activeWorkItem": {
     "type": "feature",
-    "slug": "weekly-ai-news-digest",
+    "slug": "home-products-coming-soon-card",
     "phaseTask": "phase-1-task-01",
     "step": "close-out",
     "status": "done",
-    "journal": ".context/runs/feature-weekly-ai-news-digest-phase-1-task-01.md",
-    "note": "CR-019 done — review round 2 PASS, spec 3.13.0 · scope v43"
+    "journal": ".context/runs/feature-home-products-coming-soon-card-phase-1.md",
+    "note": "CR-021 done — review round 2 PASS, spec 3.14.0 · scope v44"
   },
   "features": [
     {
@@ -69,7 +69,8 @@
         "change-hairstyle-ai-gallery-screenshots-phase-1-task-01",
         "change-home-solution-card-images-phase-1-task-01",
         "change-home-footer-redesign-phase-1-task-01",
-        "change-home-hero-banner-restyle-phase-1-task-01"
+        "change-home-hero-banner-restyle-phase-1-task-01",
+        "home-products-coming-soon-card-phase-1-task-01"
       ],
       "inProgressTask": null,
       "tasks": [
@@ -1092,6 +1093,21 @@
       "reviewer": {
         "result": "PASS",
         "report": ".context/review-reports/feature-weekly-ai-news-digest-phase-1-task-01-round-2-review.md"
+      }
+    },
+    {
+      "slug": "home-products-coming-soon-card",
+      "status": "done",
+      "changeFile": "spec/changes/archive/2026-10-14-home-products-coming-soon-card.md",
+      "classification": "ADDITIVE (UI)",
+      "tasks": {
+        "phase-1-task-01": "done"
+      },
+      "note": "CR-021 — trang chủ khối Sản phẩm thêm thẻ CTA viền đứt \"Sắp có thêm ứng dụng mới\" cuối dải (ListingCtaCard + listingCtas.products → /contact); spec 3.13.0 → 3.14.0 (MINOR) · scope v44. Build chưa chạy được trong môi trường agent",
+      "updatedAt": "2026-10-14",
+      "reviewer": {
+        "result": "PASS",
+        "report": ".context/review-reports/feature-home-products-coming-soon-card-phase-1-task-01-round-2-review.md"
       }
     }
   ],

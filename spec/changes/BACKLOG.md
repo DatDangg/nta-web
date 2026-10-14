@@ -28,6 +28,7 @@
 | CR-018 | Trang chủ khối Giải pháp: thẻ rộng hơn + ảnh bên phải dạng ảnh thật (laptop / chip AI / điện thoại) như mẫu (follow-up CR-017) | MODIFY (UI) | done (spec 3.11.0 không bump · scope v41) | `archive/2026-10-14-home-solution-card-photo.md` | 2026-10-14 | 2026-10-14 |
 | CR-019 | Tự động đăng "Bản tin AI tuần" (vi + en, dạng điểm tin, AI qua OpenCode Go) lên Tin tức qua GitHub Actions hằng tuần trên runner VPS, không duyệt tay | ADDITIVE | done (spec 3.13.0 · scope v43) | `archive/2026-10-14-weekly-ai-news-digest.md` | 2026-10-14 | 2026-10-14 |
 | CR-020 | Trang Về NTA: bỏ khối "Năng lực" và "Đội ngũ" (vi + en); xử lý nút "Tìm hiểu thêm về đội ngũ" đang trỏ `#team` | REMOVE (UI) | done (spec 3.12.0 · scope v42) | `archive/2026-10-14-about-remove-capabilities-team.md` | 2026-10-14 | 2026-10-14 |
+| CR-021 | Trang chủ khối Sản phẩm: thêm thẻ "Sắp có thêm ứng dụng mới" cuối dải như thẻ CTA trang Sản phẩm (vi + en) | ADDITIVE (UI) | done (spec 3.14.0 · scope v44) | `archive/2026-10-14-home-products-coming-soon-card.md` | 2026-10-14 | 2026-10-14 |
 
 ## Quy tắc tracking
 
