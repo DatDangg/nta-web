@@ -4,10 +4,8 @@ import { notFound } from 'next/navigation';
 import { AboutHero } from '@/components/about/AboutHero';
 import { AboutPeople } from '@/components/about/AboutPeople';
 import { AboutValues } from '@/components/about/AboutValues';
-import { CapabilityGrid } from '@/components/about/CapabilityGrid';
 import { MilestoneTimeline } from '@/components/about/MilestoneTimeline';
 import { PartnerLogos } from '@/components/about/PartnerLogos';
-import { TeamGrid } from '@/components/about/TeamGrid';
 import { CTABanner } from '@/components/shared/CTABanner';
 import { getAboutData } from '@/lib/content/about';
 import type { Locale } from '@/content/types';
@@ -44,24 +42,12 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
   const [t, about] = await Promise.all([getTranslations('about'), getAboutData(locale)]);
   if (!about) notFound();
 
-  const team = about.team.map((member, index) => ({
-    ...member,
-    name: t.has(`team.${index === 0 ? 'consulting' : 'product'}.name`)
-      ? t(`team.${index === 0 ? 'consulting' : 'product'}.name`)
-      : member.name,
-    role: t.has(`team.${index === 0 ? 'consulting' : 'product'}.role`)
-      ? t(`team.${index === 0 ? 'consulting' : 'product'}.role`)
-      : member.role,
-  }));
-
   return (
     <>
       <JsonLd data={createBreadcrumbJsonLd([{ name: locale === 'en' ? 'Home' : 'Trang chủ', path: locale === 'en' ? '/en' : '/' }, { name: t('title'), path: `${locale === 'en' ? '/en' : ''}/about` }])} />
       <AboutHero />
       <AboutValues />
       <AboutPeople />
-      <CapabilityGrid capabilities={about.capabilities} title={t('capabilitiesTitle')} />
-      <TeamGrid fallback={t('imageFallback')} members={team} title={t('teamTitle')} />
       <MilestoneTimeline milestones={about.milestones} title={t('milestonesTitle')} />
       <PartnerLogos partners={about.partners} title={t('partnersTitle')} />
       <CTABanner description={t('ctaDescription')} title={t('ctaTitle')} variant="alt" />

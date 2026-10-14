@@ -265,8 +265,6 @@ export interface MdxDocument {
 
 export interface AboutData {
   mission: string;
-  capabilities: string[];
-  team: { name: string; role: string; image: string }[];
   milestones: { year: number; description: string }[];
   partners: { name: string; logo: string | null }[];
 }

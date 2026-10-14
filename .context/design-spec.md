@@ -159,6 +159,7 @@ desc: giới thiệu 3 mảng + domain · JSON-LD: Organization + WebSite.
 
 **Route:** `/about` — R-04
 > **CR-014 (3.10.0, R-04a):** đầu trang thay bằng hero 2 cột (ảnh tòa Kim Hoàn) + khối Sứ mệnh/Tầm nhìn/Giá trị cốt lõi + khối Con người NTA (ảnh AI tạm); PageHeader + MissionBlock bỏ, các khối bên dưới giữ nguyên.
+> **CR-020 (4.0.0, R-04):** bỏ khối CapabilityGrid (Năng lực) + TeamGrid (Đội ngũ) và nút "Tìm hiểu thêm về đội ngũ" (`#team`) của khối Con người NTA. Thứ tự hiện tại: Hero · Giá trị · Con người NTA · MilestoneTimeline · PartnerLogos · CTABanner. Layout bên dưới là bản gốc (lịch sử).
 
 **Layout (7 section):** PageHeader (centered, h1 `display` + 1 dòng dẫn) · MissionBlock (statement lớn,
 `h2` centered, `max-w-[48ch]`, KHÔNG card) · CapabilityGrid (4 mục, list/divider KHÔNG card, tránh lặp family

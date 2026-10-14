@@ -1,12 +1,11 @@
 import Image from 'next/image';
 import { getTranslations } from 'next-intl/server';
 import { AccentText } from '@/components/listing/ListingHero';
-import { ListingIcon } from '@/components/listing/icons';
 import { Reveal } from '@/components/ui/Reveal';
 import { Section } from '@/components/ui/Section';
 
 /**
- * Khối "Con người NTA" (CR-014): ảnh đội ngũ trái, giới thiệu + nút cuộn tới TeamGrid (`#team`) phải.
+ * Khối "Con người NTA" (CR-014): ảnh đội ngũ trái, giới thiệu phải (không có nút CTA — CR-020).
  * Ảnh `team-people-temp.webp` là ảnh AI TẠM cắt từ mockup (794×267) — thay ảnh đội ngũ thật sau.
  */
 export async function AboutPeople() {
@@ -33,10 +32,6 @@ export async function AboutPeople() {
             {t('people.titleLead')} <AccentText>{t('people.titleAccent')}</AccentText>
           </h2>
           <p className="mt-4 max-w-[62ch] leading-relaxed text-text-secondary">{t('people.description')}</p>
-          <a className="mt-7 inline-flex min-h-11 items-center gap-2 rounded-full border border-primary px-6 text-sm font-semibold text-primary transition-colors hover:bg-primary-light focus-visible:outline focus-visible:outline-2 focus-visible:outline-focus" href="#team">
-            {t('people.cta')}
-            <ListingIcon className="size-4" name="arrow" strokeWidth={2} />
-          </a>
         </div>
       </Reveal>
     </Section>

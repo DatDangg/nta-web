@@ -88,7 +88,7 @@ Font stack: `-apple-system, BlinkMacSystemFont, "SF Pro Display", Inter, "Segoe 
 ### Screen: Về NTA
 - **Route:** `/about`
 - **Layout:** Full width, các section xếp dọc
-- **Components:** PageHeader, MissionBlock, CapabilityGrid, TeamGrid, MilestoneTimeline, PartnerLogos, CTABanner
+- **Components:** AboutHero, AboutValues, AboutPeople, MilestoneTimeline, PartnerLogos, CTABanner _(cập nhật CR-014/CR-020: PageHeader, MissionBlock, CapabilityGrid, TeamGrid đã bỏ)_
 - **States:** Default
 - **Notes:** Timeline milestones theo mốc năm; logo đối tác dạng grayscale → màu khi hover.
 
