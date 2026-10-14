@@ -1,5 +1,5 @@
 ---
-spec_version: 3.12.0
+spec_version: 3.13.0
 updated_at: 2026-10-14
 ---
 
@@ -260,7 +260,7 @@ _(cập nhật 2026-10-13: thêm **domain phụ** `ntasolution.vn` (+ `www`) ph�
       nhãn badge sang i18n + chuỗi ngày.
   - **Ngoài phạm vi:** khối "Đăng ký nhận tin" (chưa có backend — làm sau). BR-004: không thêm bài/ảnh minh hoạ giả.
   — nguồn: change `spec/changes/2026-10-13-blog-listing-redesign.md` (user chốt 6 quyết định 2026-10-13).
-- **R-09c (3.12.0 — CR-019 "Bản tin AI tuần" tự động):** mỗi tuần (cron 08:00 thứ 2 giờ VN + chạy tay `workflow_dispatch`)
+- **R-09c (3.13.0 — CR-019 "Bản tin AI tuần" tự động):** mỗi tuần (cron 08:00 thứ 2 giờ VN + chạy tay `workflow_dispatch`)
   workflow `.github/workflows/ai-news.yml` trên self-hosted runner `nta-web` (chạy trong container, không cài gì lên host)
   tự sinh + đăng **2 bài** `src/content/blog/{vi,en}/ai-weekly-YYYY-wNN.mdx` (ISO week; category `ai-tech`; cover cố định
   `/images/blog/ai-weekly-cover.svg`; tuần đã có bài → bỏ qua, không trùng).

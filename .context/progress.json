@@ -2,12 +2,12 @@
   "mode": "feature",
   "activeWorkItem": {
     "type": "feature",
-    "slug": "about-remove-capabilities-team",
+    "slug": "weekly-ai-news-digest",
     "phaseTask": "phase-1-task-01",
     "step": "close-out",
     "status": "done",
-    "journal": ".context/runs/feature-about-remove-capabilities-team-phase-1.md",
-    "note": "CR-020 done — review PASS, spec 3.12.0 · scope v42"
+    "journal": ".context/runs/feature-weekly-ai-news-digest-phase-1-task-01.md",
+    "note": "CR-019 done — review round 2 PASS, spec 3.13.0 · scope v43"
   },
   "features": [
     {
@@ -1077,6 +1077,21 @@
       "reviewer": {
         "result": "PASS",
         "report": ".context/review-reports/feature-about-remove-capabilities-team-phase-1-task-01-round-1-review.md"
+      }
+    },
+    {
+      "slug": "weekly-ai-news-digest",
+      "status": "done",
+      "changeFile": "spec/changes/archive/2026-10-14-weekly-ai-news-digest.md",
+      "classification": "ADDITIVE",
+      "tasks": {
+        "phase-1-task-01": "done"
+      },
+      "note": "CR-019 — Bản tin AI tuần tự động (GitHub Actions + last30days + OpenCode Go, guard, build gate, commit main, dispatch deploy); spec 3.12.0 → 3.13.0 (MINOR) · scope v43. Chờ user thêm secret OPENCODE_API_KEY + chạy tay lần đầu",
+      "updatedAt": "2026-10-14",
+      "reviewer": {
+        "result": "PASS",
+        "report": ".context/review-reports/feature-weekly-ai-news-digest-phase-1-task-01-round-2-review.md"
       }
     }
   ],

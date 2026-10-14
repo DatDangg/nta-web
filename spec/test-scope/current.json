@@ -1,50 +1,55 @@
 {
-  "specVersion": "3.12.0",
-  "scopeVersion": 42,
-  "generatedAt": "2026-10-14T03:00:00+07:00",
+  "specVersion": "3.13.0",
+  "scopeVersion": 43,
+  "generatedAt": "2026-10-14T13:00:00+07:00",
   "trigger": "feature-update",
-  "workItem": "feature-about-remove-capabilities-team",
+  "workItem": "feature-weekly-ai-news-digest",
   "specRefs": [
-    "R-04",
-    "R-04a"
+    "R-09c",
+    "R-09",
+    "R-09a"
   ],
   "changed": {
     "files": [
-      "src/app/[locale]/about/page.tsx (bỏ CapabilityGrid, TeamGrid, biến team)",
-      "src/components/about/AboutPeople.tsx (bỏ nút \"Tìm hiểu thêm về đội ngũ\" #team + import ListingIcon)",
-      "src/components/about/CapabilityGrid.tsx (xoá)",
-      "src/components/about/TeamGrid.tsx (xoá)",
-      "src/content/types.ts (AboutData bỏ capabilities, team)",
-      "src/lib/content/about.ts (required fields: mission, milestones, partners)",
-      "src/content/about/vi/about.mdx + en/about.mdx (bỏ frontmatter capabilities, team)",
-      "src/i18n/messages/vi.json + en.json (bỏ about.capabilitiesTitle, teamTitle, team, imageFallback, people.cta)",
-      "public/images/about/team-ai.svg + team-domain.svg (xoá)"
+      ".github/workflows/ai-news.yml (mới)",
+      "tools/ai-news/** (mới: vendor last30days MIT + ai-news-digest.sh, github-trending.sh, sanitize_brief.py đã sửa, generate.py, tests/)",
+      "public/images/blog/ai-weekly-cover.svg (mới)",
+      "docs/runbook/ai-news.md (mới)",
+      ".dockerignore (+tools)"
     ],
     "modules": [
-      "Module 2 — Về NTA /about"
+      "Module 7 — Tin tức / Blog",
+      "CI/CD (GitHub Actions)"
     ]
   },
   "impact": {
     "direct": [
-      "/about và /en/about: không còn khối \"Năng lực\"/\"Capabilities\" và \"Đội ngũ\"/\"Our team\" (không heading, không thẻ thành viên Đội ngũ tư vấn/Consulting team, Đội ngũ sản phẩm/Product team)",
-      "Khối Con người NTA không còn nút \"Tìm hiểu thêm về đội ngũ\"/\"Learn more about our team\"; trang không còn phần tử id=\"team\" và không còn link href=\"#team\"",
-      "Thứ tự khối: Hero · Giá trị (Sứ mệnh/Tầm nhìn/Giá trị cốt lõi) · Con người NTA · Hành trình phát triển/Our journey · Đối tác (ẩn nếu rỗng) · CTA"
+      "Mỗi thứ 2 08:00 VN (hoặc chạy tay) workflow AI News Weekly sinh 2 bài src/content/blog/{vi,en}/ai-weekly-YYYY-wNN.mdx, category ai-tech, cover ai-weekly-cover.svg",
+      "Bài dạng điểm tin: 5–12 mục, mỗi mục tiêu đề + 1–2 câu + link Nguồn/Source; cuối bài ghi chú tổng hợp tự động",
+      "Chạy lại cùng tuần → skip, không bài trùng",
+      "Guard/build FAIL → workflow đỏ, không commit, không deploy"
     ],
     "dependents": [
-      "Không có: CapabilityGrid/TeamGrid/getAboutData chỉ dùng ở /about; ListingIcon, team-people-temp.webp, CTABanner, MilestoneTimeline, PartnerLogos giữ nguyên"
+      "/blog, /en/blog: thẻ bài mới trong lưới Mới nhất/khối nổi bật, lọc chip AI & Công nghệ, tìm kiếm",
+      "/blog/ai-weekly-* chi tiết: render MDX, thời gian đọc, bài liên quan cùng category",
+      "deploy.yml được dispatch sau commit bot"
     ],
     "regression": [
-      "/about, /en/about: HTTP 200, hero (H1 Về NTA, 3 chỉ số, ảnh tòa Kim Hoàn), khối Giá trị, ảnh khối Con người NTA, timeline mốc 2022/2024, CTA → /contact hiển thị như trước",
-      "Metadata title/description + canonical/alternates + breadcrumb JSON-LD không đổi",
-      "Không có key i18n thô hiển thị (VI/EN); không tràn ngang ở 375/768/1024/1440",
-      "Trang chủ và các trang khác không đổi"
+      "Danh sách + chi tiết các bài blog hiện có không đổi",
+      "Docker image production không chứa tools/ (dockerignore)",
+      "CI (ci.yml) và deploy.yml không đổi"
     ]
   },
   "acceptance": [
-    "/about và /en/about không còn khối Năng lực/Capabilities và Đội ngũ/Our team",
-    "Không còn nút Tìm hiểu thêm về đội ngũ và không còn anchor #team",
-    "Các khối còn lại giữ thứ tự và giao diện",
-    "typecheck/lint/build PASS"
+    "Workflow cron tuần + workflow_dispatch trên runner nta-web",
+    "1 nguồn lỗi bị bỏ qua, không còn dữ liệu → fail",
+    "LLM chỉ nhận .clean.md có banner dữ liệu-không-phải-lệnh",
+    "Đúng 2 bài vi+en/tuần, frontmatter hợp lệ, không trùng",
+    "Mọi URL trong bài có trong .clean.md; số tin 5–12",
+    "Ghi chú tự động cuối bài + link nguồn từng tin",
+    "Build PASS mới commit + deploy",
+    "Bài hiện trên /vi/blog và /en/blog sau deploy",
+    "Secret OPENCODE_API_KEY chỉ ở GitHub Secrets"
   ],
-  "risk": "low"
+  "risk": "medium"
 }
