@@ -65,3 +65,9 @@ Verify:
 - `npm test` — 195 test, 194 pass, 1 fail **không liên quan task**: `tools/db/content-rules.test.ts` "toàn bộ nội dung file hiện tại … ảnh tồn tại" báo thiếu 9 file `/uploads/*.jpg|png` vì máy local không có `public/uploads/` (ảnh upload runtime, không thuộc repo). 2 test mới của task PASS.
 - `npm run build` — chưa chạy (agent chính chạy).
 - Trình duyệt (320/375/768/1280, scrollWidth) — chưa chạy; cần kiểm ở bước verify của agent chính/reviewer.
+
+### Ops prod (2026-10-15, sau deploy bd49bb1)
+- Phát hiện khi verify prod: content source = `db` → nhãn đọc từ bản ghi `ui_messages/<locale>/blog` (CR-031), file JSON chỉ là fallback → /blog vi vẫn "Nổi bật".
+- Đã sửa trực tiếp DB (backup `ops-cr038-ui-20261015T091225Z`): `ui_messages/vi/blog` v1→v2 `highlightEyebrow` = "Tin mới", `ui_messages/en/blog` v1→v2 = "Latest" (giữ 33 key khác), `revalidate --collection ui_messages`.
+- Kiểm: /blog có "Tin mới", không còn "Nổi bật"; /en/blog "Latest". Rollback: `content-cli rollback ui_messages/<l>/blog --to 1 --expected-version 2 --confirm-prod`.
+- Bài học: đổi chữ trong `src/i18n/messages/*.json` ở chế độ db phải kèm update bản ghi `ui_messages` tương ứng.

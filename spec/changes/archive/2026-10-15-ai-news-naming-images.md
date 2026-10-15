@@ -1,7 +1,7 @@
 ---
 id: ai-news-naming-images
 type: feature
-status: in_progress
+status: done
 created: 2026-10-15
 ---
 

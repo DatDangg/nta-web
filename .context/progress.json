@@ -1,13 +1,13 @@
 {
   "mode": "feature",
   "activeWorkItem": {
-    "type": "feature",
-    "slug": "ai-news-naming-images",
-    "phaseTask": "phase-1-task-03",
-    "step": "awaiting_user_db_ops",
-    "status": "awaiting",
-    "journal": ".context/runs/feature-ai-news-naming-images-phase-1-task-01.md",
-    "note": "CR-038 — 3 task code xong + review PASS; chờ user chạy docs/runbook/ai-news.md §9 (DB prod w42) rồi close-out/archive"
+    "type": null,
+    "slug": null,
+    "phaseTask": null,
+    "step": "idle",
+    "status": "idle",
+    "journal": null,
+    "note": "CR-038 done 2026-10-15"
   },
   "features": [
     {
@@ -1411,8 +1411,8 @@
     {
       "slug": "ai-news-naming-images",
       "cr": "CR-038",
-      "status": "awaiting_ops",
-      "changeFile": "spec/changes/2026-10-15-ai-news-naming-images.md",
+      "status": "done",
+      "changeFile": "spec/changes/archive/2026-10-15-ai-news-naming-images.md",
       "classification": "MODIFY",
       "risk": "MEDIUM",
       "phases": [
@@ -1424,7 +1424,8 @@
               "title": "Nhãn Tin mới/Latest + breadcrumb chi tiết tin kiểu pill",
               "status": "done",
               "review": "NORMAL PASS",
-              "reviewReport": ".context/review-reports/feature-ai-news-naming-images-phase-1-task-01-round-1-review.md"
+              "reviewReport": ".context/review-reports/feature-ai-news-naming-images-phase-1-task-01-round-1-review.md",
+              "note": "Kèm update DB ui_messages/{vi,en}/blog v2 (chế độ db)"
             },
             {
               "task": "phase-1-task-02",
@@ -1436,10 +1437,10 @@
             {
               "task": "phase-1-task-03",
               "title": "Sửa bài ai-weekly-2026-w42 (file seed + DB prod)",
-              "status": "awaiting_ops",
+              "status": "done",
               "review": "STRICT PASS (round 2)",
               "reviewReport": ".context/review-reports/feature-ai-news-naming-images-phase-1-task-03-round-2-review.md",
-              "note": "Seed + runbook §9 xong; chờ user chạy runbook §9 trên VPS để sửa w42 trong DB prod"
+              "note": "Seed + runbook §9; DB prod w42 v2 đã cập nhật 2026-10-15"
             }
           ]
         }
@@ -1451,7 +1452,8 @@
       ],
       "updatedAt": "2026-10-15",
       "specVersion": "4.6.0",
-      "scopeVersion": 56
+      "scopeVersion": 56,
+      "completedAt": "2026-10-15"
     }
   ],
   "bugs": [

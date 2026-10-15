@@ -88,3 +88,7 @@ Body, slug, date, category **không đổi**.
   - Kiểm: trích toàn bộ khối `sh` §9 → `bash -n` PASS; mô phỏng cổng chặn 5 ca (OK / backup=0 / VI_N rỗng / VI_N "3a" / record rỗng) → chỉ ca OK ghi.
     Không chạy gì lên DB. Không chạy lại npm test/typecheck/lint (diff round 2 chỉ là doc).
 - **Còn mở:** bước DB prod (acceptance 2–3) chờ user chạy runbook §9 trên VPS + smoke. Task chỉ đóng khi user báo đã chạy OK.
+
+### Ops prod (2026-10-15) — đã chạy runbook §9
+- Backup `ops-cr038-20261015T091033Z`; `post/vi|en/ai-weekly-2026-w42` v1→v2 (actor `ops:claude-cr038`): title/excerpt theo ngày 15/10/2026, cover `/uploads/9b72253a…fc51.jpg`; giữ date/slug/category + body; `revalidate --collection post` OK.
+- Kiểm: 4 URL 200; title mới có trên trang chi tiết vi/en; ảnh thẻ mới có trên /blog + /en/blog; không còn "tuần 42/2026". File env tạm đã shred.
