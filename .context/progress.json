@@ -7,7 +7,7 @@
     "step": "closeout",
     "status": "awaiting",
     "journal": ".context/runs/bug-ops-backup-rotation-phase-1-task-01.md",
-    "note": "CR-033 fix committed local (review STRICT PASS, scope v51). Chưa push: npm run build local FAIL do môi trường (native binding), cần build Linux/docker PASS → push → deploy → user chạy Content ops backup trên VPS xác nhận → archive CR-033"
+    "note": "CR-033 fix pushed main (review STRICT PASS, docker build PASS, scope v51). Chờ deploy → user chạy Content ops backup trên VPS xác nhận (log ops-backup-…dump, không rotate xoá pre-migrate-<sha>) → archive CR-033"
   },
   "features": [
     {
@@ -1327,7 +1327,7 @@
     {
       "slug": "ops-backup-rotation",
       "title": "Backup Content ops/AI news (pre-migrate-ops-*) dùng chung vòng giữ 14 bản với backup trước-deploy",
-      "status": "fixed_pending_deploy",
+      "status": "fixed_pending_verify",
       "changeFile": "spec/changes/2026-10-14-ops-backup-rotation.md",
       "classification": "BUG (ops)",
       "related": "CR-033",

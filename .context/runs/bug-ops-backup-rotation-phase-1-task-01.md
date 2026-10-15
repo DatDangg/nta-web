@@ -17,7 +17,7 @@ evidence:
   reportPath: .context/review-reports/bug-ops-backup-rotation-phase-1-task-01-round-1-review.md
   round: 1
   verdict: PASS
-next: "build Linux/docker PASS → git push origin main → deploy → user bấm Content ops backup trên VPS (log ops-backup-…dump, không có rotate xoá pre-migrate-<sha>) → archive CR-033 + BACKLOG done"
+next: "deploy chạy sau push → user bấm Content ops backup trên VPS (log ops-backup-…dump, không có rotate xoá pre-migrate-<sha>) → archive CR-033 + BACKLOG done"
 loopSignal: none
 approvals: ["2026-10-15 user duyệt fix plan (prefix ops-<nguồn>, nhãn tay vòng deploy, legacy pre-migrate-ops-* vòng ops)"]
 batchQueue: [CR-033 ops-backup-rotation]
@@ -37,3 +37,4 @@ batchQueue: [CR-033 ops-backup-rotation]
 - 2026-10-15 user duyệt plan → builder: backup.sh tách 2 vòng + workflows + runbook; harness 13/13 PASS (sh+dash), HEAD tái hiện bug; typecheck/lint/test PASS; npm run build FAIL môi trường (Failed to load native binding).
 - 2026-10-15 reviewer STRICT round 1 PASS (2 MINOR không chặn). spec-publisher: scope v51 (bug-fix), spec 4.2.1 giữ nguyên.
 - 2026-10-15 commit fix local; KHÔNG push vì build FAIL.
+- 2026-10-15 docker build --target builder PASS (npm run build trong container) → push origin main.
