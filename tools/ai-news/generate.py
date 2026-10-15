@@ -30,7 +30,9 @@ import og_image
 
 VN_TZ = datetime.timezone(datetime.timedelta(hours=7))
 LOCALES = ("vi", "en")
-COVER = "/images/blog/ai-weekly-cover.svg"
+# Ảnh thẻ khi không tin nào có ảnh; bình thường cover = ảnh tin đầu tiên có ảnh (R-09c 4.6.0).
+FALLBACK_COVER = "/images/blog/ai-weekly-cover.webp"
+MONTH_ABBR_EN = ("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
 CATEGORY = "ai-tech"
 
 DEFAULT_BASE_URL = "https://opencode.ai/inference/go/v1"
@@ -185,15 +187,24 @@ def safe_link_url(url: str) -> str:
     return urllib.parse.quote(url, safe=":/?#[]@!$&'*+,;=%-._~")
 
 
-def _frontmatter(locale: str, week: dict, item_count: int) -> str:
+def format_post_date(locale: str, iso_date: str) -> str:
+    """'YYYY-MM-DD' → vi 'DD/MM/YYYY', en 'D Mon YYYY'. Không dùng locale hệ thống (strftime %b đổi theo máy)."""
+    day = datetime.date.fromisoformat(iso_date)
     if locale == "vi":
-        title = f"Bản tin AI tuần {week['week']}/{week['year']}"
-        excerpt = f"{item_count} điểm tin AI đáng chú ý trong tuần {week['week']}/{week['year']}, kèm link nguồn gốc."
+        return f"{day.day:02d}/{day.month:02d}/{day.year}"
+    return f"{day.day} {MONTH_ABBR_EN[day.month - 1]} {day.year}"
+
+
+def _frontmatter(locale: str, week: dict, item_count: int, cover: str) -> str:
+    day = format_post_date(locale, week["date"])
+    if locale == "vi":
+        title = f"Bản tin AI tuần ngày {day}"
+        excerpt = f"{item_count} điểm tin AI đáng chú ý trong bản tin ngày {day}, kèm link nguồn gốc."
     else:
-        title = f"AI Weekly Digest — Week {week['week']}, {week['year']}"
-        excerpt = f"{item_count} notable AI news items from week {week['week']}, {week['year']}, with links to the original sources."
+        title = f"AI Weekly Digest — {day}"
+        excerpt = f"{item_count} notable AI news items in the digest of {day}, with links to the original sources."
     fields = [("slug", week["slug"]), ("title", title), ("date", week["date"]),
-              ("category", CATEGORY), ("excerpt", excerpt), ("cover", COVER)]
+              ("category", CATEGORY), ("excerpt", excerpt), ("cover", cover)]
     # json.dumps cho chuỗi YAML double-quoted hợp lệ.
     return "---\n" + "\n".join(f"{key}: {json.dumps(value, ensure_ascii=False)}" for key, value in fields) + "\n---\n"
 
@@ -223,14 +234,16 @@ def _image_lines(locale: str, item: dict, image) -> list:
 
 
 def render_post(locale: str, week: dict, items: list, images=None) -> str:
-    """images: {index 1-based: og_image.Image}; không có ảnh → output y như trước CR-035."""
+    """images: {index 1-based: og_image.Image}; không có ảnh → không NewsImage, cover = FALLBACK_COVER."""
     images = images or {}
     intro = {
         "vi": "Điểm lại các tin AI nổi bật trong tuần qua. Mỗi mục tóm tắt ngắn từ tiêu đề tin, kèm link để đọc bản gốc.",
         "en": "A roundup of notable AI news from the past week. Each item is a short summary based on the headline, with a link to the original.",
     }[locale]
     source_label = {"vi": "Nguồn", "en": "Source"}[locale]
-    parts = [_frontmatter(locale, week, len(items)), intro, ""]
+    # Cover = ảnh tin đầu tiên có ảnh (đã nằm trong manifest → publish-post I-7 tìm thấy); 0 ảnh → fallback.
+    cover = upload_path(images[min(images)]) if images else FALLBACK_COVER
+    parts = [_frontmatter(locale, week, len(items), cover), intro, ""]
     for index, item in enumerate(items, start=1):
         parts += [f"## {index}. {escape_mdx(item['title_' + locale])}", ""]
         if index in images:

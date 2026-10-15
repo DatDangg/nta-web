@@ -53,4 +53,26 @@
 - Attempt FAIL thật → sửa trên đĩa, tăng `attempt`; cancel ≠ fail. 3 attempt FAIL → `architecture_review_needed`, dừng báo user.
 
 ## Verification summary
-_(builder điền)_
+Builder attempt 1 (2026-10-15):
+- **Thay đổi:** `generate.py` — `COVER` → `FALLBACK_COVER` (webp) + `MONTH_ABBR_EN`; hàm thuần `format_post_date(locale, iso)`
+  (vi `DD/MM/YYYY`, en `D Mon YYYY`, không dùng locale hệ thống); `_frontmatter(locale, week, n, cover)` title/excerpt theo `week["date"]`
+  (= ngày chạy giờ VN, cũng là `date` frontmatter); `render_post` cover = `upload_path(images[min(images)])` hoặc `FALLBACK_COVER`.
+  Slug + `validate_post` không đổi; nhánh "ảnh bỏ toàn bài" / `guarded_items` render `images={}` → fallback tự đúng.
+  Asset `public/images/blog/ai-weekly-cover.webp` copy nguyên (cmp byte-identical, 68082 B). `ai-weekly-cover.svg` giữ nguyên.
+- **Test thêm/sửa:** `test_ai_news.py` — frontmatter webp + title/excerpt 12/10/2026 · 12 Oct 2026, không còn "tuần 42/2026"/"week 42";
+  `test_format_post_date_edges` (2026-01-03, 2026-12-31, 2027-01-01); `test_iso_year_boundary_title_uses_post_date` (slug w53, title 01/01/2027);
+  `test_fallback_cover_file_exists_in_public`. `test_og_image.py` — cover = ảnh tin 2 khi ảnh ở tin 2 + 5, vi == en; fallback khi `{}`;
+  CLI: cover = ảnh tin 1 và có trong `manifest.json`; tin 1 trùng sha256 với tin 3 (bỏ cả) → cover = ảnh tin 4 (manifest chỉ còn ảnh đó);
+  `test_all_image_failures_still_publish` → cover fallback webp.
+- **Docs:** `docs/runbook/ai-news.md` (đoạn Tên + ảnh thẻ đầu runbook; §8 bước 2: gỡ ảnh đang là `cover` → đổi cover), `tools/ai-news/README.md`.
+- **Verify:**
+  - `MSYS_NO_PATHCONV=1 docker run --rm -v "D:/prj/nta-web:/w" -w /w -e PYTHONDONTWRITEBYTECODE=1 python:3.12-slim python -m unittest discover -s tools/ai-news/tests`
+    → **PASS** (Ran 83 tests, OK) — Docker python:3.12-slim trên máy dev Windows.
+  - `grep -rn "ai-weekly-cover.svg" tools/ai-news/` → 0 kết quả trong source (chỉ còn file `__pycache__/*.pyc` cũ, không track).
+  - `npm run typecheck` → PASS. `npm run lint` → PASS (0 error, 1 warning có sẵn `src/components/mdx/index.tsx:26`).
+  - `npm test` → 192 pass / **1 fail có sẵn, ngoài scope**: `tools/db/content-rules.test.ts:25` báo 9 ảnh `/uploads/…` không có trong `public/`
+    — đến từ bài seed `src/content/blog/{vi,en}/ai-weekly-2026-w42.mdx` (commit 51193a0, ảnh nằm ở volume uploads prod), task này không đụng
+    `src/content` / `tools/db`. Chuyển lead/task-03 xử lý.
+  - `npm run build` → **Blocked (môi trường)**: `Failed to load next.config.ts … Failed to load native binding` — lỗi native binding trên máy,
+    không liên quan file Python/asset của task (task không đổi TS/next config). Cần chạy lại build ở môi trường CI/Linux.
+- **Residual risk:** ảnh og:image không 16:9 sẽ bị cắt ở thẻ (user đã chấp nhận). Bài cũ (w42) không đổi — task-03.

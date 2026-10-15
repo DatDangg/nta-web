@@ -632,6 +632,22 @@ class RenderImagesTest(unittest.TestCase):
             self.assertNotIn(generate.IMAGE_FOOTNOTE[locale], plain)
             self.assertTrue(plain.endswith(f"---\n\n*{generate.FOOTNOTE[locale]}*\n"))
 
+    def test_cover_is_first_item_with_image_same_for_both_locales(self):
+        items = fixture_items()
+        second, fifth = og_image.inspect_image(png_bytes(1200, 630)), og_image.inspect_image(jpeg_bytes(800, 800))
+        covers = set()
+        for locale in generate.LOCALES:
+            text = generate.render_post(locale, WEEK, items, {5: fifth, 2: second})
+            generate.validate_post(text)
+            covers.update(re.findall(r'^cover: "([^"]+)"$', text, re.MULTILINE))
+        self.assertEqual(covers, {f"/uploads/{second.sha256}.png"})
+
+    def test_cover_falls_back_without_images(self):
+        for locale in generate.LOCALES:
+            text = generate.render_post(locale, WEEK, fixture_items(), {})
+            self.assertIn(f'cover: "{generate.FALLBACK_COVER}"', text)
+        self.assertEqual(generate.FALLBACK_COVER, "/images/blog/ai-weekly-cover.webp")
+
     def test_max_size_post_with_images_within_body_limit(self):
         base = fixture_items()[0]
         items = [dict(base, url=f"https://example.com/n{i}", title_vi="t" * generate.TITLE_MAX,
@@ -713,6 +729,35 @@ class CliImagesTest(unittest.TestCase):
         self.assertNotIn("NewsImage", self.read_post("vi"))
         with open(os.path.join(self.images, "manifest.json"), encoding="utf-8") as fh:
             self.assertEqual(json.load(fh)["images"], [])
+        for locale in generate.LOCALES:
+            self.assertIn('cover: "/images/blog/ai-weekly-cover.webp"', self.read_post(locale))
+
+    def post_cover(self, locale):
+        return re.search(r'^cover: "([^"]+)"$', self.read_post(locale), re.MULTILINE).group(1)
+
+    def manifest_files(self):
+        with open(os.path.join(self.images, "manifest.json"), encoding="utf-8") as fh:
+            return [entry["file"] for entry in json.load(fh)["images"]]
+
+    def test_cover_is_first_image_and_listed_in_manifest(self):
+        net, jpg, _ = self.news_net()
+        code, _, err = self.run_main(self.render_args("--images-out", self.images), net.fetcher())
+        self.assertEqual(code, 0, err)
+        jpg_file = f"{hashlib.sha256(jpg).hexdigest()}.jpg"
+        self.assertEqual({self.post_cover(locale) for locale in generate.LOCALES}, {f"/uploads/{jpg_file}"})
+        self.assertIn(jpg_file, self.manifest_files())
+
+    def test_cover_skips_first_image_dropped_as_duplicate(self):
+        """Tin #1 và #3 cùng ảnh (trùng sha256 → bỏ cả) → cover = ảnh tin #4."""
+        net, jpg, webp = self.news_net()
+        net.routes["https://example.com/agent-framework-2"] = lambda: html_response(
+            page_with('<meta property="og:image" content="https://i.redd.it/cover.jpg">'))
+        code, _, err = self.run_main(self.render_args("--images-out", self.images), net.fetcher())
+        self.assertEqual(code, 0, err)
+        self.assertIn("ảnh tin #1 bỏ: trùng ảnh với tin khác", err)
+        webp_file = f"{hashlib.sha256(webp).hexdigest()}.webp"
+        self.assertEqual({self.post_cover(locale) for locale in generate.LOCALES}, {f"/uploads/{webp_file}"})
+        self.assertEqual(self.manifest_files(), [webp_file])
 
     def test_no_images_flag_and_missing_images_out_do_not_fetch(self):
         never = og_image.Fetcher(mock.Mock(side_effect=AssertionError("không được resolve")),

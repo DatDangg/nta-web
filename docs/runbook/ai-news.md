@@ -10,6 +10,14 @@ File seed vẫn được commit (lịch sử bài trong git, dedupe tuần `gene
 Workflow **không** dispatch `deploy.yml` nữa (DB mode không cần build lại image để hiện bài).
 
 Hệ quả đổi lịch sang thứ 7 (CR-036): bài mang số ISO week của chính tuần chạy (thứ 2 → CN, giờ VN), `date` frontmatter = ngày chạy (thứ 7), tối đa 1 bài/tuần, bài cũ không đổi.
+
+Tên + ảnh thẻ (CR-038, R-09c 4.6.0): title/excerpt theo **ngày** `date` (giờ VN) — vi `Bản tin AI tuần ngày DD/MM/YYYY`,
+en `AI Weekly Digest — D Mon YYYY` (vd `3 Oct 2026`); slug vẫn `ai-weekly-YYYY-wNN` (URL + dedupe tuần).
+`cover` (ảnh thẻ ở /blog, trang chủ, bài liên quan) = ảnh `/uploads/…` của **tin đầu tiên có ảnh** (cùng giá trị vi + en; ảnh này nằm trong
+`manifest.json` nên `publish-post` lưu cùng bài). Không tin nào có ảnh (kể cả `AI_NEWS_IMAGES=off`) → `/images/blog/ai-weekly-cover.webp`.
+Đổi ảnh fallback: thay file `public/images/blog/ai-weekly-cover.webp` **giữ nguyên tên** (commit thường + deploy). `ai-weekly-cover.svg` giữ lại
+cho bài cũ / version v1 trong DB — không xoá.
+
 Thứ 7 17/10/2026 (w42) → `check` = `skip` vì w42 đã có trên main (`publish-db` vẫn chạy tự lành, insert-only); bài tự động kế tiếp là thứ 7 24/10/2026 → `ai-weekly-2026-w43`; không còn lượt thứ 2 19/10. GitHub cron có thể trễ vài–vài chục phút lúc tải cao.
 
 Hai job, cùng self-hosted runner `nta-web`:
@@ -134,6 +142,8 @@ Chạy trên VPS qua `nta-tools` (`docker compose run --rm --no-deps -T nta-tool
    lấy `data` + `body` từ `show` → ghi `record.json` = `{"data": {...giữ nguyên...}, "body": "<body đã bỏ khối ảnh>"}` →
    `cli update post/vi/<slug> --file - --expected-version <N> --actor ops:<tên> --note "gỡ ảnh <sha256> theo yêu cầu" --confirm-prod < record.json`.
    Lặp cho `post/en/<slug>`. (Không ảnh nào còn lại → có thể bỏ luôn câu chú thích ảnh cuối bài.)
+   Nếu `data.cover` cũng là `/uploads/<sha256>.<ext>` đó (ảnh tin đầu tiên có ảnh, CR-038) → trong `record.json` đổi `cover` sang
+   `/uploads/…` của tin có ảnh kế tiếp còn lại, hoặc `/images/blog/ai-weekly-cover.webp`.
 3. **Xoá mềm asset** (sau khi không bài nào còn trỏ tới): `cli delete asset/vi/<sha256> --expected-version <N> --actor ops:<tên> --note "…" --confirm-prod`.
    Xoá mềm **không** xoá file → URL hash vẫn 200. Cần gỡ hẳn: `rm /opt/nta-web-data/uploads/<sha256>.<ext>` trên host
    (lưu ý backup `uploads-*.tar.gz` cũ vẫn còn file; restore sau đó sẽ đưa file về).

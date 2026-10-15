@@ -29,6 +29,10 @@ phải có nguyên văn trong `.clean.md` (tin vi phạm URL/độ dài bị lo�
 ảnh do `image_sniff.py` kiểm magic bytes. Artifact `ai-news-images-<slug>` chỉ chứa ảnh + `manifest.json` → job `publish-db`
 (`publish-post --images-dir`). Tắt: Variable `AI_NEWS_IMAGES=off` → `--no-images`. Vận hành/gỡ ảnh: `docs/runbook/ai-news.md` §7–8.
 
+Frontmatter (CR-038): title/excerpt theo ngày `date` (`format_post_date`: vi `DD/MM/YYYY`, en `D Mon YYYY`, tháng Jan..Dec hằng trong code,
+không phụ thuộc locale máy); slug giữ `ai-weekly-YYYY-wNN`. `cover` = `/uploads/…` của tin đầu tiên có ảnh, 0 ảnh → `FALLBACK_COVER`
+(`/images/blog/ai-weekly-cover.webp`; đổi ảnh = thay file, giữ tên).
+
 Chạy test (máy dev không có python):
 
 ```bash

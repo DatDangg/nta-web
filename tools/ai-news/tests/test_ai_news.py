@@ -199,12 +199,40 @@ class RenderTest(unittest.TestCase):
             generate.validate_post(text)
             self.assertTrue(text.startswith('---\nslug: "ai-weekly-2026-w42"\n'))
             self.assertIn('category: "ai-tech"', text)
-            self.assertIn('cover: "/images/blog/ai-weekly-cover.svg"', text)
+            self.assertIn('cover: "/images/blog/ai-weekly-cover.webp"', text)
             self.assertIn('date: "2026-10-12"', text)
             self.assertIn(generate.FOOTNOTE[locale], text)
             self.assertIn("](https://arxiv.org/abs/2610.01234)", text)
             body = text.split("---\n", 2)[2]
             self.assertNotRegex(body, r"(?<!\\)[{}<]")
+            self.assertNotIn("tuần 42/2026", text)
+            self.assertNotRegex(text, r"(?i)week 42")
+        vi = generate.render_post("vi", week, items)
+        self.assertIn('title: "Bản tin AI tuần ngày 12/10/2026"', vi)
+        self.assertIn(f'excerpt: "{len(items)} điểm tin AI đáng chú ý trong bản tin ngày 12/10/2026, kèm link nguồn gốc."', vi)
+        en = generate.render_post("en", week, items)
+        self.assertIn('title: "AI Weekly Digest — 12 Oct 2026"', en)
+        self.assertIn(f'excerpt: "{len(items)} notable AI news items in the digest of 12 Oct 2026, '
+                      'with links to the original sources."', en)
+
+    def test_format_post_date_edges(self):
+        cases = {"2026-01-03": ("03/01/2026", "3 Jan 2026"), "2026-12-31": ("31/12/2026", "31 Dec 2026"),
+                 "2027-01-01": ("01/01/2027", "1 Jan 2027")}
+        for iso, (vi, en) in cases.items():
+            self.assertEqual(generate.format_post_date("vi", iso), vi)
+            self.assertEqual(generate.format_post_date("en", iso), en)
+
+    def test_iso_year_boundary_title_uses_post_date(self):
+        week = generate.week_info(datetime.datetime(2027, 1, 1, 12, 0, tzinfo=generate.VN_TZ))
+        self.assertEqual(week["slug"], "ai-weekly-2026-w53")
+        items = generate.validate_items(load_items(), generate.extract_urls(read_fixture("digest.clean.md")))
+        self.assertIn('title: "Bản tin AI tuần ngày 01/01/2027"', generate.render_post("vi", week, items))
+        self.assertIn('title: "AI Weekly Digest — 1 Jan 2027"', generate.render_post("en", week, items))
+
+    def test_fallback_cover_file_exists_in_public(self):
+        repo_root = os.path.dirname(os.path.dirname(os.path.dirname(HERE)))
+        path = os.path.join(repo_root, "public", *generate.FALLBACK_COVER.lstrip("/").split("/"))
+        self.assertTrue(os.path.isfile(path), path)
 
 
 class CliTest(unittest.TestCase):
