@@ -1,13 +1,13 @@
 {
   "mode": "feature",
   "activeWorkItem": {
-    "type": "bug",
-    "slug": "ops-backup-rotation",
+    "type": "feature",
+    "slug": "telegram-content-bot",
     "phaseTask": "phase-1-task-01",
     "step": "closeout",
     "status": "done",
-    "journal": ".context/runs/bug-ops-backup-rotation-phase-1-task-01.md",
-    "note": "CR-033 done + archived 2026-10-15 (VPS Content ops backup → ops-backup-…dump, không rotate xoá pre-migrate-<sha>). CR-031 còn P5-T02 + close-out (xem features[] content-database)"
+    "journal": null,
+    "note": "CR-030 done 2026-10-15: thu hẹp — bot do user tự dựng; repo thêm db:cli create/update/delete + cập nhật docs/content-bot theo DB. CR-031 còn P5-T02 + close-out"
   },
   "features": [
     {
@@ -1232,6 +1232,26 @@
         "at": "2026-10-14",
         "via": "user chat"
       }
+    },
+    {
+      "slug": "telegram-content-bot",
+      "cr": "CR-030",
+      "status": "done",
+      "completedAt": "2026-10-15",
+      "phases": [
+        {
+          "phase": 1,
+          "tasks": [
+            {
+              "task": "phase-1-task-01",
+              "title": "db:cli create/update/delete + docs/content-bot theo DB",
+              "status": "done",
+              "reviewer": "PASS (STRICT round 1, 3 MINOR đã sửa)",
+              "reportPath": ".context/review-reports/feature-telegram-content-bot-phase-1-task-01-round-1-review.md"
+            }
+          ]
+        }
+      ]
     }
   ],
   "bugs": [

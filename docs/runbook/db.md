@@ -266,7 +266,12 @@ npm run db:cli -- list [--collection post] [--locale vi] [--deleted]   # id, col
 npm run db:cli -- show solution/vi/crm                                 # JSON bản ghi (id hoặc collection/locale/slug, kể cả đã xoá)
 npm run db:cli -- history solution/vi/crm                              # v1 create seed … / v2 update bot:… / …
 npm run db:cli -- rollback solution/vi/crm --to 1 --expected-version 2 [--note "lý do"]
+# CR-030 (bot Telegram ngoài dùng — docs/content-bot/05-playbook.md): record.json = {"data": {...}, "body"?: ..., "sortOrder"?: ...}
+npm run db:cli -- create post/vi/<slug> --file record.json [--actor bot:<id>] [--note "..."]      # --file - = stdin
+npm run db:cli -- update solution/vi/crm --file record.json --expected-version 3 [--actor] [--note]   # thay TOÀN BỘ data
+npm run db:cli -- delete post/vi/<slug> --expected-version 2 [--confirm-public-url-change] [--actor] [--note]
 ```
+Lệnh ghi không tự revalidate — chạy `revalidate` sau đó. Trên VPS: `docker compose run --rm --no-deps -T nta-tools tools/db/content-cli.ts …` (`docs/content-bot/10-server.md` §5).
 
 - `--expected-version` = version hiện tại thấy ở `history`; lệch (vừa có người sửa) → `conflict`, exit 1, không ghi gì — xem lại history rồi chạy lại.
 - Snapshot được validate lại như lúc sửa (required fields, I-2/I-3/I-4/I-6/I-7) — sai → từ chối, exit 1.

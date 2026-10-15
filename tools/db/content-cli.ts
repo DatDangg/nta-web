@@ -10,6 +10,11 @@
 //   npm run db:cli -- publish-post <slug> [--dry-run] [--actor workflow:ai-news] [--note "..."] [--confirm-prod]   (CR-034)
 //     Đăng src/content/blog/{vi,en}/<slug>.mdx vào DB — CHỈ chèn; bản đã có (kể cả xoá mềm) → exists. Mỗi locale in 1 dòng
 //     "publish-post post/<locale>/<slug> status=missing|exists|created" (workflow ai-news grep status=missing để quyết định backup).
+//   npm run db:cli -- create <collection/locale/slug> --file <path|-> [--actor <a>] [--note "..."] [--confirm-prod]   (CR-030)
+//   npm run db:cli -- update <id | collection/locale/slug> --file <path|-> --expected-version <N> [--actor] [--note] [--confirm-prod]
+//   npm run db:cli -- delete <id | collection/locale/slug> --expected-version <N> [--confirm-public-url-change] [--actor] [--note] [--confirm-prod]
+//     --file (`-` = stdin) là JSON { "data": {...}, "body"?: string|null, "sortOrder"?: number|null }; update thiếu body/sortOrder = giữ nguyên.
+//     Ghi qua content-repo (luật I-x, optimistic lock). KHÔNG tự revalidate — người gọi (bot Telegram) chạy `revalidate` sau khi ghi.
 // Không in DATABASE_URL / REVALIDATE_SECRET ra log.
 import { readFile } from "node:fs/promises";
 import { userInfo } from "node:os";
@@ -19,11 +24,15 @@ import {
   ContentConflictError,
   ContentNotFoundError,
   ContentValidationError,
+  createEntry,
   getEntry,
   getEntryByKey,
   listEntries,
   listVersions,
   rollbackEntry,
+  softDeleteEntry,
+  updateEntry,
+  type WriteResult,
 } from "../../src/db/content-repo";
 import type { ContentEntry } from "../../src/db/schema";
 import { ImageRejectedError } from "../../src/lib/uploads/image-file";
@@ -31,7 +40,7 @@ import { saveImage } from "../../src/lib/uploads/save-image";
 import { PUBLISH_POST_ACTOR, defaultPublishNote, publishPost } from "./publish-post";
 import { isProductionDatabaseUrl } from "./seed-db";
 
-const USAGE = "dùng: db:cli -- list|show|history|rollback|upload|revalidate|publish-post ... (xem đầu file tools/db/content-cli.ts / docs/runbook/db.md §9)";
+const USAGE = "dùng: db:cli -- list|show|history|rollback|create|update|delete|upload|revalidate|publish-post ... (xem đầu file tools/db/content-cli.ts / docs/runbook/db.md §9)";
 
 const OPTIONS = {
   collection: { type: "string" },
@@ -47,6 +56,8 @@ const OPTIONS = {
   "alt-en": { type: "string" },
   "dry-run": { type: "boolean" },
   actor: { type: "string" },
+  file: { type: "string" },
+  "confirm-public-url-change": { type: "boolean" },
 } as const;
 
 type CliValues = ReturnType<typeof parseArgs<{ options: typeof OPTIONS; allowPositionals: true }>>["values"];
@@ -69,6 +80,87 @@ async function resolveEntry(db: Database, target: string | undefined): Promise<C
       : undefined;
   if (!entry) throw new ContentNotFoundError(target);
   return entry;
+}
+
+// update/delete chỉ nhắm bản ghi đang sống; khôi phục bản đã xoá mềm đi qua rollback.
+async function resolveLiveEntry(db: Database, target: string | undefined): Promise<ContentEntry> {
+  const entry = await resolveEntry(db, target);
+  if (entry.deletedAt) throw new ContentValidationError([`${target} đã xoá mềm — dùng rollback để khôi phục`]);
+  return entry;
+}
+
+interface EntryPayload {
+  data: Record<string, unknown>;
+  body?: string | null;
+  sortOrder?: number | null;
+}
+
+const PAYLOAD_KEYS = ["data", "body", "sortOrder"];
+
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  return value !== null && typeof value === "object" && !Array.isArray(value);
+}
+
+async function readStdin(): Promise<string> {
+  const chunks: Buffer[] = [];
+  for await (const chunk of process.stdin) chunks.push(Buffer.from(chunk));
+  return Buffer.concat(chunks).toString("utf8");
+}
+
+// Đọc + kiểm hình dạng --file TRƯỚC khi chạm DB; sai → UsageError (exit 2). Luật nội dung do content-repo kiểm.
+async function readPayload(file: string | undefined, command: string): Promise<EntryPayload> {
+  if (!file) throw new UsageError(`${command} cần --file <path|->`);
+  let text: string;
+  try {
+    text = file === "-" ? await readStdin() : await readFile(file, "utf8");
+  } catch (error) {
+    throw new UsageError(`không đọc được --file ${file}: ${error instanceof Error ? error.message : String(error)}`);
+  }
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(text);
+  } catch (error) {
+    throw new UsageError(`--file ${file}: JSON không hợp lệ — ${error instanceof Error ? error.message : String(error)}`);
+  }
+  if (!isPlainObject(parsed)) throw new UsageError("--file phải là object JSON { data, body?, sortOrder? }");
+  const unknownKeys = Object.keys(parsed).filter((key) => !PAYLOAD_KEYS.includes(key));
+  if (unknownKeys.length > 0) throw new UsageError(`--file có key lạ: ${unknownKeys.join(", ")} (chỉ nhận ${PAYLOAD_KEYS.join(", ")})`);
+  const { data, body, sortOrder } = parsed;
+  if (!isPlainObject(data)) throw new UsageError("--file: data bắt buộc là object JSON");
+  if (body !== undefined && body !== null && typeof body !== "string") throw new UsageError("--file: body phải là string hoặc null");
+  if (sortOrder !== undefined && sortOrder !== null && !Number.isInteger(sortOrder)) throw new UsageError("--file: sortOrder phải là số nguyên hoặc null");
+  return { data, body: body as string | null | undefined, sortOrder: sortOrder as number | null | undefined };
+}
+
+function writeOptions(values: CliValues): { actor: string; note?: string } {
+  return { actor: values.actor ?? `cli:${userInfo().username}`, note: values.note };
+}
+
+function printWriteResult(command: string, result: WriteResult): void {
+  for (const warning of result.warnings) console.warn(`[cảnh báo] ${warning}`);
+  console.log(`[${command}] OK — ${formatEntryLine(result.entry)}`);
+}
+
+async function runCreate(db: Database, target: string | undefined, values: CliValues): Promise<void> {
+  const parts = target?.split("/") ?? [];
+  if (parts.length !== 3 || parts.includes("")) throw new UsageError("create cần <collection/locale/slug>");
+  const payload = await readPayload(values.file, "create");
+  const [collection, locale, slug] = parts;
+  printWriteResult("create", await createEntry(db, { collection, locale, slug, ...payload, ...writeOptions(values) }));
+}
+
+async function runUpdate(db: Database, target: string | undefined, values: CliValues): Promise<void> {
+  const expectedVersion = parsePositiveInteger(values["expected-version"], "--expected-version");
+  const payload = await readPayload(values.file, "update");
+  const entry = await resolveLiveEntry(db, target);
+  printWriteResult("update", await updateEntry(db, { id: entry.id, expectedVersion, ...payload, ...writeOptions(values) }));
+}
+
+async function runDelete(db: Database, target: string | undefined, values: CliValues): Promise<void> {
+  const expectedVersion = parsePositiveInteger(values["expected-version"], "--expected-version");
+  const entry = await resolveLiveEntry(db, target);
+  const confirmPublicUrlChange = values["confirm-public-url-change"] === true;
+  printWriteResult("delete", await softDeleteEntry(db, { id: entry.id, expectedVersion, confirmPublicUrlChange, ...writeOptions(values) }));
 }
 
 function formatEntryLine(entry: ContentEntry): string {
@@ -100,8 +192,7 @@ async function runRollback(db: Database, target: string | undefined, values: Cli
     actor: `cli:${userInfo().username}`,
     note: values.note,
   });
-  for (const warning of result.warnings) console.warn(`[cảnh báo] ${warning}`);
-  console.log(`[rollback] OK — ${formatEntryLine(result.entry)}`);
+  printWriteResult("rollback", result);
 }
 
 // Ảnh mới chỉ hiện trên web khi nội dung trỏ tới /uploads/<hash>.<ext> → in path để dán vào bản ghi nội dung.
@@ -168,8 +259,12 @@ async function runRevalidate(values: CliValues): Promise<number> {
 // `rollback … --dry-run` vẫn GHI thật → từ chối ngay thay vì lờ đi.
 const COMMAND_SCOPED_FLAGS: Partial<Record<keyof CliValues, readonly string[]>> = {
   "dry-run": ["publish-post"],
-  actor: ["publish-post"],
-  note: ["rollback", "publish-post"],
+  actor: ["create", "update", "delete", "publish-post"],
+  note: ["rollback", "create", "update", "delete", "publish-post"],
+  "expected-version": ["rollback", "update", "delete"],
+  to: ["rollback"],
+  file: ["create", "update"],
+  "confirm-public-url-change": ["delete"],
 };
 
 function assertFlagsSupported(command: string | undefined, values: CliValues): void {
@@ -178,6 +273,7 @@ function assertFlagsSupported(command: string | undefined, values: CliValues): v
       throw new UsageError(`--${flag} chỉ dùng với: ${commands.join(", ")}`);
     }
   }
+  if (values.actor !== undefined && values.actor.trim() === "") throw new UsageError("--actor không được rỗng");
 }
 
 async function runCommand(command: string | undefined, args: string[], values: CliValues): Promise<number> {
@@ -188,7 +284,8 @@ async function runCommand(command: string | undefined, args: string[], values: C
     console.error("DATABASE_URL is not set");
     return 2;
   }
-  const isWriteCommand = command === "rollback" || command === "upload" || (command === "publish-post" && !values["dry-run"]);
+  const isWriteCommand =
+    ["rollback", "create", "update", "delete", "upload"].includes(command ?? "") || (command === "publish-post" && !values["dry-run"]);
   if (isWriteCommand && isProductionDatabaseUrl(connectionString) && !values["confirm-prod"]) {
     console.error("[cli] từ chối: DATABASE_URL trỏ DB prod — lệnh ghi cần cờ --confirm-prod (backup trước, xem runbook §9)");
     return 2;
@@ -199,6 +296,9 @@ async function runCommand(command: string | undefined, args: string[], values: C
     else if (command === "show") console.log(JSON.stringify(await resolveEntry(db, args[0]), null, 2));
     else if (command === "history") await runHistory(db, args[0]);
     else if (command === "rollback") await runRollback(db, args[0], values);
+    else if (command === "create") await runCreate(db, args[0], values);
+    else if (command === "update") await runUpdate(db, args[0], values);
+    else if (command === "delete") await runDelete(db, args[0], values);
     else if (command === "upload") await runUpload(db, args[0], values);
     else if (command === "publish-post") await runPublishPost(db, args[0], values);
     else throw new UsageError(`lệnh không hợp lệ: ${command ?? "(trống)"}`);
