@@ -1,7 +1,7 @@
 ---
 id: contact-form-google-sheet
 type: feature
-status: in_progress
+status: done
 created: 2026-10-15
 ---
 
@@ -19,12 +19,12 @@ Hướng dự kiến: Google Apps Script Web App (gắn với Sheet) nhận POST
 - Không áp dụng (feature).
 
 ## Acceptance (bắt buộc)
-- [ ] Gửi form ở `/contact` và `/en/contact` → xuất hiện 1 dòng mới trong Sheet với đủ cột: thời gian, ngôn ngữ (vi/en), tên, email, SĐT, công ty, nhu cầu, nội dung.
-- [ ] Sheet/Web App lỗi hoặc timeout → form báo lỗi cho người dùng như hiện tại, không mất trải nghiệm, không lộ URL Web App ra client.
-- [ ] URL Web App chỉ nằm ở env server (`CONTACT_FORM_TARGET`) trên VPS, không commit; có cơ chế chống người lạ POST thẳng vào Web App (vd secret token).
-- [ ] Mỗi liên hệ mới → 1 tin nhắn Telegram (tên, email, SĐT, công ty, nhu cầu, nội dung, ngôn ngữ); Telegram lỗi vẫn ghi Sheet bình thường.
-- [ ] Có file Apps Script + hướng dẫn dựng (tạo Sheet, deploy Web App, đặt env) trong repo.
-- [ ] Cập nhật doc: `docs/BRD.md` (tick OQ#4), `.context/project-config.md`, `docs/API_SPEC.md` nếu đổi payload.
+- [x] Gửi form ở `/contact` và `/en/contact` → xuất hiện 1 dòng mới trong Sheet với đủ cột: thời gian, ngôn ngữ (vi/en), tên, email, SĐT, công ty, nhu cầu, nội dung.
+- [x] Sheet/Web App lỗi hoặc timeout → form báo lỗi cho người dùng như hiện tại, không mất trải nghiệm, không lộ URL Web App ra client.
+- [x] URL Web App chỉ nằm ở env server (`CONTACT_FORM_TARGET`) trên VPS, không commit; có cơ chế chống người lạ POST thẳng vào Web App (vd secret token).
+- [~] (đã code; user TẠM CHƯA BẬT — bỏ trống Script Properties Telegram, bật sau không cần deploy) Mỗi liên hệ mới → 1 tin nhắn Telegram (tên, email, SĐT, công ty, nhu cầu, nội dung, ngôn ngữ); Telegram lỗi vẫn ghi Sheet bình thường.
+- [x] Có file Apps Script + hướng dẫn dựng (tạo Sheet, deploy Web App, đặt env) trong repo.
+- [x] Cập nhật doc: `docs/BRD.md` (tick OQ#4), `.context/project-config.md`, `docs/API_SPEC.md` nếu đổi payload.
 
 ## Ghi chú
 - 2026-10-15: user xác nhận **đã có Sheet**.
@@ -40,3 +40,4 @@ Hướng dự kiến: Google Apps Script Web App (gắn với Sheet) nhận POST
 - Rủi ro: security (endpoint công khai, spam) → reviewer STRICT; giữ rate-limit + honeypot hiện có ở `/api/contact`.
 - "Đăng ký nhận tin" ở trang Tin tức (gác từ CR-003) KHÔNG nằm trong change này.
 - 2026-10-15 (`/change`): classify ADDITIVE · risk HIGH · spec 4.5.0 (R-13a) · scope v55 · plan 2 task `tasks/feature-contact-form-google-sheet/phase-1-task-01..02.md` — chờ user duyệt plan.
+- 2026-10-15 close-out: user deploy Web App + đặt GitHub Secrets; push `ab8b786` → Deploy; E2E prod: POST `/api/contact` locale vi + en → 200 `{"status":"ok"}` (web chỉ trả ok khi script đã ghi Sheet). Telegram: user tạm chưa bật.

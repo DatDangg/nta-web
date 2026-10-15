@@ -44,7 +44,7 @@
 | CR-034 | Bài AI news hằng tuần không lên web sau cutover DB (workflow vẫn ghi file `src/content/blog`) — ưu tiên cao, trước lượt chạy kế | bug | done (spec 4.2.1 · scope v49 · smoke prod PASS) | `archive/2026-10-15-ai-news-write-db.md` | 2026-10-15 | 2026-10-15 |
 | CR-035 | Bản tin AI tuần: mỗi tin thêm ảnh (og:image trang nguồn → tải về `/uploads`, không hotlink; không có ảnh → chỉ text) (vi + en) | ADDITIVE | done (4 task, spec 4.3.0 / scope v53) | `archive/2026-10-15-ai-news-item-images.md` | 2026-10-15 | 2026-10-15 |
 | CR-036 | Bản tin AI tuần: đổi lịch cron từ 08:00 thứ 2 sang thứ 7 hằng tuần (08:00 thứ 7 giờ VN — user chốt) | MODIFY | done (1 task, spec 4.4.0 / scope v54) | `archive/2026-10-15-ai-news-cron-saturday.md` | 2026-10-15 | 2026-10-15 |
-| CR-037 | Form liên hệ đổ dữ liệu vào Google Sheet + báo Telegram (Apps Script Web App qua `CONTACT_FORM_TARGET`) — chốt OQ#4 | ADDITIVE | in_progress (spec delta + plan, chờ duyệt) | `2026-10-15-contact-form-google-sheet.md` | 2026-10-15 | |
+| CR-037 | Form liên hệ đổ dữ liệu vào Google Sheet + báo Telegram (Apps Script Web App qua `CONTACT_FORM_TARGET`) — chốt OQ#4 | ADDITIVE | done (2 task, spec 4.5.0 / scope v55; Telegram tạm chưa bật) | `archive/2026-10-15-contact-form-google-sheet.md` | 2026-10-15 | 2026-10-15 |
 
 ## Quy tắc tracking
 

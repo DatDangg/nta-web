@@ -4,10 +4,10 @@
     "type": "feature",
     "slug": "contact-form-google-sheet",
     "phaseTask": "phase-1-task-02",
-    "step": "closeout",
-    "status": "awaiting",
+    "step": "done",
+    "status": "done",
     "journal": ".context/runs/feature-contact-form-google-sheet-phase-1-task-02.md",
-    "note": "CR-037 — T02 done (STRICT r1 PASS), đã commit local, CHƯA push: chờ user xác nhận đã deploy Web App + đặt GitHub Secrets CONTACT_FORM_TARGET/CONTACT_FORM_TOKEN → push → E2E thật → archive change doc + BACKLOG done"
+    "note": "CR-037 done 2026-10-15 — spec 4.5.0 / scope v55; push ab8b786; E2E prod vi+en 200 ok. Telegram tạm chưa bật (user tự thêm Script Properties sau)."
   },
   "features": [
     {
@@ -1358,8 +1358,8 @@
     {
       "slug": "contact-form-google-sheet",
       "cr": "CR-037",
-      "status": "in_progress",
-      "changeFile": "spec/changes/2026-10-15-contact-form-google-sheet.md",
+      "status": "done",
+      "changeFile": "spec/changes/archive/2026-10-15-contact-form-google-sheet.md",
       "classification": "ADDITIVE",
       "risk": "HIGH",
       "phases": [
