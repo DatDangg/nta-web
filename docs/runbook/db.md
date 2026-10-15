@@ -95,12 +95,18 @@ docker logs --tail 50 nta-db-backup                      # log vòng lặp sidec
 docker ps --filter name=nta                              # nta-db phải (healthy)
 ```
 
-File: `daily-<UTC>.dump` (pg_dump -Fc), `uploads-<UTC>.tar.gz`, `pre-migrate-<sha12>-<run_id>-<attempt>.dump`,
-`pre-migrate-ops-<lệnh>-<UTC>-<run>.dump` (workflow Content ops tự backup trước lệnh ghi). Mỗi loại giữ 14 bản mới nhất (`deploy/db/backup.sh` `rotate`).
+File: `daily-<UTC>.dump` (pg_dump -Fc), `uploads-<UTC>.tar.gz`, `pre-migrate-<sha12>-<run_id>-<attempt>.dump` (deploy),
+`ops-<nguồn>-<UTC>-<run>.dump` (workflow Content ops `ops-<lệnh>-…` / AI news `ops-ai-news-…` tự backup trước lệnh ghi).
+Mỗi vòng giữ riêng 14 bản mới nhất theo mtime (`deploy/db/backup.sh` `rotate`, `BACKUP_KEEP`) — vòng này không xoá file vòng kia (CR-033):
 
-> ⚠️ **CR-033 (pending):** hiện rotate tính theo glob `pre-migrate-*` → backup ops `pre-migrate-ops-*` **dùng chung vòng 14 bản** với backup trước-deploy
-> `pre-migrate-<sha>-*`; mỗi lần chạy Content ops có thể xoá 1 bản trước-deploy cũ (`spec/changes/2026-10-14-ops-backup-rotation.md`).
-> Trước khi CR-033 xong: hạn chế chạy Content ops liên tiếp; cần giữ bản trước-deploy cũ → copy ra ngoài thư mục trước.
+| Vòng | File tính vào vòng | Tạo bởi |
+|---|---|---|
+| daily | `daily-*.dump`; riêng `uploads-*.tar.gz` | sidecar 20:00 UTC, `backup.sh daily` |
+| deploy | `pre-migrate-*.dump` **trừ** `pre-migrate-ops-*` | deploy trước migrate + nhãn tay (`pre-migrate-manual-*`, `pre-migrate-before-*`) |
+| ops | `ops-*.dump` + bản cũ `pre-migrate-ops-*.dump` (tên trước CR-033, tự rơi dần) | Content ops, AI news publish-db |
+
+Fix CR-033 chỉ có hiệu lực khi sidecar `nta-db-backup` đã được deploy build lại; sidecar cũ gặp nhãn `ops-*` → `usage`, exit 2
+→ workflow dừng ở bước *Backup DB*, chưa ghi gì (chạy lại sau khi deploy xong).
 Chạy backup ngay (không chờ lịch): `docker exec nta-db-backup /scripts/backup.sh daily`.
 
 **Bỏ lỡ lịch backup:** sidecar ngủ tới 20:00 UTC; nếu container bị restart/recreate (deploy, reboot) quanh giờ đó thì có thể **không có**
@@ -109,7 +115,7 @@ thiếu thì chạy tay lệnh trên.
 
 **Cảnh báo dung lượng:** mỗi lần backup, nếu dung lượng trống của thư mục backup < 2048 MB (`BACKUP_MIN_FREE_MB`)
 → ghi dòng `WARNING dung lượng trống ...` (không fail). Thấy cảnh báo: `df -h /opt/nta-web-data`, xoá bớt
-`pre-migrate-*.dump` cũ hoặc giải phóng đĩa — KHÔNG xoá file của app khác trên VPS.
+`pre-migrate-*.dump` / `ops-*.dump` cũ hoặc giải phóng đĩa — KHÔNG xoá file của app khác trên VPS.
 
 ## 4. Restore
 

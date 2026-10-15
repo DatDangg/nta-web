@@ -1,64 +1,71 @@
 {
   "specVersion": "4.2.1",
-  "scopeVersion": 50,
-  "generatedAt": "2026-10-15T01:12:00+07:00",
+  "scopeVersion": 51,
+  "generatedAt": "2026-10-15T10:00:00+07:00",
   "trigger": "bug-fix",
-  "workItem": "bug/en-invalid-slug-500 (gộp CR-026 spec/changes/2026-10-14-en-dynamic-slug-not-found-500.md + CR-032 spec/changes/2026-10-14-en-invalid-slug-500.md; task tasks/bug-en-invalid-slug-500/phase-1-task-01.md)",
+  "workItem": "bug/ops-backup-rotation (CR-033 spec/changes/2026-10-14-ops-backup-rotation.md; task tasks/bug-ops-backup-rotation/phase-1-task-01.md; review .context/review-reports/bug-ops-backup-rotation-phase-1-task-01-round-1-review.md STRICT PASS)",
   "specRefs": [
-    "R-12",
-    "R-20",
-    "R-21",
-    "R-05",
-    "R-06",
-    "R-07",
-    "R-08",
-    "R-08a.1",
-    "R-09",
-    "R-15a"
+    "R-16b",
+    "R-16c",
+    "R-16d",
+    "R-09c",
+    "R-27"
   ],
   "changed": {
     "files": [
-      "src/app/[locale]/not-found.tsx (generateMetadata gọi getTranslations không locale → export const metadata tĩnh: title { absolute: '404 | NTA' }, robots noindex/nofollow; thân trang không đổi)",
-      "src/app/[locale]/not-found.test.ts (mới — test hồi quy tĩnh: not-found không export generateMetadata, có export const metadata)"
+      "deploy/db/backup.sh (whitelist nhận thêm nhãn ops-*; rotate <regex loại trừ|''> <glob>...; tách 2 vòng giữ: pre-migrate-*.dump trừ pre-migrate-ops-* (deploy + nhãn tay) và ops-*.dump + legacy pre-migrate-ops-*.dump (Content ops / AI news); daily/uploads, KEEP, không ghi đè, exit code giữ nguyên)",
+      ".github/workflows/content-ops.yml (nhãn backup ops-${OPS_COMMAND}-<UTC>-${GITHUB_RUN_ID}, comment đầu file)",
+      ".github/workflows/ai-news.yml (nhãn backup ops-ai-news-<UTC>-${GITHUB_RUN_ID})",
+      "docs/runbook/db.md (§3 bảng 3 vòng giữ, bỏ cảnh báo CR-033, ghi chú sidecar cũ exit 2, dòng dọn đĩa)",
+      "docs/runbook/cutover-content-db.md (tên file ops-<lệnh>-…dump)",
+      "docs/runbook/ai-news.md (tên file ops-ai-news-*, bản cũ pre-migrate-ops-ai-news-*)"
     ],
     "modules": [
-      "Trang 404 dùng chung mọi route [locale] (vi + en)",
-      "Route chi tiết en SSG + ISR on-demand: /en/blog/[slug], /en/products/[slug], /en/case-studies/[slug], /en/solutions/ai/[slug], /en/solutions/enterprise/[slug]",
-      "Revalidate nội dung (POST /api/revalidate theo tag) — 404 en giờ được cache ISR"
+      "Sidecar backup nta-db-backup (image build từ deploy/db/Dockerfile.backup — có hiệu lực sau deploy rebuild)",
+      "Backup trước migrate trong deploy (.github/workflows/deploy.yml — không đổi, chịu ảnh hưởng vòng giữ)",
+      "Workflow Content ops (backup / import-seed / upload-smoke ...)",
+      "Workflow AI news job publish-db (backup trước khi ghi DB)",
+      "Backup hằng ngày (backup-loop.sh → daily-* / uploads-*)",
+      "Restore / migrate-on-restore (lấy *.dump mới nhất)"
     ]
   },
   "impact": {
     "direct": [
-      "6 URL en slug sai → HTTP 404 (không còn 500), thân trang not-found tiếng Anh ('Page not found' / 'does not exist or has been moved'), <title>404 | NTA</title>, <meta name=\"robots\" content=\"noindex, nofollow\">: /en/blog/nope, /en/products/nope, /en/case-studies/nope, /en/solutions/ai/nope, /en/solutions/ai/crm (slug enterprise sai nhóm), /en/solutions/enterprise/boxai (slug AI sai nhóm)",
-      "Biến thể slug sai khác dưới /en/*/[slug] cùng hành vi 404 + en + title 404 | NTA + noindex (vd /en/case-studies/xyz-nope, /en/blog/xyz-nope, /en/solutions/ai/xyz-nope)",
-      "Bản vi tương ứng vẫn 404 + thân trang not-found tiếng Việt ('Trang bạn tìm không tồn tại'), title 404 | NTA, noindex: /blog/nope, /products/nope, /case-studies/nope, /case-studies/xyz-nope, /solutions/ai/crm, /solutions/enterprise/boxai",
-      "Log server không có 'Page changed from static to dynamic' sau khi gọi các URL trên",
-      "404 en được cache rồi tạo bài + revalidate → 200: GET /en/blog/<slug-chưa-có> → 404 (lần 2 x-nextjs-cache: HIT); tạo bài slug đó (publish-post) → GET vẫn 404 trước revalidate; POST /api/revalidate (collection post + slug) → GET /en/blog/<slug> 200 với title bài, /blog/<slug> 200"
+      "Có ≥14 file pre-migrate-<sha12>-<run>-<attempt>.dump, chạy Content ops backup → log 'OK db → ops-backup-<UTC>-<run>.dump', KHÔNG có dòng 'rotate: xoá pre-migrate-<sha>…'; số file pre-migrate-* (trừ pre-migrate-ops-*) không giảm",
+      "Chạy AI news publish-db (khi cần backup) → file ops-ai-news-<UTC>-<run>.dump, không xoá bản pre-migrate-<sha> của deploy",
+      "Vòng ops giữ tối đa BACKUP_KEEP (14) bản ops-*.dump mới nhất; bản ops cũ nhất bị rotate khi vượt",
+      "Deploy (backup pre-migrate-<sha>) khi vòng deploy đầy → chỉ xoá pre-migrate-<sha> cũ nhất, KHÔNG xoá ops-* hay legacy pre-migrate-ops-*",
+      "Legacy pre-migrate-ops-*.dump trên VPS được tính vào vòng ops: backup ops mới làm rơi dần legacy cũ nhất; deploy không đụng tới",
+      "Nhãn tay pre-migrate-manual-* / pre-migrate-before-* (runbook) vẫn được nhận, thuộc vòng deploy",
+      "Nhãn không hợp lệ (foo, ops-a/b) → usage, exit 2; trùng tên file (ops-dup-1 chạy 2 lần) → FAILED exit 1, file cũ giữ nguyên"
     ],
     "dependents": [
-      "Slug hợp lệ vi + en vẫn 200 với title đúng: /blog/first-steps, /en/blog/first-steps, /products/hair-style-ai, /en/products/hair-style-ai, /case-studies/heritage-site-ai-camera, /en/case-studies/heritage-site-ai-camera, /solutions/ai/boxai, /en/solutions/ai/boxai, /solutions/enterprise/crm, /en/solutions/enterprise/crm",
-      "Redirect 301 giữ nguyên: /case-studies/oc-eo-learning và /vi/case-studies/oc-eo-learning → /case-studies/heritage-site-ai-camera; /en/case-studies/oc-eo-learning → /en/case-studies/heritage-site-ai-camera",
-      "404 ngoài route detail vẫn đúng: /en/nope (en), /nope (vi), /fr/blog → 404, title 404 | NTA"
+      "Backup hằng ngày daily → vẫn rotate riêng daily-* / uploads-*, không đụng pre-migrate-* / ops-*",
+      "Deploy workflow: rebuild image nta-db-backup trước bước backup → backup pre-migrate → migrate → chạy app vẫn PASS",
+      "restore-check.sh nhận file ops-*.dump để restore vào DB tạm + kiểm số bản ghi (R-16b)",
+      "migrate-on-restore.sh lấy *.dump mới nhất — khớp cả ops-*.dump",
+      "Thứ tự sidecar cũ + workflow mới gửi ops-* (trước khi deploy rebuild) → workflow dừng ở bước Backup DB (exit 2), chưa ghi DB (fail an toàn)"
     ],
     "regression": [
-      "/, /en, /blog, /en/blog, /sitemap.xml → 200",
-      "Case study đã gỡ /case-studies/ai-box-bao-ha và /en/case-studies/ai-box-bao-ha → 404 (en không còn 500)",
-      "Trang 404 có NotFoundMessage + link về trang chủ đúng ngôn ngữ (R-12)",
-      "Chạy được ở cả CONTENT_SOURCE=db (prod) và file"
+      "Content ops import-seed / upload-smoke vẫn backup trước khi ghi rồi chạy tiếp bình thường",
+      "AI news publish-db vẫn chèn bài vi+en vào DB + revalidate + smoke 2 URL (R-09c)",
+      "Lệnh tay trong docs/runbook/db.md (backup.sh pre-migrate-manual-…, before-restore, before-import, before-rollback) chạy được",
+      "Cảnh báo BACKUP_MIN_FREE_MB vẫn hoạt động"
     ]
   },
   "acceptance": [
-    "Mọi slug sai dưới /en/{blog,products,case-studies,solutions/ai,solutions/enterprise}/[slug] → 404 + nội dung en + title '404 | NTA' + noindex, nofollow (không còn 500)",
-    "Bản vi tương ứng → 404 + nội dung vi + title '404 | NTA' + noindex",
-    "Slug hợp lệ vi + en → 200",
-    "3 redirect 301 oc-eo-learning giữ nguyên đích",
-    "URL en đã 404 (cache ISR) → tạo bài + revalidate → 200, không kẹt 404",
-    "Log server không có 'Page changed from static to dynamic'",
-    "npm test + typecheck + lint PASS; docker build PASS"
+    "Backup ops (Content ops / AI news) không bao giờ xoá bản pre-migrate-<sha> của deploy; deploy không xoá bản ops — 2 vòng giữ độc lập, mỗi vòng KEEP=14",
+    "Tên file backup ops mới: ops-<nguồn>-<UTC>-<run_id>.dump",
+    "Whitelist nhãn: daily | pre-migrate-* | ops-*; nhãn khác → exit 2",
+    "Không ghi đè file đã tồn tại (exit 1); daily/uploads giữ hành vi cũ",
+    "Harness script 13/13 PASS trên sh + dash (HEAD 7/13 tái hiện bug T1/T4); sh -n OK; YAML 2 workflow parse OK",
+    "npm run typecheck + lint + test PASS; build Linux PASS trước khi push",
+    "Sau deploy trên VPS: Content ops backup → không có dòng 'rotate: xoá pre-migrate-<sha>…'"
   ],
   "risk": "medium",
   "notes": [
-    "Không đổi requirement → specVersion giữ 4.2.1, không có spec/updates/ (theo convention bug-fix không bump, vd CR-023 scope v46)",
-    "Residual: title 404 cố định cho cả vi/en; 404 en có Cache-Control s-maxage=31536000 — cần kiểm nginx/proxy prod không cache 404 ngoài Next (revalidate Next không xoá được cache proxy)"
+    "Không đổi requirement (R-16b 'giữ tối thiểu 14 bản' + backup trước migrate nay được thoả đúng) → specVersion giữ 4.2.1, không có spec/updates/ (convention bug-fix không bump, vd CR-026/CR-032 scope v50)",
+    "Không có test tự động trong repo cho shell script — verify bằng harness ngoài repo (pg_dump/pg_restore giả); test bên TEST chủ yếu là smoke ops trên VPS sau deploy",
+    "Residual: fix chỉ có hiệu lực sau deploy rebuild sidecar; chưa xác nhận trên busybox ash thật; legacy pre-migrate-ops-* chỉ rơi khi có backup ops mới; nhãn rỗng 'ops-' vẫn được nhận (MINOR, như HEAD)"
   ]
 }

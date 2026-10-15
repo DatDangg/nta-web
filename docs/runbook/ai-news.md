@@ -77,7 +77,7 @@ Job `publish-db` đỏ (hoặc **cancelled**) → bài đã có trên `main`, ch
 | publish-db · Validate compose / nta-db healthy | Thiếu secret `POSTGRES_PASSWORD`/`REVALIDATE_SECRET`; DB không chạy | Kiểm secret / `docker ps` trên VPS (runbook `db.md`) rồi chạy lại. Chưa ghi gì. |
 | publish-db · Kiểm bài (dry-run) | File thiếu 1 locale, frontmatter sai, cover không có trong `public/` (`[cli] FAIL — …`) | Chưa ghi gì (validate **cả 2 locale** trước khi ghi). Sửa file qua commit thường rồi chạy lại. |
 | publish-db · Backup DB | `nta-db-backup` lỗi / đầy đĩa | Dừng trước khi ghi. Xử lý theo runbook `db.md`, chạy lại. |
-| publish-db · Chèn bài | Lỗi DB / I-5 (bản ghi vừa được tạo chen giữa) | Có backup `pre-migrate-ops-ai-news-*`. Chạy lại: locale đã chèn → `exists`, chỉ chèn phần còn thiếu. |
+| publish-db · Chèn bài | Lỗi DB / I-5 (bản ghi vừa được tạo chen giữa) | Có backup `ops-ai-news-*` (bản trước CR-033: `pre-migrate-ops-ai-news-*`). Chạy lại: locale đã chèn → `exists`, chỉ chèn phần còn thiếu. |
 | publish-db · Revalidate / Smoke | `nta-web` không chạy, secret revalidate sai, trang chưa 200 | Bài đã trong DB. Chạy lại workflow (revalidate luôn chạy), hoặc Content ops → `revalidate-all`. |
 
 Dữ liệu tạm (raw + `.clean.md`) nằm ở `/tmp/ai-news` trong container, mất khi job kết thúc.

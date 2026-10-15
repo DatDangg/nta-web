@@ -19,7 +19,7 @@
 | Service một-lần `nta-tools` | `docker-compose.yml` (profile `tools`), Dockerfile target `content-tools` | chạy `tools/db/*` trong mạng compose (DB không publish port), uid 1001 |
 
 - `content-ops` dùng chung nhóm `concurrency` với deploy → không bao giờ chạy song song. Chỉ `docker compose run --rm --no-deps` → không tạo lại `nta-web`/`nta-db`.
-- Lệnh ghi bắt buộc ô **confirm**: `import-seed` → `IMPORT-SEED-PROD`, `upload-smoke` → `UPLOAD-PROD`; tự **backup trước** (`pre-migrate-ops-<lệnh>-<UTC>-<run>.dump`), backup lỗi → dừng.
+- Lệnh ghi bắt buộc ô **confirm**: `import-seed` → `IMPORT-SEED-PROD`, `upload-smoke` → `UPLOAD-PROD`; tự **backup trước** (`ops-<lệnh>-<UTC>-<run>.dump`; trước CR-033 là `pre-migrate-ops-…`), backup lỗi → dừng.
 - `CONTENT_SOURCE` đọc lúc request: `next build` không prerender trang nội dung nào (chỉ `/_not-found`, icon, `robots.txt`) → build giống hệt ở 2 chế độ, đổi cờ không cần build lại.
 - Concurrency: một run đang **chờ** trong nhóm `deploy-nta-web` có thể bị GitHub huỷ khi run khác xếp hàng sau (kể cả deploy do push) → bấm lại lệnh; tránh push main trong lúc cutover.
 - `upload-smoke` cố ý để lại 1 asset (ảnh `og-default.png`, theo hash) trong DB + volume làm bằng chứng — vô hại, không cần dọn.
@@ -35,7 +35,7 @@
 | # | Việc | Ai | Cách | Đạt khi |
 |---|---|---|---|---|
 | 1 | Kiểm migration + DB rỗng/đã có | user bấm | Content ops → `parity` | bước *Kiểm migration*: `applied=2 expected=2`. Parity lúc này **FAIL "thiếu"** là bình thường nếu chưa import |
-| 2 | Backup | user bấm | Content ops → `backup` | log `OK pre-migrate-ops-backup-…dump` — **ghi tên file vào task** |
+| 2 | Backup | user bấm | Content ops → `backup` | log `OK db → ops-backup-…dump` — **ghi tên file vào task** |
 | 3 | **User xác nhận import** | user | trả lời "ok import" | — |
 | 4 | Import seed (chỉ chèn, ON CONFLICT DO NOTHING) + parity | user bấm | Content ops → `import-seed`, confirm `IMPORT-SEED-PROD` | `chèn 136, bỏ qua 0` (chạy lại = `chèn 0`) rồi `[parity] PASS` |
 | 5 | Upload ảnh mẫu (trước khi bật db) | user bấm | Content ops → `upload-smoke`, confirm `UPLOAD-PROD` | `[upload] OK (created…) /uploads/<hash>.png`; `/uploads` + `/_next/image` 200 |

@@ -5,7 +5,7 @@ name: Content ops (VPS)
 # Dockerfile target content-tools) trong mạng compose. Secret chỉ đi qua env → compose nội suy; không echo secret,
 # không `docker compose config` không -q. Chỉ dùng `run --rm --no-deps` → KHÔNG tạo lại nta-web/nta-db.
 # Lệnh (whitelist):
-#   backup          backup DB ngay (pre-migrate-ops-<UTC>-<run>) — không đổi dữ liệu
+#   backup          backup DB ngay (ops-backup-<UTC>-<run>.dump, vòng giữ ops riêng — CR-033) — không đổi dữ liệu
 #   parity          kiểm migration đã apply đủ + parity DB ↔ file (chỉ đọc)
 #   import-seed     backup → import seed (CHỈ chèn) → parity. Bắt buộc confirm = IMPORT-SEED-PROD
 #   revalidate-all  POST /api/revalidate {all:true} tới nta-web trong mạng compose
@@ -82,7 +82,7 @@ jobs:
       # Lệnh ghi luôn backup trước; backup lỗi → dừng.
       - name: Backup DB
         if: env.OPS_COMMAND == 'backup' || env.OPS_COMMAND == 'import-seed' || env.OPS_COMMAND == 'upload-smoke'
-        run: docker exec nta-db-backup /scripts/backup.sh "pre-migrate-ops-${OPS_COMMAND}-$(date -u +%Y%m%dT%H%M%SZ)-${GITHUB_RUN_ID}"
+        run: docker exec nta-db-backup /scripts/backup.sh "ops-${OPS_COMMAND}-$(date -u +%Y%m%dT%H%M%SZ)-${GITHUB_RUN_ID}"
 
       - name: Build nta-tools
         if: env.OPS_COMMAND != 'backup'

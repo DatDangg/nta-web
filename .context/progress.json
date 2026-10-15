@@ -2,12 +2,12 @@
   "mode": "feature",
   "activeWorkItem": {
     "type": "bug",
-    "slug": "en-invalid-slug-500",
+    "slug": "ops-backup-rotation",
     "phaseTask": "phase-1-task-01",
     "step": "closeout",
-    "status": "done",
-    "journal": ".context/runs/bug-en-invalid-slug-500-phase-1-task-01.md",
-    "note": "CR-026+CR-032 done + archived 2026-10-15 (smoke prod PASS). CR-031 còn B10 + P5-T02 + close-out (scope v51+)"
+    "status": "awaiting",
+    "journal": ".context/runs/bug-ops-backup-rotation-phase-1-task-01.md",
+    "note": "CR-033 fix committed local (review STRICT PASS, scope v51). Chưa push: npm run build local FAIL do môi trường (native binding), cần build Linux/docker PASS → push → deploy → user chạy Content ops backup trên VPS xác nhận → archive CR-033"
   },
   "features": [
     {
@@ -1323,6 +1323,26 @@
       "residualRisk": "title 404 cố định cho vi+en; 404 en cache ISR s-maxage (kiểm nginx/CDN prod); key notFound.title không còn dùng (giữ vì parity file/DB)",
       "prodSmoke": "PASS 2026-10-15 (6 URL en 404 + title 404 | NTA + noindex, vi 404, hợp lệ 200, 301 ok)",
       "archived": "2026-10-15"
+    },
+    {
+      "slug": "ops-backup-rotation",
+      "title": "Backup Content ops/AI news (pre-migrate-ops-*) dùng chung vòng giữ 14 bản với backup trước-deploy",
+      "status": "fixed_pending_deploy",
+      "changeFile": "spec/changes/2026-10-14-ops-backup-rotation.md",
+      "classification": "BUG (ops)",
+      "related": "CR-033",
+      "tasks": {
+        "phase-1-task-01": "done"
+      },
+      "attempt": 0,
+      "updatedAt": "2026-10-15",
+      "reviewer": {
+        "verdict": "PASS",
+        "level": "STRICT",
+        "round": 1,
+        "report": ".context/review-reports/bug-ops-backup-rotation-phase-1-task-01-round-1-review.md"
+      },
+      "scopeVersion": 51
     }
   ]
 }

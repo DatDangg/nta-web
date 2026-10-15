@@ -148,7 +148,7 @@ jobs:
       # Chỉ backup khi thật sự ghi (CR-033: không đẩy mất backup trước-deploy mỗi tuần vô ích). Backup lỗi → dừng.
       - name: Backup DB
         if: steps.dryrun.outputs.missing == 'true'
-        run: docker exec nta-db-backup /scripts/backup.sh "pre-migrate-ops-ai-news-$(date -u +%Y%m%dT%H%M%SZ)-${GITHUB_RUN_ID}"
+        run: docker exec nta-db-backup /scripts/backup.sh "ops-ai-news-$(date -u +%Y%m%dT%H%M%SZ)-${GITHUB_RUN_ID}"
 
       - name: Chèn bài vào DB (insert-only)
         if: steps.dryrun.outputs.missing == 'true'

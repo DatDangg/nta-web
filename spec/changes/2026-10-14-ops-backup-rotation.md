@@ -1,7 +1,7 @@
 ---
 id: ops-backup-rotation
 type: bug
-status: pending
+status: in_progress
 created: 2026-10-14
 ---
 

@@ -1,8 +1,12 @@
 #!/bin/sh
 # Backup PostgreSQL (pg_dump -Fc) [+ thư mục ảnh upload] ra /backups — chạy trong container nta-db-backup.
 #   backup.sh daily                → daily-<UTC>.dump + uploads-<UTC>.tar.gz, giữ BACKUP_KEEP bản mỗi loại
-#   backup.sh pre-migrate-<id>     → pre-migrate-<id>.dump (chỉ DB), giữ BACKUP_KEEP bản pre-migrate-*
-#                                    (deploy: <id> = <sha12>-<run_id>-<run_attempt> → mỗi lần chạy 1 file riêng)
+#   backup.sh pre-migrate-<id>     → pre-migrate-<id>.dump (chỉ DB), vòng deploy: giữ BACKUP_KEEP bản pre-migrate-*
+#                                    trừ pre-migrate-ops-* (deploy: <id> = <sha12>-<run_id>-<run_attempt>; nhãn tay
+#                                    pre-migrate-manual-* / pre-migrate-before-* cũng thuộc vòng này)
+#   backup.sh ops-<id>             → ops-<id>.dump (chỉ DB), vòng ops: giữ BACKUP_KEEP bản ops-* + legacy pre-migrate-ops-*
+#                                    (Content ops / AI news: <id> = <nguồn>-<UTC>-<run_id>)
+# Mỗi vòng giữ riêng → backup ops không đẩy mất điểm khôi phục trước-deploy và ngược lại (CR-033).
 # KHÔNG BAO GIỜ ghi đè file backup đã có: trùng tên → FAILED, exit 1 (giữ nguyên điểm khôi phục cũ).
 # Exit ≠ 0 khi dump lỗi (deploy dựa vào exit code để dừng trước migrate).
 # Kết nối qua env PGHOST/PGUSER/PGDATABASE/PGPASSWORD (compose cấp) — không in ra log.
@@ -16,8 +20,8 @@ MIN_FREE_MB="${BACKUP_MIN_FREE_MB:-2048}"
 LOG_FILE="$BACKUP_DIR/backup.log"
 
 case "$LABEL" in
-  daily|pre-migrate-*) ;;
-  *) echo "usage: backup.sh daily|pre-migrate-<id>" >&2; exit 2 ;;
+  daily|pre-migrate-*|ops-*) ;;
+  *) echo "usage: backup.sh daily|pre-migrate-<id>|ops-<id>" >&2; exit 2 ;;
 esac
 case "$LABEL" in
   *[!A-Za-z0-9._-]*) echo "label chứa ký tự không hợp lệ" >&2; exit 2 ;;
@@ -37,10 +41,19 @@ warn_low_disk() {
   fi
 }
 
-# Giữ KEEP file mới nhất theo mtime cho 1 prefix (vd daily-*.dump).
+# Giữ KEEP file mới nhất theo mtime trong 1 vòng giữ = hợp các glob, bỏ đường dẫn khớp regex loại trừ.
+#   rotate <regex loại trừ | ''> <glob>...    vd: rotate '' 'daily-*.dump'
 rotate() {
+  exclude="$1"; shift
+  n=$#
+  for pattern in "$@"; do
+    # shellcheck disable=SC2086 # cố ý để glob bung ra thành danh sách file
+    set -- "$@" "$BACKUP_DIR"/$pattern
+  done
+  shift "$n"
   # shellcheck disable=SC2012 # tên file do script tự đặt, không có khoảng trắng
-  ls -1t "$BACKUP_DIR"/$1 2>/dev/null | tail -n +$((KEEP + 1)) | while read -r old; do
+  ls -1t "$@" 2>/dev/null | { if [ -n "$exclude" ]; then grep -v -e "$exclude"; else cat; fi; } \
+    | tail -n +$((KEEP + 1)) | while read -r old; do
     rm -f "$old"
     log "rotate: xoá $(basename "$old")"
   done
@@ -83,17 +96,21 @@ publish_file ".tmp-$DUMP_NAME" "$DUMP_NAME"
 log "OK db → $DUMP_NAME ($(du -h "$BACKUP_DIR/$DUMP_NAME" | cut -f1))"
 
 if [ "$LABEL" = "daily" ]; then
-  rotate 'daily-*.dump'
+  rotate '' 'daily-*.dump'
   if [ -d "$UPLOADS_DIR" ]; then
     TAR_NAME="uploads-$STAMP.tar.gz"
     refuse_existing "$TAR_NAME"
     tar -czf "$BACKUP_DIR/.tmp-$TAR_NAME" -C "$UPLOADS_DIR" . || { rm -f "$BACKUP_DIR/.tmp-$TAR_NAME"; fail "tar uploads lỗi"; }
     publish_file ".tmp-$TAR_NAME" "$TAR_NAME"
     log "OK uploads → $TAR_NAME ($(du -h "$BACKUP_DIR/$TAR_NAME" | cut -f1))"
-    rotate 'uploads-*.tar.gz'
+    rotate '' 'uploads-*.tar.gz'
   else
     log "WARNING không thấy $UPLOADS_DIR — bỏ qua backup ảnh upload"
   fi
 else
-  rotate 'pre-migrate-*.dump'
+  case "$LABEL" in
+    # Legacy pre-migrate-ops-* (trước CR-033) tính vào vòng ops → tự rơi dần, không chiếm chỗ vòng deploy.
+    ops-*|pre-migrate-ops-*) rotate '' 'ops-*.dump' 'pre-migrate-ops-*.dump' ;;
+    *) rotate '/pre-migrate-ops-[^/]*$' 'pre-migrate-*.dump' ;;
+  esac
 fi
