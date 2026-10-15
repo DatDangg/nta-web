@@ -1,82 +1,68 @@
 {
-  "specVersion": "4.5.0",
-  "scopeVersion": 55,
-  "generatedAt": "2026-10-15T22:00:00+07:00",
+  "specVersion": "4.6.0",
+  "scopeVersion": 56,
+  "generatedAt": "2026-10-15T23:00:00+07:00",
   "trigger": "feature-update",
-  "workItem": "feature/contact-form-google-sheet (CR-037 spec/changes/2026-10-15-contact-form-google-sheet.md; tasks tasks/feature-contact-form-google-sheet/phase-1-task-01.md, phase-1-task-02.md; ADDITIVE, risk high; phát hành ở bước planning — hiệu lực khi phase 1 PASS + user deploy Web App + đặt secret)",
+  "workItem": "feature/ai-news-naming-images (CR-038 spec/changes/2026-10-15-ai-news-naming-images.md; tasks tasks/feature-ai-news-naming-images/phase-1-task-01.md, phase-1-task-02.md, phase-1-task-03.md; MODIFY, risk medium; phát hành ở bước planning — hiệu lực khi phase 1 PASS + bài w42 đã sửa trong DB)",
   "specRefs": [
-    "R-13a",
-    "R-13",
-    "R-16",
-    "R-18"
+    "R-09c",
+    "R-09a",
+    "R-09"
   ],
   "changed": {
     "files": [
-      "tools/contact-sheet/Code.gs — Apps Script doPost: kiểm token (SECRET_TOKEN), validate, appendRow 8 cột có LockService, chống formula injection, gửi Telegram sendMessage cô lập lỗi; doGet → method_not_allowed (task-01, file mới)",
-      "tools/contact-sheet/code.test.ts — test Code.gs qua node:vm với stub Apps Script services (task-01, file mới)",
-      "tools/contact-sheet/README.md — hướng dẫn dựng Sheet + Script Properties + deploy Web App + đặt secret web (task-01, file mới)",
-      "src/lib/api/contact-schema.ts — field tuỳ chọn locale (vi|en, mặc định vi, sai → errors.locale) (task-02)",
-      "src/lib/api/forward.ts — đọc CONTACT_FORM_TARGET + CONTACT_FORM_TOKEN, chặn NEXT_PUBLIC_*, body token/submittedAt/locale/field, redirect follow, thành công chỉ khi 2xx + {status:'ok'}, timeout 10 s (task-02)",
-      "src/lib/contact/useContactForm.ts — gửi locale theo useLocale() (dùng chung ContactForm + CTAForm) (task-02)",
-      "src/app/api/contact/route.ts — chỉ sửa nếu cần truyền thời điểm; guard order không đổi (task-02)",
-      "src/lib/api/forward.test.ts, src/lib/api/contact-schema.test.ts — test mới (task-02)",
-      ".env.local.example, docker-compose.yml, .github/workflows/deploy.yml — nối env server-only CONTACT_FORM_TOKEN (task-02)",
-      "docs/API_SPEC.md, docs/ERD.md, docs/runbook/deploy-vps.md, docs/BRD.md (OQ#4), docs/DESIGN.md (nếu có luồng form), .context/project-config.md — doc reconcile (task-02)",
-      "docs/runbook/db.md §1b — script env tạm cho compose gõ tay thêm CONTACT_FORM_TOKEN (spec-validation G1)",
-      "docs/content-bot/10-server.md — bảng env thêm CONTACT_FORM_TOKEN",
-      ".context/project-config.md — required env thêm CONTACT_FORM_TOKEN, bỏ ⚠️ OQ#4"
+      "src/i18n/messages/vi.json + en.json — blog.highlightEyebrow: 'Nổi bật' → 'Tin mới', 'Featured' → 'Latest' (task-01)",
+      "src/components/blog/ArticleHeader.tsx — Breadcrumb variant 'pill' (task-01)",
+      "src/components/blog/FeaturedPosts.tsx — chỉ comment mô tả thẻ (task-01, không đổi hành vi ngoài nhãn i18n)",
+      "tools/ai-news/generate.py — title/excerpt theo ngày (vi DD/MM/YYYY, en D Mon YYYY), cover = ảnh tin đầu tiên có ảnh, fallback /images/blog/ai-weekly-cover.webp (task-02)",
+      "tools/ai-news/tests/test_ai_news.py + test_og_image.py — cập nhật kỳ vọng title/excerpt/cover (task-02)",
+      "public/images/blog/ai-weekly-cover.webp — ảnh fallback mới (task-02, file mới; ai-weekly-cover.svg giữ lại)",
+      "src/content/blog/{vi,en}/ai-weekly-2026-w42.mdx — title/excerpt theo ngày 15/10/2026 + cover ảnh tin 1 (task-03)",
+      "docs/runbook/ai-news.md — quy tắc tên/cover mới + quy trình sửa w42 trong DB (task-02/03)"
     ],
     "modules": [
-      "API POST /api/contact — schema (locale) + forward tới Apps Script Web App",
-      "Form liên hệ client (useContactForm: ContactForm /contact, /en/contact + CTAForm trang chi tiết giải pháp)",
-      "Apps Script Web App ngoài repo runtime (tools/contact-sheet) — ghi Google Sheet + báo Telegram",
-      "Env/deploy wiring (compose + GitHub Actions deploy)"
+      "blog listing /blog, /en/blog (khối nổi bật — nhãn thẻ highlight, ảnh thẻ bài lớn/nhỏ/lưới)",
+      "blog detail /blog/[slug], /en/blog/[slug] (breadcrumb, tiêu đề)",
+      "trang chủ — thẻ bài viết mới (PostCard dùng post.cover)",
+      "pipeline ai-news (generate.py render + publish-db)",
+      "DB nội dung post/vi|en/ai-weekly-2026-w42"
     ]
   },
   "impact": {
     "direct": [
-      "POST /api/contact: locale thiếu → 'vi'; 'en' → 'en'; 'fr'/số → 400 errors.locale; field cũ không đổi",
-      "Form /contact gửi locale 'vi', /en/contact gửi 'en'; form CTA ở /solutions/ai/[slug] và /solutions/enterprise/[slug] gửi đúng locale trang (vi + en)",
-      "forward: thiếu CONTACT_FORM_TARGET hoặc CONTACT_FORM_TOKEN, hoặc có NEXT_PUBLIC_CONTACT_FORM_TARGET/NEXT_PUBLIC_CONTACT_FORM_TOKEN → 500, 0 lần gọi fetch",
-      "forward: body JSON có token, submittedAt (ISO 8601), locale, name, email, phone|null, company|null, need|null, message; Content-Type application/json; redirect 'follow'",
-      "forward: 200 {status:'ok'} (sau 302) → API 200 thành công; 200 {status:'error'}, 200 HTML, 5xx, timeout → API 500 message chung",
-      "Message lỗi/response/log không chứa URL Web App hay token; CONTACT_FORM_TOKEN không có trong .next/static sau build",
-      "Apps Script: token sai/thiếu/SECRET_TOKEN rỗng → {status:'error',code:'unauthorized'}, 0 dòng, 0 Telegram; JSON hỏng → bad_request",
-      "Apps Script: token đúng → đúng 1 dòng 8 cột (thời gian giờ VN, ngôn ngữ, tên, email, SĐT, công ty, nhu cầu nhãn vi, nội dung) + header tự tạo khi sheet rỗng",
-      "Apps Script: ô bắt đầu '=', '+', '-', '@', tab, CR → có tiền tố \"'\" (chống formula injection)",
-      "Apps Script: 1 tin Telegram sendMessage text thuần (không parse_mode) đủ tên/email/SĐT/công ty/nhu cầu/nội dung/ngôn ngữ, không chứa token; Telegram ném lỗi/4xx → vẫn ghi dòng + trả ok; không gọi getUpdates/setWebhook/deleteWebhook",
-      "E2E thật sau khi user deploy: gửi form vi + en → 1 dòng mới trên Sheet + 1 tin Telegram; token web sai → form báo lỗi, không dòng"
+      "/blog + /en/blog: thẻ highlight hiển thị 'TIN MỚI' / 'LATEST' (in hoa CSS), không còn 'NỔI BẬT'/'FEATURED'",
+      "/blog/ai-weekly-2026-w42 + /en/blog/ai-weekly-2026-w42: tiêu đề 'Bản tin AI tuần ngày 15/10/2026' / 'AI Weekly Digest — 15 Oct 2026'; excerpt theo ngày; slug/URL không đổi",
+      "Thẻ bài w42 ở /blog, /en/blog, trang chủ: ảnh = /uploads/9b72253a…fc51.jpg (ảnh tin 1), không còn SVG cố định",
+      "Breadcrumb /blog/<slug> vi + en: kiểu pill (icon nhà có aria-label, 'Tin tức'/'Blog' là link, tiêu đề bài aria-current=page màu thương hiệu); tiêu đề dài không tràn ngang ở 320/375/768/1280 px",
+      "generate.py: render có ảnh → cover = upload_path ảnh có index nhỏ nhất; 0 ảnh / AI_NEWS_IMAGES=off / ảnh bỏ toàn bài → cover /images/blog/ai-weekly-cover.webp; title/excerpt vi + en theo date"
     ],
     "dependents": [
-      "ContactForm (/contact, /en/contact) và CTAForm (trang chi tiết giải pháp) — thông báo thành công/lỗi hiển thị như trước",
-      "Env wiring: .env.local.example, docker-compose.yml (CONTACT_FORM_TOKEN: ${CONTACT_FORM_TOKEN:-}), deploy.yml đọc secrets.CONTACT_FORM_TOKEN (không echo, không build arg)",
-      "Doc as-built: API_SPEC (locale + payload forward + điều kiện thành công), ERD (ContactSubmission → Google Sheet), runbook deploy-vps §4"
+      "BlogPostCard (large/small/grid) + PostCard (trang chủ, RelatedPosts) render cover /uploads qua next/image (localPatterns /uploads/**)",
+      "publish-post --dry-run/--images-dir: collectImagePaths gồm data.cover → cover /uploads là ảnh đã có trong manifest; cover webp kiểm I-7 trong public/ của image nta-tools",
+      "content-cli update post/{vi,en}/ai-weekly-2026-w42 (version mới, history), revalidate collection post",
+      "Breadcrumb dùng chung (AboutHero, DetailHero, ListingHero pill; PageHeader plain) — không đổi nếu task-01 chỉ đổi ArticleHeader"
     ],
     "regression": [
-      "Rate-limit POST /api/contact vẫn chặn khi vượt ngưỡng (429) trước validate",
-      "Honeypot có giá trị → 200 giả, KHÔNG forward (không ghi Sheet, không Telegram)",
-      "Guard order R-18 rateLimit → validate → honeypot → forward không đổi",
-      "Validate cũ name/email/phone/company/need/message giữ nguyên thông báo lỗi vi/en",
-      "Form tối giản (name/email/message) vẫn gửi được; CTA form rút gọn vẫn gửi được",
-      "GET /api/health không đổi; không có ghi DB cho contact (R-16)",
-      "npm test / lint / typecheck / build PASS",
-      "Lệnh docker compose gõ tay trên VPS theo docs/runbook/db.md §1b vẫn giữ CONTACT_FORM_TARGET + CONTACT_FORM_TOKEN (không tạo lại nta-web với token rỗng)"
+      "Các bài blog khác giữ cover cũ; trang chi tiết không render cover (không lặp ảnh tin 1)",
+      "og:image + JSON-LD Article/Breadcrumb bài blog không đổi (og-default.png)",
+      "Ảnh trong từng tin (NewsImage + credit) không đổi; AI_NEWS_IMAGES=off vẫn ra bài chỉ text",
+      "Dedupe tuần theo slug, workflow chạy lại cùng tuần → skip / exists, 0 ghi",
+      "Bộ lọc/tìm kiếm/phân trang /blog, nút 'Xem tất cả bài viết'",
+      "Breadcrumb pill ở /about, /solutions/*, /products/*, /case-studies/*, trang danh sách"
     ]
   },
   "acceptance": [
-    "/contact + /en/contact + CTA gửi locale đúng; API nhận locale tuỳ chọn, sai → 400",
-    "Forward gửi token trong body + submittedAt + locale; chỉ thành công khi JSON {status:'ok'} sau redirect",
-    "Thiếu env / Web App lỗi / timeout → 500 + message chung, không lộ URL/token ra client/log/bundle",
-    "Apps Script: token sai → không ghi, không Telegram; token đúng → 1 dòng 8 cột chống formula injection",
-    "Telegram lỗi không ảnh hưởng ghi Sheet / kết quả ok; text thuần, không lộ token",
-    "CONTACT_FORM_TOKEN nối qua .env.local.example, compose, deploy.yml; không có giá trị thật trong repo",
-    "README tools/contact-sheet đủ bước dựng/deploy/xoay token; doc as-built + BRD OQ#4 + project-config cập nhật"
+    "/blog: nhãn khối highlight 'Tin mới' (vi) / 'Latest' (en)",
+    "Bản tin mới + bài w42: title/excerpt theo ngày (vi + en), không còn 'tuần NN/YYYY' / 'Week NN'; slug giữ ai-weekly-YYYY-wNN",
+    "Thẻ bản tin ở /blog hiện ảnh tin đầu tiên có ảnh; số không có ảnh → /images/blog/ai-weekly-cover.webp; bài w42 đã đổi cover (file seed + DB); ảnh trong từng tin giữ nguyên",
+    "Breadcrumb /blog/<slug> kiểu pill như trang chi tiết khác; desktop + mobile không vỡ với tiêu đề dài",
+    "python -m unittest discover -s tools/ai-news/tests PASS; npm test, typecheck, lint, build PASS"
   ],
-  "risk": "high",
+  "risk": "medium",
   "notes": [
-    "Endpoint công khai nhận PII + secret token + gọi API bên thứ ba (Telegram bằng bot prod) → review STRICT",
-    "Apps Script không chạy được trong CI: unit test qua node:vm stub; E2E thật (Sheet + Telegram) chỉ sau khi user deploy Web App + đặt secret GitHub",
-    "Không test getUpdates trên bot đang polling; TELEGRAM_CHAT_ID lấy từ cấu hình bot",
-    "Timeout forward đề xuất 10 s (Apps Script cold start) — câu hỏi mở Q2 trong plan"
+    "Python không có trên máy Windows dev: test generator chạy trong Linux VM / docker / CI (python3 stdlib)",
+    "Sửa w42 trong DB prod = thao tác ghi DB thật trên VPS (nta-tools content-cli update + backup + revalidate) — do user chạy hoặc user duyệt cách chạy (câu hỏi mở trong plan)",
+    "ai-weekly-cover.svg giữ lại: v1 của w42 trong content_versions + fixture tools/db còn tham chiếu",
+    "Ảnh tin 1 có thể không phải 16:9 → thẻ object-cover cắt ảnh; chấp nhận theo yêu cầu user (lấy tin đầu tiên có ảnh)"
   ]
 }

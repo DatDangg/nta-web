@@ -1,5 +1,5 @@
 ---
-spec_version: 4.5.0
+spec_version: 4.6.0
 updated_at: 2026-10-15
 ---
 
@@ -250,6 +250,10 @@ _(cập nhật 2026-10-13: thêm **domain phụ** `ntasolution.vn` (+ `www`) ph�
   Priority: Medium (theo FR-060). `[reverse-engineered from docs]`
   — nguồn: `docs/BRD.md:103-105` (FR-060), `docs/DESIGN.md:121-123`
   - Empty state: xem R-09a §Trạng thái.
+  - *Breadcrumb chi tiết `/blog/[slug]` (4.6.0 — CR-038):* kiểu **pill** như các trang chi tiết khác (`DetailHero` — giải pháp /
+    sản phẩm / case study): viên thuốc, icon nhà (aria-label "Trang chủ"/"Home") thay chữ, `Tin tức`/`Blog` là link, mục hiện tại
+    (tiêu đề bài) màu thương hiệu `aria-current="page"`; tiêu đề dài không tràn ngang / không vỡ khung ở mobile (≥ 320 px) và desktop.
+    Breadcrumb JSON-LD không đổi.
   - Ngày hiển thị trên card blog **list** dùng **cùng format locale** với detail (design S11):
     ~~VI `dd/mm/yyyy` (`08/10/2026`)~~ → **VI `08 Th10, 2026`** (ngày 2 chữ số + ` Th` + tháng KHÔNG pad 0 + `, ` + năm; vd `15 Th3, 2026`; ghép tay, không dùng
     `Intl` vi-VN vì ra "thg"), EN `Oct 8, 2026`; tính theo ngày ISO trong frontmatter (không lệch timezone)
@@ -264,7 +268,8 @@ _(cập nhật 2026-10-13: thêm **domain phụ** `ntasolution.vn` (+ `www`) ph�
      (không phân biệt hoa/thường, dấu tiếng Việt). Trạng thái phản ánh trên URL `?category=<key>&q=<text>&page=<n>`;
      đổi lọc/tìm → về trang 1. Chip không có bài vẫn hiện; kết quả rỗng → empty state + nút xoá bộ lọc.
   3. **Khối nổi bật** (khi KHÔNG lọc/tìm): bài mới nhất dạng lớn (ảnh, badge danh mục, ngày, thời gian đọc,
-     tiêu đề, tóm tắt, "Đọc thêm →"), tối đa 2 bài kế tiếp dạng nhỏ, thẻ "NỔI BẬT — Cập nhật mới nhất từ NTA"
+     tiêu đề, tóm tắt, "Đọc thêm →"), tối đa 2 bài kế tiếp dạng nhỏ, thẻ ~~"NỔI BẬT"~~ **"TIN MỚI — Cập nhật mới nhất từ NTA"** (4.6.0 — CR-038: eyebrow i18n
+     `blog.highlightEyebrow` vi `Tin mới` / en `Latest`, in hoa bằng CSS; tiêu đề/nội dung thẻ không đổi)
      với nút "Xem tất cả bài viết" cuộn + focus tới mục 4 (khối này chỉ hiện khi không lọc ⇒ không cần xoá bộ lọc). Thiếu bài → khối co lại, không chèn bài giả.
   4. **"Bài viết mới nhất"** — lưới thẻ (1 / 2 / 3 / 4 cột ở base / md / lg / xl) gồm các bài còn lại sau khối nổi bật,
      phân trang; rỗng → ẩn mục. Khi đang lọc/tìm → ẩn khối nổi bật, lưới hiển thị toàn bộ kết quả.
@@ -301,8 +306,23 @@ _(cập nhật 2026-10-13: thêm **domain phụ** `ntasolution.vn` (+ `www`) ph�
   — nguồn: change `spec/changes/2026-10-13-blog-listing-redesign.md` (user chốt 6 quyết định 2026-10-13).
 - **R-09c (3.13.0 — CR-019 "Bản tin AI tuần" tự động):** mỗi tuần (cron 08:00 thứ 7 giờ VN — `0 1 * * 6` UTC — + chạy tay `workflow_dispatch`; CR-036 đổi từ thứ 2)
   workflow `.github/workflows/ai-news.yml` trên self-hosted runner `nta-web` (chạy trong container, không cài gì lên host)
-  tự sinh + đăng **2 bài** `src/content/blog/{vi,en}/ai-weekly-YYYY-wNN.mdx` (ISO week; category `ai-tech`; cover cố định
-  `/images/blog/ai-weekly-cover.svg`; tuần đã có bài → bỏ qua, không trùng).
+  tự sinh + đăng **2 bài** `src/content/blog/{vi,en}/ai-weekly-YYYY-wNN.mdx` (ISO week; category `ai-tech`; ~~cover cố định
+  `/images/blog/ai-weekly-cover.svg`~~ → cover theo *Tên + ảnh thẻ* bên dưới (4.6.0); tuần đã có bài → bỏ qua, không trùng).
+  - *Tên + ảnh thẻ (4.6.0 — CR-038, MODIFY):* tên bản tin theo **ngày** của bài (= `date` frontmatter, ngày chạy giờ VN),
+    không còn "tuần NN/YYYY":
+    title vi `Bản tin AI tuần ngày DD/MM/YYYY` (ngày + tháng 2 chữ số, vd `Bản tin AI tuần ngày 03/10/2026`) ·
+    en `AI Weekly Digest — D Mon YYYY` (ngày không pad, tháng viết tắt tiếng Anh cố định Jan..Dec, vd `AI Weekly Digest — 3 Oct 2026`);
+    excerpt vi `N điểm tin AI đáng chú ý trong bản tin ngày DD/MM/YYYY, kèm link nguồn gốc.` ·
+    en `N notable AI news items in the digest of D Mon YYYY, with links to the original sources.`
+    Slug **giữ** `ai-weekly-YYYY-wNN` (giữ URL + dedupe theo tuần). `cover` (ảnh thẻ ở danh sách /blog, thẻ bài ở trang chủ / bài liên quan)
+    = ảnh của **tin đầu tiên có ảnh** trong số đó (`/uploads/<sha256>.<ext>`, chính ảnh đã chèn trong bài — cùng giá trị ở vi + en);
+    số không có tin nào có ảnh (kể cả `AI_NEWS_IMAGES=off` hoặc ảnh bị bỏ toàn bài) → ảnh cố định
+    **`/images/blog/ai-weekly-cover.webp`** (raster 16:9 user cung cấp 2026-10-15, không dùng AI sinh ảnh). Ảnh trong từng tin
+    không đổi. `ArticleHeader` không render cover → trang chi tiết không lặp ảnh tin 1; og:image/JSON-LD bài blog vẫn dùng
+    `og-default.png` (không đổi). `public/images/blog/ai-weekly-cover.svg` **giữ lại** (version v1 của bài đã đăng + fixture test
+    còn tham chiếu — xoá sẽ làm rollback về v1 vi phạm I-7), không dùng cho bài mới.
+    Bài đã đăng `ai-weekly-2026-w42` (vi + en) sửa theo quy tắc này ở cả file seed lẫn DB (cover = ảnh tin 1; version mới qua
+    write-path `updateEntry` có `--expected-version`, backup DB trước, revalidate `post`); body bài không đổi.
   - *Lịch (4.4.0 — CR-036):* bài thứ 7 mang số ISO week của chính tuần đó (thứ 2 → CN, giờ VN); `date` frontmatter = ngày
     chạy; mỗi tuần tối đa 1 bài, bài các tuần cũ không đổi.
   - *Thu thập:* `tools/ai-news/` (vendor `last30days` MIT + script in-house): 4 topic `--days 7` + GitHub trending 7 ngày
@@ -319,8 +339,8 @@ _(cập nhật 2026-10-13: thêm **domain phụ** `ntasolution.vn` (+ `www`) ph�
     Bài vi + en chèn ảnh dưới tiêu đề tin bằng component MDX `NewsImage` (`/uploads/<sha256>.<ext>` → `next/image`; src/kích
     thước/alt sai → không ra ảnh; `ArticleImage` không đổi), alt = tiêu đề tin theo locale + ghi nguồn ảnh: dòng nhỏ
     ngay dưới mỗi ảnh "Ảnh: <tên miền>" (vi) / "Image: <domain>" (en) **và** 1 câu chú thích cuối bài (ảnh minh hoạ thuộc về
-    trang nguồn của từng tin); **không hotlink**. Tin không lấy được ảnh → chỉ text; lỗi ảnh không làm fail bài. Ảnh bìa giữ
-    SVG cố định. Tắt khẩn cấp: biến `AI_NEWS_IMAGES=off` → bài chỉ text như trước CR-035. Bản quyền og:image: user **chấp nhận rủi ro** (2026-10-15); runbook `docs/runbook/ai-news.md` có cách gỡ 1 ảnh
+    trang nguồn của từng tin); **không hotlink**. Tin không lấy được ảnh → chỉ text; lỗi ảnh không làm fail bài. ~~Ảnh bìa giữ
+    SVG cố định.~~ Ảnh bìa: xem *Tên + ảnh thẻ* (4.6.0 — CR-038). Tắt khẩn cấp: biến `AI_NEWS_IMAGES=off` → bài chỉ text như trước CR-035. Bản quyền og:image: user **chấp nhận rủi ro** (2026-10-15); runbook `docs/runbook/ai-news.md` có cách gỡ 1 ảnh
     khi bị yêu cầu.
   - *Guard trước khi đăng:* mọi URL trong bài phải có trong `.clean.md`; số tin trong khoảng cho phép; frontmatter
     (`slug/title/date/category/excerpt/cover`) + độ dài hợp lệ; `npm run build` PASS. Bất kỳ bước FAIL → không commit,
@@ -343,7 +363,8 @@ _(cập nhật 2026-10-13: thêm **domain phụ** `ntasolution.vn` (+ `www`) ph�
     (vd `rollback --dry-run`) bằng lỗi usage, không chạm DB.
   - Không duyệt tay (user chốt 2026-10-14, đã được báo rủi ro AI bịa chi tiết). — nguồn: change `spec/changes/2026-10-14-weekly-ai-news-digest.md`
     + `spec/changes/2026-10-15-ai-news-write-db.md` (CR-034, BUG sau cutover DB)
-    + `spec/changes/2026-10-15-ai-news-item-images.md` (CR-035, ADDITIVE ảnh từng tin).
+    + `spec/changes/2026-10-15-ai-news-item-images.md` (CR-035, ADDITIVE ảnh từng tin)
+    + `spec/changes/2026-10-15-ai-news-naming-images.md` (CR-038, MODIFY tên theo ngày + ảnh thẻ + nhãn "Tin mới" + breadcrumb pill).
 - `[cần xác nhận]` blog là static file hay cần CMS (Open Question — `docs/BRD.md:177`)
 
 ### Module 8 — Liên hệ

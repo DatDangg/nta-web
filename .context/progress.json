@@ -2,12 +2,12 @@
   "mode": "feature",
   "activeWorkItem": {
     "type": "feature",
-    "slug": "contact-form-google-sheet",
-    "phaseTask": "phase-1-task-02",
-    "step": "done",
-    "status": "done",
-    "journal": ".context/runs/feature-contact-form-google-sheet-phase-1-task-02.md",
-    "note": "CR-037 done 2026-10-15 — spec 4.5.0 / scope v55; push ab8b786; E2E prod vi+en 200 ok. Telegram tạm chưa bật (user tự thêm Script Properties sau)."
+    "slug": "ai-news-naming-images",
+    "phaseTask": "phase-1",
+    "step": "phase_plan_checkpoint",
+    "status": "awaiting",
+    "journal": ".context/runs/feature-ai-news-naming-images-phase-1-task-01.md",
+    "note": "CR-038 — spec 4.6.0 / scope v56; chờ user duyệt phase plan (3 task) + chốt cách sửa w42 trong DB (Q1)"
   },
   "features": [
     {
@@ -1407,6 +1407,44 @@
         "round": 2,
         "report": ".context/review-reports/feature-contact-form-google-sheet-spec-validation.md"
       }
+    },
+    {
+      "slug": "ai-news-naming-images",
+      "cr": "CR-038",
+      "status": "planning",
+      "changeFile": "spec/changes/2026-10-15-ai-news-naming-images.md",
+      "classification": "MODIFY",
+      "risk": "MEDIUM",
+      "phases": [
+        {
+          "phase": 1,
+          "tasks": [
+            {
+              "task": "phase-1-task-01",
+              "title": "Nhãn Tin mới/Latest + breadcrumb chi tiết tin kiểu pill",
+              "status": "pending"
+            },
+            {
+              "task": "phase-1-task-02",
+              "title": "Generator tên theo ngày + cover ảnh tin đầu tiên có ảnh (fallback webp)",
+              "status": "pending"
+            },
+            {
+              "task": "phase-1-task-03",
+              "title": "Sửa bài ai-weekly-2026-w42 (file seed + DB prod)",
+              "status": "pending"
+            }
+          ]
+        }
+      ],
+      "specRefs": [
+        "R-09c",
+        "R-09a",
+        "R-09"
+      ],
+      "updatedAt": "2026-10-15",
+      "specVersion": "4.6.0",
+      "scopeVersion": 56
     }
   ],
   "bugs": [
