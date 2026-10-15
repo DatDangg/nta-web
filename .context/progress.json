@@ -3,11 +3,11 @@
   "activeWorkItem": {
     "type": "feature",
     "slug": "ai-news-cron-saturday",
-    "phaseTask": "phase-1-task-01",
-    "step": "closeout",
-    "status": "in_progress",
+    "phaseTask": "phase-1",
+    "step": "done",
+    "status": "done",
     "journal": ".context/runs/feature-ai-news-cron-saturday-phase-1-task-01.md",
-    "note": "CR-036 phase-1-task-01 reviewer FAST PASS r1 — commit task rồi close-out."
+    "note": "CR-036 done 2026-10-15 — spec 4.4.0 / scope v54. Theo dõi lượt cron thứ 7 17/10 (skip) và 24/10 (w43)."
   },
   "features": [
     {
@@ -1328,8 +1328,8 @@
     {
       "slug": "ai-news-cron-saturday",
       "cr": "CR-036",
-      "status": "in_progress",
-      "changeFile": "spec/changes/2026-10-15-ai-news-cron-saturday.md",
+      "status": "done",
+      "changeFile": "spec/changes/archive/2026-10-15-ai-news-cron-saturday.md",
       "classification": "MODIFY",
       "risk": "LOW",
       "phases": [
@@ -1345,11 +1345,15 @@
                 "level": "FAST",
                 "round": 1,
                 "report": ".context/review-reports/feature-ai-news-cron-saturday-phase-1-task-01-round-1-review.md"
-              }
+              },
+              "commit": "e12dbc2"
             }
           ]
         }
-      ]
+      ],
+      "specVersion": "4.4.0",
+      "scopeVersion": 54,
+      "doneAt": "2026-10-15"
     }
   ],
   "bugs": [

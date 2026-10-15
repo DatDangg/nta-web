@@ -1,7 +1,7 @@
 ---
 id: ai-news-cron-saturday
 type: feature
-status: in_progress
+status: done
 created: 2026-10-15
 ---
 
@@ -16,9 +16,9 @@ Giờ chạy: **08:00 thứ 7 giờ VN** (user chốt 15/10) → `cron: '0 1 * *
 - Không áp dụng (feature).
 
 ## Acceptance (bắt buộc)
-- [ ] `ai-news.yml` chạy tự động 08:00 thứ 7 giờ VN (`0 1 * * 6` UTC), không còn lịch thứ 2; `workflow_dispatch` giữ nguyên.
-- [ ] Slug bài vẫn theo ISO week giờ VN (`ai-weekly-<năm>-w<tuần>`), mỗi tuần tối đa 1 bài; không đổi bài các tuần cũ.
-- [ ] Spec R-09c, runbook `docs/runbook/ai-news.md` (dòng lịch chạy) và comment trong workflow ghi đúng lịch mới.
+- [x] `ai-news.yml` chạy tự động 08:00 thứ 7 giờ VN (`0 1 * * 6` UTC), không còn lịch thứ 2; `workflow_dispatch` giữ nguyên.
+- [x] Slug bài vẫn theo ISO week giờ VN (`ai-weekly-<năm>-w<tuần>`), mỗi tuần tối đa 1 bài; không đổi bài các tuần cũ.
+- [x] Spec R-09c, runbook `docs/runbook/ai-news.md` (dòng lịch chạy) và comment trong workflow ghi đúng lịch mới.
 
 ## Ghi chú
 - Slug tính theo ISO week (thứ 2 → CN) ở `tools/ai-news/generate.py` `week_info`. Thứ 7 vẫn thuộc tuần ISO hiện tại → bài thứ 7 là bản tin của chính tuần đó (trước đây thứ 2 đăng bài mang số tuần mới).
