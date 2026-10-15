@@ -52,4 +52,39 @@ Body, slug, date, category **không đổi**.
 - Lệnh DB lỗi `ContentConflictError` (expected-version lệch) → `show` lại lấy version mới, không ép ghi.
 
 ## Verification summary
-_(builder điền)_
+- **Phương án Q1 = A** (user chốt): KHÔNG đụng `content-ops.yml`; user tự chạy lệnh DB trên VPS theo runbook. Builder không chạy gì lên DB thật.
+- **File seed** `src/content/blog/{vi,en}/ai-weekly-2026-w42.mdx` dòng 3/6/7: title/excerpt/cover đúng bảng "Giá trị đích"; slug/date/category/body không đổi
+  (`git diff` chỉ 3 dòng/locale). Chuỗi đối chiếu tay với `format_post_date` + `_frontmatter` (`tools/ai-news/generate.py:190-209`):
+  vi `15/10/2026`, en `15 Oct 2026` (`MONTH_ABBR_EN[9]`), item_count = 12 (12 heading `## ` mỗi locale); máy local không có Python nên không gọi
+  được hàm trực tiếp — format đơn giản, khớp từng ký tự với bảng của task. Cover = `src` của `<NewsImage>` đầu tiên (`:14` cả vi + en) = logic
+  `images[min(images)]` (`generate.py:245`).
+- **Fixture** `tools/db/fixtures/blog/{vi,en}/ai-weekly-2026-w42.mdx` **giữ nguyên**: là bản v1 (date `2026-10-14`, cover SVG, tên tuần cũ) dùng làm
+  dữ liệu test của `tools/db/publish-post.test.ts:32` — không đại diện bản hiện hành; scope task cấm sửa.
+- **Runbook** `docs/runbook/ai-news.md` §9 "Sửa tiêu đề / ảnh thẻ bài đã đăng — Sửa bài w42 (CR-038)": env tạm (`read -rs`, như db.md §1b) → backup
+  `ops-cr038-<UTC>` → `show` vi/en ra file + lấy version top-level → `record.json` sinh bằng `node` trong image `nta-web-tools` (`--network none`,
+  `--entrypoint node`; image không có jq) = `{"data": {...data cũ, title, excerpt, cover}}` (không gửi `body` → giữ nguyên; dừng nếu bản ghi xoá mềm;
+  in cũ → mới + danh sách field giữ nguyên) → `update --file - --expected-version N --actor --note --confirm-prod` → `revalidate --collection post`
+  → `history` → curl 4 URL (200, tiêu đề mới, hash ảnh thẻ trên /blog, /en/blog) → rollback `--to N --expected-version N+1 --confirm-prod` (rollback
+  không nhận `--actor`, `COMMAND_SCOPED_FLAGS` `content-cli.ts`) → dọn env/workdir → Content ops `parity` sau khi seed lên main.
+  Hai `record.json` được sinh tự động từ data thật lúc chạy (thay cho file mẫu tay — tránh mất field). Script merge + `sed` lấy version đã chạy thử
+  local trên JSON giả lập `JSON.stringify(entry, null, 2)` (có key `version` lồng trong data → không bị bắt nhầm): PASS.
+- `npm test`: 195 tests, 192 pass, 2 skip (cần `TEST_DATABASE_URL`), **1 fail có sẵn** `tools/db/content-rules.test.ts` (thiếu `public/uploads` local —
+  9 đường dẫn `/uploads` y như trước; cover mới trùng ảnh tin 1 đã có trong body → không thêm phần tử mới). Không fail mới.
+- `npm run typecheck`: PASS. `npm run lint`: PASS (0 error, 1 warning `no-img-element` có sẵn, không thuộc task).
+- `npm run build`: **Blocked (môi trường)** — `Failed to load native binding` khi load `next.config.ts`, cùng lỗi đã ghi ở task-02; không liên quan diff.
+- **Round 2 (sửa theo review round 1 STRICT FAIL — chỉ `docs/runbook/ai-news.md` §9, seed giữ nguyên):**
+  - M1: §9 tách thành khối 0–7 đánh số + ghi rõ "dán/chạy TỪNG KHỐI MỘT, không dán cả loạt"; secret gom 1 dòng
+    `read -rsp 'POSTGRES_PASSWORD: ' PW; echo; read -rsp 'REVALIDATE_SECRET: ' RS; echo; printf … > "$ENVF"; unset PW RS`
+    (dán 1 dòng → `read` đọc từ terminal, không nuốt code); mọi `cli` không đọc file (`show`, `revalidate`, `history`, `rollback`) + `git log`,
+    `docker exec`, `build` đều có `</dev/null`; `update` vẫn đọc `record.json` qua `<`.
+  - M2: khối 3 `backup.sh … && BACKUP_OK=1` (`deploy/db/backup.sh` `set -eu`, exit ≠ 0 khi lỗi/trùng tên); khối 6 cổng chặn
+    `[ "$BACKUP_OK" = 1 ] && is_num "$VI_N" && is_num "$EN_N" && [ -s vi.record.json ] && [ -s en.record.json ]` → mới `update` vi `&&` en; không đạt
+    → in lý do, không ghi. Rollback: bỏ dòng locale chưa ghi; shell đã đóng → chạy lại khối 0–2 + gán tay `VI_N/EN_N` đã ghi giấy.
+  - L1: `ENVF` nằm trong `$WORK`; `trap 'shred -u "$ENVF"; rm -rf "$WORK"' EXIT HUP TERM` (không bẫy INT để Ctrl-C không xoá giữa chừng) +
+    nhắc "dừng ở bước nào cũng chạy dòng Dọn" (Dọn gỡ trap).
+  - L2: khối 2 in `docker image inspect -f {{.Created}} nta-web-tools:latest` + `git log -1`; tuỳ chọn
+    `docker compose --env-file "$ENVF" --profile tools build nta-tools` (y như bước "Build nta-tools" của `content-ops.yml:89` / `ai-news.yml:177`;
+    cần `--env-file` vì compose nội suy `${POSTGRES_PASSWORD:?}`).
+  - Kiểm: trích toàn bộ khối `sh` §9 → `bash -n` PASS; mô phỏng cổng chặn 5 ca (OK / backup=0 / VI_N rỗng / VI_N "3a" / record rỗng) → chỉ ca OK ghi.
+    Không chạy gì lên DB. Không chạy lại npm test/typecheck/lint (diff round 2 chỉ là doc).
+- **Còn mở:** bước DB prod (acceptance 2–3) chờ user chạy runbook §9 trên VPS + smoke. Task chỉ đóng khi user báo đã chạy OK.

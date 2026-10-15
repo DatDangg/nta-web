@@ -164,3 +164,147 @@ Chạy trên VPS qua `nta-tools` (`docker compose run --rm --no-deps -T nta-tool
    trình duyệt / proxy / CDN đã tải ảnh vẫn giữ bản cache tới 1 năm — **ngoài tầm kiểm soát** của server; nêu rõ khi phản hồi yêu cầu gỡ.
 6. **Sửa file seed trong git** `src/content/blog/{vi,en}/<slug>.mdx` (bỏ cùng khối ảnh như bước 2) qua commit thường — để đường lùi
    `CONTENT_SOURCE=file` / import-seed không đưa ảnh trở lại.
+
+## 9. Sửa tiêu đề / ảnh thẻ bài đã đăng — Sửa bài w42 (CR-038)
+
+Bài `ai-weekly-2026-w42` (đăng 15/10/2026, trước CR-038) mang tên cũ "tuần 42/2026" + cover SVG chung. File seed đã sửa qua commit
+(title/excerpt theo ngày, cover = ảnh tin 1); **web prod đọc DB** nên phải cập nhật 2 bản ghi `post/{vi,en}/ai-weekly-2026-w42` bằng tay
+(workflow `publish-post` là insert-only, không ghi đè). Giá trị đích (R-09c 4.6.0, `date` = `2026-10-15`, 12 tin, cover chung vi + en):
+
+| Locale | title | excerpt |
+|---|---|---|
+| vi | `Bản tin AI tuần ngày 15/10/2026` | `12 điểm tin AI đáng chú ý trong bản tin ngày 15/10/2026, kèm link nguồn gốc.` |
+| en | `AI Weekly Digest — 15 Oct 2026` | `12 notable AI news items in the digest of 15 Oct 2026, with links to the original sources.` |
+
+cover = `/uploads/9b72253a979b1d87c03bca8a2abf5bac9cef4557356eca763f36a544dba8fc51.jpg` (asset đã có trong DB từ lúc đăng bài — I-7 PASS).
+
+`update` thay **TOÀN BỘ** `data` → JSON phải giữ đủ mọi field cũ (slug, date, category, …); chỉ gửi `data`, **không** gửi `body`
+→ body giữ nguyên. Để tránh gõ tay JSON, đoạn dưới lấy `data` hiện tại từ `show` và trộn 3 field mới bằng `node` trong image
+`nta-web-tools` (đã có trên VPS, chạy `--network none`, không cần secret).
+
+**Cách chạy:** `bash` **trên VPS**, tất cả khối trong **cùng 1 shell** (biến dùng chung). **Dán/chạy TỪNG KHỐI MỘT**, đọc output rồi mới sang
+khối sau — **không dán cả loạt** (lệnh `read`/`docker` sẽ nuốt các dòng dán sau nó). Mọi lệnh `cli` không đọc file đều có `</dev/null`
+để docker không lấy mất phần đã dán. Thoát shell giữa chừng → `trap` ở khối 0 tự xoá env tạm + thư mục làm việc; dù vậy **dừng ở bước
+nào cũng chạy dòng Dọn** ở cuối mục này.
+
+**Khối 0 — thư mục làm việc + tự dọn:**
+
+```sh
+cd /opt/actions-runner-nta-web/_work/nta-web/nta-web
+umask 077
+WORK="$(mktemp -d /root/nta-cr038.XXXXXX)"; ENVF="$WORK/compose.env"
+trap 'shred -u "$ENVF" 2>/dev/null; rm -rf "$WORK"' EXIT HUP TERM
+```
+
+**Khối 1 — secret cho compose** (như db.md §1b; **1 dòng duy nhất**, dán rồi Enter, gõ/dán từng secret khi thấy prompt — không hiện,
+không vào history):
+
+```sh
+read -rsp 'POSTGRES_PASSWORD: ' PW; echo; read -rsp 'REVALIDATE_SECRET: ' RS; echo; printf 'POSTGRES_PASSWORD=%s\nREVALIDATE_SECRET=%s\n' "$PW" "$RS" > "$ENVF"; unset PW RS
+```
+
+**Khối 2 — biến + hàm:**
+
+```sh
+cli() { docker compose --env-file "$ENVF" run --rm --no-deps -T nta-tools tools/db/content-cli.ts "$@"; }
+is_num() { case "$1" in ''|*[!0-9]*) return 1 ;; esac; }
+SLUG=ai-weekly-2026-w42
+COVER=/uploads/9b72253a979b1d87c03bca8a2abf5bac9cef4557356eca763f36a544dba8fc51.jpg
+ACTOR="ops:${SUDO_USER:-$(whoami)}"
+NOTE="CR-038 tên theo ngày + cover ảnh tin 1"
+docker image inspect -f 'image tools: {{.Created}}' nta-web-tools:latest; git log -1 --format='repo: %cI %h' </dev/null
+```
+
+Tuỳ chọn — image tools cũ hơn commit `main` ở trên (image build lần cuối bởi workflow ai-news / content-ops) → build lại y như workflow
+(`.github/workflows/content-ops.yml` bước "Build nta-tools"):
+
+```sh
+docker compose --env-file "$ENVF" --profile tools build nta-tools </dev/null
+```
+
+**Khối 3 — backup trước khi ghi** (`backup.sh` exit ≠ 0 khi lỗi / trùng tên):
+
+```sh
+BACKUP_OK=0
+docker exec nta-db-backup /scripts/backup.sh "ops-cr038-$(date -u +%Y%m%dT%H%M%SZ)" </dev/null && BACKUP_OK=1
+echo "BACKUP_OK=$BACKUP_OK"          # 0 → DỪNG, xử lý lỗi backup trước; KHÔNG sang khối 6.
+```
+
+**Khối 4 — lấy bản hiện tại (data + version) của 2 locale:**
+
+```sh
+rm -f "$WORK/vi.record.json" "$WORK/en.record.json"   # chạy lại khối 4 → buộc chạy lại khối 5, không ghi record cũ
+cli show "post/vi/$SLUG" </dev/null > "$WORK/vi.show.json"
+cli show "post/en/$SLUG" </dev/null > "$WORK/en.show.json"
+VI_N=$(sed -n 's/^  "version": \([0-9][0-9]*\),*$/\1/p' "$WORK/vi.show.json")
+EN_N=$(sed -n 's/^  "version": \([0-9][0-9]*\),*$/\1/p' "$WORK/en.show.json")
+echo "vi v$VI_N · en v$EN_N"          # GHI RA GIẤY 2 số này (đường rollback). Rỗng → show lỗi, DỪNG.
+```
+
+**Khối 5 — `record.json` = `{"data": data cũ + title/excerpt/cover mới}`**, in cũ → mới để soát mắt (bản ghi xoá mềm → lỗi, file rỗng):
+
+```sh
+merge() {  # $1 locale, $2 title, $3 excerpt
+  docker run --rm -i --network none --entrypoint node nta-web-tools:latest -e '
+    const [title, excerpt, cover] = process.argv.slice(1);
+    let raw = "";
+    process.stdin.on("data", (c) => (raw += c)).on("end", () => {
+      const entry = JSON.parse(raw);
+      if (entry.deletedAt) throw new Error("bản ghi đang xoá mềm — DỪNG");
+      const next = { ...entry.data, title, excerpt, cover };
+      for (const k of ["title", "excerpt", "cover"]) console.error(`${k}: ${entry.data[k]}\n   -> ${next[k]}`);
+      console.error(`giữ nguyên: ${Object.keys(entry.data).filter((k) => !["title", "excerpt", "cover"].includes(k)).join(", ")}`);
+      process.stdout.write(JSON.stringify({ data: next }));
+    });' "$2" "$3" "$COVER" < "$WORK/$1.show.json" > "$WORK/$1.record.json"
+}
+merge vi "Bản tin AI tuần ngày 15/10/2026" "12 điểm tin AI đáng chú ý trong bản tin ngày 15/10/2026, kèm link nguồn gốc."
+merge en "AI Weekly Digest — 15 Oct 2026" "12 notable AI news items in the digest of 15 Oct 2026, with links to the original sources."
+```
+
+**Khối 6 — ghi, có cổng chặn** (optimistic lock theo version vừa đọc). Chỉ ghi khi backup OK + `VI_N`/`EN_N` là số + 2 `record.json`
+không rỗng; không đạt → in lý do, **không** ghi gì. Conflict (`ContentConflictError`) → chạy lại từ khối 4, không ép ghi:
+
+```sh
+if [ "$BACKUP_OK" = 1 ] && is_num "$VI_N" && is_num "$EN_N" \
+   && [ -s "$WORK/vi.record.json" ] && [ -s "$WORK/en.record.json" ]; then
+  cli update "post/vi/$SLUG" --file - --expected-version "$VI_N" --actor "$ACTOR" --note "$NOTE" --confirm-prod < "$WORK/vi.record.json" \
+  && cli update "post/en/$SLUG" --file - --expected-version "$EN_N" --actor "$ACTOR" --note "$NOTE" --confirm-prod < "$WORK/en.record.json"
+else
+  echo "CỔNG CHẶN: backup=$BACKUP_OK vi='$VI_N' en='$EN_N' hoặc record.json rỗng — KHÔNG ghi. Sửa nguyên nhân rồi chạy lại từ khối 3."
+fi
+```
+
+**Khối 7 — revalidate + kiểm DB:**
+
+```sh
+cli revalidate --collection post </dev/null
+cli history "post/vi/$SLUG" </dev/null; cli history "post/en/$SLUG" </dev/null   # dòng mới: v$((VI_N+1)) / v$((EN_N+1)) update $ACTOR — CR-038 …
+```
+
+Kiểm web (trên VPS qua port `HOST_PORT`, mặc định 3005; hoặc mở trình duyệt `https://ntavietnam.tech`):
+
+```sh
+for p in /blog /en/blog "/blog/$SLUG" "/en/blog/$SLUG"; do
+  printf '%s ' "$p"; curl -s -o /dev/null -w '%{http_code}\n' "http://127.0.0.1:3005$p"   # 200 cả 4
+done
+curl -s "http://127.0.0.1:3005/blog/$SLUG"    | grep -c 'Bản tin AI tuần ngày 15/10/2026'   # ≥ 1
+curl -s "http://127.0.0.1:3005/en/blog/$SLUG" | grep -c 'AI Weekly Digest — 15 Oct 2026'    # ≥ 1
+curl -s http://127.0.0.1:3005/blog    | grep -c 9b72253a979b1d87c03bca8a2abf5bac9cef4557356eca763f36a544dba8fc51   # ≥ 1 (ảnh thẻ mới)
+curl -s http://127.0.0.1:3005/en/blog | grep -c 9b72253a979b1d87c03bca8a2abf5bac9cef4557356eca763f36a544dba8fc51   # ≥ 1
+```
+
+**Sai → rollback** (về đúng version đọc ở khối 4 — cover SVG v1 vẫn còn trong `public/`, nên rollback qua được I-7), rồi revalidate.
+Locale nào chưa được ghi (vd en dừng vì vi conflict) thì bỏ dòng của locale đó. Shell đã đóng → chạy lại khối 0–2 và gán tay
+`VI_N=…; EN_N=…` theo số đã ghi ra giấy:
+
+```sh
+cli rollback "post/vi/$SLUG" --to "$VI_N" --expected-version "$((VI_N+1))" --note "rollback CR-038" --confirm-prod </dev/null
+cli rollback "post/en/$SLUG" --to "$EN_N" --expected-version "$((EN_N+1))" --note "rollback CR-038" --confirm-prod </dev/null
+cli revalidate --collection post </dev/null
+```
+
+**Dọn** (luôn chạy, dừng ở bước nào cũng vậy — kể cả sau rollback): `shred -u "$ENVF" 2>/dev/null; rm -rf "$WORK"; trap - EXIT HUP TERM`.
+Sau khi commit file seed lên `main`: Actions → **Content ops** → `parity` — không còn lệch `post/{vi,en}/ai-weekly-2026-w42`.
+
+Dùng lại cho bài khác: đổi `SLUG`, `COVER` và 2 dòng `merge` (title/excerpt sinh đúng format bằng `format_post_date` / `_frontmatter`
+trong `tools/ai-news/generate.py`); sửa cả file seed `src/content/blog/{vi,en}/<slug>.mdx` qua commit thường.
