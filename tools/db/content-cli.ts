@@ -7,9 +7,12 @@
 //   npm run db:cli -- revalidate --collection post [--slug x] | --all   (P3-T03: gọi POST /api/revalidate, không cần DATABASE_URL)
 //   npm run db:cli -- upload <file> [--alt-vi "..."] [--alt-en "..."] [--confirm-prod]   (P3-T05: lưu ảnh vào UPLOAD_DIR + bản ghi asset)
 //     URL endpoint từ REVALIDATE_URL (vd http://127.0.0.1:3005/api/revalidate), secret từ REVALIDATE_SECRET.
-//   npm run db:cli -- publish-post <slug> [--dry-run] [--actor workflow:ai-news] [--note "..."] [--confirm-prod]   (CR-034)
+//   npm run db:cli -- publish-post <slug> [--dry-run] [--images-dir <dir>] [--actor workflow:ai-news] [--note "..."] [--confirm-prod]   (CR-034)
 //     Đăng src/content/blog/{vi,en}/<slug>.mdx vào DB — CHỈ chèn; bản đã có (kể cả xoá mềm) → exists. Mỗi locale in 1 dòng
 //     "publish-post post/<locale>/<slug> status=missing|exists|created" (workflow ai-news grep status=missing để quyết định backup).
+//     --images-dir (CR-035): thư mục <sha256>.<ext> + manifest.json (tools/ai-news/generate.py). Ảnh /uploads/* bài còn thiếu chưa có
+//     asset → kiểm (manifest, không symlink, magic bytes ≤ 5 MB, sha256 == tên) rồi lưu vào UPLOAD_DIR + asset TRƯỚC khi chèn bài.
+//     In "publish-post image /uploads/<x> status=missing|exists" (dry-run) hoặc created|reused|restored (ghi). Thiếu ảnh → exit 1, 0 ghi.
 //   npm run db:cli -- create <collection/locale/slug> --file <path|-> [--actor <a>] [--note "..."] [--confirm-prod]   (CR-030)
 //   npm run db:cli -- update <id | collection/locale/slug> --file <path|-> --expected-version <N> [--actor] [--note] [--confirm-prod]
 //   npm run db:cli -- delete <id | collection/locale/slug> --expected-version <N> [--confirm-public-url-change] [--actor] [--note] [--confirm-prod]
@@ -58,6 +61,7 @@ const OPTIONS = {
   actor: { type: "string" },
   file: { type: "string" },
   "confirm-public-url-change": { type: "boolean" },
+  "images-dir": { type: "string" },
 } as const;
 
 type CliValues = ReturnType<typeof parseArgs<{ options: typeof OPTIONS; allowPositionals: true }>>["values"];
@@ -211,13 +215,16 @@ async function runUpload(db: Database, file: string | undefined, values: CliValu
 
 async function runPublishPost(db: Database, slug: string | undefined, values: CliValues): Promise<void> {
   if (!slug) throw new UsageError("thiếu <slug>");
-  const results = await publishPost(db, {
+  const { posts, images, warnings } = await publishPost(db, {
     slug,
     dryRun: values["dry-run"] === true,
     actor: values.actor ?? PUBLISH_POST_ACTOR,
     note: values.note ?? defaultPublishNote(slug, process.env.GITHUB_RUN_ID),
+    imagesDir: values["images-dir"],
   });
-  for (const result of results) {
+  for (const warning of warnings) console.warn(`[cảnh báo] ${warning}`);
+  for (const image of images) console.log(`publish-post image ${image.path} status=${image.status}`);
+  for (const result of posts) {
     for (const warning of result.warnings) console.warn(`[cảnh báo] ${result.key}: ${warning}`);
     console.log(`publish-post ${result.key} status=${result.status}`);
   }
@@ -265,6 +272,7 @@ const COMMAND_SCOPED_FLAGS: Partial<Record<keyof CliValues, readonly string[]>> 
   to: ["rollback"],
   file: ["create", "update"],
   "confirm-public-url-change": ["delete"],
+  "images-dir": ["publish-post"],
 };
 
 function assertFlagsSupported(command: string | undefined, values: CliValues): void {

@@ -44,6 +44,18 @@ describe("content-cli — cờ theo lệnh", () => {
     assert.equal(status, 1);
     assert.match(stderr, /không tìm thấy file/);
   });
+
+  it("--images-dir ngoài publish-post bị từ chối (CR-035)", () => {
+    const { status, stderr } = runCli(["upload", "a.png", "--images-dir", "/in"]);
+    assert.equal(status, 2);
+    assert.match(stderr, /--images-dir chỉ dùng với: publish-post/);
+  });
+
+  it("publish-post nhận --images-dir (qua bước kiểm cờ, tới bước đọc file)", () => {
+    const { status, stderr } = runCli(["publish-post", "ai-weekly-2099-w01", "--dry-run", "--images-dir", "/in"]);
+    assert.equal(status, 1);
+    assert.match(stderr, /không tìm thấy file/);
+  });
 });
 
 describe("content-cli — create/update/delete (CR-030)", () => {

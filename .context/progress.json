@@ -3,11 +3,11 @@
   "activeWorkItem": {
     "type": "feature",
     "slug": "ai-news-item-images",
-    "phaseTask": "phase-1-task-02",
+    "phaseTask": "phase-1-task-03",
     "step": "builder",
     "status": "running",
     "journal": ".context/runs/feature-ai-news-item-images-phase-1-task-01.md",
-    "note": "CR-035 T01 PASS (review r2 STRICT) committed. T02 builder — cancel sẽ redo bước này. Không push trước khi T04 xong."
+    "note": "CR-035 T01, T02 PASS committed. T03 builder — cancel sẽ redo bước này. Không push trước khi T04 xong."
   },
   "features": [
     {

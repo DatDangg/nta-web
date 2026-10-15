@@ -270,7 +270,17 @@ npm run db:cli -- rollback solution/vi/crm --to 1 --expected-version 2 [--note "
 npm run db:cli -- create post/vi/<slug> --file record.json [--actor bot:<id>] [--note "..."]      # --file - = stdin
 npm run db:cli -- update solution/vi/crm --file record.json --expected-version 3 [--actor] [--note]   # thay TOÀN BỘ data
 npm run db:cli -- delete post/vi/<slug> --expected-version 2 [--confirm-public-url-change] [--actor] [--note]
+# CR-034/035 (workflow ai-news): CHỈ chèn bài src/content/blog/{vi,en}/<slug>.mdx; bản đã có (kể cả xoá mềm) → exists
+npm run db:cli -- publish-post <slug> [--dry-run] [--images-dir <dir>] [--actor workflow:ai-news] [--note "..."]
 ```
+
+- `publish-post --images-dir <dir>` (CR-035): `<dir>` = output `--images-out` của `tools/ai-news/generate.py` (`<sha256>.<ext>` + `manifest.json`).
+  Chỉ nhận ảnh **có trong manifest** (slug manifest phải khớp; không quét thư mục), file thường (không symlink), tên `<sha256>.<jpg|png|webp>`,
+  magic bytes ≤ 5 MB (`inspectImage`), sha256 thật == tên file. Ảnh `/uploads/*` mà bài còn thiếu chưa có asset sống → lưu bằng `saveImage`
+  (UPLOAD_DIR + asset version, actor = `--actor`, alt vi/en + `originalName` = host nguồn từ manifest) **trước** khi chèn bài; trùng hash
+  asset đã xoá mềm → `restored`. In thêm `publish-post image /uploads/<x> status=missing|exists` (dry-run) / `created|reused|restored` (ghi).
+  Bài tham chiếu ảnh chưa có asset mà thiếu `--images-dir` / thiếu file / file sai → exit 1, không ghi ảnh hay locale nào.
+  Chèn bài lỗi sau khi đã lưu ảnh → asset mồ côi vô hại (chạy lại → `reused`). Docker: mount `<dir>` read-only, vd `-v <dir>:/in:ro … --images-dir /in`.
 Lệnh ghi không tự revalidate — chạy `revalidate` sau đó. Trên VPS: `docker compose run --rm --no-deps -T nta-tools tools/db/content-cli.ts …` (`docs/content-bot/10-server.md` §5).
 
 - `--expected-version` = version hiện tại thấy ở `history`; lệch (vừa có người sửa) → `conflict`, exit 1, không ghi gì — xem lại history rồi chạy lại.

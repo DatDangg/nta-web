@@ -45,4 +45,19 @@ Q1 chấp nhận rủi ro bản quyền + runbook gỡ ảnh · Q2 "Ảnh: <tên
 Như task-01 (3 attempt → `architecture_review_needed`; interrupted ≠ failed; append `.context/error-memory.md`).
 
 ## Verification summary
-_(chưa làm — chờ user duyệt plan)_
+Builder 2026-10-15 (attempt 1):
+- Code: `tools/db/publish-post.ts` (`imagesDir`/`uploadDir`; `readManifest` + `prepareImage` + `planImages`; trả `{ posts, images, warnings }`),
+  `tools/db/content-cli.ts` (cờ `--images-dir` chỉ cho `publish-post`, in dòng `publish-post image … status=…`, header). Không đổi schema,
+  `saveImage`, `inspectImage`, `content-repo`, lệnh `upload`.
+- I-7 dry-run: lỗi `I-7 ảnh upload không có trong DB: <path>` của `findNewEntryProblems` được gỡ CHỈ cho ảnh đã qua `prepareImage`
+  (manifest + lstat không symlink + ≤ 5 MB + `inspectImage` + đuôi khớp + sha256 == tên). Ghi: `saveImage` từng ảnh → `createEntry` vi, en
+  (createEntry tự kiểm lại I-7 trong transaction).
+- Test: `tools/db/publish-post.test.ts` (+ describe `--images-dir (Postgres)`, 7 ca; test cũ chỉ đổi `results` → `{ posts: results }`),
+  `tools/db/content-cli.test.ts` (+2 ca cờ).
+- `TEST_DATABASE_URL=<postgres:16-alpine tạm, 127.0.0.1:55433> node --import tsx --test tools/db/publish-post.test.ts tools/db/content-cli.test.ts`
+  → 34 tests, 33 pass, 0 fail, 1 skip (symlink: Windows EPERM không tạo được symlink).
+- `npm test` (kèm TEST_DATABASE_URL trên) → 148 tests, 146 pass, 0 fail, 2 skip. `npm run typecheck` PASS. `npm run lint` PASS (0 error,
+  1 warning có sẵn `src/components/mdx/index.tsx` — ngoài scope).
+- Chưa chạy: `docker compose --profile tools build nta-tools` + dry-run trong container trên DB dev (không có DB dev nta) → để reviewer/T04.
+- Residual risk: nhánh từ chối symlink chưa chạy được trên Windows (chạy được trên Linux/CI có TEST_DATABASE_URL); dòng image
+  `status=missing` cũng khớp grep `' status=missing$'` của `ai-news.yml` — vô hại vì ảnh chỉ được kiểm cho locale missing (T04 xem lại grep).
