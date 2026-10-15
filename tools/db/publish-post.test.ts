@@ -28,7 +28,8 @@ import { defaultPublishNote, publishPost, type PublishPostOptions } from "./publ
 import { isProductionDatabaseUrl } from "./seed-db";
 
 const SLUG = "ai-weekly-2026-w42";
-const REAL_BLOG_DIR = path.resolve("src/content/blog");
+// Bản chụp bài w42 (không ảnh) — tách khỏi src/content/blog vì bài thật có thể bị sinh lại (CR-035 chạy lại w42).
+const REAL_BLOG_DIR = path.resolve("tools/db/fixtures/blog");
 const actor = "workflow:ai-news";
 const note = defaultPublishNote(SLUG, "123456");
 
