@@ -7,9 +7,12 @@ deterministic (LLM KHÔNG viết MDX) → ghi src/content/blog/{vi,en}/ai-weekly
 
 Subcommand:
   check     in slug tuần này + status new|skip (bài đã tồn tại → skip).
-  generate  gọi LLM rồi render (cần env OPENCODE_API_KEY).
-  render    render từ file JSON có sẵn (fixture / kiểm thử offline), cùng guard.
+  generate  gọi LLM rồi render (cần env OPENCODE_API_KEY). Có --items-out <file>: chỉ LLM + guard,
+            ghi JSON tin đã qua guard (status=items), KHÔNG ghi MDX — bước ảnh chạy sau ở `render`.
+  render    render từ file JSON có sẵn, cùng guard; KHÔNG cần key. Có --images-out <dir> (và không
+            --no-images): lấy og:image từng tin qua og_image.py (guard SSRF) → ghi ảnh + manifest.json.
 
+Ảnh chỉ fetch ở `render` (process không có OPENCODE_API_KEY — CR-035 W3a). Lỗi ảnh không làm fail bài.
 Bất kỳ guard nào FAIL → exit 1, KHÔNG ghi file. Python stdlib only.
 """
 import argparse
@@ -22,6 +25,8 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
+
+import og_image
 
 VN_TZ = datetime.timezone(datetime.timedelta(hours=7))
 LOCALES = ("vi", "en")
@@ -50,6 +55,11 @@ FOOTNOTE = {
     "vi": "Bản tin được tổng hợp tự động từ các nguồn công khai.",
     "en": "This digest is compiled automatically from public sources.",
 }
+IMAGE_FOOTNOTE = {
+    "vi": "Ảnh minh hoạ thuộc về trang nguồn của từng tin.",
+    "en": "Images belong to each item's source page.",
+}
+IMAGE_CREDIT = {"vi": "Ảnh", "en": "Image"}
 
 
 class GuardError(Exception):
@@ -188,7 +198,33 @@ def _frontmatter(locale: str, week: dict, item_count: int) -> str:
     return "---\n" + "\n".join(f"{key}: {json.dumps(value, ensure_ascii=False)}" for key, value in fields) + "\n---\n"
 
 
-def render_post(locale: str, week: dict, items: list) -> str:
+_JSX_ATTR_ESCAPES = {"&": "&amp;", '"': "&quot;", "<": "&lt;", ">": "&gt;", "{": "&#123;", "}": "&#125;"}
+
+
+def escape_jsx_attr(text: str) -> str:
+    """Giá trị thuộc tính JSX trong ngoặc kép: ký tự phá cú pháp → character reference, không xuống dòng."""
+    return "".join(_JSX_ATTR_ESCAPES.get(ch, ch) for ch in re.sub(r"\s+", " ", text).strip())
+
+
+def source_host(url: str) -> str:
+    host = (urllib.parse.urlsplit(url).hostname or "").lower()
+    return host[4:] if host.startswith("www.") else host
+
+
+def upload_path(image) -> str:
+    """Trùng tuyệt đối tên storeImageFile (src/lib/uploads/image-file.ts) tạo: /uploads/<sha256>.<ext>."""
+    return f"/uploads/{image.sha256}.{image.ext}"
+
+
+def _image_lines(locale: str, item: dict, image) -> list:
+    alt = escape_jsx_attr(item["title_" + locale])
+    tag = f'<NewsImage src="{upload_path(image)}" alt="{alt}" width="{image.width}" height="{image.height}" />'
+    return [tag, "", f"*{IMAGE_CREDIT[locale]}: {escape_mdx(source_host(item['url']))}*", ""]
+
+
+def render_post(locale: str, week: dict, items: list, images=None) -> str:
+    """images: {index 1-based: og_image.Image}; không có ảnh → output y như trước CR-035."""
+    images = images or {}
     intro = {
         "vi": "Điểm lại các tin AI nổi bật trong tuần qua. Mỗi mục tóm tắt ngắn từ tiêu đề tin, kèm link để đọc bản gốc.",
         "en": "A roundup of notable AI news from the past week. Each item is a short summary based on the headline, with a link to the original.",
@@ -196,15 +232,17 @@ def render_post(locale: str, week: dict, items: list) -> str:
     source_label = {"vi": "Nguồn", "en": "Source"}[locale]
     parts = [_frontmatter(locale, week, len(items)), intro, ""]
     for index, item in enumerate(items, start=1):
+        parts += [f"## {index}. {escape_mdx(item['title_' + locale])}", ""]
+        if index in images:
+            parts += _image_lines(locale, item, images[index])
         parts += [
-            f"## {index}. {escape_mdx(item['title_' + locale])}",
-            "",
             escape_mdx(item["summary_" + locale]),
             "",
             f"{source_label}: [{escape_mdx(item['source'])}]({safe_link_url(item['url'])})",
             "",
         ]
-    parts += ["---", "", f"*{FOOTNOTE[locale]}*", ""]
+    footnote = f"{FOOTNOTE[locale]} {IMAGE_FOOTNOTE[locale]}" if images else FOOTNOTE[locale]
+    parts += ["---", "", f"*{footnote}*", ""]
     return "\n".join(parts)
 
 
@@ -306,12 +344,58 @@ def resolve_now(value) -> datetime.datetime:
     return datetime.datetime.now(VN_TZ)
 
 
-def publish(clean_text: str, raw_items, content_dir: str, week: dict) -> list:
-    """Guard toàn bộ trước, chỉ ghi file khi cả 2 bài đều hợp lệ."""
+def guarded_items(clean_text: str, raw_items, week: dict) -> list:
+    """Guard tin + thử render bài không ảnh (fail sớm trước khi tốn công lấy ảnh)."""
     items = validate_items(raw_items, extract_urls(clean_text))
-    posts = {locale: render_post(locale, week, items) for locale in LOCALES}
-    for text in posts.values():
-        validate_post(text)
+    for locale in LOCALES:
+        validate_post(render_post(locale, week, items))
+    return items
+
+
+def write_items(items: list, items_out: str) -> None:
+    os.makedirs(os.path.dirname(os.path.abspath(items_out)), exist_ok=True)
+    with open(items_out, "w", encoding="utf-8", newline="\n") as fh:
+        json.dump({"items": items}, fh, ensure_ascii=False, indent=1)
+        fh.write("\n")
+
+
+def write_images(images_out: str, slug: str, items: list, images: dict) -> None:
+    """<sha256>.<ext> + manifest.json cho publish-post --images-dir (task-02). Manifest luôn ghi, kể cả 0 ảnh."""
+    os.makedirs(images_out, exist_ok=True)
+    entries = []
+    for index, image in sorted(images.items()):
+        file_name = f"{image.sha256}.{image.ext}"
+        with open(os.path.join(images_out, file_name), "wb") as fh:
+            fh.write(image.data)
+        item = items[index - 1]
+        entries.append({"file": file_name, "sha256": image.sha256, "ext": image.ext, "width": image.width,
+                        "height": image.height, "bytes": len(image.data), "sourceHost": source_host(item["url"]),
+                        "alt": {locale: item["title_" + locale] for locale in LOCALES}})
+    with open(os.path.join(images_out, "manifest.json"), "w", encoding="utf-8", newline="\n") as fh:
+        json.dump({"slug": slug, "images": entries}, fh, ensure_ascii=False, indent=1)
+        fh.write("\n")
+
+
+def publish(clean_text: str, raw_items, content_dir: str, week: dict, images_out=None, fetcher=None) -> list:
+    """Guard toàn bộ trước, chỉ ghi file khi cả 2 bài đều hợp lệ. images_out=None → không fetch ảnh."""
+    items = guarded_items(clean_text, raw_items, week)
+    images = {}
+    if images_out:
+        images = og_image.collect_images([item["url"] for item in items], fetcher or og_image.Fetcher(), log)
+        log(f"ảnh: {len(images)}/{len(items)} tin có ảnh")
+    posts = {locale: render_post(locale, week, items, images) for locale in LOCALES}
+    try:
+        for text in posts.values():
+            validate_post(text)
+    except GuardError as exc:
+        if not images:
+            raise
+        # Bản không ảnh đã qua guard ở guarded_items → ảnh không bao giờ làm fail bài.
+        log(f"ảnh bỏ toàn bài: {exc}")
+        images = {}
+        posts = {locale: render_post(locale, week, items) for locale in LOCALES}
+    if images_out:
+        write_images(images_out, week["slug"], items, images)
     written = []
     for locale, path in post_paths(content_dir, week["slug"]).items():
         os.makedirs(os.path.dirname(path), exist_ok=True)
@@ -335,14 +419,23 @@ def _load_items(args, clean_text: str):
     return parse_llm_json(call_llm(build_messages(clean_text), api_key, model, base_url))
 
 
-def main(argv=None) -> int:
+def main(argv=None, fetcher=None) -> int:
+    """fetcher: og_image.Fetcher tiêm cho test (mặc định mạng thật, chỉ dùng ở render --images-out)."""
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("command", choices=("check", "generate", "render"))
     parser.add_argument("--content-dir", default="src/content/blog")
     parser.add_argument("--clean", help="file .clean.md (generate/render)")
     parser.add_argument("--items-json", help="file JSON {items:[...]} (render)")
+    parser.add_argument("--items-out", help="generate: chỉ ghi JSON tin đã qua guard, không ghi MDX")
+    parser.add_argument("--images-out", help="render: thư mục ghi ảnh og:image + manifest.json")
+    parser.add_argument("--no-images", action="store_true", help="render: tắt lấy ảnh (offline / khẩn cấp)")
     parser.add_argument("--now", help="ISO datetime thay cho thời điểm hiện tại (kiểm thử)")
     args = parser.parse_args(argv)
+    if args.command != "generate" and args.items_out:
+        parser.error("--items-out chỉ dùng với generate")
+    if args.command != "render" and (args.images_out or args.no_images):
+        parser.error("--images-out/--no-images chỉ dùng với render (fetch ảnh không chạy cùng OPENCODE_API_KEY)")
+    images_out = None if args.no_images else args.images_out
 
     week = week_info(resolve_now(args.now))
     if already_published(args.content_dir, week["slug"]):
@@ -357,7 +450,13 @@ def main(argv=None) -> int:
     try:
         with open(args.clean, encoding="utf-8") as fh:
             clean_text = fh.read()
-        written = publish(clean_text, _load_items(args, clean_text), args.content_dir, week)
+        raw_items = _load_items(args, clean_text)
+        if args.items_out:
+            write_items(guarded_items(clean_text, raw_items, week), args.items_out)
+            log(f"Đã ghi {args.items_out}")
+            set_output(status="items", slug=week["slug"])
+            return 0
+        written = publish(clean_text, raw_items, args.content_dir, week, images_out, fetcher)
     except (GuardError, OSError, ValueError, urllib.error.URLError) as exc:
         log(f"FAIL: {exc}")
         return 1

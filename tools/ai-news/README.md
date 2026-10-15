@@ -11,6 +11,12 @@ last30days/scripts/ai-news-digest.sh   thu thập 4 topic + GitHub trending → 
 generate.py check                      slug tuần (ai-weekly-YYYY-wNN, giờ VN); bài đã có → skip
 generate.py generate --clean <file>    OpenCode Go → JSON tin → guard → render MDX vi + en
 generate.py render --clean <f> --items-json <f>   như generate nhưng đọc JSON có sẵn (test offline)
+generate.py generate … --items-out <f> chỉ LLM + guard → ghi JSON tin (có OPENCODE_API_KEY), không ghi MDX
+generate.py render … --images-out <dir>  (KHÔNG cần key) fetch og:image từng tin qua og_image.py (SSRF guard,
+                                       https/443, IP public, deadline 10 s/request, ảnh ≤2 MB JPEG/PNG/WebP
+                                       200..8192 px) → <sha256>.<ext> + manifest.json; MDX `<NewsImage …/>` +
+                                       dòng "Ảnh: <host>". `--no-images` = hành vi cũ. Lỗi ảnh không fail bài (CR-035)
+og_image.py / image_sniff.py           fetch ảnh có guard / nhận diện magic bytes + kích thước
 tests/                                 unittest stdlib + fixture
 ```
 

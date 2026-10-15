@@ -64,4 +64,19 @@ Q1 chấp nhận rủi ro bản quyền + runbook gỡ ảnh · Q2 "Ảnh: <tên
 Attempt 1 fail → `.agent/error-analyzer.md`, fix tối thiểu · Attempt 2 → so pattern đang chạy, kiểm lại assumption · Attempt 3 fail → `architecture_review_needed`, dừng. Interrupted ≠ failed attempt. Mỗi attempt fail append `.context/error-memory.md`.
 
 ## Verification summary
-_(chưa làm — chờ user duyệt plan)_
+_(builder, 2026-10-15 — chờ reviewer STRICT)_
+- **File:** mới `tools/ai-news/og_image.py` (guard URL/IP, `Fetcher` pin IP + redirect tay + deadline, parse meta, nhận diện ảnh, `collect_images` ngân sách 90 s + bỏ ảnh trùng); sửa `tools/ai-news/generate.py` (`generate --items-out`, `render --images-out/--no-images`, `<NewsImage …/>` + dòng nguồn + chú thích cuối bài, `write_images` + `manifest.json`); test mới `tools/ai-news/tests/test_og_image.py` (44 test, ảnh tổng hợp trong code — không thêm fixture nhị phân).
+- `docker run python:3.13-slim python -m unittest discover -s tools/ai-news/tests` → **70 test OK** (26 cũ + 44 mới). `python:3.12-slim` → **70 OK**; riêng `test_ai_news.py` → 26 OK.
+- Golden: `render` (không ảnh) bằng `generate.py` ở HEAD vs bản mới trên fixture → vi/en **byte-identical**.
+- MDX: bài có ảnh (alt chứa `"<>{}&*_` + `</NewsImage>`) compile bằng `@mdx-js/mdx` của repo → 2 lời gọi `_jsx(NewsImage, {src, alt, width, height})`, alt giải mã đúng chuỗi gốc, 0 thẻ `img` thô.
+- `npm run typecheck` / `npm run lint`: skip — task không đụng TS/JS.
+- Không fetch mạng thật (resolver/connection/clock giả); không chạy workflow.
+- Ghi chú triển khai: dùng `http.client.HTTPSConnection` (connect tới IP đã kiểm, SNI + verify cert theo hostname) thay `urllib` + `ProxyHandler({})` — `http.client` vốn không đọc proxy env, không gửi cookie/Authorization. Deadline 10 s tính cho cả chuỗi redirect của 1 lần lấy (trang hoặc ảnh), chặt hơn "mỗi hop". `sourceHost` bỏ tiền tố `www.`. Nếu bài có ảnh vượt guard độ dài → tự render lại không ảnh (không fail bài). `generate --items-out` in `status=items`.
+- Residual risk: URL og:image chứa khoảng trắng/ký tự điều khiển → `http.client` từ chối → tin không ảnh (chấp nhận); ảnh JPEG progressive/CMYK chỉ đọc header, không decode — nhất quán `image-file.ts`; chưa kiểm fetch thật (tuỳ chọn, máy dev có mạng).
+
+**Sửa sau review round 1 (FAIL — `.context/review-reports/feature-ai-news-item-images-phase-1-task-01-round-1-review.md`):**
+- MAJOR-1: mỗi hop chạy dưới watchdog `threading.Timer` (hết deadline → `shutdown(SHUT_RDWR)` socket, phủ connect + TLS + header + body; mọi kết quả sau khi watchdog nổ, kể cả EOF giả → `quá deadline`). `PinnedHTTPSConnection` gán `self.sock` trước `do_handshake()` (`do_handshake_on_connect=False`) để cắt được pha TLS. Body đọc bằng `read1(n)` (≤ 1 recv/lần) + kiểm deadline mỗi vòng. `FakeResponse.read` giờ ném lỗi (bắt buộc `read1`). Thêm 4 test socket thật 127.0.0.1 (`RealSocketDeadlineTest`, deadline 1 s): nhỏ giọt header / body Content-Length / body chunked → dừng < 2.5 s; server nhanh vẫn đọc đúng. Mutation: tắt watchdog → test header-drip treo 20 s và FAIL (test có giá trị).
+- MINOR-1: `resolve_public_ips` trả mọi IP đã kiểm (bỏ trùng); `_connect_any` thử lần lượt, không resolve lại; test IPv6 không tới được → IPv4, tất cả không tới được → `không kết nối được`.
+- MINOR-2: tách nhận diện ảnh sang `tools/ai-news/image_sniff.py` (79 dòng); `og_image.py` 299 dòng (re-export `Image`/`ImageSkip`/`inspect_image`).
+- MINOR-3: thêm note vào `phase-1-task-02.md` (chỉ lưu ảnh có trong manifest, không quét thư mục).
+- `docker run python:3.13-slim python -m unittest discover -s tools/ai-news/tests` → **76 OK** (26 cũ + 50 mới, 3.5 s); `python:3.12-slim` → **76 OK**.

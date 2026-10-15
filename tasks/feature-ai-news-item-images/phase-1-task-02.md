@@ -18,6 +18,7 @@ Q1 chấp nhận rủi ro bản quyền + runbook gỡ ảnh · Q2 "Ảnh: <tên
 ## Scope
 1. `publish-post <slug> --images-dir <dir>` (tuỳ chọn; không có → hành vi CR-034 y nguyên):
    - Đọc `<dir>/manifest.json` (slug phải khớp); chỉ nhận file tên khớp `UPLOAD_FILE_NAME_PATTERN`, không symlink, không `..`.
+   - _Note từ T01 review round 1 (MINOR-3):_ chỉ lưu ảnh **có trong `manifest.json`** (và bài tham chiếu) — KHÔNG glob/quét thư mục; `--images-out` có thể còn file `<sha>.<ext>` từ lần chạy trước.
    - Với mỗi `/uploads/<sha>.<ext>` mà body bài **missing** tham chiếu: asset còn sống trong DB → OK; chưa có → phải có file trong `<dir>`, `inspectImage` PASS, sha256 thật của bytes == tên file, ext khớp → "sẽ upload". File thừa → bỏ qua (cảnh báo).
    - **Dry-run**: validate như trên, I-7 coi ảnh "sẽ upload" là hợp lệ; không ghi gì; in thêm `publish-post image /uploads/<x> status=missing|exists`.
    - **Ghi** (sau backup ở workflow): upload ảnh cần (actor = `--actor`, alt vi/en từ manifest, `originalName` = host nguồn) → rồi `createEntry` vi, en như CR-034. Upload xong mà chèn bài lỗi → asset mồ côi vô hại (chạy lại → reused).
