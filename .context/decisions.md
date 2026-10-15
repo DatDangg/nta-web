@@ -188,3 +188,15 @@
   `{path, sha256, mime, bytes, width, height, alt, originalName?}`; `checkRecord` kiểm path khớp slug/đuôi/mime + giới hạn; I-1 (cặp vi/en)
   bỏ qua cho asset. Trùng hash với asset còn sống → dùng lại (không version mới); với asset đã xoá mềm → `rollbackEntry` khôi phục
   (version mới). Xoá mềm asset không xoá file vật lý.
+
+## 2026-10-15 — CR-037 P1-T01: form Liên hệ → Apps Script Web App ghi Google Sheet + báo Telegram (R-13a)
+- **Đích forward = Apps Script Web App** gắn với Sheet có sẵn của user (`tools/contact-sheet/Code.gs`, user dán + triển khai
+  *Thực thi: Tôi*, *Truy cập: Bất kỳ ai*). Không dùng Sheets API + service account từ web: khỏi quản lý khoá JSON trên VPS, khỏi thêm lib.
+- **Xác thực bằng token trong body JSON** (`token`, so với Script Property `SECRET_TOKEN`, so sánh không short-circuit) — Web App
+  không đọc được header tuỳ ý. Sai/thiếu → `unauthorized`, không ghi, không Telegram. Web giữ secret ở GitHub Secrets
+  (`CONTACT_FORM_TARGET`, `CONTACT_FORM_TOKEN`) → `deploy.yml` → compose; timeout web 10 s (user duyệt).
+- **Telegram gửi từ Apps Script** (bot content CR-030, `sendMessage` text thuần, không `parse_mode`), SAU khi ghi Sheet, lỗi bị nuốt:
+  Sheet là nguồn sự thật, kết quả `ok` chỉ phụ thuộc việc ghi Sheet. Không gọi `getUpdates`/`setWebhook` (tránh tranh update với bot polling).
+  Log lỗi chỉ mã cố định — exception `UrlFetchApp` có thể chứa URL kèm token bot.
+- **Validate phía script lỏng hơn web** (G5): chỉ kiểu + độ dài ≤ 5000 + bắt buộc name/email/message + locale vi|en; `need` lạ ghi nguyên key.
+  Chống formula injection bằng tiền tố `'`. Bảng nhãn nhu cầu nhân bản trong script, test kiểm đúng tập key `CONTACT_NEEDS`.

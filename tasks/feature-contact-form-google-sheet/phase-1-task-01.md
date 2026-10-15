@@ -60,4 +60,24 @@ Response (sau 302 → `script.googleusercontent.com`): JSON `{"status":"ok"}` kh
 - 3 attempt FAIL → `architecture_review_needed`, dừng báo user.
 
 ## Verification summary
-_(builder điền)_
+_(builder, attempt 1 — 2026-10-15)_
+- **Files mới:** `tools/contact-sheet/Code.gs`, `tools/contact-sheet/code.test.ts`, `tools/contact-sheet/README.md` · **sửa:** `.context/decisions.md` (append mục CR-037 P1-T01).
+- **Lệnh + kết quả:**
+  - `node --import tsx --test tools/contact-sheet/code.test.ts` → 41/41 PASS (vm nạp `Code.gs` = bằng chứng cú pháp; `node --check` không áp dụng cho `.gs`).
+  - `npm test` → 178 test, 177 pass, 1 fail **ngoài scope, đã có từ trước**: `tools/db/content-rules.test.ts` "toàn bộ nội dung file hiện tại… ảnh tồn tại" — nội dung tham chiếu 9 ảnh `/uploads/<sha>.{jpg,png}` không có trên máy local (ảnh do bot/DB lưu, không nằm trong repo). Không import gì từ `tools/contact-sheet/`.
+  - `npm run lint` → 0 error (1 warning có sẵn `src/components/mdx/index.tsx` `no-img-element`). ESLint không quét `.gs`.
+  - `npm run typecheck` → PASS (tsc có quét `code.test.ts`; không quét `.gs`).
+  - `grep -n "getUpdates\|setWebhook\|parse_mode" tools/contact-sheet/Code.gs` → 0 kết quả.
+- **Phủ acceptance:** token sai/thiếu/sai kiểu/property rỗng/thiếu → `unauthorized`, 0 append, 0 fetch; token đúng → 1 dòng 8 cột (giờ VN `yyyy-MM-dd HH:mm:ss`), 1 fetch `sendMessage`, không `parse_mode`; header tự tạo khi sheet rỗng; `SHEET_NAME` sai → `server_error`, không Telegram; formula injection `= + - @ \t \r` → tiền tố `'`; `phone/company/need` null và `''` nhận; `need` lạ ghi nguyên key; Telegram throw (message chứa token bot) / 403 / thiếu cấu hình → vẫn ghi + `ok`, `console.error` chỉ mã cố định; text ≤ 4000; `doGet` → `method_not_allowed`; `NEED_LABELS_` đúng tập key `CONTACT_NEEDS`.
+- **Không có URL/token thật** trong repo (README dùng placeholder `<URL /exec>`, `<SECRET_TOKEN>`).
+- **Residual risk:**
+  - Chưa chạy trên Google thật (stub `SpreadsheetApp`/`LockService`/`UrlFetchApp`/`Utilities`) — E2E (302 → JSON, cấp quyền, ghi Sheet, tin Telegram) ở close-out sau khi user triển khai.
+  - Bảng nhãn nhu cầu nhân bản trong script: test chỉ khoá **tập key**, không khoá chữ nhãn với `vi.json` (đổi chữ nhãn web không làm test đỏ).
+  - Lock timeout / lỗi Sheet → `server_error` (web cần hiển thị lỗi, task-02).
+
+_(Builder attempt 2 — 2026-10-15, sửa reviewer round 1 HIGH-1)_
+- **Root cause:** `appendRow` parse chuỗi như gõ tay; `sanitizeCell_` chỉ thêm `'` khi khớp ký tự công thức → SĐT `0901234567` mất số 0, `1/2`/`2026-10-15`/`TRUE`/`1e5` thành ngày/số/boolean.
+- **Fix:** `sanitizeCell_` thêm đúng 1 tiền tố `'` cho **mọi** chuỗi không rỗng (gộp chống công thức + ép văn bản, không nhân đôi `'`); `buildRow_` chỉ áp cho cột 2–8, cột thời gian giữ nguyên.
+- **Files sửa:** `tools/contact-sheet/Code.gs`, `tools/contact-sheet/code.test.ts` (cập nhật kỳ vọng dòng đủ cột + `need` lạ; thêm test SĐT `'0901234567`, `2026-10-15`/`TRUE`/`1/2`/`1e5`, rỗng/null, cột thời gian không `'`), `tools/contact-sheet/README.md` (mục e: LOW-1 lock 10 s = timeout web → có thể dòng trùng; mục g: mô tả lại tiền tố `'`).
+- **Lệnh + kết quả:** `node --import tsx --test tools/contact-sheet/code.test.ts` → 47/47 PASS · `npm run lint` → 0 error (1 warning có sẵn `src/components/mdx/index.tsx`) · `npm run typecheck` → PASS.
+- **Residual risk:** hành vi `'` trên Sheet thật (ô hiển thị không có `'`, giá trị là text) chỉ kiểm được ở E2E sau khi user triển khai.
