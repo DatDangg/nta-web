@@ -5,10 +5,10 @@ workItem: feature/content-database
 phaseTask: phase-4-task-01
 step: cutover
 agent: change-request
-status: awaiting
+status: done
 attempt: 1
 interrupted: false
-updatedAt: 2026-10-14T00:00:00+07:00
+updatedAt: 2026-10-15T00:00:00+07:00
 filesTouched: [see commit]
 filesNew: [.context/runs/feature-content-database-phase-4-task-01.md]
 evidence:
@@ -16,7 +16,7 @@ evidence:
   reportPath: .context/review-reports/feature-content-database-phase-4-task-01-round-1-review.md
   round: 1
   verdict: PASS   # phần A; F2-F6 sửa inline, F1 chờ user trước B9
-next: "CHỜ USER B10 sau 20:00 UTC (03:00 VN): daily-*.dump mới + restore-check.sh (+ migrate-on-restore.sh) → close-out P4-T01 → P5-T01"
+next: "P4-T01 done. Tiếp: P5-T02 (bỏ cờ, chờ ổn định ≥1 ngày + user đồng ý) → close-out CR-031 (spec-validator phase 4/5, spec-publish, archive)"
 loopSignal: none
 approvals: [{gate: phase_done, phase: 3, at: 2026-10-14, ok: true}, {gate: F1_smoke_edit, choice: a-local-evidence+revalidate-all, at: 2026-10-14, ok: true, by: "user giao agent chọn"}, {gate: B3_import_prod, at: 2026-10-14, ok: true}]
 batchQueue: []
@@ -36,3 +36,5 @@ batchQueue: []
 - 2026-10-14 smoke public (agent, chỉ GET): sitemap 52/52 URL 200; 3 redirect oc-eo 301 đúng; slug sai vi 404; /en/*/nope 500 (CR-032 có sẵn); /api/health 200; /_next/image ảnh upload 200; /en x-nextjs-cache HIT; TTFB từ máy agent (VN→VPS) ~0.21–0.25 s cả vi lẫn en (mạng chi phối, vi ≈ en).
 - 2026-10-14 B7 revalidate-all OK {revalidated:[content]}. B8 upload-smoke lần 2: reused, /uploads 200 + /_next/image 200 sau recreate container (backup rotate xoá pre-migrate cũ — đã biết, residual). Recrawl sitemap sau B7.
 - 2026-10-14 B9 user (SSH): docker logs nta-web grep [content-shape]|[content-store] = 0; docker stop nta-db → /, /en, /blog vẫn 200 → docker start nta-db.
+- 2026-10-14 B10a user (SSH ls): daily-20261014T200000Z.dump 179013B + uploads-20261014T200000Z.tar.gz 88082B lúc 20:00 UTC (cùng size với pre-migrate gần nhất). Còn B10b: restore-check.sh + migrate-on-restore.sh.
+- 2026-10-15 B10b user (SSH): restore-check daily-20261014T200000Z.dump → nta_restore_check 137/137/2 = nta_web, dropdb; migrate-on-restore → không có migration chờ, PASS, xoá DB tạm. P4-T01 done.

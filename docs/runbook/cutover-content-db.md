@@ -2,7 +2,7 @@
 
 > **Trạng thái: ĐÃ CUTOVER 14/10/2026.** Variable `CONTENT_SOURCE=db` + Deploy `490f8e1` lúc 16:38 UTC. Đạt B1–B9
 > (import 136/136 + parity PASS, upload-smoke 2 lần, sitemap 52/52 200, DB dừng ngắn trang cache vẫn 200, log 0 dòng `[content-store]`/`[content-shape]`) —
-> bằng chứng `tasks/feature-content-database/phase-4-task-01.md`. **Còn B10** (user: `daily-*.dump` đầu tiên + diễn tập restore).
+> bằng chứng `tasks/feature-content-database/phase-4-task-01.md`. B10 PASS 15/10 (`daily-20261014T200000Z.dump` restore vào DB tạm khớp 137/137, migrate-on-restore PASS).
 > Sửa/rollback nội dung trên prod qua bot dời sang CR-030. Runbook giữ lại cho: lùi về `file` (§4), chạy lại parity/revalidate/backup qua Content ops (§0), dựng lại môi trường.
 > Bỏ hẳn cờ: `tasks/feature-content-database/phase-5-task-02.md` (chờ ổn định ≥ 1 ngày + user đồng ý). Backup ops dùng chung vòng giữ với backup trước-deploy → CR-033 (`db.md` §3).
 

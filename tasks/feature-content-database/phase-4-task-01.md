@@ -65,5 +65,5 @@
 - [x] B7 (14/10 16:4x UTC) revalidate-all → `{"status":"ok","revalidated":["content"]}`
 - [x] B8 (14/10 16:49 UTC) upload-smoke lần 2 → reused (file 16:34, owner 1001) + /uploads 200 + /_next/image 200 sau khi nta-web recreate ở B6
 - [x] B9 (14/10) smoke: sitemap 52/52 200 (trước + sau B7), 301 oc-eo đúng, 404 vi, CR-032 500 có sẵn, health 200, next/image upload 200; log nta-web 0 dòng [content-shape]/[content-store] (user SSH); DB dừng ngắn → /, /en, /blog vẫn 200 (user); TTFB từ ngoài ~0.21–0.25 s vi ≈ en; sửa/rollback trên prod dời CR-030 (F1 phương án a)
-- [ ] B10 (user, SSH đọc-only) có daily-*.dump + restore-check.sh vào DB tạm + migrate-on-restore.sh
+- [x] B10 (15/10, user SSH) `daily-20261014T200000Z.dump` (179013 B) + `uploads-20261014T200000Z.tar.gz` lúc 20:00 UTC; restore-check → `nta_restore_check` khớp `nta_web` (content_entries 137 / content_versions 137 / migrations 2 — 137 = 136 import + bài ai-weekly-2026-w42 của CR-034), đã dropdb; migrate-on-restore → gate "không có migration chờ", migrate OK, `== KẾT QUẢ: PASS`, đã xoá DB tạm
 - Lùi: Variable CONTENT_SOURCE=file + Deploy; DB giữ nguyên; mọi sửa trong DB biến mất khỏi web khi lùi.

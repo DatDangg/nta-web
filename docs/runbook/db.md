@@ -8,7 +8,7 @@
 **Trạng thái (14/10/2026):** prod **đã cutover** — web đọc nội dung từ `nta-db` từ 16:38 UTC (Variable `CONTENT_SOURCE=db`;
 import 136/136, parity PASS — `docs/runbook/cutover-content-db.md`, `tasks/feature-content-database/phase-4-task-01.md`).
 Từ đây **DB là nguồn sự thật** của nội dung: mất DB = mất mọi chỉnh sửa sau cutover → backup/restore dưới đây là thao tác sống còn.
-Còn chờ: B10 (user kiểm `daily-*.dump` đầu tiên + diễn tập restore §4a + §5b).
+B10 PASS 15/10/2026: `daily-20261014T200000Z.dump` restore vào DB tạm (§4a) khớp `nta_web` 137/137, chạy thử migration (§5b) PASS.
 
 ## 0. Thành phần
 
