@@ -2,12 +2,12 @@
   "mode": "feature",
   "activeWorkItem": {
     "type": "feature",
-    "slug": "ai-news-item-images",
-    "phaseTask": "phase-1",
-    "step": "done",
-    "status": "done",
-    "journal": ".context/runs/feature-ai-news-item-images-phase-1-task-01.md",
-    "note": "CR-035 done 2026-10-15 — spec 4.3.0 / scope v53. Theo dõi lượt cron ai-news kế tiếp (ảnh tin)."
+    "slug": "ai-news-cron-saturday",
+    "phaseTask": "phase-1-task-01",
+    "step": "plan",
+    "status": "awaiting_approval",
+    "journal": ".context/runs/feature-ai-news-cron-saturday-phase-1-task-01.md",
+    "note": "CR-036 MODIFY/LOW — cron 0 1 * * 6 (08:00 thứ 7 VN). Chờ user duyệt plan + spec delta MINOR 4.4.0."
   },
   "features": [
     {
@@ -1323,6 +1323,26 @@
         "G1: ảnh đã gỡ có thể restored khi og:image cùng sha256 xuất hiện lại (runbook §8 cảnh báo; cần CR chặn)",
         "Chưa chạy workflow thật — lượt cron có ảnh đầu tiên cần theo dõi",
         "Dòng nguồn ảnh chưa xem trực quan trên trình duyệt (375px)"
+      ]
+    },
+    {
+      "slug": "ai-news-cron-saturday",
+      "cr": "CR-036",
+      "status": "in_progress",
+      "changeFile": "spec/changes/2026-10-15-ai-news-cron-saturday.md",
+      "classification": "MODIFY",
+      "risk": "LOW",
+      "phases": [
+        {
+          "phase": 1,
+          "tasks": [
+            {
+              "task": "phase-1-task-01",
+              "title": "Đổi cron ai-news sang 08:00 thứ 7 VN + đồng bộ doc",
+              "status": "pending"
+            }
+          ]
+        }
       ]
     }
   ],
