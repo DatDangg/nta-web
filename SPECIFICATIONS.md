@@ -1,5 +1,5 @@
 ---
-spec_version: 4.4.0
+spec_version: 4.5.0
 updated_at: 2026-10-15
 ---
 
@@ -396,6 +396,26 @@ Base URL: dev `http://localhost:3000/api` · prod `https://ntavietnam.tech/api` 
   (name/email/message) vẫn gửi được.
   `[reverse-engineered from docs]` — nguồn: `docs/API_SPEC.md:40-61`
   - `[cần xác nhận]` rate-limit threshold (request/window) chưa doc nào định nghĩa — `docs/API_SPEC.md:60`
+- **R-13a** _(4.5.0 — CR-037, chốt OQ#4; hiệu lực khi phase 1 PASS + user deploy Web App)_: đích forward của R-13 là
+  **Google Apps Script Web App** gắn với Google Sheet có sẵn của NTA (script + hướng dẫn nằm trong repo, user tự deploy).
+  1. **Body thêm field tuỳ chọn `locale`** (`vi|en`): form `/contact`, `/en/contact` và form CTA rút gọn gửi theo locale trang;
+     thiếu → `vi`; có gửi mà sai → `400 errors.locale`.
+  2. Server POST JSON tới `CONTACT_FORM_TARGET` (URL Web App, server-only) gồm `token`, `submittedAt` (ISO 8601 lúc server nhận),
+     `locale`, `name`, `email`, `phone`, `company`, `need`, `message`. `token` = env server-only **`CONTACT_FORM_TOKEN`**
+     (Apps Script `doPost` không đọc được header → token đi trong body). Thiếu `CONTACT_FORM_TARGET` hoặc `CONTACT_FORM_TOKEN`,
+     hoặc tồn tại biến `NEXT_PUBLIC_*` cùng tên → coi như chưa cấu hình → `500 {status:"error",message}` (không gọi ra ngoài).
+     URL Web App và token **không** trả về client, không log, không vào bundle.
+  3. Web App trả `302` sang `script.googleusercontent.com` → server theo redirect và chỉ coi là thành công khi phản hồi cuối
+     `2xx` **và** JSON `{status:"ok"}`; mọi trường hợp khác (token sai, lỗi script, trang HTML lỗi, timeout) → `500` như hiện tại.
+  4. Apps Script so token với Script Property `SECRET_TOKEN` (sai/thiếu → `{status:"error"}`, **không** ghi Sheet, không Telegram);
+     hợp lệ → append **1 dòng** (khoá `LockService`) với cột: thời gian (giờ VN), ngôn ngữ, tên, email, SĐT, công ty, nhu cầu,
+     nội dung; ô bắt đầu bằng `= + - @`, tab hoặc CR bị vô hiệu hoá công thức (tiền tố `'`) (chống formula injection).
+  5. Sau khi ghi Sheet, script gửi **1 tin Telegram** (`sendMessage`, text thuần, không `parse_mode`) bằng bot content CR-030 tới
+     chat của user (Script Properties `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID`) gồm tên, email, SĐT, công ty, nhu cầu, nội dung,
+     ngôn ngữ. Telegram lỗi/timeout **không** làm hỏng việc ghi Sheet và **không** đổi kết quả `{status:"ok"}` trả web.
+     Script **không** gọi `getUpdates`/`setWebhook` (không xung đột bot đang chạy). Bí mật bot/chat/token chỉ ở Script Properties.
+  6. Rate-limit + honeypot + guard order R-18 giữ nguyên; honeypot có giá trị → không forward (không ghi Sheet, không Telegram).
+  Nguồn: `spec/changes/2026-10-15-contact-form-google-sheet.md` (CR-037, quyết định user 2026-10-15).
 - **R-14:** `GET /api/health` — `{status:"ok",timestamp}` cho health check / uptime (docker-vps).
   `[reverse-engineered from docs]` — nguồn: `docs/API_SPEC.md:63-67`
 - **R-15:** Không dựng `GET /api/posts` hoặc `GET /api/case-studies` trong v1; nội dung được render từ file tĩnh trong repo.
@@ -418,7 +438,7 @@ Base URL: dev `http://localhost:3000/api` · prod `https://ntavietnam.tech/api` 
   Phạm vi gồm cả **chữ giao diện** `src/i18n/messages/{vi,en}.json` (next-intl lấy messages từ DB) và **thông tin công ty**
   `company-info.ts` (vi + en) — user chốt 14/10/2026 (quyết định #9: bot sửa được mọi chữ trên web).
   Ảnh có sẵn `public/images` **giữ trong repo** (không chuyển); ảnh mới theo R-16d.
-  Form liên hệ **forward** qua email/API bên thứ ba, **không lưu DB** (giữ nguyên).
+  Form liên hệ **forward** qua email/API bên thứ ba, **không lưu DB** (giữ nguyên).  _(4.5.0 — CR-037: bên thứ ba = Google Sheet qua Apps Script Web App, R-13a.)_
   Hiệu năng/khả dụng: trang đã cache (route cache hoặc data cache) **không** truy vấn DB; ~~TTFB trang chủ (cache hit) không tệ hơn quá 20% so với trước~~
   → _(P3-T02, user chốt 14/10/2026)_ build image **không** cần DB nên trang vi (mặc định, `localePrefix: as-needed` → middleware rewrite) render theo request
   dựa trên data cache (Next 15.5 không cache ISR on-demand cho URL bị rewrite); TTFB đo local khi data cache hit **≤ 50 ms** (trước ~14 ms, sau ~35 ms);
@@ -446,8 +466,8 @@ Base URL: dev `http://localhost:3000/api` · prod `https://ntavietnam.tech/api` 
   `HIGH_RISK_MIGRATION` và **chỉ chạy khi user duyệt rõ**; cấm `drizzle-kit push`, reset DB, xoá/ghi đè dữ liệu bằng seed.
   Import seed ban đầu là thao tác **1 lần, chỉ chèn (không ghi đè/xoá)**, chạy sau backup + user xác nhận.
   Thay cho "verify staging" của migration HIGH_RISK: restore backup mới nhất vào DB tạm rồi chạy thử migration ở đó trước khi chạy prod.
-  - ⚠️ Conflict C2 (ghi nhận): `docs/BRD.md:52` ghi "lưu/forward" vs `docs/ERD.md:20-22` "chưa cần lưu DB"
-    — spec theo ERD (không lưu DB); phụ thuộc Open Question #4 (form gửi về đâu).
+  - ~~⚠️ Conflict C2 (ghi nhận): `docs/BRD.md:52` ghi "lưu/forward" vs `docs/ERD.md:20-22` "chưa cần lưu DB"
+    — spec theo ERD (không lưu DB); phụ thuộc Open Question #4 (form gửi về đâu).~~ Đã giải quyết 4.5.0 (CR-037): "lưu" = 1 dòng Google Sheet, web không lưu DB (R-13a).
 - Entity ở mức khái niệm (_trước 4.2.0_ là file nội dung; _từ 4.2.0_ là bản ghi trong DB — chi tiết `docs/ERD.md`): Solution, Product, CaseStudy, Post,
   ContactSubmission (không lưu) — `docs/ERD.md:26-34`
 
@@ -520,14 +540,14 @@ Base URL: dev `http://localhost:3000/api` · prod `https://ntavietnam.tech/api` 
 1. Logo NTA + brand color chính thức (`docs/BRD.md:173`) — hiện dùng palette neutral light tạm (`docs/BRD.md:166`).
 2. ~~Hotline / email / địa chỉ thật (`docs/BRD.md:174`)~~ — ĐÃ CHỐT 13/10/2026 (R-10 §2, CR-008).
 3. Danh sách sản phẩm & case study ưu tiên (`docs/BRD.md:175`).
-4. Form liên hệ gửi về đâu — email / CRM / Google Sheet (`docs/BRD.md:176`) — giải quyết Conflict C2.
+4. ~~Form liên hệ gửi về đâu — email / CRM / Google Sheet (`docs/BRD.md:176`)~~ — ĐÃ CHỐT 15/10/2026: Google Sheet qua Apps Script Web App + báo Telegram (R-13a, CR-037).
 5. Blog có cần CMS thật hay trang tĩnh (`docs/BRD.md:177`).
 6. Package manager + verify commands (`package_manager: none`, `.context/project-config.md:22`).
 
 ## Cross-doc conflicts (ghi nhận — chờ user resolve qua `/brainstorm`)
 
 - **C1 (MEDIUM):** bộ breakpoint authoritative — xem R-23. → hỏi user ở brainstorm checkpoint.
-- **C2 (MEDIUM):** form liên hệ "lưu" (BRD:52) vs "chỉ forward, không DB" (ERD:20-22) — phụ thuộc OQ#4.
+- ~~**C2 (MEDIUM):** form liên hệ "lưu" (BRD:52) vs "chỉ forward, không DB" (ERD:20-22)~~ — ĐÃ GIẢI QUYẾT (CR-037): "lưu" = 1 dòng trong Google Sheet; web vẫn không lưu DB (R-13a, R-16).
 - **C3 (LOW):** `BRIEF.md:50` stale (liệt domain/ngôn ngữ là "còn thiếu" trong khi `BRIEF.md:15-16` đã chốt).
 
 ---

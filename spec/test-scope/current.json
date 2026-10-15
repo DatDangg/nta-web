@@ -1,52 +1,82 @@
 {
-  "specVersion": "4.4.0",
-  "scopeVersion": 54,
-  "generatedAt": "2026-10-15T21:00:00+07:00",
+  "specVersion": "4.5.0",
+  "scopeVersion": 55,
+  "generatedAt": "2026-10-15T22:00:00+07:00",
   "trigger": "feature-update",
-  "workItem": "feature/ai-news-cron-saturday (CR-036 spec/changes/2026-10-15-ai-news-cron-saturday.md; task tasks/feature-ai-news-cron-saturday/phase-1-task-01.md; MODIFY, risk low; phát hành ở bước planning — hiệu lực khi task PASS)",
+  "workItem": "feature/contact-form-google-sheet (CR-037 spec/changes/2026-10-15-contact-form-google-sheet.md; tasks tasks/feature-contact-form-google-sheet/phase-1-task-01.md, phase-1-task-02.md; ADDITIVE, risk high; phát hành ở bước planning — hiệu lực khi phase 1 PASS + user deploy Web App + đặt secret)",
   "specRefs": [
-    "R-09c"
+    "R-13a",
+    "R-13",
+    "R-16",
+    "R-18"
   ],
   "changed": {
     "files": [
-      ".github/workflows/ai-news.yml — cron '0 1 * * 1' → '0 1 * * 6' (08:00 thứ 7 giờ VN); workflow_dispatch, concurrency, jobs giữ nguyên",
-      "docs/runbook/ai-news.md — lịch thứ 7 + hệ quả vận hành (17/10 skip w42, 24/10 sinh w43)",
-      "tools/ai-news/README.md — lịch thứ 7",
-      "docs/DESIGN.md — current-state lịch bản tin AI tuần",
-      "docs/content-bot/00-overview.md — lịch thứ 7",
-      "docs/content-bot/01-site-map.md — lịch thứ 7",
-      "docs/content-bot/10-server.md — lịch thứ 7"
+      "tools/contact-sheet/Code.gs — Apps Script doPost: kiểm token (SECRET_TOKEN), validate, appendRow 8 cột có LockService, chống formula injection, gửi Telegram sendMessage cô lập lỗi; doGet → method_not_allowed (task-01, file mới)",
+      "tools/contact-sheet/code.test.ts — test Code.gs qua node:vm với stub Apps Script services (task-01, file mới)",
+      "tools/contact-sheet/README.md — hướng dẫn dựng Sheet + Script Properties + deploy Web App + đặt secret web (task-01, file mới)",
+      "src/lib/api/contact-schema.ts — field tuỳ chọn locale (vi|en, mặc định vi, sai → errors.locale) (task-02)",
+      "src/lib/api/forward.ts — đọc CONTACT_FORM_TARGET + CONTACT_FORM_TOKEN, chặn NEXT_PUBLIC_*, body token/submittedAt/locale/field, redirect follow, thành công chỉ khi 2xx + {status:'ok'}, timeout 10 s (task-02)",
+      "src/lib/contact/useContactForm.ts — gửi locale theo useLocale() (dùng chung ContactForm + CTAForm) (task-02)",
+      "src/app/api/contact/route.ts — chỉ sửa nếu cần truyền thời điểm; guard order không đổi (task-02)",
+      "src/lib/api/forward.test.ts, src/lib/api/contact-schema.test.ts — test mới (task-02)",
+      ".env.local.example, docker-compose.yml, .github/workflows/deploy.yml — nối env server-only CONTACT_FORM_TOKEN (task-02)",
+      "docs/API_SPEC.md, docs/ERD.md, docs/runbook/deploy-vps.md, docs/BRD.md (OQ#4), docs/DESIGN.md (nếu có luồng form), .context/project-config.md — doc reconcile (task-02)",
+      "docs/runbook/db.md §1b — script env tạm cho compose gõ tay thêm CONTACT_FORM_TOKEN (spec-validation G1)",
+      "docs/content-bot/10-server.md — bảng env thêm CONTACT_FORM_TOKEN",
+      ".context/project-config.md — required env thêm CONTACT_FORM_TOKEN, bỏ ⚠️ OQ#4"
     ],
     "modules": [
-      "Pipeline bản tin AI tuần — lịch kích hoạt GitHub Actions (schedule)"
+      "API POST /api/contact — schema (locale) + forward tới Apps Script Web App",
+      "Form liên hệ client (useContactForm: ContactForm /contact, /en/contact + CTAForm trang chi tiết giải pháp)",
+      "Apps Script Web App ngoài repo runtime (tools/contact-sheet) — ghi Google Sheet + báo Telegram",
+      "Env/deploy wiring (compose + GitHub Actions deploy)"
     ]
   },
   "impact": {
     "direct": [
-      "on.schedule[0].cron của .github/workflows/ai-news.yml == '0 1 * * 6' (01:00 UTC thứ 7 = 08:00 thứ 7 giờ VN, UTC+7 không DST); không còn lịch thứ 2",
-      "workflow_dispatch vẫn có (chạy tay được)",
-      "Bài chạy thứ 7 có slug ai-weekly-YYYY-wNN theo ISO week giờ VN của chính tuần đó (thứ 2 → CN); date frontmatter = ngày chạy",
-      "Doc runbook/README/DESIGN/content-bot ghi đúng lịch thứ 7 (lịch thứ 2 chỉ còn trong ngữ cảnh lịch sử)"
+      "POST /api/contact: locale thiếu → 'vi'; 'en' → 'en'; 'fr'/số → 400 errors.locale; field cũ không đổi",
+      "Form /contact gửi locale 'vi', /en/contact gửi 'en'; form CTA ở /solutions/ai/[slug] và /solutions/enterprise/[slug] gửi đúng locale trang (vi + en)",
+      "forward: thiếu CONTACT_FORM_TARGET hoặc CONTACT_FORM_TOKEN, hoặc có NEXT_PUBLIC_CONTACT_FORM_TARGET/NEXT_PUBLIC_CONTACT_FORM_TOKEN → 500, 0 lần gọi fetch",
+      "forward: body JSON có token, submittedAt (ISO 8601), locale, name, email, phone|null, company|null, need|null, message; Content-Type application/json; redirect 'follow'",
+      "forward: 200 {status:'ok'} (sau 302) → API 200 thành công; 200 {status:'error'}, 200 HTML, 5xx, timeout → API 500 message chung",
+      "Message lỗi/response/log không chứa URL Web App hay token; CONTACT_FORM_TOKEN không có trong .next/static sau build",
+      "Apps Script: token sai/thiếu/SECRET_TOKEN rỗng → {status:'error',code:'unauthorized'}, 0 dòng, 0 Telegram; JSON hỏng → bad_request",
+      "Apps Script: token đúng → đúng 1 dòng 8 cột (thời gian giờ VN, ngôn ngữ, tên, email, SĐT, công ty, nhu cầu nhãn vi, nội dung) + header tự tạo khi sheet rỗng",
+      "Apps Script: ô bắt đầu '=', '+', '-', '@', tab, CR → có tiền tố \"'\" (chống formula injection)",
+      "Apps Script: 1 tin Telegram sendMessage text thuần (không parse_mode) đủ tên/email/SĐT/công ty/nhu cầu/nội dung/ngôn ngữ, không chứa token; Telegram ném lỗi/4xx → vẫn ghi dòng + trả ok; không gọi getUpdates/setWebhook/deleteWebhook",
+      "E2E thật sau khi user deploy: gửi form vi + en → 1 dòng mới trên Sheet + 1 tin Telegram; token web sai → form báo lỗi, không dòng"
     ],
     "dependents": [
-      "Dedupe tuần: tuần đã có bài (vd w42 chạy thứ 7 17/10) → check = skip, job publish-db vẫn chạy tự lành insert-only"
+      "ContactForm (/contact, /en/contact) và CTAForm (trang chi tiết giải pháp) — thông báo thành công/lỗi hiển thị như trước",
+      "Env wiring: .env.local.example, docker-compose.yml (CONTACT_FORM_TOKEN: ${CONTACT_FORM_TOKEN:-}), deploy.yml đọc secrets.CONTACT_FORM_TOKEN (không echo, không build arg)",
+      "Doc as-built: API_SPEC (locale + payload forward + điều kiện thành công), ERD (ContactSubmission → Google Sheet), runbook deploy-vps §4"
     ],
     "regression": [
-      "Test Python tools/ai-news (python -m unittest discover -s tools/ai-news/tests) PASS không đổi",
-      "Bài AI tuần các tuần cũ không đổi; mỗi tuần tối đa 1 bài",
-      "Concurrency/jobs digest + publish-db của ai-news.yml không đổi"
+      "Rate-limit POST /api/contact vẫn chặn khi vượt ngưỡng (429) trước validate",
+      "Honeypot có giá trị → 200 giả, KHÔNG forward (không ghi Sheet, không Telegram)",
+      "Guard order R-18 rateLimit → validate → honeypot → forward không đổi",
+      "Validate cũ name/email/phone/company/need/message giữ nguyên thông báo lỗi vi/en",
+      "Form tối giản (name/email/message) vẫn gửi được; CTA form rút gọn vẫn gửi được",
+      "GET /api/health không đổi; không có ghi DB cho contact (R-16)",
+      "npm test / lint / typecheck / build PASS",
+      "Lệnh docker compose gõ tay trên VPS theo docs/runbook/db.md §1b vẫn giữ CONTACT_FORM_TARGET + CONTACT_FORM_TOKEN (không tạo lại nta-web với token rỗng)"
     ]
   },
   "acceptance": [
-    "Cron '0 1 * * 6', không còn lịch thứ 2; workflow_dispatch giữ nguyên",
-    "Slug ISO week giờ VN, ≤ 1 bài/tuần; bài cũ không đổi",
-    "R-09c (spec 4.4.0), runbook, README tools, DESIGN, docs content-bot ghi đúng lịch mới",
-    "npm run lint + typecheck PASS (0 file web đổi)"
+    "/contact + /en/contact + CTA gửi locale đúng; API nhận locale tuỳ chọn, sai → 400",
+    "Forward gửi token trong body + submittedAt + locale; chỉ thành công khi JSON {status:'ok'} sau redirect",
+    "Thiếu env / Web App lỗi / timeout → 500 + message chung, không lộ URL/token ra client/log/bundle",
+    "Apps Script: token sai → không ghi, không Telegram; token đúng → 1 dòng 8 cột chống formula injection",
+    "Telegram lỗi không ảnh hưởng ghi Sheet / kết quả ok; text thuần, không lộ token",
+    "CONTACT_FORM_TOKEN nối qua .env.local.example, compose, deploy.yml; không có giá trị thật trong repo",
+    "README tools/contact-sheet đủ bước dựng/deploy/xoay token; doc as-built + BRD OQ#4 + project-config cập nhật"
   ],
-  "risk": "low",
+  "risk": "high",
   "notes": [
-    "Chỉ kiểm cron/lịch; không đổi route/UI/API/DB, không đổi generate.py",
-    "Lượt kiểm thật trên prod: thứ 7 17/10 (w42 skip), thứ 7 24/10 sinh ai-weekly-2026-w43",
-    "GitHub cron có thể trễ vài–vài chục phút lúc tải cao"
+    "Endpoint công khai nhận PII + secret token + gọi API bên thứ ba (Telegram bằng bot prod) → review STRICT",
+    "Apps Script không chạy được trong CI: unit test qua node:vm stub; E2E thật (Sheet + Telegram) chỉ sau khi user deploy Web App + đặt secret GitHub",
+    "Không test getUpdates trên bot đang polling; TELEGRAM_CHAT_ID lấy từ cấu hình bot",
+    "Timeout forward đề xuất 10 s (Apps Script cold start) — câu hỏi mở Q2 trong plan"
   ]
 }
