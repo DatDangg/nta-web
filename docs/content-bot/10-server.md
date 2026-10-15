@@ -29,7 +29,7 @@
 |---|---|---|
 | `ci.yml` | push / PR | typecheck + lint + build |
 | `deploy.yml` — "Deploy (VPS)" | **push `main`** hoặc chạy tay | Trên self-hosted runner label `nta-web`: `docker compose build` → `docker compose up -d --remove-orphans` → health check `127.0.0.1:3005/api/health` (12 lần × 3s) |
-| `ai-news.yml` — "AI News Weekly" | cron thứ 2 08:00 giờ VN + chạy tay | Sinh bài `ai-weekly-*` → commit main → dispatch `deploy.yml` |
+| `ai-news.yml` — "AI News Weekly" | cron thứ 7 08:00 giờ VN (CR-036) + chạy tay | Sinh bài `ai-weekly-*` → commit file seed main → job `publish-db` chèn bài vào DB (insert-only) → revalidate → smoke (KHÔNG dispatch `deploy.yml`, CR-034) |
 
 - Runner workspace (= thư mục deploy thực tế): `/opt/actions-runner-nta-web/_work/nta-web/nta-web`.
 - Build image mất vài phút; site cập nhật sau khi container mới healthy.

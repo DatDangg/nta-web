@@ -44,4 +44,11 @@ Lý do MINOR (không PATCH): đổi behavior quan sát được (ngày đăng b�
 - 3 attempt FAIL → `architecture_review_needed`, dừng báo user.
 
 ## Verification summary
-_(builder điền)_
+Builder attempt 1 — 2026-10-15:
+- **File đổi:** `.github/workflows/ai-news.yml` (cron `0 1 * * 6` + comment CR-036; `workflow_dispatch`/concurrency/jobs giữ nguyên), `docs/runbook/ai-news.md` (dòng 3 lịch + đoạn "Hệ quả đổi lịch" 17/10 skip, 24/10 = w43, không còn 19/10, `date` = ngày chạy), `tools/ai-news/README.md:3`, `docs/DESIGN.md:288`, `docs/content-bot/00-overview.md:35`, `docs/content-bot/01-site-map.md:44`, `docs/content-bot/10-server.md:32` (bỏ "dispatch deploy.yml" lỗi thời → `publish-db` chèn DB, insert-only, KHÔNG dispatch deploy).
+- **actionlint** (`docker rhysd/actionlint:latest`, `MSYS_NO_PATHCONV=1`): chỉ 2 lỗi `runner-label` "nta-web" unknown (label self-hosted tùy biến, có sẵn từ trước, không liên quan schedule); chạy lại với `-ignore 'label "nta-web" is unknown'` → exit 0 PASS.
+- **YAML assert** (node + js-yaml): `on.schedule[0].cron == '0 1 * * 6'` → PASS. `0 1 * * 6` = 01:00 UTC thứ 7 = 08:00 thứ 7 giờ VN (UTC+7, không DST).
+- **grep** `0 1 \* \* 1|thứ 2` trên `.github docs tools/ai-news/README.md SPECIFICATIONS.md`: không còn `0 1 * * 1`; "thứ 2" chỉ còn ngữ cảnh lịch sử/ngữ nghĩa ISO week ("CR-036 đổi từ thứ 2", "thứ 2 → CN", "không còn lượt thứ 2 19/10") ở runbook:3,12,13 và SPECIFICATIONS:302,306 → PASS.
+- **unittest** (`docker python:3.13-slim`, `tools/ai-news/tests`): Ran 76 tests, OK → PASS.
+- **`npm run lint`**: exit 0 (0 error, 1 warning có sẵn `src/components/mdx/index.tsx:26` no-img-element) → PASS. **`npm run typecheck`**: exit 0 → PASS. Build không chạy (0 file web đổi).
+- Chưa verify: lịch mới trên GitHub Actions + lượt 17/10 `skip` / 24/10 sinh w43 (sau deploy).

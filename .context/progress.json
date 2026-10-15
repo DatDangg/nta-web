@@ -4,10 +4,10 @@
     "type": "feature",
     "slug": "ai-news-cron-saturday",
     "phaseTask": "phase-1-task-01",
-    "step": "plan",
-    "status": "awaiting_approval",
+    "step": "closeout",
+    "status": "in_progress",
     "journal": ".context/runs/feature-ai-news-cron-saturday-phase-1-task-01.md",
-    "note": "CR-036 MODIFY/LOW — cron 0 1 * * 6 (08:00 thứ 7 VN). Chờ user duyệt plan + spec delta MINOR 4.4.0."
+    "note": "CR-036 phase-1-task-01 reviewer FAST PASS r1 — commit task rồi close-out."
   },
   "features": [
     {
@@ -1339,7 +1339,13 @@
             {
               "task": "phase-1-task-01",
               "title": "Đổi cron ai-news sang 08:00 thứ 7 VN + đồng bộ doc",
-              "status": "pending"
+              "status": "done",
+              "reviewer": {
+                "verdict": "PASS",
+                "level": "FAST",
+                "round": 1,
+                "report": ".context/review-reports/feature-ai-news-cron-saturday-phase-1-task-01-round-1-review.md"
+              }
             }
           ]
         }

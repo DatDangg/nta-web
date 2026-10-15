@@ -285,7 +285,7 @@ Font stack: `-apple-system, BlinkMacSystemFont, "SF Pro Display", Inter, "Segoe 
 - Deploy (`.github/workflows/deploy.yml`): DB healthy → backup pre-migrate → gate destructive → migrate (`nta-migrate`, Dockerfile target `migrator`) → web.
 - Content ops (`.github/workflows/content-ops.yml`, chạy tay): `parity` · `backup` · `import-seed` · `revalidate-all` · `upload-smoke` qua service `nta-tools`
   (Dockerfile target `content-tools`, có `src/` + `tools/db/` + `public/` cho kiểm ảnh I-7), cùng concurrency với deploy, lệnh ghi cần confirm + tự backup trước.
-- AI news (`.github/workflows/ai-news.yml`, cron thứ 2 + chạy tay — `docs/runbook/ai-news.md`): job `digest` (container) `generate --items-out` (bước duy nhất có `OPENCODE_API_KEY`)
+- AI news (`.github/workflows/ai-news.yml`, cron thứ 7 08:00 giờ VN (CR-036) + chạy tay — `docs/runbook/ai-news.md`): job `digest` (container) `generate --items-out` (bước duy nhất có `OPENCODE_API_KEY`)
   → `render --images-out` (KHÔNG key, fetch og:image có SSRF guard, CR-035; `vars.AI_NEWS_IMAGES=off` → `--no-images`) → build → artifact `ai-news-images-<slug>` (ảnh + manifest, 7 ngày) → commit file seed;
   job `publish-db` (host, concurrency `deploy-nta-web`, chỉ `main`) chạy cả khi bài tuần đã có (`skip`, tự lành): tải artifact ảnh (chỉ cùng run) → `publish-post --dry-run [--images-dir]` (cờ chỉ khi có manifest) → backup chỉ khi có locale `missing`
   → `publish-post` (lưu ảnh UPLOAD_DIR + asset trước, rồi createEntry, actor `workflow:ai-news`, bản ghi đã có kể cả xoá mềm → `exists`, không ghi đè) → `revalidate --collection post` → smoke trang + 1 ảnh `/uploads`. Không dispatch deploy.

@@ -1,6 +1,6 @@
 # tools/ai-news — Bản tin AI tuần (CR-019, spec R-09c)
 
-Pipeline chạy bởi `.github/workflows/ai-news.yml` (cron 08:00 thứ 2 giờ VN + chạy tay).
+Pipeline chạy bởi `.github/workflows/ai-news.yml` (cron 08:00 thứ 7 giờ VN — `0 1 * * 6` UTC, CR-036 — + chạy tay).
 Vận hành (secret, chạy tay, đổi model, tắt cron, xử lý lỗi): `docs/runbook/ai-news.md`.
 
 Pipeline này chỉ sinh + commit file seed `src/content/blog/{vi,en}/<slug>.mdx`. Prod đọc nội dung từ DB → job `publish-db`

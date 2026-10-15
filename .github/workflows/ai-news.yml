@@ -7,7 +7,7 @@ name: AI News Weekly
 # → revalidate collection post → smoke. KHÔNG dispatch deploy.yml (DB mode không cần build lại image để hiện bài).
 on:
   schedule:
-    - cron: '0 1 * * 1' # 08:00 thứ 2 giờ Việt Nam (UTC+7)
+    - cron: '0 1 * * 6' # 08:00 thứ 7 giờ Việt Nam (UTC+7) — CR-036
   workflow_dispatch:
 
 concurrency:

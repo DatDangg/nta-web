@@ -41,5 +41,5 @@
 | Case study | `dental-clinic-operations`, `heritage-site-ai-camera` |
 | Blog | `first-steps`, `digital-workflows`, `learning-content`, `responsible-ai`, `ai-weekly-*` |
 
-Bài `ai-weekly-YYYY-wNN` do workflow tự động `.github/workflows/ai-news.yml` đăng vào DB mỗi thứ 2
+Bài `ai-weekly-YYYY-wNN` do workflow tự động `.github/workflows/ai-news.yml` đăng vào DB mỗi thứ 7
 (`docs/runbook/ai-news.md`) — bot **không** sửa/ghi đè các bài này trừ khi người duyệt yêu cầu rõ.

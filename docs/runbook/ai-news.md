@@ -1,6 +1,6 @@
 # Runbook — Bản tin AI tuần (CR-019, spec R-09c)
 
-Workflow `.github/workflows/ai-news.yml` — mỗi thứ 2 lúc 08:00 giờ VN (`cron: '0 1 * * 1'` UTC) tự thu thập
+Workflow `.github/workflows/ai-news.yml` — mỗi thứ 7 lúc 08:00 giờ VN (`cron: '0 1 * * 6'` UTC; CR-036 đổi từ thứ 2) tự thu thập
 tin AI 7 ngày, nhờ OpenCode Go viết 2 bài `src/content/blog/{vi,en}/ai-weekly-YYYY-wNN.mdx` (category `ai-tech`),
 kèm **ảnh tin** (og:image của trang tin, lưu về `/uploads`, CR-035), build PASS → commit file seed thẳng `main` → **chèn bài vào DB prod** (job `publish-db`, CR-034) → revalidate → smoke.
 Code: `tools/ai-news/` (xem `tools/ai-news/README.md`) + lệnh `publish-post` của `tools/db/content-cli.ts`.
@@ -8,6 +8,9 @@ Code: `tools/ai-news/` (xem `tools/ai-news/README.md`) + lệnh `publish-post` c
 Prod đọc nội dung từ DB (`CONTENT_SOURCE=db`, CR-031) → bài chỉ hiện khi có bản ghi trong `content_entries`.
 File seed vẫn được commit (lịch sử bài trong git, dedupe tuần `generate.py check`, đường lùi `CONTENT_SOURCE=file`).
 Workflow **không** dispatch `deploy.yml` nữa (DB mode không cần build lại image để hiện bài).
+
+Hệ quả đổi lịch sang thứ 7 (CR-036): bài mang số ISO week của chính tuần chạy (thứ 2 → CN, giờ VN), `date` frontmatter = ngày chạy (thứ 7), tối đa 1 bài/tuần, bài cũ không đổi.
+Thứ 7 17/10/2026 (w42) → `check` = `skip` vì w42 đã có trên main (`publish-db` vẫn chạy tự lành, insert-only); bài tự động kế tiếp là thứ 7 24/10/2026 → `ai-weekly-2026-w43`; không còn lượt thứ 2 19/10. GitHub cron có thể trễ vài–vài chục phút lúc tải cao.
 
 Hai job, cùng self-hosted runner `nta-web`:
 

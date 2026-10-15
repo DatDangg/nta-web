@@ -32,7 +32,7 @@ Cung cấp đủ context để (1) model trong bot sửa đúng bản ghi, đún
 | Chất lượng | ESLint · `tsc --noEmit` · `node --test` · write-path kiểm required fields + I-1..I-8 khi ghi DB |
 | Runtime | Node 22 · Docker (Next standalone, cổng 8080) |
 | Hạ tầng | VPS Ubuntu 24.04 dùng chung · nginx + Let's Encrypt · domain `ntavietnam.tech` (+ `ntasolution.vn`) |
-| CI/CD | GitHub Actions: `ci.yml` (lint/typecheck/build) · `deploy.yml` (self-hosted runner, push `main` → deploy) · `ai-news.yml` (bản tin AI tự động thứ 2) |
+| CI/CD | GitHub Actions: `ci.yml` (lint/typecheck/build) · `deploy.yml` (self-hosted runner, push `main` → deploy) · `ai-news.yml` (bản tin AI tự động thứ 7) |
 | Bot | Telegram Bot API (long polling) · API model do người dùng chọn · gọi `db:cli` qua `docker compose run nta-tools` — chi tiết `10-server.md` |
 
 ## 3. Tài liệu
