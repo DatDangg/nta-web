@@ -4,10 +4,10 @@
     "type": "feature",
     "slug": "ai-news-item-images",
     "phaseTask": "phase-1",
-    "step": "spec_validator",
-    "status": "running",
+    "step": "done",
+    "status": "done",
     "journal": ".context/runs/feature-ai-news-item-images-phase-1-task-01.md",
-    "note": "CR-035 T01-T04 PASS committed. Spec-validator phase-1 — cancel sẽ redo bước này. Push chỉ sau close-out."
+    "note": "CR-035 done 2026-10-15 — spec 4.3.0 / scope v53. Theo dõi lượt cron ai-news kế tiếp (ảnh tin)."
   },
   "features": [
     {
@@ -1256,8 +1256,8 @@
     {
       "slug": "ai-news-item-images",
       "cr": "CR-035",
-      "status": "in_progress",
-      "changeFile": "spec/changes/2026-10-15-ai-news-item-images.md",
+      "status": "done",
+      "changeFile": "spec/changes/archive/2026-10-15-ai-news-item-images.md",
       "classification": "ADDITIVE",
       "risk": "HIGH",
       "phases": [
@@ -1267,29 +1267,63 @@
             {
               "task": "phase-1-task-01",
               "title": "generate.py lấy og:image an toàn (SSRF guard) + render ảnh MDX",
-              "status": "pending"
+              "status": "done",
+              "commit": "13d1b35",
+              "reviewer": {
+                "verdict": "PASS",
+                "round": 2,
+                "report": ".context/review-reports/feature-ai-news-item-images-phase-1-task-01-round-2-review.md"
+              }
             },
             {
               "task": "phase-1-task-02",
               "title": "publish-post --images-dir (saveImage trước createEntry)",
-              "status": "pending"
+              "status": "done",
+              "commit": "0d12984",
+              "reviewer": {
+                "verdict": "PASS",
+                "round": 1,
+                "report": ".context/review-reports/feature-ai-news-item-images-phase-1-task-02-round-1-review.md"
+              }
             },
             {
               "task": "phase-1-task-03",
-              "title": "ArticleImage width/height chuỗi → next/image + dòng nguồn ảnh",
-              "status": "pending"
+              "title": "Component MDX NewsImage → next/image + dòng nguồn ảnh",
+              "status": "done",
+              "commit": "66079e0",
+              "reviewer": {
+                "verdict": "PASS",
+                "round": 1,
+                "report": ".context/review-reports/feature-ai-news-item-images-phase-1-task-03-round-1-review.md"
+              }
             },
             {
               "task": "phase-1-task-04",
               "title": "ai-news.yml artifact digest → publish-db + docs",
-              "status": "pending"
+              "status": "done",
+              "commit": "8ca92fc",
+              "reviewer": {
+                "verdict": "PASS",
+                "round": 3,
+                "report": ".context/review-reports/feature-ai-news-item-images-phase-1-task-04-round-3-review.md"
+              }
             }
           ]
         }
       ],
       "updatedAt": "2026-10-15",
       "specVersion": "4.3.0",
-      "scopeVersion": 52
+      "scopeVersion": 53,
+      "completedAt": "2026-10-15",
+      "phaseValidation": {
+        "verdict": "PASS",
+        "report": ".context/review-reports/feature-ai-news-item-images-phase-1-spec-validation.md"
+      },
+      "residualRisk": [
+        "G1: ảnh đã gỡ có thể restored khi og:image cùng sha256 xuất hiện lại (runbook §8 cảnh báo; cần CR chặn)",
+        "Chưa chạy workflow thật — lượt cron có ảnh đầu tiên cần theo dõi",
+        "Dòng nguồn ảnh chưa xem trực quan trên trình duyệt (375px)"
+      ]
     }
   ],
   "bugs": [

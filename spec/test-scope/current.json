@@ -1,22 +1,30 @@
 {
   "specVersion": "4.3.0",
-  "scopeVersion": 52,
-  "generatedAt": "2026-10-15T16:00:00+07:00",
+  "scopeVersion": 53,
+  "generatedAt": "2026-10-15T20:00:00+07:00",
   "trigger": "feature-update",
-  "workItem": "feature/ai-news-item-images (CR-035 spec/changes/2026-10-15-ai-news-item-images.md; tasks tasks/feature-ai-news-item-images/phase-1-task-01..04.md; ADDITIVE, review STRICT; phát hành ở bước planning sau khi user duyệt plan 2026-10-15)",
+  "workItem": "feature/ai-news-item-images (CR-035 spec/changes/2026-10-15-ai-news-item-images.md; tasks tasks/feature-ai-news-item-images/phase-1-task-01..04.md; ADDITIVE, review STRICT; close-out phase 1 — commits 13d1b35 T01, 0d12984 T02, 66079e0 T03, 8ca92fc T04 sau spec 9d256a2; spec-validator phase 1 PASS)",
   "specRefs": [
     "R-09c"
   ],
   "changed": {
     "files": [
-      "tools/ai-news/generate.py (dự kiến — tách 2 bước: `generate --items-out <file>` (LLM + guard, có OPENCODE_API_KEY, không fetch ảnh) và `render --items-json <file> --images-out <dir>` (KHÔNG key, gọi og_image, render <NewsImage …/> + dòng nguồn dưới tiêu đề tin, câu chú thích cuối bài, manifest ảnh), cờ --no-images)",
-      "tools/ai-news/og_image.py (dự kiến — mới: fetch og:image/twitter:image an toàn SSRF (kể cả NAT64/6to4/Teredo, IPv4-mapped tự xét), deadline 10 s tổng/request, kiểm magic bytes/kích thước, sha256 tên file, bỏ ảnh trùng)",
-      "tools/ai-news/tests/* (dự kiến — test từng guard SSRF/ảnh + render)",
-      "tools/db/publish-post.ts (dự kiến — --images-dir: validate ảnh trong dry-run, I-7 coi ảnh sắp lưu hợp lệ, saveImage trước createEntry)",
-      "tools/db/content-cli.ts (dự kiến — nhận cờ --images-dir cho publish-post)",
-      "src/components/mdx/ (dự kiến — thêm component NewsImage đăng ký trong mdxComponents: chỉ nhận src /uploads/<sha256>.(jpg|png|webp), width/height chuỗi số 1..8192, alt bắt buộc → next/image; KHÔNG sửa ArticleImage, KHÔNG đổi mdxComponents.img; style dòng nguồn nếu cần)",
-      ".github/workflows/ai-news.yml (dự kiến — job digest tách bước Generate (có OPENCODE_API_KEY, --items-out) / Render (KHÔNG key, render --items-json … --images-out); upload-artifact ai-news-images-<slug> 7 ngày → download + mount ro ở publish-db, publish-post --images-dir; AI_NEWS_IMAGES=off → --no-images)",
-      "docs/runbook/ai-news.md (dự kiến — luồng ảnh, tắt khẩn cấp, mục gỡ 1 ảnh khi bị yêu cầu)"
+      "tools/ai-news/generate.py — tách 2 subcommand: `generate --items-out <file>` (LLM + guard, có OPENCODE_API_KEY, không fetch ảnh) và `render --items-json <file> --images-out <dir>` (KHÔNG key, gọi og_image, render <NewsImage …/> + dòng nguồn nghiêng `*Ảnh: <host>*` dưới tiêu đề tin, câu chú thích cuối bài, manifest.json ảnh), cờ --no-images; bản có ảnh trượt guard bài → bỏ toàn bộ ảnh, đăng bản text; cờ sai subcommand → parser.error",
+      "tools/ai-news/og_image.py (mới) — fetch og:image / og:image:secure_url / twitter:image an toàn SSRF (https-only port 443, không userinfo, chặn IP không-global kể cả NAT64/6to4/Teredo, IPv4-mapped xét IPv4 bên trong, mọi IP DNS + mỗi hop redirect, pin IP, ≤ 3 redirect), timeout socket 5 s + deadline 10 s tổng/request, ngân sách 90 s, HTML ≤ 512 KB chỉ đọc meta, trang không phải text/html → bỏ, ảnh ≤ 2 MB, sha256 tên file, bỏ ảnh trùng ≥ 2 tin",
+      "tools/ai-news/image_sniff.py (mới) — nhận dạng JPEG/PNG/WebP theo magic bytes + đọc kích thước, cạnh 200..8192 px (GIF/SVG/HTML → bỏ)",
+      "tools/ai-news/tests/test_og_image.py (mới) — test từng guard SSRF/ảnh + render + tách subcommand",
+      "tools/ai-news/README.md — luồng ảnh, generate/render, --no-images",
+      "tools/db/publish-post.ts — --images-dir: đọc manifest.json (slug phải khớp), validate ảnh trong dry-run (có trong manifest, không symlink, inspectImage magic bytes/ext, sha256 thật == tên file), I-7 coi ảnh sắp lưu hợp lệ, ảnh thừa trong manifest → cảnh báo; sau backup saveImage trước createEntry",
+      "tools/db/publish-post.test.ts — test --images-dir (dry-run, manifest lệch, symlink, ext lệch, lưu ảnh, exists không đụng ảnh)",
+      "tools/db/content-cli.ts — nhận cờ --images-dir cho publish-post (lệnh khác → lỗi usage)",
+      "tools/db/content-cli.test.ts — test cờ --images-dir chỉ thuộc publish-post",
+      "src/components/mdx/news-image.tsx (mới) — component NewsImage: chỉ nhận src /uploads/<sha256 64 hex>.(jpg|png|webp), width/height chuỗi số hoặc number nguyên 1..8192, alt bắt buộc → next/image; sai → null",
+      "src/components/mdx/index.tsx — đăng ký NewsImage trong mdxComponents (ArticleImage + mdxComponents.img không đổi)",
+      "src/components/mdx/news-image.test.ts (mới) — test validate src/alt/width/height",
+      ".github/workflows/ai-news.yml — job digest tách bước Generate (có OPENCODE_API_KEY, --items-out) / Render (KHÔNG key, render --items-json … --images-out); AI_NEWS_IMAGES=off → --no-images; upload-artifact ai-news-images-<slug> 7 ngày → publish-db download + mount ro, publish-post --images-dir (chỉ khi có manifest); dry-run lỗi mà không có artifact → ::error:: hướng dẫn Re-run; bước Smoke ảnh tin",
+      "docs/runbook/ai-news.md — luồng ảnh (§1), Re-run khi thiếu artifact (§5), tắt khẩn cấp AI_NEWS_IMAGES=off, mục §8 gỡ 1 ảnh khi bị yêu cầu",
+      "docs/runbook/db.md — §9 publish-post --images-dir + saveImage (reused/restored)",
+      "docs/DESIGN.md — current-state luồng ảnh tin AI tuần + NewsImage"
     ],
     "modules": [
       "Pipeline bản tin AI tuần — job digest (tools/ai-news, fetch Internet trên runner VPS)",
@@ -31,15 +39,18 @@
     "direct": [
       "Tin có og:image hợp lệ ở trang nguồn → MDX bài vi + en có <NewsImage src=\"/uploads/<sha256>.<ext>\" alt width height/> ngay dưới tiêu đề tin, alt = tiêu đề tin theo ngôn ngữ; trang chi tiết render next/image (/_next/image?url=%2Fuploads…)",
       "src ảnh là /uploads/<sha256>.<ext> phục vụ từ domain site; không có URL ảnh ngoài (không hotlink) trong MDX/HTML bài",
-      "Dưới mỗi ảnh có dòng nhỏ 'Ảnh: <tên miền nguồn>' (vi) / 'Image: <domain>' (en); cuối bài có câu chú thích ảnh minh hoạ thuộc trang nguồn",
-      "Tin không có og:image / timeout / quá 2 MB / không phải JPEG-PNG-WebP (kể cả GIF, SVG, HTML giả ảnh) / < 200 px → tin đó chỉ text, bài vẫn đăng, workflow xanh",
+      "Dưới mỗi ảnh có dòng nghiêng `*Ảnh: <tên miền nguồn>*` (vi) / `*Image: <domain>*` (en), cùng cỡ chữ thân bài; cuối bài có câu chú thích ảnh minh hoạ thuộc trang nguồn",
+      "Tin không có og:image / timeout / quá 2 MB / không phải JPEG-PNG-WebP (kể cả GIF, SVG, HTML giả ảnh) / < 200 px / trang nguồn không phải text/html → tin đó chỉ text, bài vẫn đăng, workflow xanh",
+      "Bản có ảnh trượt guard bài (URL/số tin/frontmatter/độ dài) → bỏ toàn bộ ảnh, đăng bản chỉ text",
       "Ảnh trùng giữa ≥ 2 tin (cùng sha256, vd logo) → bỏ ở mọi tin đó",
       "SSRF: URL tin hoặc og:image trỏ http, port khác 443, userinfo, localhost/127.0.0.1, RFC1918, link-local 169.254.0.0/16 (metadata 169.254.169.254), 100.64/10, IPv6 ULA/loopback, NAT64 64:ff9b::/96 + 64:ff9b:1::/48, 6to4 2002::/16, Teredo 2001::/32 (dù is_global), IPv4-mapped (xét IPv4 bên trong), tên miền resolve ra IP nội bộ, redirect sang IP nội bộ hoặc https→http, > 3 redirect → không fetch, tin chỉ text",
       "Mỗi request có deadline tổng 10 s (ngoài timeout socket 5 s; server nhỏ giọt → bỏ), ngân sách bước ảnh ≤ 90 s → tin còn lại không ảnh; ảnh cạnh ngoài 200..8192 px → bỏ",
       "HTML trang nguồn > 512 KB chỉ đọc phần đầu; HTML không xuất hiện trong prompt LLM, file trên đĩa hay log",
-      "publish-post --images-dir --dry-run: ảnh sai magic bytes hoặc sha256 ≠ tên file → đỏ, không ghi locale nào; ảnh đúng → I-7 coi hợp lệ",
-      "publish-post --images-dir --confirm-prod: backup → lưu ảnh qua saveImage (asset version, actor workflow:ai-news, trùng hash → reused) → createEntry vi + en; chạy lại cùng tuần → bài exists, không upload/ghi ảnh",
-      "NewsImage: src ngoài (http…, //…) / sai dạng (không phải sha256 64 hex thường, ext khác jpg|png|webp, có ..) / width-height không phải chuỗi số 1..8192 / thiếu alt → không ra ảnh (null); đúng → next/image",
+      "publish-post --images-dir --dry-run: ảnh sai magic bytes, ext ≠ nội dung, hoặc sha256 ≠ tên file → đỏ, không ghi locale nào; ảnh đúng → I-7 coi hợp lệ",
+      "publish-post --images-dir từ chối: manifest.json slug khác slug bài, ảnh bài tham chiếu không có trong manifest, file là symlink/thư mục, ext lệch nội dung → đỏ, 0 ghi; ảnh có trong manifest nhưng bài không dùng → chỉ cảnh báo, vẫn chạy",
+      "publish-post --images-dir --confirm-prod: backup → lưu ảnh qua saveImage (asset version, actor workflow:ai-news, trùng hash → reused, trùng hash asset đã xoá mềm → restored) → createEntry vi + en; chạy lại cùng tuần → bài exists, không upload/ghi ảnh",
+      "publish-db dry-run lỗi mà run KHÔNG có artifact ảnh (vd bài trỏ /uploads chưa có asset, sinh từ run khác) → đỏ + `::error::` hướng dẫn mở run đã sinh bài → Re-run failed jobs (artifact 7 ngày), 0 ghi DB",
+      "NewsImage: src ngoài (http…, //…) / sai dạng (không phải sha256 64 hex thường, ext khác jpg|png|webp, có ..) / width-height không phải chuỗi số hoặc number nguyên 1..8192 / thiếu alt → không ra ảnh (null); đúng → next/image",
       "Tách secret: bước fetch ảnh (render --items-json … --images-out) chạy KHÔNG có OPENCODE_API_KEY; bước generate --items-out có key nhưng không fetch ảnh",
       "Workflow ai-news: artifact ai-news-images-<slug> (7 ngày) từ digest sang publish-db; AI_NEWS_IMAGES=off → chạy --no-images, bài chỉ text"
     ],
@@ -48,6 +59,7 @@
       "Validate I-7 cho các luồng ghi khác (create/update qua db:cli) giữ nguyên — ảnh /uploads không tồn tại vẫn bị từ chối",
       "Trang chi tiết blog/case study/sản phẩm khác dùng ArticleImage (mdxComponents.img) trong MDX hiển thị đúng như trước — ArticleImage không đổi",
       "Revalidate collection post + smoke /blog/<slug> và /en/blog/<slug> HTTP 200 sau publish-db",
+      "Smoke 1 ảnh /uploads/<sha256>.<ext> (lấy từ bài vi) HTTP 200 sau publish-db; bài không có ảnh → bỏ qua",
       "Backup DB trước khi ghi (nhãn ops-ai-news-<UTC>-<run>) vẫn chạy khi có locale missing"
     ],
     "regression": [
@@ -56,29 +68,32 @@
       "Ảnh bìa bài AI tuần vẫn /images/blog/ai-weekly-cover.svg",
       "Blog listing /blog, /en/blog + sitemap hiển thị bình thường",
       "publish-post không có --images-dir chạy như CR-034 (chỉ-thêm-mới, exists → không ghi đè)",
-      "CLI từ chối cờ không thuộc lệnh (vd --images-dir cho lệnh khác) bằng lỗi usage, không chạm DB"
+      "CLI từ chối cờ không thuộc lệnh (vd --images-dir cho lệnh khác) bằng lỗi usage, không chạm DB",
+      "generate.py từ chối --items-out ngoài subcommand generate và --images-out/--no-images ngoài render (lỗi parser, exit ≠ 0)"
     ]
   },
   "acceptance": [
     "Mỗi tin có og:image hợp lệ ở trang nguồn → bài vi + en hiện ảnh (<NewsImage> → next/image) dưới tiêu đề tin, alt = tiêu đề tin theo ngôn ngữ",
     "Ảnh được tải về và phục vụ từ domain site (/uploads/...), KHÔNG hotlink ảnh ngoài",
-    "Tin không lấy được ảnh (không có og:image, timeout, sai định dạng, quá dung lượng) → vẫn đăng, chỉ hiện text; không làm fail cả bài",
+    "Tin không lấy được ảnh (không có og:image, timeout, sai định dạng, quá dung lượng, trang không phải HTML) → vẫn đăng, chỉ hiện text; không làm fail cả bài",
     "Bài các tuần cũ không bị đổi",
-    "Ghi nguồn ảnh: 'Ảnh: <tên miền>' / 'Image: <domain>' ngay dưới mỗi ảnh và câu chú thích cuối bài",
+    "Ghi nguồn ảnh: dòng nghiêng 'Ảnh: <tên miền>' / 'Image: <domain>' ngay dưới mỗi ảnh và câu chú thích cuối bài",
     "Chỉ JPEG/PNG/WebP (theo magic bytes), ≤ 2 MB, cạnh 200..8192 px; GIF → tin chỉ text; R-16d không đổi",
     "Ảnh trùng giữa các tin tự bỏ (không deny-list cứng)",
     "Guard SSRF có test từng guard (https-only, IP không-global sau DNS + mỗi redirect gồm NAT64/6to4/Teredo + IPv4-mapped, pin IP, ≤ 3 redirect, timeout 5 s + deadline 10 s/request, giới hạn HTML 512 KB / ảnh 2 MB, HTML không tới LLM)",
-    "NewsImage chỉ ra ảnh với src /uploads/<sha256>.(jpg|png|webp) + width/height chuỗi số 1..8192 + alt; src ngoài/sai dạng/thiếu alt → không ra ảnh",
+    "NewsImage chỉ ra ảnh với src /uploads/<sha256>.(jpg|png|webp) + width/height chuỗi số hoặc number nguyên 1..8192 + alt; src ngoài/sai dạng/thiếu alt → không ra ảnh",
     "Workflow ai-news tách bước generate (--items-out, có OPENCODE_API_KEY) / render (render --items-json … --images-out, KHÔNG key); artifact ai-news-images-<slug> → publish-db publish-post --images-dir; --no-images khi AI_NEWS_IMAGES=off",
+    "publish-post --images-dir chỉ ghi khi manifest đúng slug và mọi ảnh bài tham chiếu hợp lệ; sai → đỏ, 0 ghi",
     "Runbook docs/runbook/ai-news.md có mục gỡ 1 ảnh khi bị yêu cầu (xoá mềm asset + sửa bài qua db:cli update) và tắt khẩn cấp AI_NEWS_IMAGES=off",
     "npm run typecheck + lint + test PASS; test Python tools/ai-news PASS; build PASS trước khi push"
   ],
   "risk": "high",
   "notes": [
     "Risk high: SSRF trên runner self-hosted VPS dùng chung (127.0.0.1:3005 nta-web, nta-db, docker bridge 172.17.0.1, metadata 169.254.169.254), DNS rebinding, file khổng lồ/slow-loris, file 'ảnh' là HTML/SVG; bytes không tin cậy vào volume /uploads + content_entries prod không người duyệt; shared write-path saveImage/createEntry/I-7 + shared mdxComponents (thêm NewsImage, ArticleImage không đổi)",
+    "Residual risk G1 (spec-validator phase 1, MEDIUM): ảnh đã gỡ theo runbook §8 (asset xoá mềm) sẽ được saveImage khôi phục (restored) nếu tuần sau og:image cùng bytes xuất hiện lại — hành vi hiện tại, chưa có CR chặn; test nên có case xác nhận restored để phát hiện khi đổi",
     "Bản quyền og:image: user chấp nhận rủi ro (2026-10-15); có ghi nguồn + quy trình gỡ ảnh",
-    "Scope phát hành ở bước planning (danh sách file là dự kiến) — có thể cập nhật lại ở close-out nếu file thực tế khác; lượt kiểm thật trên prod: cron 19/10 (w43)",
-    "Không đổi schema DB, R-16d, cover, guard text/URL, bài các tuần trước",
-    "Sửa lại 2026-10-15 theo spec-validator round 2 (G2): render ảnh tin bằng component NewsImage (MDX 3 không map <img> viết thẳng sang components.img); giữ specVersion 4.3.0 / scopeVersion 52 vì chưa commit"
+    "Scope cập nhật ở close-out theo file + hành vi thực tế (git diff 9d256a2..HEAD); lượt kiểm thật trên prod: cron 19/10 (w43)",
+    "Residual W1: DB dev/staging seed từ file sẽ 404 ảnh /uploads (ảnh chỉ có trên volume prod)",
+    "Không đổi schema DB, R-16d, cover, guard text/URL, bài các tuần trước"
   ]
 }

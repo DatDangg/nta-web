@@ -3,22 +3,22 @@
 ```yaml
 workItem: feature/ai-news-item-images
 phaseTask: phase-1
-step: spec_validator
-agent: spec-validator
-status: running                     # T04 builder; cancel sẽ redo bước này
+step: done
+agent: change-request
+status: done
 attempt: 1
 interrupted: false
 updatedAt: 2026-10-15T00:00:00+07:00
 filesTouched: [SPECIFICATIONS.md, spec/CHANGELOG.md, spec/test-scope/current.json, spec/changes/BACKLOG.md, .context/progress.json]
 filesNew: [spec/changes/2026-10-15-ai-news-item-images.md, spec/updates/2026-10-15-ai-news-item-images.md, tasks/feature-ai-news-item-images/, .context/review-reports/feature-ai-news-item-images-spec-validation.md]
 evidence:
-  reportPath: .context/review-reports/feature-ai-news-item-images-phase-1-task-04-round-3-review.md
+  reportPath: .context/review-reports/feature-ai-news-item-images-phase-1-spec-validation.md
   round: 3
   verdict: PASS
-next: "spec-validator phase-1 → spec-publisher → close-out → push"
+next: "none — CR-035 done; push origin main"
 loopSignal: none
 approvals: [{gate: phase_plan, at: 2026-10-15, ok: true}]
-batchQueue: [phase-1-task-01, phase-1-task-02, phase-1-task-03, phase-1-task-04]
+batchQueue: []
 ```
 
 ## Notes / WIP reasoning
@@ -32,3 +32,4 @@ batchQueue: [phase-1-task-01, phase-1-task-02, phase-1-task-03, phase-1-task-04]
 - 2026-10-15 T02 builder (npm test/typecheck/lint PASS, DB test 33/34 pass 1 skip) → reviewer STRICT r1 PASS (2 MINOR) → commit T02; ▶ START builder T03
 - 2026-10-15 T03 builder (npm test 135 pass, typecheck/lint PASS, docker build PASS) → reviewer NORMAL r1 PASS (3 MINOR) → commit T03; ▶ START builder T04
 - 2026-10-15 T04 builder → reviewer r1 FAIL (runbook cache next/image) → fix → r2 FAIL (force-recreate thiếu env) → sửa 1 dòng runbook → r3 PASS → commit T04; ▶ START spec-validator phase
+- 2026-10-15 spec-validator phase PASS (G1 restored → runbook cảnh báo; G2 test-scope) → spec-publisher scope v53 → close-out, archive change doc

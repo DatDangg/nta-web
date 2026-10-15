@@ -314,10 +314,11 @@ _(cập nhật 2026-10-13: thêm **domain phụ** `ntasolution.vn` (+ `www`) ph�
     của **chính URL tin** với guard SSRF (https-only, chặn IP không-global kể cả sau DNS/redirect, pin IP, ≤ 3 redirect, timeout,
     HTML ≤ 512 KB chỉ đọc meta, HTML không tới LLM) → tải ảnh ≤ 2 MB, **chỉ JPEG/PNG/WebP** theo magic bytes (GIF → bỏ ảnh, tin
     chỉ text; không đổi R-16d), ≥ 200 px; ảnh trùng giữa các tin (cùng sha256 ở ≥ 2 tin) **tự bỏ**, không deny-list cứng.
-    Bài vi + en chèn ảnh dưới tiêu đề tin (`/uploads/<sha256>.<ext>`, alt = tiêu đề tin theo locale) + ghi nguồn ảnh: dòng nhỏ
+    Bài vi + en chèn ảnh dưới tiêu đề tin bằng component MDX `NewsImage` (`/uploads/<sha256>.<ext>` → `next/image`; src/kích
+    thước/alt sai → không ra ảnh; `ArticleImage` không đổi), alt = tiêu đề tin theo locale + ghi nguồn ảnh: dòng nhỏ
     ngay dưới mỗi ảnh "Ảnh: <tên miền>" (vi) / "Image: <domain>" (en) **và** 1 câu chú thích cuối bài (ảnh minh hoạ thuộc về
     trang nguồn của từng tin); **không hotlink**. Tin không lấy được ảnh → chỉ text; lỗi ảnh không làm fail bài. Ảnh bìa giữ
-    SVG cố định. Bản quyền og:image: user **chấp nhận rủi ro** (2026-10-15); runbook `docs/runbook/ai-news.md` có cách gỡ 1 ảnh
+    SVG cố định. Tắt khẩn cấp: biến `AI_NEWS_IMAGES=off` → bài chỉ text như trước CR-035. Bản quyền og:image: user **chấp nhận rủi ro** (2026-10-15); runbook `docs/runbook/ai-news.md` có cách gỡ 1 ảnh
     khi bị yêu cầu.
   - *Guard trước khi đăng:* mọi URL trong bài phải có trong `.clean.md`; số tin trong khoảng cho phép; frontmatter
     (`slug/title/date/category/excerpt/cover`) + độ dài hợp lệ; `npm run build` PASS. Bất kỳ bước FAIL → không commit,

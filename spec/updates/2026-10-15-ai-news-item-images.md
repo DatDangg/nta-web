@@ -37,3 +37,13 @@
   (generate có key / render không key, artifact digest → publish-db), chi tiết bài blog vi/en tuần mới.
 - Regression: bài AI tuần cũ không đổi, blog hiện có, Content ops `upload`, `publish-post` không ảnh, ảnh trong MDX khác (`ArticleImage` không đổi).
 - Chi tiết: `spec/test-scope/current.json` (scope v52).
+
+## Close-out phase 1 — 2026-10-15 (scope v53)
+- Phase 1 PASS: commits `13d1b35` (T01), `0d12984` (T02), `66079e0` (T03), `8ca92fc` (T04); spec-validator phase 1 PASS
+  (`.context/review-reports/feature-ai-news-item-images-phase-1-spec-validation.md`).
+- **spec_version giữ 4.3.0** (không đổi requirement). `spec/test-scope/current.json` → **v53**: danh sách file thật (thêm `image_sniff.py`,
+  test Python/TS, `news-image.tsx`, docs/runbook), hành vi as-built (dòng nguồn nghiêng, width/height chuỗi số hoặc number,
+  manifest/symlink/ext ở `--images-dir`, ảnh thừa chỉ cảnh báo, `::error::` Re-run khi thiếu artifact, trang không phải `text/html` → chỉ text,
+  bản có ảnh trượt guard → bản chỉ text, smoke 1 ảnh `/uploads`, regression cờ sai subcommand).
+- `SPECIFICATIONS.md` R-09c: ghi rõ component `NewsImage` + tắt khẩn cấp `AI_NEWS_IMAGES=off` (đã nằm trong delta này, không phải intent mới).
+- Residual risk **G1**: asset ảnh đã xoá mềm khi gỡ theo runbook §8 sẽ được `saveImage` khôi phục (`restored`) nếu cùng bytes xuất hiện lại tuần sau — chưa có CR chặn.

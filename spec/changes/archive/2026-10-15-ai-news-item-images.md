@@ -1,7 +1,7 @@
 ---
 id: ai-news-item-images
 type: feature
-status: in_progress
+status: done
 created: 2026-10-15
 cr: CR-035
 classification: ADDITIVE

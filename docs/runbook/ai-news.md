@@ -134,6 +134,9 @@ Chạy trên VPS qua `nta-tools` (`docker compose run --rm --no-deps -T nta-tool
 3. **Xoá mềm asset** (sau khi không bài nào còn trỏ tới): `cli delete asset/vi/<sha256> --expected-version <N> --actor ops:<tên> --note "…" --confirm-prod`.
    Xoá mềm **không** xoá file → URL hash vẫn 200. Cần gỡ hẳn: `rm /opt/nta-web-data/uploads/<sha256>.<ext>` trên host
    (lưu ý backup `uploads-*.tar.gz` cũ vẫn còn file; restore sau đó sẽ đưa file về).
+   ⚠️ **Ảnh đã gỡ có thể tự quay lại:** nếu tuần sau og:image **cùng nội dung (cùng sha256)** xuất hiện lại, `publish-post --images-dir`
+   gọi `saveImage` → asset xoá mềm được **khôi phục** (`status=restored`) + ghi lại file, không ai duyệt. Sau khi gỡ, theo dõi log
+   job `publish-db` các tuần sau (`publish-post image /uploads/<sha256>… status=restored`) → gặp thì gỡ lại theo §8 (CR-035 G1, chờ CR chặn tự động).
 4. **Xoá cache next/image** (bắt buộc — `rm` file gốc chưa đủ): ảnh tin hiển thị qua `next/image`
    (`/_next/image?url=%2Fuploads%2F<sha256>.<ext>&w=…&q=…`); bản đã tối ưu được giữ **31 ngày** (`minimumCacheTTL`, `next.config.ts`)
    trong `/app/.next/cache/images` của container `nta-web` (không phải volume — chỉ mất khi container tạo lại). Trên VPS:

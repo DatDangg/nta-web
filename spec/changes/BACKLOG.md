@@ -42,7 +42,7 @@
 | CR-032 | URL tiếng Anh slug sai (`/en/blog/nope`, `/en/solutions/ai/crm`...) trả 500 thay vì 404 | bug | done (gộp CR-026+CR-032 · scope v50 · smoke prod PASS) | `archive/2026-10-14-en-invalid-slug-500.md` | 2026-10-14 | 2026-10-15 |
 | CR-033 | Backup Content ops (`pre-migrate-ops-*`) dùng chung vòng giữ 14 bản → đẩy mất backup trước-deploy | bug (ops) | done (scope v51 · VPS ops-backup PASS) | `archive/2026-10-14-ops-backup-rotation.md` | 2026-10-14 | 2026-10-15 |
 | CR-034 | Bài AI news hằng tuần không lên web sau cutover DB (workflow vẫn ghi file `src/content/blog`) — ưu tiên cao, trước lượt chạy kế | bug | done (spec 4.2.1 · scope v49 · smoke prod PASS) | `archive/2026-10-15-ai-news-write-db.md` | 2026-10-15 | 2026-10-15 |
-| CR-035 | Bản tin AI tuần: mỗi tin thêm ảnh (og:image trang nguồn → tải về `/uploads`, không hotlink; không có ảnh → chỉ text) (vi + en) | ADDITIVE | in_progress (plan 4 task — chờ user duyệt + trả lời Q1–Q4) | `2026-10-15-ai-news-item-images.md` | 2026-10-15 | |
+| CR-035 | Bản tin AI tuần: mỗi tin thêm ảnh (og:image trang nguồn → tải về `/uploads`, không hotlink; không có ảnh → chỉ text) (vi + en) | ADDITIVE | done (4 task, spec 4.3.0 / scope v53) | `archive/2026-10-15-ai-news-item-images.md` | 2026-10-15 | 2026-10-15 |
 
 ## Quy tắc tracking
 
