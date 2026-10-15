@@ -158,5 +158,5 @@ ui:
 ```yaml
 secrets:
   source: env                    # chỉ đọc từ env; KHÔNG hardcode/commit
-  required: [CONTACT_FORM_TARGET, POSTGRES_PASSWORD, DATABASE_URL, REVALIDATE_SECRET]  # ✅ 3 secret DB/revalidate thêm ở CR-031 — giá trị đặt trên VPS/runner (user), KHÔNG commit  # ⚠️ OQ#4 chưa chốt hình thức forward — tên env var giữ sẵn; giá trị → .env.local khi chốt
+  required: [CONTACT_FORM_TARGET, CONTACT_FORM_TOKEN, POSTGRES_PASSWORD, DATABASE_URL, REVALIDATE_SECRET]  # ✅ 3 secret DB/revalidate thêm ở CR-031; CONTACT_FORM_TARGET + CONTACT_FORM_TOKEN = Apps Script Web App ghi Google Sheet (OQ#4 chốt ở CR-037, server-only) — giá trị đặt ở GitHub Secrets (user), KHÔNG commit
 ```

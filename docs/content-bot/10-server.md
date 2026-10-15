@@ -42,6 +42,7 @@
 |---|---|---|
 | `NEXT_PUBLIC_SITE_URL` | app (build-time) | `https://ntavietnam.tech` |
 | `CONTACT_FORM_TARGET` | app | GitHub Actions secret |
+| `CONTACT_FORM_TOKEN` | app (form liên hệ → Apps Script, CR-037) | GitHub Actions secret |
 | `POSTGRES_PASSWORD` | app, `nta-tools` (bot cần) | GitHub Actions secret — VPS **không** lưu sẵn (`docs/runbook/db.md` §1a) |
 | `REVALIDATE_SECRET` | `POST /api/revalidate` (bot cần) | GitHub Actions secret — như trên |
 | `HOST_PORT` | app | `3005` |

@@ -25,6 +25,8 @@ Mô hình **document store**: mỗi bản ghi nội dung (1 file MDX hoặc 1 ob
 trong `data` (jsonb). Không tách bảng con (showcase, gallery, milestones…) — ràng buộc field nằm ở tầng app (`.context/decisions.md` CR-031 P1-T01).
 
 **Không lưu DB:** form liên hệ (`POST /api/contact`) vẫn chỉ forward sang `CONTACT_FORM_TARGET`, không có bảng submission.
+Từ CR-037 (R-13a) đích là Google Apps Script Web App → mỗi lượt gửi = 1 dòng Google Sheet (cột theo `tools/contact-sheet/Code.gs`)
+kèm 1 tin Telegram; web không giữ bản sao (`src/lib/api/forward.ts`).
 
 ## Bảng
 
@@ -83,7 +85,7 @@ Số bản ghi seed 14/10/2026: 68 mỗi locale, tổng 136 (chi tiết `docs/ru
 | CaseStudy | `case_study` | thuộc 1 category; gallery + related trong `data` |
 | Post | `post` | category blog |
 | Asset (ảnh upload) | `asset` | file `/uploads/<sha256>.<ext>` trên volume; bản ghi khác tham chiếu qua `data.path` |
-| ContactSubmission | — (không lưu DB) | transient, forward qua `CONTACT_FORM_TARGET` |
+| ContactSubmission | — (không lưu DB web; lưu ở Google Sheet ngoài hệ thống) | transient, forward qua `CONTACT_FORM_TARGET` (Apps Script, CR-037) |
 
 ## Migration gate
 

@@ -25,7 +25,7 @@ Website **không có đăng nhập người dùng**. Route thật (`src/app/api/
 
 | Method | Endpoint | Mục đích | Auth |
 |--------|----------|----------|------|
-| POST | `/api/contact` | Nhận form liên hệ (tên, email, SĐT, nội dung) → forward `CONTACT_FORM_TARGET` (không lưu DB) | công khai + rate-limit |
+| POST | `/api/contact` | Nhận form liên hệ (tên, email, SĐT, nội dung) → forward Apps Script Web App `CONTACT_FORM_TARGET` ghi Google Sheet + báo Telegram (không lưu DB web) | công khai + rate-limit |
 | GET | `/api/health` | Health check / uptime | công khai |
 | POST | `/api/revalidate` | Làm mới data cache nội dung DB theo tag (CR-031) | header `x-revalidate-secret` + rate-limit |
 | GET | `/uploads/<sha256>.<ext>` | Phục vụ ảnh upload từ volume (CR-031) | công khai |
@@ -47,11 +47,14 @@ Không có auth người dùng. `/api/revalidate` dùng shared secret `REVALIDAT
   "company": "string (tuỳ chọn, ≤150 ký tự) — Tên doanh nghiệp/Tổ chức",
   "need": "crm|dentgo|lms|hrm|boxai|custom-ai|flycam|custom-software|other (tuỳ chọn) — Nhu cầu",
   "message": "string (bắt buộc, 10–2000 ký tự)",
-  "honeypot": "" // trường ẩn chống spam — phải rỗng
+  "honeypot": "", // trường ẩn chống spam — phải rỗng
+  "locale": "vi|en (tuỳ chọn) — ngôn ngữ trang gửi; thiếu/'' → vi; giá trị khác → 400 errors.locale (CR-037)"
 }
 ```
 
 `company` / `need` thêm ở spec 3.6.0 (CR-008), được chuyển tiếp nguyên trạng sang `CONTACT_FORM_TARGET`.
+`locale` (CR-037): `src/lib/contact/useContactForm.ts` gửi theo `useLocale()` cho cả `/contact`, `/en/contact` và form CTA;
+validate ở `src/lib/api/contact-schema.ts`.
 Form trang `/contact` bắt buộc thêm `phone` + `need` và giới hạn `message` ≤500 ở client; API giữ tuỳ chọn để form CTA
 rút gọn (name/email/message) ở trang chi tiết giải pháp vẫn hợp lệ. Danh sách key `need`: `src/lib/contact/company-info.ts`.
 
@@ -64,7 +67,33 @@ rút gọn (name/email/message) ở trang chi tiết giải pháp vẫn hợp l�
 { "status": "error", "errors": { "email": "Email không hợp lệ" } }
 // 429 — quá nhiều request
 { "status": "error", "message": "Vui lòng thử lại sau." }
+// 500 — chưa cấu hình / Web App lỗi / timeout (message chung, không lộ URL/token)
+{ "status": "error", "message": "Không thể gửi yêu cầu lúc này." }
 ```
+
+Thứ tự guard (R-18, `src/app/api/contact/route.ts`): rate-limit → JSON → validate → honeypot có giá trị thì trả 200 giả,
+**không** forward → forward → lỗi forward = 500.
+
+### Forward tới Apps Script (R-13a, CR-037)
+
+Code: `src/lib/api/forward.ts` (`forwardContactForm`); script nhận: `tools/contact-sheet/Code.gs` + `README.md`.
+
+- **Env (server-only, runtime):** `CONTACT_FORM_TARGET` = URL Web App `…/exec`, `CONTACT_FORM_TOKEN` = token khớp
+  Script Property `SECRET_TOKEN`. Thiếu một trong hai, hoặc tồn tại `NEXT_PUBLIC_CONTACT_FORM_TARGET` /
+  `NEXT_PUBLIC_CONTACT_FORM_TOKEN` → không gọi mạng, route trả 500.
+- **Request:** `POST <CONTACT_FORM_TARGET>`, `Content-Type: application/json`, `redirect: 'follow'`, timeout 10 000 ms:
+
+```jsonc
+{ "token": "<CONTACT_FORM_TOKEN>", "submittedAt": "2026-10-15T08:00:00.000Z", "locale": "vi",
+  "name": "...", "email": "...", "phone": "..." | null, "company": "..." | null, "need": "crm" | null, "message": "..." }
+```
+
+- **Thành công chỉ khi** HTTP ok **và** body JSON là `{ "status": "ok" }` (Web App trả 302 → `script.googleusercontent.com`,
+  fetch Node theo redirect bằng GET). `{"status":"error","code":…}`, trang HTML của Google, HTTP lỗi, lỗi mạng, timeout
+  → ném lỗi message chung (không chứa URL/token) → 500.
+- **Residual risk (trùng dòng hiếm gặp):** script chờ lock tối đa 10 s, bằng timeout web 10 s → web có thể báo lỗi
+  trong khi script vẫn ghi muộn; khách gửi lại → Sheet có 2 dòng cùng nội dung. Chấp nhận, lọc tay
+  (`docs/runbook/deploy-vps.md` § sự cố form liên hệ).
 
 ### GET /api/health — response
 

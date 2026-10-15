@@ -4,10 +4,10 @@
     "type": "feature",
     "slug": "contact-form-google-sheet",
     "phaseTask": "phase-1-task-02",
-    "step": "ready",
+    "step": "closeout",
     "status": "awaiting",
-    "journal": ".context/runs/feature-contact-form-google-sheet-phase-1-task-01.md",
-    "note": "CR-037 — T01 done (STRICT r2 PASS); kế: builder phase-1-task-02 (KHÔNG push T02 trước khi user xác nhận secret)"
+    "journal": ".context/runs/feature-contact-form-google-sheet-phase-1-task-02.md",
+    "note": "CR-037 — T02 done (STRICT r1 PASS), đã commit local, CHƯA push: chờ user xác nhận đã deploy Web App + đặt GitHub Secrets CONTACT_FORM_TARGET/CONTACT_FORM_TOKEN → push → E2E thật → archive change doc + BACKLOG done"
   },
   "features": [
     {
@@ -1381,7 +1381,14 @@
             {
               "task": "phase-1-task-02",
               "title": "Web forward tới Apps Script (token body, locale, redirect) + env + doc reconcile",
-              "status": "pending"
+              "status": "done",
+              "reviewer": {
+                "verdict": "PASS",
+                "level": "STRICT",
+                "round": 1,
+                "report": ".context/review-reports/feature-contact-form-google-sheet-phase-1-task-02-round-1-review.md"
+              },
+              "attempt": 1
             }
           ]
         }

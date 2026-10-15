@@ -43,15 +43,53 @@
   (3) push → Deploy → E2E thật: gửi `/contact` + `/en/contact` → 1 dòng Sheet/lượt + 1 tin Telegram; token sai (curl) → không dòng.
 
 ## Acceptance
-- [ ] `/contact` + `/en/contact` (và CTA) gửi `locale` đúng; API nhận `locale` tuỳ chọn, sai → 400.
-- [ ] Forward gửi token trong body + `submittedAt` + `locale`; chỉ thành công khi JSON `{status:"ok"}` sau redirect.
-- [ ] Thiếu env / Web App lỗi / timeout → form báo lỗi như hiện tại (500 + message chung), không lộ URL/token ra client/log.
-- [ ] `CONTACT_FORM_TOKEN` được nối qua `.env.local.example`, compose, `deploy.yml`; không có giá trị thật trong repo.
-- [ ] Doc as-built + BRD OQ#4 + project-config cập nhật.
+- [x] `/contact` + `/en/contact` (và CTA) gửi `locale` đúng; API nhận `locale` tuỳ chọn, sai → 400.
+- [x] Forward gửi token trong body + `submittedAt` + `locale`; chỉ thành công khi JSON `{status:"ok"}` sau redirect.
+- [x] Thiếu env / Web App lỗi / timeout → form báo lỗi như hiện tại (500 + message chung), không lộ URL/token ra client/log.
+- [x] `CONTACT_FORM_TOKEN` được nối qua `.env.local.example`, compose, `deploy.yml`; không có giá trị thật trong repo.
+- [x] Doc as-built + BRD OQ#4 + project-config cập nhật.
 
 ## Retry / Escalation
 - Attempt FAIL thật (reviewer/verify) → sửa trên đĩa, tăng `attempt`; cancel ≠ fail.
 - 3 attempt FAIL → `architecture_review_needed`, dừng báo user.
 
 ## Verification summary
-_(builder điền)_
+_(builder, attempt 1 — 2026-10-15)_
+
+**Code**
+- `src/lib/api/contact-schema.ts`: `ContactForm.locale: 'vi' | 'en'` (luôn có); thiếu/`''` → `vi`; khác → `errors.locale` (400).
+- `src/lib/contact/useContactForm.ts`: body `{ ...values, locale: useLocale() }` — áp chung `ContactForm.tsx` + `CTAForm.tsx`, không đổi UI.
+- `src/lib/api/forward.ts`: đọc `CONTACT_FORM_TARGET` + `CONTACT_FORM_TOKEN`; thiếu / có `NEXT_PUBLIC_*` → throw, 0 fetch. Body đúng hợp đồng T01
+  (`token`, `submittedAt` ISO — clock inject qua tham số `now`, `locale`, `phone/company/need` trống → `null`), `redirect: 'follow'`, timeout 10000 ms.
+  Thành công chỉ khi `response.ok` + JSON `{status:"ok"}`. Lỗi mạng/timeout của fetch được bọc lại thành message chung (test phát hiện lỗi fetch gốc có thể mang URL target).
+- `route.ts`: không đổi (guard order R-18 giữ nguyên; honeypot trả 200 giả trước bước forward — `route.ts:34-36`).
+- Env: `.env.local.example` (`CONTACT_FORM_TOKEN=`, comment server-only + khớp Script Property `SECRET_TOKEN`), `docker-compose.yml`
+  (`CONTACT_FORM_TOKEN: ${CONTACT_FORM_TOKEN:-}` + header), `deploy.yml` env `CONTACT_FORM_TOKEN: ${{ secrets.CONTACT_FORM_TOKEN }}` (không echo, không build arg).
+
+**Tests** — mới `src/lib/api/contact-schema.test.ts` (4) + `src/lib/api/forward.test.ts` (5, gồm server HTTP local trả 302 → GET JSON để xác nhận đường redirect thật của Node fetch: `POST /exec` → `GET /echo?...`). 9/9 PASS.
+Không có test route sẵn → honeypot không forward xác nhận bằng đọc code (`route.ts:34-36` return trước `forwardContactForm`).
+
+**Verify**
+- `npm test`: 193 tests — 190 pass, 1 fail, 2 skipped. Fail duy nhất = `tools/db/content-rules.test.ts` (thiếu `/uploads/*.jpg` local) — có sẵn từ T01, ngoài scope.
+- `npm run lint`: exit 0 (0 error, 1 warning `no-img-element` có sẵn, không thuộc file đổi).
+- `npm run typecheck`: exit 0.
+- `npm run build`: **BLOCKED bởi môi trường** — `Failed to load next.config.ts: Failed to load native binding`; nguyên nhân
+  `next-intl/node_modules/@swc/core` native addon từ chối cache dir (`C:\Users\datda\AppData\Local\swc`: "DACL grants replacement rights … to SID S-1-15-3-…"
+  — SID AppContainer của sandbox agent). Lỗi xảy ra lúc nạp `next.config.ts`, trước khi đụng code `src/`. Thử `SWC_NATIVE_BINDING_CACHE` (scratchpad, `node_modules/.cache`) vẫn lỗi → dừng theo Tool Loop Guard.
+  → Primary chạy thay `docker build --target builder -t nta-web-buildcheck:tmp .` (docker_build_evidence_command): **PASS** (next build đủ route);
+  trong image: `grep -rln CONTACT_FORM_TOKEN .next/static` **rỗng**, chỉ có ở `.next/server/app/api/contact/route.js`; đã `docker rmi` image tạm.
+- Bằng chứng tĩnh thay thế: `CONTACT_FORM_TOKEN` trong `src/` chỉ ở `forward.ts` (+ test); `forward.ts` chỉ được import bởi `src/app/api/contact/route.ts` (server route); client hook không import nó; không có `NEXT_PUBLIC_` mới.
+- `docker compose config --quiet` (env giả): exit 0; render ra `CONTACT_FORM_TOKEN: faketok`, thiếu TARGET → `""` (cho phép trống như cũ).
+- actionlint: skip (không cài trên máy).
+
+**Doc reconcile** — `docs/API_SPEC.md` (request `locale`, response 500, guard order, mục Forward tới Apps Script + residual risk trùng dòng),
+`docs/ERD.md` (ContactSubmission → Google Sheet ngoài hệ thống), `docs/runbook/deploy-vps.md` §4 (bảng env + danh sách secret) + §7 (sự cố form + trùng dòng),
+`docs/runbook/db.md` §1b (`read -rs CTK … CONTACT_FORM_TOKEN`), `docs/content-bot/10-server.md` §3, `.context/project-config.md` `required:` (+`CONTACT_FORM_TOKEN`, bỏ ⚠️ OQ#4),
+`docs/BRD.md` OQ#4 tick. `docs/DESIGN.md`: no doc impact (chỉ mô tả màn `/contact` + states, không mô tả luồng forward).
+
+**Residual risk**
+- LOW-1 (T01): script chờ lock 10 s = timeout web 10 s → web có thể báo lỗi trong khi Apps Script vẫn ghi muộn → khách gửi lại → trùng dòng Sheet. Chấp nhận, lọc tay (ghi ở API_SPEC + runbook §7). Không sửa `Code.gs`.
+- `npm run build` trên host bị sandbox chặn; đã thay bằng build Docker PASS (xem trên).
+
+**Review** — STRICT r1 **PASS** (`.context/review-reports/feature-contact-form-google-sheet-phase-1-task-02-round-1-review.md`); LOW-2 test chưa assert 10000 ms, LOW-3 check NEXT_PUBLIC_* chỉ có tác dụng lúc build (chấp nhận), LOW-4 route catch không log (có từ trước, ngoài scope).
+- E2E thật (Sheet + Telegram) chờ user deploy Web App + đặt 2 secret — bước close-out theo §Rollout.

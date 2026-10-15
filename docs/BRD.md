@@ -173,5 +173,5 @@ một nơi tra cứu hồ sơ năng lực, case study và thông tin liên hệ 
 - [ ] Logo NTA (file/svg) và bảng màu thương hiệu chính thức?
 - [ ] Hotline / email / địa chỉ thật để hiển thị?
 - [ ] Danh sách sản phẩm & case study ưu tiên đưa lên trước?
-- [ ] Form liên hệ gửi về đâu (email nào / CRM / Google Sheet)?
+- [x] Form liên hệ gửi về đâu (email nào / CRM / Google Sheet)? → **Google Sheet** qua Google Apps Script Web App + báo Telegram (chốt 15/10/2026, CR-037, spec R-13a)
 - [ ] Có cần khu blog/tin tức thật (CMS) hay chỉ trang tĩnh?

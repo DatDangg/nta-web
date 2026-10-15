@@ -67,8 +67,10 @@ umask 077
 ENVF="$(mktemp /root/nta-compose-env.XXXXXX)"        # ngoài repo, mode 600
 read -rs PW && printf 'POSTGRES_PASSWORD=%s\n' "$PW" >> "$ENVF"
 read -rs RS && printf 'REVALIDATE_SECRET=%s\n' "$RS" >> "$ENVF"; unset PW RS
-# Đích forward form liên hệ: compose cho phép trống, nhưng THIẾU dòng này thì `up` tạo lại nta-web với giá trị rỗng → form mất đích.
+# Form liên hệ (URL Web App + token, CR-037): compose cho phép trống, nhưng THIẾU 2 dòng này thì `up` tạo lại nta-web
+# với giá trị rỗng → form trả 500.
 read -rs CT && printf 'CONTACT_FORM_TARGET=%s\n' "$CT" >> "$ENVF"; unset CT
+read -rs CTK && printf 'CONTACT_FORM_TOKEN=%s\n' "$CTK" >> "$ENVF"; unset CTK
 docker compose --env-file "$ENVF" ps                   # ... lệnh compose cần chạy
 shred -u "$ENVF" 2>/dev/null || rm -f "$ENVF"          # xoá ngay khi xong
 ```

@@ -8,7 +8,11 @@ export type ContactForm = {
   need?: ContactNeed;
   message: string;
   honeypot: string;
+  /** Ngôn ngữ trang khách gửi form (R-13a) — luôn có sau validate, mặc định `vi`. */
+  locale: ContactLocale;
 };
+
+export type ContactLocale = 'vi' | 'en';
 
 export type ContactValidation =
   | { success: true; data: ContactForm }
@@ -31,6 +35,7 @@ export function validateContactForm(input: unknown): ContactValidation {
   const need = typeof body.need === 'string' ? body.need : undefined;
   const message = typeof body.message === 'string' ? body.message.trim() : '';
   const honeypot = typeof body.honeypot === 'string' ? body.honeypot : undefined;
+  const locale = body.locale === undefined || body.locale === '' ? 'vi' : body.locale;
 
   if (name.length < 2 || name.length > 100) {
     errors.name = 'Tên phải có từ 2 đến 100 ký tự';
@@ -54,6 +59,9 @@ export function validateContactForm(input: unknown): ContactValidation {
   if (message.length < 10 || message.length > 2000) {
     errors.message = 'Nội dung phải có từ 10 đến 2000 ký tự';
   }
+  if (locale !== 'vi' && locale !== 'en') {
+    errors.locale = 'Ngôn ngữ không hợp lệ';
+  }
   if (honeypot === undefined) {
     errors.honeypot = 'Trường xác minh không hợp lệ';
   }
@@ -72,6 +80,7 @@ export function validateContactForm(input: unknown): ContactValidation {
       need: need && isContactNeed(need) ? need : undefined,
       message,
       honeypot: honeypot ?? '',
+      locale: locale === 'en' ? 'en' : 'vi',
     },
   };
 }

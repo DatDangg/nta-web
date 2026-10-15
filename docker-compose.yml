@@ -8,7 +8,8 @@
 #
 # Biến môi trường (đọc từ shell/.env, KHÔNG commit giá trị thật):
 #   NEXT_PUBLIC_SITE_URL   build-time, canonical URL (mặc định https://ntavietnam.tech)
-#   CONTACT_FORM_TARGET    server-only, đích forward form (OQ#4 — có thể để trống tạm)
+#   CONTACT_FORM_TARGET    server-only, URL Apps Script Web App nhận form (R-13a) — trống → form trả 500
+#   CONTACT_FORM_TOKEN     server-only (secret), token khớp Script Property của Web App — trống → form trả 500
 #   HOST_PORT              port host (mặc định 3005)
 #   POSTGRES_PASSWORD      BẮT BUỘC (secret) — mật khẩu user `nta`; chỉ chữ + số (ghép thẳng vào DATABASE_URL)
 #   REVALIDATE_SECRET      BẮT BUỘC (secret) — dùng cho POST /api/revalidate (CR-031 P3-T03)
@@ -33,6 +34,7 @@ services:
       PORT: "8080"
       HOSTNAME: 0.0.0.0
       CONTACT_FORM_TARGET: ${CONTACT_FORM_TARGET:-}
+      CONTACT_FORM_TOKEN: ${CONTACT_FORM_TOKEN:-}
       DATABASE_URL: postgres://nta:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}@nta-db:5432/nta_web
       REVALIDATE_SECRET: ${REVALIDATE_SECRET:?REVALIDATE_SECRET is required}
       UPLOAD_DIR: /app/uploads

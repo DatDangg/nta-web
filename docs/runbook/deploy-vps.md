@@ -103,7 +103,8 @@ curl -sI https://ntavietnam.tech/        | head -1   # 200 — KHÔNG đổi hà
 | Biến | Loại | Ghi chú |
 |---|---|---|
 | `NEXT_PUBLIC_SITE_URL` | build-time | `https://ntavietnam.tech` — canonical/SEO (inline lúc build) |
-| `CONTACT_FORM_TARGET` | server-only (secret) | đích forward form — **OQ#4 chưa chốt**, tạm để trống |
+| `CONTACT_FORM_TARGET` | server-only (secret) | URL Apps Script Web App `…/exec` nhận form → Google Sheet + Telegram (R-13a, [`tools/contact-sheet/README.md`](../../tools/contact-sheet/README.md)). Trống → form trả 500 |
+| `CONTACT_FORM_TOKEN` | server-only (secret) | token khớp Script Property `SECRET_TOKEN` của Web App (CR-037). **Không** đặt `NEXT_PUBLIC_`, không build arg. Trống → form trả 500 |
 | `HOST_PORT` | runtime | mặc định `3005` |
 | `POSTGRES_PASSWORD` | secret, **bắt buộc** | mật khẩu DB `nta-db` (chỉ chữ + số) → ghép `DATABASE_URL` |
 | `REVALIDATE_SECRET` | secret, **bắt buộc** | `POST /api/revalidate` |
@@ -111,7 +112,7 @@ curl -sI https://ntavietnam.tech/        | head -1   # 200 — KHÔNG đổi hà
 | `CONTENT_SOURCE` | runtime, GitHub **Variable** (không phải secret) | `file` (mặc định khi chưa đặt) / `db`. **Prod = `db` từ 14/10/2026** — đổi variable + chạy lại Deploy, không build lại ([`cutover-content-db.md`](cutover-content-db.md)) |
 | `DATABASE_URL` / `UPLOAD_DIR` | runtime (compose tự ghép) | `postgres://nta:<POSTGRES_PASSWORD>@nta-db:5432/nta_web` / `/app/uploads` |
 
-Secret repo (GitHub → Settings → Secrets and variables → Actions): `CONTACT_FORM_TARGET`, `POSTGRES_PASSWORD`, `REVALIDATE_SECRET`.
+Secret repo (GitHub → Settings → Secrets and variables → Actions): `CONTACT_FORM_TARGET`, `CONTACT_FORM_TOKEN`, `POSTGRES_PASSWORD`, `REVALIDATE_SECRET`.
 
 ## 5. Rollback
 
@@ -152,7 +153,11 @@ Không cần secret: dùng thẳng `docker ps` / `docker logs <container>` / `do
 - **certbot fail:** DNS chưa trỏ đúng; `dig +short ntavietnam.tech` (domain phụ: `dig +short ntasolution.vn` + `dig +short www.ntasolution.vn`).
 - **`ntasolution.vn` ra trang nginx mặc định:** chưa có vhost khớp `server_name` → rơi vào default server block; cài vhost theo §3b.
 - **`ntasolution.vn` báo lỗi cert (SNI trả cert `ntavietnam.tech`):** chưa cấp cert riêng → chạy `certbot --nginx --redirect -d ntasolution.vn -d www.ntasolution.vn`.
-- **Form không gửi:** `CONTACT_FORM_TARGET` chưa set (OQ#4).
+- **Form không gửi (500 "Không thể gửi yêu cầu lúc này."):** thiếu secret `CONTACT_FORM_TARGET` / `CONTACT_FORM_TOKEN`
+  (đặt xong phải chạy lại Deploy), token web ≠ Script Property `SECRET_TOKEN`, Web App deploy sai quyền (phải là "Bất kỳ ai") hoặc
+  phiên bản cũ, Apps Script chậm quá 10 s. Kiểm tra: Apps Script → Executions; quy trình ở `tools/contact-sheet/README.md`.
+- **Sheet có 2 dòng trùng nội dung (hiếm):** web timeout 10 s trong khi script vẫn ghi muộn (chờ lock tới 10 s) → khách
+  bấm gửi lại. Đã chấp nhận (CR-037) — lọc tay dòng trùng trong Sheet.
 
 ## 8. Database (`nta-db`) — backup / restore / migrate
 

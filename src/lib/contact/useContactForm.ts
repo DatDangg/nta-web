@@ -1,5 +1,6 @@
 'use client';
 
+import { useLocale } from 'next-intl';
 import { useState } from 'react';
 import { COMPANY_MAX_LENGTH, isContactNeed } from './company-info';
 
@@ -60,6 +61,8 @@ function validate(values: ContactValues, messages: ContactMessages, fields: read
 }
 
 export function useContactForm(messages: ContactMessages, fields: readonly ContactField[] = ['name', 'email', 'phone', 'message'], options: ContactFormOptions = {}) {
+  // Gửi kèm để Sheet ghi khách đến từ /contact hay /en/contact (R-13a); server mặc định 'vi'.
+  const locale = useLocale();
   const [values, setValues] = useState<ContactValues>(EMPTY_VALUES);
   const [errors, setErrors] = useState<Partial<Record<ContactField, string>>>({});
   const [status, setStatus] = useState<'default' | 'validating' | 'submitting' | 'success' | 'rate-limit' | 'error'>('default');
@@ -104,7 +107,7 @@ export function useContactForm(messages: ContactMessages, fields: readonly Conta
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(values),
+        body: JSON.stringify({ ...values, locale }),
       });
       const payload: unknown = await response.json();
       if (response.ok) {

@@ -20,6 +20,7 @@ env:
   NEXT_PUBLIC_SITE_URL: https://ntavietnam.tech
   HOST_PORT: "3005"
   CONTACT_FORM_TARGET: ${{ secrets.CONTACT_FORM_TARGET }}
+  CONTACT_FORM_TOKEN: ${{ secrets.CONTACT_FORM_TOKEN }}
   # Secret chỉ đi qua env → docker compose nội suy; không echo, không `docker compose config` không -q.
   POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
   REVALIDATE_SECRET: ${{ secrets.REVALIDATE_SECRET }}
