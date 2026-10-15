@@ -200,3 +200,17 @@
   Log lỗi chỉ mã cố định — exception `UrlFetchApp` có thể chứa URL kèm token bot.
 - **Validate phía script lỏng hơn web** (G5): chỉ kiểu + độ dài ≤ 5000 + bắt buộc name/email/message + locale vi|en; `need` lạ ghi nguyên key.
   Chống formula injection bằng tiền tố `'`. Bảng nhãn nhu cầu nhân bản trong script, test kiểm đúng tập key `CONTACT_NEEDS`.
+
+## 2026-10-15 — CR-039 P1-T01: form Liên hệ chỉ gửi email tới `ADMIN_EMAIL` (bỏ Google Sheet + Telegram, R-13a 4.7.0)
+- **Đích = email** gửi từ chính Apps Script Web App (`MailApp.sendEmail`, plain text, không `htmlBody`) tới Script Property `ADMIN_EMAIL`,
+  đọc lại mỗi request → đổi người nhận có hiệu lực ngay, không redeploy. Hợp đồng web ↔ Web App, env `CONTACT_FORM_TARGET`/`CONTACT_FORM_TOKEN`,
+  timeout 10 s, `forward.ts` giữ nguyên (chỉ sửa comment). Dùng lại dự án Apps Script cũ + "Phiên bản mới" → URL `/exec` không đổi.
+- **Bỏ hẳn** Sheet (`SpreadsheetApp`, `LockService`, chống formula injection, `SHEET_NAME`) và Telegram (`UrlFetchApp`, `TELEGRAM_*`).
+  Thư mục `tools/contact-sheet/` → `tools/contact-mail/` (`git mv`). Mục CR-037 ở trên giữ làm lịch sử.
+- **`ok` chỉ khi gửi mail không lỗi**; thiếu `ADMIN_EMAIL` (kiểm trước khi gửi) / `sendEmail` ném lỗi (hết hạn mức, chưa cấp quyền) →
+  `server_error` → web 500. Log chỉ mã cố định `contact-mail: admin_email_missing|send_failed` (exception có thể chứa email khách).
+- **Chống chèn header:** `replyTo` = email khách, script validate thêm `^[^\s@<control>]+@[^\s@<control>]+$` (vẫn lỏng hơn zod web — G5);
+  tiêu đề `[NTA] Liên hệ mới — <tên>` bỏ ký tự điều khiển, gộp khoảng trắng, cắt 100 ký tự.
+- **`testSendMail()`** công khai để chủ script chạy trong editor cấp scope gửi mail lần đầu (thiếu → Google trả trang HTML lỗi → web 500) và test.
+- **Chấp nhận:** không còn bản lưu dự phòng (mail là bản duy nhất); hạn mức Gmail ~100 / Workspace ~1500 người nhận/ngày; timeout web 10 s
+  có thể sinh 2 mail trùng khi khách gửi lại.

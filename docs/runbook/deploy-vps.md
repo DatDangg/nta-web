@@ -103,7 +103,7 @@ curl -sI https://ntavietnam.tech/        | head -1   # 200 — KHÔNG đổi hà
 | Biến | Loại | Ghi chú |
 |---|---|---|
 | `NEXT_PUBLIC_SITE_URL` | build-time | `https://ntavietnam.tech` — canonical/SEO (inline lúc build) |
-| `CONTACT_FORM_TARGET` | server-only (secret) | URL Apps Script Web App `…/exec` nhận form → Google Sheet + Telegram (R-13a, [`tools/contact-sheet/README.md`](../../tools/contact-sheet/README.md)). Trống → form trả 500 |
+| `CONTACT_FORM_TARGET` | server-only (secret) | URL Apps Script Web App `…/exec` nhận form → gửi email tới Script Property `ADMIN_EMAIL` (R-13a, CR-039, [`tools/contact-mail/README.md`](../../tools/contact-mail/README.md)). Trống → form trả 500 |
 | `CONTACT_FORM_TOKEN` | server-only (secret) | token khớp Script Property `SECRET_TOKEN` của Web App (CR-037). **Không** đặt `NEXT_PUBLIC_`, không build arg. Trống → form trả 500 |
 | `HOST_PORT` | runtime | mặc định `3005` |
 | `POSTGRES_PASSWORD` | secret, **bắt buộc** | mật khẩu DB `nta-db` (chỉ chữ + số) → ghép `DATABASE_URL` |
@@ -155,9 +155,11 @@ Không cần secret: dùng thẳng `docker ps` / `docker logs <container>` / `do
 - **`ntasolution.vn` báo lỗi cert (SNI trả cert `ntavietnam.tech`):** chưa cấp cert riêng → chạy `certbot --nginx --redirect -d ntasolution.vn -d www.ntasolution.vn`.
 - **Form không gửi (500 "Không thể gửi yêu cầu lúc này."):** thiếu secret `CONTACT_FORM_TARGET` / `CONTACT_FORM_TOKEN`
   (đặt xong phải chạy lại Deploy), token web ≠ Script Property `SECRET_TOKEN`, Web App deploy sai quyền (phải là "Bất kỳ ai") hoặc
-  phiên bản cũ, Apps Script chậm quá 10 s. Kiểm tra: Apps Script → Executions; quy trình ở `tools/contact-sheet/README.md`.
-- **Sheet có 2 dòng trùng nội dung (hiếm):** web timeout 10 s trong khi script vẫn ghi muộn (chờ lock tới 10 s) → khách
-  bấm gửi lại. Đã chấp nhận (CR-037) — lọc tay dòng trùng trong Sheet.
+  phiên bản cũ, chưa cấp quyền gửi mail (chạy `testSendMail` trong editor), thiếu Script Property `ADMIN_EMAIL`, hết hạn mức
+  gửi mail của Google trong ngày, Apps Script chậm quá 10 s. Kiểm tra: Apps Script → Executions (mã `contact-mail: admin_email_missing` /
+  `contact-mail: send_failed`); quy trình ở `tools/contact-mail/README.md`.
+- **Admin nhận 2 mail trùng nội dung (hiếm):** web timeout 10 s trong khi script vẫn gửi mail muộn → khách bấm gửi lại.
+  Đã chấp nhận (CR-039) — bỏ qua mail trùng.
 
 ## 8. Database (`nta-db`) — backup / restore / migrate
 

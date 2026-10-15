@@ -3,11 +3,11 @@
   "activeWorkItem": {
     "type": "feature",
     "slug": "contact-form-email-only",
-    "phaseTask": "phase-1",
-    "step": "phase_plan_checkpoint",
-    "status": "awaiting",
+    "phaseTask": "phase-1-task-01",
+    "step": "close_out",
+    "status": "running",
     "journal": ".context/runs/feature-contact-form-email-only-phase-1-task-01.md",
-    "note": "CR-039 intake xong (spec 4.7.0 / scope v57) — chờ user duyệt plan 1 task"
+    "note": "Task 01 PASS + spec-validator PASS; đang close-out CR-039"
   },
   "features": [
     {
@@ -1469,9 +1469,11 @@
             {
               "task": "phase-1-task-01",
               "title": "Apps Script chỉ gửi email tới ADMIN_EMAIL (bỏ Sheet + Telegram), đổi thư mục tools/contact-mail, test + README + doc reconcile",
-              "status": "pending",
-              "review": null,
-              "reviewReport": null
+              "status": "done",
+              "review": "STRICT FAIL (round 1) → NORMAL PASS (round 2)",
+              "reviewReport": ".context/review-reports/feature-contact-form-email-only-phase-1-task-01-round-2-review.md",
+              "attempts": 2,
+              "note": "tools/contact-sheet → tools/contact-mail; build chứng minh qua docker build --target builder (npm run build local lỗi môi trường @swc/core)"
             }
           ]
         }
@@ -1483,7 +1485,11 @@
       ],
       "updatedAt": "2026-10-15",
       "specVersion": "4.7.0",
-      "scopeVersion": 57
+      "scopeVersion": 57,
+      "specValidation": {
+        "verdict": "PASS",
+        "report": ".context/review-reports/feature-contact-form-email-only-spec-validation.md"
+      }
     }
   ],
   "bugs": [

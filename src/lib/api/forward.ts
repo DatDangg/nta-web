@@ -1,10 +1,10 @@
 import type { ContactForm } from './contact-schema';
 
-// Apps Script Web App (R-13a): cold start 1–3 s + chờ lock + ghi Sheet + báo Telegram → 5 s không đủ.
+// Apps Script Web App (R-13a): cold start 1–3 s + gửi mail qua MailApp → 5 s không đủ.
 const FORWARD_TIMEOUT_MS = 10000;
 
 /**
- * Gửi form liên hệ tới Apps Script Web App (hợp đồng: tasks/feature-contact-form-google-sheet/phase-1-task-01.md).
+ * Gửi form liên hệ tới Apps Script Web App (hợp đồng: tasks/feature-contact-form-email-only/phase-1-task-01.md, script tools/contact-mail/Code.gs).
  * Server-only: URL + token chỉ đọc từ env runtime, không bao giờ có trong message lỗi.
  * Web App trả 302 → script.googleusercontent.com; fetch Node theo redirect (đổi sang GET) để lấy JSON kết quả.
  */
@@ -25,7 +25,7 @@ export async function forwardContactForm(contact: ContactForm, now: () => Date =
   if (!response.ok) {
     throw new Error('Contact forwarding failed');
   }
-  // Google trả trang HTML khi deploy sai quyền / script lỗi → json() ném lỗi; chỉ {status:"ok"} mới là đã ghi Sheet.
+  // Google trả trang HTML khi deploy sai quyền / script lỗi → json() ném lỗi; chỉ {status:"ok"} mới là đã gửi mail.
   const result: unknown = await response.json().catch(() => null);
   if (typeof result !== 'object' || result === null || !('status' in result) || result.status !== 'ok') {
     throw new Error('Contact forwarding failed');

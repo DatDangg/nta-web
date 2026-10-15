@@ -61,7 +61,7 @@ function validate(values: ContactValues, messages: ContactMessages, fields: read
 }
 
 export function useContactForm(messages: ContactMessages, fields: readonly ContactField[] = ['name', 'email', 'phone', 'message'], options: ContactFormOptions = {}) {
-  // Gửi kèm để Sheet ghi khách đến từ /contact hay /en/contact (R-13a); server mặc định 'vi'.
+  // Gửi kèm để mail ghi ngôn ngữ khách dùng (/contact hay /en/contact, R-13a); server mặc định 'vi'.
   const locale = useLocale();
   const [values, setValues] = useState<ContactValues>(EMPTY_VALUES);
   const [errors, setErrors] = useState<Partial<Record<ContactField, string>>>({});

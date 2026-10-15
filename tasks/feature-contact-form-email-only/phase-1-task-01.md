@@ -1,6 +1,7 @@
 # feature-contact-form-email-only · phase-1-task-01 — Apps Script chỉ gửi email tới `ADMIN_EMAIL` (bỏ Sheet + Telegram)
 
 - **CR:** CR-039 · change doc `spec/changes/2026-10-15-contact-form-email-only.md` · spec R-13a (4.7.0), ghi chú R-16
+- **Status:** done (2026-10-15) · attempt 2 · reviewer round 2 PASS · spec-validator phase 1 PASS
 - **Classification / Risk:** MODIFY + REMOVE · **MEDIUM**
   - Expected review level: **STRICT** (endpoint công khai nhận dữ liệu người dùng → email: token, header/HTML injection,
     log không lộ dữ liệu; luồng liên hệ là kênh khách hàng duy nhất, không còn bản lưu dự phòng).
@@ -91,17 +92,72 @@
   mỗi lượt, Reply tới email khách; xoá `ADMIN_EMAIL` tạm → form báo lỗi; đặt lại → OK.
 
 ## Acceptance
-- [ ] Form `/vi/lien-he`, `/en/contact` → 1 email tới `ADMIN_EMAIL` đủ: thời gian (giờ VN), ngôn ngữ, tên, email, SĐT, công ty, nhu cầu (nhãn), nội dung.
-- [ ] `replyTo` = email khách; tiêu đề `[NTA] Liên hệ mới — <tên>`.
-- [ ] Không ghi Sheet, không gọi Telegram; không đọc `SHEET_NAME` / `TELEGRAM_*`.
-- [ ] Chỉ `{"status":"ok"}` khi gửi mail thành công; lỗi gửi → `server_error`.
-- [ ] Token + validate giữ nguyên; body plain text, tên không chèn được header.
-- [ ] Thiếu `ADMIN_EMAIL` → `server_error`, log mã cố định, không lộ dữ liệu.
-- [ ] Đổi `ADMIN_EMAIL` có hiệu lực ngay, không redeploy.
-- [ ] Test + README cập nhật; thư mục `tools/contact-mail/`, không còn tham chiếu sống tới `tools/contact-sheet/`.
+- [x] Form `/vi/lien-he`, `/en/contact` → 1 email tới `ADMIN_EMAIL` đủ: thời gian (giờ VN), ngôn ngữ, tên, email, SĐT, công ty, nhu cầu (nhãn), nội dung.
+- [x] `replyTo` = email khách; tiêu đề `[NTA] Liên hệ mới — <tên>`.
+- [x] Không ghi Sheet, không gọi Telegram; không đọc `SHEET_NAME` / `TELEGRAM_*`.
+- [x] Chỉ `{"status":"ok"}` khi gửi mail thành công; lỗi gửi → `server_error`.
+- [x] Token + validate giữ nguyên; body plain text, tên không chèn được header.
+- [x] Thiếu `ADMIN_EMAIL` → `server_error`, log mã cố định, không lộ dữ liệu.
+- [x] Đổi `ADMIN_EMAIL` có hiệu lực ngay, không redeploy.
+- [x] Test + README cập nhật; thư mục `tools/contact-mail/`, không còn tham chiếu sống tới `tools/contact-sheet/`.
 
 ## Retry / Escalation
 - Attempt FAIL thật (reviewer/verify) → sửa trên đĩa, tăng `attempt`; cancel ≠ fail. 3 attempt FAIL → `architecture_review_needed`, dừng báo user.
 
 ## Verification summary
-_(Builder điền: files changed, lệnh + kết quả, residual risk.)_
+Builder attempt 1 (15/10/2026).
+
+**Files:**
+- `git mv tools/contact-sheet → tools/contact-mail` (Code.gs, code.test.ts, README.md — rename + viết lại nội dung).
+- `tools/contact-mail/Code.gs` — bỏ Sheet/Lock/Telegram; thêm `readAdminEmail_`, `orDash_`, `buildMailSubject_`, `buildMailBody_`,
+  `sendContactMail_`, `testSendMail()`; `validatePayload_` thêm kiểm email dạng `x@y` không khoảng trắng/ký tự điều khiển.
+- `tools/contact-mail/code.test.ts` — 46 test (stub `MailApp`, không stub Sheet/Lock/UrlFetch) + kiểm tĩnh nguồn.
+- `tools/contact-mail/README.md` — hướng dẫn mới a–h.
+- Doc reconcile: `docs/API_SPEC.md` (§Forward + residual risk trùng mail), `docs/ERD.md` (đoạn "Không lưu DB"),
+  `docs/runbook/deploy-vps.md` (§4 bảng env + §7 troubleshooting form), `.env.local.example` (comment CONTACT FORM),
+  `.context/decisions.md` (append mục CR-039 P1-T01, mục CR-037 giữ nguyên). `docs/DESIGN.md`: không nhắc Sheet/Telegram → **no doc impact**.
+- Comment-only: `src/lib/api/forward.ts` (3 comment), `src/lib/contact/useContactForm.ts` (1 comment) — `git diff -U0 src/` chỉ có dòng comment.
+
+**Verify:**
+- `node --import tsx --test tools/contact-mail/code.test.ts` → 46/46 PASS.
+- `npm test` → 194 test: 191 pass, 2 skip (cần `TEST_DATABASE_URL`), **1 fail ngoài scope có sẵn**: `tools/db/content-rules.test.ts`
+  (thiếu 9 file `/uploads/*` local). Không liên quan task.
+- `npm run typecheck` → PASS (exit 0).
+- `npm run lint` → PASS (0 error, 1 warning có sẵn `src/components/mdx/index.tsx:26` no-img-element).
+- `npm run build` → **BLOCKED (môi trường agent)**: `Failed to load next.config.ts` → `next-intl/node_modules/@swc/core` từ chối native addon
+  vì DACL thư mục `C:\Users\datda\AppData\Local` cấp quyền cho SID AppContainer `S-1-15-3-…` (sandbox của agent). Lỗi xảy ra lúc nạp
+  `next.config.ts`, trước khi compile `src/` — không liên quan diff (src chỉ đổi comment). Thử lại qua PowerShell và với
+  `SWC_NATIVE_BINDING_CACHE` trong scratchpad (cùng ancestor `AppData\Local`) → cùng lỗi. Cần chạy `npm run build` ở terminal thường của user
+  (hoặc `docker build --target builder -t nta-web-buildcheck:tmp .`).
+- `git grep -n "contact-sheet" -- <loại trừ lịch sử>` → chỉ còn: `.context/decisions.md:193` (mục CR-037 lịch sử) + `:209` (mục CR-039 mô tả việc đổi tên),
+  change doc / spec update / test-scope / task file của chính CR-039 (mô tả đổi tên). 0 tham chiếu sống.
+- `grep -nE "SpreadsheetApp|UrlFetchApp|LockService|SHEET_NAME|TELEGRAM_|htmlBody" tools/contact-mail/Code.gs` → 0 dòng.
+
+**Attempt 2 — sửa theo reviewer round 1 FAIL** (`.context/review-reports/feature-contact-form-email-only-phase-1-task-01-round-1-review.md`):
+- MAJOR 1: `docs/API_SPEC.md:28` bảng endpoint → "gửi 1 email tới Script Property `ADMIN_EMAIL` (CR-039; không Sheet/Telegram, không lưu DB web)".
+- MAJOR 2: `docs/ERD.md:88` ContactSubmission → "không Sheet — mỗi lượt gửi = 1 email tới `ADMIN_EMAIL`", khớp `ERD.md:28-29`.
+- MINOR 4: `Code.gs` `REPLY_TO_PATTERN_` cấm thêm `, ; < > "` → replyTo luôn là 1 địa chỉ; +4 test bad_request (phẩy, chấm phẩy, `A<a@…>`, nháy kép).
+- MINOR 5: `buildMailSubject_` tên rỗng sau khi lọc ký tự điều khiển → `-`; +1 test (`"\u0001\u0002"` → `[NTA] Liên hệ mới — -`).
+- Không sửa `docs/BRD.md` (intent doc). Quét `Google Sheet|Telegram` trong API_SPEC/ERD/DESIGN/deploy-vps/README → không còn mô tả sống sai.
+- Verify: `tools/contact-mail/code.test.ts` 51/51 PASS · `npm run typecheck` PASS · `npm run lint` PASS (0 error, 1 warning có sẵn).
+  `npm test` toàn bộ và `npm run build` không chạy lại (coordinator chỉ yêu cầu 3 lệnh trên; build vẫn BLOCKED trong sandbox như attempt 1).
+
+**Residual risk:**
+- Build chưa chứng minh trong môi trường agent (xem trên).
+- Hành vi thật của `MailApp` (quyền, hạn mức, Spam, `replyTo`, nhiều địa chỉ phẩy trong `to`) chỉ kiểm được thủ công sau khi user dán script + chạy `testSendMail`.
+- Email validate phía script lỏng (`x@y`) — chặn chèn header nhưng không đảm bảo địa chỉ tồn tại; web đã validate zod trước.
+
+## Close-out (change-request, 2026-10-15)
+- **Review:** round 1 FAIL (`.context/review-reports/feature-contact-form-email-only-phase-1-task-01-round-1-review.md` — MAJOR doc reconcile API_SPEC/ERD, MINOR replyTo/tiêu đề rỗng)
+  → round 2 **PASS** (`...-round-2-review.md`). Spec-validator phase 1 **PASS** (`.context/review-reports/feature-contact-form-email-only-spec-validation.md`).
+- **Build:** `npm run build` local lỗi môi trường (`@swc/core` "Failed to load native binding" lúc nạp `next.config.ts`, không do diff) →
+  chứng minh bằng `docker build --target builder` → `next build` Compiled successfully, 9/9 trang tĩnh; image tạm đã xoá.
+- **Verify cuối:** `tools/contact-mail/code.test.ts` 51/51 PASS · typecheck PASS · lint PASS (1 warning có sẵn) · `npm test` 1 fail có sẵn ngoài scope
+  (`tools/db/content-rules.test.ts` thiếu `/uploads` local).
+- **Doc impact / reconcile:**
+  - As-built: `docs/API_SPEC.md` (bảng endpoint + §Forward), `docs/ERD.md` (Không lưu DB + ContactSubmission), `docs/runbook/deploy-vps.md` (§4 env, §7 troubleshooting),
+    `.env.local.example` (comment CONTACT FORM) — đã reconcile, khớp R-13a 4.7.0. `docs/DESIGN.md` → no doc impact.
+  - Intent: `docs/BRD.md:176` (OQ form liên hệ) — **chỉ thêm ghi chú** CR-039 / R-13a 4.7.0 (CR đã được user duyệt), không viết lại intent.
+  - `.context/decisions.md` append mục CR-039 P1-T01 (mục CR-037 giữ làm lịch sử).
+- **Residual risk:** hành vi thật `MailApp` (quyền gửi mail, hạn mức, Spam) chỉ kiểm thủ công sau khi user dán script, chạy `testSendMail`,
+  đặt `ADMIN_EMAIL`, cập nhật **phiên bản mới** trên triển khai cũ (giữ URL `/exec`) — theo `tools/contact-mail/README.md`. Trước bước đó prod vẫn chạy script CR-037 cũ (Sheet).
