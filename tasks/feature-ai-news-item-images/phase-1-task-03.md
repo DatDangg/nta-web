@@ -33,4 +33,9 @@ Q1 chấp nhận rủi ro bản quyền + runbook gỡ ảnh · Q2 "Ảnh: <tên
 Như task-01.
 
 ## Verification summary
-_(chưa làm)_
+- **Code:** `src/components/mdx/news-image.tsx` (mới — validate src `/uploads/<64 hex thường>.(jpg|png|webp)`, width/height số nguyên 1..8192 dạng chuỗi hoặc number, alt không rỗng; sai → `null`; đúng → `next/image` class/sizes/lazy như `ArticleImage`) + `src/components/mdx/index.tsx` (import + key `NewsImage` trong `mdxComponents`; `ArticleImage`/`img` giữ nguyên).
+- **Test:** `src/components/mdx/news-image.test.ts` — render thật qua `compileMDX` (next-mdx-remote/rsc, cùng pipeline `MDXRemote` của `RenderMdx`) + `renderToStaticMarkup`: thẻ như generate.py sinh → `/_next/image?url=%2Fuploads%2F<sha>.webp`, width/height/alt/lazy/sizes + `<em>Ảnh: host</em>`; jpg/png + cạnh 1/8192; number hợp lệ (gọi trực tiếp — MDX v6 chặn biểu thức `{}`); 15 ca sai (http, `//`, không sha, sha hoa, gif, `..`, query, 0, 8193, thập phân, âm, chữ, thiếu height, thiếu alt, alt rỗng) → không có `<img>`; regression ảnh markdown vẫn qua `ArticleImage` (`<img>` trần).
+- **Scope §2 (dòng nguồn `<em>`):** không thêm style — `*Ảnh: host*` render `<p class="my-5 leading-relaxed"><em>…</em></p>` (nghiêng, khoảng cách ảnh–caption = margin collapse `my-8`/`my-5` ≈ 2rem). Chưa xem trực quan trên dev server.
+- **Scope §3:** route `src/app/uploads/[...path]/route.ts` → `serveUpload` khớp `UPLOAD_FILE_NAME_PATTERN` `^[0-9a-f]{64}\.(jpg|png|webp)$`, `next.config` `localPatterns` có `/uploads/**` — không sửa.
+- **Verify:** `npm test` 137 tests, 135 pass, 0 fail, 2 skipped · `npm run typecheck` PASS · `npm run lint` 0 error (1 warning có sẵn `no-img-element` ở `ArticleImage`) · `npm run build` Windows lỗi môi trường (`Failed to load native binding` khi nạp next.config.ts) → `docker build --target builder -t nta-web-buildcheck:tmp .` PASS, đã `docker rmi`.
+- **Doc impact:** `docs/DESIGN.md` không có mục MDX components → no doc impact.

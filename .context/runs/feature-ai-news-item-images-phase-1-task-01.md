@@ -2,20 +2,20 @@
 
 ```yaml
 workItem: feature/ai-news-item-images
-phaseTask: phase-1-task-03
+phaseTask: phase-1-task-04
 step: builder
 agent: builder
-status: running                     # T03 builder; cancel sẽ redo bước này
+status: running                     # T04 builder; cancel sẽ redo bước này
 attempt: 1
 interrupted: false
 updatedAt: 2026-10-15T00:00:00+07:00
 filesTouched: [SPECIFICATIONS.md, spec/CHANGELOG.md, spec/test-scope/current.json, spec/changes/BACKLOG.md, .context/progress.json]
 filesNew: [spec/changes/2026-10-15-ai-news-item-images.md, spec/updates/2026-10-15-ai-news-item-images.md, tasks/feature-ai-news-item-images/, .context/review-reports/feature-ai-news-item-images-spec-validation.md]
 evidence:
-  reportPath: .context/review-reports/feature-ai-news-item-images-phase-1-task-02-round-1-review.md
+  reportPath: .context/review-reports/feature-ai-news-item-images-phase-1-task-03-round-1-review.md
   round: 1
   verdict: PASS
-next: "T03 builder → reviewer NORMAL"
+next: "T04 builder → reviewer STRICT"
 loopSignal: none
 approvals: [{gate: phase_plan, at: 2026-10-15, ok: true}]
 batchQueue: [phase-1-task-01, phase-1-task-02, phase-1-task-03, phase-1-task-04]
@@ -30,3 +30,4 @@ batchQueue: [phase-1-task-01, phase-1-task-02, phase-1-task-03, phase-1-task-04]
 - 2026-10-15 builder T01 xong (70 test OK); reviewer r1 FAIL MAJOR-1 deadline + 3 MINOR → ▶ START builder fix (attempt 1)
 - 2026-10-15 builder fix r1 (76 test OK) → reviewer r2 STRICT PASS (MINOR r2: watchdog nổ khi sock None → T04 đặt timeout-minutes) → commit T01
 - 2026-10-15 T02 builder (npm test/typecheck/lint PASS, DB test 33/34 pass 1 skip) → reviewer STRICT r1 PASS (2 MINOR) → commit T02; ▶ START builder T03
+- 2026-10-15 T03 builder (npm test 135 pass, typecheck/lint PASS, docker build PASS) → reviewer NORMAL r1 PASS (3 MINOR) → commit T03; ▶ START builder T04

@@ -1,5 +1,6 @@
 import type { ComponentProps } from 'react';
 import Image from 'next/image';
+import { NewsImage } from './news-image';
 
 function ArticleImage(props: ComponentProps<'img'>) {
   if (
@@ -57,6 +58,7 @@ export const mdxComponents = {
   ),
   hr: ({ className, ...props }: ComponentProps<'hr'>) => <hr {...props} className={withClass('my-10 border-border', className)} />,
   img: ArticleImage,
+  NewsImage,
   code: ({ className, ...props }: ComponentProps<'code'>) => (
     <code {...props} className={withClass('rounded-sm bg-surface-sunken px-1 py-0.5 font-mono text-sm', className)} />
   ),
