@@ -7,7 +7,7 @@ workItem: bug/ops-backup-rotation
 phaseTask: phase-1-task-01
 step: closeout
 agent: change-request
-status: awaiting
+status: done
 attempt: 0
 interrupted: false
 updatedAt: 2026-10-15T00:00:00Z
@@ -17,7 +17,7 @@ evidence:
   reportPath: .context/review-reports/bug-ops-backup-rotation-phase-1-task-01-round-1-review.md
   round: 1
   verdict: PASS
-next: "deploy chạy sau push → user bấm Content ops backup trên VPS (log ops-backup-…dump, không có rotate xoá pre-migrate-<sha>) → archive CR-033 + BACKLOG done"
+next: "none — CR-033 done"
 loopSignal: none
 approvals: ["2026-10-15 user duyệt fix plan (prefix ops-<nguồn>, nhãn tay vòng deploy, legacy pre-migrate-ops-* vòng ops)"]
 batchQueue: [CR-033 ops-backup-rotation]
@@ -38,3 +38,4 @@ batchQueue: [CR-033 ops-backup-rotation]
 - 2026-10-15 reviewer STRICT round 1 PASS (2 MINOR không chặn). spec-publisher: scope v51 (bug-fix), spec 4.2.1 giữ nguyên.
 - 2026-10-15 commit fix local; KHÔNG push vì build FAIL.
 - 2026-10-15 docker build --target builder PASS (npm run build trong container) → push origin main.
+- 2026-10-15 VPS verify PASS (Content ops backup run 38672728081 → ops-backup-…dump, không rotate chéo) → archive CR-033, BACKLOG done.

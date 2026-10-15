@@ -40,7 +40,7 @@
 | CR-030 | Bot Telegram thêm/sửa/xoá nội dung website (Claude API đề xuất → người duyệt → commit main → CI deploy); context bot đã export ở `docs/content-bot/` | ADDITIVE (tooling/VPS) | pending (chờ trả lời 5 câu hỏi) | `2026-10-14-telegram-content-bot.md` | 2026-10-14 | |
 | CR-031 | Thêm database lưu nội dung website (thay file MDX/TS) — nền cho bot Telegram CR-030 | ADDITIVE + MODIFY (kiến trúc/DB/infra) | in_progress (spec 4.2.0 · phase 1–3 done, P3 spec-validator PASS 14/10 · chờ checkpoint → P4 cutover) | `2026-10-14-content-database.md` | 2026-10-14 | |
 | CR-032 | URL tiếng Anh slug sai (`/en/blog/nope`, `/en/solutions/ai/crm`...) trả 500 thay vì 404 | bug | done (gộp CR-026+CR-032 · scope v50 · smoke prod PASS) | `archive/2026-10-14-en-invalid-slug-500.md` | 2026-10-14 | 2026-10-15 |
-| CR-033 | Backup Content ops (`pre-migrate-ops-*`) dùng chung vòng giữ 14 bản → đẩy mất backup trước-deploy | bug (ops) | in_progress | `2026-10-14-ops-backup-rotation.md` | 2026-10-14 | |
+| CR-033 | Backup Content ops (`pre-migrate-ops-*`) dùng chung vòng giữ 14 bản → đẩy mất backup trước-deploy | bug (ops) | done (scope v51 · VPS ops-backup PASS) | `archive/2026-10-14-ops-backup-rotation.md` | 2026-10-14 | 2026-10-15 |
 | CR-034 | Bài AI news hằng tuần không lên web sau cutover DB (workflow vẫn ghi file `src/content/blog`) — ưu tiên cao, trước lượt chạy kế | bug | done (spec 4.2.1 · scope v49 · smoke prod PASS) | `archive/2026-10-15-ai-news-write-db.md` | 2026-10-15 | 2026-10-15 |
 
 ## Quy tắc tracking

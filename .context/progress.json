@@ -5,9 +5,9 @@
     "slug": "ops-backup-rotation",
     "phaseTask": "phase-1-task-01",
     "step": "closeout",
-    "status": "awaiting",
+    "status": "done",
     "journal": ".context/runs/bug-ops-backup-rotation-phase-1-task-01.md",
-    "note": "CR-033 fix pushed main (review STRICT PASS, docker build PASS, scope v51). Chờ deploy → user chạy Content ops backup trên VPS xác nhận (log ops-backup-…dump, không rotate xoá pre-migrate-<sha>) → archive CR-033"
+    "note": "CR-033 done + archived 2026-10-15 (VPS Content ops backup → ops-backup-…dump, không rotate xoá pre-migrate-<sha>). CR-031 còn P5-T02 + close-out (xem features[] content-database)"
   },
   "features": [
     {
@@ -1327,8 +1327,8 @@
     {
       "slug": "ops-backup-rotation",
       "title": "Backup Content ops/AI news (pre-migrate-ops-*) dùng chung vòng giữ 14 bản với backup trước-deploy",
-      "status": "fixed_pending_verify",
-      "changeFile": "spec/changes/2026-10-14-ops-backup-rotation.md",
+      "status": "done",
+      "changeFile": "spec/changes/archive/2026-10-14-ops-backup-rotation.md",
       "classification": "BUG (ops)",
       "related": "CR-033",
       "tasks": {
@@ -1342,7 +1342,8 @@
         "round": 1,
         "report": ".context/review-reports/bug-ops-backup-rotation-phase-1-task-01-round-1-review.md"
       },
-      "scopeVersion": 51
+      "scopeVersion": 51,
+      "doneAt": "2026-10-15"
     }
   ]
 }

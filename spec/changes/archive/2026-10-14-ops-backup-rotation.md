@@ -1,7 +1,7 @@
 ---
 id: ops-backup-rotation
 type: bug
-status: in_progress
+status: done
 created: 2026-10-14
 ---
 
@@ -18,9 +18,9 @@ nên mỗi lần chạy ops xoá bớt 1 bản trước-deploy cũ. Tách 2 lo�
 - Actual: log `rotate: xoá pre-migrate-8794f2917d86-…dump`, `rotate: xoá pre-migrate-e202ffca7b34-…dump` khi chạy ops.
 
 ## Acceptance (bắt buộc)
-- [ ] Backup ops có prefix/nhãn riêng (vd `ops-<lệnh>-<UTC>-<run>`) được `backup.sh` chấp nhận, vòng giữ riêng.
-- [ ] Rotate của deploy chỉ tính `pre-migrate-<sha>-*`; không xoá backup ops và ngược lại.
-- [ ] Runbook `docs/runbook/db.md` + `docs/runbook/cutover-content-db.md` cập nhật tên file.
+- [x] Backup ops có prefix/nhãn riêng (vd `ops-<lệnh>-<UTC>-<run>`) được `backup.sh` chấp nhận, vòng giữ riêng.
+- [x] Rotate của deploy chỉ tính `pre-migrate-<sha>-*`; không xoá backup ops và ngược lại.
+- [x] Runbook `docs/runbook/db.md` + `docs/runbook/cutover-content-db.md` cập nhật tên file.
 
 ## Ghi chú
 Phát hiện khi cutover CR-031 P4-T01 (B8). Liên quan `deploy/db/backup.sh` (rotate theo glob `pre-migrate-*`), `.github/workflows/content-ops.yml`.

@@ -89,6 +89,7 @@ Chạy cả `sh` (Git Bash) lẫn **`dash`** (POSIX nghiêm, gần busybox ash).
 - Actual after fix: 2 vòng độc lập (T1–T4), whitelist/không ghi đè/daily như cũ (T5–T8).
 - Evidence: harness 13/13 PASS trên `sh` + `dash`; HEAD 7/13 (T1, T4 tái hiện đúng bug).
 - **Status: PASS** (mức script; xác nhận trên VPS sau deploy = bước user ở Verification plan).
+- **VPS 2026-10-15 (sau deploy 482aaa8): PASS** — Content ops `backup` run 38672728081: `OK db → ops-backup-20261015T024614Z-38672728081.dump (176.0K)`, không có dòng `rotate: xoá pre-migrate-<sha>`.
 
 **Verify khác:**
 - `sh -n deploy/db/backup.sh` → OK; `dash -n` → OK. `shellcheck`: skip (không cài).
