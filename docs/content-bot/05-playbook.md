@@ -66,6 +66,7 @@ Cần: tiêu đề, nội dung/ý chính, danh mục (đề xuất nếu thiếu
 2. Ảnh người dùng gửi → `upload` trước, lấy `/uploads/<hash>.<ext>` làm `cover`.
 3. 2 bản ghi `post/vi/<slug>` + `post/en/<slug>` — `data` theo `06` §1 (frontmatter → JSON), thân bài → `body`.
 4. `excerpt` 1–2 câu, ≤ ~160 ký tự. Body: mở đầu, các mục `##`, kết ngắn. Không bịa số liệu/nguồn.
+   Ảnh giữa bài → `upload` rồi chèn `<NewsImage … />` (`04` §F).
 5. Revalidate: `--collection post`.
 
 ## 3. Thêm giải pháp / sản phẩm / case study
