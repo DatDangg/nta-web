@@ -3,11 +3,11 @@
   "activeWorkItem": {
     "type": "feature",
     "slug": "ai-news-naming-images",
-    "phaseTask": "phase-1",
-    "step": "phase_plan_checkpoint",
+    "phaseTask": "phase-1-task-01",
+    "step": "commit",
     "status": "awaiting",
     "journal": ".context/runs/feature-ai-news-naming-images-phase-1-task-01.md",
-    "note": "CR-038 — spec 4.6.0 / scope v56; chờ user duyệt phase plan (3 task) + chốt cách sửa w42 trong DB (Q1)"
+    "note": "CR-038 — task 01 done (NORMAL PASS); task 02 review PASS chờ commit; task 03 chưa build"
   },
   "features": [
     {
@@ -1411,7 +1411,7 @@
     {
       "slug": "ai-news-naming-images",
       "cr": "CR-038",
-      "status": "planning",
+      "status": "in_progress",
       "changeFile": "spec/changes/2026-10-15-ai-news-naming-images.md",
       "classification": "MODIFY",
       "risk": "MEDIUM",
@@ -1422,7 +1422,9 @@
             {
               "task": "phase-1-task-01",
               "title": "Nhãn Tin mới/Latest + breadcrumb chi tiết tin kiểu pill",
-              "status": "pending"
+              "status": "done",
+              "review": "NORMAL PASS",
+              "reviewReport": ".context/review-reports/feature-ai-news-naming-images-phase-1-task-01-round-1-review.md"
             },
             {
               "task": "phase-1-task-02",

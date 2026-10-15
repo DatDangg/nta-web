@@ -7,7 +7,7 @@ interface FeaturedPostsProps {
   onShowAll: () => void;
 }
 
-/** Thẻ "NỔI BẬT — Cập nhật mới nhất từ NTA" (không có newsletter — ngoài phạm vi, quyết định user 2026-10-13). */
+/** Thẻ "TIN MỚI — Cập nhật mới nhất từ NTA" (không có newsletter — ngoài phạm vi, quyết định user 2026-10-13). */
 function HighlightCard({ onShowAll }: { onShowAll: () => void }) {
   const t = useTranslations('blog');
   return (
@@ -43,8 +43,8 @@ function HighlightCard({ onShowAll }: { onShowAll: () => void }) {
 }
 
 /**
- * Khối nổi bật (R-09a §3, chỉ khi không lọc/tìm, trang 1): bài mới nhất dạng lớn, ≤2 bài nhỏ, thẻ NỔI BẬT.
- * xl: 3 cột · md–lg: bài lớn + thẻ NỔI BẬT full-width, 2 bài nhỏ 2 cột · base: 1 cột.
+ * Khối nổi bật (R-09a §3, chỉ khi không lọc/tìm, trang 1): bài mới nhất dạng lớn, ≤2 bài nhỏ, thẻ TIN MỚI.
+ * xl: 3 cột · md–lg: bài lớn + thẻ TIN MỚI full-width, 2 bài nhỏ 2 cột · base: 1 cột.
  */
 export function FeaturedPosts({ posts, onShowAll }: FeaturedPostsProps) {
   const t = useTranslations('blog');
