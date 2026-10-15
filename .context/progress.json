@@ -1,13 +1,13 @@
 {
   "mode": "feature",
   "activeWorkItem": {
-    "type": "feature",
-    "slug": "contact-form-email-only",
-    "phaseTask": "phase-1-task-01",
-    "step": "close_out",
-    "status": "running",
-    "journal": ".context/runs/feature-contact-form-email-only-phase-1-task-01.md",
-    "note": "Task 01 PASS + spec-validator PASS; đang close-out CR-039"
+    "type": null,
+    "slug": null,
+    "phaseTask": null,
+    "step": "idle",
+    "status": "idle",
+    "journal": null,
+    "note": "CR-039 done 2026-10-15"
   },
   "features": [
     {
@@ -1458,8 +1458,8 @@
     {
       "slug": "contact-form-email-only",
       "cr": "CR-039",
-      "status": "in_progress",
-      "changeFile": "spec/changes/2026-10-15-contact-form-email-only.md",
+      "status": "done",
+      "changeFile": "spec/changes/archive/2026-10-15-contact-form-email-only.md",
       "classification": "MODIFY + REMOVE",
       "risk": "MEDIUM",
       "phases": [
@@ -1489,7 +1489,8 @@
       "specValidation": {
         "verdict": "PASS",
         "report": ".context/review-reports/feature-contact-form-email-only-spec-validation.md"
-      }
+      },
+      "completedAt": "2026-10-15"
     }
   ],
   "bugs": [

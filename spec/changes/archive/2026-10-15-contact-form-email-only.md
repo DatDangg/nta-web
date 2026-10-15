@@ -1,7 +1,7 @@
 ---
 id: contact-form-email-only
 type: feature
-status: in_progress
+status: done
 created: 2026-10-15
 ---
 
@@ -17,14 +17,14 @@ User (chat 2026-10-15): "cái liên hệ giờ đang lưu sheet… muốn đổi
 - Phía web (`src/lib/api/forward.ts`, `CONTACT_FORM_TARGET` / `CONTACT_FORM_TOKEN`) giữ hợp đồng hiện tại nếu không cần đổi.
 
 ## Acceptance (bắt buộc)
-- [ ] Gửi form `/vi/lien-he` và `/en/contact` → 1 email tới địa chỉ trong `ADMIN_EMAIL`, đủ: thời gian (giờ VN), ngôn ngữ, tên, email, SĐT, công ty, nhu cầu (nhãn), nội dung.
-- [ ] Email có `replyTo` = email khách; tiêu đề nhận diện được (vd "[NTA] Liên hệ mới — <tên>").
-- [ ] Không ghi Sheet, không gọi Telegram; không còn đọc `SHEET_NAME` / `TELEGRAM_*`.
-- [ ] Script chỉ trả `{"status":"ok"}` khi gửi mail thành công; lỗi gửi (vd hết hạn mức) → `server_error` để web báo lỗi cho người dùng (không mất liên hệ âm thầm).
-- [ ] Token bí mật + validate payload giữ nguyên; nội dung người dùng không chèn được HTML vào mail (gửi plain text hoặc escape).
-- [ ] Thiếu `ADMIN_EMAIL` → `server_error`, log mã cố định, không lộ dữ liệu.
-- [ ] Đổi `ADMIN_EMAIL` sang địa chỉ khác có hiệu lực ngay, không redeploy.
-- [ ] Test `tools/contact-sheet/code.test.ts` cập nhật theo; README hướng dẫn mới (property, cấp quyền gửi mail, hạn mức Gmail ~100/ngày · Workspace ~1500/ngày).
+- [x] Gửi form `/vi/lien-he` và `/en/contact` → 1 email tới địa chỉ trong `ADMIN_EMAIL`, đủ: thời gian (giờ VN), ngôn ngữ, tên, email, SĐT, công ty, nhu cầu (nhãn), nội dung.
+- [x] Email có `replyTo` = email khách; tiêu đề nhận diện được (vd "[NTA] Liên hệ mới — <tên>").
+- [x] Không ghi Sheet, không gọi Telegram; không còn đọc `SHEET_NAME` / `TELEGRAM_*`.
+- [x] Script chỉ trả `{"status":"ok"}` khi gửi mail thành công; lỗi gửi (vd hết hạn mức) → `server_error` để web báo lỗi cho người dùng (không mất liên hệ âm thầm).
+- [x] Token bí mật + validate payload giữ nguyên; nội dung người dùng không chèn được HTML vào mail (gửi plain text hoặc escape).
+- [x] Thiếu `ADMIN_EMAIL` → `server_error`, log mã cố định, không lộ dữ liệu.
+- [x] Đổi `ADMIN_EMAIL` sang địa chỉ khác có hiệu lực ngay, không redeploy.
+- [x] Test `tools/contact-sheet/code.test.ts` cập nhật theo; README hướng dẫn mới (property, cấp quyền gửi mail, hạn mức Gmail ~100/ngày · Workspace ~1500/ngày).
 
 ## Ghi chú
 - Spec: thay R-13a (4.5.0) — "lưu" không còn là dòng Sheet; web vẫn không lưu DB (R-13). Rủi ro user chấp nhận: mail lỗi → không có bản lưu dự phòng.
@@ -39,3 +39,5 @@ User (chat 2026-10-15): "cái liên hệ giờ đang lưu sheet… muốn đổi
   Quyết định: đổi thư mục `tools/contact-sheet` → `tools/contact-mail` (git mv; glob test/tsconfig tự bao, không đổi cấu hình);
   `src/lib/api/forward.ts` không đổi hành vi (chỉ comment). Thêm hàm `testSendMail()` để cấp quyền gửi mail + test.
   Plan: 1 task `tasks/feature-contact-form-email-only/phase-1-task-01.md`. **Dừng ở checkpoint duyệt plan**, chưa gọi builder.
+- 2026-10-15 — Phase 1 xong: task-01 (attempt 2) reviewer round 2 PASS, spec-validator PASS; commit `115f125`. Đóng change, archive.
+  **Việc của user (ngoài repo):** dán `tools/contact-mail/Code.gs`, chạy `testSendMail` cấp quyền, đặt `ADMIN_EMAIL`, xoá property `TELEGRAM_*`/`SHEET_NAME`, Quản lý triển khai → Phiên bản mới (giữ URL `/exec`) — theo `tools/contact-mail/README.md`.

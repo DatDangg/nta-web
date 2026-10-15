@@ -3,19 +3,19 @@
 ```yaml
 workItem: feature/contact-form-email-only
 phaseTask: phase-1-task-01
-step: close_out
+step: done
 agent: change-request
 status: awaiting
 attempt: 2
 interrupted: false
-updatedAt: 2026-10-15T23:55:00+07:00
+updatedAt: 2026-10-16T00:10:00+07:00
 filesTouched: [SPECIFICATIONS.md, spec/changes/BACKLOG.md, .context/progress.json, spec/CHANGELOG.md, spec/test-scope/current.json]
 filesNew: [spec/changes/2026-10-15-contact-form-email-only.md, spec/updates/2026-10-15-contact-form-email-only.md, tasks/feature-contact-form-email-only/phase-1-task-01.md, .context/runs/feature-contact-form-email-only-phase-1-task-01.md]
 evidence:
   reportPath: .context/review-reports/feature-contact-form-email-only-phase-1-task-01-round-2-review.md
   round: 2
   verdict: PASS
-next: "close-out: spec-validator → progress → commit task → archive change doc + BACKLOG done → commit close-out → push"
+next: "none — CR-039 done; user cập nhật script trên Apps Script theo tools/contact-mail/README.md; primary push"
 loopSignal: none
 approvals: ["2026-10-15 user duyệt plan CR-039 (1 task, đổi thư mục tools/contact-mail)"]
 batchQueue: []
@@ -41,3 +41,4 @@ batchQueue: []
 - reviewer round 2 PASS (NORMAL); build PASS qua docker build --target builder (next build mới, 9/9 trang, image tạm đã xoá; npm run build local lỗi native binding @swc/core do môi trường, không do diff) → close-out
 - 2026-10-15 builder attempt 1 → reviewer round 1 FAIL (MAJOR doc API_SPEC/ERD) → builder attempt 2 → reviewer round 2 PASS. Build chứng minh qua docker build --target builder.
 - 2026-10-15 spec-validator phase 1 PASS (inline, `.context/review-reports/feature-contact-form-email-only-spec-validation.md`); BRD:176 ghi chú CR-039; task done → commit task.
+- 2026-10-15 close-out: change doc done → spec/changes/archive/, BACKLOG CR-039 done, progress activeWorkItem idle. Journal hoàn tất.

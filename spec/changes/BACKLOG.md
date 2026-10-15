@@ -46,7 +46,7 @@
 | CR-036 | Bản tin AI tuần: đổi lịch cron từ 08:00 thứ 2 sang thứ 7 hằng tuần (08:00 thứ 7 giờ VN — user chốt) | MODIFY | done (1 task, spec 4.4.0 / scope v54) | `archive/2026-10-15-ai-news-cron-saturday.md` | 2026-10-15 | 2026-10-15 |
 | CR-037 | Form liên hệ đổ dữ liệu vào Google Sheet + báo Telegram (Apps Script Web App qua `CONTACT_FORM_TARGET`) — chốt OQ#4 | ADDITIVE | done (2 task, spec 4.5.0 / scope v55; Telegram tạm chưa bật) | `archive/2026-10-15-contact-form-google-sheet.md` | 2026-10-15 | 2026-10-15 |
 | CR-038 | Bản tin AI + Blog: nhãn "Nổi bật" → "Tin mới", tên bản tin theo ngày, ảnh thẻ bản tin lấy ảnh tin đầu tiên có ảnh (fallback ảnh cố định), breadcrumb chi tiết tin đồng bộ kiểu pill | MODIFY | done (3 task, spec 4.6.0 / scope v56; DB prod: w42 v2 + ui_messages blog v2) | `archive/2026-10-15-ai-news-naming-images.md` | 2026-10-15 | 2026-10-15 |
-| CR-039 | Form liên hệ: chỉ gửi email tới admin (`ADMIN_EMAIL` trong Script Properties), bỏ Google Sheet + Telegram — thay R-13a | MODIFY + REMOVE | in_progress (1 task, spec 4.7.0 / scope v57; chờ duyệt plan) | `2026-10-15-contact-form-email-only.md` | 2026-10-15 | |
+| CR-039 | Form liên hệ: chỉ gửi email tới admin (`ADMIN_EMAIL` trong Script Properties), bỏ Google Sheet + Telegram — thay R-13a | MODIFY + REMOVE | done (1 task, spec 4.7.0 / scope v57; user cần dán script mới + đặt `ADMIN_EMAIL` + Phiên bản mới trên Apps Script) | `archive/2026-10-15-contact-form-email-only.md` | 2026-10-15 | 2026-10-15 |
 
 ## Quy tắc tracking
 
