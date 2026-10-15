@@ -2,12 +2,12 @@
   "mode": "feature",
   "activeWorkItem": {
     "type": "feature",
-    "slug": "telegram-content-bot",
+    "slug": "ai-news-item-images",
     "phaseTask": "phase-1-task-01",
-    "step": "closeout",
-    "status": "done",
-    "journal": null,
-    "note": "CR-030 done 2026-10-15: thu hẹp — bot do user tự dựng; repo thêm db:cli create/update/delete + cập nhật docs/content-bot theo DB. CR-031 còn P5-T02 + close-out"
+    "step": "builder",
+    "status": "running",
+    "journal": ".context/runs/feature-ai-news-item-images-phase-1-task-01.md",
+    "note": "CR-035 spec-validation r2 PASS (G1 dọn task, G2 test-scope v52 sinh lại). Spec/intake committed. T01 builder đang chạy — cancel sẽ redo bước này."
   },
   "features": [
     {
@@ -1252,6 +1252,44 @@
           ]
         }
       ]
+    },
+    {
+      "slug": "ai-news-item-images",
+      "cr": "CR-035",
+      "status": "in_progress",
+      "changeFile": "spec/changes/2026-10-15-ai-news-item-images.md",
+      "classification": "ADDITIVE",
+      "risk": "HIGH",
+      "phases": [
+        {
+          "phase": 1,
+          "tasks": [
+            {
+              "task": "phase-1-task-01",
+              "title": "generate.py lấy og:image an toàn (SSRF guard) + render ảnh MDX",
+              "status": "pending"
+            },
+            {
+              "task": "phase-1-task-02",
+              "title": "publish-post --images-dir (saveImage trước createEntry)",
+              "status": "pending"
+            },
+            {
+              "task": "phase-1-task-03",
+              "title": "ArticleImage width/height chuỗi → next/image + dòng nguồn ảnh",
+              "status": "pending"
+            },
+            {
+              "task": "phase-1-task-04",
+              "title": "ai-news.yml artifact digest → publish-db + docs",
+              "status": "pending"
+            }
+          ]
+        }
+      ],
+      "updatedAt": "2026-10-15",
+      "specVersion": "4.3.0",
+      "scopeVersion": 52
     }
   ],
   "bugs": [

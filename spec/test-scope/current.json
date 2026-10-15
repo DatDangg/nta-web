@@ -1,71 +1,84 @@
 {
-  "specVersion": "4.2.1",
-  "scopeVersion": 51,
-  "generatedAt": "2026-10-15T10:00:00+07:00",
-  "trigger": "bug-fix",
-  "workItem": "bug/ops-backup-rotation (CR-033 spec/changes/2026-10-14-ops-backup-rotation.md; task tasks/bug-ops-backup-rotation/phase-1-task-01.md; review .context/review-reports/bug-ops-backup-rotation-phase-1-task-01-round-1-review.md STRICT PASS)",
+  "specVersion": "4.3.0",
+  "scopeVersion": 52,
+  "generatedAt": "2026-10-15T16:00:00+07:00",
+  "trigger": "feature-update",
+  "workItem": "feature/ai-news-item-images (CR-035 spec/changes/2026-10-15-ai-news-item-images.md; tasks tasks/feature-ai-news-item-images/phase-1-task-01..04.md; ADDITIVE, review STRICT; phát hành ở bước planning sau khi user duyệt plan 2026-10-15)",
   "specRefs": [
-    "R-16b",
-    "R-16c",
-    "R-16d",
-    "R-09c",
-    "R-27"
+    "R-09c"
   ],
   "changed": {
     "files": [
-      "deploy/db/backup.sh (whitelist nhận thêm nhãn ops-*; rotate <regex loại trừ|''> <glob>...; tách 2 vòng giữ: pre-migrate-*.dump trừ pre-migrate-ops-* (deploy + nhãn tay) và ops-*.dump + legacy pre-migrate-ops-*.dump (Content ops / AI news); daily/uploads, KEEP, không ghi đè, exit code giữ nguyên)",
-      ".github/workflows/content-ops.yml (nhãn backup ops-${OPS_COMMAND}-<UTC>-${GITHUB_RUN_ID}, comment đầu file)",
-      ".github/workflows/ai-news.yml (nhãn backup ops-ai-news-<UTC>-${GITHUB_RUN_ID})",
-      "docs/runbook/db.md (§3 bảng 3 vòng giữ, bỏ cảnh báo CR-033, ghi chú sidecar cũ exit 2, dòng dọn đĩa)",
-      "docs/runbook/cutover-content-db.md (tên file ops-<lệnh>-…dump)",
-      "docs/runbook/ai-news.md (tên file ops-ai-news-*, bản cũ pre-migrate-ops-ai-news-*)"
+      "tools/ai-news/generate.py (dự kiến — tách 2 bước: `generate --items-out <file>` (LLM + guard, có OPENCODE_API_KEY, không fetch ảnh) và `render --items-json <file> --images-out <dir>` (KHÔNG key, gọi og_image, render <NewsImage …/> + dòng nguồn dưới tiêu đề tin, câu chú thích cuối bài, manifest ảnh), cờ --no-images)",
+      "tools/ai-news/og_image.py (dự kiến — mới: fetch og:image/twitter:image an toàn SSRF (kể cả NAT64/6to4/Teredo, IPv4-mapped tự xét), deadline 10 s tổng/request, kiểm magic bytes/kích thước, sha256 tên file, bỏ ảnh trùng)",
+      "tools/ai-news/tests/* (dự kiến — test từng guard SSRF/ảnh + render)",
+      "tools/db/publish-post.ts (dự kiến — --images-dir: validate ảnh trong dry-run, I-7 coi ảnh sắp lưu hợp lệ, saveImage trước createEntry)",
+      "tools/db/content-cli.ts (dự kiến — nhận cờ --images-dir cho publish-post)",
+      "src/components/mdx/ (dự kiến — thêm component NewsImage đăng ký trong mdxComponents: chỉ nhận src /uploads/<sha256>.(jpg|png|webp), width/height chuỗi số 1..8192, alt bắt buộc → next/image; KHÔNG sửa ArticleImage, KHÔNG đổi mdxComponents.img; style dòng nguồn nếu cần)",
+      ".github/workflows/ai-news.yml (dự kiến — job digest tách bước Generate (có OPENCODE_API_KEY, --items-out) / Render (KHÔNG key, render --items-json … --images-out); upload-artifact ai-news-images-<slug> 7 ngày → download + mount ro ở publish-db, publish-post --images-dir; AI_NEWS_IMAGES=off → --no-images)",
+      "docs/runbook/ai-news.md (dự kiến — luồng ảnh, tắt khẩn cấp, mục gỡ 1 ảnh khi bị yêu cầu)"
     ],
     "modules": [
-      "Sidecar backup nta-db-backup (image build từ deploy/db/Dockerfile.backup — có hiệu lực sau deploy rebuild)",
-      "Backup trước migrate trong deploy (.github/workflows/deploy.yml — không đổi, chịu ảnh hưởng vòng giữ)",
-      "Workflow Content ops (backup / import-seed / upload-smoke ...)",
-      "Workflow AI news job publish-db (backup trước khi ghi DB)",
-      "Backup hằng ngày (backup-loop.sh → daily-* / uploads-*)",
-      "Restore / migrate-on-restore (lấy *.dump mới nhất)"
+      "Pipeline bản tin AI tuần — job digest (tools/ai-news, fetch Internet trên runner VPS)",
+      "Pipeline bản tin AI tuần — job publish-db (publish-post, secret DB)",
+      "Write-path ảnh upload (saveImage / inspectImage / storeImageFile, R-16d — dùng lại, không đổi)",
+      "Validate nội dung I-7 (ảnh /uploads/* phải là asset còn sống — src/db/content-repo.ts)",
+      "Render MDX blog chi tiết (RenderMdx + mdxComponents — thêm NewsImage; ArticleImage và mdxComponents.img giữ nguyên)",
+      "Route phục vụ /uploads/[...path] + next.config images.localPatterns /uploads/**"
     ]
   },
   "impact": {
     "direct": [
-      "Có ≥14 file pre-migrate-<sha12>-<run>-<attempt>.dump, chạy Content ops backup → log 'OK db → ops-backup-<UTC>-<run>.dump', KHÔNG có dòng 'rotate: xoá pre-migrate-<sha>…'; số file pre-migrate-* (trừ pre-migrate-ops-*) không giảm",
-      "Chạy AI news publish-db (khi cần backup) → file ops-ai-news-<UTC>-<run>.dump, không xoá bản pre-migrate-<sha> của deploy",
-      "Vòng ops giữ tối đa BACKUP_KEEP (14) bản ops-*.dump mới nhất; bản ops cũ nhất bị rotate khi vượt",
-      "Deploy (backup pre-migrate-<sha>) khi vòng deploy đầy → chỉ xoá pre-migrate-<sha> cũ nhất, KHÔNG xoá ops-* hay legacy pre-migrate-ops-*",
-      "Legacy pre-migrate-ops-*.dump trên VPS được tính vào vòng ops: backup ops mới làm rơi dần legacy cũ nhất; deploy không đụng tới",
-      "Nhãn tay pre-migrate-manual-* / pre-migrate-before-* (runbook) vẫn được nhận, thuộc vòng deploy",
-      "Nhãn không hợp lệ (foo, ops-a/b) → usage, exit 2; trùng tên file (ops-dup-1 chạy 2 lần) → FAILED exit 1, file cũ giữ nguyên"
+      "Tin có og:image hợp lệ ở trang nguồn → MDX bài vi + en có <NewsImage src=\"/uploads/<sha256>.<ext>\" alt width height/> ngay dưới tiêu đề tin, alt = tiêu đề tin theo ngôn ngữ; trang chi tiết render next/image (/_next/image?url=%2Fuploads…)",
+      "src ảnh là /uploads/<sha256>.<ext> phục vụ từ domain site; không có URL ảnh ngoài (không hotlink) trong MDX/HTML bài",
+      "Dưới mỗi ảnh có dòng nhỏ 'Ảnh: <tên miền nguồn>' (vi) / 'Image: <domain>' (en); cuối bài có câu chú thích ảnh minh hoạ thuộc trang nguồn",
+      "Tin không có og:image / timeout / quá 2 MB / không phải JPEG-PNG-WebP (kể cả GIF, SVG, HTML giả ảnh) / < 200 px → tin đó chỉ text, bài vẫn đăng, workflow xanh",
+      "Ảnh trùng giữa ≥ 2 tin (cùng sha256, vd logo) → bỏ ở mọi tin đó",
+      "SSRF: URL tin hoặc og:image trỏ http, port khác 443, userinfo, localhost/127.0.0.1, RFC1918, link-local 169.254.0.0/16 (metadata 169.254.169.254), 100.64/10, IPv6 ULA/loopback, NAT64 64:ff9b::/96 + 64:ff9b:1::/48, 6to4 2002::/16, Teredo 2001::/32 (dù is_global), IPv4-mapped (xét IPv4 bên trong), tên miền resolve ra IP nội bộ, redirect sang IP nội bộ hoặc https→http, > 3 redirect → không fetch, tin chỉ text",
+      "Mỗi request có deadline tổng 10 s (ngoài timeout socket 5 s; server nhỏ giọt → bỏ), ngân sách bước ảnh ≤ 90 s → tin còn lại không ảnh; ảnh cạnh ngoài 200..8192 px → bỏ",
+      "HTML trang nguồn > 512 KB chỉ đọc phần đầu; HTML không xuất hiện trong prompt LLM, file trên đĩa hay log",
+      "publish-post --images-dir --dry-run: ảnh sai magic bytes hoặc sha256 ≠ tên file → đỏ, không ghi locale nào; ảnh đúng → I-7 coi hợp lệ",
+      "publish-post --images-dir --confirm-prod: backup → lưu ảnh qua saveImage (asset version, actor workflow:ai-news, trùng hash → reused) → createEntry vi + en; chạy lại cùng tuần → bài exists, không upload/ghi ảnh",
+      "NewsImage: src ngoài (http…, //…) / sai dạng (không phải sha256 64 hex thường, ext khác jpg|png|webp, có ..) / width-height không phải chuỗi số 1..8192 / thiếu alt → không ra ảnh (null); đúng → next/image",
+      "Tách secret: bước fetch ảnh (render --items-json … --images-out) chạy KHÔNG có OPENCODE_API_KEY; bước generate --items-out có key nhưng không fetch ảnh",
+      "Workflow ai-news: artifact ai-news-images-<slug> (7 ngày) từ digest sang publish-db; AI_NEWS_IMAGES=off → chạy --no-images, bài chỉ text"
     ],
     "dependents": [
-      "Backup hằng ngày daily → vẫn rotate riêng daily-* / uploads-*, không đụng pre-migrate-* / ops-*",
-      "Deploy workflow: rebuild image nta-db-backup trước bước backup → backup pre-migrate → migrate → chạy app vẫn PASS",
-      "restore-check.sh nhận file ops-*.dump để restore vào DB tạm + kiểm số bản ghi (R-16b)",
-      "migrate-on-restore.sh lấy *.dump mới nhất — khớp cả ops-*.dump",
-      "Thứ tự sidecar cũ + workflow mới gửi ops-* (trước khi deploy rebuild) → workflow dừng ở bước Backup DB (exit 2), chưa ghi DB (fail an toàn)"
+      "Content ops 'upload' (content-cli upload → saveImage) vẫn hoạt động như cũ, chỉ JPEG/PNG/WebP ≤ 5 MB (R-16d không đổi)",
+      "Validate I-7 cho các luồng ghi khác (create/update qua db:cli) giữ nguyên — ảnh /uploads không tồn tại vẫn bị từ chối",
+      "Trang chi tiết blog/case study/sản phẩm khác dùng ArticleImage (mdxComponents.img) trong MDX hiển thị đúng như trước — ArticleImage không đổi",
+      "Revalidate collection post + smoke /blog/<slug> và /en/blog/<slug> HTTP 200 sau publish-db",
+      "Backup DB trước khi ghi (nhãn ops-ai-news-<UTC>-<run>) vẫn chạy khi có locale missing"
     ],
     "regression": [
-      "Content ops import-seed / upload-smoke vẫn backup trước khi ghi rồi chạy tiếp bình thường",
-      "AI news publish-db vẫn chèn bài vi+en vào DB + revalidate + smoke 2 URL (R-09c)",
-      "Lệnh tay trong docs/runbook/db.md (backup.sh pre-migrate-manual-…, before-restore, before-import, before-rollback) chạy được",
-      "Cảnh báo BACKUP_MIN_FREE_MB vẫn hoạt động"
+      "Bài AI tuần các tuần trước (không ảnh) không bị đổi nội dung/version trong DB",
+      "Guard URL allow-list .clean.md, số tin, frontmatter, npm run build trong digest giữ nguyên; FAIL → không commit, không ghi DB",
+      "Ảnh bìa bài AI tuần vẫn /images/blog/ai-weekly-cover.svg",
+      "Blog listing /blog, /en/blog + sitemap hiển thị bình thường",
+      "publish-post không có --images-dir chạy như CR-034 (chỉ-thêm-mới, exists → không ghi đè)",
+      "CLI từ chối cờ không thuộc lệnh (vd --images-dir cho lệnh khác) bằng lỗi usage, không chạm DB"
     ]
   },
   "acceptance": [
-    "Backup ops (Content ops / AI news) không bao giờ xoá bản pre-migrate-<sha> của deploy; deploy không xoá bản ops — 2 vòng giữ độc lập, mỗi vòng KEEP=14",
-    "Tên file backup ops mới: ops-<nguồn>-<UTC>-<run_id>.dump",
-    "Whitelist nhãn: daily | pre-migrate-* | ops-*; nhãn khác → exit 2",
-    "Không ghi đè file đã tồn tại (exit 1); daily/uploads giữ hành vi cũ",
-    "Harness script 13/13 PASS trên sh + dash (HEAD 7/13 tái hiện bug T1/T4); sh -n OK; YAML 2 workflow parse OK",
-    "npm run typecheck + lint + test PASS; build Linux PASS trước khi push",
-    "Sau deploy trên VPS: Content ops backup → không có dòng 'rotate: xoá pre-migrate-<sha>…'"
+    "Mỗi tin có og:image hợp lệ ở trang nguồn → bài vi + en hiện ảnh (<NewsImage> → next/image) dưới tiêu đề tin, alt = tiêu đề tin theo ngôn ngữ",
+    "Ảnh được tải về và phục vụ từ domain site (/uploads/...), KHÔNG hotlink ảnh ngoài",
+    "Tin không lấy được ảnh (không có og:image, timeout, sai định dạng, quá dung lượng) → vẫn đăng, chỉ hiện text; không làm fail cả bài",
+    "Bài các tuần cũ không bị đổi",
+    "Ghi nguồn ảnh: 'Ảnh: <tên miền>' / 'Image: <domain>' ngay dưới mỗi ảnh và câu chú thích cuối bài",
+    "Chỉ JPEG/PNG/WebP (theo magic bytes), ≤ 2 MB, cạnh 200..8192 px; GIF → tin chỉ text; R-16d không đổi",
+    "Ảnh trùng giữa các tin tự bỏ (không deny-list cứng)",
+    "Guard SSRF có test từng guard (https-only, IP không-global sau DNS + mỗi redirect gồm NAT64/6to4/Teredo + IPv4-mapped, pin IP, ≤ 3 redirect, timeout 5 s + deadline 10 s/request, giới hạn HTML 512 KB / ảnh 2 MB, HTML không tới LLM)",
+    "NewsImage chỉ ra ảnh với src /uploads/<sha256>.(jpg|png|webp) + width/height chuỗi số 1..8192 + alt; src ngoài/sai dạng/thiếu alt → không ra ảnh",
+    "Workflow ai-news tách bước generate (--items-out, có OPENCODE_API_KEY) / render (render --items-json … --images-out, KHÔNG key); artifact ai-news-images-<slug> → publish-db publish-post --images-dir; --no-images khi AI_NEWS_IMAGES=off",
+    "Runbook docs/runbook/ai-news.md có mục gỡ 1 ảnh khi bị yêu cầu (xoá mềm asset + sửa bài qua db:cli update) và tắt khẩn cấp AI_NEWS_IMAGES=off",
+    "npm run typecheck + lint + test PASS; test Python tools/ai-news PASS; build PASS trước khi push"
   ],
-  "risk": "medium",
+  "risk": "high",
   "notes": [
-    "Không đổi requirement (R-16b 'giữ tối thiểu 14 bản' + backup trước migrate nay được thoả đúng) → specVersion giữ 4.2.1, không có spec/updates/ (convention bug-fix không bump, vd CR-026/CR-032 scope v50)",
-    "Không có test tự động trong repo cho shell script — verify bằng harness ngoài repo (pg_dump/pg_restore giả); test bên TEST chủ yếu là smoke ops trên VPS sau deploy",
-    "Residual: fix chỉ có hiệu lực sau deploy rebuild sidecar; chưa xác nhận trên busybox ash thật; legacy pre-migrate-ops-* chỉ rơi khi có backup ops mới; nhãn rỗng 'ops-' vẫn được nhận (MINOR, như HEAD)"
+    "Risk high: SSRF trên runner self-hosted VPS dùng chung (127.0.0.1:3005 nta-web, nta-db, docker bridge 172.17.0.1, metadata 169.254.169.254), DNS rebinding, file khổng lồ/slow-loris, file 'ảnh' là HTML/SVG; bytes không tin cậy vào volume /uploads + content_entries prod không người duyệt; shared write-path saveImage/createEntry/I-7 + shared mdxComponents (thêm NewsImage, ArticleImage không đổi)",
+    "Bản quyền og:image: user chấp nhận rủi ro (2026-10-15); có ghi nguồn + quy trình gỡ ảnh",
+    "Scope phát hành ở bước planning (danh sách file là dự kiến) — có thể cập nhật lại ở close-out nếu file thực tế khác; lượt kiểm thật trên prod: cron 19/10 (w43)",
+    "Không đổi schema DB, R-16d, cover, guard text/URL, bài các tuần trước",
+    "Sửa lại 2026-10-15 theo spec-validator round 2 (G2): render ảnh tin bằng component NewsImage (MDX 3 không map <img> viết thẳng sang components.img); giữ specVersion 4.3.0 / scopeVersion 52 vì chưa commit"
   ]
 }

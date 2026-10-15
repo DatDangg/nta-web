@@ -1,5 +1,5 @@
 ---
-spec_version: 4.2.1
+spec_version: 4.3.0
 updated_at: 2026-10-15
 ---
 
@@ -310,6 +310,15 @@ _(cập nhật 2026-10-13: thêm **domain phụ** `ntasolution.vn` (+ `www`) ph�
     + header `x-opencode-session` cố định) trả danh sách tin; dạng **điểm tin** — mỗi tin: tiêu đề dịch + 1–2 câu diễn giải
     từ chính tiêu đề + link nguồn; cấm thêm thông tin không có trong dữ liệu. Cuối bài ghi chú cố định "Bản tin được tổng hợp
     tự động từ các nguồn công khai" (vi/en).
+  - *Ảnh từng tin (4.3.0 — CR-035):* sau guard URL, `generate.py` (job `digest`, không secret DB) lấy `og:image`/`twitter:image`
+    của **chính URL tin** với guard SSRF (https-only, chặn IP không-global kể cả sau DNS/redirect, pin IP, ≤ 3 redirect, timeout,
+    HTML ≤ 512 KB chỉ đọc meta, HTML không tới LLM) → tải ảnh ≤ 2 MB, **chỉ JPEG/PNG/WebP** theo magic bytes (GIF → bỏ ảnh, tin
+    chỉ text; không đổi R-16d), ≥ 200 px; ảnh trùng giữa các tin (cùng sha256 ở ≥ 2 tin) **tự bỏ**, không deny-list cứng.
+    Bài vi + en chèn ảnh dưới tiêu đề tin (`/uploads/<sha256>.<ext>`, alt = tiêu đề tin theo locale) + ghi nguồn ảnh: dòng nhỏ
+    ngay dưới mỗi ảnh "Ảnh: <tên miền>" (vi) / "Image: <domain>" (en) **và** 1 câu chú thích cuối bài (ảnh minh hoạ thuộc về
+    trang nguồn của từng tin); **không hotlink**. Tin không lấy được ảnh → chỉ text; lỗi ảnh không làm fail bài. Ảnh bìa giữ
+    SVG cố định. Bản quyền og:image: user **chấp nhận rủi ro** (2026-10-15); runbook `docs/runbook/ai-news.md` có cách gỡ 1 ảnh
+    khi bị yêu cầu.
   - *Guard trước khi đăng:* mọi URL trong bài phải có trong `.clean.md`; số tin trong khoảng cho phép; frontmatter
     (`slug/title/date/category/excerpt/cover`) + độ dài hợp lệ; `npm run build` PASS. Bất kỳ bước FAIL → không commit,
     không ghi DB, workflow đỏ. PASS → commit file seed thẳng `main` (lịch sử bài trong git + dedupe tuần theo file).
@@ -318,15 +327,20 @@ _(cập nhật 2026-10-13: thêm **domain phụ** `ntasolution.vn` (+ `www`) ph�
     (vừa commit **hoặc** đã có từ lượt trước → chạy lại cùng tuần tự lành):
     1. `content-cli.ts publish-post <slug> --dry-run` — đọc `src/content/blog/{vi,en}/<slug>.mdx` bằng parser chung, validate
        **cả 2 locale** trước khi ghi bất kỳ bản nào; báo `missing|exists` theo locale. Lỗi validate → đỏ, không ghi locale nào.
+       *(4.3.0 — CR-035)* `--images-dir <dir>`: validate ảnh của bài (magic bytes, sha256 == tên file) ngay trong dry-run; ảnh
+       sắp lưu được coi là hợp lệ cho I-7. Ảnh chuyển từ job `digest` → `publish-db` qua artifact (giữ 7 ngày).
     2. Có locale `missing` → **backup DB trước khi ghi** (lỗi backup → dừng); không thiếu → không backup.
     3. **Chỉ thêm mới** qua write-path chuẩn `createEntry`: version 1 + `content_versions` (op `create`, actor
        `workflow:ai-news`, note có run id). Bản ghi đã có — kể cả đã sửa hay **đã xoá mềm** — → `exists`, **không ghi đè,
        không khôi phục**; chạy lại cùng tuần → 0 ghi, workflow xanh.
+       *(4.3.0 — CR-035)* `--images-dir`: sau backup, lưu ảnh qua `saveImage` (asset có version, actor `workflow:ai-news`;
+       trùng hash → dùng lại) **trước** khi chèn bài; bài `exists` → không đụng ảnh.
     4. Revalidate collection `post` (luôn chạy) → smoke `/blog/<slug>` + `/en/blog/<slug>` HTTP 200.
     Không dispatch `deploy.yml` (bài hiện qua DB + revalidate, không cần build lại image). CLI từ chối cờ không thuộc lệnh
     (vd `rollback --dry-run`) bằng lỗi usage, không chạm DB.
   - Không duyệt tay (user chốt 2026-10-14, đã được báo rủi ro AI bịa chi tiết). — nguồn: change `spec/changes/2026-10-14-weekly-ai-news-digest.md`
-    + `spec/changes/2026-10-15-ai-news-write-db.md` (CR-034, BUG sau cutover DB).
+    + `spec/changes/2026-10-15-ai-news-write-db.md` (CR-034, BUG sau cutover DB)
+    + `spec/changes/2026-10-15-ai-news-item-images.md` (CR-035, ADDITIVE ảnh từng tin).
 - `[cần xác nhận]` blog là static file hay cần CMS (Open Question — `docs/BRD.md:177`)
 
 ### Module 8 — Liên hệ
