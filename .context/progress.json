@@ -1,13 +1,13 @@
 {
   "mode": "feature",
   "activeWorkItem": {
-    "type": null,
-    "slug": null,
-    "phaseTask": null,
-    "step": "idle",
-    "status": "idle",
-    "journal": null,
-    "note": "CR-038 done 2026-10-15"
+    "type": "feature",
+    "slug": "contact-form-email-only",
+    "phaseTask": "phase-1",
+    "step": "phase_plan_checkpoint",
+    "status": "awaiting",
+    "journal": ".context/runs/feature-contact-form-email-only-phase-1-task-01.md",
+    "note": "CR-039 intake xong (spec 4.7.0 / scope v57) — chờ user duyệt plan 1 task"
   },
   "features": [
     {
@@ -1454,6 +1454,36 @@
       "specVersion": "4.6.0",
       "scopeVersion": 56,
       "completedAt": "2026-10-15"
+    },
+    {
+      "slug": "contact-form-email-only",
+      "cr": "CR-039",
+      "status": "in_progress",
+      "changeFile": "spec/changes/2026-10-15-contact-form-email-only.md",
+      "classification": "MODIFY + REMOVE",
+      "risk": "MEDIUM",
+      "phases": [
+        {
+          "phase": 1,
+          "tasks": [
+            {
+              "task": "phase-1-task-01",
+              "title": "Apps Script chỉ gửi email tới ADMIN_EMAIL (bỏ Sheet + Telegram), đổi thư mục tools/contact-mail, test + README + doc reconcile",
+              "status": "pending",
+              "review": null,
+              "reviewReport": null
+            }
+          ]
+        }
+      ],
+      "specRefs": [
+        "R-13a",
+        "R-13",
+        "R-16"
+      ],
+      "updatedAt": "2026-10-15",
+      "specVersion": "4.7.0",
+      "scopeVersion": 57
     }
   ],
   "bugs": [

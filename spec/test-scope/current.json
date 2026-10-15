@@ -1,68 +1,62 @@
 {
-  "specVersion": "4.6.0",
-  "scopeVersion": 56,
-  "generatedAt": "2026-10-15T23:00:00+07:00",
+  "specVersion": "4.7.0",
+  "scopeVersion": 57,
+  "generatedAt": "2026-10-15T23:30:00+07:00",
   "trigger": "feature-update",
-  "workItem": "feature/ai-news-naming-images (CR-038 spec/changes/2026-10-15-ai-news-naming-images.md; tasks tasks/feature-ai-news-naming-images/phase-1-task-01.md, phase-1-task-02.md, phase-1-task-03.md; MODIFY, risk medium; phát hành ở bước planning — hiệu lực khi phase 1 PASS + bài w42 đã sửa trong DB)",
+  "workItem": "feature/contact-form-email-only (CR-039 spec/changes/2026-10-15-contact-form-email-only.md; task tasks/feature-contact-form-email-only/phase-1-task-01.md; MODIFY + REMOVE, risk medium; phát hành ở bước planning — hiệu lực khi phase 1 PASS + user cập nhật script Apps Script, đặt ADMIN_EMAIL)",
   "specRefs": [
-    "R-09c",
-    "R-09a",
-    "R-09"
+    "R-13a",
+    "R-13",
+    "R-16"
   ],
   "changed": {
     "files": [
-      "src/i18n/messages/vi.json + en.json — blog.highlightEyebrow: 'Nổi bật' → 'Tin mới', 'Featured' → 'Latest' (task-01)",
-      "src/components/blog/ArticleHeader.tsx — Breadcrumb variant 'pill' (task-01)",
-      "src/components/blog/FeaturedPosts.tsx — chỉ comment mô tả thẻ (task-01, không đổi hành vi ngoài nhãn i18n)",
-      "tools/ai-news/generate.py — title/excerpt theo ngày (vi DD/MM/YYYY, en D Mon YYYY), cover = ảnh tin đầu tiên có ảnh, fallback /images/blog/ai-weekly-cover.webp (task-02)",
-      "tools/ai-news/tests/test_ai_news.py + test_og_image.py — cập nhật kỳ vọng title/excerpt/cover (task-02)",
-      "public/images/blog/ai-weekly-cover.webp — ảnh fallback mới (task-02, file mới; ai-weekly-cover.svg giữ lại)",
-      "src/content/blog/{vi,en}/ai-weekly-2026-w42.mdx — title/excerpt theo ngày 15/10/2026 + cover ảnh tin 1 (task-03)",
-      "docs/runbook/ai-news.md — quy tắc tên/cover mới + quy trình sửa w42 trong DB (task-02/03)"
+      "tools/contact-sheet/ → tools/contact-mail/ (git mv Code.gs, code.test.ts, README.md)",
+      "tools/contact-mail/Code.gs — bỏ SpreadsheetApp/LockService/UrlFetchApp/Telegram; gửi 1 mail MailApp tới Script Property ADMIN_EMAIL (plain text, replyTo = email khách, tiêu đề [NTA] Liên hệ mới — <tên>), lỗi/thiếu ADMIN_EMAIL → server_error, log mã cố định contact-mail:*",
+      "tools/contact-mail/code.test.ts — stub MailApp thay SpreadsheetApp/UrlFetchApp; kiểm token/validate/nội dung mail/replyTo/tiêu đề/lỗi gửi/thiếu ADMIN_EMAIL/không gọi dịch vụ khác",
+      "tools/contact-mail/README.md — hướng dẫn mới (ADMIN_EMAIL, cấp quyền gửi mail, hạn mức, cập nhật phiên bản triển khai giữ URL /exec, gỡ property cũ)",
+      "src/lib/api/forward.ts — chỉ comment (Sheet/Telegram → email); hành vi không đổi",
+      "docs/API_SPEC.md, docs/ERD.md, docs/runbook/deploy-vps.md, .env.local.example — reconcile as-built (đích = email, đường dẫn tools/contact-mail)"
     ],
     "modules": [
-      "blog listing /blog, /en/blog (khối nổi bật — nhãn thẻ highlight, ảnh thẻ bài lớn/nhỏ/lưới)",
-      "blog detail /blog/[slug], /en/blog/[slug] (breadcrumb, tiêu đề)",
-      "trang chủ — thẻ bài viết mới (PostCard dùng post.cover)",
-      "pipeline ai-news (generate.py render + publish-db)",
-      "DB nội dung post/vi|en/ai-weekly-2026-w42"
+      "Apps Script Web App nhận form liên hệ (ngoài repo runtime, user deploy)",
+      "POST /api/contact → forwardContactForm (hợp đồng không đổi)",
+      "form /contact, /en/contact + form CTA rút gọn trang giải pháp"
     ]
   },
   "impact": {
     "direct": [
-      "/blog + /en/blog: thẻ highlight hiển thị 'TIN MỚI' / 'LATEST' (in hoa CSS), không còn 'NỔI BẬT'/'FEATURED'",
-      "/blog/ai-weekly-2026-w42 + /en/blog/ai-weekly-2026-w42: tiêu đề 'Bản tin AI tuần ngày 15/10/2026' / 'AI Weekly Digest — 15 Oct 2026'; excerpt theo ngày; slug/URL không đổi",
-      "Thẻ bài w42 ở /blog, /en/blog, trang chủ: ảnh = /uploads/9b72253a…fc51.jpg (ảnh tin 1), không còn SVG cố định",
-      "Breadcrumb /blog/<slug> vi + en: kiểu pill (icon nhà có aria-label, 'Tin tức'/'Blog' là link, tiêu đề bài aria-current=page màu thương hiệu); tiêu đề dài không tràn ngang ở 320/375/768/1280 px",
-      "generate.py: render có ảnh → cover = upload_path ảnh có index nhỏ nhất; 0 ảnh / AI_NEWS_IMAGES=off / ảnh bỏ toàn bài → cover /images/blog/ai-weekly-cover.webp; title/excerpt vi + en theo date"
+      "Gửi form /vi/lien-he và /en/contact (token đúng) → đúng 1 email tới ADMIN_EMAIL, đủ: thời gian giờ VN, ngôn ngữ, tên, email, SĐT, công ty, nhu cầu (nhãn), nội dung; field trống là -",
+      "Email có replyTo = email khách; tiêu đề [NTA] Liên hệ mới — <tên>; body plain text (nội dung có <b>/<script> hiện nguyên văn, không render HTML)",
+      "Không có dòng Sheet mới, không có tin Telegram",
+      "ADMIN_EMAIL trống/thiếu hoặc MailApp ném lỗi (hạn mức) → script server_error → web hiện lỗi gửi (500), không báo thành công giả",
+      "Đổi ADMIN_EMAIL sang địa chỉ khác → lượt gửi kế tiếp tới địa chỉ mới, không redeploy web",
+      "Token sai/thiếu → unauthorized, không gửi mail; payload sai → bad_request, không gửi mail"
     ],
     "dependents": [
-      "BlogPostCard (large/small/grid) + PostCard (trang chủ, RelatedPosts) render cover /uploads qua next/image (localPatterns /uploads/**)",
-      "publish-post --dry-run/--images-dir: collectImagePaths gồm data.cover → cover /uploads là ảnh đã có trong manifest; cover webp kiểm I-7 trong public/ của image nta-tools",
-      "content-cli update post/{vi,en}/ai-weekly-2026-w42 (version mới, history), revalidate collection post",
-      "Breadcrumb dùng chung (AboutHero, DetailHero, ListingHero pill; PageHeader plain) — không đổi nếu task-01 chỉ đổi ArticleHeader"
+      "forward.ts: chỉ {status:\"ok\"} là thành công; HTML lỗi quyền (chưa cấp quyền gửi mail) → 500",
+      "Web App phiên bản mới cập nhật trên triển khai cũ → URL /exec giữ nguyên, CONTACT_FORM_TARGET không đổi"
     ],
     "regression": [
-      "Các bài blog khác giữ cover cũ; trang chi tiết không render cover (không lặp ảnh tin 1)",
-      "og:image + JSON-LD Article/Breadcrumb bài blog không đổi (og-default.png)",
-      "Ảnh trong từng tin (NewsImage + credit) không đổi; AI_NEWS_IMAGES=off vẫn ra bài chỉ text",
-      "Dedupe tuần theo slug, workflow chạy lại cùng tuần → skip / exists, 0 ghi",
-      "Bộ lọc/tìm kiếm/phân trang /blog, nút 'Xem tất cả bài viết'",
-      "Breadcrumb pill ở /about, /solutions/*, /products/*, /case-studies/*, trang danh sách"
+      "Validate client/server form liên hệ (name/email/phone/message/company/need/locale)",
+      "Honeypot có giá trị → 200 giả, không gửi mail; rate-limit 429",
+      "Form CTA rút gọn ở trang giải pháp (name/email/message) gửi được",
+      "Thông báo thành công/lỗi trên UI vi + en"
     ]
   },
   "acceptance": [
-    "/blog: nhãn khối highlight 'Tin mới' (vi) / 'Latest' (en)",
-    "Bản tin mới + bài w42: title/excerpt theo ngày (vi + en), không còn 'tuần NN/YYYY' / 'Week NN'; slug giữ ai-weekly-YYYY-wNN",
-    "Thẻ bản tin ở /blog hiện ảnh tin đầu tiên có ảnh; số không có ảnh → /images/blog/ai-weekly-cover.webp; bài w42 đã đổi cover (file seed + DB); ảnh trong từng tin giữ nguyên",
-    "Breadcrumb /blog/<slug> kiểu pill như trang chi tiết khác; desktop + mobile không vỡ với tiêu đề dài",
-    "python -m unittest discover -s tools/ai-news/tests PASS; npm test, typecheck, lint, build PASS"
+    "Form /vi/lien-he + /en/contact → 1 email tới ADMIN_EMAIL đủ 8 thông tin, replyTo = email khách, tiêu đề nhận diện được",
+    "Không ghi Sheet, không gọi Telegram; Code.gs không còn SpreadsheetApp/UrlFetchApp/SHEET_NAME/TELEGRAM_",
+    "Chỉ {status:\"ok\"} khi gửi mail thành công; lỗi gửi / thiếu ADMIN_EMAIL → server_error, log mã cố định, không lộ dữ liệu",
+    "Token + validate payload giữ nguyên; nội dung người dùng không chèn được HTML vào mail, tên không chèn được header",
+    "Đổi ADMIN_EMAIL có hiệu lực ngay, không redeploy",
+    "npm test (gồm tools/contact-mail/code.test.ts), typecheck, lint, build PASS"
   ],
   "risk": "medium",
   "notes": [
-    "Python không có trên máy Windows dev: test generator chạy trong Linux VM / docker / CI (python3 stdlib)",
-    "Sửa w42 trong DB prod = thao tác ghi DB thật trên VPS (nta-tools content-cli update + backup + revalidate) — do user chạy hoặc user duyệt cách chạy (câu hỏi mở trong plan)",
-    "ai-weekly-cover.svg giữ lại: v1 của w42 trong content_versions + fixture tools/db còn tham chiếu",
-    "Ảnh tin 1 có thể không phải 16:9 → thẻ object-cover cắt ảnh; chấp nhận theo yêu cầu user (lấy tin đầu tiên có ảnh)"
+    "Gửi mail thật chỉ kiểm được sau khi user dán script + cấp quyền + đặt ADMIN_EMAIL (Apps Script ngoài repo); trong repo kiểm bằng unit test node:vm",
+    "Hạn mức MailApp: Gmail thường ~100 người nhận/ngày, Workspace ~1500/ngày — vượt → server_error",
+    "Không còn bản lưu dự phòng (Sheet) — user chấp nhận rủi ro; web timeout 10 s trong khi script gửi muộn → có thể 2 mail trùng khi khách gửi lại",
+    "Mail gửi từ tài khoản Google deploy script; có thể vào Spam lần đầu — admin đánh dấu không phải spam"
   ]
 }
