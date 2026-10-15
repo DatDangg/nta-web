@@ -3,11 +3,11 @@
   "activeWorkItem": {
     "type": "feature",
     "slug": "ai-news-item-images",
-    "phaseTask": "phase-1-task-04",
-    "step": "builder",
+    "phaseTask": "phase-1",
+    "step": "spec_validator",
     "status": "running",
     "journal": ".context/runs/feature-ai-news-item-images-phase-1-task-01.md",
-    "note": "CR-035 T01-T03 PASS committed. T04 builder (workflow) — cancel sẽ redo bước này. Push chỉ sau spec-validator phase + close-out."
+    "note": "CR-035 T01-T04 PASS committed. Spec-validator phase-1 — cancel sẽ redo bước này. Push chỉ sau close-out."
   },
   "features": [
     {

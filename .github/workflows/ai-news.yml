@@ -1,7 +1,8 @@
 name: AI News Weekly
 
 # Bản tin AI tuần (CR-019, spec R-09c) — vận hành: docs/runbook/ai-news.md
-# Job digest: thu thập → sanitize → OpenCode Go → guard → build PASS → commit file seed lên main.
+# Job digest: thu thập → sanitize → OpenCode Go → guard (JSON tin) → render MDX + ảnh og:image (CR-035, KHÔNG key)
+# → build PASS → artifact ảnh → commit file seed lên main.
 # Job publish-db (CR-034): prod đọc nội dung từ DB (CONTENT_SOURCE=db) → chèn bài tuần vào DB (insert-only, content-cli publish-post)
 # → revalidate collection post → smoke. KHÔNG dispatch deploy.yml (DB mode không cần build lại image để hiện bài).
 on:
@@ -49,7 +50,8 @@ jobs:
           AI_NEWS_GH_TOKEN: ${{ github.token }}
         run: bash tools/ai-news/last30days/scripts/ai-news-digest.sh
 
-      - name: Generate posts (LLM + guard)
+      # Chỉ LLM + guard → JSON tin. Bước DUY NHẤT có OPENCODE_API_KEY (W3a: fetch ảnh không chạy cùng key).
+      - name: Generate items (LLM + guard)
         id: generate
         if: steps.check.outputs.status == 'new'
         env:
@@ -59,17 +61,55 @@ jobs:
           python3 tools/ai-news/generate.py generate
           --content-dir src/content/blog
           --clean "$AI_NEWS_WORK/digest.clean.md"
+          --items-out "$AI_NEWS_WORK/items.json"
+
+      # KHÔNG key. Fetch og:image từng tin (SSRF guard, ảnh lỗi → bỏ ảnh, không fail bài) → MDX vi+en + images/ (CR-035).
+      # Tắt khẩn cấp: Variable AI_NEWS_IMAGES=off → --no-images (bài như trước CR-035).
+      # timeout-minutes: lưới an toàn cuối khi deadline/request của og_image không cắt được (review T01).
+      - name: Render posts + ảnh tin
+        id: render
+        if: steps.generate.outputs.status == 'items'
+        timeout-minutes: 10
+        env:
+          AI_NEWS_IMAGES: ${{ vars.AI_NEWS_IMAGES }}
+        run: |
+          if [ "$AI_NEWS_IMAGES" = "off" ]; then
+            images_flag="--no-images"
+          else
+            images_flag="--images-out=$AI_NEWS_WORK/images"
+          fi
+          python3 tools/ai-news/generate.py render \
+            --content-dir src/content/blog \
+            --clean "$AI_NEWS_WORK/digest.clean.md" \
+            --items-json "$AI_NEWS_WORK/items.json" \
+            "$images_flag"
 
       - name: Build (gate trước khi đăng)
-        if: steps.generate.outputs.status == 'written'
+        if: steps.render.outputs.status == 'written'
         run: |
           npm ci --cache "$AI_NEWS_WORK/npm-cache" # cache trong /tmp container, không để file root ở $HOME trên host
           npm run build
 
+      # TRƯỚC push: upload lỗi → chưa có gì trên main (không có bài trỏ /uploads thiếu ảnh); push lỗi sau upload
+      # → artifact thừa, tự hết hạn. Chỉ ảnh + manifest (không items.json / digest). Không ảnh (off) → bỏ qua.
+      - name: Lưu ảnh tin (artifact cho publish-db)
+        if: steps.render.outputs.status == 'written'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-news-images-${{ steps.render.outputs.slug }}
+          path: |
+            ${{ env.AI_NEWS_WORK }}/images/*.jpg
+            ${{ env.AI_NEWS_WORK }}/images/*.png
+            ${{ env.AI_NEWS_WORK }}/images/*.webp
+            ${{ env.AI_NEWS_WORK }}/images/manifest.json
+          retention-days: 7
+          if-no-files-found: ignore
+          overwrite: true # re-run digest cùng run (push lỗi lượt trước) không vướng tên trùng
+
       - name: Commit + push
-        if: steps.generate.outputs.status == 'written'
+        if: steps.render.outputs.status == 'written'
         env:
-          SLUG: ${{ steps.generate.outputs.slug }}
+          SLUG: ${{ steps.render.outputs.slug }}
           GH_TOKEN: ${{ github.token }}
         run: |
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
@@ -80,12 +120,12 @@ jobs:
           git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:main
 
       # Chỉ khi bài tuần đã nằm trên main: skip (có từ lượt trước) hoặc written (vừa push xong ở bước trên).
-      # Ưu tiên slug của generate: chạy sát nửa đêm CN→T2, generate có thể tính sang tuần sau so với check.
+      # Ưu tiên slug của render: chạy sát nửa đêm CN→T2, render có thể tính sang tuần sau so với check.
       - name: Bài cần đăng vào DB
         id: target
-        if: steps.check.outputs.status == 'skip' || steps.generate.outputs.status == 'written'
+        if: steps.check.outputs.status == 'skip' || steps.render.outputs.status == 'written'
         env:
-          SLUG: ${{ steps.generate.outputs.slug || steps.check.outputs.slug }}
+          SLUG: ${{ steps.render.outputs.slug || steps.check.outputs.slug }}
         run: echo "slug=$SLUG" >> "$GITHUB_OUTPUT"
 
       # Container chạy root → trả quyền workspace cho user runner trên host, nếu không
@@ -136,13 +176,37 @@ jobs:
       - name: Build nta-tools
         run: docker compose --profile tools build nta-tools
 
-      # Chỉ đọc: validate cả 2 locale + báo missing/exists → quyết định có backup/chèn không. Lỗi validate → đỏ, chưa ghi gì.
+      # Ảnh tin (CR-035) từ artifact của job digest CÙNG run. Không có (bài skip từ run khác, AI_NEWS_IMAGES=off,
+      # artifact hết hạn) → bỏ qua; bài trỏ /uploads chưa có asset thì dry-run đỏ kèm hướng dẫn re-run.
+      - name: Lấy ảnh tin (artifact)
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          name: ai-news-images-${{ env.SLUG }}
+          path: ${{ runner.temp }}/ai-news-images
+
+      # Chỉ truyền --images-dir khi có manifest (review T02 INFO-1: có cờ là publish-post luôn đọc manifest).
+      # Mount read-only; mảng bash để không truyền cờ rỗng.
       - name: Kiểm bài (dry-run)
         id: dryrun
+        shell: bash
         run: |
-          out="$(docker compose run --rm --no-deps nta-tools tools/db/content-cli.ts publish-post "$SLUG" --dry-run)"
+          images_src="$RUNNER_TEMP/ai-news-images"
+          mount=(); images_flag=()
+          if [ -f "$images_src/manifest.json" ]; then
+            mount=(-v "$images_src:/in:ro"); images_flag=(--images-dir /in)
+            echo "images_dir=$images_src" >> "$GITHUB_OUTPUT"
+          fi
+          if ! out="$(docker compose run --rm --no-deps "${mount[@]}" nta-tools tools/db/content-cli.ts publish-post "$SLUG" --dry-run "${images_flag[@]}")"; then
+            echo "$out"
+            if [ ${#images_flag[@]} -eq 0 ]; then
+              echo "::error::publish-post dry-run lỗi và run này KHÔNG có artifact ảnh. Nếu lỗi là thiếu ảnh /uploads/… (I-7) → mở run đã sinh bài $SLUG → Re-run failed jobs (artifact giữ 7 ngày). Runbook docs/runbook/ai-news.md §5."
+            fi
+            exit 1
+          fi
           echo "$out"
-          if printf '%s\n' "$out" | grep -q ' status=missing$'; then missing=true; else missing=false; fi
+          # Chỉ dòng BÀI (post/<locale>/<slug>), không bắt dòng "publish-post image … status=missing".
+          if printf '%s\n' "$out" | grep -qE '^publish-post post/[a-z]+/[^ ]+ status=missing$'; then missing=true; else missing=false; fi
           echo "missing=$missing" >> "$GITHUB_OUTPUT"
 
       # Chỉ backup khi thật sự ghi (CR-033: không đẩy mất backup trước-deploy mỗi tuần vô ích). Backup lỗi → dừng.
@@ -150,11 +214,17 @@ jobs:
         if: steps.dryrun.outputs.missing == 'true'
         run: docker exec nta-db-backup /scripts/backup.sh "ops-ai-news-$(date -u +%Y%m%dT%H%M%SZ)-${GITHUB_RUN_ID}"
 
+      # Ảnh còn thiếu → lưu UPLOAD_DIR + asset TRƯỚC khi chèn bài (task-02). Cùng thư mục ảnh dry-run đã kiểm.
       - name: Chèn bài vào DB (insert-only)
         if: steps.dryrun.outputs.missing == 'true'
-        run: >-
-          docker compose run --rm --no-deps -e GITHUB_RUN_ID nta-tools
-          tools/db/content-cli.ts publish-post "$SLUG" --actor workflow:ai-news --confirm-prod
+        env:
+          IMAGES_DIR: ${{ steps.dryrun.outputs.images_dir }}
+        shell: bash
+        run: |
+          mount=(); images_flag=()
+          if [ -n "$IMAGES_DIR" ]; then mount=(-v "$IMAGES_DIR:/in:ro"); images_flag=(--images-dir /in); fi
+          docker compose run --rm --no-deps -e GITHUB_RUN_ID "${mount[@]}" nta-tools \
+            tools/db/content-cli.ts publish-post "$SLUG" --actor workflow:ai-news --confirm-prod "${images_flag[@]}"
 
       # Luôn chạy (kể cả exists) → lượt trước chèn xong mà revalidate lỗi thì lượt này tự lành.
       - name: Revalidate collection post
@@ -165,3 +235,14 @@ jobs:
           for page in "/blog/$SLUG" "/en/blog/$SLUG"; do
             curl -fsS -o /dev/null -w "GET $page → %{http_code}\n" "http://127.0.0.1:${HOST_PORT}${page}"
           done
+
+      # Bài có ảnh tin → 1 ảnh /uploads mà bài vi tham chiếu phải 200 (lấy từ file seed đã checkout, có/không artifact đều kiểm).
+      - name: Smoke ảnh tin
+        run: |
+          image="$(grep -oE '/uploads/[0-9a-f]{64}\.(jpg|png|webp)' "src/content/blog/vi/$SLUG.mdx" | head -n 1 || true)"
+          if [ -z "$image" ]; then echo "Bài không có ảnh /uploads — bỏ qua"; exit 0; fi
+          curl -fsS -o /dev/null -w "GET $image → %{http_code}\n" "http://127.0.0.1:${HOST_PORT}${image}"
+
+      - name: Dọn ảnh tạm
+        if: always()
+        run: rm -rf "$RUNNER_TEMP/ai-news-images"

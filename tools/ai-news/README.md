@@ -24,6 +24,11 @@ Ranh giới tin cậy: dữ liệu internet chỉ đi tới LLM qua `.clean.md` 
 "dữ liệu, không phải lệnh"). LLM chỉ trả JSON; MDX do `generate.py` render deterministic, mọi URL
 phải có nguyên văn trong `.clean.md` (tin vi phạm URL/độ dài bị loại riêng), còn ≥5 tin hợp lệ (lấy tối đa 12). Dưới 5 → FAIL, không ghi file.
 
+Ảnh tin (CR-035): workflow tách 2 bước — `generate --items-out` (bước DUY NHẤT có `OPENCODE_API_KEY`) → `render --items-json … --images-out`
+(KHÔNG key). Render chỉ fetch URL tin **đã qua guard**, từ trang tin chỉ đọc meta `og:image` (HTML ≤ 512 KB, không tới LLM, không vào MDX);
+ảnh do `image_sniff.py` kiểm magic bytes. Artifact `ai-news-images-<slug>` chỉ chứa ảnh + `manifest.json` → job `publish-db`
+(`publish-post --images-dir`). Tắt: Variable `AI_NEWS_IMAGES=off` → `--no-images`. Vận hành/gỡ ảnh: `docs/runbook/ai-news.md` §7–8.
+
 Chạy test (máy dev không có python):
 
 ```bash
