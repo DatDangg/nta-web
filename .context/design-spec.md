@@ -129,6 +129,10 @@ File component ≤ 300 dòng, function ≤ 50 dòng → tách sub-component khi 
 4. **Case study nổi bật**: split 1 lần duy nhất (ảnh trái | text phải): tên dự án, 1 kết quả số thật, link.
 5. **CTABanner accent**: full-width nền `primary`, text inverse, 1 CTA (button trắng, chữ `primary`).
 
+**Khung chung (CR-040, R-01b):** mọi section trang chủ + Header/Footer/CTA bọc nội dung bằng `<Container>` (1280 + px 16/24/32) —
+CẤM `max-w-[1400px]`, CẤM lồng khung hẹp hơn (vd `max-w-[1040px]`) trong section. Hero `lg+`: lớp nền (ảnh + panel + phủ trắng) nằm trong
+stage `max-w-[1440px] mx-auto`; > 1440 mép phải stage fade sang trắng; chiều cao `clamp(540px,46vw,662px)`. Nền section/marquee vẫn full-bleed.
+
 **Components:** Header, Hero, SolutionCard×3, ProductCard strip, CaseStudyHighlight, CTABanner, Footer, Breadcrumb (không).
 
 **States:** Default ✅ · Loading: page-level không (xem §1.4) · ảnh skeleton theo aspect · Error: ảnh fallback · Empty: strip sản phẩm <1 → ẩn section.
@@ -140,8 +144,8 @@ File component ≤ 300 dòng, function ≤ 50 dòng → tách sub-component khi 
 | sm ≥640 | strip hiện ~1.5 card |
 | md ≥768 | hero 2 cột (text 42.5% / ảnh 57.5%); solution 2 cột; strip 2.5 card |
 | lg ≥1024 | nav ngang đầy đủ; hero 2 cột rộng; solution 3 cột; strip 3 card + arrow; case 50/50 |
-| xl ≥1280 | container 1280px, spacing `4xl`, ảnh hero lớn hơn |
-| 2xl ≥1536 | giữ container, whitespace tăng, không phóng to chữ ngoài clamp |
+| xl ≥1280 | container 1280px (mọi section cùng mép — R-01b), spacing `4xl`, ảnh hero lớn hơn |
+| 2xl ≥1536 | giữ container, whitespace tăng, không phóng to chữ ngoài clamp; hero stage ≤ 1440 căn giữa, cao ≤ 662px (R-01b) |
 
 **Interactions:** reveal theo section (fade/slide 16px); card hover lift; CTA active `scale(0.98)`; strip drag/snap.
 

@@ -1,6 +1,6 @@
 ---
-spec_version: 4.7.0
-updated_at: 2026-10-15
+spec_version: 4.8.0
+updated_at: 2026-10-19
 ---
 
 # SPECIFICATIONS.md — NTA Website
@@ -57,6 +57,13 @@ _(cập nhật 2026-10-13: thêm **domain phụ** `ntasolution.vn` (+ `www`) ph�
   States: Default / Loading (nếu fetch) / Error. `[reverse-engineered from docs]`
   — nguồn: `docs/BRD.md:65-67` (FR-001), `docs/DESIGN.md:78-83`
   `[cần xác nhận]` dưới SSG (không fetch) liệu có cần Loading/Error state — chốt khi implement.
+- **R-01b (4.8.0 — CR-040, căn khung trang chủ):** Trên `/` (vi + en), Header, Hero (khối chữ), Giải pháp, Sản phẩm tiêu biểu,
+  Câu chuyện khách hàng, CTA band và Footer dùng **chung 1 khung nội dung** = `Container` (`max-w-container` 1280px + padding ngang
+  16/24/32px theo base/sm/lg) → mép trái/phải nội dung (tiêu đề section, mép thẻ đầu/cuối, logo, nút CTA) thẳng hàng theo chiều dọc ở mọi
+  viewport (sai số ≤ 2px). Không section nào dùng max-width riêng hay lồng khung hẹp hơn. Dải chữ chạy (marquee) và nền section vẫn full-bleed.
+  Hero desktop (`lg+`): ảnh nền + 5 panel kính + wordmark + lớp phủ trắng nằm trong **stage tối đa 1440px căn giữa** (≤ 1440 giống hiện tại:
+  ảnh tràn mép phải); viewport > 1440 → ảnh không dính mép phải màn hình, mép phải stage mờ dần sang nền trắng, chiều cao hero tối đa 662px
+  (= tỉ lệ ở 1440) để bố cục chữ ↔ ảnh như ở 1440. Mobile/tablet (< `lg`) không đổi. Không đổi nội dung/hành vi R-01/R-02a/R-03a/R-03b.
 - **R-02:** Khối 3 mảng giải pháp (Doanh nghiệp / AI / App AI) — 3 card, điều hướng đúng trang, có hover state.
   `[reverse-engineered from docs]` — nguồn: `docs/BRD.md:69-71` (FR-002)
 - **R-02a (3.11.0 — khối Giải pháp trang chủ theo mockup CR-016):** header section dùng chung — eyebrow (`SOLUTIONS ——`) +

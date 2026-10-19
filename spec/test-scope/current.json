@@ -1,62 +1,57 @@
 {
-  "specVersion": "4.7.0",
-  "scopeVersion": 57,
-  "generatedAt": "2026-10-15T23:30:00+07:00",
+  "specVersion": "4.8.0",
+  "scopeVersion": 58,
+  "generatedAt": "2026-10-19T10:30:00+07:00",
   "trigger": "feature-update",
-  "workItem": "feature/contact-form-email-only (CR-039 spec/changes/2026-10-15-contact-form-email-only.md; task tasks/feature-contact-form-email-only/phase-1-task-01.md; MODIFY + REMOVE, risk medium; phát hành ở bước planning — hiệu lực khi phase 1 PASS + user cập nhật script Apps Script, đặt ADMIN_EMAIL)",
+  "workItem": "feature/home-layout-alignment (CR-040 spec/changes/2026-10-19-home-layout-alignment.md; tasks tasks/feature-home-layout-alignment/phase-1-task-01..02.md; MODIFY UI-only, risk low-medium; phát hành ở bước planning — hiệu lực khi phase 1 PASS)",
   "specRefs": [
-    "R-13a",
-    "R-13",
-    "R-16"
+    "R-01b",
+    "R-01",
+    "R-02a",
+    "R-03a",
+    "R-03b",
+    "R-23"
   ],
   "changed": {
     "files": [
-      "tools/contact-sheet/ → tools/contact-mail/ (git mv Code.gs, code.test.ts, README.md)",
-      "tools/contact-mail/Code.gs — bỏ SpreadsheetApp/LockService/UrlFetchApp/Telegram; gửi 1 mail MailApp tới Script Property ADMIN_EMAIL (plain text, replyTo = email khách, tiêu đề [NTA] Liên hệ mới — <tên>), lỗi/thiếu ADMIN_EMAIL → server_error, log mã cố định contact-mail:*",
-      "tools/contact-mail/code.test.ts — stub MailApp thay SpreadsheetApp/UrlFetchApp; kiểm token/validate/nội dung mail/replyTo/tiêu đề/lỗi gửi/thiếu ADMIN_EMAIL/không gọi dịch vụ khác",
-      "tools/contact-mail/README.md — hướng dẫn mới (ADMIN_EMAIL, cấp quyền gửi mail, hạn mức, cập nhật phiên bản triển khai giữ URL /exec, gỡ property cũ)",
-      "src/lib/api/forward.ts — chỉ comment (Sheet/Telegram → email); hành vi không đổi",
-      "docs/API_SPEC.md, docs/ERD.md, docs/runbook/deploy-vps.md, .env.local.example — reconcile as-built (đích = email, đường dẫn tools/contact-mail)"
+      "src/components/home/SolutionGridHome.tsx — bỏ div max-w-[1400px], bọc bằng <Container>",
+      "src/components/home/ProductStrip.tsx — bỏ div max-w-container tự viết + lồng max-w-[1040px], bọc bằng <Container>; sizes ảnh 3-up cập nhật",
+      "src/components/layout/Header.tsx — link logo bù px-2 (-ml-2) để mép logo = mép nội dung",
+      "src/components/home/HeroVisual.tsx — HeroBackground: ảnh + panel + lớp phủ vào stage max-w-[1440px] mx-auto, fade mép phải khi viewport > 1440",
+      "src/components/home/Hero.tsx — chiều cao lg clamp(540px,46vw,662px)",
+      "docs/DESIGN.md (current-state trang chủ) — reconcile as-built"
     ],
     "modules": [
-      "Apps Script Web App nhận form liên hệ (ngoài repo runtime, user deploy)",
-      "POST /api/contact → forwardContactForm (hợp đồng không đổi)",
-      "form /contact, /en/contact + form CTA rút gọn trang giải pháp"
+      "Trang chủ / và /en (desktop lg+)",
+      "Header (mọi trang — chỉ dịch mép logo 8px)"
     ]
   },
   "impact": {
     "direct": [
-      "Gửi form /vi/lien-he và /en/contact (token đúng) → đúng 1 email tới ADMIN_EMAIL, đủ: thời gian giờ VN, ngôn ngữ, tên, email, SĐT, công ty, nhu cầu (nhãn), nội dung; field trống là -",
-      "Email có replyTo = email khách; tiêu đề [NTA] Liên hệ mới — <tên>; body plain text (nội dung có <b>/<script> hiện nguyên văn, không render HTML)",
-      "Không có dòng Sheet mới, không có tin Telegram",
-      "ADMIN_EMAIL trống/thiếu hoặc MailApp ném lỗi (hạn mức) → script server_error → web hiện lỗi gửi (500), không báo thành công giả",
-      "Đổi ADMIN_EMAIL sang địa chỉ khác → lượt gửi kế tiếp tới địa chỉ mới, không redeploy web",
-      "Token sai/thiếu → unauthorized, không gửi mail; payload sai → bad_request, không gửi mail"
+      "Ở 1280/1440/1920 (vi + en): mép trái nội dung của logo header, khối chữ hero, tiêu đề Giải pháp, thẻ Giải pháp đầu, tiêu đề Sản phẩm, thẻ sản phẩm đầu, tiêu đề Case study, thẻ case đầu, khối chữ CTA band, cột footer đầu bằng nhau (≤ 2px); mép phải tương tự (thẻ cuối, nút/mũi tên phải)",
+      "1440: mép trái nội dung = 112px, mép phải = 1328px (không tính thanh cuộn); 1920: 352 / 1568",
+      "Hero ≥ 1024: ≤ 1440 ảnh vẫn tràn mép phải như trước; > 1440 ảnh kết thúc ở mép phải stage 1440 căn giữa và mờ dần sang trắng, không dính mép màn; chiều cao hero ≤ 662px; panel kính + wordmark vẫn nằm trên ảnh, không đè khối chữ",
+      "Khối Sản phẩm 3 thẻ ở lg+: 3 thẻ chia đều bề rộng khung 1216px (không còn khung hẹp 1040), vẫn 1 hàng, không cuộn, nút ←/→ ẩn"
     ],
     "dependents": [
-      "forward.ts: chỉ {status:\"ok\"} là thành công; HTML lỗi quyền (chưa cấp quyền gửi mail) → 500",
-      "Web App phiên bản mới cập nhật trên triển khai cũ → URL /exec giữ nguyên, CONTACT_FORM_TARGET không đổi"
+      "Header dùng ở mọi trang — mép logo dịch trái 8px, vùng bấm logo vẫn ≥ 44px",
+      "Container/token max-w-container KHÔNG đổi → các trang khác không đổi bề rộng"
     ],
     "regression": [
-      "Validate client/server form liên hệ (name/email/phone/message/company/need/locale)",
-      "Honeypot có giá trị → 200 giả, không gửi mail; rate-limit 429",
-      "Form CTA rút gọn ở trang giải pháp (name/email/message) gửi được",
-      "Thông báo thành công/lỗi trên UI vi + en"
+      "375 / 768 / 1024: trang chủ giống trước (hero xếp dọc < lg, dải thẻ cuộn ngang, không tràn ngang)",
+      "R-03a: dải sản phẩm — nút ←/→, phím ←/→, snap, thẻ CTA cuối dải hoạt động như cũ",
+      "R-03b: carousel case study, nút \"Xem tất cả case study\"",
+      "R-02a: 3 thẻ giải pháp, link đúng trang, ảnh minh hoạ không đè chữ, tiêu đề thẻ không tràn ở 1280–1920",
+      "Không có thanh cuộn ngang ở mọi viewport 375–2560",
+      "LCP hero (R-22): ảnh hero vẫn priority"
     ]
   },
   "acceptance": [
-    "Form /vi/lien-he + /en/contact → 1 email tới ADMIN_EMAIL đủ 8 thông tin, replyTo = email khách, tiêu đề nhận diện được",
-    "Không ghi Sheet, không gọi Telegram; Code.gs không còn SpreadsheetApp/UrlFetchApp/SHEET_NAME/TELEGRAM_",
-    "Chỉ {status:\"ok\"} khi gửi mail thành công; lỗi gửi / thiếu ADMIN_EMAIL → server_error, log mã cố định, không lộ dữ liệu",
-    "Token + validate payload giữ nguyên; nội dung người dùng không chèn được HTML vào mail, tên không chèn được header",
-    "Đổi ADMIN_EMAIL có hiệu lực ngay, không redeploy",
-    "npm test (gồm tools/contact-mail/code.test.ts), typecheck, lint, build PASS"
+    "Mọi section trang chủ + header + footer cùng mép trái/phải ở mọi breakpoint (đo getBoundingClientRect, ≤ 2px)",
+    "Màn 1440–1920+: hero chữ + ảnh cân đối, ảnh không dính mép phải màn hình",
+    "Mobile/tablet 375/768/1024 không vỡ, không đổi nội dung/hành vi",
+    "Kiểm tra cả vi và en"
   ],
-  "risk": "medium",
-  "notes": [
-    "Gửi mail thật chỉ kiểm được sau khi user dán script + cấp quyền + đặt ADMIN_EMAIL (Apps Script ngoài repo); trong repo kiểm bằng unit test node:vm",
-    "Hạn mức MailApp: Gmail thường ~100 người nhận/ngày, Workspace ~1500/ngày — vượt → server_error",
-    "Không còn bản lưu dự phòng (Sheet) — user chấp nhận rủi ro; web timeout 10 s trong khi script gửi muộn → có thể 2 mail trùng khi khách gửi lại",
-    "Mail gửi từ tài khoản Google deploy script; có thể vào Spam lần đầu — admin đánh dấu không phải spam"
-  ]
+  "risk": "low-medium",
+  "notes": "Thay scope v57 (CR-039). UI-only, không đổi API/DB/nội dung. Đo mép bằng DOM (getBoundingClientRect) — không tính thanh cuộn dọc. Phương án khung (1280 khuyến nghị / 1440 thay thế) chờ user chốt ở checkpoint; nếu user chọn 1440 sẽ phát hành lại scope (đổi token max-w-container, ảnh hưởng mọi trang)."
 }
