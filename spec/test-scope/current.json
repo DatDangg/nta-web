@@ -1,57 +1,48 @@
 {
-  "specVersion": "4.8.0",
-  "scopeVersion": 58,
-  "generatedAt": "2026-10-19T10:30:00+07:00",
+  "specVersion": "4.9.0",
+  "scopeVersion": 59,
+  "generatedAt": "2026-10-19T18:00:00+07:00",
   "trigger": "feature-update",
-  "workItem": "feature/home-layout-alignment (CR-040 spec/changes/2026-10-19-home-layout-alignment.md; tasks tasks/feature-home-layout-alignment/phase-1-task-01..02.md; MODIFY UI-only, risk low-medium; phát hành ở bước planning — hiệu lực khi phase 1 PASS)",
+  "workItem": "feature/hero-wide-screen-backdrop (CR-041 spec/changes/2026-10-19-hero-wide-screen-backdrop.md; task tasks/feature-hero-wide-screen-backdrop/phase-1-task-01.md; MODIFY UI-only, risk low-medium; follow-up CR-040)",
   "specRefs": [
     "R-01b",
     "R-01",
-    "R-02a",
-    "R-03a",
-    "R-03b",
-    "R-23"
+    "R-22"
   ],
   "changed": {
     "files": [
-      "src/components/home/SolutionGridHome.tsx — bỏ div max-w-[1400px], bọc bằng <Container>",
-      "src/components/home/ProductStrip.tsx — bỏ div max-w-container tự viết + lồng max-w-[1040px], bọc bằng <Container>; sizes ảnh 3-up cập nhật",
-      "src/components/layout/Header.tsx — link logo bù px-2 (-ml-2) để mép logo = mép nội dung",
-      "src/components/home/HeroVisual.tsx — HeroBackground: ảnh + panel + lớp phủ vào stage max-w-[1440px] mx-auto, fade mép phải khi viewport > 1440",
-      "src/components/home/Hero.tsx — chiều cao lg clamp(540px,46vw,662px)",
-      "docs/DESIGN.md (current-state trang chủ) — reconcile as-built"
+      "src/components/home/HeroVisual.tsx — HeroBackground: lớp nền mờ full-bleed (bản sao ảnh hero, blur + phủ trắng) chỉ > 1440; fade/mask rộng hai cạnh stage thay fade w-24 mép phải; lớp phủ trắng vùng chữ phủ cả nền bên trái",
+      "docs/DESIGN.md (current-state hero) — reconcile as-built"
     ],
     "modules": [
-      "Trang chủ / và /en (desktop lg+)",
-      "Header (mọi trang — chỉ dịch mép logo 8px)"
+      "Trang chủ / và /en — hero desktop (lg+), rõ nhất > 1440"
     ]
   },
   "impact": {
     "direct": [
-      "Ở 1280/1440/1920 (vi + en): mép trái nội dung của logo header, khối chữ hero, tiêu đề Giải pháp, thẻ Giải pháp đầu, tiêu đề Sản phẩm, thẻ sản phẩm đầu, tiêu đề Case study, thẻ case đầu, khối chữ CTA band, cột footer đầu bằng nhau (≤ 2px); mép phải tương tự (thẻ cuối, nút/mũi tên phải)",
-      "1440: mép trái nội dung = 112px, mép phải = 1328px (không tính thanh cuộn); 1920: 352 / 1568",
-      "Hero ≥ 1024: ≤ 1440 ảnh vẫn tràn mép phải như trước; > 1440 ảnh kết thúc ở mép phải stage 1440 căn giữa và mờ dần sang trắng, không dính mép màn; chiều cao hero ≤ 662px; panel kính + wordmark vẫn nằm trên ảnh, không đè khối chữ",
-      "Khối Sản phẩm 3 thẻ ở lg+: 3 thẻ chia đều bề rộng khung 1216px (không còn khung hẹp 1040), vẫn 1 hàng, không cuộn, nút ←/→ ẩn"
+      "1920/2560/3840 (vi + en): hai bên stage 1440 không còn nền trắng trơn — thấy nền ảnh mờ tông sáng liền mạch, full-bleed như dải marquee bên dưới",
+      "Cạnh trái/phải stage ảnh nét hoà dần vào nền mờ, không có đường cắt dọc cứng",
+      "Mép trái h1 hero = mép trái khung Container 1280 (≤ 2px), chữ dễ đọc trên lớp phủ trắng",
+      "Ảnh nét + panel kính không méo, vị trí panel như CR-040"
     ],
     "dependents": [
-      "Header dùng ở mọi trang — mép logo dịch trái 8px, vùng bấm logo vẫn ≥ 44px",
-      "Container/token max-w-container KHÔNG đổi → các trang khác không đổi bề rộng"
+      "Ảnh nền mờ dùng cùng /images/home/hero-banner.jpg với sizes nhỏ (decorative alt=\"\" aria-hidden) — không tải ảnh lớn thêm"
     ],
     "regression": [
-      "375 / 768 / 1024: trang chủ giống trước (hero xếp dọc < lg, dải thẻ cuộn ngang, không tràn ngang)",
-      "R-03a: dải sản phẩm — nút ←/→, phím ←/→, snap, thẻ CTA cuối dải hoạt động như cũ",
-      "R-03b: carousel case study, nút \"Xem tất cả case study\"",
-      "R-02a: 3 thẻ giải pháp, link đúng trang, ảnh minh hoạ không đè chữ, tiêu đề thẻ không tràn ở 1280–1920",
-      "Không có thanh cuộn ngang ở mọi viewport 375–2560",
-      "LCP hero (R-22): ảnh hero vẫn priority"
+      "≤ 1440 (1024/1280/1440): hero y như CR-040",
+      "375/768: hero mobile (HeroMobileImage) không đổi",
+      "Không thanh cuộn ngang 1024–3840",
+      "LCP hero (R-22): ảnh nét vẫn priority",
+      "Mờ đáy chuyển sang section kế tiếp giữ nguyên"
     ]
   },
   "acceptance": [
-    "Mọi section trang chủ + header + footer cùng mép trái/phải ở mọi breakpoint (đo getBoundingClientRect, ≤ 2px)",
-    "Màn 1440–1920+: hero chữ + ảnh cân đối, ảnh không dính mép phải màn hình",
-    "Mobile/tablet 375/768/1024 không vỡ, không đổi nội dung/hành vi",
-    "Kiểm tra cả vi và en"
+    "≥ 1920: không còn mảng trắng trơn lớn hai bên hero",
+    "Không có đường cắt cứng ở cạnh stage ảnh",
+    "Mép trái chữ hero = khung 1280, chữ dễ đọc",
+    "Ảnh/panel không méo; không tải ảnh nặng hơn đáng kể",
+    "≤ 1440 + mobile/tablet giữ nguyên; kiểm vi + en"
   ],
   "risk": "low-medium",
-  "notes": "Thay scope v57 (CR-039). UI-only, không đổi API/DB/nội dung. Đo mép bằng DOM (getBoundingClientRect) — không tính thanh cuộn dọc. Phương án khung (1280 khuyến nghị / 1440 thay thế) chờ user chốt ở checkpoint; nếu user chọn 1440 sẽ phát hành lại scope (đổi token max-w-container, ảnh hưởng mọi trang)."
+  "notes": "Thay scope v58 (CR-040). UI-only, không đổi API/DB/nội dung."
 }
