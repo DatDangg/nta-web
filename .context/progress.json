@@ -1,13 +1,13 @@
 {
   "mode": "feature",
   "activeWorkItem": {
-    "type": "feature",
-    "slug": "hero-wide-screen-backdrop",
-    "phaseTask": "phase-1-task-01",
-    "step": "close-out",
-    "status": "awaiting",
-    "journal": ".context/runs/feature-hero-wide-screen-backdrop-phase-1-task-01.md",
-    "note": "CR-041 in progress"
+    "type": null,
+    "slug": null,
+    "phaseTask": null,
+    "step": "idle",
+    "status": "idle",
+    "journal": null,
+    "note": "CR-041 done 2026-10-19"
   },
   "features": [
     {
@@ -73,7 +73,8 @@
         "home-products-coming-soon-card-phase-1-task-01",
         "home-products-show-three-phase-1-task-01",
         "home-layout-alignment-phase-1-task-01",
-        "home-layout-alignment-phase-1-task-02"
+        "home-layout-alignment-phase-1-task-02",
+        "hero-wide-screen-backdrop-phase-1-task-01"
       ],
       "inProgressTask": null,
       "tasks": [
@@ -1546,8 +1547,8 @@
     {
       "slug": "hero-wide-screen-backdrop",
       "cr": "CR-041",
-      "status": "in_progress",
-      "changeFile": "spec/changes/2026-10-19-hero-wide-screen-backdrop.md",
+      "status": "done",
+      "changeFile": "spec/changes/archive/2026-10-19-hero-wide-screen-backdrop.md",
       "classification": "MODIFY",
       "risk": "LOW-MEDIUM",
       "phases": [
@@ -1573,7 +1574,12 @@
       ],
       "updatedAt": "2026-10-19",
       "specVersion": "4.9.0",
-      "scopeVersion": 59
+      "scopeVersion": 59,
+      "specValidation": {
+        "verdict": "PASS",
+        "report": ".context/review-reports/feature-hero-wide-screen-backdrop-spec-validation.md"
+      },
+      "completedAt": "2026-10-19"
     }
   ],
   "bugs": [

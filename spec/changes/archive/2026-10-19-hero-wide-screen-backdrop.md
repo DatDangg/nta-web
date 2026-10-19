@@ -1,7 +1,8 @@
 ---
 id: hero-wide-screen-backdrop
 type: feature
-status: in_progress
+status: done
+completed: 2026-10-19
 created: 2026-10-19
 ---
 
@@ -19,11 +20,11 @@ Sau CR-040, ảnh hero nằm trong stage tối đa 1440px căn giữa. Màn rộ
 - Actual: ngoài stage 1440 là `bg-white`; fade mép phải stage chỉ `w-24` (`src/components/home/HeroVisual.tsx`) nên ở màn rất rộng thấy như cắt cứng.
 
 ## Acceptance (bắt buộc)
-- [ ] Ở 1920, 2560 và rộng hơn: không còn mảng trắng trơn lớn hai bên hero; hero liền mạch với màn hình (đồng bộ cảm giác full-bleed như dải marquee bên dưới).
-- [ ] Không có đường cắt cứng ở cạnh stage ảnh.
-- [ ] Mép trái chữ hero vẫn thẳng với khung 1280 (giữ kết quả CR-040), chữ vẫn dễ đọc.
-- [ ] Ảnh hero/panel kính không bị méo; không tải ảnh nặng hơn hiện tại đáng kể.
-- [ ] ≤ 1440 và mobile/tablet giữ nguyên như hiện tại; kiểm tra vi + en.
+- [x] Ở 1920, 2560 và rộng hơn: không còn mảng trắng trơn lớn hai bên hero; hero liền mạch với màn hình (đồng bộ cảm giác full-bleed như dải marquee bên dưới).
+- [x] Không có đường cắt cứng ở cạnh stage ảnh.
+- [x] Mép trái chữ hero vẫn thẳng với khung 1280 (giữ kết quả CR-040), chữ vẫn dễ đọc.
+- [x] Ảnh hero/panel kính không bị méo; không tải ảnh nặng hơn hiện tại đáng kể.
+- [x] ≤ 1440 và mobile/tablet giữ nguyên như hiện tại; kiểm tra vi + en.
 
 ## Ghi chú
 - Hướng đề xuất (chờ chốt khi `/change`):
@@ -35,3 +36,7 @@ Sau CR-040, ảnh hero nằm trong stage tối đa 1440px căn giữa. Màn rộ
 - User chốt **hướng A** ("a đi") và duyệt luôn plan → auto proceed.
 - Classification: **MODIFY** (UI-only, chỉ `lg+` và rõ nhất > 1440), risk **LOW–MEDIUM** (thẩm mỹ + tải ảnh hero).
 - Spec delta: R-01b cập nhật (4.8.0 → 4.9.0), scope v59. Task: `tasks/feature-hero-wide-screen-backdrop/phase-1-task-01.md`.
+
+## Kết quả (2026-10-19)
+- Done: task 01 (cd37ff0) reviewer NORMAL PASS round 1, spec-validator PASS (`.context/review-reports/feature-hero-wide-screen-backdrop-spec-validation.md`). Spec 4.9.0 / scope v59.
+- Ảnh kiểm: `.context/review-reports/cr-041-screens/` (local, không commit).

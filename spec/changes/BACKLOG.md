@@ -48,7 +48,7 @@
 | CR-038 | Bản tin AI + Blog: nhãn "Nổi bật" → "Tin mới", tên bản tin theo ngày, ảnh thẻ bản tin lấy ảnh tin đầu tiên có ảnh (fallback ảnh cố định), breadcrumb chi tiết tin đồng bộ kiểu pill | MODIFY | done (3 task, spec 4.6.0 / scope v56; DB prod: w42 v2 + ui_messages blog v2) | `archive/2026-10-15-ai-news-naming-images.md` | 2026-10-15 | 2026-10-15 |
 | CR-039 | Form liên hệ: chỉ gửi email tới admin (`ADMIN_EMAIL` trong Script Properties), bỏ Google Sheet + Telegram — thay R-13a | MODIFY + REMOVE | done (1 task, spec 4.7.0 / scope v57; user cần dán script mới + đặt `ADMIN_EMAIL` + Phiên bản mới trên Apps Script) | `archive/2026-10-15-contact-form-email-only.md` | 2026-10-15 | 2026-10-15 |
 | CR-040 | Trang chủ: căn thẳng hàng mép các section (container chung) + cân bố cục hero trên màn hình lớn | MODIFY | done (2 task, spec 4.8.0 / scope v58; khung chung Container 1280, hero stage 1440) | `archive/2026-10-19-home-layout-alignment.md` | 2026-10-19 | 2026-10-19 |
-| CR-041 | Hero trang chủ: bỏ dải trắng hai bên trên màn rất rộng (nền full-bleed sau stage 1440, fade mép mềm) — follow-up CR-040 | MODIFY | in_progress (hướng A: nền mờ full-bleed sau stage 1440, spec 4.9.0 / scope v59) | `2026-10-19-hero-wide-screen-backdrop.md` | 2026-10-19 | |
+| CR-041 | Hero trang chủ: bỏ dải trắng hai bên trên màn rất rộng (nền full-bleed sau stage 1440, fade mép mềm) — follow-up CR-040 | MODIFY | done (1 task, spec 4.9.0 / scope v59; hướng A: nền mờ full-bleed sau stage 1440, mask mềm hai cạnh) | `archive/2026-10-19-hero-wide-screen-backdrop.md` | 2026-10-19 | 2026-10-19 |
 
 ## Quy tắc tracking
 
