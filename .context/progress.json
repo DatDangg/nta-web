@@ -4,10 +4,10 @@
     "type": "feature",
     "slug": "home-layout-alignment",
     "phaseTask": "phase-1-task-02",
-    "step": "builder",
+    "step": "spec_validator",
     "status": "awaiting",
     "journal": ".context/runs/feature-home-layout-alignment-phase-1-task-02.md",
-    "note": "CR-040 task 01 done; task 02 hero stage kế tiếp"
+    "note": "CR-040 task 01+02 done; spec-validator + close-out"
   },
   "features": [
     {
@@ -72,7 +72,8 @@
         "change-home-hero-banner-restyle-phase-1-task-01",
         "home-products-coming-soon-card-phase-1-task-01",
         "home-products-show-three-phase-1-task-01",
-        "home-layout-alignment-phase-1-task-01"
+        "home-layout-alignment-phase-1-task-01",
+        "home-layout-alignment-phase-1-task-02"
       ],
       "inProgressTask": null,
       "tasks": [
@@ -1516,8 +1517,11 @@
             {
               "task": "phase-1-task-02",
               "title": "Hero desktop: ảnh + panel + lớp phủ nằm trong stage max 1440 căn giữa, cap chiều cao 662px, fade mép phải khi màn > 1440",
-              "status": "pending",
-              "attempts": 0
+              "status": "done",
+              "attempts": 2,
+              "review": "NORMAL FAIL (round 1) → NORMAL PASS (round 2)",
+              "reviewReport": ".context/review-reports/feature-home-layout-alignment-phase-1-task-02-round-2-review.md",
+              "note": "hero stage 1440 overflow-hidden, cao ≤ 662px, h1 cap 4.46rem (= 1440), sizes ảnh khớp; F1 task 01 (HomeProductCard sizes 600px) gộp ở đây"
             }
           ]
         }

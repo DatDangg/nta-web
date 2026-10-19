@@ -15,16 +15,17 @@ export async function Hero({ panels }: HeroProps) {
   const cta = await getTranslations('common.cta');
 
   return (
-    // Desktop (lg+): toàn bộ ảnh hero-banner làm NỀN full-bleed của section, chữ HTML nằm bên trái
+    // Desktop (lg+): toàn bộ ảnh hero-banner làm NỀN của section (stage ≤ 1440 căn giữa, R-01b), chữ HTML nằm bên trái
     // trên vùng thành phố đã được phủ trắng mờ (khớp ảnh mẫu). Panel kính nằm trên ảnh (HeroBackground).
     // Mobile/tablet (< lg): chữ trên nền trắng, ảnh xếp bên dưới.
-    <section data-motion-off className="relative isolate overflow-hidden bg-white lg:flex lg:h-[clamp(540px,46vw,820px)] lg:items-center">
+    <section data-motion-off className="relative isolate overflow-hidden bg-white lg:flex lg:h-[clamp(540px,46vw,662px)] lg:items-center">
       <HeroBackground imageAlt={t('heroImageAlt')} panels={panels} />
 
       <Container className="relative z-10 w-full py-12 md:py-16 lg:py-0">
         <div className="text-center md:text-left lg:max-w-[40%] xl:max-w-[44%]">
-          {/* Tiêu đề 2 phần: lead đen + accent gradient teal→xanh lá (ảnh mẫu: "doanh nghiệp Việt"). */}
-          <h1 className="text-[clamp(2.5rem,0.5rem+4.4vw,5.75rem)] font-bold leading-[1.05] tracking-[-0.03em] text-text-primary">
+          {/* Tiêu đề 2 phần: lead đen + accent gradient teal→xanh lá (ảnh mẫu: "doanh nghiệp Việt").
+              Max 4.46rem = cỡ ở 1440: section/ảnh dừng lớn ở 1440 (CR-040) nên chữ cũng dừng, giữ tỉ lệ chữ ↔ ảnh. */}
+          <h1 className="text-[clamp(2.5rem,0.5rem+4.4vw,4.46rem)] font-bold leading-[1.05] tracking-[-0.03em] text-text-primary">
             <span className="split-line block">{t('heroTitleLead')}</span>
             <span style={{ '--split-delay': '140ms' } as CSSProperties} className="split-line block bg-gradient-to-r from-[#0fa3b1] via-[#0b9488] to-[#0d9a6c] bg-clip-text pb-[0.08em] text-transparent [-webkit-box-decoration-break:clone] [box-decoration-break:clone]">
               {t('heroTitleAccent')}

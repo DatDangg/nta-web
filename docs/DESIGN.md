@@ -85,6 +85,7 @@ Font stack: `-apple-system, BlinkMacSystemFont, "SF Pro Display", Inter, "Segoe 
 - **States:** Default, Loading (nếu fetch), Error
 - **Notes:** Hiệu ứng subtle (fade/slide-in) khi scroll; ảnh hero tối ưu.
 - **Khung chung (as-built, R-01b, CR-040):** mọi section trang chủ (header, giải pháp, sản phẩm tiêu biểu, case study, CTA, footer) dùng `Container` 1280 (`src/components/ui/Container.tsx`) → mép trái/phải nội dung thẳng một đường ở mọi viewport; không còn khung riêng 1400px (giải pháp) hay 1040px (sản phẩm). Link logo header bù `-ml-2` để chữ logo thẳng mép nội dung.
+- **Hero desktop (as-built, R-01b, CR-040):** lg+ ảnh nền + panel kính + lớp phủ trắng nằm trong stage `max-w-[1440px]` căn giữa (`HeroBackground`); section cao `clamp(540px,46vw,662px)` → ≤ 1440 như bản full-bleed cũ, > 1440 ảnh dừng ở 1345×662, mép phải ảnh = mép phải stage ((W+1440)/2) có dải fade trắng `w-24`, ngoài stage nền trắng. h1 hero max `4.46rem` (= cỡ ở 1440) để giữ tỉ lệ chữ ↔ ảnh. `sizes` ảnh nền khớp bề rộng khung thật (≥ 1440 tải w=1920 thay vì 3840). Hero < lg (`HeroMobileImage`) không đổi.
 
 ### Screen: Về NTA
 - **Route:** `/about`

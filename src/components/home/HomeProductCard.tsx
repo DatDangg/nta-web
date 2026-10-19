@@ -22,7 +22,7 @@ export type HomeFeaturedProduct = {
 export function HomeProductCard({
   product,
   className = '',
-  imageSizes = '(min-width: 1024px) 508px, (min-width: 768px) 45vw, 85vw',
+  imageSizes = '(min-width: 1024px) 600px, (min-width: 768px) 45vw, 85vw',
 }: {
   product: HomeFeaturedProduct;
   className?: string;
