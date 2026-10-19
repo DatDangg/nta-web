@@ -84,6 +84,7 @@ Font stack: `-apple-system, BlinkMacSystemFont, "SF Pro Display", Inter, "Segoe 
 - **Components:** Header sticky, Hero (title + subtitle + 2 CTA), SolutionCards ×3, ProductGrid, CaseStudyHighlight, CTABanner, Footer
 - **States:** Default, Loading (nếu fetch), Error
 - **Notes:** Hiệu ứng subtle (fade/slide-in) khi scroll; ảnh hero tối ưu.
+- **Khung chung (as-built, R-01b, CR-040):** mọi section trang chủ (header, giải pháp, sản phẩm tiêu biểu, case study, CTA, footer) dùng `Container` 1280 (`src/components/ui/Container.tsx`) → mép trái/phải nội dung thẳng một đường ở mọi viewport; không còn khung riêng 1400px (giải pháp) hay 1040px (sản phẩm). Link logo header bù `-ml-2` để chữ logo thẳng mép nội dung.
 
 ### Screen: Về NTA
 - **Route:** `/about`

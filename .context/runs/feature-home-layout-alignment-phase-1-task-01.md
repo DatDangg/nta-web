@@ -3,21 +3,21 @@
 ```yaml
 workItem: feature/home-layout-alignment
 phaseTask: phase-1-task-01
-step: ready
+step: done
 agent: change-request
 status: awaiting
-attempt: 0
+attempt: 1
 interrupted: false
-updatedAt: 2026-10-19T10:30:00+07:00
+updatedAt: 2026-10-19T12:00:00+07:00
 filesTouched: [spec/changes/BACKLOG.md, .context/progress.json, SPECIFICATIONS.md, spec/CHANGELOG.md, spec/test-scope/current.json, .context/design-spec.md]
 filesNew: [spec/changes/2026-10-19-home-layout-alignment.md, spec/updates/2026-10-19-home-layout-alignment.md, tasks/feature-home-layout-alignment/phase-1-task-01.md, tasks/feature-home-layout-alignment/phase-1-task-02.md, .context/runs/feature-home-layout-alignment-phase-1-task-01.md]
 evidence:
-  reportPath: null
-  round: 0
-  verdict: null
-next: "⏸ chờ user duyệt plan CR-040 (khung 1280 vs 1440, hero stage 1440) → builder phase-1-task-01"
+  reportPath: .context/review-reports/feature-home-layout-alignment-phase-1-task-01-round-1-review.md
+  round: 1
+  verdict: PASS
+next: "commit task 01 → builder phase-1-task-02 (journal .context/runs/feature-home-layout-alignment-phase-1-task-02.md)"
 loopSignal: none
-approvals: []
+approvals: ["2026-10-19 user duyệt plan CR-040 (\"thấy nào ổn thì chọn đi\") → khung 1280 giữ token, hero stage 1440, cao ≤ 662px"]
 batchQueue: [phase-1-task-01, phase-1-task-02]
 ```
 
@@ -34,3 +34,6 @@ batchQueue: [phase-1-task-01, phase-1-task-02]
 ## History
 - 2026-10-19 journal created — BACKLOG CR-040 in_progress; classify MODIFY; spec delta R-01b → 4.8.0; spec/updates + CHANGELOG +
   test-scope v58; design-spec §Screen 1 ghi rule khung chung; task 01 (khung chung) + task 02 (hero stage) soạn. Chưa gọi builder.
+- 2026-10-19 user duyệt plan (khung 1280, hero stage 1440/662) → ▶ START [agent: builder] phase-1-task-01 (running)
+- builder DONE: typecheck PASS, lint PASS (1 warning cũ), test 196/199 (1 fail môi trường public/uploads, ngoài scope), build PASS qua docker builder; DOM đo mép 0px lệch ở 1280/1440/1920 vi+en → ▶ START [agent: reviewer] round 1 (running)
+- reviewer round 1 PASS (NORMAL), F1 Low (HomeProductCard sizes 508px nhánh >3 thẻ) → gộp vào task 02; F2 status task đã cập nhật → close-out task 01, commit

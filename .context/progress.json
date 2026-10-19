@@ -3,11 +3,11 @@
   "activeWorkItem": {
     "type": "feature",
     "slug": "home-layout-alignment",
-    "phaseTask": "phase-1-task-01",
-    "step": "phase_plan_checkpoint",
+    "phaseTask": "phase-1-task-02",
+    "step": "builder",
     "status": "awaiting",
-    "journal": ".context/runs/feature-home-layout-alignment-phase-1-task-01.md",
-    "note": "CR-040 plan 2 task — chờ user duyệt (khung 1280 khuyến nghị / 1440 thay thế; hero stage 1440)"
+    "journal": ".context/runs/feature-home-layout-alignment-phase-1-task-02.md",
+    "note": "CR-040 task 01 done; task 02 hero stage kế tiếp"
   },
   "features": [
     {
@@ -71,7 +71,8 @@
         "change-home-footer-redesign-phase-1-task-01",
         "change-home-hero-banner-restyle-phase-1-task-01",
         "home-products-coming-soon-card-phase-1-task-01",
-        "home-products-show-three-phase-1-task-01"
+        "home-products-show-three-phase-1-task-01",
+        "home-layout-alignment-phase-1-task-01"
       ],
       "inProgressTask": null,
       "tasks": [
@@ -1506,8 +1507,11 @@
             {
               "task": "phase-1-task-01",
               "title": "Khung chung trang chủ: SolutionGridHome + ProductStrip dùng Container 1280, bỏ max-w-[1400px] và lồng 1040; mép logo header",
-              "status": "pending",
-              "attempts": 0
+              "status": "done",
+              "attempts": 1,
+              "review": "NORMAL PASS (round 1)",
+              "reviewReport": ".context/review-reports/feature-home-layout-alignment-phase-1-task-01-round-1-review.md",
+              "note": "DOM đo mép lệch 0px ở 1280/1440/1920 vi+en; build PASS qua docker build --target builder; F1 Low chuyển task 02"
             },
             {
               "task": "phase-1-task-02",

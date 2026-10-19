@@ -1,6 +1,7 @@
 import type { CSSProperties } from 'react';
 import Image from 'next/image';
 import { ListingIcon } from '@/components/listing/icons';
+import { Container } from '@/components/ui/Container';
 import { Reveal } from '@/components/ui/Reveal';
 import type { HomeSolutionCard } from '@/content/home';
 import { Link } from '@/i18n/navigation';
@@ -28,12 +29,12 @@ type SolutionGridHomeProps = {
 
 /**
  * Khối "Giải pháp" trang chủ theo mockup CR-016 (`2.webp` nửa trên).
- * Container rộng riêng 1400px (CR-018) để 3 thẻ đủ ngang như mẫu `5.webp`; token `max-w-container` dùng chung không đổi.
+ * Dùng `Container` 1280 chung để mép trái/phải thẳng các section khác (R-01b, CR-040; trước đây rộng riêng 1400px).
  */
 export function SolutionGridHome({ solutions, eyebrow, titleLead, titleAccent, description }: SolutionGridHomeProps) {
   return (
     <section aria-labelledby="home-solutions-title" className="bg-background-alt py-12 md:py-16 xl:py-24">
-      <div className="mx-auto w-full max-w-[1400px] px-4 sm:px-6 lg:px-8">
+      <Container>
         <Reveal>
           <HomeSectionHeader
             accentOnNewLine
@@ -49,7 +50,7 @@ export function SolutionGridHome({ solutions, eyebrow, titleLead, titleAccent, d
             <SolutionHomeCard key={solution.href} solution={solution} />
           ))}
         </Reveal>
-      </div>
+      </Container>
     </section>
   );
 }

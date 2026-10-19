@@ -82,7 +82,7 @@ export function Header({ solutionGroups }: { solutionGroups: SolutionsMenuGroup[
       onFocus={() => setHidden(false)}
     >
       <Container className="flex h-16 items-center justify-between lg:h-[72px]">
-        <Link aria-label={t('homeLabel')} className="flex min-h-11 items-center px-2" href="/"><BrandLogo priority /></Link>
+        <Link aria-label={t('homeLabel')} className="-ml-2 flex min-h-11 items-center px-2" href="/"><BrandLogo priority /></Link>
         <nav aria-label={t('label')} className="hidden items-center gap-5 lg:flex">
           <div className="group relative" ref={solutionsMenu} onBlur={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setSolutionsOpen(false); }} onMouseEnter={() => setSolutionsOpen(true)} onMouseLeave={() => setSolutionsOpen(false)}>
             <button aria-expanded={solutionsOpen} aria-haspopup="true" className={`relative flex min-h-11 items-center gap-1 text-sm hover:text-primary ${routeIsActive('/solutions') ? 'text-primary after:absolute after:inset-x-0 after:bottom-1 after:h-0.5 after:bg-primary' : ''}`} onClick={() => setSolutionsOpen((open) => !open)} onKeyDown={(event) => { if (event.key === 'ArrowDown') { event.preventDefault(); setSolutionsOpen(true); requestAnimationFrame(() => document.getElementById('desktop-solutions-enterprise')?.focus()); } }} ref={solutionsButton} type="button">{t('solutions')}<svg aria-hidden="true" className="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" /></svg></button>
