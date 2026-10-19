@@ -1,13 +1,13 @@
 {
   "mode": "feature",
   "activeWorkItem": {
-    "type": "feature",
-    "slug": "home-layout-alignment",
-    "phaseTask": "phase-1-task-02",
-    "step": "spec_validator",
-    "status": "awaiting",
-    "journal": ".context/runs/feature-home-layout-alignment-phase-1-task-02.md",
-    "note": "CR-040 task 01+02 done; spec-validator + close-out"
+    "type": null,
+    "slug": null,
+    "phaseTask": null,
+    "step": "idle",
+    "status": "idle",
+    "journal": null,
+    "note": "CR-040 done 2026-10-19"
   },
   "features": [
     {
@@ -1497,8 +1497,8 @@
     {
       "slug": "home-layout-alignment",
       "cr": "CR-040",
-      "status": "in_progress",
-      "changeFile": "spec/changes/2026-10-19-home-layout-alignment.md",
+      "status": "done",
+      "changeFile": "spec/changes/archive/2026-10-19-home-layout-alignment.md",
       "classification": "MODIFY",
       "risk": "LOW-MEDIUM",
       "phases": [
@@ -1536,7 +1536,12 @@
       ],
       "updatedAt": "2026-10-19",
       "specVersion": "4.8.0",
-      "scopeVersion": 58
+      "scopeVersion": 58,
+      "specValidation": {
+        "verdict": "PASS",
+        "report": ".context/review-reports/feature-home-layout-alignment-spec-validation.md"
+      },
+      "completedAt": "2026-10-19"
     }
   ],
   "bugs": [

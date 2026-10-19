@@ -15,7 +15,7 @@ evidence:
   reportPath: .context/review-reports/feature-home-layout-alignment-phase-1-task-02-round-2-review.md
   round: 2
   verdict: PASS
-next: "spec-validator phase 1 → close-out CR-040 → push"
+next: "none — CR-040 done; push origin main"
 loopSignal: none
 approvals: ["2026-10-19 user duyệt plan CR-040 (\"thấy nào ổn thì chọn đi\") → khung 1280 giữ token, hero stage 1440, cao ≤ 662px"]
 batchQueue: [phase-1-task-02]
@@ -31,3 +31,4 @@ batchQueue: [phase-1-task-02]
 - reviewer round 1 FAIL (MAJOR F1: motion-load-zoom scale 1.08 tràn ~54px ngoài stage > 1440, thiếu overflow-hidden) → ▶ START [agent: builder] attempt 2 (running)
 - builder attempt 2 DONE: overflow-hidden stage; typecheck/lint/docker build PASS; đo bật animation 1440/1920/2560: ảnh clip đúng (W+1440)/2, 1440 không đổi → ▶ START [agent: reviewer] round 2 (running)
 - reviewer round 2 PASS (NORMAL) → close-out task 02, commit
+- 2026-10-19 spec-validator phase 1 PASS (inline, .context/review-reports/feature-home-layout-alignment-spec-validation.md); close-out: change doc → archive, BACKLOG done, progress idle.
