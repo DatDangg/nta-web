@@ -1,13 +1,13 @@
 {
   "mode": "feature",
   "activeWorkItem": {
-    "type": null,
-    "slug": null,
-    "phaseTask": null,
-    "step": "idle",
-    "status": "idle",
-    "journal": null,
-    "note": "CR-040 done 2026-10-19"
+    "type": "feature",
+    "slug": "hero-wide-screen-backdrop",
+    "phaseTask": "phase-1-task-01",
+    "step": "close-out",
+    "status": "awaiting",
+    "journal": ".context/runs/feature-hero-wide-screen-backdrop-phase-1-task-01.md",
+    "note": "CR-041 in progress"
   },
   "features": [
     {
@@ -1542,6 +1542,38 @@
         "report": ".context/review-reports/feature-home-layout-alignment-spec-validation.md"
       },
       "completedAt": "2026-10-19"
+    },
+    {
+      "slug": "hero-wide-screen-backdrop",
+      "cr": "CR-041",
+      "status": "in_progress",
+      "changeFile": "spec/changes/2026-10-19-hero-wide-screen-backdrop.md",
+      "classification": "MODIFY",
+      "risk": "LOW-MEDIUM",
+      "phases": [
+        {
+          "phase": 1,
+          "tasks": [
+            {
+              "task": "phase-1-task-01",
+              "title": "Hero > 1440: nền mờ full-bleed sau stage 1440 + fade rộng hai cạnh stage",
+              "status": "done",
+              "attempts": 1,
+              "review": "NORMAL PASS (round 1)",
+              "reviewReport": ".context/review-reports/feature-hero-wide-screen-backdrop-phase-1-task-01-round-1-review.md",
+              "note": "nền mờ full-bleed > 1440 (blur-2xl + white/50, sizes 640px), mask 2 cạnh ảnh nét, phủ trắng trái ngoài stage; ≤1440 không đổi; docker build PASS"
+            }
+          ]
+        }
+      ],
+      "specRefs": [
+        "R-01b",
+        "R-01",
+        "R-22"
+      ],
+      "updatedAt": "2026-10-19",
+      "specVersion": "4.9.0",
+      "scopeVersion": 59
     }
   ],
   "bugs": [
