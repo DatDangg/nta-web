@@ -50,6 +50,7 @@
 | CR-040 | Trang chủ: căn thẳng hàng mép các section (container chung) + cân bố cục hero trên màn hình lớn | MODIFY | done (2 task, spec 4.8.0 / scope v58; khung chung Container 1280, hero stage 1440) | `archive/2026-10-19-home-layout-alignment.md` | 2026-10-19 | 2026-10-19 |
 | CR-041 | Hero trang chủ: bỏ dải trắng hai bên trên màn rất rộng (nền full-bleed sau stage 1440, fade mép mềm) — follow-up CR-040 | MODIFY | done (1 task, spec 4.9.0 / scope v59; hướng A: nền mờ full-bleed sau stage 1440, mask mềm hai cạnh) | `archive/2026-10-19-hero-wide-screen-backdrop.md` | 2026-10-19 | 2026-10-19 |
 | CR-042 | Hero trang chủ: bỏ nền mờ full-bleed + mask hai cạnh của CR-041, quay lại bố cục CR-040 | REMOVE | done (1 task, spec 4.10.0 / scope v60; hero về bố cục CR-040) | `archive/2026-10-20-hero-remove-blur-backdrop.md` | 2026-10-20 | 2026-10-20 |
+| CR-043 | Hero trang chủ: hiện nền bên trái (thành phố + cây) như bản mẫu mới — ảnh hero mới full-bleed, phủ trắng nhẹ | MODIFY | done (1 task, review round 2 PASS, spec 4.11.0 / scope v61) | `archive/2026-10-20-hero-left-background.md` | 2026-10-20 | 2026-10-20 |
 
 ## Quy tắc tracking
 

@@ -15,8 +15,8 @@ export async function Hero({ panels }: HeroProps) {
   const cta = await getTranslations('common.cta');
 
   return (
-    // Desktop (lg+): toàn bộ ảnh hero-banner làm NỀN của section (stage ≤ 1440 căn giữa, R-01b), chữ HTML nằm bên trái
-    // trên vùng thành phố đã được phủ trắng mờ (khớp ảnh mẫu). Panel kính nằm trên ảnh (HeroBackground).
+    // Desktop (lg+): toàn bộ ảnh hero-bg làm NỀN full-bleed của section (R-01b, CR-043), chữ HTML nằm bên trái
+    // trên vùng thành phố phủ trắng nhẹ (khớp bản mẫu). Panel kính nằm trên ảnh (HeroBackground).
     // Mobile/tablet (< lg): chữ trên nền trắng, ảnh xếp bên dưới.
     <section data-motion-off className="relative isolate overflow-hidden bg-white lg:flex lg:h-[clamp(540px,46vw,662px)] lg:items-center">
       <HeroBackground imageAlt={t('heroImageAlt')} panels={panels} />

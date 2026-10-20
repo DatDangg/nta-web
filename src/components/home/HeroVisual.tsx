@@ -3,7 +3,7 @@ import { CountUp } from '@/components/motion/CountUp';
 import type { CSSProperties, ReactNode } from 'react';
 import type { HomeContent } from '@/content/home';
 
-const HERO_SRC = '/images/home/hero-banner.jpg';
+const HERO_SRC = '/images/home/hero-bg.webp';
 
 /** Độ trễ cho hiệu ứng bật-lên + trôi nhẹ của panel kính (`.hero-pop` trong globals.css). */
 const popDelay = (ms: number) => ({ '--d': `${ms}ms` }) as CSSProperties;
@@ -11,14 +11,12 @@ const popDelay = (ms: number) => ({ '--d': `${ms}ms` }) as CSSProperties;
 type HeroPanels = HomeContent['heroPanels'];
 
 /*
- * Hero dùng TOÀN BỘ ảnh hero-banner (1787×880) làm nền.
+ * Hero dùng TOÀN BỘ ảnh hero-bg (1916×821) làm nền full-bleed (kích thước khung: xem `HeroBackground`).
  *
- * Khung ảnh (`frame`) luôn giữ đúng tỉ lệ ảnh gốc, cao = cao section, neo MÉP PHẢI. Nhờ vậy robot +
- * khối NTA luôn ở cùng vị trí tương đối trong khung, và các panel kính đặt bằng % của khung
- * khớp đúng lên ảnh ở mọi bề rộng màn hình. Viewport hẹp hơn khung → phần thành phố bên trái bị cắt;
- * viewport rộng hơn → nền trắng của section lấp bên trái, gradient che mép ảnh.
+ * Khung ảnh luôn giữ đúng tỉ lệ ảnh gốc nên robot + khối NTA luôn ở cùng vị trí tương đối trong khung, và các panel
+ * kính đặt bằng % của hộp panel (trong khung) khớp đúng lên ảnh ở mọi bề rộng màn hình.
  *
- * Cỡ chữ/padding trong panel dùng đơn vị `cqw` (container query) theo bề rộng khung, để panel co
+ * Cỡ chữ/padding trong panel dùng đơn vị `cqw` (container query) theo bề rộng hộp panel, để panel co
  * giãn cùng ảnh thay vì vỡ chữ.
  */
 
@@ -139,51 +137,50 @@ type HeroBackgroundProps = {
 /**
  * Nền ảnh + panel kính (chỉ lg+). Decorative với panel; ảnh có alt.
  *
- * Ảnh + lớp phủ nằm trong STAGE tối đa 1440px căn giữa (R-01b, CR-040): ≤ 1440 stage = viewport nên hình
- * y hệt bản full-bleed cũ; > 1440 ảnh không dạt sang mép phải màn hình mà cân với khung chữ 1280,
- * ngoài stage là nền trắng của section.
+ * Ảnh hero-bg (1916×821) phủ FULL-BLEED kiểu `background-size: cover` (R-01b, CR-043): nửa trái là thành phố + cửa kính +
+ * cây (nền sau chữ, phủ trắng nhẹ), nửa phải robot/khối xanh. Wrapper là size container (`cqw`/`cqh` = bề rộng/cao section)
+ * để khung ảnh tự tính kích thước bằng CSS:
+ * - rộng = max(bề rộng section, cao section × 1916/821), tối đa 2048px; neo mép phải, neo dọc 35% (giữ vùng panel trong khung);
+ * - viewport hẹp → cắt bớt thành phố bên trái; > 2048 → khung căn giữa, không phóng tiếp (panel không to dần/bị cắt),
+ *   hai cạnh ảnh mask mờ sang nền trắng của section;
+ * - khi khung rộng hơn viewport (< ~1545), lùi khung sang phải tối đa 56px (chỉ trong phần ảnh thừa, không hở mép trái) để
+ *   panel kính không chồng cột chữ ở 1024–1100 và giữ khe chữ ↔ panel ở 1280–1440 (review CR-043 M1/m1).
  */
 export function HeroBackground({ panels, imageAlt }: HeroBackgroundProps) {
   return (
-    <div className="absolute inset-0 -z-10 hidden lg:block">
-      <div className="relative mx-auto h-full w-full max-w-[1440px] overflow-hidden">
-        <div className="absolute inset-y-0 right-0 aspect-[1787/880] h-full [container-type:inline-size]">
-          {/* sizes = bề rộng thật của khung (cao × 1787/880): ≥ 1440 cao 662 → 1345px; 1174–1440 cao 46vw → ~94vw; 1024–1174 cao 540 → 1097px. */}
-          <Image
-            alt={imageAlt}
-            className="motion-load-zoom object-cover"
-            fill
-            priority
-            sizes="(min-width: 1440px) 1345px, (min-width: 1174px) 94vw, (min-width: 1024px) 1097px, 1px"
-            src={HERO_SRC}
-          />
-
-          {/* Che mép trái khung ảnh (thấy được khi màn hình rộng hơn khung). */}
-          <div aria-hidden className="absolute inset-y-0 left-0 w-[30%] bg-gradient-to-r from-white to-transparent" />
-          {/* Viewport > 1440: mép phải stage không còn là mép màn hình → fade sang trắng thay vì cắt cứng (nằm dưới panel kính). */}
-          <div aria-hidden className="absolute inset-y-0 right-0 hidden w-24 bg-gradient-to-l from-white to-transparent min-[1441px]:block" />
-
-          {/* 5 panel kính + wordmark NTA — vị trí % theo khung ảnh, khớp ảnh mẫu. */}
-          <div aria-hidden className="absolute inset-0 text-text-primary">
-            <ListPanel className="left-[46%] top-[15%] w-[15.5%]" delay={300} icon={<IconBrain />} items={panels.ai.items} title={panels.ai.title} />
-            <ChartPanel className="left-[70.5%] top-[14%] w-[17%]" delay={450} subtitle={panels.chart.subtitle} title={panels.chart.title} />
-            <StatPanel className="left-[88.5%] top-[33%] w-[9%]" delay={600} label={panels.performance.label} value={panels.performance.value} />
-            <ListPanel className="left-[45.5%] top-[50%] w-[16%]" delay={750} icon={<IconGrid />} items={panels.management.items} title={panels.management.title} />
-            <ListPanel className="left-[83%] top-[55%] w-[14.5%]" delay={900} icon={<IconPhone />} items={panels.apps.items} title={panels.apps.title} />
-
-            <p className="absolute left-[73%] top-[56%] -translate-x-1/2 text-[4cqw] font-black tracking-tight text-white drop-shadow-[0_0.2cqw_0.6cqw_rgb(0_80_70/0.55)]">
-              {panels.wordmark}
-            </p>
-          </div>
-        </div>
-
-        {/* Phủ trắng mờ vùng thành phố bên trái để chữ dễ đọc (theo bề rộng stage, không theo khung). */}
-        <div
-          aria-hidden
-          className="absolute inset-0 bg-[linear-gradient(90deg,#fff_0%,rgb(255_255_255/0.94)_28%,rgb(255_255_255/0.6)_42%,rgb(255_255_255/0)_56%)]"
+    <div className="absolute inset-0 -z-10 hidden [container-type:size] lg:block">
+      <div className="absolute right-[calc(max(0px,(100cqw_-_2048px)/2)_-_min(max(0px,100cqh*1916/821_-_100cqw),56px))] top-[calc((100cqh_-_min(max(100cqh,100cqw*821/1916),877.6px))*0.35)] aspect-[1916/821] w-[min(max(100cqw,calc(100cqh*1916/821)),2048px)]">
+        {/* sizes = bề rộng thật của khung = min(max(100vw, cao × 1916/821), 2048): ≥ 2048 → 2048px; 1545–2048 → 100vw;
+            1440–1545 cao 662 → 1545px; 1174–1440 cao 46vw → ~108vw; 1024–1174 cao 540 → 1260px. */}
+        <Image
+          alt={imageAlt}
+          className="motion-load-zoom object-cover min-[2049px]:[mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]"
+          fill
+          priority
+          sizes="(min-width: 2048px) 2048px, (min-width: 1545px) 100vw, (min-width: 1440px) 1545px, (min-width: 1174px) 108vw, (min-width: 1024px) 1260px, 1px"
+          src={HERO_SRC}
         />
+
+        {/* Hộp panel: vùng robot/khối xanh trên ảnh. 5 panel kính + wordmark NTA đặt % theo hộp này, đè khớp panel vẽ sẵn trong ảnh. */}
+        <div aria-hidden className="absolute left-[17%] top-[7%] h-[80.4%] w-[69.9%] text-text-primary [container-type:inline-size]">
+          <ListPanel className="left-[46.2%] top-[25.8%] w-[15.5%]" delay={300} icon={<IconBrain />} items={panels.ai.items} title={panels.ai.title} />
+          <ChartPanel className="left-[69.9%] top-[15.8%] w-[17%]" delay={450} subtitle={panels.chart.subtitle} title={panels.chart.title} />
+          <StatPanel className="left-[87.7%] top-[35.2%] w-[9%]" delay={600} label={panels.performance.label} value={panels.performance.value} />
+          <ListPanel className="left-[46.2%] top-[52.7%] w-[16%]" delay={750} icon={<IconGrid />} items={panels.management.items} title={panels.management.title} />
+          <ListPanel className="left-[82.8%] top-[54.2%] w-[14.5%]" delay={900} icon={<IconPhone />} items={panels.apps.items} title={panels.apps.title} />
+
+          <p className="absolute left-[73%] top-[56%] -translate-x-1/2 text-[4cqw] font-black tracking-tight text-white drop-shadow-[0_0.2cqw_0.6cqw_rgb(0_80_70/0.55)]">
+            {panels.wordmark}
+          </p>
+        </div>
       </div>
-      {/* Mờ đáy chuyển sang section kế tiếp — giữ full-width section: ngoài stage vốn trắng nên kết quả như nhau, không tạo mép dọc ở cạnh stage. */}
+
+      {/* Phủ trắng NHẸ vùng chữ bên trái: vẫn thấy thành phố/cây phía sau (bản mẫu CR-043), chữ vẫn đủ tương phản. */}
+      <div
+        aria-hidden
+        className="absolute inset-0 bg-[linear-gradient(90deg,rgb(255_255_255/0.85)_0%,rgb(255_255_255/0.72)_30%,rgb(255_255_255/0.35)_45%,rgb(255_255_255/0)_58%)]"
+      />
+      {/* Mờ đáy chuyển sang section kế tiếp. */}
       <div aria-hidden className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-white to-transparent" />
     </div>
   );
@@ -193,7 +190,7 @@ export function HeroBackground({ panels, imageAlt }: HeroBackgroundProps) {
 export function HeroMobileImage({ imageAlt }: { imageAlt: string }) {
   return (
     <div className="relative aspect-[4/3] w-full [mask-image:linear-gradient(to_bottom,transparent,black_20%)] md:aspect-[16/9] lg:hidden">
-      <Image alt={imageAlt} className="object-cover object-[72%_50%]" fill sizes="100vw" src={HERO_SRC} />
+      <Image alt={imageAlt} className="object-cover object-[75%_50%]" fill sizes="100vw" src={HERO_SRC} />
     </div>
   );
 }

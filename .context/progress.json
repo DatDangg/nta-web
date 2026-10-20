@@ -7,7 +7,7 @@
     "step": "idle",
     "status": "idle",
     "journal": null,
-    "note": "CR-042 done 2026-10-20"
+    "note": "CR-043 done 2026-10-20"
   },
   "features": [
     {
@@ -1610,6 +1610,39 @@
       "updatedAt": "2026-10-20",
       "specVersion": "4.10.0",
       "scopeVersion": 60,
+      "completedAt": "2026-10-20"
+    },
+    {
+      "slug": "hero-left-background",
+      "cr": "CR-043",
+      "status": "done",
+      "changeFile": "spec/changes/archive/2026-10-20-hero-left-background.md",
+      "classification": "MODIFY",
+      "risk": "LOW-MEDIUM",
+      "phases": [
+        {
+          "phase": 1,
+          "tasks": [
+            {
+              "task": "phase-1-task-01",
+              "title": "Hero: ảnh hero-bg full-bleed, nền trái thấy thành phố/cây (phủ trắng nhẹ), panel căn lại, khung ≤ 2048",
+              "status": "done",
+              "attempts": 2,
+              "review": "NORMAL FAIL round 1 (M1 panel chồng chữ 1024–1075) → PASS round 2",
+              "reviewReport": ".context/review-reports/feature-hero-left-background-phase-1-task-01-round-2-review.md",
+              "note": "lùi khung tối đa 56px khi khung > viewport; xoá hero-banner.jpg; khe chữ↔panel 21–84px (1024–2560); typecheck + lint PASS"
+            }
+          ]
+        }
+      ],
+      "specRefs": [
+        "R-01b",
+        "R-01",
+        "R-22"
+      ],
+      "updatedAt": "2026-10-20",
+      "specVersion": "4.11.0",
+      "scopeVersion": 61,
       "completedAt": "2026-10-20"
     }
   ],

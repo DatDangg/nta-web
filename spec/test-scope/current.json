@@ -1,9 +1,9 @@
 {
-  "specVersion": "4.10.0",
-  "scopeVersion": 60,
-  "generatedAt": "2026-10-20T12:00:00+07:00",
+  "specVersion": "4.11.0",
+  "scopeVersion": 61,
+  "generatedAt": "2026-10-20T18:00:00+07:00",
   "trigger": "feature-update",
-  "workItem": "feature/hero-remove-blur-backdrop (CR-042 spec/changes/2026-10-20-hero-remove-blur-backdrop.md; REMOVE UI-only, risk low; gỡ CR-041, hero về as-built CR-040)",
+  "workItem": "feature/hero-left-background (CR-043 spec/changes/2026-10-20-hero-left-background.md; MODIFY UI-only, risk low-medium; thay hành vi hero CR-040/042)",
   "specRefs": [
     "R-01b",
     "R-01",
@@ -11,37 +11,42 @@
   ],
   "changed": {
     "files": [
-      "src/components/home/HeroVisual.tsx — HeroBackground trả về bản CR-040: bỏ lớp nền mờ full-bleed (blur + phủ trắng) và mask hai cạnh stage; khôi phục fade trắng w-24 mép phải stage khi > 1440",
-      "docs/DESIGN.md (current-state hero) — reconcile as-built về CR-040"
+      "public/images/home/hero-bg.webp — ảnh nền hero mới 1916×821",
+      "src/components/home/HeroVisual.tsx — nền hero full-bleed cover (khung tối đa 2048, mép mờ trắng khi > 2048), lớp phủ trắng nhẹ bên trái, panel kính căn lại theo ảnh, ảnh mobile crop vào robot",
+      "src/components/home/Hero.tsx — nối ảnh/khung hero mới",
+      "docs/DESIGN.md (current-state hero) — reconcile as-built CR-043",
+      "public/images/home/hero-banner.jpg (deleted)"
     ],
     "modules": [
-      "Trang chủ / và /en — hero desktop (lg+), rõ nhất > 1440"
+      "Trang chủ / và /en — hero desktop (lg+) và hero mobile/tablet"
     ]
   },
   "impact": {
     "direct": [
-      "1920/2560/3840 (vi + en): hai bên stage 1440 là nền trắng, không còn nền ảnh mờ (blur) full-bleed",
-      "Cạnh trái stage ảnh không còn mask; mép phải stage fade trắng w-24 như CR-040",
-      "Mép trái h1 hero = mép trái khung Container 1280 (≤ 2px), chữ dễ đọc",
-      "Ảnh nét + panel kính không méo, vị trí panel như CR-040"
+      "1100/1440/1920/2560 (vi + en): ảnh hero-bg phủ full-bleed; nửa trái thấy thành phố/cửa kính/cây phía sau chữ với lớp phủ trắng nhẹ (không còn phủ trắng gần đặc)",
+      "Chữ hero (h1 2 màu, mô tả, CTA) đủ tương phản trên nền ảnh (WCAG AA)",
+      "Panel kính vẫn có chuyển động, vị trí khớp ảnh mới, không bị cắt ở mọi breakpoint desktop",
+      "> 2048 (2560): ảnh căn giữa trong khung 2048, không phóng to; hai cạnh mờ dần sang trắng, không blur",
+      "375/768: hero mobile dùng cùng ảnh hero-bg, crop vào robot"
     ],
     "dependents": [
-      "Không còn tải bản sao ảnh nền mờ /images/home/hero-banner.jpg (decorative) — chỉ còn ảnh hero nét"
+      "Ảnh hero cũ hero-banner.jpg không còn là ảnh nền hero desktop — ảnh LCP mới là hero-bg.webp"
     ],
     "regression": [
-      "≤ 1440 (1024/1280/1440): hero không đổi",
-      "375/768: hero mobile (HeroMobileImage) không đổi",
-      "Không thanh cuộn ngang 1024–3840",
-      "LCP hero (R-22): ảnh nét vẫn priority",
+      "Mép trái h1 hero = mép trái khung Container 1280 (≤ 2px) ở desktop",
+      "Không thanh cuộn ngang ở 375/768/1100/1440/1920/2560",
+      "LCP hero (R-22): ảnh hero-bg có priority, không lazy",
+      "Header, các section dưới hero (Giải pháp/Sản phẩm/Case study/CTA/Footer) không đổi",
       "Mờ đáy chuyển sang section kế tiếp giữ nguyên"
     ]
   },
   "acceptance": [
-    "> 1440: không còn nền mờ (blur) và mask hai cạnh; ngoài stage 1440 là nền trắng, mép phải stage fade trắng w-24",
-    "Mép trái chữ hero = khung 1280, chữ dễ đọc",
-    "Ảnh/panel không méo",
-    "≤ 1440 + mobile/tablet giữ nguyên; kiểm vi + en"
+    "Desktop 1100/1440/1920/2560 vi + en: nền trái thấy thành phố/cây sau chữ, chữ đủ tương phản",
+    "Panel kính khớp ảnh, động, không bị cắt",
+    "> 2048: ảnh không phóng to, căn giữa, hai mép mờ sang trắng (không blur)",
+    "Mobile 375/768: ảnh crop vào robot",
+    "Không scroll ngang; ảnh hero priority cho LCP"
   ],
-  "risk": "low",
-  "notes": "Thay scope v59 (CR-041). Hành vi hero = scope v58 (CR-040). UI-only, không đổi API/DB/nội dung."
+  "risk": "low-medium",
+  "notes": "Thay scope v60 (CR-042) và hành vi hero của v58 (CR-040). UI-only, không đổi API/DB/nội dung."
 }

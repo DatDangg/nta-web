@@ -1,5 +1,5 @@
 ---
-spec_version: 4.10.0
+spec_version: 4.11.0
 updated_at: 2026-10-20
 ---
 
@@ -61,11 +61,12 @@ _(cập nhật 2026-10-13: thêm **domain phụ** `ntasolution.vn` (+ `www`) ph�
   Câu chuyện khách hàng, CTA band và Footer dùng **chung 1 khung nội dung** = `Container` (`max-w-container` 1280px + padding ngang
   16/24/32px theo base/sm/lg) → mép trái/phải nội dung (tiêu đề section, mép thẻ đầu/cuối, logo, nút CTA) thẳng hàng theo chiều dọc ở mọi
   viewport (sai số ≤ 2px). Không section nào dùng max-width riêng hay lồng khung hẹp hơn. Dải chữ chạy (marquee) và nền section vẫn full-bleed.
-  Hero desktop (`lg+`): ảnh nền + 5 panel kính + wordmark + lớp phủ trắng nằm trong **stage tối đa 1440px căn giữa** (≤ 1440 giống hiện tại:
-  ảnh tràn mép phải); viewport > 1440 → ảnh không dính mép phải màn hình, mép phải stage mờ dần sang nền trắng, chiều cao hero tối đa 662px
-  (= tỉ lệ ở 1440) để bố cục chữ ↔ ảnh như ở 1440. **(4.10.0 — CR-042)** Bỏ nền mờ full-bleed + mask hai cạnh của CR-041 (4.9.0) theo yêu
-  cầu user: hero quay lại đúng hành vi CR-040 (ngoài stage là nền trắng của section). Mobile/tablet (< `lg`) không đổi. Không đổi nội
-  dung/hành vi R-01/R-02a/R-03a/R-03b.
+  Hero desktop (`lg+`) **(4.11.0 — CR-043, thay hành vi CR-040/042)**: ảnh nền `hero-bg` (1916×821) phủ **full-bleed** cả bề ngang section
+  kiểu cover — nửa trái là thành phố + cửa kính + cây (nền sau chữ, thấy rõ), nửa phải robot/khối xanh; lớp phủ trắng vùng chữ **nhẹ**
+  (≈ 0.85 → 0 trong ~58% bề ngang) đủ tương phản cho chữ; 5 panel kính + wordmark vẫn động, đè khớp panel trong ảnh. Khung ảnh giữ tỉ lệ
+  ảnh, rộng tối đa 2048px: viewport hẹp → cắt bớt thành phố bên trái; > 2048 → ảnh căn giữa, không phóng tiếp (panel không to dần/bị cắt),
+  hai cạnh ảnh mờ sang nền trắng (không dùng nền blur). Chiều cao hero tối đa 662px. Mobile/tablet (< `lg`) dùng cùng ảnh, crop vào robot.
+  Mép chữ vẫn thẳng khung 1280. Không đổi nội dung/hành vi R-01/R-02a/R-03a/R-03b.
 - **R-02:** Khối 3 mảng giải pháp (Doanh nghiệp / AI / App AI) — 3 card, điều hướng đúng trang, có hover state.
   `[reverse-engineered from docs]` — nguồn: `docs/BRD.md:69-71` (FR-002)
 - **R-02a (3.11.0 — khối Giải pháp trang chủ theo mockup CR-016):** header section dùng chung — eyebrow (`SOLUTIONS ——`) +
