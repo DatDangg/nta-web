@@ -140,39 +140,28 @@ type HeroBackgroundProps = {
  * Nền ảnh + panel kính (chỉ lg+). Decorative với panel; ảnh có alt.
  *
  * Ảnh + lớp phủ nằm trong STAGE tối đa 1440px căn giữa (R-01b, CR-040): ≤ 1440 stage = viewport nên hình
- * y hệt bản full-bleed cũ; > 1440 ảnh không dạt sang mép phải màn hình mà cân với khung chữ 1280.
- *
- * Chỉ > 1440 (CR-041): phía sau stage có nền mờ full-bleed (bản nhỏ của chính ảnh hero, blur + phủ trắng) để hai
- * bên không còn dải trắng trơn; ảnh nét được mask mờ hai cạnh hoà vào nền đó (mask trên ảnh, không trên panel kính),
- * và lớp phủ trắng vùng chữ kéo ra tận mép trái màn hình.
+ * y hệt bản full-bleed cũ; > 1440 ảnh không dạt sang mép phải màn hình mà cân với khung chữ 1280,
+ * ngoài stage là nền trắng của section.
  */
 export function HeroBackground({ panels, imageAlt }: HeroBackgroundProps) {
   return (
     <div className="absolute inset-0 -z-10 hidden lg:block">
-      {/* > 1440: nền mờ full-bleed. Lazy (không priority) trong khối display:none → ≤ 1440 không tải; sizes nhỏ vì đã blur.
-          scale để mép blur (trong suốt dần) nằm ngoài khung overflow-hidden, không lộ viền trắng. */}
-      <div aria-hidden className="absolute inset-0 hidden overflow-hidden min-[1441px]:block">
-        <Image alt="" className="scale-110 object-cover blur-2xl" fill sizes="640px" src={HERO_SRC} />
-        <div className="absolute inset-0 bg-white/50" />
-      </div>
-      {/* > 1440: phủ trắng phần nền mờ bên trái ngoài stage (nhạt dần ra mép màn hình); sát stage 0.9 = mép trái lớp phủ
-          trong stage → không lộ đường nối. */}
-      <div aria-hidden className="absolute inset-y-0 left-0 hidden w-[calc(50%-720px)] bg-gradient-to-r from-white/70 to-white/90 min-[1441px]:block" />
       <div className="relative mx-auto h-full w-full max-w-[1440px] overflow-hidden">
         <div className="absolute inset-y-0 right-0 aspect-[1787/880] h-full [container-type:inline-size]">
           {/* sizes = bề rộng thật của khung (cao × 1787/880): ≥ 1440 cao 662 → 1345px; 1174–1440 cao 46vw → ~94vw; 1024–1174 cao 540 → 1097px. */}
           <Image
             alt={imageAlt}
-            className="motion-load-zoom object-cover min-[1441px]:[mask-image:linear-gradient(to_right,transparent,black_30%,black_88%,transparent)]"
+            className="motion-load-zoom object-cover"
             fill
             priority
             sizes="(min-width: 1440px) 1345px, (min-width: 1174px) 94vw, (min-width: 1024px) 1097px, 1px"
             src={HERO_SRC}
           />
 
-          {/* ≤ 1440: che mép trái khung ảnh sang trắng. > 1440 thay bằng mask hai cạnh trên ảnh (mờ sang nền mờ phía sau) —
-              mask đặt trên ảnh chứ không trên khung để panel kính sát mép phải không bị mờ theo. */}
-          <div aria-hidden className="absolute inset-y-0 left-0 w-[30%] bg-gradient-to-r from-white to-transparent min-[1441px]:hidden" />
+          {/* Che mép trái khung ảnh (thấy được khi màn hình rộng hơn khung). */}
+          <div aria-hidden className="absolute inset-y-0 left-0 w-[30%] bg-gradient-to-r from-white to-transparent" />
+          {/* Viewport > 1440: mép phải stage không còn là mép màn hình → fade sang trắng thay vì cắt cứng (nằm dưới panel kính). */}
+          <div aria-hidden className="absolute inset-y-0 right-0 hidden w-24 bg-gradient-to-l from-white to-transparent min-[1441px]:block" />
 
           {/* 5 panel kính + wordmark NTA — vị trí % theo khung ảnh, khớp ảnh mẫu. */}
           <div aria-hidden className="absolute inset-0 text-text-primary">
@@ -188,11 +177,10 @@ export function HeroBackground({ panels, imageAlt }: HeroBackgroundProps) {
           </div>
         </div>
 
-        {/* Phủ trắng mờ vùng thành phố bên trái để chữ dễ đọc (theo bề rộng stage, không theo khung).
-            > 1440 mép trái 0.9 thay vì trắng đặc → nối liền dải phủ ngoài stage. */}
+        {/* Phủ trắng mờ vùng thành phố bên trái để chữ dễ đọc (theo bề rộng stage, không theo khung). */}
         <div
           aria-hidden
-          className="absolute inset-0 bg-[linear-gradient(90deg,#fff_0%,rgb(255_255_255/0.94)_28%,rgb(255_255_255/0.6)_42%,rgb(255_255_255/0)_56%)] min-[1441px]:bg-[linear-gradient(90deg,rgb(255_255_255/0.9)_0%,rgb(255_255_255/0.94)_28%,rgb(255_255_255/0.6)_42%,rgb(255_255_255/0)_56%)]"
+          className="absolute inset-0 bg-[linear-gradient(90deg,#fff_0%,rgb(255_255_255/0.94)_28%,rgb(255_255_255/0.6)_42%,rgb(255_255_255/0)_56%)]"
         />
       </div>
       {/* Mờ đáy chuyển sang section kế tiếp — giữ full-width section: ngoài stage vốn trắng nên kết quả như nhau, không tạo mép dọc ở cạnh stage. */}

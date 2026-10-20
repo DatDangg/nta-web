@@ -7,7 +7,7 @@
     "step": "idle",
     "status": "idle",
     "journal": null,
-    "note": "CR-041 done 2026-10-19"
+    "note": "CR-042 done 2026-10-20"
   },
   "features": [
     {
@@ -1580,6 +1580,37 @@
         "report": ".context/review-reports/feature-hero-wide-screen-backdrop-spec-validation.md"
       },
       "completedAt": "2026-10-19"
+    },
+    {
+      "slug": "hero-remove-blur-backdrop",
+      "cr": "CR-042",
+      "status": "done",
+      "changeFile": "spec/changes/archive/2026-10-20-hero-remove-blur-backdrop.md",
+      "classification": "REMOVE",
+      "risk": "LOW",
+      "phases": [
+        {
+          "phase": 1,
+          "tasks": [
+            {
+              "task": "phase-1-task-01",
+              "title": "Gỡ nền mờ full-bleed + mask hai cạnh của CR-041, HeroVisual về bản CR-040",
+              "status": "done",
+              "attempts": 1,
+              "review": "NORMAL PASS (round 1)",
+              "reviewReport": ".context/review-reports/feature-hero-remove-blur-backdrop-phase-1-task-01-round-1-review.md",
+              "note": "HeroVisual.tsx = 224f4b5; DESIGN.md as-built + R-01b 4.10.0; typecheck + lint PASS; preview 1920 không còn blur"
+            }
+          ]
+        }
+      ],
+      "specRefs": [
+        "R-01b"
+      ],
+      "updatedAt": "2026-10-20",
+      "specVersion": "4.10.0",
+      "scopeVersion": 60,
+      "completedAt": "2026-10-20"
     }
   ],
   "bugs": [
