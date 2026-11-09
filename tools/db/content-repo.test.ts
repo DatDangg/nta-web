@@ -181,6 +181,19 @@ describe("content-repo (Postgres)", { skip }, () => {
     await rejectsWith(createEntry(db, { ...solution, collection: "khac" }), /I-6 collection/);
   });
 
+  // CR-044 (R-20a mục 9): migration 0002 nới CHECK → ghi được ja; I-1 chỉ đòi cặp vi/en.
+  it("locale ja: ghi được, không cảnh báo I-1; bản ja không thay cặp vi/en; locale lạ → I-6", async () => {
+    const item = await firstLive("listing_item", "vi", 1);
+    const ja = await createEntry(db, { collection: "listing_item", slug: item.slug, locale: "ja", data: item.data as Record<string, unknown>, body: item.body, actor });
+    assert.equal(ja.entry.locale, "ja");
+    assert.deepEqual(ja.warnings, []);
+    const lonely = await createEntry(db, { collection: "listing_item", slug: "chi-co-vi-ja", locale: "ja", data: item.data as Record<string, unknown>, actor });
+    assert.deepEqual(lonely.warnings, []);
+    const viOnly = await createEntry(db, { collection: "listing_item", slug: "chi-co-vi-ja", locale: "vi", data: item.data as Record<string, unknown>, actor });
+    assert.match(viOnly.warnings.join(), /I-1 .*cặp vi\/en/);
+    await rejectsWith(createEntry(db, { collection: "listing_item", slug: item.slug, locale: "fr", data: item.data as Record<string, unknown>, actor }), /I-6 locale/);
+  });
+
   it("lỗi giữa transaction (ghi lịch sử hỏng) → entry không đổi, không thiếu version", async () => {
     const item = await entryOf("solution_overview", "vi", "enterprise");
     // Chiếm trước (entry_id, version 2) → INSERT content_versions sau UPDATE entry vi phạm UNIQUE.

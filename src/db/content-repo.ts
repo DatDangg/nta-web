@@ -5,7 +5,7 @@
 // Dùng cho CLI (tools/db/content-cli.ts) và bot CR-030. Không import "server-only" (CLI chạy bằng tsx); không log DATABASE_URL.
 import { access } from "node:fs/promises";
 import path from "node:path";
-import { and, asc, eq, isNull, ne, sql, type SQL } from "drizzle-orm";
+import { and, asc, eq, isNull, sql, type SQL } from "drizzle-orm";
 import type { Database } from "./client";
 import {
   checkRecord,
@@ -15,7 +15,7 @@ import {
   registryTargetCollection,
   type ContentRecord,
 } from "./content-rules";
-import { contentEntries, contentVersions, type ContentEntry, type ContentVersion, type ContentVersionOp } from "./schema";
+import { contentEntries, contentVersions, isSeedLocale, type ContentEntry, type ContentVersion, type ContentVersionOp } from "./schema";
 
 type Transaction = Parameters<Parameters<Database["transaction"]>[0]>[0];
 
@@ -167,22 +167,14 @@ async function registryValidation(tx: Transaction, record: ContentRecord): Promi
   return result;
 }
 
-// I-1: cảnh báo (không chặn) khi locale kia chưa có bản còn sống — bot tạo vi rồi en tuần tự.
+// I-1: cảnh báo (không chặn) khi locale kia của cặp vi/en chưa có bản còn sống — bot tạo vi rồi en tuần tự.
+// ja (R-20a mục 9) không bắt buộc: ghi ja không cảnh báo, và bản ja không thay được cho vi/en còn thiếu.
 async function localePairWarnings(tx: Transaction, record: ContentRecord): Promise<string[]> {
-  // Asset là 1 bản ghi / ảnh (locale cố định, alt vi/en trong data) → không có cặp vi/en.
-  if (record.collection === "asset") return [];
-  const others = await tx
-    .select({ locale: contentEntries.locale })
-    .from(contentEntries)
-    .where(
-      and(
-        eq(contentEntries.collection, record.collection),
-        eq(contentEntries.slug, record.slug),
-        ne(contentEntries.locale, record.locale as ContentEntry["locale"]),
-        isNull(contentEntries.deletedAt),
-      ),
-    );
-  return others.length > 0 ? [] : [`I-1 ${record.collection}/${record.slug} chưa có bản ngôn ngữ còn lại — tạo cặp vi/en`];
+  // Asset là 1 bản ghi / ảnh (locale cố định, alt theo ngôn ngữ trong data) → không có cặp vi/en.
+  if (record.collection === "asset" || !isSeedLocale(record.locale)) return [];
+  const pairLocale = record.locale === "vi" ? "en" : "vi";
+  const pair = await findLiveEntry(tx, record.collection, pairLocale, record.slug);
+  return pair ? [] : [`I-1 ${record.collection}/${record.slug} chưa có bản ngôn ngữ còn lại — tạo cặp vi/en`];
 }
 
 async function validateRecord(tx: Transaction, record: ContentRecord, publicDir: string | undefined): Promise<Validation> {

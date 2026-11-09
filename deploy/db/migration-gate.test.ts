@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, it } from "node:test";
-import { checkMigrationSql, selectPendingMigrations, splitStatements } from "./migration-gate";
+import { APPROVAL_MARKER_PATTERN, checkMigrationSql, selectPendingMigrations, splitStatements } from "./migration-gate";
 
 const MARKER = "-- HIGH_RISK_MIGRATION: approved 2026-10-14 by user";
 
@@ -112,6 +112,23 @@ describe("checkMigrationSql — cho qua migration additive", () => {
     assert.deepEqual(result.findings, []);
     assert.equal(result.approved, false);
     assert.equal(result.blocked, false);
+  });
+
+  // CR-044 (R-20a mục 9): chỉ nới CHECK locale thêm 'ja' — không đổi dữ liệu nhưng có DROP CONSTRAINT → gate chặn, cần dòng duyệt.
+  it("migration thật drizzle/0002 (nới CHECK locale thêm ja) → chỉ DROP + ADD CHECK, có dòng duyệt → pass", () => {
+    const sql = readFileSync(path.join(process.cwd(), "drizzle", "0002_happy_magma.sql"), "utf8");
+    // splitStatements thay literal chuỗi bằng '' → kiểm danh sách locale trên SQL gốc.
+    assert.deepEqual(splitStatements(sql), [
+      'ALTER TABLE "content_entries" DROP CONSTRAINT "content_entries_locale_check"',
+      `ALTER TABLE "content_entries" ADD CONSTRAINT "content_entries_locale_check" CHECK ("content_entries"."locale" IN ('', '', ''))`,
+    ]);
+    assert.match(sql, /CHECK \("content_entries"\."locale" IN \('vi', 'en', 'ja'\)\);/);
+    const result = checkMigrationSql(sql);
+    assert.deepEqual(result.findings.map((finding) => finding.rule), ["ALTER TABLE ... DROP"]);
+    assert.equal(result.approved, true);
+    assert.equal(result.blocked, false);
+    const withoutApproval = sql.replace(APPROVAL_MARKER_PATTERN, "");
+    assert.equal(checkMigrationSql(withoutApproval).blocked, true);
   });
 });
 

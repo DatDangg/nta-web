@@ -3,9 +3,12 @@ import { test } from "node:test";
 import { getTableConfig } from "drizzle-orm/pg-core";
 import {
   CONTENT_COLLECTIONS,
+  CONTENT_LOCALES,
+  SEED_LOCALES,
   contentEntries,
   contentVersions,
   isContentCollection,
+  isSeedLocale,
 } from "./schema";
 
 test("collection whitelist covers current content types and rejects unknown values", () => {
@@ -72,4 +75,17 @@ test("content_versions references content_entries and is unique per (entry_id, v
   assert.ok(sortOrder);
   assert.equal(sortOrder.notNull, false);
   assert.equal(sortOrder.hasDefault, false);
+});
+
+// CR-044 (R-20a mục 9/10): DB nhận vi/en/ja; file seed + cặp I-1 chỉ vi/en.
+test("locale: CHECK content_entries nhận vi/en/ja, SEED_LOCALES chỉ vi/en", () => {
+  assert.deepEqual([...CONTENT_LOCALES], ["vi", "en", "ja"]);
+  assert.deepEqual([...SEED_LOCALES], ["vi", "en"]);
+  assert.equal(isSeedLocale("ja"), false);
+  assert.equal(isSeedLocale("vi"), true);
+  const localeCheck = getTableConfig(contentEntries).checks.find((item) => item.name === "content_entries_locale_check");
+  assert.ok(localeCheck);
+  const chunks = (localeCheck.value as unknown as { queryChunks: unknown[] }).queryChunks;
+  const text = chunks.map((chunk) => (typeof chunk === "object" && chunk !== null && "value" in chunk ? String(chunk.value) : "")).join("");
+  assert.match(text, /IN \('vi', 'en', 'ja'\)/);
 });

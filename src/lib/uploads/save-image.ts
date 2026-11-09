@@ -14,6 +14,7 @@ const MAX_ORIGINAL_NAME_LENGTH = 200;
 export interface ImageAlt {
   vi?: string;
   en?: string;
+  ja?: string;
 }
 
 export interface SaveImageInput {
@@ -37,6 +38,7 @@ function assetData(image: StoredImage, input: SaveImageInput): Record<string, un
   const alt: ImageAlt = {};
   if (input.alt?.vi?.trim()) alt.vi = input.alt.vi.trim();
   if (input.alt?.en?.trim()) alt.en = input.alt.en.trim();
+  if (input.alt?.ja?.trim()) alt.ja = input.alt.ja.trim();
   const data: Record<string, unknown> = {
     path: image.urlPath,
     sha256: image.sha256,

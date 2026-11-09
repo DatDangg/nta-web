@@ -1,7 +1,7 @@
 // So khớp DB ↔ file (thuần, không I/O) + ràng buộc toàn vẹn I-1..I-6 (quy tắc từng bản ghi ở src/db/content-rules.ts) (docs/content-bot/08-data-model.md §4).
 import { isDeepStrictEqual } from "node:util";
 import { checkRecord, registryProblem, registryTargetCollection } from "../../src/db/content-rules";
-import { CONTENT_LOCALES } from "../../src/db/schema";
+import { SEED_LOCALES, isSeedLocale } from "../../src/db/schema";
 import { recordKey, type SeedRecord } from "./file-source";
 
 export interface ParityIssue {
@@ -27,12 +27,14 @@ export function firstDifference(left: unknown, right: unknown, path: string): st
 }
 
 // `dbRecords` = các hàng còn sống (deleted_at IS NULL) thuộc collection seed.
+// Chỉ so locale có file seed (SEED_LOCALES): hàng ja do bot ghi thẳng DB (R-20a mục 10) → bỏ qua cả hai chiều.
 export function compareRecords(fileRecords: readonly SeedRecord[], dbRecords: readonly SeedRecord[]): ParityIssue[] {
   const issues: ParityIssue[] = [];
-  const dbByKey = new Map(dbRecords.map((record) => [recordKey(record), record]));
+  const dbByKey = new Map(dbRecords.filter((record) => isSeedLocale(record.locale)).map((record) => [recordKey(record), record]));
   const fileKeys = new Set<string>();
 
   for (const fileRecord of fileRecords) {
+    if (!isSeedLocale(fileRecord.locale)) continue;
     const key = recordKey(fileRecord);
     fileKeys.add(key);
     const dbRecord = dbByKey.get(key);
@@ -52,15 +54,17 @@ export function compareRecords(fileRecords: readonly SeedRecord[], dbRecords: re
   return issues;
 }
 
+// I-1 chỉ đòi cặp vi/en; slug chỉ có bản ja không bị báo thiếu vi/en (ja không bắt buộc, R-20a mục 9).
 function checkLocalePairs(records: readonly SeedRecord[]): ParityIssue[] {
   const localesBySlug = new Map<string, Set<string>>();
   for (const record of records) {
+    if (!isSeedLocale(record.locale)) continue;
     const key = `${record.collection}/${record.slug}`;
     localesBySlug.set(key, (localesBySlug.get(key) ?? new Set()).add(record.locale));
   }
   const issues: ParityIssue[] = [];
   for (const [key, locales] of localesBySlug) {
-    const missing = CONTENT_LOCALES.filter((locale) => !locales.has(locale));
+    const missing = SEED_LOCALES.filter((locale) => !locales.has(locale));
     if (missing.length > 0) issues.push({ key, problem: `I-1 thiếu bản ${missing.join(", ")}` });
   }
   return issues;

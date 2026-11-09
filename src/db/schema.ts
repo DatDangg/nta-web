@@ -41,8 +41,17 @@ export function isContentCollection(value: string): value is ContentCollection {
   return (CONTENT_COLLECTIONS as readonly string[]).includes(value);
 }
 
-export const CONTENT_LOCALES = ["vi", "en"] as const;
+// CONTENT_LOCALES = locale DB nhận (CHECK, rule I-6). SEED_LOCALES = locale có nguồn file seed + bắt buộc cặp I-1
+// (file-source, parity, cảnh báo cặp) — ja (CR-044, R-20a) chỉ có ở DB, bot seed sau, web fallback en khi thiếu.
+export const CONTENT_LOCALES = ["vi", "en", "ja"] as const;
 export type ContentLocale = (typeof CONTENT_LOCALES)[number];
+
+export const SEED_LOCALES = ["vi", "en"] as const satisfies readonly ContentLocale[];
+export type SeedLocale = (typeof SEED_LOCALES)[number];
+
+export function isSeedLocale(value: string): value is SeedLocale {
+  return (SEED_LOCALES as readonly string[]).includes(value);
+}
 
 export const CONTENT_VERSION_OPS = ["create", "update", "delete", "rollback"] as const;
 export type ContentVersionOp = (typeof CONTENT_VERSION_OPS)[number];
@@ -75,7 +84,7 @@ export const contentEntries = pgTable(
     index("content_entries_collection_locale_live_idx")
       .on(table.collection, table.locale)
       .where(sql`${table.deletedAt} IS NULL`),
-    check("content_entries_locale_check", sql`${table.locale} IN ('vi', 'en')`),
+    check("content_entries_locale_check", sql`${table.locale} IN ('vi', 'en', 'ja')`),
     check("content_entries_version_check", sql`${table.version} >= 1`),
   ],
 );

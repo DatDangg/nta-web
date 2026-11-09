@@ -3,21 +3,21 @@
 ```yaml
 workItem: feature/add-japanese-locale
 phaseTask: phase-1-task-01
-step: ready
+step: done
 agent: change-request
-status: awaiting
+status: done
 attempt: 0
 interrupted: false
 updatedAt: 2026-11-09T10:30:00+07:00
 filesTouched: [SPECIFICATIONS.md, spec/CHANGELOG.md, spec/changes/BACKLOG.md, spec/test-scope/current.json, spec/changes/2026-11-09-add-japanese-locale.md, .context/progress.json]
 filesNew: [spec/updates/2026-11-09-add-japanese-locale.md, tasks/feature-add-japanese-locale/phase-1-task-01.md, tasks/feature-add-japanese-locale/phase-2-task-01..04.md, tasks/feature-add-japanese-locale/phase-3-task-01..02.md, .context/review-reports/feature-add-japanese-locale-spec-validation.md]
 evidence:
-  reportPath: .context/review-reports/feature-add-japanese-locale-spec-validation.md
+  reportPath: .context/review-reports/feature-add-japanese-locale-phase-1-task-01-round-1-review.md
   round: 1
   verdict: PASS
-next: "Chờ user duyệt phase plan (7 task, 3 phase) + duyệt dòng HIGH_RISK_MIGRATION cho migration 0002 → rồi builder phase-1-task-01"
+next: "builder P2-T01 (ja.json) — session mới /resume nếu cần; KHÔNG push"
 loopSignal: none
-approvals: [{gate: phase_plan, at: null, ok: null}]
+approvals: [{gate: phase_plan, at: 2026-11-09, ok: true, via: coordinator relay "Duyệt hết, làm đi"}, {gate: high_risk_migration_0002, at: 2026-11-09, ok: true, by: Bruce, via: coordinator relay}]
 batchQueue: [phase-1-task-01, phase-2-task-01, phase-2-task-02, phase-2-task-03, phase-2-task-04, phase-3-task-01, phase-3-task-02]
 ```
 
@@ -34,3 +34,6 @@ batchQueue: [phase-1-task-01, phase-2-task-01, phase-2-task-02, phase-2-task-03,
 - 2026-11-09T10:00 change-request: classify + spec delta 4.12.0 + test-scope v62
 - 2026-11-09T10:15 spec-validator pre-plan PASS (có điều kiện) → gaps gộp vào spec
 - 2026-11-09T10:30 phase/task 3 phase 7 task; dừng ở checkpoint duyệt plan
+- 2026-11-09T11:00 plan + migration 0002 approval relay qua coordinator; ▶ START builder P1-T01 (cancel → redo)
+- 2026-11-09T11:40 ✅ DONE builder P1-T01 (0002_happy_magma.sql + dòng duyệt; typecheck/lint PASS; npm test 202/205 — 1 fail có sẵn public/uploads, DB suite skip; build lỗi native binding môi trường). ▶ START reviewer STRICT round 1 (cancel → redo)
+- 2026-11-09T12:00 ✅ DONE reviewer STRICT PASS round 1; close-out commit P1-T01. Dừng vì chạm giới hạn steps của change-request agent.

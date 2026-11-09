@@ -5,7 +5,7 @@
 //   npm run db:cli -- rollback <id | collection/locale/slug> --to <N> --expected-version <M> [--note "..."] [--confirm-prod]
 // `show`/`history` tìm cả bản ghi đã xoá mềm. Lệnh ghi (rollback, upload) trên DB prod cần --confirm-prod (giống import-seed).
 //   npm run db:cli -- revalidate --collection post [--slug x] | --all   (P3-T03: gọi POST /api/revalidate, không cần DATABASE_URL)
-//   npm run db:cli -- upload <file> [--alt-vi "..."] [--alt-en "..."] [--confirm-prod]   (P3-T05: lưu ảnh vào UPLOAD_DIR + bản ghi asset)
+//   npm run db:cli -- upload <file> [--alt-vi "..."] [--alt-en "..."] [--alt-ja "..."] [--confirm-prod]   (P3-T05: lưu ảnh vào UPLOAD_DIR + bản ghi asset)
 //     URL endpoint từ REVALIDATE_URL (vd http://127.0.0.1:3005/api/revalidate), secret từ REVALIDATE_SECRET.
 //   npm run db:cli -- publish-post <slug> [--dry-run] [--images-dir <dir>] [--actor workflow:ai-news] [--note "..."] [--confirm-prod]   (CR-034)
 //     Đăng src/content/blog/{vi,en}/<slug>.mdx vào DB — CHỈ chèn; bản đã có (kể cả xoá mềm) → exists. Mỗi locale in 1 dòng
@@ -57,6 +57,7 @@ const OPTIONS = {
   all: { type: "boolean" },
   "alt-vi": { type: "string" },
   "alt-en": { type: "string" },
+  "alt-ja": { type: "string" },
   "dry-run": { type: "boolean" },
   actor: { type: "string" },
   file: { type: "string" },
@@ -205,7 +206,7 @@ async function runUpload(db: Database, file: string | undefined, values: CliValu
   const result = await saveImage(db, {
     bytes: await readFile(file),
     originalName: file,
-    alt: { vi: values["alt-vi"], en: values["alt-en"] },
+    alt: { vi: values["alt-vi"], en: values["alt-en"], ja: values["alt-ja"] },
     actor: `cli:${userInfo().username}`,
   });
   const { image } = result;

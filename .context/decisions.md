@@ -214,3 +214,14 @@
 - **`testSendMail()`** công khai để chủ script chạy trong editor cấp scope gửi mail lần đầu (thiếu → Google trả trang HTML lỗi → web 500) và test.
 - **Chấp nhận:** không còn bản lưu dự phòng (mail là bản duy nhất); hạn mức Gmail ~100 / Workspace ~1500 người nhận/ngày; timeout web 10 s
   có thể sinh 2 mail trùng khi khách gửi lại.
+
+## 2026-11-09 — CR-044 P1-T01: tách `SEED_LOCALES` (vi/en) khỏi `CONTENT_LOCALES` (vi/en/ja) (R-20a mục 9/10)
+- **`CONTENT_LOCALES = ['vi','en','ja']`** (src/db/schema.ts) = tập DB nhận: CHECK `content_entries_locale_check`, rule I-6 (`checkRecord`),
+  key hợp lệ của `asset.data.alt` (alt.ja tuỳ chọn). Migration `drizzle/0002_happy_magma.sql` chỉ DROP + ADD lại CHECK (nới, bản ghi cũ đều thoả),
+  vẫn bị gate chặn vì `DROP CONSTRAINT` → có dòng duyệt `HIGH_RISK_MIGRATION` (user duyệt 2026-11-09).
+- **`SEED_LOCALES = ['vi','en']`** + `isSeedLocale()` = tập có nguồn file seed và bắt buộc cặp I-1: `readFileSource`, parity
+  (`compareRecords` bỏ qua hàng ja cả hai chiều, `checkLocalePairs` chỉ đòi vi/en), `countByCollection`, cảnh báo cặp I-1 ở write-path
+  (`localePairWarnings`: ghi ja không cảnh báo; ghi vi/en chỉ kiểm bản còn lại trong cặp — bản ja không thay được), `publish-post` (giữ vi/en tới P3-T01).
+- **Lý do:** ja không có file seed (bot dịch + seed sau deploy, web fallback en) → nếu dùng chung một tập, parity báo "thiếu ja" cho mọi bản ghi
+  và import-seed/publish-post đòi file ja không tồn tại. `SeedRecord.locale` đổi sang `ContentLocale` vì `readDatabaseRecords` có thể trả hàng ja;
+  per-record rule (I-2/I-5/I-6) và I-3/I-4 vẫn chạy trên hàng ja.

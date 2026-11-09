@@ -9,7 +9,7 @@ import { solutionOverview } from "../../src/content/solutions/overview";
 import { COMPANY_CONTACT } from "../../src/lib/contact/company-info";
 import { ABOUT_SLUG, MDX_COLLECTION_DIRECTORIES, readMdxFiles, type MdxCollection } from "../../src/lib/content/mdx-files";
 import { aiSlugs, enterpriseSlugs, productSlugs } from "../../src/lib/content/slug";
-import { CONTENT_LOCALES, type ContentCollection } from "../../src/db/schema";
+import { SEED_LOCALES, isSeedLocale, type ContentCollection, type ContentLocale } from "../../src/db/schema";
 import { COMPANY_INFO_SLUG, HOME_SLUG, LISTING_LABELS_SLUG } from "../../src/db/content-rules";
 import enMessages from "../../src/i18n/messages/en.json";
 import viMessages from "../../src/i18n/messages/vi.json";
@@ -17,7 +17,8 @@ import viMessages from "../../src/i18n/messages/vi.json";
 export interface SeedRecord {
   collection: ContentCollection;
   slug: string;
-  locale: Locale;
+  // File seed chỉ có SEED_LOCALES; bản ghi đọc từ DB (readDatabaseRecords) có thể là ja.
+  locale: ContentLocale;
   data: Record<string, unknown>;
   body: string | null;
   sortOrder: number | null;
@@ -136,7 +137,7 @@ function registryRecords(locale: Locale): SeedRecord[] {
 
 export async function readFileSource(): Promise<SeedRecord[]> {
   const records: SeedRecord[] = [];
-  for (const locale of CONTENT_LOCALES) {
+  for (const locale of SEED_LOCALES) {
     for (const collection of Object.keys(MDX_COLLECTION_DIRECTORIES) as MdxCollection[]) {
       records.push(...(await readMdxCollection(collection, locale)));
     }
@@ -149,11 +150,12 @@ export function recordKey(record: Pick<SeedRecord, "collection" | "slug" | "loca
   return `${record.collection}/${record.locale}/${record.slug}`;
 }
 
-// Bảng đếm "collection → {vi, en}" theo thứ tự SEED_COLLECTIONS (dùng cho --dry-run và báo cáo).
+// Bảng đếm "collection → {vi, en}" theo thứ tự SEED_COLLECTIONS (dùng cho --dry-run và báo cáo). Hàng ja (chỉ có ở DB) không đếm.
 export function countByCollection(records: readonly SeedRecord[]): Map<string, Record<Locale, number>> {
   const counts = new Map<string, Record<Locale, number>>();
   for (const collection of SEED_COLLECTIONS) counts.set(collection, { vi: 0, en: 0 });
   for (const record of records) {
+    if (!isSeedLocale(record.locale)) continue;
     const row = counts.get(record.collection) ?? { vi: 0, en: 0 };
     row[record.locale] += 1;
     counts.set(record.collection, row);

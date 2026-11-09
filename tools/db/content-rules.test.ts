@@ -71,6 +71,11 @@ test("I-6: collection/locale/category/icon ngoài danh sách → lỗi", () => {
   assert.match(checkRecord({ ...post, collection: "slug_registry", slug: "x", data: { group: "y" } }).join(), /I-6 nhóm slug_registry/);
 });
 
+test("I-6 locale (CR-044 R-20a mục 9): ja hợp lệ, locale ngoài vi/en/ja bị chặn", () => {
+  assert.deepEqual(checkRecord({ ...post, locale: "ja" }), []);
+  for (const locale of ["fr", "JA", "jp", ""]) assert.match(checkRecord({ ...post, locale }).join(), /I-6 locale/, locale);
+});
+
 test("I-3/I-4: solution/product so với nhóm registry", () => {
   const solution = { collection: "solution", data: { category: "ai" } };
   assert.match(String(registryProblem(solution, undefined)), /I-3/);

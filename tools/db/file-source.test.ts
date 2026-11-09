@@ -68,6 +68,20 @@ test("compareRecords reports changed, missing and extra records", () => {
   assert.match(compareRecords([sample], [sample, extra])[0].problem, /thừa trong DB/);
 });
 
+// CR-044 (R-20a mục 10): ja không có file seed — parity bỏ qua hàng ja cả hai chiều, I-1 chỉ đòi cặp vi/en.
+test("parity bỏ qua hàng ja: không báo thừa trong DB, không báo thiếu, I-1 không đòi ja", async () => {
+  const ja: SeedRecord = { ...sample, locale: "ja" };
+  assert.deepEqual(compareRecords([sample], [sample, ja]), [], "ja trong DB không bị báo thừa");
+  assert.deepEqual(compareRecords([sample, ja], [sample]), [], "ja trong nguồn file không bị báo thiếu");
+  const records = await readFileSource();
+  assert.equal(records.some((record) => record.locale === "ja"), false, "file seed chỉ vi/en");
+  const jaCopies = records.flatMap((record): SeedRecord[] => (record.locale === "en" ? [{ ...record, locale: "ja" }] : []));
+  assert.deepEqual(checkInvariants([...records, ...jaCopies]), [], "ja đầy đủ không gây lỗi I-x");
+  const onlyJa = checkInvariants([{ ...ja, collection: "listing_item", slug: "x", data: {} }]).map((issue) => issue.problem);
+  assert.equal(onlyJa.some((problem) => problem.startsWith("I-1")), false, "slug chỉ có ja không bị báo thiếu vi/en");
+  assert.deepEqual(countByCollection([ja]).get("solution"), { vi: 0, en: 0 });
+});
+
 test("checkInvariants flags missing locale, slug mismatch, registry, enum and required-field problems", () => {
   const problems = checkInvariants([
     { ...sample, data: { ...sample.data, slug: "other", category: "weird" } },

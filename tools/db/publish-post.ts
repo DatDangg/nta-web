@@ -11,7 +11,7 @@ import path from "node:path";
 import type { Database } from "../../src/db/client";
 import { ContentNotFoundError, ContentValidationError, createEntry, findNewEntryProblems, getEntryByKey } from "../../src/db/content-repo";
 import { collectImagePaths } from "../../src/db/content-rules";
-import { CONTENT_LOCALES, type ContentLocale } from "../../src/db/schema";
+import { SEED_LOCALES, type ContentLocale } from "../../src/db/schema";
 import { MDX_COLLECTION_DIRECTORIES, parseMdxSource } from "../../src/lib/content/mdx-files";
 import { ImageRejectedError, MAX_UPLOAD_BYTES, UPLOAD_FILE_NAME_PATTERN, UPLOAD_URL_PREFIX, inspectImage } from "../../src/lib/uploads/image-file";
 import { saveImage, type ImageAlt, type SaveImageResult } from "../../src/lib/uploads/save-image";
@@ -227,7 +227,8 @@ export async function publishPost(db: Database, options: PublishPostOptions): Pr
   if (!POST_SLUG_PATTERN.test(slug)) throw new ContentValidationError([`slug "${slug}" phải dạng a-z0-9 nối bằng '-'`]);
   const blogDir = options.blogDir ?? path.join(process.cwd(), "src/content", MDX_COLLECTION_DIRECTORIES.post);
   // Đọc cả hai file trước: thiếu 1 locale → lỗi ngay, không ghi locale còn lại.
-  const files = await Promise.all(CONTENT_LOCALES.map((locale) => readPostFile(blogDir, locale, slug)));
+  // Giữ vi/en (SEED_LOCALES) tới CR-044 P3-T01 — cron AI news chưa sinh file ja.
+  const files = await Promise.all(SEED_LOCALES.map((locale) => readPostFile(blogDir, locale, slug)));
 
   const { posts: results, problems: localeProblems } = await checkLocales(db, slug, files, options.publicDir);
   const needUpload = new Set<string>();
@@ -248,7 +249,7 @@ export async function publishPost(db: Database, options: PublishPostOptions): Pr
     const result = plan.images.find((item) => item.path === image.urlPath);
     if (result) result.status = saved.status;
   }
-  // results[i] tương ứng files[i] (cùng thứ tự CONTENT_LOCALES).
+  // results[i] tương ứng files[i] (cùng thứ tự SEED_LOCALES).
   for (const [index, result] of results.entries()) {
     if (result.status !== "missing") continue;
     const file = files[index];

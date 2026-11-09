@@ -51,6 +51,13 @@ describe("content-cli — cờ theo lệnh", () => {
     assert.match(stderr, /--images-dir chỉ dùng với: publish-post/);
   });
 
+  it("upload nhận --alt-ja tuỳ chọn (CR-044) — qua bước parse cờ, tới bước đọc file", () => {
+    const { status, stderr } = runCli(["upload", "khong-co-anh.png", "--alt-vi", "Ảnh", "--alt-en", "Image", "--alt-ja", "画像", "--confirm-prod"]);
+    assert.equal(status, 1);
+    assert.doesNotMatch(stderr, /Unknown option|alt-ja/);
+    assert.match(stderr, /ENOENT|khong-co-anh/);
+  });
+
   it("publish-post nhận --images-dir (qua bước kiểm cờ, tới bước đọc file)", () => {
     const { status, stderr } = runCli(["publish-post", "ai-weekly-2099-w01", "--dry-run", "--images-dir", "/in"]);
     assert.equal(status, 1);

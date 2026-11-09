@@ -35,6 +35,12 @@ describe("checkRecord — collection asset", () => {
     assert.deepEqual(checkRecord(assetRecord()), []);
   });
 
+  it("alt.ja tuỳ chọn (CR-044): có hoặc không đều hợp lệ, alt.ja không phải chuỗi → lỗi", () => {
+    assert.deepEqual(checkRecord(assetRecord({}, { alt: { vi: "a", en: "b", ja: "画像" } })), []);
+    assert.deepEqual(checkRecord(assetRecord({}, { alt: { ja: "画像" } })), []);
+    assert.match(checkRecord(assetRecord({}, { alt: { ja: 1 } })).join("; "), /alt/);
+  });
+
   it("chặn path lệch slug/traversal, mime lệch đuôi, kích thước/dung lượng sai, alt sai, locale en", () => {
     const cases: [ContentRecord, RegExp][] = [
       [assetRecord({}, { path: `/uploads/../${SHA}.webp` }), /data.path/],
@@ -97,7 +103,7 @@ describe("saveImage (Postgres + thư mục tạm)", { skip }, () => {
   });
 
   it("tạo file + asset version 1 với metadata đầy đủ; tên gốc chỉ giữ basename", async () => {
-    const result = await saveImage(db, { bytes: png(300, 200), originalName: "C:/tmp/../anh goc.png", alt: { vi: " Ảnh ", en: "" }, actor, uploadDir });
+    const result = await saveImage(db, { bytes: png(300, 200), originalName: "C:/tmp/../anh goc.png", alt: { vi: " Ảnh ", en: "", ja: " 画像 " }, actor, uploadDir });
     assert.equal(result.status, "created");
     assert.equal(result.asset.version, 1);
     assert.equal(result.asset.slug, result.image.sha256);
@@ -108,7 +114,7 @@ describe("saveImage (Postgres + thư mục tạm)", { skip }, () => {
       bytes: 34,
       width: 300,
       height: 200,
-      alt: { vi: "Ảnh" },
+      alt: { vi: "Ảnh", ja: "画像" },
       originalName: "anh goc.png",
     });
     assert.deepEqual((await listVersions(db, result.asset.id)).map((version) => version.op), ["create"]);

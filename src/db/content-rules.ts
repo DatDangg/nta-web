@@ -151,7 +151,7 @@ function enumProblems(record: ContentRecord): string[] {
   return [...problems, ...showcaseIconProblems(asRecord(data.showcase))];
 }
 
-// Asset (ảnh upload, R-16d): 1 bản ghi / ảnh, khoá slug = sha256, locale cố định (alt vi/en trong data.alt).
+// Asset (ảnh upload, R-16d): 1 bản ghi / ảnh, khoá slug = sha256, locale cố định (alt vi/en/ja trong data.alt).
 // Dữ liệu do saveImage (src/lib/uploads/save-image.ts) sinh — kiểm lại để CLI/rollback/bot không ghi được đường dẫn lệch tên file.
 export const ASSET_LOCALE = "vi";
 
@@ -175,7 +175,7 @@ function assetProblems(record: ContentRecord): string[] {
   }
   const alt = asRecord(data.alt);
   if (!alt || Object.entries(alt).some(([locale, text]) => !isOneOf(CONTENT_LOCALES, locale) || typeof text !== "string")) {
-    problems.push("asset: data.alt phải là object { vi?: string, en?: string }");
+    problems.push("asset: data.alt phải là object { vi?: string, en?: string, ja?: string }");
   }
   return problems;
 }
