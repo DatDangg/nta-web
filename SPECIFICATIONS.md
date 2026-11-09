@@ -1,6 +1,6 @@
 ---
-spec_version: 4.11.0
-updated_at: 2026-10-20
+spec_version: 4.12.0
+updated_at: 2026-11-09
 ---
 
 # SPECIFICATIONS.md — NTA Website
@@ -23,6 +23,7 @@ Nguồn: `BRIEF.md:5-17`, `docs/BRD.md:14-31`.
 Domain: **`ntavietnam.tech`** (canonical `https://ntavietnam.tech` — HTTPS, apex, không `www`) · Song ngữ **VI/EN** · Phong cách **light minimal kiểu Apple**.
 Nguồn: `BRIEF.md:15-16`, `docs/BRD.md:51,167` (quyết định ngày 08/10/2026 — xem `git log`: ab335bb, e7f54aa).
 _(cập nhật 2026-10-09: đổi domain đích sang `ntavietnam.tech` — change `domain-ntavietnam`, `spec/updates/2026-10-09-domain-ntavietnam.md`)_
+_(cập nhật 2026-11-09 — 4.12.0, CR-044: thêm **tiếng Nhật** — đa ngữ **VI/EN/JA**, route `/ja/...`, xem R-20a)_
 _(cập nhật 2026-10-13: thêm **domain phụ** `ntasolution.vn` (+ `www`) phục vụ **cùng nội dung**, KHÔNG redirect giữa 2 domain; canonical/SEO vẫn **`ntavietnam.tech`** — change `add-domain-ntasolution`, `spec/updates/2026-10-13-add-domain-ntasolution.md`)_
 
 ## Scope
@@ -40,7 +41,7 @@ _(cập nhật 2026-10-13: thêm **domain phụ** `ntasolution.vn` (+ `www`) ph�
 
 - **Frontend:** Next.js (App Router) + TypeScript + Tailwind CSS — nguồn: `BRIEF.md:46`, `docs/BRD.md:156`
 - **Nội dung:** ~~file nội dung trong repo (MDX / JSON / TS), render SSG/SSR~~ → _(4.2.0 — CR-031)_ **PostgreSQL** (bảng `content_entries` + `content_versions`, R-16/R-16a); file trong `src/content/` chỉ còn là **seed import ban đầu**, web không đọc nữa; render on-demand + cache, làm mới qua revalidate (R-15a) — nguồn: `spec/changes/2026-10-14-content-database.md`
-- **i18n:** `next-intl` hoặc `next-i18n` (mặc định VI, toggle EN, route `/en/...`) — nguồn: `BRIEF.md:42`
+- **i18n:** `next-intl` hoặc `next-i18n` (mặc định VI, toggle EN, route `/en/...`) — nguồn: `BRIEF.md:42` · _(4.12.0 — CR-044)_ thêm `ja` (route `/ja/...`, R-20a)
 - **Database/ORM:** _(4.2.0 — CR-031)_ **PostgreSQL** (container riêng `nta-db` trên VPS dùng chung) + **Drizzle** (`drizzle-orm` + `drizzle-kit`, migration SQL versioned) — `db_tool: drizzle`, `migration_required: true`, **chỉ DB prod** (không có DB staging — quyết định user 14/10/2026) — nguồn: `.context/project-config.md` mục Database
 - **Deploy:** docker-vps — VPS `187.52.119.50` (shared), Docker + nginx + certbot, container `nta-web` tại `127.0.0.1:3005` — nguồn: `.context/project-config.md:51-59`, `docs/runbook/deploy-vps.md`
 - **CI/CD:** GitHub Actions — nguồn: `.context/project-config.md:48`
@@ -371,6 +372,12 @@ _(cập nhật 2026-10-13: thêm **domain phụ** `ntasolution.vn` (+ `www`) ph�
     4. Revalidate collection `post` (luôn chạy) → smoke `/blog/<slug>` + `/en/blog/<slug>` HTTP 200.
     Không dispatch `deploy.yml` (bài hiện qua DB + revalidate, không cần build lại image). CLI từ chối cờ không thuộc lệnh
     (vd `rollback --dry-run`) bằng lỗi usage, không chạm DB.
+  - *Bản ja (4.12.0 — CR-044, OQ-3):* mỗi tuần sinh **3 bài** `src/content/blog/{vi,en,ja}/ai-weekly-YYYY-wNN.mdx` (cùng slug, cùng tin, cùng ảnh/cover);
+    LLM trả thêm `title_ja`/`summary_ja`; title ja `AIウィークリーダイジェスト — YYYY年M月D日`, excerpt ja `YYYY年M月D日のダイジェストから注目のAIニュースN件を、元記事へのリンク付きで紹介します。`,
+    chú thích ảnh `画像: <domain>`, ghi chú cuối bài `本ダイジェストは公開情報をもとに自動で作成しています。`; alt ảnh có `ja`; **mọi chuỗi cố định theo locale**
+    trong `generate.py` (đoạn mở đầu, nhãn nguồn `出典`, chú thích bản quyền ảnh) có bản ja; giới hạn độ dài `title_ja`/`summary_ja` theo ký tự, tương đương vi/en. Guard + `publish-post --dry-run`
+    validate **cả 3 locale** trước khi ghi bất kỳ bản nào; workflow commit 3 file, smoke thêm `/ja/blog/<slug>`. Bài các tuần trước không có ja → hiển thị
+    theo fallback en (R-20a); chạy lại tuần cũ chỉ thêm locale còn `missing` có file.
   - Không duyệt tay (user chốt 2026-10-14, đã được báo rủi ro AI bịa chi tiết). — nguồn: change `spec/changes/2026-10-14-weekly-ai-news-digest.md`
     + `spec/changes/2026-10-15-ai-news-write-db.md` (CR-034, BUG sau cutover DB)
     + `spec/changes/2026-10-15-ai-news-item-images.md` (CR-035, ADDITIVE ảnh từng tin)
@@ -430,7 +437,7 @@ Base URL: dev `http://localhost:3000/api` · prod `https://ntavietnam.tech/api` 
 - **R-13a** _(4.5.0 — CR-037, chốt OQ#4; **sửa 4.7.0 — CR-039**: bỏ Google Sheet + Telegram, chỉ gửi email; hiệu lực khi phase 1 PASS + user cập nhật script trên Apps Script)_:
   đích forward của R-13 là **Google Apps Script Web App** (script + hướng dẫn nằm trong repo `tools/contact-mail/`, user tự dán + deploy).
   ~~Web App gắn với Google Sheet có sẵn của NTA~~ _(4.7.0: không còn ghi Sheet)_.
-  1. **Body thêm field tuỳ chọn `locale`** (`vi|en`): form `/contact`, `/en/contact` và form CTA rút gọn gửi theo locale trang;
+  1. **Body thêm field tuỳ chọn `locale`** (`vi|en`; _4.12.0 — CR-044: `vi|en|ja`_): form `/contact`, `/en/contact`, `/ja/contact` (4.12.0) và form CTA rút gọn gửi theo locale trang;
      thiếu → `vi`; có gửi mà sai → `400 errors.locale`.
   2. Server POST JSON tới `CONTACT_FORM_TARGET` (URL Web App, server-only) gồm `token`, `submittedAt` (ISO 8601 lúc server nhận),
      `locale`, `name`, `email`, `phone`, `company`, `need`, `message`. `token` = env server-only **`CONTACT_FORM_TOKEN`**
@@ -530,6 +537,38 @@ Base URL: dev `http://localhost:3000/api` · prod `https://ntavietnam.tech/api` 
 
 - **R-20 (i18n):** Song ngữ Việt/Anh — mặc định VI, toggle EN, route `/en/...`, hreflang + localized meta.
   `[reverse-engineered from docs]` — nguồn: `BRIEF.md:42`, `docs/BRD.md:51,130`
+  _(4.12.0 — CR-044: mở rộng thành **3 ngôn ngữ VI/EN/JA**, chi tiết R-20a.)_
+- **R-20a (4.12.0 — CR-044, thêm tiếng Nhật `ja`; hiệu lực khi phase 1–3 PASS + migration chạy prod):** locales `vi` (mặc định, không prefix) / `en` / `ja`,
+  `localePrefix: as-needed` giữ nguyên; **ja ngang hàng vi/en ở mọi nơi** (user chốt 2026-11-09).
+  1. *Routing:* mọi trang có bản `/en/...` đều có `/ja/...` trả 200 (`/ja`, `/ja/about`, `/ja/solutions/enterprise[/slug]`, `/ja/solutions/ai[/slug]`,
+     `/ja/products[/slug]`, `/ja/case-studies[/slug]`, `/ja/blog[/slug]`, `/ja/contact`); URL vi không prefix, `/en/...` không đổi; redirect 301 cũ (R-08a.1)
+     có bản ja; locale không hỗ trợ → 404 như cũ. Guard locale trong page dùng `routing.locales` (không hardcode `'vi' | 'en'`).
+  2. *Fallback en (OQ-1):* bản ghi nội dung ja chưa có (DB `content_entries` locale ja — hoặc file seed ở chế độ `CONTENT_SOURCE=file`) → hiển thị
+     **bản en** cùng collection/slug, theo **từng bản ghi** (có bản ghi ja → dùng nguyên bản ja, không trộn field en); `slug_registry`/thứ tự ja thiếu →
+     dùng của en; `company_info` ja thiếu → en. Không 404/500 vì thiếu ja. Trang vẫn `<html lang="ja">` + chữ giao diện ja. Fallback chỉ là lưới an toàn
+     trong lúc bot seed — không log lỗi mỗi request (cảnh báo tối đa 1 lần/process/collection).
+  3. *Chữ giao diện:* `src/i18n/messages/ja.json` có **đủ toàn bộ key như `en.json`** (cùng cấu trúc/kiểu; dev dịch, bot/user soát sau — OQ-2); test kiểm
+     parity key vi/en/ja. Chế độ db: `ui_messages/ja/<namespace>` gộp sâu đè lên `ja.json` theo cơ chế R-16 (chưa có bản ghi ja → dùng `ja.json`, không lỗi).
+  4. *Bộ chuyển ngôn ngữ:* 3 nút liền **VI · EN · JA** (header desktop + drawer mobile — OQ-4), giữ đúng trang hiện tại (cùng path/slug), nút đang chọn có
+     trạng thái chọn cho trình đọc màn hình; vùng bấm ≥ 44px trên mobile.
+  5. *SEO:* sitemap có alternates `vi`/`en`/`ja` cho mọi URL; hreflang `vi`, `en`, `ja` + `x-default` = vi; meta/OG localized (`og:locale` `ja_JP`);
+     JSON-LD `availableLanguage` gồm `ja`; ngày hiển thị ở trang ja theo `ja-JP` (vd `2026年11月9日`).
+  6. *Font:* glyph tiếng Nhật qua `next/font` **Noto Sans JP** (weight tối thiểu đang dùng), **chỉ áp dụng ở trang ja**, không preload trên trang vi/en
+     (vi/en không tải thêm file font JP); LCP R-22 giữ.
+  7. *Chữ chọn theo locale trong code* (skip-link, nút lên đầu trang, title metadata trang chi tiết sản phẩm/giải pháp DN, …) có bản ja — không còn nhánh
+     "vi, còn lại en".
+  8. *Form liên hệ (R-13a):* field `locale` nhận `vi|en|ja`; script `tools/contact-mail` nhận `ja` (user dán lại script lên Apps Script).
+  9. *DB (R-16/R-16c):* CHECK `content_entries_locale_check` → `locale IN ('vi','en','ja')` qua migration Drizzle versioned `drizzle/0002_*`;
+     `CONTENT_LOCALES = ['vi','en','ja']` (DB CHECK, rule I-6, publish-post) nhận `ja`; `asset.alt.ja` hợp lệ (tuỳ chọn) + `content-cli upload` có
+     `--alt-ja` tuỳ chọn; `content-cli` ghi được bản ghi ja; cảnh báo cặp I-1 chỉ kiểm cặp vi/en (ja không bắt buộc). Migration **chỉ nới** ràng buộc (không đổi/xoá
+     dữ liệu, bản ghi cũ đều thoả), nhưng có câu `ALTER TABLE … DROP CONSTRAINT` → gate deploy (`deploy/db/migration-gate.ts`) chặn → file phải có dòng
+     duyệt `-- HIGH_RISK_MIGRATION: approved YYYY-MM-DD by <user>` (user duyệt rõ) + chạy thử trên DB tạm restore từ backup trước khi deploy prod.
+  10. *Tooling:* tách 2 tập locale — `SEED_LOCALES = ['vi','en']` (file-source, parity, cặp I-1) và `CONTENT_LOCALES` (DB). ja **không có file seed import
+      ban đầu** (trừ file bài bản tin AI tuần R-09c, publish qua `publish-post`, không qua import-seed); parity **bỏ qua hàng ja ở cả hai chiều**
+      (không báo thiếu, không báo "thừa trong DB"); vi/en parity như cũ.
+  11. *Nội dung ja* (home, about, ui_messages, company_info, listing_page, listing_item, solution, product, case_study, post, slug_registry, solution_overview)
+      do bot CR-030 dịch + seed **sau** deploy + migration; `docs/content-bot/` cập nhật key `collection/(vi|en|ja)/slug`; rebuild image `nta-tools`.
+  — nguồn: change `spec/changes/2026-11-09-add-japanese-locale.md` (CR-044)
 - **R-21 (SEO):** SSR/SSG, meta + OpenGraph per page, `sitemap.xml`, `robots.txt`, JSON-LD Organization;
   Lighthouse SEO ≥ 90. `[reverse-engineered from docs]` — nguồn: `BRIEF.md:38`, `docs/BRD.md:125,29`
 - **R-22 (Performance):** LCP < 2.5s trên 4G; ảnh tối ưu (`next/image`), lazy-load, bundle gọn;

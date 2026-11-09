@@ -1,52 +1,84 @@
 {
-  "specVersion": "4.11.0",
-  "scopeVersion": 61,
-  "generatedAt": "2026-10-20T18:00:00+07:00",
+  "specVersion": "4.12.0",
+  "scopeVersion": 62,
+  "generatedAt": "2026-11-09T10:00:00+07:00",
   "trigger": "feature-update",
-  "workItem": "feature/hero-left-background (CR-043 spec/changes/2026-10-20-hero-left-background.md; MODIFY UI-only, risk low-medium; thay hành vi hero CR-040/042)",
+  "workItem": "feature/add-japanese-locale (CR-044 spec/changes/2026-11-09-add-japanese-locale.md; tasks tasks/feature-add-japanese-locale/phase-1-task-01..phase-3-task-02.md; ADDITIVE i18n + DB, risk HIGH; phát hành ở bước planning — hiệu lực khi phase 1–3 PASS + migration prod)",
   "specRefs": [
-    "R-01b",
-    "R-01",
-    "R-22"
+    "R-20a",
+    "R-20",
+    "R-21",
+    "R-09c",
+    "R-13a",
+    "R-16",
+    "R-16c",
+    "R-22",
+    "R-24"
   ],
   "changed": {
     "files": [
-      "public/images/home/hero-bg.webp — ảnh nền hero mới 1916×821",
-      "src/components/home/HeroVisual.tsx — nền hero full-bleed cover (khung tối đa 2048, mép mờ trắng khi > 2048), lớp phủ trắng nhẹ bên trái, panel kính căn lại theo ảnh, ảnh mobile crop vào robot",
-      "src/components/home/Hero.tsx — nối ảnh/khung hero mới",
-      "docs/DESIGN.md (current-state hero) — reconcile as-built CR-043",
-      "public/images/home/hero-banner.jpg (deleted)"
+      "drizzle/0002_*.sql + drizzle/meta — nới CHECK content_entries_locale_check thêm 'ja' (dòng duyệt HIGH_RISK_MIGRATION)",
+      "src/db/schema.ts, src/db/content-rules.ts — CONTENT_LOCALES + I-6 + asset alt nhận ja",
+      "tools/db/file-source.ts, tools/db/parity-check.ts, tools/db/publish-post.ts — locale seed vs locale DB; publish-post 3 locale",
+      "src/i18n/routing.ts, src/i18n/request.ts, src/content/types.ts — locale ja + fallback en",
+      "src/lib/content/* (store/registry/load-mdx), src/lib/contact/company-* — fallback en theo bản ghi",
+      "src/i18n/messages/ja.json — mới, đủ key như en.json",
+      "src/app/[locale]/**/page.tsx + layout.tsx — bỏ guard 'vi'|'en', chữ chọn theo locale có ja, html lang, font JP",
+      "src/components/layout/LanguageToggle.tsx, src/components/motion/ScrollTopButton.tsx",
+      "src/lib/seo/jsonld.ts, src/lib/format/date.ts, src/lib/api/contact-schema.ts, sitemap/metadata helpers",
+      "tools/ai-news/generate.py + .github/workflows/ai-news.yml — bản tin 3 locale",
+      "tools/contact-mail/Code.gs — nhận locale ja",
+      "docs/content-bot/*, docs/runbook/ai-news.md, docs/API_SPEC.md, docs/ERD.md, docs/DESIGN.md — reconcile"
     ],
     "modules": [
-      "Trang chủ / và /en — hero desktop (lg+) và hero mobile/tablet"
+      "Mọi trang /ja/... (home, about, solutions, products, case-studies, blog, contact, 404)",
+      "Header/LanguageToggle mọi trang (vi/en/ja)",
+      "SEO: sitemap.xml, hreflang, JSON-LD",
+      "DB content_entries + content-cli/bot",
+      "Workflow bản tin AI tuần + publish-db",
+      "Form liên hệ /ja/contact → Apps Script"
     ]
   },
   "impact": {
     "direct": [
-      "1100/1440/1920/2560 (vi + en): ảnh hero-bg phủ full-bleed; nửa trái thấy thành phố/cửa kính/cây phía sau chữ với lớp phủ trắng nhẹ (không còn phủ trắng gần đặc)",
-      "Chữ hero (h1 2 màu, mô tả, CTA) đủ tương phản trên nền ảnh (WCAG AA)",
-      "Panel kính vẫn có chuyển động, vị trí khớp ảnh mới, không bị cắt ở mọi breakpoint desktop",
-      "> 2048 (2560): ảnh căn giữa trong khung 2048, không phóng to; hai cạnh mờ dần sang trắng, không blur",
-      "375/768: hero mobile dùng cùng ảnh hero-bg, crop vào robot"
+      "/ja, /ja/about, /ja/solutions/enterprise[/slug], /ja/solutions/ai[/slug], /ja/products[/slug], /ja/case-studies[/slug], /ja/blog[/slug], /ja/contact → HTTP 200, <html lang=\"ja\">",
+      "Khi DB chưa có bản ghi ja: nội dung hiện bản en, chữ giao diện (nav, nút, nhãn) tiếng Nhật từ ja.json; không 404/500",
+      "/ja/<slug-không-tồn-tại> → 404 (trang not-found tiếng Nhật)",
+      "Bộ chuyển VI · EN · JA ở header desktop + drawer mobile; bấm JA từ /en/blog/<slug> → /ja/blog/<slug>; bấm VI → /blog/<slug>",
+      "sitemap.xml: mỗi URL có alternate hreflang vi/en/ja; <head> có link hreflang ja + x-default trỏ vi",
+      "Chữ tiếng Nhật hiển thị đúng glyph (Noto Sans JP); trang vi/en không tải file font JP",
+      "Ngày trên blog/case study ở trang ja dạng 2026年11月9日",
+      "Form /ja/contact gửi locale=ja → 200 khi Apps Script đã cập nhật; locale sai → 400 errors.locale",
+      "content-cli ghi được bản ghi locale ja; locale khác vi/en/ja → lỗi I-6"
     ],
     "dependents": [
-      "Ảnh hero cũ hero-banner.jpg không còn là ảnh nền hero desktop — ảnh LCP mới là hero-bg.webp"
+      "Middleware next-intl (localePrefix as-needed) — vi không prefix giữ nguyên",
+      "R-08a.1 redirect 301 slug cũ case study — có bản /ja",
+      "Data cache tag content:* + revalidate R-15a — áp dụng cho bản ghi ja",
+      "Bot nội dung CR-030 — seed ja sau deploy",
+      "Gate migration deploy.yml — migration 0002 phải có dòng duyệt mới qua"
     ],
     "regression": [
-      "Mép trái h1 hero = mép trái khung Container 1280 (≤ 2px) ở desktop",
-      "Không thanh cuộn ngang ở 375/768/1100/1440/1920/2560",
-      "LCP hero (R-22): ảnh hero-bg có priority, không lazy",
-      "Header, các section dưới hero (Giải pháp/Sản phẩm/Case study/CTA/Footer) không đổi",
-      "Mờ đáy chuyển sang section kế tiếp giữ nguyên"
+      "Mọi URL vi (không prefix) và /en/... trả nội dung y như trước (vi + en)",
+      "Bộ chuyển VI/EN vẫn giữ đúng trang",
+      "Trang vi/en: LCP R-22 không tệ hơn đáng kể, không preload font JP",
+      "Bản tin AI tuần: workflow cron thứ 7 xanh, sinh 3 bài, chạy lại cùng tuần → 0 ghi",
+      "Form /contact, /en/contact gửi như cũ",
+      "parity-check vi/en vẫn PASS (không báo thiếu ja)",
+      "typecheck + lint + build + test PASS"
     ]
   },
   "acceptance": [
-    "Desktop 1100/1440/1920/2560 vi + en: nền trái thấy thành phố/cây sau chữ, chữ đủ tương phản",
-    "Panel kính khớp ảnh, động, không bị cắt",
-    "> 2048: ảnh không phóng to, căn giữa, hai mép mờ sang trắng (không blur)",
-    "Mobile 375/768: ảnh crop vào robot",
-    "Không scroll ngang; ảnh hero priority cho LCP"
+    "Mọi route /ja/... trả 200; URL vi + /en không đổi",
+    "Thiếu bản ghi/key ja → fallback en (nội dung), không 404/500",
+    "ja.json đủ key như en.json",
+    "Bộ chuyển VI · EN · JA giữ đúng trang",
+    "Sitemap + hreflang có ja, x-default = vi, <html lang=\"ja\">",
+    "Glyph Nhật đúng, vi/en không chậm đáng kể",
+    "Migration versioned cho phép locale ja; content-cli ghi được bản ghi ja",
+    "Bản tin AI tuần sinh + đăng vi/en/ja, workflow xanh",
+    "typecheck + lint + build PASS"
   ],
-  "risk": "low-medium",
-  "notes": "Thay scope v60 (CR-042) và hành vi hero của v58 (CR-040). UI-only, không đổi API/DB/nội dung."
+  "risk": "high",
+  "notes": "Thay scope v61 (CR-043). Nội dung ja thật do bot seed sau deploy — test lúc đầu chủ yếu thấy fallback en + chữ giao diện ja. Migration 0002 chạy prod sau backup (không có DB staging — R-16c), chạy thử trước trên DB tạm restore từ backup."
 }
