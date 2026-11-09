@@ -6,5 +6,4 @@
   - Nguồn font chính thức: https://fonts.google.com/noto/specimen/Noto+Sans+JP · https://github.com/notofonts/noto-cjk
 - File `.woff2` ở đây là bản subset theo unicode-range do next/font/google tải lúc build, KHÔNG sửa đổi glyph;
   không bán riêng font. Tái tạo: `tools/fonts/build-noto-jp.mjs` (hướng dẫn ở đầu file).
-- Ghi chú: chưa kèm `OFL.txt` (không có bản văn bản OFL trên máy lúc thêm font) — bổ sung khi có
-  (OFL yêu cầu phân phối kèm thông báo bản quyền + giấy phép).
+- Giấy phép kèm theo: `OFL.txt` (thông báo bản quyền Noto CJK + văn bản OFL-1.1 lấy từ `notofonts/noto-cjk` `Sans/LICENSE`).

@@ -302,9 +302,9 @@ Thay đổi DB: `drizzle/0002_happy_magma.sql` chỉ **nới** CHECK `content_en
 → file **đã có** dòng duyệt `-- HIGH_RISK_MIGRATION: approved 2026-11-09 by Bruce` (dòng 1) — không cần thêm; nếu dòng này bị gỡ, deploy sẽ đỏ ở bước gate (§6).
 
 **Checklist trước khi push** (user làm — agent không SSH / không tải file):
-- [ ] Thêm `public/fonts/noto-sans-jp/OFL.txt` = văn bản OFL-1.1 gốc **kèm dòng copyright** của Noto Sans JP, lấy từ repo `notofonts/noto-cjk`
+- [x] Thêm `public/fonts/noto-sans-jp/OFL.txt` = văn bản OFL-1.1 gốc **kèm dòng copyright** của Noto Sans JP, lấy từ repo `notofonts/noto-cjk`
       (OFL bắt buộc phân phối kèm giấy phép). `tools/fonts/build-noto-jp.mjs` không xoá file này khi tái tạo font.
-- [ ] Dán lại `tools/contact-mail/Code.gs` lên Apps Script (Deploy → Quản lý triển khai → sửa → **Phiên bản mới**, giữ URL `/exec`):
+- [x] Dán lại `tools/contact-mail/Code.gs` (user xác nhận 2026-11-09) lên Apps Script (Deploy → Quản lý triển khai → sửa → **Phiên bản mới**, giữ URL `/exec`):
       script mới nhận `locale` `ja` (`SUPPORTED_LOCALES_`). Script cũ trả lỗi cho form `/ja/contact`. Dán trước deploy vô hại (script nhận tập rộng hơn).
 - [ ] Backup DB: `docker exec nta-db-backup /scripts/backup.sh pre-migrate-manual-cr044-<UTC>` → kiểm dòng `OK` trong `backup.log` (§3).
 - [ ] Chạy thử `0002` trên DB tạm restore từ backup (§5b), checkout **đúng commit sẽ deploy**:
