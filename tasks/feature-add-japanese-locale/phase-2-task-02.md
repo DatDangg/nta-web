@@ -25,7 +25,10 @@
 Max 3 attempt; fail lần 3 → `architecture_review_needed` (không fix #4). Mỗi failed attempt append `.context/error-memory.md`.
 
 ## Verification summary
-- Acceptance criteria: _pending_
-- Verify commands + result: _pending_ (`npm run typecheck`, `npm run lint`, `npm test`, `npm run build` — lấy từ `.context/project-config.md`)
-- Reviewer verdict: _pending_
-- Doc impact: _pending_
+- Acceptance criteria (builder 2026-11-09):
+  - Fallback en theo bản ghi ở 1 chỗ: `src/lib/content/locale-fallback.ts` (`readWithFallback`/`mergeByKey`/`pickLocale`); db = `getLocalizedEntries` (`store.ts`) dùng bởi `load-mdx.ts`, `registry.ts` (readKeyed/readSingleton), `company-contact.ts`; file = `load-mdx.ts` (thư mục `ja` thiếu → en, gộp theo tên file) + `pickLocale` cho object TS (`LocaleRecord<T>`). `ui_messages` KHÔNG fallback en (request.ts giữ ja.json). Cảnh báo `warnOncePerProcess` 1 lần/process/collection.
+  - ja = en khi chưa có ja: PASS (test file mode + db stub). vi/en: đi thẳng đường cũ (`needsContentFallback` chỉ ja) → PASS test "vi/en không đổi". Thiếu toàn bộ ja → không ném: PASS. Slug sai → `null` (404): PASS.
+  - `/ja` vẫn bị guard page chặn (`locale !== 'vi' && locale !== 'en'` ở 9 page + `isLocale` `src/lib/content/slug.ts:9` cho trang chi tiết) → mở ở P2-T03. Sitemap thêm alternates ja (bắt buộc vì `routing.locales` có ja); hreflang `<head>` tự có ja qua `createLocaleAlternates`.
+- Verify commands + result (builder): `npm run typecheck` PASS · `npm run lint` PASS (0 error, 1 warning có sẵn `components/mdx/index.tsx`) · `npm test` 225 tests: 222 pass, 2 skip, 1 fail có sẵn (`content-rules.test.ts` ảnh `/uploads/*` không có trong `public/uploads`) · `npm run build` PASS.
+- Reviewer verdict: STRICT PASS round 1 — `.context/review-reports/feature-add-japanese-locale-phase-2-task-02-round-1-review.md` (5 MINOR không chặn; điều kiện phát hành: KHÔNG push/deploy trước khi P2-T03 PASS)
+- Doc impact: no doc impact ở task này — `docs/DESIGN.md` (fallback) + `.context/decisions.md` dời P3-T02

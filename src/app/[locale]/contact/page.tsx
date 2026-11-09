@@ -6,13 +6,13 @@ import { ContactForm } from '@/components/contact/ContactForm';
 import { GlassVisual } from '@/components/listing/GlassVisual';
 import { ListingHero } from '@/components/listing/ListingHero';
 import { Container } from '@/components/ui/Container';
-import type { Locale } from '@/content/types';
+import type { LocaleRecord } from '@/content/types';
 import { getCompanyContact } from '@/lib/contact/company-contact';
 import { createBreadcrumbJsonLd, createContactPageJsonLd } from '@/lib/seo/jsonld';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { createLocaleAlternates, localizedPath } from '@/lib/seo';
 
-const metadataByLocale: Record<Locale, { title: string; description: string }> = {
+const metadataByLocale: LocaleRecord<{ title: string; description: string }> = {
   vi: { title: 'Liên hệ | NTA', description: 'Liên hệ NTA qua hotline 0335546831, email admin@ntasolution.vn hoặc văn phòng tại tòa nhà Kim Hoàn, ngõ 19 Duy Tân, Cầu Giấy, Hà Nội. Đội ngũ NTA phản hồi trong 24h.' },
   en: { title: 'Contact | NTA', description: 'Contact NTA by phone 0335546831, email admin@ntasolution.vn or visit our office at Kim Hoan Building, Lane 19 Duy Tan, Cau Giay, Hanoi. Our team replies within 24 hours.' },
 };

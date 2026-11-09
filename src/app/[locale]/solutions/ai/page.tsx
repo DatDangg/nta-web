@@ -7,7 +7,7 @@ import { ListingHero } from '@/components/listing/ListingHero';
 import type { ListingCta } from '@/components/listing/types';
 import { CTABanner } from '@/components/shared/CTABanner';
 import { getListingCtas, getListingLabels, getListingPages } from '@/lib/content/registry';
-import type { Locale } from '@/content/types';
+import type { LocaleRecord } from '@/content/types';
 import { getAllCaseStudies } from '@/lib/content/case-studies';
 import { getAllSolutions } from '@/lib/content/solutions';
 import { toSolutionItems } from '@/lib/content/solution-listing';
@@ -15,7 +15,7 @@ import { JsonLd } from '@/components/seo/JsonLd';
 import { createBreadcrumbJsonLd } from '@/lib/seo/jsonld';
 import { createLocaleAlternates, localizedPath } from '@/lib/seo';
 
-const overviewMetadata: Record<Locale, Metadata> = {
+const overviewMetadata: LocaleRecord<Metadata> = {
   vi: { title: 'Giải pháp AI | NTA', description: 'Các giải pháp trí tuệ nhân tạo của NTA, từ trợ lý nội bộ, phân tích hình ảnh đến AI tùy chỉnh, giúp doanh nghiệp khai thác dữ liệu và tự động hóa vận hành.' },
   en: { title: 'AI Solutions | NTA', description: 'NTA artificial intelligence solutions, from internal assistants and image analysis to custom AI, help businesses harness data and automate operations.' },
 };

@@ -8,13 +8,13 @@ import { ListingExplorer } from '@/components/listing/ListingExplorer';
 import { ListingHero } from '@/components/listing/ListingHero';
 import type { ListingItem } from '@/components/listing/types';
 import { getListingCtas, getListingItems, getListingLabels, getListingPages, getRegistrySlugs } from '@/lib/content/registry';
-import type { Locale, Product } from '@/content/types';
+import type { LocaleRecord, Product } from '@/content/types';
 import { getAllProducts } from '@/lib/content/products';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { createBreadcrumbJsonLd } from '@/lib/seo/jsonld';
 import { createLocaleAlternates, localizedPath } from '@/lib/seo';
 
-const pageMetadata: Record<Locale, Metadata> = {
+const pageMetadata: LocaleRecord<Metadata> = {
   vi: { title: 'Sản phẩm App | NTA', description: 'Khám phá các ứng dụng di động do NTA phát triển, từ trải nghiệm âm nhạc hỗ trợ bởi AI đến thử kiểu tóc với AI, mang lại trải nghiệm số thực tế cho người dùng.' },
   en: { title: 'Apps | NTA', description: 'Explore NTA mobile apps, from AI-assisted music experiences to trying different hairstyles with AI, delivering practical digital experiences for everyday users.' },
 };

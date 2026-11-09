@@ -8,12 +8,12 @@ import type { ListingItem } from '@/components/listing/types';
 import { CTABanner } from '@/components/shared/CTABanner';
 import { compareCaseStudies, getAllCaseStudies } from '@/lib/content/case-studies';
 import { getListingCtas, getListingItems, getListingLabels, getListingPages } from '@/lib/content/registry';
-import type { Locale } from '@/content/types';
+import type { LocaleRecord } from '@/content/types';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { createBreadcrumbJsonLd } from '@/lib/seo/jsonld';
 import { createLocaleAlternates, localizedPath } from '@/lib/seo';
 
-const pageMetadata: Record<Locale, Metadata> = {
+const pageMetadata: LocaleRecord<Metadata> = {
   vi: { title: 'Case Study | NTA', description: 'Khám phá các dự án số hóa NTA đã triển khai cho doanh nghiệp và tổ chức, từ quản lý vận hành đến chuyển đổi số quy trình làm việc thực tế tại Việt Nam.' },
   en: { title: 'Case Studies | NTA', description: 'Explore digital projects delivered by NTA for businesses and organizations, from operations management to real-world digital transformation of workflows.' },
 };

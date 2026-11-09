@@ -10,7 +10,7 @@ import { ListingIcon, type ListingIconName } from '@/components/listing/icons';
 import { Marquee } from '@/components/motion/Marquee';
 import { getHomeContent, getListingCtas, getListingItems } from '@/lib/content/registry';
 import { getAllCaseStudies } from '@/lib/content/case-studies';
-import type { Locale } from '@/content/types';
+import type { LocaleRecord } from '@/content/types';
 import { createLocaleAlternates, localizedPath } from '@/lib/seo';
 
 /** Icon cho từng nhãn ở dải chữ chạy — theo đúng thứ tự `items` của mỗi panel hero (vi/en dùng chung). */
@@ -20,7 +20,7 @@ const marqueeIcons: Record<'ai' | 'management' | 'apps', ListingIconName[]> = {
   apps: ['phone', 'camera', 'plug', 'smile'],
 };
 
-const homeMetadata: Record<Locale, { title: string; description: string }> = {
+const homeMetadata: LocaleRecord<{ title: string; description: string }> = {
   vi: {
     title: 'NTA | Giải pháp Doanh nghiệp, AI và Ứng dụng AI',
     description: 'NTA cung cấp giải pháp số hóa về quản trị, AI và ứng dụng di động cho doanh nghiệp, cơ quan nhà nước, tối ưu vận hành và cải thiện trải nghiệm người dùng.',

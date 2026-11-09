@@ -3,7 +3,7 @@ import type { GlassTile } from '@/components/listing/GlassVisual';
 import type { ListingIconName } from '@/components/listing/icons';
 import type { ListingTheme } from '@/components/listing/themes';
 import type { ListingCategory, ListingLabels } from '@/components/listing/types';
-import type { Locale } from './types';
+import type { LocaleRecord } from './types';
 
 /**
  * Nội dung hero + thanh lọc + metadata thẻ cho 4 trang danh sách (thiết kế "Ứng dụng AI").
@@ -37,7 +37,7 @@ export interface ListingItemMeta {
 
 type PageKey = 'products' | 'caseStudies' | 'enterprise' | 'ai';
 
-export const listingLabels: Record<Locale, Omit<ListingLabels, 'searchPlaceholder'>> = {
+export const listingLabels: LocaleRecord<Omit<ListingLabels, 'searchPlaceholder'>> = {
   vi: {
     all: 'Tất cả',
     groupLabel: 'Lọc theo danh mục',
@@ -56,7 +56,7 @@ export const listingLabels: Record<Locale, Omit<ListingLabels, 'searchPlaceholde
   },
 };
 
-export const listingPages: Record<Locale, Record<PageKey, ListingPageCopy>> = {
+export const listingPages: LocaleRecord<Record<PageKey, ListingPageCopy>> = {
   vi: {
     products: {
       crumbs: ['Sản phẩm', 'Ứng dụng AI'],
@@ -240,7 +240,7 @@ export const listingPages: Record<Locale, Record<PageKey, ListingPageCopy>> = {
 };
 
 /** Metadata thẻ theo slug (icon, màu, danh mục lọc, phụ đề, chip ngắn). */
-export const listingItems: Record<Locale, Record<string, ListingItemMeta>> = {
+export const listingItems: LocaleRecord<Record<string, ListingItemMeta>> = {
   vi: {
     'music-app': { icon: 'music', theme: 'violet', categories: ['creative', 'entertainment'], subtitle: 'Tạo nhạc từ ý tưởng của bạn với AI', chips: ['Mô tả hoặc lời ca', 'Có lời / không lời', 'Nhận diện bài hát'] },
     'hair-style-ai': { icon: 'face', theme: 'rose', categories: ['image', 'lifestyle'], subtitle: 'Thử kiểu tóc mới với AI', chips: ['76 kiểu tóc', 'Gợi ý theo dáng mặt', 'Đổi màu tóc'] },
@@ -274,7 +274,7 @@ export const listingItems: Record<Locale, Record<string, ListingItemMeta>> = {
 };
 
 /** CTA thẻ viền đứt cuối lưới. */
-export const listingCtas: Record<Locale, Record<PageKey, { title: string; description: string; label: string }>> = {
+export const listingCtas: LocaleRecord<Record<PageKey, { title: string; description: string; label: string }>> = {
   vi: {
     products: { title: 'Sắp có thêm ứng dụng mới', description: 'NTA liên tục phát triển thêm ứng dụng AI. Có ý tưởng? Hãy trao đổi với chúng tôi.', label: 'Liên hệ đội ngũ NTA' },
     caseStudies: { title: 'Dự án tiếp theo của bạn', description: 'Chia sẻ bài toán của tổ chức, NTA sẽ cùng bạn xây dựng phương án phù hợp.', label: 'Liên hệ tư vấn' },

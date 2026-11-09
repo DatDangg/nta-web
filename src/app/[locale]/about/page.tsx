@@ -8,12 +8,12 @@ import { MilestoneTimeline } from '@/components/about/MilestoneTimeline';
 import { PartnerLogos } from '@/components/about/PartnerLogos';
 import { CTABanner } from '@/components/shared/CTABanner';
 import { getAboutData } from '@/lib/content/about';
-import type { Locale } from '@/content/types';
+import type { LocaleRecord } from '@/content/types';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { createBreadcrumbJsonLd } from '@/lib/seo/jsonld';
 import { createLocaleAlternates, localizedPath } from '@/lib/seo';
 
-const aboutMetadata: Record<Locale, { title: string; description: string }> = {
+const aboutMetadata: LocaleRecord<{ title: string; description: string }> = {
   vi: {
     title: 'Về NTA | NTA',
     description: 'Tìm hiểu về NTA và năng lực phát triển giải pháp doanh nghiệp, trí tuệ nhân tạo cùng ứng dụng di động thực tế cho doanh nghiệp và tổ chức tại Việt Nam.',

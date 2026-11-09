@@ -1,4 +1,4 @@
-import type { Locale } from '../types';
+import type { LocaleRecord } from '../types';
 
 export const solutionOverview = {
   vi: {
@@ -21,4 +21,4 @@ export const solutionOverview = {
       description: 'AI applied to operations and customer experience, from internal assistants to custom computer vision.',
     },
   },
-} satisfies Record<Locale, Record<'enterprise' | 'ai', { title: string; description: string }>>;
+} satisfies LocaleRecord<Record<'enterprise' | 'ai', { title: string; description: string }>>;

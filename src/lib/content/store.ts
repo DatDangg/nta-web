@@ -2,9 +2,12 @@ import 'server-only';
 
 import { unstable_cache } from 'next/cache';
 import { getDb } from '@/db/client';
-import { readLiveEntries, readLiveEntry, type StoredEntry } from '@/db/content-read';
+import type { Locale } from '@/content/types';
+import { compareStoredEntries, readLiveEntries, readLiveEntry, type StoredEntry } from '@/db/content-read';
 import type { ContentCollection, ContentLocale } from '@/db/schema';
 import { contentTags } from './cache-tags';
+import { FALLBACK_LOCALE, readWithFallback } from './locale-fallback';
+import { warnOncePerProcess } from './ui-data';
 
 export type { StoredEntry } from '@/db/content-read';
 
@@ -36,4 +39,19 @@ export function getEntry(collection: ContentCollection, slug: string, locale: Co
     { tags: contentTags(collection, slug) },
   );
   return cached();
+}
+
+/**
+ * Như getEntries nhưng áp fallback en theo bản ghi cho locale chưa đủ nội dung (ja — R-20a.2). vi/en = getEntries y nguyên.
+ * Hai lần đọc (ja + en) đều qua data cache tag `content:<collection>` → revalidate collection làm mới cả hai.
+ * KHÔNG dùng cho `ui_messages`: chữ giao diện ja dự phòng bằng ja.json (src/i18n/request.ts), không bằng bản en.
+ */
+export function getLocalizedEntries(collection: ContentCollection, locale: Locale): Promise<StoredEntry[]> {
+  return readWithFallback(
+    locale,
+    (readLocale) => getEntries(collection, readLocale),
+    (entry) => entry.slug,
+    compareStoredEntries,
+    () => warnOncePerProcess(`[content-store] ${collection}/${locale} thiếu bản ghi → dùng bản ${FALLBACK_LOCALE} (R-20a.2)`),
+  );
 }

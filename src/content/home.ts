@@ -1,5 +1,6 @@
 import type { ListingIconName } from '@/components/listing/icons';
-import type { Locale } from './types';
+import { pickLocale } from '../lib/content/locale-fallback';
+import type { Locale, LocaleRecord } from './types';
 
 /** Thẻ khối "Giải pháp" trang chủ (CR-016): icon vuông + tiêu đề + mô tả + 3 gạch đầu dòng + link "Tìm hiểu …". */
 export interface HomeSolutionCard {
@@ -30,7 +31,7 @@ export interface HomeContent {
   };
 }
 
-const homeContent: Record<Locale, HomeContent> = {
+const homeContent: LocaleRecord<HomeContent> = {
   vi: {
     solutionCards: [
       {
@@ -138,5 +139,5 @@ const homeContent: Record<Locale, HomeContent> = {
 };
 
 export function getHomeContent(locale: Locale): HomeContent {
-  return homeContent[locale];
+  return pickLocale(homeContent, locale);
 }

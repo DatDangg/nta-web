@@ -4,22 +4,23 @@ import { getHomeContent as getFileHomeContent, type HomeContent } from '@/conten
 import { detailTiles, listingCtas, listingItems, listingLabels, listingPages, type ListingItemMeta } from '@/content/listings';
 import { solutionOverview } from '@/content/solutions/overview';
 import type { GlassTile } from '@/components/listing/GlassVisual';
-import type { Locale } from '@/content/types';
+import type { Locale, RequiredContentLocale } from '@/content/types';
 import { HOME_SLUG, LISTING_LABELS_SLUG } from '@/db/content-rules';
 import type { ContentCollection } from '@/db/schema';
 import { aiSlugs, enterpriseSlugs, productSlugs } from './slug';
 import { getContentSource } from './source';
-import { getEntries } from './store';
+import { pickLocale } from './locale-fallback';
+import { getEntries, getLocalizedEntries } from './store';
 
 // Registry nội dung dạng object TS (slug, listing, home, overview) đọc theo cờ CONTENT_SOURCE (CR-031 P3-T02):
 //   file = hằng TS hiện tại (hành vi cũ) · db = collection tương ứng trong content_entries (quy ước khoá: tools/db/file-source.ts).
 // Lỗi DB được store ném ra (không trả rỗng); bản ghi singleton thiếu → ném lỗi rõ thay vì render trang thiếu nội dung.
 
 export type RegistryGroup = 'enterprise' | 'ai' | 'product';
-export type ListingPages = (typeof listingPages)[Locale];
-export type ListingCtas = (typeof listingCtas)[Locale];
-export type ListingLabels = (typeof listingLabels)[Locale];
-export type SolutionOverview = (typeof solutionOverview)[Locale];
+export type ListingPages = (typeof listingPages)[RequiredContentLocale];
+export type ListingCtas = (typeof listingCtas)[RequiredContentLocale];
+export type ListingLabels = (typeof listingLabels)[RequiredContentLocale];
+export type SolutionOverview = (typeof solutionOverview)[RequiredContentLocale];
 
 const FILE_REGISTRY: Record<RegistryGroup, readonly string[]> = { enterprise: enterpriseSlugs, ai: aiSlugs, product: productSlugs };
 
@@ -29,7 +30,7 @@ const SOLUTION_OVERVIEW_KEYS = Object.keys(solutionOverview.vi) as (keyof Soluti
 
 // Collection dạng "mỗi key 1 bản ghi": dựng lại Record theo thứ tự sort_order (store đã sắp) — không dựa thứ tự key jsonb.
 async function readKeyed<T>(collection: ContentCollection, locale: Locale): Promise<Record<string, T>> {
-  const entries = await getEntries(collection, locale);
+  const entries = await getLocalizedEntries(collection, locale);
   return Object.fromEntries(entries.map((entry) => [entry.slug, entry.data as T]));
 }
 
@@ -42,7 +43,7 @@ async function readKeyedRequired<T extends object>(collection: ContentCollection
 }
 
 async function readSingleton<T>(collection: ContentCollection, slug: string, locale: Locale): Promise<T> {
-  const entry = (await getEntries(collection, locale)).find((candidate) => candidate.slug === slug);
+  const entry = (await getLocalizedEntries(collection, locale)).find((candidate) => candidate.slug === slug);
   if (!entry) throw new Error(`[content-registry] Thiếu bản ghi ${collection}/${locale}/${slug} trong DB`);
   return entry.data as T;
 }
@@ -59,22 +60,22 @@ export async function isRegisteredSlug(group: RegistryGroup, slug: string): Prom
 }
 
 export async function getListingPages(locale: Locale): Promise<ListingPages> {
-  if (getContentSource() === 'file') return listingPages[locale];
+  if (getContentSource() === 'file') return pickLocale(listingPages, locale);
   return readKeyedRequired<ListingPages>('listing_page', locale, LISTING_PAGE_KEYS);
 }
 
 export async function getListingItems(locale: Locale): Promise<Record<string, ListingItemMeta>> {
-  if (getContentSource() === 'file') return listingItems[locale];
+  if (getContentSource() === 'file') return pickLocale(listingItems, locale);
   return readKeyed<ListingItemMeta>('listing_item', locale);
 }
 
 export async function getListingCtas(locale: Locale): Promise<ListingCtas> {
-  if (getContentSource() === 'file') return listingCtas[locale];
+  if (getContentSource() === 'file') return pickLocale(listingCtas, locale);
   return readKeyedRequired<ListingCtas>('listing_cta', locale, LISTING_PAGE_KEYS);
 }
 
 export async function getListingLabels(locale: Locale): Promise<ListingLabels> {
-  if (getContentSource() === 'file') return listingLabels[locale];
+  if (getContentSource() === 'file') return pickLocale(listingLabels, locale);
   return readSingleton<ListingLabels>('listing_labels', LISTING_LABELS_SLUG, locale);
 }
 
@@ -84,7 +85,7 @@ export async function getHomeContent(locale: Locale): Promise<HomeContent> {
 }
 
 export async function getSolutionOverview(locale: Locale): Promise<SolutionOverview> {
-  if (getContentSource() === 'file') return solutionOverview[locale];
+  if (getContentSource() === 'file') return pickLocale(solutionOverview, locale);
   return readKeyedRequired<SolutionOverview>('solution_overview', locale, SOLUTION_OVERVIEW_KEYS);
 }
 

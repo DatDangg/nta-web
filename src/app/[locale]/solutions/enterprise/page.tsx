@@ -6,14 +6,14 @@ import { ListingExplorer } from '@/components/listing/ListingExplorer';
 import { ListingHero } from '@/components/listing/ListingHero';
 import { CTABanner } from '@/components/shared/CTABanner';
 import { getListingCtas, getListingLabels, getListingPages } from '@/lib/content/registry';
-import type { Locale } from '@/content/types';
+import type { LocaleRecord } from '@/content/types';
 import { getAllSolutions } from '@/lib/content/solutions';
 import { toSolutionItems } from '@/lib/content/solution-listing';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { createBreadcrumbJsonLd } from '@/lib/seo/jsonld';
 import { createLocaleAlternates, localizedPath } from '@/lib/seo';
 
-const pageMetadata: Record<Locale, Metadata> = {
+const pageMetadata: LocaleRecord<Metadata> = {
   vi: { title: 'Giải pháp Doanh nghiệp | NTA', description: 'Các giải pháp quản trị khách hàng, nhân sự, đào tạo và vận hành nha khoa toàn diện của NTA giúp doanh nghiệp chuẩn hóa quy trình và tăng hiệu suất vận hành.' },
   en: { title: 'Enterprise Solutions | NTA', description: 'NTA enterprise solutions for customer management, HR, learning and dental operations help businesses standardize processes and improve operational efficiency.' },
 };

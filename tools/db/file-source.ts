@@ -2,14 +2,13 @@
 // Đọc bằng CHÍNH loader/hằng mà web đang dùng (không parse lại) để dữ liệu import khớp đúng cái web render.
 // Quy ước slug cho bản ghi không phải file MDX: xem .context/decisions.md (CR-031 P2-T01).
 import { isDeepStrictEqual } from "node:util";
-import type { Locale } from "../../src/content/types";
 import { getHomeContent } from "../../src/content/home";
 import { listingCtas, listingItems, listingLabels, listingPages } from "../../src/content/listings";
 import { solutionOverview } from "../../src/content/solutions/overview";
 import { COMPANY_CONTACT } from "../../src/lib/contact/company-info";
 import { ABOUT_SLUG, MDX_COLLECTION_DIRECTORIES, readMdxFiles, type MdxCollection } from "../../src/lib/content/mdx-files";
 import { aiSlugs, enterpriseSlugs, productSlugs } from "../../src/lib/content/slug";
-import { SEED_LOCALES, isSeedLocale, type ContentCollection, type ContentLocale } from "../../src/db/schema";
+import { SEED_LOCALES, isSeedLocale, type ContentCollection, type ContentLocale, type SeedLocale } from "../../src/db/schema";
 import { COMPANY_INFO_SLUG, HOME_SLUG, LISTING_LABELS_SLUG } from "../../src/db/content-rules";
 import enMessages from "../../src/i18n/messages/en.json";
 import viMessages from "../../src/i18n/messages/vi.json";
@@ -55,7 +54,7 @@ const SLUG_REGISTRY: Record<SlugRegistryGroup, readonly string[]> = {
   product: productSlugs,
 };
 
-const UI_MESSAGES: Record<Locale, Record<string, unknown>> = { vi: viMessages, en: enMessages };
+const UI_MESSAGES: Record<SeedLocale, Record<string, unknown>> = { vi: viMessages, en: enMessages };
 
 // jsonb chỉ giữ được giá trị JSON: Date/undefined/hàm sẽ đổi hoặc mất khi ghi → chặn ngay ở nguồn.
 export function toJsonObject(value: unknown, where: string): Record<string, unknown> {
@@ -68,7 +67,7 @@ export function toJsonObject(value: unknown, where: string): Record<string, unkn
 
 function keyedRecords(
   collection: ContentCollection,
-  locale: Locale,
+  locale: SeedLocale,
   source: Record<string, unknown>,
 ): SeedRecord[] {
   return Object.entries(source).map(([slug, value], index) => ({
@@ -81,7 +80,7 @@ function keyedRecords(
   }));
 }
 
-function singletonRecord(collection: ContentCollection, slug: string, locale: Locale, value: unknown): SeedRecord {
+function singletonRecord(collection: ContentCollection, slug: string, locale: SeedLocale, value: unknown): SeedRecord {
   return {
     collection,
     slug,
@@ -92,7 +91,7 @@ function singletonRecord(collection: ContentCollection, slug: string, locale: Lo
   };
 }
 
-async function readMdxCollection(collection: MdxCollection, locale: Locale): Promise<SeedRecord[]> {
+async function readMdxCollection(collection: MdxCollection, locale: SeedLocale): Promise<SeedRecord[]> {
   const directory = MDX_COLLECTION_DIRECTORIES[collection];
   const files = await readMdxFiles(directory, locale);
   return files.map((file) => ({
@@ -107,7 +106,7 @@ async function readMdxCollection(collection: MdxCollection, locale: Locale): Pro
 }
 
 // Registry slug không theo ngôn ngữ nhưng locale là NOT NULL → ghi cùng dữ liệu cho vi và en.
-function slugRegistryRecords(locale: Locale): SeedRecord[] {
+function slugRegistryRecords(locale: SeedLocale): SeedRecord[] {
   return Object.entries(SLUG_REGISTRY).flatMap(([group, slugs]) =>
     slugs.map((slug, index) => ({
       collection: "slug_registry" as const,
@@ -120,7 +119,7 @@ function slugRegistryRecords(locale: Locale): SeedRecord[] {
   );
 }
 
-function registryRecords(locale: Locale): SeedRecord[] {
+function registryRecords(locale: SeedLocale): SeedRecord[] {
   return [
     ...keyedRecords("listing_page", locale, listingPages[locale]),
     ...keyedRecords("listing_item", locale, listingItems[locale]),
@@ -151,8 +150,8 @@ export function recordKey(record: Pick<SeedRecord, "collection" | "slug" | "loca
 }
 
 // Bảng đếm "collection → {vi, en}" theo thứ tự SEED_COLLECTIONS (dùng cho --dry-run và báo cáo). Hàng ja (chỉ có ở DB) không đếm.
-export function countByCollection(records: readonly SeedRecord[]): Map<string, Record<Locale, number>> {
-  const counts = new Map<string, Record<Locale, number>>();
+export function countByCollection(records: readonly SeedRecord[]): Map<string, Record<SeedLocale, number>> {
+  const counts = new Map<string, Record<SeedLocale, number>>();
   for (const collection of SEED_COLLECTIONS) counts.set(collection, { vi: 0, en: 0 });
   for (const record of records) {
     if (!isSeedLocale(record.locale)) continue;
@@ -163,7 +162,7 @@ export function countByCollection(records: readonly SeedRecord[]): Map<string, R
   return counts;
 }
 
-export function formatCountTable(counts: Map<string, Record<Locale, number>>): string {
+export function formatCountTable(counts: Map<string, Record<SeedLocale, number>>): string {
   const lines = ["collection           vi    en"];
   for (const [collection, row] of counts) {
     lines.push(`${collection.padEnd(20)} ${String(row.vi).padStart(3)}   ${String(row.en).padStart(3)}`);

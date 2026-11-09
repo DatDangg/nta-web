@@ -1,4 +1,13 @@
-export type Locale = 'vi' | 'en';
+import type { routing } from '@/i18n/routing';
+
+/** Locale web hỗ trợ — suy từ `routing.locales` (1 nguồn). Nội dung `ja` thiếu → fallback en theo bản ghi (R-20a.2). */
+export type Locale = (typeof routing.locales)[number];
+
+/** Locale bắt buộc có nội dung (file seed vi/en). Locale còn lại (`ja`) được phép thiếu → chọn bằng `pickLocale` (fallback en). */
+export type RequiredContentLocale = Exclude<Locale, 'ja'>;
+
+/** Object nội dung theo locale: vi/en bắt buộc, ja tuỳ chọn (R-20a.2 — không thêm bản ja vào file seed). */
+export type LocaleRecord<T> = Record<RequiredContentLocale, T> & Partial<Record<'ja', T>>;
 
 /**
  * Một tính năng trong `Solution.features`.

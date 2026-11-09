@@ -2,9 +2,11 @@ import 'server-only';
 
 import type { Locale } from '@/content/types';
 import { REQUIRED_FIELDS } from '@/db/content-rules';
-import { assertRequiredFields, loadMdxDirectory, MDX_COLLECTION_DIRECTORIES, type MdxCollection } from './mdx-files';
+import { FALLBACK_LOCALE, needsContentFallback, readWithFallback } from './locale-fallback';
+import { assertRequiredFields, loadMdxDirectory, MDX_COLLECTION_DIRECTORIES, readMdxFiles, type MdxCollection, type MdxFile } from './mdx-files';
 import { getContentSource } from './source';
-import { getEntries, type StoredEntry } from './store';
+import { getLocalizedEntries, type StoredEntry } from './store';
+import { warnOncePerProcess } from './ui-data';
 
 // Phần đọc file nằm ở mdx-files.ts (không server-only) để tools/db dùng lại đúng logic này.
 export { ABOUT_SLUG, assertRequiredFields, loadMdxDirectory } from './mdx-files';
@@ -16,11 +18,37 @@ function toMdxRecord<T>(entry: StoredEntry): T {
   return { ...entry.data, body: entry.body } as T;
 }
 
-function compareByFileName(left: StoredEntry, right: StoredEntry): number {
-  const leftName = `${left.slug}.mdx`;
-  const rightName = `${right.slug}.mdx`;
+function compareNames(leftName: string, rightName: string): number {
   if (leftName === rightName) return 0;
   return leftName < rightName ? -1 : 1;
+}
+
+function compareByFileName(left: StoredEntry, right: StoredEntry): number {
+  return compareNames(`${left.slug}.mdx`, `${right.slug}.mdx`);
+}
+
+// Thư mục locale chưa có (src/content/<coll>/ja không được seed — R-20a.2) = chưa có bản ghi nào, không phải lỗi.
+async function readMdxFilesOrNone(directory: string, locale: Locale): Promise<MdxFile[]> {
+  try {
+    return await readMdxFiles(directory, locale);
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === 'ENOENT') return [];
+    throw error;
+  }
+}
+
+// Chế độ file, locale cần fallback (ja): gộp theo tên file <slug>.mdx — có file ja thì dùng, thiếu thì file en; sắp theo tên file như nhánh db.
+async function loadMdxDirectoryWithFallback<T>(collection: MdxCollection, locale: Locale): Promise<T[]> {
+  const directory = MDX_COLLECTION_DIRECTORIES[collection];
+  if (!needsContentFallback(locale)) return loadMdxDirectory<T>(directory, locale);
+  const files = await readWithFallback(
+    locale,
+    (readLocale) => (readLocale === FALLBACK_LOCALE ? readMdxFiles(directory, readLocale) : readMdxFilesOrNone(directory, readLocale)),
+    (file) => file.fileName,
+    (left, right) => compareNames(left.fileName, right.fileName),
+    () => warnOncePerProcess(`[content-file] ${collection}/${locale} thiếu file → dùng bản ${FALLBACK_LOCALE} (R-20a.2)`),
+  );
+  return files.map((file) => ({ ...file.frontmatter, body: file.body }) as T);
 }
 
 // Chế độ file trên bản build production: src/content nằm trong image, không đổi lúc chạy → đọc đĩa 1 lần/process
@@ -28,12 +56,11 @@ function compareByFileName(left: StoredEntry, right: StoredEntry): number {
 const fileMemo = new Map<string, Promise<unknown[]>>();
 
 function loadMdxFromFile<T>(collection: MdxCollection, locale: Locale): Promise<T[]> {
-  const directory = MDX_COLLECTION_DIRECTORIES[collection];
-  if (process.env.NODE_ENV !== 'production') return loadMdxDirectory<T>(directory, locale);
+  if (process.env.NODE_ENV !== 'production') return loadMdxDirectoryWithFallback<T>(collection, locale);
   const key = `${collection}/${locale}`;
   let pending = fileMemo.get(key);
   if (!pending) {
-    pending = loadMdxDirectory<T>(directory, locale);
+    pending = loadMdxDirectoryWithFallback<T>(collection, locale);
     pending.catch(() => fileMemo.delete(key));
     fileMemo.set(key, pending);
   }
@@ -44,7 +71,7 @@ function loadMdxFromFile<T>(collection: MdxCollection, locale: Locale): Promise<
 /** Bản ghi MDX của 1 collection theo cờ CONTENT_SOURCE (file = src/content, db = PostgreSQL). Lỗi DB được ném ra, không trả rỗng. */
 export async function loadMdxCollection<T>(collection: MdxCollection, locale: Locale): Promise<T[]> {
   if (getContentSource() === 'file') return loadMdxFromFile<T>(collection, locale);
-  const entries = await getEntries(collection, locale);
+  const entries = await getLocalizedEntries(collection, locale);
   return [...entries].sort(compareByFileName).map((entry) => toMdxRecord<T>(entry));
 }
 
