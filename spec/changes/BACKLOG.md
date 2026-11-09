@@ -52,6 +52,7 @@
 | CR-042 | Hero trang chủ: bỏ nền mờ full-bleed + mask hai cạnh của CR-041, quay lại bố cục CR-040 | REMOVE | done (1 task, spec 4.10.0 / scope v60; hero về bố cục CR-040) | `archive/2026-10-20-hero-remove-blur-backdrop.md` | 2026-10-20 | 2026-10-20 |
 | CR-043 | Hero trang chủ: hiện nền bên trái (thành phố + cây) như bản mẫu mới — ảnh hero mới full-bleed, phủ trắng nhẹ | MODIFY | done (1 task, review round 2 PASS, spec 4.11.0 / scope v61) | `archive/2026-10-20-hero-left-background.md` | 2026-10-20 | 2026-10-20 |
 | CR-044 | Thêm tiếng Nhật (ja): route `/ja/...`, `ja.json`, bộ chuyển VI/EN/JA, hreflang/sitemap, font JP, migration DB cho locale ja + fallback; nội dung ja do bot seed sau | ADDITIVE (i18n/DB) | done (7 task, spec 4.12.1 / scope v62; deploy prod + migration 0002 + seed 59 bản ghi ja) | `archive/2026-11-09-add-japanese-locale.md` | 2026-11-09 | 2026-11-09 |
+| CR-045 | Bản ja: copyright footer còn tiếng Anh + tiêu đề tab trang 404 thành tiếng Việt (mọi locale) | bug | done (1 task, reviewer PASS; no spec bump) | `archive/2026-11-09-ja-copyright-404-title.md` | 2026-11-09 | 2026-11-09 |
 
 ## Quy tắc tracking
 

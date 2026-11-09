@@ -10,6 +10,7 @@ import { getCompanyContact } from '@/lib/contact/company-contact';
 import { createOrganizationJsonLd, createWebSiteJsonLd } from '@/lib/seo/jsonld';
 import { BASE_URL, OG_LOCALE } from '@/lib/seo';
 import { isLocale } from '@/lib/content/slug';
+import type { Locale } from '@/content/types';
 import { Inter } from 'next/font/google';
 import { MotionRoot } from '@/components/motion/MotionRoot';
 import { ScrollTopButton } from '@/components/motion/ScrollTopButton';
@@ -26,13 +27,21 @@ const inter = Inter({
   preload: true,
 });
 
+// Title mặc định theo locale (trang không tự đặt title — vd 404 sau khi load). Map tĩnh, KHÔNG gọi next-intl ở metadata (CR-026/CR-032).
+const DEFAULT_TITLE: Record<Locale, string> = {
+  vi: 'NTA | Giải pháp công nghệ doanh nghiệp',
+  en: 'NTA | Enterprise technology solutions',
+  ja: 'NTA | 企業向けテクノロジーソリューション',
+};
+
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
-  const { locale } = await params;
+  const { locale: requested } = await params;
+  const locale = isLocale(requested) ? requested : routing.defaultLocale;
   return {
     metadataBase: new URL(BASE_URL),
-    title: 'NTA | Giải pháp công nghệ doanh nghiệp',
+    title: DEFAULT_TITLE[locale],
     openGraph: {
-      type: 'website', siteName: 'NTA', locale: OG_LOCALE[isLocale(locale) ? locale : routing.defaultLocale],
+      type: 'website', siteName: 'NTA', locale: OG_LOCALE[locale],
       images: [{ url: '/images/og-default.png', width: 1200, height: 630 }],
     },
     twitter: { card: 'summary_large_image', images: ['/images/og-default.png'] },
