@@ -2,12 +2,12 @@
   "mode": "feature",
   "activeWorkItem": {
     "type": "feature",
-    "slug": "add-japanese-locale",
+    "slug": "ja-case-studies-copy-polish",
     "phaseTask": "closed",
     "step": "done",
     "status": "done",
-    "journal": ".context/runs/feature-add-japanese-locale-phase-3-task-02.md",
-    "note": "CR-044 đóng 2026-11-09: deploy prod bff75b1, migration 0002, seed 59 bản ghi ja, spec 4.12.1 (G1 duyệt). Change doc archive."
+    "journal": null,
+    "note": "CR-046 đóng 2026-11-09: sửa 4 bản ghi ja trên DB prod (v2, backup ops-cr046-ja-copy-20261109T082252Z.dump), revalidate, verify live PASS. Không bump spec."
   },
   "features": [
     {
@@ -1762,6 +1762,26 @@
       "specVersion": "4.12.0",
       "scopeVersion": 62,
       "next": "Rollout prod do user (docs/runbook/db.md §10): thêm OFL.txt → dán lại Code.gs → backup + thử 0002 trên DB tạm → push main/deploy.yml → smoke /ja → rebuild nta-tools → bot seed ja (slug_registry trước) — xong trước cron AI news thứ 7 (01:00 UTC). G1 chờ user xác nhận câu chữ R-20a.6."
+    },
+    {
+      "slug": "ja-case-studies-copy-polish",
+      "cr": "CR-046",
+      "title": "Biên tập lại văn bản ja trang Case Studies",
+      "status": "done",
+      "changeFile": "spec/changes/archive/2026-11-09-ja-case-studies-copy-polish.md",
+      "classification": "MODIFY (content-only DB)",
+      "risk": "MEDIUM",
+      "tasks": {
+        "phase-1-task-01": "done"
+      },
+      "attempt": 1,
+      "reviewer": {
+        "verdict": "PASS",
+        "level": "FAST",
+        "note": "không có code diff — verify bằng script (mỗi thay thế đúng 1 lần, key data giữ nguyên) + fetch live 3 trang"
+      },
+      "scopeVersion": 63,
+      "doneAt": "2026-11-09"
     }
   ],
   "bugs": [

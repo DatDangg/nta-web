@@ -1,84 +1,36 @@
 {
   "specVersion": "4.12.1",
-  "scopeVersion": 62,
-  "generatedAt": "2026-11-09T10:00:00+07:00",
+  "scopeVersion": 63,
+  "generatedAt": "2026-11-09T15:30:00+07:00",
   "trigger": "feature-update",
-  "workItem": "feature/add-japanese-locale (CR-044 spec/changes/2026-11-09-add-japanese-locale.md; tasks tasks/feature-add-japanese-locale/phase-1-task-01..phase-3-task-02.md; ADDITIVE i18n + DB, risk HIGH; phát hành ở bước planning — hiệu lực khi phase 1–3 PASS + migration prod)",
+  "workItem": "feature/ja-case-studies-copy-polish (CR-046 spec/changes/archive/2026-11-09-ja-case-studies-copy-polish.md; task tasks/feature-ja-case-studies-copy-polish/phase-1-task-01.md; MODIFY nội dung DB ja, không đổi code/requirement, không bump spec)",
   "specRefs": [
-    "R-20a",
-    "R-20",
-    "R-21",
-    "R-09c",
-    "R-13a",
-    "R-16",
-    "R-16c",
-    "R-22",
-    "R-24"
+    "R-20a"
   ],
   "changed": {
-    "files": [
-      "drizzle/0002_*.sql + drizzle/meta — nới CHECK content_entries_locale_check thêm 'ja' (dòng duyệt HIGH_RISK_MIGRATION)",
-      "src/db/schema.ts, src/db/content-rules.ts — CONTENT_LOCALES + I-6 + asset alt nhận ja",
-      "tools/db/file-source.ts, tools/db/parity-check.ts, tools/db/publish-post.ts — locale seed vs locale DB; publish-post 3 locale",
-      "src/i18n/routing.ts, src/i18n/request.ts, src/content/types.ts — locale ja + fallback en",
-      "src/lib/content/* (store/registry/load-mdx), src/lib/contact/company-* — fallback en theo bản ghi",
-      "src/i18n/messages/ja.json — mới, đủ key như en.json",
-      "src/app/[locale]/**/page.tsx + layout.tsx — bỏ guard 'vi'|'en', chữ chọn theo locale có ja, html lang, font JP",
-      "src/components/layout/LanguageToggle.tsx, src/components/motion/ScrollTopButton.tsx",
-      "src/lib/seo/jsonld.ts, src/lib/format/date.ts, src/lib/api/contact-schema.ts, sitemap/metadata helpers",
-      "tools/ai-news/generate.py + .github/workflows/ai-news.yml — bản tin 3 locale",
-      "tools/contact-mail/Code.gs — nhận locale ja",
-      "docs/content-bot/*, docs/runbook/ai-news.md, docs/API_SPEC.md, docs/ERD.md, docs/DESIGN.md — reconcile"
-    ],
+    "files": [],
     "modules": [
-      "Mọi trang /ja/... (home, about, solutions, products, case-studies, blog, contact, 404)",
-      "Header/LanguageToggle mọi trang (vi/en/ja)",
-      "SEO: sitemap.xml, hreflang, JSON-LD",
-      "DB content_entries + content-cli/bot",
-      "Workflow bản tin AI tuần + publish-db",
-      "Form liên hệ /ja/contact → Apps Script"
+      "DB prod content_entries: listing_page/ja/caseStudies, listing_cta/ja/caseStudies, case_study/ja/dental-clinic-operations, case_study/ja/heritage-site-ai-camera (v1→v2, actor dev:claude-cr046)"
     ]
   },
   "impact": {
     "direct": [
-      "/ja, /ja/about, /ja/solutions/enterprise[/slug], /ja/solutions/ai[/slug], /ja/products[/slug], /ja/case-studies[/slug], /ja/blog[/slug], /ja/contact → HTTP 200, <html lang=\"ja\">",
-      "Khi DB chưa có bản ghi ja: nội dung hiện bản en, chữ giao diện (nav, nút, nhãn) tiếng Nhật từ ja.json; không 404/500",
-      "/ja/<slug-không-tồn-tại> → 404 (trang not-found tiếng Nhật)",
-      "Bộ chuyển VI · EN · JA ở header desktop + drawer mobile; bấm JA từ /en/blog/<slug> → /ja/blog/<slug>; bấm VI → /blog/<slug>",
-      "sitemap.xml: mỗi URL có alternate hreflang vi/en/ja; <head> có link hreflang ja + x-default trỏ vi",
-      "Chữ tiếng Nhật hiển thị đúng glyph (Noto Sans JP); trang vi/en không tải file font JP",
-      "Ngày trên blog/case study ở trang ja dạng 2026年11月9日",
-      "Form /ja/contact gửi locale=ja → 200 khi Apps Script đã cập nhật; locale sai → 400 errors.locale",
-      "content-cli ghi được bản ghi locale ja; locale khác vi/en/ja → lỗi I-6"
+      "/ja/case-studies",
+      "/ja/case-studies/dental-clinic-operations",
+      "/ja/case-studies/heritage-site-ai-camera"
     ],
     "dependents": [
-      "Middleware next-intl (localePrefix as-needed) — vi không prefix giữ nguyên",
-      "R-08a.1 redirect 301 slug cũ case study — có bản /ja",
-      "Data cache tag content:* + revalidate R-15a — áp dụng cho bản ghi ja",
-      "Bot nội dung CR-030 — seed ja sau deploy",
-      "Gate migration deploy.yml — migration 0002 phải có dòng duyệt mới qua"
+      "thẻ case study trên /ja/case-studies lấy title/hero.subtitle/hero.description từ case_study ja"
     ],
     "regression": [
-      "Mọi URL vi (không prefix) và /en/... trả nội dung y như trước (vi + en)",
-      "Bộ chuyển VI/EN vẫn giữ đúng trang",
-      "Trang vi/en: LCP R-22 không tệ hơn đáng kể, không preload font JP",
-      "Bản tin AI tuần: workflow cron thứ 7 xanh, sinh 3 bài, chạy lại cùng tuần → 0 ghi",
-      "Form /contact, /en/contact gửi như cũ",
-      "parity-check vi/en vẫn PASS (không báo thiếu ja)",
-      "typecheck + lint + build + test PASS"
+      "/case-studies và /en/case-studies (vi/en) không đổi",
+      "các trang /ja khác không đổi"
     ]
   },
   "acceptance": [
-    "Mọi route /ja/... trả 200; URL vi + /en không đổi",
-    "Thiếu bản ghi/key ja → fallback en (nội dung), không 404/500",
-    "ja.json đủ key như en.json",
-    "Bộ chuyển VI · EN · JA giữ đúng trang",
-    "Sitemap + hreflang có ja, x-default = vi, <html lang=\"ja\">",
-    "Glyph Nhật đúng, vi/en không chậm đáng kể",
-    "Migration versioned cho phép locale ja; content-cli ghi được bản ghi ja",
-    "Bản tin AI tuần sinh + đăng vi/en/ja, workflow xanh",
-    "typecheck + lint + build PASS"
+    "3 trang ja hiển thị câu mới theo change doc CR-046",
+    "Không còn: 回収済み売上, 治療セッション, 機密を保つ, 在庫上で, 同じ姿, 死角のない, 不審人物, 未収残高, 課題起点, 貴組織",
+    "vi/en giữ nguyên"
   ],
-  "risk": "high",
-  "notes": "Thay scope v61 (CR-043). Nội dung ja thật do bot seed sau deploy — test lúc đầu chủ yếu thấy fallback en + chữ giao diện ja. Migration 0002 chạy prod sau backup (không có DB staging — R-16c), chạy thử trước trên DB tạm restore từ backup."
+  "risk": "low"
 }
