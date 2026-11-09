@@ -1,0 +1,252 @@
+{
+  "common": {
+    "siteName": "NTA",
+    "cta": {
+      "contact": "お問い合わせ",
+      "viewSolutions": "ソリューションを見る",
+      "learnMore": "詳しく見る",
+      "viewCaseStudies": "導入事例を見る",
+      "submit": "送信する",
+      "bulletConsulting": "丁寧なコンサルティング",
+      "bulletSolution": "最適なソリューション",
+      "bulletDeploy": "スピーディーな導入"
+    },
+    "lightbox": {
+      "open": "画像を拡大: {alt}",
+      "label": "拡大画像ビューアー",
+      "close": "閉じる",
+      "prev": "前の画像",
+      "next": "次の画像",
+      "counter": "{current} / {total}"
+    }
+  },
+  "nav": {
+    "label": "メインナビゲーション",
+    "home": "ホーム",
+    "homeLabel": "NTA ホーム",
+    "openMenu": "メニューを開く",
+    "closeMenu": "メニューを閉じる",
+    "solutions": "ソリューション",
+    "enterprise": "企業向けソリューション",
+    "ai": "AIソリューション",
+    "products": "製品",
+    "caseStudies": "導入事例",
+    "news": "ニュース",
+    "about": "NTAについて",
+    "contact": "お問い合わせ"
+  },
+  "footer": {
+    "aboutGroup": "NTAについて",
+    "solutionsGroup": "ソリューション",
+    "contentGroup": "コンテンツ",
+    "intro": "会社紹介",
+    "aiApps": "AIアプリ",
+    "tagline": "AIを活用したインテリジェントな企業運営プラットフォーム",
+    "supportTitle": "お困りですか？",
+    "supportLink": "担当者に相談する",
+    "socialFacebook": "NTA公式Facebook",
+    "socialLinkedIn": "NTA公式LinkedIn",
+    "socialYouTube": "NTA公式YouTube",
+    "copyright": "© NTA. All rights reserved.",
+    "contactTitle": "連絡先", "contactPhone": "電話番号", "contactEmail": "メール", "contactAddress": "所在地"
+  },
+  "interactive": {
+    "filter": {
+      "groupLabel": "カテゴリーで絞り込む",
+      "options": { "all": "すべて", "enterprise": "企業向け", "ai": "AI", "app-ai": "AIアプリ" },
+      "resultCount": "{count, plural, =0 {該当なし} other {#件}}"
+    },
+    "pagination": {
+      "label": "ページ送り",
+      "previous": "前へ",
+      "next": "次へ",
+      "page": "{page}ページ"
+    },
+    "empty": { "message": "条件に一致するコンテンツが見つかりません", "clearFilter": "絞り込みを解除" }
+  },
+  "notFound": {
+    "title": "ページが見つかりません | NTA",
+    "heading": "ページが見つかりません",
+    "message": "お探しのページは存在しないか、移動した可能性があります。URLをご確認いただくか、以下のページからお選びください。",
+    "homeLink": "ホームへ戻る",
+    "suggestionsLabel": "おすすめのページ"
+  },
+  "home": {
+    "heroTitleLead": "ベトナム企業のための",
+    "heroTitleAccent": "デジタルソリューション",
+    "heroDescription": "NTAは、企業や行政機関に向けて、業務管理・AI・モバイルアプリのソリューションを提供しています。",
+    "heroImageAlt": "企業の業務管理システムを操作するAIロボットのイラスト",
+    "solutionsEyebrow": "SOLUTIONS",
+    "solutionsTitleLead": "ニーズに合わせた",
+    "solutionsTitleAccent": "ソリューション",
+    "solutionsLead": "企業の業務管理から人工知能まで、NTAは現場の課題を解決するソリューションとAIアプリを開発し、組織の効率的な運営と持続的な価値創出を支援します。",
+    "productsEyebrow": "PRODUCTS",
+    "productsTitleLead": "注目の",
+    "productsTitleAccent": "製品",
+    "productsLead": "NTAが開発したAIアプリは、現場の課題を解決し、利用者に確かな価値をお届けします。",
+    "caseStudyEyebrow": "CASE STUDY",
+    "caseStudyTitleLead": "お客様の",
+    "caseStudyTitleAccent": "導入事例",
+    "caseStudyLead": "企業・組織のAI活用とデジタルトランスフォーメーション（DX）に伴走し、確かで持続的な価値を生み出します。",
+    "viewAllCaseStudies": "導入事例をすべて見る",
+    "viewDetail": "詳細を見る",
+    "ctaTitle": "最適なソリューションを一緒に見つけましょう",
+    "ctaDescription": "貴社の目標やデジタル化のニーズについて、NTAチームにお気軽にご相談ください。",
+    "previousProducts": "前の製品",
+    "nextProducts": "次の製品",
+    "previousCases": "前の導入事例",
+    "nextCases": "次の導入事例"
+  },
+  "solutions": {
+    "enterprise": {
+      "title": "企業向けソリューション",
+      "description": "業務運営、人事、研修、営業プロセスを標準化する業務管理システム群です。",
+      "ctaTitle": "最適なソリューションを一緒に見つけましょう",
+      "ctaDescription": "貴社の目標やデジタル化のニーズについて、NTAチームにお気軽にご相談ください。",
+      "featuresTitle": "主な機能",
+      "demoCta": "デモを依頼する",
+      "viewDemoCta": "デモを見る",
+      "featuresCta": "機能を見る ›",
+      "featuresCtaAria": "機能を見る（機能セクションまでスクロールします）",
+      "benefitsTitle": "導入メリット",
+      "useCasesTitle": "活用シーン",
+      "faqTitle": "よくあるご質問",
+      "screenshotsTitle": "ソリューション画面",
+      "relatedTitle": "関連ソリューション",
+      "imageAlt": "{title}ソリューションのイメージ"
+    },
+    "ai": {
+      "title": "AIソリューション",
+      "description": "社内アシスタントから独自の画像認識まで、業務運営と顧客体験にAIを活用します。",
+      "detailTitle": "貴社のための{title}",
+      "featuresTitle": "主な機能",
+      "benefitsTitle": "導入メリット",
+      "useCasesTitle": "活用シーン",
+      "highlightsTitle": "主要指標",
+      "faqTitle": "よくあるご質問",
+      "screenshotsTitle": "ソリューション画面",
+      "caseStudyTitle": "導入ストーリー",
+      "relatedCaseTitle": "関連する導入事例",
+      "caseStudyLink": "導入事例を見る",
+      "ctaTitle": "最適なソリューションを一緒に見つけましょう",
+      "ctaDescription": "貴社の目標やデジタル化のニーズについて、NTAチームにお気軽にご相談ください。",
+      "imageAlt": "{title}ソリューションのイメージ"
+    }
+  },
+  "about": {
+    "title": "NTAについて",
+    "description": "ベトナム全土の組織に向けて、企業向けシステム・人工知能・モバイルアプリの実用的なソリューションを開発するNTAをご紹介します。",
+    "missionTitle": "私たちの使命",
+    "milestonesTitle": "NTAの歩み",
+    "partnersTitle": "パートナー",
+    "ctaTitle": "最適なソリューションを一緒に見つけましょう",
+    "ctaDescription": "貴社の目標やデジタル化のニーズについて、NTAチームにお気軽にご相談ください。",
+    "hero": {
+      "titleLead": "会社紹介", "titleAccent": "NTA",
+      "tagline": "AIで価値を創造し、よりスマートな未来へ",
+      "description": "NTAは、人工知能の研究・開発・応用に注力するテクノロジー企業です。企業・組織のデジタルトランスフォーメーション（DX）に伴走し、実用的で効果的かつ持続可能なソリューションを提供しています。",
+      "imageAlt": "Kim Hoanビル — NTAオフィス"
+    },
+    "stats": {
+      "projects": { "value": "50+", "label": "導入プロジェクト" },
+      "partners": { "value": "30+", "label": "取引先企業" },
+      "satisfaction": { "value": "99%", "label": "顧客満足度" }
+    },
+    "values": {
+      "titleLead": "AIを現場に届け、", "titleAccent": "持続的な価値を創造",
+      "mission": { "title": "ミッション", "text": "人工知能を活用して現場の課題を解決し、業務効率を高め、企業と社会に持続的な価値をもたらします。" },
+      "vision": { "title": "ビジョン", "text": "ベトナムを代表する信頼のAIテクノロジーパートナーとなり、お客様とともによりスマートな未来を築きます。" },
+      "core": { "title": "コアバリュー", "items": ["イノベーション", "顧客第一", "品質と効率", "持続的な成長"] }
+    },
+    "people": {
+      "eyebrow": "NTAの人材",
+      "titleLead": "私たちが信じるのは", "titleAccent": "人とテクノロジーの力",
+      "description": "NTAには、AI・ソフトウェア・DX分野の経験豊富な専門家が集まっています。確かな価値をもたらし、導入しやすく、社会に良い影響を与えるテクノロジーソリューションをつくるという共通の目標を持っています。",
+      "imageAlt": "会議室でAIソリューションについて議論するNTAチーム"
+    }
+  },
+  "products": {
+    "title": "アプリ",
+    "intro": "NTAのモバイルアプリは、AIを活用した体験を日常のユーザーに身近なものにします。",
+    "screenshotAlt": "画面イメージ — {title}",
+    "comingSoon": "近日公開",
+    "download": "アプリをダウンロード",
+    "ctaTitle": "最適なソリューションを一緒に見つけましょう",
+    "ctaDescription": "貴社の目標やデジタル化のニーズについて、NTAチームにお気軽にご相談ください。"
+  },
+  "caseStudies": {
+    "title": "導入事例",
+    "intro": "各組織の実際のニーズに応えて導入したデジタルプロジェクトです。",
+    "emptyMessage": "このカテゴリーの導入事例はまだありません。",
+    "clearFilter": "絞り込みを解除",
+    "imageAlt": "{title}の導入事例画像",
+    "challenge": "課題",
+    "solution": "ソリューション",
+    "result": "成果",
+    "gallery": "プロジェクト画像",
+    "related": "関連する導入事例",
+    "meta": { "client": "お客様", "sector": "業種", "year": "年度" },
+    "categories": { "enterprise": "企業向け", "ai": "AI", "app-ai": "AIアプリ" }
+  },
+  "blog": {
+    "title": "ブログ",
+    "metadataDescription": "デジタルソリューション、人工知能、組織のDXに関するNTAのニュース、専門家の視点、実践的な知見をご紹介します。",
+    "empty": "まだ記事がありません。近日公開予定です。",
+    "home": "ホームへ戻る",
+    "imageAlt": "{title}のカバー画像",
+    "share": "共有",
+    "shareFacebook": "この記事をFacebookで共有",
+    "shareLinkedIn": "この記事をLinkedInで共有",
+    "copyLink": "リンクをコピー",
+    "copied": "コピーしました",
+    "related": "関連記事",
+    "ctaTitle": "最適なソリューションを一緒に見つけましょう",
+    "ctaDescription": "貴社の目標やデジタル化のニーズについて、NTAチームにお気軽にご相談ください。",
+    "categories": {
+      "all": "すべて",
+      "ai-tech": "AI・テクノロジー",
+      "practical": "活用事例",
+      "customer-stories": "お客様ストーリー",
+      "nta-news": "NTAの活動",
+      "trends": "トレンド",
+      "guides": "ガイド"
+    },
+    "readingTime": "約{minutes}分で読めます",
+    "heroTitle": "ニュース＆最新情報",
+    "heroLead": "テーマ：",
+    "heroAccent": "AIと現場での活用",
+    "heroDescription": "AI・テクノロジーに関するストーリーやトレンド、実践的な知見、そしてNTAが組織のDXをどのように支援しているかをお届けします。",
+    "filterGroupLabel": "カテゴリーで絞り込む",
+    "searchLabel": "記事を検索",
+    "searchPlaceholder": "記事を検索...",
+    "resultCount": "{count, plural, =0 {該当する記事はありません} other {#件の記事}}",
+    "filterEmpty": "該当する記事はありません。",
+    "clearFilters": "絞り込みを解除",
+    "featuredLabel": "注目記事",
+    "highlightEyebrow": "最新",
+    "highlightTitle": "NTAの最新情報",
+    "highlightText": "主要なニュース、イベント、新製品の情報を随時お届けします。",
+    "viewAll": "すべての記事を見る",
+    "latestTitle": "最新記事",
+    "resultsTitle": "検索結果",
+    "readMore": "続きを読む"
+  },
+  "contact": {
+    "title": "お問い合わせ",
+    "intro": "お客様情報をご入力ください。NTAチームより24時間以内にご連絡いたします。",
+    "labels": { "name": "氏名", "email": "メールアドレス", "phone": "電話番号", "company": "会社名・組織名", "need": "ご相談内容", "message": "メッセージ" },
+    "helpers": { "name": "2〜100文字で入力してください。", "email": "ご返信先のメールアドレスを入力してください。", "phone": "任意、9〜15桁の数字。", "message": "10〜2000文字で入力してください。" },
+    "errors": { "name": "氏名を入力してください（2〜100文字）。", "email": "有効なメールアドレスを入力してください。", "phone": "電話番号を入力してください（9〜15桁）。", "company": "会社名は150文字以内で入力してください。", "need": "ご相談内容を選択してください。", "message": "メッセージは10〜2000文字で入力してください。", "messageShort": "メッセージは10〜500文字で入力してください。" },
+    "submit": "送信する", "submitting": "送信中…", "successTitle": "送信が完了しました", "success": "送信しました。24時間以内にご連絡いたします。", "sendAnother": "別のお問い合わせを送信", "rateLimit": "送信回数が多すぎます。しばらくしてから再度お試しください。", "sendError": "送信できませんでした。再度お試しいただくか、ホットラインまでご連絡ください。", "summary": "入力内容をご確認ください。", "retry": "再試行",
+    "consultationTitle": "ご相談のお申し込み",
+    "heroTitle": "NTAへのお問い合わせ", "heroLead": "ともに創りましょう", "heroAccent": "現場に届く価値を",
+    "heroDescription": "私たちはいつでもお客様の声に耳を傾け、AI活用とDXに取り組む企業・組織に伴走いたします。",
+    "glassTitle": "Let's Build", "glassText": "Smarter Together",
+    "info": { "title": "連絡先", "phone": "電話番号", "phoneNote": "月〜金 8:30〜17:30", "email": "メールアドレス", "emailNote": "24時間以内にご返信", "address": "所在地" },
+    "map": { "title": "NTAオフィスの地図 — Kim Hoanビル, Lane 19 Duy Tan, Cau Giay, Hanoi", "open": "Googleマップで開く", "newTab": "（新しいタブで開きます）" },
+    "office": { "title": "NTAオフィス", "parking": "駐車場", "parkingNote": "ビル内にあります", "transit": "アクセス良好", "transitNote": "メトロ路線の近く", "central": "中心部に立地", "centralNote": "移動に便利" },
+    "form": { "eyebrow": "情報をお送りください", "title": "お問い合わせフォーム", "description": "フォームにご記入いただければ、NTAチームよりできるだけ早くご連絡いたします。", "submit": "メッセージを送信", "required": "必須", "counter": "{count}/{max}文字入力済み" },
+    "placeholders": { "name": "山田 太郎", "email": "name@company.com", "phone": "0901 234 567", "company": "株式会社ABC", "need": "ご関心の分野を選択してください", "message": "ご要望、プロジェクト、ご質問などについて詳しくお聞かせください..." },
+    "needs": { "crm": "CRMソフトウェア", "dentgo": "歯科医院向けソフトウェア DentGo", "lms": "オンライン学習プラットフォーム LMS", "hrm": "人事管理 HRM", "boxai": "BoxAI", "custom-ai": "カスタムAIソリューション", "flycam": "Flycam（ドローン）", "custom-software": "受託ソフトウェア開発", "other": "その他" }
+  }
+}

@@ -3,11 +3,11 @@
   "activeWorkItem": {
     "type": "feature",
     "slug": "add-japanese-locale",
-    "phaseTask": "phase-2-task-01",
+    "phaseTask": "phase-2-task-02",
     "step": "ready",
     "status": "awaiting",
-    "journal": ".context/runs/feature-add-japanese-locale-phase-1-task-01.md",
-    "note": "P1-T01 done; next builder P2-T01 (ja.json). Không push — chờ restore-test 0002 + user yêu cầu deploy"
+    "journal": ".context/runs/feature-add-japanese-locale-phase-2-task-01.md",
+    "note": "P2-T01 done; next builder P2-T02 (routing/request ja + fallback en, STRICT). Không push"
   },
   "features": [
     {
@@ -1673,8 +1673,11 @@
             {
               "task": "phase-2-task-01",
               "title": "ja.json đủ key + test parity vi/en/ja",
-              "status": "pending",
-              "attempts": 0
+              "status": "done",
+              "attempts": 1,
+              "review": "NORMAL PASS round 1",
+              "reviewReport": ".context/review-reports/feature-add-japanese-locale-phase-2-task-01-round-1-review.md",
+              "note": "ja.json 283 lá (です/ます, plural ja chỉ other); messages.test.ts 4 test PASS; typecheck/lint/build PASS; npm test 206/209 (1 fail có sẵn public/uploads). 5 MINOR (thuật ngữ cần user soát) ghi trong task file"
             },
             {
               "task": "phase-2-task-02",
