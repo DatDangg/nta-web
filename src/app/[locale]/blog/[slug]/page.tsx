@@ -9,7 +9,9 @@ import { mdxComponents } from '@/components/mdx';
 import { getAllPosts, getPostBySlug } from '@/lib/content/posts';
 import { RenderMdx } from '@/lib/content/render-mdx';
 import { JsonLd } from '@/components/seo/JsonLd';
-import { createArticleJsonLd, createBreadcrumbJsonLd } from '@/lib/seo/jsonld';
+import { createArticleJsonLd } from '@/lib/seo/jsonld';
+import { isLocale } from '@/lib/content/slug';
+import { createLocaleBreadcrumbJsonLd } from '@/lib/seo/breadcrumb';
 import { createLocaleAlternates, localizedPath, BASE_URL } from '@/lib/seo';
 
 // Không prerender slug lúc build (build không truy cập DB — decisions.md CR-031 P3-T02): render lần đầu theo yêu cầu rồi cache.
@@ -19,7 +21,7 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string; slug: string }> }): Promise<Metadata> {
   const { locale, slug } = await params;
-  if (locale !== 'vi' && locale !== 'en') notFound();
+  if (!isLocale(locale)) notFound();
   const post = await getPostBySlug(locale, slug);
   if (!post) notFound();
   return {
@@ -31,7 +33,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
 export default async function BlogPostPage({ params }: { params: Promise<{ locale: string; slug: string }> }) {
   const { locale, slug } = await params;
-  if (locale !== 'vi' && locale !== 'en') notFound();
+  if (!isLocale(locale)) notFound();
   setRequestLocale(locale);
   const [post, posts, t] = await Promise.all([getPostBySlug(locale, slug), getAllPosts(locale), getTranslations('blog')]);
   if (!post) notFound();
@@ -41,7 +43,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ local
 
   return (
     <>
-      <JsonLd data={createBreadcrumbJsonLd([{ name: locale === 'en' ? 'Home' : 'Trang chủ', path: locale === 'en' ? '/en' : '/' }, { name: locale === 'en' ? 'Blog' : 'Blog', path: `${locale === 'en' ? '/en' : ''}/blog` }, { name: post.title, path: `${locale === 'en' ? '/en' : ''}/blog/${slug}` }])} />
+      <JsonLd data={await createLocaleBreadcrumbJsonLd(locale, [{ name: 'Blog', path: `/blog` }, { name: post.title, path: `/blog/${slug}` }])} />
       <article>
         <ArticleHeader locale={locale} post={post} />
         <div className="mx-auto max-w-[720px] px-4">

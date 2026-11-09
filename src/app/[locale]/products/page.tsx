@@ -8,20 +8,22 @@ import { ListingExplorer } from '@/components/listing/ListingExplorer';
 import { ListingHero } from '@/components/listing/ListingHero';
 import type { ListingItem } from '@/components/listing/types';
 import { getListingCtas, getListingItems, getListingLabels, getListingPages, getRegistrySlugs } from '@/lib/content/registry';
-import type { LocaleRecord, Product } from '@/content/types';
+import type { Locale, Product } from '@/content/types';
 import { getAllProducts } from '@/lib/content/products';
 import { JsonLd } from '@/components/seo/JsonLd';
-import { createBreadcrumbJsonLd } from '@/lib/seo/jsonld';
+import { isLocale } from '@/lib/content/slug';
+import { createLocaleBreadcrumbJsonLd } from '@/lib/seo/breadcrumb';
 import { createLocaleAlternates, localizedPath } from '@/lib/seo';
 
-const pageMetadata: LocaleRecord<Metadata> = {
+const pageMetadata: Record<Locale, Metadata> = {
   vi: { title: 'Sản phẩm App | NTA', description: 'Khám phá các ứng dụng di động do NTA phát triển, từ trải nghiệm âm nhạc hỗ trợ bởi AI đến thử kiểu tóc với AI, mang lại trải nghiệm số thực tế cho người dùng.' },
   en: { title: 'Apps | NTA', description: 'Explore NTA mobile apps, from AI-assisted music experiences to trying different hairstyles with AI, delivering practical digital experiences for everyday users.' },
+  ja: { title: 'アプリ | NTA', description: 'AIを活用した音楽体験からAIヘアスタイル試着まで、NTAが開発したモバイルアプリで日常に役立つデジタル体験をお届けします。' },
 };
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
-  if (locale !== 'vi' && locale !== 'en') notFound();
+  if (!isLocale(locale)) notFound();
   return {
     ...pageMetadata[locale],
     alternates: { canonical: localizedPath(locale, 'products'), ...createLocaleAlternates('products') },
@@ -37,7 +39,7 @@ function orderProducts(products: Product[], productSlugs: readonly string[]) {
 
 export default async function ProductsPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
-  if (locale !== 'vi' && locale !== 'en') notFound();
+  if (!isLocale(locale)) notFound();
   setRequestLocale(locale);
   const [t, products, productSlugs, listingPages, listingItems, listingCtas, listingLabels] = await Promise.all([
     getTranslations('products'), getAllProducts(locale), getRegistrySlugs('product'),
@@ -45,7 +47,7 @@ export default async function ProductsPage({ params }: { params: Promise<{ local
   ]);
   const copy = listingPages.products;
   const ordered = orderProducts(products, productSlugs);
-  const detailTitle = locale === 'en' ? 'App details' : 'Chi tiết ứng dụng';
+  const detailTitle = t('detailTitle');
   const items: ListingItem[] = ordered.map((product) => {
     const meta = listingItems[product.slug];
     const poster = product.screenshots[0];
@@ -68,7 +70,7 @@ export default async function ProductsPage({ params }: { params: Promise<{ local
 
   return (
     <>
-      <JsonLd data={createBreadcrumbJsonLd([{ name: locale === 'en' ? 'Home' : 'Trang chủ', path: locale === 'en' ? '/en' : '/' }, { name: t('title'), path: `${locale === 'en' ? '/en' : ''}/products` }])} />
+      <JsonLd data={await createLocaleBreadcrumbJsonLd(locale, [{ name: t('title'), path: `/products` }])} />
       <ListingHero
         accent={copy.accent}
         breadcrumbs={copy.crumbs.map((label) => ({ label }))}

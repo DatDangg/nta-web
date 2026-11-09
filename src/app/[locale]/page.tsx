@@ -10,7 +10,8 @@ import { ListingIcon, type ListingIconName } from '@/components/listing/icons';
 import { Marquee } from '@/components/motion/Marquee';
 import { getHomeContent, getListingCtas, getListingItems } from '@/lib/content/registry';
 import { getAllCaseStudies } from '@/lib/content/case-studies';
-import type { LocaleRecord } from '@/content/types';
+import type { Locale } from '@/content/types';
+import { isLocale } from '@/lib/content/slug';
 import { createLocaleAlternates, localizedPath } from '@/lib/seo';
 
 /** Icon cho từng nhãn ở dải chữ chạy — theo đúng thứ tự `items` của mỗi panel hero (vi/en dùng chung). */
@@ -20,7 +21,7 @@ const marqueeIcons: Record<'ai' | 'management' | 'apps', ListingIconName[]> = {
   apps: ['phone', 'camera', 'plug', 'smile'],
 };
 
-const homeMetadata: LocaleRecord<{ title: string; description: string }> = {
+const homeMetadata: Record<Locale, { title: string; description: string }> = {
   vi: {
     title: 'NTA | Giải pháp Doanh nghiệp, AI và Ứng dụng AI',
     description: 'NTA cung cấp giải pháp số hóa về quản trị, AI và ứng dụng di động cho doanh nghiệp, cơ quan nhà nước, tối ưu vận hành và cải thiện trải nghiệm người dùng.',
@@ -29,11 +30,15 @@ const homeMetadata: LocaleRecord<{ title: string; description: string }> = {
     title: 'NTA | Enterprise, AI and App Solutions',
     description: 'NTA provides digital solutions in management, AI and mobile apps for businesses and government agencies to improve daily workflows and user experiences.',
   },
+  ja: {
+    title: 'NTA | 企業向け・AI・アプリソリューション',
+    description: 'NTAは企業や行政機関向けに、業務管理・AI・モバイルアプリのデジタルソリューションを提供し、日々の業務と利用者体験の向上を支援します。',
+  },
 };
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
-  if (locale !== 'vi' && locale !== 'en') notFound();
+  if (!isLocale(locale)) notFound();
   const metadata = homeMetadata[locale];
 
   return {
@@ -45,7 +50,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
-  if (locale !== 'vi' && locale !== 'en') notFound();
+  if (!isLocale(locale)) notFound();
   setRequestLocale(locale);
 
   const [t, home, caseStudies, listingCtas, listingItems] = await Promise.all([

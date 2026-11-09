@@ -4,15 +4,22 @@ import { notFound } from 'next/navigation';
 import { ShowcaseLayout } from '@/components/case-studies/showcase/ShowcaseLayout';
 import { getProductBySlug } from '@/lib/content/products';
 import { isLocale } from '@/lib/content/slug';
+import type { Locale } from '@/content/types';
 import { getDetailTiles } from '@/lib/content/registry';
 import { JsonLd } from '@/components/seo/JsonLd';
-import { createBreadcrumbJsonLd } from '@/lib/seo/jsonld';
+import { createLocaleBreadcrumbJsonLd } from '@/lib/seo/breadcrumb';
 import { createLocaleAlternates, localizedPath } from '@/lib/seo';
 
 // Không prerender slug lúc build (build không truy cập DB — decisions.md CR-031 P3-T02): render lần đầu theo yêu cầu rồi cache.
 export function generateStaticParams() {
   return [];
 }
+
+const productTitle: Record<Locale, (name: string) => string> = {
+  vi: (name) => `Ứng dụng ${name} | NTA`,
+  en: (name) => `${name} App | NTA`,
+  ja: (name) => `${name} アプリ | NTA`,
+};
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string; slug: string }> }): Promise<Metadata> {
   const { locale, slug } = await params;
@@ -22,7 +29,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const path = `/products/${product.slug}`;
   const name = product.brandName ?? product.title;
   return {
-    title: locale === 'vi' ? `Ứng dụng ${name} | NTA` : `${name} App | NTA`,
+    title: productTitle[locale](name),
     description: product.description,
     alternates: { canonical: localizedPath(locale, path), ...createLocaleAlternates(path) },
   };
@@ -39,11 +46,10 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
   const [t, product, tiles] = await Promise.all([getTranslations('products'), getProductBySlug(locale, slug), getDetailTiles(locale, slug)]);
   if (!product) notFound();
   const name = product.brandName ?? product.title;
-  const base = locale === 'en' ? '/en' : '';
 
   return (
     <>
-      <JsonLd data={createBreadcrumbJsonLd([{ name: locale === 'en' ? 'Home' : 'Trang chủ', path: locale === 'en' ? '/en' : '/' }, { name: t('title'), path: `${base}/products` }, { name, path: `${base}/products/${product.slug}` }])} />
+      <JsonLd data={await createLocaleBreadcrumbJsonLd(locale, [{ name: t('title'), path: `/products` }, { name, path: `/products/${product.slug}` }])} />
       <ShowcaseLayout breadcrumbs={[{ label: t('title'), href: '/products' }, { label: name }]} showcase={product.showcase} tiles={tiles} />
     </>
   );

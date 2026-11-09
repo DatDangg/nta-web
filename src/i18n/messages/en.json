@@ -18,7 +18,9 @@
       "prev": "Previous image",
       "next": "Next image",
       "counter": "{current} / {total}"
-    }
+    },
+    "skipToContent": "Skip to content",
+    "backToTop": "Back to top"
   },
   "nav": {
     "label": "Main navigation",
@@ -166,6 +168,7 @@
     }
   },
   "products": {
+    "detailTitle": "App details",
     "title": "Apps",
     "intro": "NTA mobile apps bring AI-enabled experiences closer to everyday users.",
     "screenshotAlt": "Illustrative interface — {title}",

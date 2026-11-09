@@ -9,7 +9,7 @@ import { getSolutionBySlug } from '@/lib/content/solutions';
 import { isLocale } from '@/lib/content/slug';
 import { getDetailTiles, isRegisteredSlug } from '@/lib/content/registry';
 import { JsonLd } from '@/components/seo/JsonLd';
-import { createBreadcrumbJsonLd } from '@/lib/seo/jsonld';
+import { createLocaleBreadcrumbJsonLd } from '@/lib/seo/breadcrumb';
 import { createLocaleAlternates, localizedPath } from '@/lib/seo';
 
 // Không prerender slug lúc build (build không truy cập DB — decisions.md CR-031 P3-T02): render lần đầu theo yêu cầu rồi cache.
@@ -48,7 +48,7 @@ export default async function AiSolutionDetailPage({ params }: { params: Promise
 
   return (
     <>
-      <JsonLd data={createBreadcrumbJsonLd([{ name: locale === 'en' ? 'Home' : 'Trang chủ', path: locale === 'en' ? '/en' : '/' }, { name: t('title'), path: `${locale === 'en' ? '/en' : ''}/solutions/ai` }, { name: solution.title, path: `${locale === 'en' ? '/en' : ''}/solutions/ai/${slug}` }])} />
+      <JsonLd data={await createLocaleBreadcrumbJsonLd(locale, [{ name: t('title'), path: `/solutions/ai` }, { name: solution.title, path: `/solutions/ai/${slug}` }])} />
       <ShowcaseLayout breadcrumbs={[{ label: t('title'), href: '/solutions/ai' }, { label: solution.brandName ?? solution.title }]} showcase={solution.showcase} tiles={tiles} />
       <CaseStudyLink caseStudy={relatedCase} linkLabel={t('caseStudyLink')} title={t('relatedCaseTitle')} />
       <CTAForm />

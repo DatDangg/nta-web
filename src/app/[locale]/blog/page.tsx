@@ -9,12 +9,13 @@ import { BlogListing } from '@/components/blog/BlogListing';
 import { getAllPosts } from '@/lib/content/posts';
 import type { Locale } from '@/content/types';
 import { JsonLd } from '@/components/seo/JsonLd';
-import { createBreadcrumbJsonLd } from '@/lib/seo/jsonld';
+import { isLocale } from '@/lib/content/slug';
+import { createLocaleBreadcrumbJsonLd } from '@/lib/seo/breadcrumb';
 import { createLocaleAlternates, localizedPath } from '@/lib/seo';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
-  if (locale !== 'vi' && locale !== 'en') notFound();
+  if (!isLocale(locale)) notFound();
   const t = await getTranslations({ locale, namespace: 'blog' });
   return {
     title: `${t('title')} | NTA`,
@@ -25,12 +26,12 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
 export default async function BlogPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
-  if (locale !== 'vi' && locale !== 'en') notFound();
+  if (!isLocale(locale)) notFound();
   setRequestLocale(locale);
   const [t, posts] = await Promise.all([getTranslations('blog'), getAllPosts(locale as Locale)]);
   return (
     <>
-      <JsonLd data={createBreadcrumbJsonLd([{ name: locale === 'en' ? 'Home' : 'Trang chủ', path: locale === 'en' ? '/en' : '/' }, { name: t('title'), path: `${locale === 'en' ? '/en' : ''}/blog` }])} />
+      <JsonLd data={await createLocaleBreadcrumbJsonLd(locale, [{ name: t('title'), path: `/blog` }])} />
       <ListingHero
         accent={t('heroAccent')}
         breadcrumbs={[{ label: t('title') }]}

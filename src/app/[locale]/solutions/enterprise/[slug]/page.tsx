@@ -7,9 +7,10 @@ import { CTAForm } from '@/components/contact/CTAForm';
 import { Container } from '@/components/ui/Container';
 import { getAllSolutions, getSolutionBySlug } from '@/lib/content/solutions';
 import { isLocale } from '@/lib/content/slug';
+import type { Locale } from '@/content/types';
 import { getDetailTiles } from '@/lib/content/registry';
 import { JsonLd } from '@/components/seo/JsonLd';
-import { createBreadcrumbJsonLd } from '@/lib/seo/jsonld';
+import { createLocaleBreadcrumbJsonLd } from '@/lib/seo/breadcrumb';
 import { createLocaleAlternates, localizedPath } from '@/lib/seo';
 
 // Không prerender slug lúc build (build không truy cập DB — decisions.md CR-031 P3-T02): render lần đầu theo yêu cầu rồi cache.
@@ -17,13 +18,19 @@ export function generateStaticParams() {
   return [];
 }
 
+const solutionTitle: Record<Locale, (brandName: string) => string> = {
+  vi: (brandName) => `Giải pháp ${brandName} | NTA`,
+  en: (brandName) => `${brandName} Solution | NTA`,
+  ja: (brandName) => `${brandName} ソリューション | NTA`,
+};
+
 export async function generateMetadata({ params }: { params: Promise<{ locale: string; slug: string }> }): Promise<Metadata> {
   const { locale, slug } = await params;
   if (!isLocale(locale)) notFound();
   const solution = await getSolutionBySlug(locale, slug);
   if (!solution || solution.category !== 'enterprise') notFound();
   const brandName = solution.brandName ?? solution.title;
-  const metadataTitle = locale === 'vi' ? `Giải pháp ${brandName} | NTA` : `${brandName} Solution | NTA`;
+  const metadataTitle = solutionTitle[locale](brandName);
   const path = `/solutions/enterprise/${solution.slug}`;
 
   return {
@@ -56,7 +63,7 @@ export default async function EnterpriseSolutionDetailPage({ params }: { params:
 
   return (
     <>
-      <JsonLd data={createBreadcrumbJsonLd([{ name: locale === 'en' ? 'Home' : 'Trang chủ', path: locale === 'en' ? '/en' : '/' }, { name: t('title'), path: `${locale === 'en' ? '/en' : ''}/solutions/enterprise` }, { name: solution.title, path: `${locale === 'en' ? '/en' : ''}/solutions/enterprise/${slug}` }])} />
+      <JsonLd data={await createLocaleBreadcrumbJsonLd(locale, [{ name: t('title'), path: `/solutions/enterprise` }, { name: solution.title, path: `/solutions/enterprise/${slug}` }])} />
       <ShowcaseLayout breadcrumbs={crumbs} showcase={solution.showcase} tiles={tiles} />
       {relatedSolutions.length > 0 && (
         <Container className="pb-12">

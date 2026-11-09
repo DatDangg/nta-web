@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
-import { getMessages, setRequestLocale } from 'next-intl/server';
+import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 import { Header } from '@/components/layout/Header';
@@ -8,7 +8,8 @@ import { Footer } from '@/components/layout/Footer';
 import { getSolutionsMenu } from '@/lib/content/solutions-menu';
 import { getCompanyContact } from '@/lib/contact/company-contact';
 import { createOrganizationJsonLd, createWebSiteJsonLd } from '@/lib/seo/jsonld';
-import { BASE_URL } from '@/lib/seo';
+import { BASE_URL, OG_LOCALE } from '@/lib/seo';
+import { isLocale } from '@/lib/content/slug';
 import { Inter } from 'next/font/google';
 import { MotionRoot } from '@/components/motion/MotionRoot';
 import { ScrollTopButton } from '@/components/motion/ScrollTopButton';
@@ -31,7 +32,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     metadataBase: new URL(BASE_URL),
     title: 'NTA | Giải pháp công nghệ doanh nghiệp',
     openGraph: {
-      type: 'website', siteName: 'NTA', locale: locale === 'en' ? 'en_US' : 'vi_VN',
+      type: 'website', siteName: 'NTA', locale: OG_LOCALE[isLocale(locale) ? locale : routing.defaultLocale],
       images: [{ url: '/images/og-default.png', width: 1200, height: 630 }],
     },
     twitter: { card: 'summary_large_image', images: ['/images/og-default.png'] },
@@ -58,6 +59,7 @@ export default async function LocaleLayout({
   setRequestLocale(locale);
   const messages = await getMessages();
   const contact = await getCompanyContact(locale);
+  const common = await getTranslations({ locale, namespace: 'common' });
 
   return (
     // `suppressHydrationWarning`: script dưới đây thêm class `js` vào <html> TRƯỚC khi
@@ -73,7 +75,7 @@ export default async function LocaleLayout({
         <style dangerouslySetInnerHTML={{ __html: AUTO_MOTION_CSS }} />
         <NextIntlClientProvider messages={messages}>
           <a className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-modal focus:rounded-full focus:bg-background focus:px-4 focus:py-3 focus:text-primary" href="#main">
-            {locale === 'vi' ? 'Bỏ qua tới nội dung' : 'Skip to content'}
+            {common('skipToContent')}
           </a>
           <Header solutionGroups={await getSolutionsMenu(locale)} />
           <main id="main" tabIndex={-1}>{children}</main>

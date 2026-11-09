@@ -6,20 +6,23 @@ import { ContactForm } from '@/components/contact/ContactForm';
 import { GlassVisual } from '@/components/listing/GlassVisual';
 import { ListingHero } from '@/components/listing/ListingHero';
 import { Container } from '@/components/ui/Container';
-import type { LocaleRecord } from '@/content/types';
+import type { Locale } from '@/content/types';
 import { getCompanyContact } from '@/lib/contact/company-contact';
-import { createBreadcrumbJsonLd, createContactPageJsonLd } from '@/lib/seo/jsonld';
+import { createContactPageJsonLd } from '@/lib/seo/jsonld';
 import { JsonLd } from '@/components/seo/JsonLd';
+import { isLocale } from '@/lib/content/slug';
+import { createLocaleBreadcrumbJsonLd } from '@/lib/seo/breadcrumb';
 import { createLocaleAlternates, localizedPath } from '@/lib/seo';
 
-const metadataByLocale: LocaleRecord<{ title: string; description: string }> = {
+const metadataByLocale: Record<Locale, { title: string; description: string }> = {
   vi: { title: 'Liên hệ | NTA', description: 'Liên hệ NTA qua hotline 0335546831, email admin@ntasolution.vn hoặc văn phòng tại tòa nhà Kim Hoàn, ngõ 19 Duy Tân, Cầu Giấy, Hà Nội. Đội ngũ NTA phản hồi trong 24h.' },
   en: { title: 'Contact | NTA', description: 'Contact NTA by phone 0335546831, email admin@ntasolution.vn or visit our office at Kim Hoan Building, Lane 19 Duy Tan, Cau Giay, Hanoi. Our team replies within 24 hours.' },
+  ja: { title: 'お問い合わせ | NTA', description: 'NTAへのお問い合わせは、電話 0335546831、メール admin@ntasolution.vn、またはハノイ市カウザイ区ズイタン通り19小路 キムホアンビルのオフィスまで。24時間以内にご返信します。' },
 };
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
-  if (locale !== 'vi' && locale !== 'en') notFound();
+  if (!isLocale(locale)) notFound();
   return {
     ...metadataByLocale[locale],
     alternates: { canonical: localizedPath(locale, 'contact'), ...createLocaleAlternates('contact') },
@@ -29,12 +32,12 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 /** Trang Liên hệ (R-10, spec 3.6.0): hero nền sóng + 2 card — thông tin/bản đồ (trái) và form (phải); `< lg` xếp 1 cột. */
 export default async function ContactPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
-  if (locale !== 'vi' && locale !== 'en') notFound();
+  if (!isLocale(locale)) notFound();
   setRequestLocale(locale);
   const t = await getTranslations('contact');
   const contact = await getCompanyContact(locale);
   return <>
-    <JsonLd data={createBreadcrumbJsonLd([{ name: locale === 'en' ? 'Home' : 'Trang chủ', path: locale === 'en' ? '/en' : '/' }, { name: t('title'), path: `${locale === 'en' ? '/en' : ''}/contact` }])} />
+    <JsonLd data={await createLocaleBreadcrumbJsonLd(locale, [{ name: t('title'), path: `/contact` }])} />
     <ListingHero
       accent={t('heroAccent')}
       breadcrumbs={[{ label: t('title') }]}

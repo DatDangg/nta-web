@@ -3,11 +3,11 @@
   "activeWorkItem": {
     "type": "feature",
     "slug": "add-japanese-locale",
-    "phaseTask": "phase-2-task-03",
+    "phaseTask": "phase-2-task-04",
     "step": "ready",
     "status": "awaiting",
-    "journal": ".context/runs/feature-add-japanese-locale-phase-2-task-02.md",
-    "note": "P2-T02 done (commit local, KHÔNG push — reviewer: không deploy trước P2-T03 vì Accept-Language ja → /ja 404 + hreflang/sitemap ja). next builder P2-T03 (guard page nhận ja + isLocale)."
+    "journal": ".context/runs/feature-add-japanese-locale-phase-2-task-03.md",
+    "note": "P2-T03 done (commit local, KHÔNG push). /ja chạy 200. next builder P2-T04 (LanguageToggle VI·EN·JA + font Noto Sans JP). Trước deploy: user dán lại tools/contact-mail/Code.gs lên Apps Script."
   },
   "features": [
     {
@@ -1691,8 +1691,11 @@
             {
               "task": "phase-2-task-03",
               "title": "pages bỏ guard vi/en, chữ theo locale, SEO hreflang/sitemap/JSON-LD, ngày ja-JP, contact locale ja",
-              "status": "pending",
-              "attempts": 0
+              "status": "done",
+              "attempts": 1,
+              "review": "STRICT PASS round 1",
+              "reviewReport": ".context/review-reports/feature-add-japanese-locale-phase-2-task-03-round-1-review.md",
+              "note": "guard → isLocale(routing.locales); breadcrumb helper + localeHref; metadata maps Record<Locale> có ja; og:locale/inLanguage ja; availableLanguage vi/en/ja; ngày ja 2026年11月9日; contact locale ja; Code.gs ja (user phải dán lại lên Apps Script TRƯỚC deploy); redirect R-08a.1 ja; sitemap chỉ alternate locale có thật. typecheck/lint/build PASS; npm test 227/230 (1 fail có sẵn uploads); smoke 15 route /ja 200 lang=ja, hreflang ja + x-default vi, slug sai 404. 4 MINOR (hreflang head [slug] vẫn liệt kê 3 locale - task riêng)"
             },
             {
               "task": "phase-2-task-04",

@@ -4,11 +4,12 @@ const englishDateFormat = new Intl.DateTimeFormat('en-US', { month: 'short', day
 
 /**
  * Single source of truth for blog post date display (R-09, list + detail).
- * VI → "08 Th10, 2026" (built by hand: Intl vi-VN prints "thg"), EN → "Oct 8, 2026".
+ * VI → "08 Th10, 2026" (built by hand: Intl vi-VN prints "thg"), EN → "Oct 8, 2026", JA → "2026年10月8日" (CR-044).
  * Reads the ISO `YYYY-MM-DD` parts directly so the shown day never shifts with the server/browser timezone.
  */
 export function formatPostDate(isoDate: string, locale: Locale): string {
   const [year, month, day] = isoDate.slice(0, 10).split('-').map(Number);
   if (locale === 'vi') return `${String(day).padStart(2, '0')} Th${month}, ${year}`;
+  if (locale === 'ja') return `${year}年${month}月${day}日`;
   return englishDateFormat.format(new Date(Date.UTC(year, month - 1, day)));
 }

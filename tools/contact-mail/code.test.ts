@@ -133,6 +133,12 @@ describe("Code.gs doPost — gửi mail", () => {
     assert.ok(h.mails[0].body.includes("Nhu cầu: new-product\n"));
   });
 
+  it("locale ja → nhận, dòng Ngôn ngữ: ja (CR-044)", () => {
+    const h = createHarness();
+    h.post(validPayload({ locale: "ja" }));
+    assert.ok(h.mails[0].body.includes("Ngôn ngữ: ja\n"));
+  });
+
   it("locale en → dòng Ngôn ngữ: en", () => {
     const h = createHarness();
     h.post(validPayload({ locale: "en" }));

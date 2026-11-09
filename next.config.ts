@@ -26,6 +26,7 @@ const nextConfig: NextConfig = {
       { source: '/case-studies/oc-eo-learning', destination: '/case-studies/heritage-site-ai-camera', statusCode: 301 },
       { source: '/vi/case-studies/oc-eo-learning', destination: '/case-studies/heritage-site-ai-camera', statusCode: 301 },
       { source: '/en/case-studies/oc-eo-learning', destination: '/en/case-studies/heritage-site-ai-camera', statusCode: 301 },
+      { source: '/ja/case-studies/oc-eo-learning', destination: '/ja/case-studies/heritage-site-ai-camera', statusCode: 301 },
     ];
   },
 };

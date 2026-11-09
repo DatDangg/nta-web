@@ -8,25 +8,27 @@ import type { ListingItem } from '@/components/listing/types';
 import { CTABanner } from '@/components/shared/CTABanner';
 import { compareCaseStudies, getAllCaseStudies } from '@/lib/content/case-studies';
 import { getListingCtas, getListingItems, getListingLabels, getListingPages } from '@/lib/content/registry';
-import type { LocaleRecord } from '@/content/types';
+import type { Locale } from '@/content/types';
 import { JsonLd } from '@/components/seo/JsonLd';
-import { createBreadcrumbJsonLd } from '@/lib/seo/jsonld';
+import { isLocale } from '@/lib/content/slug';
+import { createLocaleBreadcrumbJsonLd } from '@/lib/seo/breadcrumb';
 import { createLocaleAlternates, localizedPath } from '@/lib/seo';
 
-const pageMetadata: LocaleRecord<Metadata> = {
+const pageMetadata: Record<Locale, Metadata> = {
   vi: { title: 'Case Study | NTA', description: 'Khám phá các dự án số hóa NTA đã triển khai cho doanh nghiệp và tổ chức, từ quản lý vận hành đến chuyển đổi số quy trình làm việc thực tế tại Việt Nam.' },
   en: { title: 'Case Studies | NTA', description: 'Explore digital projects delivered by NTA for businesses and organizations, from operations management to real-world digital transformation of workflows.' },
+  ja: { title: '導入事例 | NTA', description: '業務管理から現場のワークフローのデジタル化まで、NTAが企業・組織向けに手がけたデジタルプロジェクトをご紹介します。' },
 };
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
-  if (locale !== 'vi' && locale !== 'en') notFound();
+  if (!isLocale(locale)) notFound();
   return { ...pageMetadata[locale], alternates: { canonical: localizedPath(locale, 'case-studies'), ...createLocaleAlternates('case-studies') } };
 }
 
 export default async function CaseStudiesPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
-  if (locale !== 'vi' && locale !== 'en') notFound();
+  if (!isLocale(locale)) notFound();
   setRequestLocale(locale);
   const [t, studies, cta, listingPages, listingItems, listingCtas, listingLabels] = await Promise.all([
     getTranslations('caseStudies'), getAllCaseStudies(locale), getTranslations('solutions.ai'),
@@ -59,7 +61,7 @@ export default async function CaseStudiesPage({ params }: { params: Promise<{ lo
 
   return (
     <>
-      <JsonLd data={createBreadcrumbJsonLd([{ name: locale === 'en' ? 'Home' : 'Trang chủ', path: locale === 'en' ? '/en' : '/' }, { name: t('title'), path: `${locale === 'en' ? '/en' : ''}/case-studies` }])} />
+      <JsonLd data={await createLocaleBreadcrumbJsonLd(locale, [{ name: t('title'), path: `/case-studies` }])} />
       <ListingHero
         accent={copy.accent}
         breadcrumbs={copy.crumbs.map((label) => ({ label }))}

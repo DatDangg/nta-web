@@ -8,12 +8,13 @@ import { MilestoneTimeline } from '@/components/about/MilestoneTimeline';
 import { PartnerLogos } from '@/components/about/PartnerLogos';
 import { CTABanner } from '@/components/shared/CTABanner';
 import { getAboutData } from '@/lib/content/about';
-import type { LocaleRecord } from '@/content/types';
+import type { Locale } from '@/content/types';
 import { JsonLd } from '@/components/seo/JsonLd';
-import { createBreadcrumbJsonLd } from '@/lib/seo/jsonld';
+import { isLocale } from '@/lib/content/slug';
+import { createLocaleBreadcrumbJsonLd } from '@/lib/seo/breadcrumb';
 import { createLocaleAlternates, localizedPath } from '@/lib/seo';
 
-const aboutMetadata: LocaleRecord<{ title: string; description: string }> = {
+const aboutMetadata: Record<Locale, { title: string; description: string }> = {
   vi: {
     title: 'Về NTA | NTA',
     description: 'Tìm hiểu về NTA và năng lực phát triển giải pháp doanh nghiệp, trí tuệ nhân tạo cùng ứng dụng di động thực tế cho doanh nghiệp và tổ chức tại Việt Nam.',
@@ -22,11 +23,15 @@ const aboutMetadata: LocaleRecord<{ title: string; description: string }> = {
     title: 'About NTA | NTA',
     description: 'Learn about NTA and our expertise in enterprise solutions, artificial intelligence and practical mobile apps for businesses and organizations across Vietnam.',
   },
+  ja: {
+    title: 'NTAについて | NTA',
+    description: 'NTAの企業向けソリューション、人工知能、実用的なモバイルアプリの開発力について、ベトナムの企業・組織への取り組みとともにご紹介します。',
+  },
 };
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
-  if (locale !== 'vi' && locale !== 'en') notFound();
+  if (!isLocale(locale)) notFound();
   const metadata = aboutMetadata[locale];
   return {
     title: metadata.title,
@@ -37,14 +42,14 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
 export default async function AboutPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
-  if (locale !== 'vi' && locale !== 'en') notFound();
+  if (!isLocale(locale)) notFound();
   setRequestLocale(locale);
   const [t, about] = await Promise.all([getTranslations('about'), getAboutData(locale)]);
   if (!about) notFound();
 
   return (
     <>
-      <JsonLd data={createBreadcrumbJsonLd([{ name: locale === 'en' ? 'Home' : 'Trang chủ', path: locale === 'en' ? '/en' : '/' }, { name: t('title'), path: `${locale === 'en' ? '/en' : ''}/about` }])} />
+      <JsonLd data={await createLocaleBreadcrumbJsonLd(locale, [{ name: t('title'), path: `/about` }])} />
       <AboutHero />
       <AboutValues />
       <AboutPeople />

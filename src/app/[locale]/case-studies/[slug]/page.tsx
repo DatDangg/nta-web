@@ -14,8 +14,8 @@ import { getAllCaseStudies, getCaseStudyBySlug } from '@/lib/content/case-studie
 import { getDetailTiles } from '@/lib/content/registry';
 import { isLocale } from '@/lib/content/slug';
 import { JsonLd } from '@/components/seo/JsonLd';
-import { createBreadcrumbJsonLd } from '@/lib/seo/jsonld';
-import { createLocaleAlternates, localizedPath } from '@/lib/seo';
+import { createLocaleBreadcrumbJsonLd } from '@/lib/seo/breadcrumb';
+import { createLocaleAlternates, LANGUAGE_TAG, localizedPath } from '@/lib/seo';
 
 // Không prerender slug lúc build (build không truy cập DB — decisions.md CR-031 P3-T02): render lần đầu theo yêu cầu rồi cache.
 export function generateStaticParams() {
@@ -49,10 +49,10 @@ export default async function CaseStudyDetailPage({ params }: { params: Promise<
   });
   const jsonLd = {
     '@context': 'https://schema.org', '@type': 'Article',
-    headline: study.title, description: study.result, inLanguage: locale === 'en' ? 'en-US' : 'vi-VN',
+    headline: study.title, description: study.result, inLanguage: LANGUAGE_TAG[locale],
     author: { '@type': 'Organization', name: 'NTA' }, publisher: { '@type': 'Organization', name: 'NTA' },
   };
-  const breadcrumbJsonLd = createBreadcrumbJsonLd([{ name: locale === 'en' ? 'Home' : 'Trang chủ', path: locale === 'en' ? '/en' : '/' }, { name: t('title'), path: `${locale === 'en' ? '/en' : ''}/case-studies` }, { name: study.title, path: `${locale === 'en' ? '/en' : ''}/case-studies/${slug}` }]);
+  const breadcrumbJsonLd = await createLocaleBreadcrumbJsonLd(locale, [{ name: t('title'), path: `/case-studies` }, { name: study.title, path: `/case-studies/${slug}` }]);
 
   // Bố cục landing (ảnh mẫu Óc Eo): hero riêng có breadcrumb, CTA thẻ bo góc thay CTABanner.
   if (study.layout === 'showcase' && study.showcase) {

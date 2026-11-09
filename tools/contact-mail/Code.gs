@@ -26,6 +26,8 @@ var NEED_LABELS_ = {
   'custom-software': 'Phát triển phần mềm theo yêu cầu',
   other: 'Khác',
 };
+// Khớp routing.locales (src/i18n/routing.ts) — thêm locale ở web thì thêm ở đây rồi DÁN LẠI script lên Apps Script (CR-044).
+var SUPPORTED_LOCALES_ = ['vi', 'en', 'ja'];
 var REQUIRED_FIELDS_ = ['name', 'email', 'message'];
 var OPTIONAL_FIELDS_ = ['phone', 'company', 'need'];
 // Email khách dùng làm replyTo → đúng 1 địa chỉ dạng x@y: cấm khoảng trắng/ký tự điều khiển (chèn header) và , ; < > " (nhiều
@@ -110,7 +112,7 @@ function isValidToken_(given, expected) {
 
 /** Chốt an toàn LỎNG hơn validate của web (G5): mọi payload web chấp nhận thì ở đây phải chấp nhận. */
 function validatePayload_(p) {
-  if (p.locale !== 'vi' && p.locale !== 'en') return false;
+  if (SUPPORTED_LOCALES_.indexOf(p.locale) === -1) return false;
   for (var i = 0; i < REQUIRED_FIELDS_.length; i++) {
     var required = p[REQUIRED_FIELDS_[i]];
     if (typeof required !== 'string' || required.trim() === '' || required.length > MAX_FIELD_LENGTH_) return false;

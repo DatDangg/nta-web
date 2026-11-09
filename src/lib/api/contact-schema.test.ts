@@ -18,8 +18,8 @@ test('contact-schema locale: thiếu hoặc rỗng → vi', () => {
   }
 });
 
-test('contact-schema locale: en giữ nguyên, vi giữ nguyên', () => {
-  for (const locale of ['en', 'vi'] as const) {
+test('contact-schema locale: vi/en/ja giữ nguyên (CR-044)', () => {
+  for (const locale of ['en', 'vi', 'ja'] as const) {
     const result = validateContactForm({ ...VALID_INPUT, locale });
     assert.equal(result.success, true);
     if (result.success) assert.equal(result.data.locale, locale);
@@ -27,7 +27,7 @@ test('contact-schema locale: en giữ nguyên, vi giữ nguyên', () => {
 });
 
 test('contact-schema locale: giá trị lạ / không phải chuỗi → errors.locale', () => {
-  for (const locale of ['fr', 'EN', 1, null, true]) {
+  for (const locale of ['fr', 'EN', 'JA', 'jp', 1, null, true]) {
     assert.ok(errorsOf({ ...VALID_INPUT, locale }).locale, `locale=${String(locale)} phải lỗi`);
   }
 });

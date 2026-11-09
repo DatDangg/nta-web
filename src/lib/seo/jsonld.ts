@@ -1,4 +1,6 @@
-import { BASE_URL as SITE_URL } from '@/lib/seo';
+import { BASE_URL as SITE_URL, LANGUAGE_TAG, localeHref } from '@/lib/seo';
+import { routing } from '@/i18n/routing';
+import type { Locale } from '@/content/types';
 import type { CompanyContact } from '@/lib/contact/company-info';
 
 /** Thông tin liên hệ của Organization (R-10 §6) — cùng nguồn (getCompanyContact) với trang Liên hệ + Footer. */
@@ -15,7 +17,7 @@ function organizationContact({ phone, email, address }: CompanyContact) {
     },
     contactPoint: {
       '@type': 'ContactPoint', contactType: 'customer service',
-      telephone: phone.e164, email: email.display, availableLanguage: ['vi', 'en'],
+      telephone: phone.e164, email: email.display, availableLanguage: [...routing.locales],
     },
   };
 }
@@ -28,10 +30,10 @@ export function createOrganizationJsonLd(contact: CompanyContact) {
   };
 }
 
-export function createWebSiteJsonLd(locale: string) {
+export function createWebSiteJsonLd(locale: Locale) {
   return {
     '@context': 'https://schema.org', '@type': 'WebSite', name: 'NTA',
-    url: SITE_URL, inLanguage: locale === 'en' ? 'en-US' : 'vi-VN',
+    url: SITE_URL, inLanguage: LANGUAGE_TAG[locale],
   };
 }
 
@@ -54,11 +56,13 @@ export function createArticleJsonLd(article: { title: string; url: string; date:
   };
 }
 
-export function createContactPageJsonLd(locale: string, contact: CompanyContact) {
+const CONTACT_PAGE_NAME: Record<Locale, string> = { vi: 'Liên hệ NTA', en: 'Contact NTA', ja: 'NTAへのお問い合わせ' };
+
+export function createContactPageJsonLd(locale: Locale, contact: CompanyContact) {
   return {
     '@context': 'https://schema.org', '@type': 'ContactPage',
-    url: `${SITE_URL}${locale === 'en' ? '/en' : ''}/contact`,
-    name: locale === 'en' ? 'Contact NTA' : 'Liên hệ NTA',
+    url: `${SITE_URL}${localeHref(locale, 'contact')}`,
+    name: CONTACT_PAGE_NAME[locale],
     mainEntity: { '@type': 'Organization', name: 'NTA', url: SITE_URL, ...organizationContact(contact) },
   };
 }

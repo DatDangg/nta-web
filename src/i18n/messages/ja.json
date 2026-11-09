@@ -18,7 +18,9 @@
       "prev": "前の画像",
       "next": "次の画像",
       "counter": "{current} / {total}"
-    }
+    },
+    "skipToContent": "本文へスキップ",
+    "backToTop": "ページの先頭へ"
   },
   "nav": {
     "label": "メインナビゲーション",
@@ -166,6 +168,7 @@
     }
   },
   "products": {
+    "detailTitle": "アプリの詳細",
     "title": "アプリ",
     "intro": "NTAのモバイルアプリは、AIを活用した体験を日常のユーザーに身近なものにします。",
     "screenshotAlt": "画面イメージ — {title}",

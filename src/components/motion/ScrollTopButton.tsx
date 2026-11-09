@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { useLocale } from 'next-intl';
+import { useTranslations } from 'next-intl';
 
 const RADIUS = 20;
 const CIRC = 2 * Math.PI * RADIUS;
@@ -11,7 +11,7 @@ const CIRC = 2 * Math.PI * RADIUS;
  * kèm vòng tiến độ cuộn. Hiện sau khi cuộn quá 600px.
  */
 export function ScrollTopButton() {
-  const locale = useLocale();
+  const t = useTranslations('common');
   const [visible, setVisible] = useState(false);
   const ringRef = useRef<SVGCircleElement>(null);
 
@@ -43,7 +43,7 @@ export function ScrollTopButton() {
 
   return (
     <button
-      aria-label={locale === 'vi' ? 'Lên đầu trang' : 'Back to top'}
+      aria-label={t('backToTop')}
       className={`group fixed bottom-5 right-5 z-sticky flex size-12 items-center justify-center rounded-full bg-surface text-primary-active shadow-md transition-[opacity,transform,box-shadow] duration-slow ease-out-expo hover:shadow-lg md:bottom-8 md:right-8 ${visible ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-4 opacity-0'}`}
       onClick={toTop}
       tabIndex={visible ? 0 : -1}

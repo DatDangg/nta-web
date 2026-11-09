@@ -18,7 +18,9 @@
       "prev": "Ảnh trước",
       "next": "Ảnh sau",
       "counter": "{current} / {total}"
-    }
+    },
+    "skipToContent": "Bỏ qua tới nội dung",
+    "backToTop": "Lên đầu trang"
   },
   "nav": {
     "label": "Điều hướng chính",
@@ -166,6 +168,7 @@
     }
   },
   "products": {
+    "detailTitle": "Chi tiết ứng dụng",
     "title": "Sản phẩm app",
     "intro": "Các ứng dụng di động của NTA mang trải nghiệm AI đến gần hơn với người dùng.",
     "screenshotAlt": "Giao diện minh hoạ — {title}",

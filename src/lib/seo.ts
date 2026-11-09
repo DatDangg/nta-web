@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { routing } from '@/i18n/routing';
+import type { Locale } from '@/content/types';
 
 // ntavietnam.tech là canonical cho cả ntasolution.vn (quyết định 13/10/2026).
 export const CANONICAL_SITE_URL = 'https://ntavietnam.tech';
@@ -34,3 +35,14 @@ export function createLocaleAlternates(pathname = ''): NonNullable<Metadata['alt
 
   return { languages };
 }
+
+/** Đường dẫn tương đối theo locale (vi mặc định không prefix — localePrefix 'as-needed'); trang chủ vi → "/". */
+export function localeHref(locale: string, pathname = ''): string {
+  return localizedSegments(locale, pathname) || '/';
+}
+
+/** Mã ngôn ngữ BCP 47 cho JSON-LD `inLanguage`. */
+export const LANGUAGE_TAG: Record<Locale, string> = { vi: 'vi-VN', en: 'en-US', ja: 'ja-JP' };
+
+/** Mã locale Open Graph (`og:locale`). */
+export const OG_LOCALE: Record<Locale, string> = { vi: 'vi_VN', en: 'en_US', ja: 'ja_JP' };

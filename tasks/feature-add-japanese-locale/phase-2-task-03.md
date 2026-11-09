@@ -26,7 +26,9 @@
 Max 3 attempt; fail lần 3 → `architecture_review_needed` (không fix #4). Mỗi failed attempt append `.context/error-memory.md`.
 
 ## Verification summary
-- Acceptance criteria: _pending_
-- Verify commands + result: _pending_ (`npm run typecheck`, `npm run lint`, `npm test`, `npm run build` — lấy từ `.context/project-config.md`)
-- Reviewer verdict: _pending_
-- Doc impact: _pending_
+- Status: **done** (attempt 1, 2026-11-09)
+- Acceptance criteria: PASS — smoke `next start` file mode: /ja, /ja/about, /ja/solutions/ai(+boxai), /ja/solutions/enterprise(+crm), /ja/products(+music-app), /ja/case-studies(+heritage-site-ai-camera), /ja/blog(+ai-weekly-2026-w42), /ja/contact → 200, `<html lang="ja">`, hreflang ja + x-default → URL vi; / lang vi, /en lang en; slug sai dưới /ja → 404; /ja/case-studies/oc-eo-learning → 301; Accept-Language ja → 307 /ja; sitemap 78 hreflang ja. DB mode chưa smoke (không có DB dev).
+- Verify commands + result: `npm run typecheck` PASS · `npm run lint` PASS (1 warning cũ) · `npm test` 230: 227 pass / 1 fail có sẵn (tools/db/content-rules.test.ts thiếu /uploads local) / 2 skip · `SWC_NATIVE_BINDING_CACHE=... npm run build` PASS.
+- Reviewer verdict: STRICT PASS round 1 — `.context/review-reports/feature-add-japanese-locale-phase-2-task-03-round-1-review.md` (4 MINOR: hreflang <head> trang [slug] vẫn liệt kê 3 locale (có sẵn, task riêng); Code.gs phải dán lại TRƯỚC deploy; isLocale tự viết giống hasLocale; API_SPEC ở P3-T02).
+- Doc impact: `docs/API_SPEC.md` locale vi|en|ja → reconcile ở P3-T02 (theo plan).
+- Residual risk: user phải dán lại `tools/contact-mail/Code.gs` lên Apps Script trước khi deploy ja; `src/db/content-repo.ts:175` pairLocale vi↔en (DB layer, soát ở P3); LanguageToggle chưa có JA (P2-T04).

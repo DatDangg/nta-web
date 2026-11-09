@@ -1,4 +1,6 @@
 import { COMPANY_MAX_LENGTH, isContactNeed, type ContactNeed } from '@/lib/contact/company-info';
+import { isLocale } from '@/lib/content/slug';
+import type { Locale } from '@/content/types';
 
 export type ContactForm = {
   name: string;
@@ -12,7 +14,8 @@ export type ContactForm = {
   locale: ContactLocale;
 };
 
-export type ContactLocale = 'vi' | 'en';
+/** = locale web (routing.locales: vi | en | ja) — thêm locale ở routing là form tự nhận (CR-044). */
+export type ContactLocale = Locale;
 
 export type ContactValidation =
   | { success: true; data: ContactForm }
@@ -35,7 +38,8 @@ export function validateContactForm(input: unknown): ContactValidation {
   const need = typeof body.need === 'string' ? body.need : undefined;
   const message = typeof body.message === 'string' ? body.message.trim() : '';
   const honeypot = typeof body.honeypot === 'string' ? body.honeypot : undefined;
-  const locale = body.locale === undefined || body.locale === '' ? 'vi' : body.locale;
+  const rawLocale = body.locale === undefined || body.locale === '' ? 'vi' : body.locale;
+  const locale = typeof rawLocale === 'string' && isLocale(rawLocale) ? rawLocale : undefined;
 
   if (name.length < 2 || name.length > 100) {
     errors.name = 'Tên phải có từ 2 đến 100 ký tự';
@@ -59,7 +63,7 @@ export function validateContactForm(input: unknown): ContactValidation {
   if (message.length < 10 || message.length > 2000) {
     errors.message = 'Nội dung phải có từ 10 đến 2000 ký tự';
   }
-  if (locale !== 'vi' && locale !== 'en') {
+  if (locale === undefined) {
     errors.locale = 'Ngôn ngữ không hợp lệ';
   }
   if (honeypot === undefined) {
@@ -80,7 +84,7 @@ export function validateContactForm(input: unknown): ContactValidation {
       need: need && isContactNeed(need) ? need : undefined,
       message,
       honeypot: honeypot ?? '',
-      locale: locale === 'en' ? 'en' : 'vi',
+      locale: locale ?? 'vi',
     },
   };
 }
