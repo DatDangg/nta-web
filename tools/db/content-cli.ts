@@ -8,7 +8,7 @@
 //   npm run db:cli -- upload <file> [--alt-vi "..."] [--alt-en "..."] [--alt-ja "..."] [--confirm-prod]   (P3-T05: lưu ảnh vào UPLOAD_DIR + bản ghi asset)
 //     URL endpoint từ REVALIDATE_URL (vd http://127.0.0.1:3005/api/revalidate), secret từ REVALIDATE_SECRET.
 //   npm run db:cli -- publish-post <slug> [--dry-run] [--images-dir <dir>] [--actor workflow:ai-news] [--note "..."] [--confirm-prod]   (CR-034)
-//     Đăng src/content/blog/{vi,en}/<slug>.mdx vào DB — CHỈ chèn; bản đã có (kể cả xoá mềm) → exists. Mỗi locale in 1 dòng
+//     Đăng src/content/blog/{vi,en,ja}/<slug>.mdx vào DB (ja tuỳ chọn — thiếu file ja thì bỏ qua, CR-044) — CHỈ chèn; bản đã có (kể cả xoá mềm) → exists. Mỗi locale in 1 dòng
 //     "publish-post post/<locale>/<slug> status=missing|exists|created" (workflow ai-news grep status=missing để quyết định backup).
 //     --images-dir (CR-035): thư mục <sha256>.<ext> + manifest.json (tools/ai-news/generate.py). Ảnh /uploads/* bài còn thiếu chưa có
 //     asset → kiểm (manifest, không symlink, magic bytes ≤ 5 MB, sha256 == tên) rồi lưu vào UPLOAD_DIR + asset TRƯỚC khi chèn bài.
@@ -216,7 +216,7 @@ async function runUpload(db: Database, file: string | undefined, values: CliValu
 
 async function runPublishPost(db: Database, slug: string | undefined, values: CliValues): Promise<void> {
   if (!slug) throw new UsageError("thiếu <slug>");
-  const { posts, images, warnings } = await publishPost(db, {
+  const { posts, images, warnings, skippedLocales } = await publishPost(db, {
     slug,
     dryRun: values["dry-run"] === true,
     actor: values.actor ?? PUBLISH_POST_ACTOR,
@@ -224,6 +224,8 @@ async function runPublishPost(db: Database, slug: string | undefined, values: Cl
     imagesDir: values["images-dir"],
   });
   for (const warning of warnings) console.warn(`[cảnh báo] ${warning}`);
+  // stderr, không dạng "status=" → workflow ai-news không coi là bài cần ghi.
+  for (const locale of skippedLocales) console.warn(`[info] post/${locale}/${slug}: không có file ${locale} — bỏ qua`);
   for (const image of images) console.log(`publish-post image ${image.path} status=${image.status}`);
   for (const result of posts) {
     for (const warning of result.warnings) console.warn(`[cảnh báo] ${result.key}: ${warning}`);

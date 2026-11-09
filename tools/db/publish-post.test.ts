@@ -33,16 +33,18 @@ const REAL_BLOG_DIR = path.resolve("tools/db/fixtures/blog");
 const actor = "workflow:ai-news";
 const note = defaultPublishNote(SLUG, "123456");
 
-async function makeBlogDir(files: Partial<Record<"vi" | "en", string>>): Promise<string> {
+async function makeBlogDir(files: Partial<Record<"vi" | "en" | "ja", string>>, slug = SLUG): Promise<string> {
   const blogDir = await mkdtemp(path.join(tmpdir(), "nta-publish-"));
   for (const [locale, source] of Object.entries(files)) {
     await mkdir(path.join(blogDir, locale), { recursive: true });
-    await writeFile(path.join(blogDir, locale, `${SLUG}.mdx`), source, "utf8");
+    await writeFile(path.join(blogDir, locale, `${slug}.mdx`), source.replace(`slug: "${SLUG}"`, `slug: "${slug}"`), "utf8");
   }
   return blogDir;
 }
 
 const realSource = (locale: "vi" | "en") => readFile(path.join(REAL_BLOG_DIR, locale, `${SLUG}.mdx`), "utf8");
+// Bản ja (CR-044) dựng từ fixture en đổi title — nội dung chữ không ảnh hưởng validate DB.
+const jaSource = async () => (await realSource("en")).replace(/^title: ".*"$/m, 'title: "AIウィークリーダイジェスト — 2026年10月14日"');
 
 describe("publish-post (không cần DB)", () => {
   // Pool chưa kết nối — các ca dưới phải lỗi TRƯỚC khi chạm DB.
@@ -58,6 +60,15 @@ describe("publish-post (không cần DB)", () => {
   it("slug lạ (path traversal) → lỗi validate, không đọc file", async () => {
     const options: PublishPostOptions = { slug: "../secret", dryRun: true, actor, note };
     await assert.rejects(publishPost(idleDb, options), ContentValidationError);
+  });
+
+  it("thiếu file vi (dù có en + ja) → ContentNotFoundError trước khi chạm DB — ja không thay được vi/en", async () => {
+    const blogDir = await makeBlogDir({ en: await realSource("en"), ja: await jaSource() });
+    try {
+      await assert.rejects(publishPost(idleDb, { slug: SLUG, dryRun: true, actor, note, blogDir }), ContentNotFoundError);
+    } finally {
+      await rm(blogDir, { recursive: true, force: true });
+    }
   });
 
   it("thiếu file 1 locale → ContentNotFoundError trước khi chạm DB", async () => {
@@ -113,11 +124,13 @@ describe("publish-post (Postgres)", { skip }, () => {
   });
 
   it("dry-run: báo missing cả 2 locale, không ghi", async () => {
-    const { posts: results } = await publishPost(db, { slug: SLUG, dryRun: true, actor, note });
+    const { posts: results, skippedLocales } = await publishPost(db, { slug: SLUG, dryRun: true, actor, note });
     assert.deepEqual(results.map((result) => [result.key, result.status]), [
       [`post/vi/${SLUG}`, "missing"],
       [`post/en/${SLUG}`, "missing"],
     ]);
+    // Bài tuần cũ (trước CR-044) không có file ja → bỏ qua ja, không lỗi.
+    assert.deepEqual(skippedLocales, ["ja"]);
     assert.equal((await postEntries()).length, 0);
   });
 
@@ -177,6 +190,64 @@ describe("publish-post (Postgres)", { skip }, () => {
       assert.equal((await listVersions(db, existingEn.entry.id)).length, 1);
     } finally {
       await rm(blogDir, { recursive: true, force: true });
+    }
+  });
+
+  // CR-044 P3-T01: bài tuần mới có 3 locale vi/en/ja.
+  it("3 locale: ja lỗi → vi/en cũng không ghi; dry-run missing ×3; ghi created ×3; chạy lại exists ×3, 0 ghi", async () => {
+    const jaSlug = "ai-weekly-2026-w50";
+    const sources = { vi: await realSource("vi"), en: await realSource("en"), ja: await jaSource() };
+    const badJaDir = await makeBlogDir({ ...sources, ja: sources.ja.replace("/images/blog/ai-weekly-cover.svg", "/images/blog/khong-co.svg") }, jaSlug);
+    const blogDir = await makeBlogDir(sources, jaSlug);
+    const countFor = async () => (await postEntries()).filter((entry) => entry.slug === jaSlug).length;
+    try {
+      await assert.rejects(publishPost(db, { slug: jaSlug, dryRun: false, actor, note, blogDir: badJaDir }), /post\/ja\/.*I-7/);
+      assert.equal(await countFor(), 0);
+
+      const dry = await publishPost(db, { slug: jaSlug, dryRun: true, actor, note, blogDir });
+      assert.deepEqual(dry.posts.map((result) => [result.key, result.status]), [
+        [`post/vi/${jaSlug}`, "missing"],
+        [`post/en/${jaSlug}`, "missing"],
+        [`post/ja/${jaSlug}`, "missing"],
+      ]);
+      assert.deepEqual(dry.skippedLocales, []);
+      assert.equal(await countFor(), 0);
+
+      const created = await publishPost(db, { slug: jaSlug, dryRun: false, actor, note, blogDir });
+      assert.deepEqual(created.posts.map((result) => result.status), ["created", "created", "created"]);
+      const ja = await getEntryByKey(db, { collection: "post", locale: "ja", slug: jaSlug });
+      assert.ok(ja);
+      assert.equal(ja.version, 1);
+      assert.equal((ja.data as Record<string, unknown>).title, "AIウィークリーダイジェスト — 2026年10月14日");
+
+      const again = await publishPost(db, { slug: jaSlug, dryRun: false, actor, note: "lần 2", blogDir });
+      assert.deepEqual(again.posts.map((result) => result.status), ["exists", "exists", "exists"]);
+      assert.equal(await countFor(), 3);
+      assert.equal((await listVersions(db, ja.id)).length, 1);
+    } finally {
+      await rm(badJaDir, { recursive: true, force: true });
+      await rm(blogDir, { recursive: true, force: true });
+    }
+  });
+
+  it("tuần cũ đã có vi/en trong DB, nay có thêm file ja → chỉ chèn ja; không có file ja → không ghi gì", async () => {
+    const oldSlug = "ai-weekly-2026-w51";
+    const viEnDir = await makeBlogDir({ vi: await realSource("vi"), en: await realSource("en") }, oldSlug);
+    const fullDir = await makeBlogDir({ vi: await realSource("vi"), en: await realSource("en"), ja: await jaSource() }, oldSlug);
+    try {
+      await publishPost(db, { slug: oldSlug, dryRun: false, actor, note, blogDir: viEnDir });
+      const before = (await postEntries()).length;
+      const rerun = await publishPost(db, { slug: oldSlug, dryRun: false, actor, note, blogDir: viEnDir });
+      assert.deepEqual(rerun.posts.map((result) => [result.locale, result.status]), [["vi", "exists"], ["en", "exists"]]);
+      assert.deepEqual(rerun.skippedLocales, ["ja"]);
+      assert.equal((await postEntries()).length, before);
+
+      const withJa = await publishPost(db, { slug: oldSlug, dryRun: false, actor, note, blogDir: fullDir });
+      assert.deepEqual(withJa.posts.map((result) => [result.locale, result.status]), [["vi", "exists"], ["en", "exists"], ["ja", "created"]]);
+      assert.equal((await postEntries()).length, before + 1);
+    } finally {
+      await rm(viEnDir, { recursive: true, force: true });
+      await rm(fullDir, { recursive: true, force: true });
     }
   });
 });

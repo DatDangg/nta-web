@@ -652,7 +652,8 @@ class RenderImagesTest(unittest.TestCase):
         base = fixture_items()[0]
         items = [dict(base, url=f"https://example.com/n{i}", title_vi="t" * generate.TITLE_MAX,
                       title_en="t" * generate.TITLE_MAX, summary_vi="s" * generate.SUMMARY_MAX,
-                      summary_en="s" * generate.SUMMARY_MAX, source="x" * generate.SOURCE_MAX)
+                      summary_en="s" * generate.SUMMARY_MAX, title_ja="タ" * generate.TITLE_MAX,
+                      summary_ja="要" * generate.SUMMARY_MAX, source="x" * generate.SOURCE_MAX)
                  for i in range(generate.MAX_ITEMS)]
         image = og_image.inspect_image(png_bytes(8192, 8192))
         images = {i: image for i in range(1, generate.MAX_ITEMS + 1)}
@@ -714,7 +715,8 @@ class CliImagesTest(unittest.TestCase):
         self.assertEqual(first, {"file": f"{jpg_sha}.jpg", "sha256": jpg_sha, "ext": "jpg", "width": 1200, "height": 630,
                                  "bytes": len(jpg), "sourceHost": "reddit.com",
                                  "alt": {"vi": "Mô hình mở mới dẫn đầu bảng xếp hạng lập trình",
-                                         "en": "New open-weight model leads a coding benchmark"}})
+                                         "en": "New open-weight model leads a coding benchmark",
+                                         "ja": "新しいオープンウェイトモデルがコーディングベンチマークで首位に"}})
         self.assertEqual(sorted(os.listdir(self.images)), sorted([f"{jpg_sha}.jpg", f"{webp_sha}.webp", "manifest.json"]))
         with open(os.path.join(self.images, f"{webp_sha}.webp"), "rb") as fh:
             self.assertEqual(fh.read(), webp)

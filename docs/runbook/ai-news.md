@@ -1,7 +1,7 @@
 # Runbook — Bản tin AI tuần (CR-019, spec R-09c)
 
 Workflow `.github/workflows/ai-news.yml` — mỗi thứ 7 lúc 08:00 giờ VN (`cron: '0 1 * * 6'` UTC; CR-036 đổi từ thứ 2) tự thu thập
-tin AI 7 ngày, nhờ OpenCode Go viết 2 bài `src/content/blog/{vi,en}/ai-weekly-YYYY-wNN.mdx` (category `ai-tech`),
+tin AI 7 ngày, nhờ OpenCode Go viết 3 bài `src/content/blog/{vi,en,ja}/ai-weekly-YYYY-wNN.mdx` (category `ai-tech`; ja từ CR-044 — xem § Bản ja),
 kèm **ảnh tin** (og:image của trang tin, lưu về `/uploads`, CR-035), build PASS → commit file seed thẳng `main` → **chèn bài vào DB prod** (job `publish-db`, CR-034) → revalidate → smoke.
 Code: `tools/ai-news/` (xem `tools/ai-news/README.md`) + lệnh `publish-post` của `tools/db/content-cli.ts`.
 
@@ -18,6 +18,21 @@ en `AI Weekly Digest — D Mon YYYY` (vd `3 Oct 2026`); slug vẫn `ai-weekly-YY
 Đổi ảnh fallback: thay file `public/images/blog/ai-weekly-cover.webp` **giữ nguyên tên** (commit thường + deploy). `ai-weekly-cover.svg` giữ lại
 cho bài cũ / version v1 trong DB — không xoá.
 
+## Bản ja (CR-044, R-09c 4.12.0)
+
+- LLM trả thêm `title_ja`/`summary_ja` cùng mỗi tin (cùng slug, cùng tin, cùng ảnh/cover với vi/en). Guard y như vi/en, đếm theo **ký tự**:
+  title 5–140, summary 20–420 (dùng chung ngưỡng vi/en — chữ Nhật dày hơn nên đây là trần rộng; sàn vẫn loại chuỗi rỗng/vụn), không chứa URL.
+  Tin thiếu/sai `title_ja`/`summary_ja` bị **loại như tin sai vi/en**; còn dưới 5 tin hợp lệ → bước Generate đỏ, **không ghi bản nào** (không đăng lẻ vi/en).
+- Bài ja: title `AIウィークリーダイジェスト — YYYY年M月D日`, excerpt `YYYY年M月D日のダイジェストから注目のAIニュースN件を、元記事へのリンク付きで紹介します。`,
+  nhãn nguồn `出典`, chú thích ảnh `*画像: <domain>*`, ghi chú cuối `本ダイジェストは公開情報をもとに自動で作成しています。` (+ câu bản quyền ảnh khi có ảnh);
+  `manifest.json` alt có `ja`. Escape MDX y như vi/en.
+- `publish-post`: vi/en **bắt buộc** (thiếu file → lỗi, 0 ghi); ja **tuỳ chọn** — bài các tuần trước CR-044 không có file ja → bỏ qua ja
+  (dòng `[info] post/ja/<slug>: không có file ja — bỏ qua`, không lỗi, không ghi gì cho ja; web hiện bản en theo fallback R-20a).
+  Có file ja → dry-run validate **cả 3 locale** trước khi ghi bất kỳ bản nào; chạy lại → `exists`, 0 ghi. Workflow commit 3 file, smoke thêm `/ja/blog/<slug>`.
+- **Điều kiện trước cron đầu tiên có ja:** image web có route `/ja` đã deploy **và** migration `0002` (CHECK locale nhận `ja`) đã chạy trên prod.
+  Dry-run không phát hiện được CHECK cũ → nếu thiếu migration, vi/en được chèn, chèn ja lỗi, smoke `/ja/blog` đỏ.
+  Cách xử lý: chạy migration/deploy rồi chạy tay lại workflow → chỉ thêm ja (vi/en đã `exists`).
+
 Thứ 7 17/10/2026 (w42) → `check` = `skip` vì w42 đã có trên main (`publish-db` vẫn chạy tự lành, insert-only); bài tự động kế tiếp là thứ 7 24/10/2026 → `ai-weekly-2026-w43`; không còn lượt thứ 2 19/10. GitHub cron có thể trễ vài–vài chục phút lúc tải cao.
 
 Hai job, cùng self-hosted runner `nta-web`:
@@ -25,7 +40,7 @@ Hai job, cùng self-hosted runner `nta-web`:
 | Job | Chạy ở | Việc | Secret |
 |---|---|---|---|
 | `digest` | container `node:22-trixie` (Python 3.13 + Node 22 + git, không cài gì lên host). Bước cuối `chown` trả quyền workspace (container chạy root) | check tuần → thu thập → **Generate** (LLM + guard → `items.json`) → **Render** (MDX + fetch ảnh, KHÔNG key) → build → artifact ảnh → commit/push file → xuất slug bài cần đăng | `OPENCODE_API_KEY` (**chỉ** bước Generate) |
-| `publish-db` | host (cần docker), concurrency `deploy-nta-web` (chung deploy/Content ops — không chạy song song backup/migrate), chỉ ref `main` | tải artifact ảnh → dry-run → backup (chỉ khi có locale `missing`) → lưu ảnh + chèn → revalidate `post` → smoke `/blog/<slug>` + `/en/blog/<slug>` + 1 ảnh `/uploads` | `POSTGRES_PASSWORD`, `REVALIDATE_SECRET` (chỉ job này) |
+| `publish-db` | host (cần docker), concurrency `deploy-nta-web` (chung deploy/Content ops — không chạy song song backup/migrate), chỉ ref `main` | tải artifact ảnh → dry-run → backup (chỉ khi có locale `missing`) → lưu ảnh + chèn → revalidate `post` → smoke `/blog/<slug>` + `/en/blog/<slug>` + `/ja/blog/<slug>` + 1 ảnh `/uploads` | `POSTGRES_PASSWORD`, `REVALIDATE_SECRET` (chỉ job này) |
 
 `publish-db` chạy cả khi `digest` báo `skip` (bài tuần đã có file từ lượt trước) → chạy lại cùng tuần **tự lành** nếu lượt trước chèn DB/revalidate lỗi.
 Chèn là **insert-only** qua write-path chuẩn `createEntry`: bản ghi `post/<locale>/<slug>` đã có (kể cả đã sửa hoặc xoá mềm) → `exists`, không ghi đè, không khôi phục.
@@ -86,14 +101,14 @@ Job `publish-db` đỏ (hoặc **cancelled**) → bài đã có trên `main`, ch
 | Bước đỏ | Nguyên nhân thường gặp | Xử lý |
 |---|---|---|
 | Collect + sanitize (exit 3/4) | Mọi nguồn đều lỗi/bị chặn (Reddit, HN, GitHub rate-limit), mạng VPS | Xem log bước; chạy tay lại sau. 1 nguồn lỗi KHÔNG làm đỏ. |
-| Generate items (LLM + guard) | Thiếu/sai key, model không tồn tại, LLM trả JSON hỏng, **guard chặn** (sau khi loại các tin có URL lạ / text sai, còn dưới 5 tin hợp lệ; tối đa lấy 12) | Đọc dòng `[ai-news] FAIL: ...`. Guard chặn là đúng thiết kế (chống bịa) → chạy tay lại; lặp lại nhiều tuần → đổi model. |
+| Generate items (LLM + guard) | Thiếu/sai key, model không tồn tại, LLM trả JSON hỏng, **guard chặn** (sau khi loại các tin có URL lạ / text sai — kể cả thiếu/sai `title_ja`/`summary_ja` — còn dưới 5 tin hợp lệ; tối đa lấy 12; không ghi bản vi/en/ja nào) | Đọc dòng `[ai-news] FAIL: ...`. Guard chặn là đúng thiết kế (chống bịa) → chạy tay lại; lặp lại nhiều tuần → đổi model. |
 | Render posts + ảnh tin | Lỗi ghi file / timeout 10 phút (mạng trang tin treo) | Lỗi **1 ảnh** không làm đỏ (bỏ ảnh đó). Đỏ ở đây → chưa commit gì; chạy tay lại, lặp lại → đặt `AI_NEWS_IMAGES=off` (§7). |
 | Build | Bài sinh ra làm hỏng build (hiếm, MDX đã escape) | Không có gì được commit. Báo dev kèm log. |
 | Commit + push | `main` vừa có commit khác chen giữa (push bị từ chối) | Chạy tay lại workflow. |
 | publish-db · Validate compose / nta-db healthy | Thiếu secret `POSTGRES_PASSWORD`/`REVALIDATE_SECRET`; DB không chạy | Kiểm secret / `docker ps` trên VPS (runbook `db.md`) rồi chạy lại. Chưa ghi gì. |
 | Lưu ảnh tin (artifact) | Lỗi upload artifact | Chạy **trước** push → chưa có gì trên `main`. Chạy tay lại workflow. |
 | publish-db · Kiểm bài (dry-run) — `I-7 ảnh upload không có trong DB … --images-dir` + `::error::` "KHÔNG có artifact ảnh" | Run này không có artifact ảnh (bài `skip` từ run khác, artifact hết hạn 7 ngày) mà bài trỏ `/uploads/…` chưa có asset | Chưa ghi gì. **Re-run failed jobs của CHÍNH run đã sinh bài** (xem trên). Quá 7 ngày → §8 bước 6 (bỏ ảnh khỏi file seed) rồi chạy lại. |
-| publish-db · Kiểm bài (dry-run) | File thiếu 1 locale, frontmatter sai, cover không có trong `public/` (`[cli] FAIL — …`) | Chưa ghi gì (validate **cả 2 locale** trước khi ghi). Sửa file qua commit thường rồi chạy lại. |
+| publish-db · Kiểm bài (dry-run) | File thiếu vi hoặc en, frontmatter sai, cover không có trong `public/` (`[cli] FAIL — …`) | Chưa ghi gì (validate **mọi locale có file — vi/en/ja** — trước khi ghi; thiếu file ja chỉ bỏ qua ja). Sửa file qua commit thường rồi chạy lại. |
 | publish-db · Backup DB | `nta-db-backup` lỗi / đầy đĩa | Dừng trước khi ghi. Xử lý theo runbook `db.md`, chạy lại. |
 | publish-db · Chèn bài | Lỗi DB / I-5 (bản ghi vừa được tạo chen giữa) | Có backup `ops-ai-news-*` (bản trước CR-033: `pre-migrate-ops-ai-news-*`). Chạy lại: locale đã chèn → `exists`, chỉ chèn phần còn thiếu. |
 | publish-db · Smoke ảnh tin | `/uploads/<hash>` không 200 (volume `/opt/nta-web-data/uploads` không mount / quyền) | Bài + asset đã trong DB. Kiểm volume của `nta-web`, `ls /opt/nta-web-data/uploads`; Content ops → `upload-smoke`. |

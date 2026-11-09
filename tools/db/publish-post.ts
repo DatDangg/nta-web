@@ -1,17 +1,18 @@
 // Đăng 1 bài blog từ file seed vào DB — CHỈ chèn (CR-034). Dùng cho workflow AI news (job publish-db) qua content-cli `publish-post`.
-// Đọc src/content/blog/{vi,en}/<slug>.mdx bằng parser chung của web/seed (parseMdxSource), validate CẢ HAI locale
+// Đọc src/content/blog/{vi,en,ja}/<slug>.mdx bằng parser chung của web/seed (parseMdxSource), validate MỌI locale có file
 // trước khi ghi bản đầu tiên, rồi createEntry (write-path chuẩn: version 1 + content_versions op create + actor).
 // Bản ghi đã có (kể cả đã sửa / đã xoá mềm) → "exists", không bao giờ ghi đè hay khôi phục.
 // CR-035: --images-dir = thư mục ảnh tin + manifest.json do tools/ai-news/generate.py sinh. Ảnh /uploads/* mà bài còn thiếu
 // chưa có trong DB được kiểm (có trong manifest, không symlink, inspectImage, sha256 thật == tên file) rồi lưu bằng saveImage
 // TRƯỚC khi chèn bài — dry-run coi các ảnh đó là hợp lệ cho I-7.
+// CR-044: vi/en bắt buộc (thiếu → lỗi); ja tuỳ chọn — bài các tuần trước CR-044 không có file ja → bỏ qua ja (web fallback en).
 import { createHash } from "node:crypto";
 import { lstat, readFile } from "node:fs/promises";
 import path from "node:path";
 import type { Database } from "../../src/db/client";
 import { ContentNotFoundError, ContentValidationError, createEntry, findNewEntryProblems, getEntryByKey } from "../../src/db/content-repo";
 import { collectImagePaths } from "../../src/db/content-rules";
-import { SEED_LOCALES, type ContentLocale } from "../../src/db/schema";
+import { CONTENT_LOCALES, SEED_LOCALES, type ContentLocale } from "../../src/db/schema";
 import { MDX_COLLECTION_DIRECTORIES, parseMdxSource } from "../../src/lib/content/mdx-files";
 import { ImageRejectedError, MAX_UPLOAD_BYTES, UPLOAD_FILE_NAME_PATTERN, UPLOAD_URL_PREFIX, inspectImage } from "../../src/lib/uploads/image-file";
 import { saveImage, type ImageAlt, type SaveImageResult } from "../../src/lib/uploads/save-image";
@@ -61,6 +62,8 @@ export interface PublishPostResult {
   posts: PublishLocaleResult[];
   images: PublishImageResult[];
   warnings: string[];
+  // Locale tuỳ chọn (ja) không có file → không đọc/ghi gì cho locale đó (CR-044, tuần cũ).
+  skippedLocales: ContentLocale[];
 }
 
 interface PostFile {
@@ -91,6 +94,16 @@ async function readPostFile(blogDir: string, locale: ContentLocale, slug: string
   });
   const { frontmatter, body } = parseMdxSource(source);
   return { locale, data: toJsonObject(frontmatter, filePath), body };
+}
+
+// Locale ngoài SEED_LOCALES (ja) thiếu file → null (bỏ qua locale đó); vi/en thiếu vẫn ném ContentNotFoundError.
+async function readOptionalPostFile(blogDir: string, locale: ContentLocale, slug: string): Promise<PostFile | null> {
+  try {
+    return await readPostFile(blogDir, locale, slug);
+  } catch (error) {
+    if (error instanceof ContentNotFoundError && !(SEED_LOCALES as readonly string[]).includes(locale)) return null;
+    throw error;
+  }
 }
 
 function isPlainObject(value: unknown): value is Record<string, unknown> {
@@ -134,7 +147,9 @@ async function readManifest(imagesDir: string, slug: string): Promise<Map<string
       problems.push(`--images-dir: ${problem}`);
       continue;
     }
-    const alt = isPlainObject(entry.alt) ? { vi: optionalString(entry.alt.vi), en: optionalString(entry.alt.en) } : {};
+    const alt = isPlainObject(entry.alt)
+      ? { vi: optionalString(entry.alt.vi), en: optionalString(entry.alt.en), ja: optionalString(entry.alt.ja) }
+      : {};
     images.set(String(entry.file), { alt, sourceHost: optionalString(entry.sourceHost) });
   }
   if (problems.length > 0) throw new ContentValidationError(problems);
@@ -198,7 +213,7 @@ interface ImagePlan {
   warnings: string[];
 }
 
-// files = cả 2 locale (để cảnh báo ảnh thừa); missingFiles = locale sẽ chèn; needUpload = ảnh I-7 báo chưa có asset sống.
+// files = mọi locale có file (để cảnh báo ảnh thừa); missingFiles = locale sẽ chèn; needUpload = ảnh I-7 báo chưa có asset sống.
 async function planImages(files: PostFile[], missingFiles: PostFile[], needUpload: Set<string>, options: PublishPostOptions): Promise<ImagePlan> {
   const plan: ImagePlan = { images: [], prepared: [], problems: [], warnings: [] };
   for (const imagePath of uploadPathsOf(missingFiles)) plan.images.push({ path: imagePath, status: needUpload.has(imagePath) ? "missing" : "exists" });
@@ -226,9 +241,10 @@ export async function publishPost(db: Database, options: PublishPostOptions): Pr
   const { slug } = options;
   if (!POST_SLUG_PATTERN.test(slug)) throw new ContentValidationError([`slug "${slug}" phải dạng a-z0-9 nối bằng '-'`]);
   const blogDir = options.blogDir ?? path.join(process.cwd(), "src/content", MDX_COLLECTION_DIRECTORIES.post);
-  // Đọc cả hai file trước: thiếu 1 locale → lỗi ngay, không ghi locale còn lại.
-  // Giữ vi/en (SEED_LOCALES) tới CR-044 P3-T01 — cron AI news chưa sinh file ja.
-  const files = await Promise.all(SEED_LOCALES.map((locale) => readPostFile(blogDir, locale, slug)));
+  // Đọc mọi file trước: thiếu vi/en → lỗi ngay, không ghi locale còn lại; thiếu ja (tuần cũ) → bỏ qua ja.
+  const readResults = await Promise.all(CONTENT_LOCALES.map((locale) => readOptionalPostFile(blogDir, locale, slug)));
+  const files = readResults.filter((file): file is PostFile => file !== null);
+  const skippedLocales = CONTENT_LOCALES.filter((_, index) => readResults[index] === null);
 
   const { posts: results, problems: localeProblems } = await checkLocales(db, slug, files, options.publicDir);
   const needUpload = new Set<string>();
@@ -240,7 +256,7 @@ export async function publishPost(db: Database, options: PublishPostOptions): Pr
   for (const { key, problem } of localeProblems) if (!resolved.has(problem)) problems.push(`${key}: ${problem}`);
   problems.push(...plan.problems);
   if (problems.length > 0) throw new ContentValidationError(problems);
-  const output: PublishPostResult = { posts: results, images: plan.images, warnings: plan.warnings };
+  const output: PublishPostResult = { posts: results, images: plan.images, warnings: plan.warnings, skippedLocales };
   if (options.dryRun) return output;
 
   // Ảnh trước, bài sau: chèn bài lỗi chỉ để lại asset mồ côi vô hại (chạy lại → reused). createEntry tự kiểm lại I-7.
@@ -249,7 +265,7 @@ export async function publishPost(db: Database, options: PublishPostOptions): Pr
     const result = plan.images.find((item) => item.path === image.urlPath);
     if (result) result.status = saved.status;
   }
-  // results[i] tương ứng files[i] (cùng thứ tự SEED_LOCALES).
+  // results[i] tương ứng files[i] (cùng thứ tự CONTENT_LOCALES, đã bỏ locale không có file).
   for (const [index, result] of results.entries()) {
     if (result.status !== "missing") continue;
     const file = files[index];

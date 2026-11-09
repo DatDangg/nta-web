@@ -3,7 +3,7 @@
 Pipeline chạy bởi `.github/workflows/ai-news.yml` (cron 08:00 thứ 7 giờ VN — `0 1 * * 6` UTC, CR-036 — + chạy tay).
 Vận hành (secret, chạy tay, đổi model, tắt cron, xử lý lỗi): `docs/runbook/ai-news.md`.
 
-Pipeline này chỉ sinh + commit file seed `src/content/blog/{vi,en}/<slug>.mdx`. Prod đọc nội dung từ DB → job `publish-db`
+Pipeline này chỉ sinh + commit file seed `src/content/blog/{vi,en,ja}/<slug>.mdx` (ja từ CR-044). Prod đọc nội dung từ DB → job `publish-db`
 của cùng workflow đưa bài vào DB bằng `tools/db/content-cli.ts publish-post <slug>` (insert-only, CR-034) rồi revalidate; không dispatch deploy.
 
 ```
@@ -29,7 +29,7 @@ phải có nguyên văn trong `.clean.md` (tin vi phạm URL/độ dài bị lo�
 ảnh do `image_sniff.py` kiểm magic bytes. Artifact `ai-news-images-<slug>` chỉ chứa ảnh + `manifest.json` → job `publish-db`
 (`publish-post --images-dir`). Tắt: Variable `AI_NEWS_IMAGES=off` → `--no-images`. Vận hành/gỡ ảnh: `docs/runbook/ai-news.md` §7–8.
 
-Frontmatter (CR-038): title/excerpt theo ngày `date` (`format_post_date`: vi `DD/MM/YYYY`, en `D Mon YYYY`, tháng Jan..Dec hằng trong code,
+Frontmatter (CR-038): title/excerpt theo ngày `date` (`format_post_date`: vi `DD/MM/YYYY`, en `D Mon YYYY`, ja `YYYY年M月D日` (CR-044), tháng Jan..Dec hằng trong code,
 không phụ thuộc locale máy); slug giữ `ai-weekly-YYYY-wNN`. `cover` = `/uploads/…` của tin đầu tiên có ảnh, 0 ảnh → `FALLBACK_COVER`
 (`/images/blog/ai-weekly-cover.webp`; đổi ảnh = thay file, giữ tên).
 

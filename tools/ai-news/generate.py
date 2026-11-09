@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""generate.py — Sinh bài "Bản tin AI tuần" (vi + en) từ file .clean.md đã sanitize.
+"""generate.py — Sinh bài "Bản tin AI tuần" (vi + en + ja) từ file .clean.md đã sanitize.
 
 Luồng: .clean.md → LLM (OpenCode Go, OpenAI-compatible) trả JSON danh sách tin
 → guard (URL phải có nguyên văn trong .clean.md, số tin, độ dài) → render MDX
-deterministic (LLM KHÔNG viết MDX) → ghi src/content/blog/{vi,en}/ai-weekly-YYYY-wNN.mdx.
+deterministic (LLM KHÔNG viết MDX) → ghi src/content/blog/{vi,en,ja}/ai-weekly-YYYY-wNN.mdx.
 
 Subcommand:
   check     in slug tuần này + status new|skip (bài đã tồn tại → skip).
@@ -29,7 +29,7 @@ import urllib.request
 import og_image
 
 VN_TZ = datetime.timezone(datetime.timedelta(hours=7))
-LOCALES = ("vi", "en")
+LOCALES = ("vi", "en", "ja")  # ja: CR-044 (R-09c 4.12.0)
 # Ảnh thẻ khi không tin nào có ảnh; bình thường cover = ảnh tin đầu tiên có ảnh (R-09c 4.6.0).
 FALLBACK_COVER = "/images/blog/ai-weekly-cover.webp"
 MONTH_ABBR_EN = ("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
@@ -44,6 +44,8 @@ MAX_ATTEMPTS = 3
 MAX_CLEAN_CHARS = 60000
 
 MIN_ITEMS, MAX_ITEMS = 5, 12
+# Đếm theo ký tự (len của str), áp dụng chung vi/en/ja. Chữ Nhật dày hơn (1 ký tự ≈ 2-3 ký tự Latin) nên cùng
+# ngưỡng vẫn là trần rộng cho ja; sàn 5/20 ký tự vẫn loại được chuỗi rỗng/vụn mà không loại tiêu đề ja ngắn hợp lệ.
 TITLE_MAX = 140
 SUMMARY_MIN, SUMMARY_MAX = 20, 420
 SOURCE_MAX = 60
@@ -56,12 +58,20 @@ URL_TRAILING = ".,;:!?*_~"
 FOOTNOTE = {
     "vi": "Bản tin được tổng hợp tự động từ các nguồn công khai.",
     "en": "This digest is compiled automatically from public sources.",
+    "ja": "本ダイジェストは公開情報をもとに自動で作成しています。",
 }
 IMAGE_FOOTNOTE = {
     "vi": "Ảnh minh hoạ thuộc về trang nguồn của từng tin.",
     "en": "Images belong to each item's source page.",
+    "ja": "画像の著作権は各ニュースの出典ページに帰属します。",
 }
-IMAGE_CREDIT = {"vi": "Ảnh", "en": "Image"}
+IMAGE_CREDIT = {"vi": "Ảnh", "en": "Image", "ja": "画像"}
+INTRO = {
+    "vi": "Điểm lại các tin AI nổi bật trong tuần qua. Mỗi mục tóm tắt ngắn từ tiêu đề tin, kèm link để đọc bản gốc.",
+    "en": "A roundup of notable AI news from the past week. Each item is a short summary based on the headline, with a link to the original.",
+    "ja": "先週の注目すべきAIニュースをまとめました。各項目は見出しをもとにした短い要約で、元記事へのリンクを掲載しています。",
+}
+SOURCE_LABEL = {"vi": "Nguồn", "en": "Source", "ja": "出典"}
 
 
 class GuardError(Exception):
@@ -162,8 +172,9 @@ def _validate_item(item, allowed_urls: dict, index: int) -> dict:
     return {
         "url": allowed_urls[key],
         "source": _require_text(item, "source", 2, SOURCE_MAX, index),
-        **{f: _require_text(item, f, 5, TITLE_MAX, index) for f in ("title_vi", "title_en")},
-        **{f: _require_text(item, f, SUMMARY_MIN, SUMMARY_MAX, index) for f in ("summary_vi", "summary_en")},
+        **{f"title_{locale}": _require_text(item, f"title_{locale}", 5, TITLE_MAX, index) for locale in LOCALES},
+        **{f"summary_{locale}": _require_text(item, f"summary_{locale}", SUMMARY_MIN, SUMMARY_MAX, index)
+           for locale in LOCALES},
     }
 
 
@@ -188,10 +199,12 @@ def safe_link_url(url: str) -> str:
 
 
 def format_post_date(locale: str, iso_date: str) -> str:
-    """'YYYY-MM-DD' → vi 'DD/MM/YYYY', en 'D Mon YYYY'. Không dùng locale hệ thống (strftime %b đổi theo máy)."""
+    """'YYYY-MM-DD' → vi 'DD/MM/YYYY', en 'D Mon YYYY', ja 'YYYY年M月D日'. Không dùng locale hệ thống (strftime %b đổi theo máy)."""
     day = datetime.date.fromisoformat(iso_date)
     if locale == "vi":
         return f"{day.day:02d}/{day.month:02d}/{day.year}"
+    if locale == "ja":
+        return f"{day.year}年{day.month}月{day.day}日"
     return f"{day.day} {MONTH_ABBR_EN[day.month - 1]} {day.year}"
 
 
@@ -200,6 +213,9 @@ def _frontmatter(locale: str, week: dict, item_count: int, cover: str) -> str:
     if locale == "vi":
         title = f"Bản tin AI tuần ngày {day}"
         excerpt = f"{item_count} điểm tin AI đáng chú ý trong bản tin ngày {day}, kèm link nguồn gốc."
+    elif locale == "ja":
+        title = f"AIウィークリーダイジェスト — {day}"
+        excerpt = f"{day}のダイジェストから注目のAIニュース{item_count}件を、元記事へのリンク付きで紹介します。"
     else:
         title = f"AI Weekly Digest — {day}"
         excerpt = f"{item_count} notable AI news items in the digest of {day}, with links to the original sources."
@@ -236,14 +252,9 @@ def _image_lines(locale: str, item: dict, image) -> list:
 def render_post(locale: str, week: dict, items: list, images=None) -> str:
     """images: {index 1-based: og_image.Image}; không có ảnh → không NewsImage, cover = FALLBACK_COVER."""
     images = images or {}
-    intro = {
-        "vi": "Điểm lại các tin AI nổi bật trong tuần qua. Mỗi mục tóm tắt ngắn từ tiêu đề tin, kèm link để đọc bản gốc.",
-        "en": "A roundup of notable AI news from the past week. Each item is a short summary based on the headline, with a link to the original.",
-    }[locale]
-    source_label = {"vi": "Nguồn", "en": "Source"}[locale]
     # Cover = ảnh tin đầu tiên có ảnh (đã nằm trong manifest → publish-post I-7 tìm thấy); 0 ảnh → fallback.
     cover = upload_path(images[min(images)]) if images else FALLBACK_COVER
-    parts = [_frontmatter(locale, week, len(items), cover), intro, ""]
+    parts = [_frontmatter(locale, week, len(items), cover), INTRO[locale], ""]
     for index, item in enumerate(items, start=1):
         parts += [f"## {index}. {escape_mdx(item['title_' + locale])}", ""]
         if index in images:
@@ -251,7 +262,7 @@ def render_post(locale: str, week: dict, items: list, images=None) -> str:
         parts += [
             escape_mdx(item["summary_" + locale]),
             "",
-            f"{source_label}: [{escape_mdx(item['source'])}]({safe_link_url(item['url'])})",
+            f"{SOURCE_LABEL[locale]}: [{escape_mdx(item['source'])}]({safe_link_url(item['url'])})",
             "",
         ]
     footnote = f"{FOOTNOTE[locale]} {IMAGE_FOOTNOTE[locale]}" if images else FOOTNOTE[locale]
@@ -284,11 +295,12 @@ def build_messages(clean_text: str) -> list:
         "ngày tháng hay chi tiết không có trong dữ liệu. Không chắc thì viết chung chung.\n"
         "- Viết bằng lời của bạn, không chép nguyên văn tiêu đề dài.\n"
         "- 'url' phải chép NGUYÊN VĂN một URL có trong dữ liệu, đúng của tin đó. Không tạo URL mới.\n"
-        f"- title_vi/title_en tối đa {TITLE_MAX} ký tự; summary_vi/summary_en 1-2 câu, tối đa {SUMMARY_MAX} ký tự; "
-        "không chứa URL, không markdown.\n"
+        f"- title_vi/title_en/title_ja tối đa {TITLE_MAX} ký tự; summary_vi/summary_en/summary_ja 1-2 câu, "
+        f"tối đa {SUMMARY_MAX} ký tự; không chứa URL, không markdown.\n"
+        "- title_ja/summary_ja viết tiếng Nhật tự nhiên, thể lịch sự です/ます; giữ nguyên tên riêng như trong dữ liệu.\n"
         "- 'source' là tên nguồn ngắn (vd Reddit, Hacker News, arXiv, GitHub, Techmeme).\n"
         'Chỉ trả về MỘT object JSON: {"items":[{"title_vi":"","title_en":"","summary_vi":"",'
-        '"summary_en":"","url":"","source":""}]} — không kèm giải thích.'
+        '"summary_en":"","title_ja":"","summary_ja":"","url":"","source":""}]} — không kèm giải thích.'
     )
     user = f"{DATA_START}\n{data}\n{DATA_END}"
     return [{"role": "system", "content": system}, {"role": "user", "content": user}]
@@ -390,7 +402,7 @@ def write_images(images_out: str, slug: str, items: list, images: dict) -> None:
 
 
 def publish(clean_text: str, raw_items, content_dir: str, week: dict, images_out=None, fetcher=None) -> list:
-    """Guard toàn bộ trước, chỉ ghi file khi cả 2 bài đều hợp lệ. images_out=None → không fetch ảnh."""
+    """Guard toàn bộ trước, chỉ ghi file khi cả 3 bài (vi/en/ja) đều hợp lệ. images_out=None → không fetch ảnh."""
     items = guarded_items(clean_text, raw_items, week)
     images = {}
     if images_out:

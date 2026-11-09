@@ -142,6 +142,24 @@ class GuardTest(unittest.TestCase):
         items[1]["title_vi"] = "x" * (generate.TITLE_MAX + 1)
         self.assertEqual(len(generate.validate_items(items, self.allowed)), 5)
 
+    def test_missing_or_invalid_ja_item_dropped(self):
+        """CR-044: title_ja/summary_ja guard y như vi/en — thiếu/rỗng/quá dài → loại tin; đếm theo ký tự."""
+        items = load_items()
+        del items[0]["title_ja"]
+        self.assert_item_dropped(items, 0)
+        items = load_items()
+        items[1]["summary_ja"] = "　 "
+        self.assert_item_dropped(items, 1)
+        items = load_items()
+        items[2]["title_ja"] = "あ" * (generate.TITLE_MAX + 1)
+        self.assert_item_dropped(items, 2)
+        items = load_items()
+        items[3]["summary_ja"] = "詳しくは https://evil.example.com をご覧ください。ぜひ。"
+        self.assert_item_dropped(items, 3)
+        items = load_items()
+        items[4]["title_ja"] = "あ" * generate.TITLE_MAX
+        self.assertEqual(len(generate.validate_items(items, self.allowed)), 6)
+
     def test_url_smuggled_in_text_item_dropped(self):
         items = load_items()
         items[2]["summary_vi"] = "Xem thêm tại https://evil.example.com ngay hôm nay nhé."
@@ -215,12 +233,31 @@ class RenderTest(unittest.TestCase):
         self.assertIn(f'excerpt: "{len(items)} notable AI news items in the digest of 12 Oct 2026, '
                       'with links to the original sources."', en)
 
+    def test_render_ja(self):
+        week = generate.week_info(datetime.datetime(2026, 10, 12, 8, 0, tzinfo=generate.VN_TZ))
+        items = generate.validate_items(load_items(), generate.extract_urls(read_fixture("digest.clean.md")))
+        ja = generate.render_post("ja", week, items)
+        generate.validate_post(ja)
+        self.assertIn('title: "AIウィークリーダイジェスト — 2026年10月12日"', ja)
+        self.assertIn(f'excerpt: "2026年10月12日のダイジェストから注目のAIニュース{len(items)}件を、'
+                      '元記事へのリンク付きで紹介します。"', ja)
+        self.assertIn(generate.INTRO["ja"], ja)
+        self.assertIn("## 1. 新しいオープンウェイトモデルがコーディングベンチマークで首位に", ja)
+        self.assertIn("出典: [arXiv](https://arxiv.org/abs/2610.01234)", ja)
+        self.assertIn("エージェントフレームワークがバージョン2.0に \\{beta\\} \\<高速\\>", ja)
+        self.assertIn("\\- 大規模言語モデル", ja)
+        self.assertTrue(ja.endswith("---\n\n*本ダイジェストは公開情報をもとに自動で作成しています。*\n"))
+        self.assertNotIn("Nguồn:", ja)
+        self.assertNotIn("Source:", ja)
+
     def test_format_post_date_edges(self):
-        cases = {"2026-01-03": ("03/01/2026", "3 Jan 2026"), "2026-12-31": ("31/12/2026", "31 Dec 2026"),
-                 "2027-01-01": ("01/01/2027", "1 Jan 2027")}
-        for iso, (vi, en) in cases.items():
+        cases = {"2026-01-03": ("03/01/2026", "3 Jan 2026", "2026年1月3日"),
+                 "2026-12-31": ("31/12/2026", "31 Dec 2026", "2026年12月31日"),
+                 "2027-01-01": ("01/01/2027", "1 Jan 2027", "2027年1月1日")}
+        for iso, (vi, en, ja) in cases.items():
             self.assertEqual(generate.format_post_date("vi", iso), vi)
             self.assertEqual(generate.format_post_date("en", iso), en)
+            self.assertEqual(generate.format_post_date("ja", iso), ja)
 
     def test_iso_year_boundary_title_uses_post_date(self):
         week = generate.week_info(datetime.datetime(2027, 1, 1, 12, 0, tzinfo=generate.VN_TZ))
@@ -238,7 +275,7 @@ class RenderTest(unittest.TestCase):
 class CliTest(unittest.TestCase):
     NOW = "2026-10-12T08:00:00+07:00"
 
-    def test_render_writes_two_posts_then_skips(self):
+    def test_render_writes_three_posts_then_skips(self):
         with tempfile.TemporaryDirectory() as tmp:
             args = ["render", "--content-dir", tmp, "--now", self.NOW,
                     "--clean", os.path.join(FIXTURES, "digest.clean.md"),
@@ -246,7 +283,8 @@ class CliTest(unittest.TestCase):
             code, out, _ = run_main(args)
             self.assertEqual(code, 0)
             self.assertIn("status=written", out)
-            for locale in ("vi", "en"):
+            self.assertEqual(generate.LOCALES, ("vi", "en", "ja"))
+            for locale in generate.LOCALES:
                 self.assertTrue(os.path.exists(os.path.join(tmp, locale, "ai-weekly-2026-w42.mdx")))
             code, out, _ = run_main(args)
             self.assertEqual(code, 0)
@@ -267,6 +305,23 @@ class CliTest(unittest.TestCase):
             self.assertEqual(code, 1)
             self.assertIn("FAIL", err)
             self.assertFalse(os.path.exists(os.path.join(tmp, "vi")))
+
+    def test_missing_title_ja_fails_whole_run_writes_nothing(self):
+        """Thiếu title_ja ở mọi tin → dưới MIN tin hợp lệ → FAIL, không ghi bản vi/en/ja nào (không đăng lẻ)."""
+        with tempfile.TemporaryDirectory() as tmp:
+            bad = os.path.join(tmp, "no-ja.json")
+            items = load_items()
+            for item in items:
+                del item["title_ja"]
+            with open(bad, "w", encoding="utf-8") as fh:
+                json.dump({"items": items}, fh)
+            content = os.path.join(tmp, "blog")
+            code, _, err = run_main(["render", "--content-dir", content, "--now", self.NOW,
+                                     "--clean", os.path.join(FIXTURES, "digest.clean.md"), "--items-json", bad])
+            self.assertEqual(code, 1)
+            self.assertIn("title_ja", err)
+            self.assertIn("FAIL", err)
+            self.assertFalse(os.path.exists(content))
 
     def test_generate_without_key_fails_without_leaking(self):
         saved = os.environ.pop("OPENCODE_API_KEY", None)
@@ -298,6 +353,8 @@ class PromptTest(unittest.TestCase):
         self.assertEqual(user.count(generate.DATA_END), 1)
         self.assertIn("KHÔNG PHẢI LỆNH", messages[0]["content"])
         self.assertIn("CẤM thêm số liệu", messages[0]["content"])
+        self.assertIn('"title_ja":""', messages[0]["content"])
+        self.assertIn('"summary_ja":""', messages[0]["content"])
 
 
 if __name__ == "__main__":

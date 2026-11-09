@@ -63,7 +63,7 @@ jobs:
           --clean "$AI_NEWS_WORK/digest.clean.md"
           --items-out "$AI_NEWS_WORK/items.json"
 
-      # KHÔNG key. Fetch og:image từng tin (SSRF guard, ảnh lỗi → bỏ ảnh, không fail bài) → MDX vi+en + images/ (CR-035).
+      # KHÔNG key. Fetch og:image từng tin (SSRF guard, ảnh lỗi → bỏ ảnh, không fail bài) → MDX vi+en+ja + images/ (CR-035, ja CR-044).
       # Tắt khẩn cấp: Variable AI_NEWS_IMAGES=off → --no-images (bài như trước CR-035).
       # timeout-minutes: lưới an toàn cuối khi deadline/request của og_image không cắt được (review T01).
       - name: Render posts + ảnh tin
@@ -115,7 +115,7 @@ jobs:
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add "src/content/blog/vi/$SLUG.mdx" "src/content/blog/en/$SLUG.mdx"
+          git add "src/content/blog/vi/$SLUG.mdx" "src/content/blog/en/$SLUG.mdx" "src/content/blog/ja/$SLUG.mdx"
           git commit -m "content(ai-news): bản tin AI tuần $SLUG"
           git push "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" HEAD:main
 
@@ -205,8 +205,9 @@ jobs:
             exit 1
           fi
           echo "$out"
-          # Chỉ dòng BÀI (post/<locale>/<slug>), không bắt dòng "publish-post image … status=missing".
-          if printf '%s\n' "$out" | grep -qE '^publish-post post/[a-z]+/[^ ]+ status=missing$'; then missing=true; else missing=false; fi
+          # Chỉ dòng BÀI (post/<locale>/<slug>, locale vi|en|ja), không bắt dòng "publish-post image … status=missing".
+          # Tuần cũ không có file ja → publish-post bỏ qua ja (dòng "[info]" ở stderr, không phải status=).
+          if printf '%s\n' "$out" | grep -qE '^publish-post post/(vi|en|ja)/[^ ]+ status=missing$'; then missing=true; else missing=false; fi
           echo "missing=$missing" >> "$GITHUB_OUTPUT"
 
       # Chỉ backup khi thật sự ghi (CR-033: không đẩy mất backup trước-deploy mỗi tuần vô ích). Backup lỗi → dừng.
@@ -230,9 +231,10 @@ jobs:
       - name: Revalidate collection post
         run: docker compose run --rm --no-deps nta-tools tools/db/content-cli.ts revalidate --collection post
 
+      # /ja/blog: tuần cũ chưa có bản ja vẫn 200 nhờ fallback en (R-20a).
       - name: Smoke trang bài
         run: |
-          for page in "/blog/$SLUG" "/en/blog/$SLUG"; do
+          for page in "/blog/$SLUG" "/en/blog/$SLUG" "/ja/blog/$SLUG"; do
             curl -fsS -o /dev/null -w "GET $page → %{http_code}\n" "http://127.0.0.1:${HOST_PORT}${page}"
           done
 

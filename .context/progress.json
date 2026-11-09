@@ -3,11 +3,11 @@
   "activeWorkItem": {
     "type": "feature",
     "slug": "add-japanese-locale",
-    "phaseTask": "phase-3-task-01",
+    "phaseTask": "phase-3-task-02",
     "step": "ready",
     "status": "awaiting",
-    "journal": ".context/runs/feature-add-japanese-locale-phase-2-task-04.md",
-    "note": "Phase 2 done (P2-T04 STRICT PASS r2, spec-validator phase 2 PASS có điều kiện G1 → P3-T02). Commit local, KHÔNG push. next builder P3-T01 (AI news vi/en/ja). Trước deploy: dán lại Code.gs lên Apps Script; thêm OFL.txt font."
+    "journal": ".context/runs/feature-add-japanese-locale-phase-3-task-01.md",
+    "note": "P3-T01 STRICT PASS r1, commit local, KHÔNG push. next builder P3-T02 (doc reconcile + docs bot + runbook rollout; gồm G1 R-20a.6 next/font vs self-host). Trước deploy: dán lại Code.gs; thêm OFL.txt; migration 0002 prod trước cron thứ 7."
   },
   "features": [
     {
@@ -1718,8 +1718,11 @@
             {
               "task": "phase-3-task-01",
               "title": "AI news tuần sinh + đăng vi/en/ja (generate.py, publish-post, ai-news.yml)",
-              "status": "pending",
-              "attempts": 0
+              "status": "done",
+              "attempts": 1,
+              "review": "STRICT PASS round 1",
+              "reviewReport": ".context/review-reports/feature-add-japanese-locale-phase-3-task-01-round-1-review.md",
+              "note": "generate.py LOCALES vi/en/ja (guard ja 5-140/20-420 ký tự; ja sai → loại tin, <5 tin → fail cả lượt, không đăng lẻ); publish-post CONTENT_LOCALES, ja thiếu file → skippedLocales; ai-news.yml git add ja + regex (vi|en|ja) + smoke /ja/blog; runbook (+ điều kiện migration 0002 trước cron). Docker py unittest 86 OK; typecheck/lint PASS; npm test 228/231 (1 fail có sẵn uploads); build PASS bài mẫu (đã xoá). Residual: Postgres suite chưa chạy CI, 4 test publish-post cũ fail có sẵn (blogDir thật), BODY_MIN 600 áp cho ja"
             },
             {
               "task": "phase-3-task-02",

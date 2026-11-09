@@ -24,7 +24,10 @@
 Max 3 attempt; fail lần 3 → `architecture_review_needed` (không fix #4). Mỗi failed attempt append `.context/error-memory.md`.
 
 ## Verification summary
-- Acceptance criteria: _pending_
-- Verify commands + result: _pending_ (`npm run typecheck`, `npm run lint`, `npm test`, `npm run build` — lấy từ `.context/project-config.md`)
-- Reviewer verdict: _pending_
-- Doc impact: _pending_
+- Acceptance criteria: PASS — generate (fixture) → 3 file vi/en/ja hợp lệ; thiếu title_ja/summary_ja → loại tin, <5 tin → exit 1, 0 file; publish-post 3 locale validate trước khi ghi, tuần cũ thiếu ja → skippedLocales (0 ghi), chạy lại → exists 0 ghi; build PASS với bài mẫu w52 (đã xoá, không commit). Không chạy workflow thật, không gọi LLM thật.
+- Verify commands + result: Docker python:3.12-slim unittest (mount repo theo README) 86 OK · `npm run typecheck` PASS · `npm run lint` PASS (1 warning có sẵn) · `npm test` 228/231 (1 fail có sẵn content-rules thiếu /uploads, 2 skip) · Postgres tạm (builder): test ja mới PASS, 4 test cũ dùng blogDir thật FAIL có sẵn ở HEAD · `SWC_NATIVE_BINDING_CACHE=... npm run build` PASS, smoke next start `/ja/blog/<w52>` + `/ja/blog/ai-weekly-2026-w42` (fallback en) 200.
+- Ja length limits: cùng ngưỡng ký tự vi/en (title 5–140, summary 20–420).
+- Ngoài danh sách file: `tools/db/content-cli.ts` in `[info] post/ja/<slug>: không có file ja — bỏ qua` ra stderr (reviewer chấp nhận).
+- Reviewer verdict: STRICT PASS round 1 — `.context/review-reports/feature-add-japanese-locale-phase-3-task-01-round-1-review.md`; MINOR 1 (điều kiện migration 0002 trước cron) đã thêm vào runbook; MINOR 2 (BODY_MIN 600 áp cho ja) + 3 (Postgres suite chưa chạy ở reviewer) → residual.
+- Doc impact: `docs/runbook/ai-news.md`, `tools/ai-news/README.md`. Không đổi API/schema doc.
+- content-repo.ts:175 localePairWarnings bỏ qua ja (isSeedLocale) → không chặn bài ja, không cần sửa.
