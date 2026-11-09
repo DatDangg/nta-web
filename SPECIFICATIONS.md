@@ -1,5 +1,5 @@
 ---
-spec_version: 4.12.0
+spec_version: 4.12.1
 updated_at: 2026-11-09
 ---
 
@@ -553,7 +553,7 @@ Base URL: dev `http://localhost:3000/api` · prod `https://ntavietnam.tech/api` 
      trạng thái chọn cho trình đọc màn hình; vùng bấm ≥ 44px trên mobile.
   5. *SEO:* sitemap có alternates `vi`/`en`/`ja` cho mọi URL; hreflang `vi`, `en`, `ja` + `x-default` = vi; meta/OG localized (`og:locale` `ja_JP`);
      JSON-LD `availableLanguage` gồm `ja`; ngày hiển thị ở trang ja theo `ja-JP` (vd `2026年11月9日`).
-  6. *Font:* glyph tiếng Nhật qua `next/font` **Noto Sans JP** (weight tối thiểu đang dùng), **chỉ áp dụng ở trang ja**, không preload trên trang vi/en
+  6. *Font:* glyph tiếng Nhật bằng font **Noto Sans JP** tự host trong `public/fonts/noto-sans-jp/` (kèm `OFL.txt`), **chỉ link ở trang ja** — trang vi/en không tải CSS/file font JP
      (vi/en không tải thêm file font JP); LCP R-22 giữ.
   7. *Chữ chọn theo locale trong code* (skip-link, nút lên đầu trang, title metadata trang chi tiết sản phẩm/giải pháp DN, …) có bản ja — không còn nhánh
      "vi, còn lại en".

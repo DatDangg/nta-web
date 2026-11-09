@@ -1,7 +1,7 @@
 ---
 id: add-japanese-locale
 type: feature
-status: in_progress
+status: done
 created: 2026-11-09
 ---
 
@@ -65,3 +65,10 @@ User: "đổi hết tất cả luôn" → làm đủ bộ, ja ngang hàng vi/en 
   task `tasks/feature-add-japanese-locale/phase-1-task-01 … phase-3-task-02`. Chờ user duyệt plan + duyệt dòng `HIGH_RISK_MIGRATION` cho migration 0002.
 - 2026-11-09: P1-T01..P3-T02 done (commit local, chưa push). spec-validator phase 3 + tổng CR-044 COMPLETE (`.context/review-reports/feature-add-japanese-locale-final-spec-validation.md`).
   **Chưa archive — next (user):** rollout prod theo `docs/runbook/db.md` §10: thêm `public/fonts/noto-sans-jp/OFL.txt` gốc → dán lại `tools/contact-mail/Code.gs` lên Apps Script → backup + chạy thử 0002 trên DB tạm → push main / deploy.yml → smoke `/ja` → rebuild `nta-tools` → bot seed ja (slug_registry ja trước) — xong TRƯỚC cron AI news thứ 7. G1: chờ user xác nhận câu chữ R-20a.6 (đề xuất: "Font Noto Sans JP tự host trong `public/fonts/noto-sans-jp/`, chỉ link ở trang ja (không tải trên vi/en)").
+
+## Đóng (2026-11-09)
+- Code: 7 task + OFL (b2caf09 → 0b5e43e), push main bff75b1, deploy.yml PASS (gate APPROVED, migrate 0002, health OK); restore-test 0002 PASS trước deploy.
+- Prod: mọi route `/ja/...` 200, `lang=ja`, font JP chỉ ở ja, woff2 cache immutable; nta-tools rebuild nhận `ja`.
+- Nội dung: bot không làm → dev dịch từ bản en + seed 59 bản ghi ja (actor `dev:claude-cr044`, backup `ops-bot-cr044-seed-ja-20261109T074548Z.dump`), revalidate all; ui_messages ja dùng `ja.json` (không seed DB).
+- G1: R-20a.6 sửa câu chữ (spec 4.12.1), user duyệt.
+- Còn lại (không chặn): người biết tiếng Nhật soát bản dịch máy; theo dõi lượt cron AI news đầu tiên có ja (14/11).
