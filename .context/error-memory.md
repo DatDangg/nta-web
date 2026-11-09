@@ -116,3 +116,4 @@ These rules were learned from real bugs. Apply them to every task, not just when
 - **Fix:** `bg-[rgb(0_158_135/0.4)]`, `border-[rgb(33_217_173/0.8)]`, `border-border` (bỏ alpha). r2 PASS, CSS artifact xác nhận.
 - **Pattern:** Màu theme dạng `var()` thuần + modifier `/NN` = class chết. Chỉ `background` (khai `rgb(var(...) / <alpha-value>)`) và màu built-in (`white`, `black`) dùng được `/NN`.
 - **Prevention:** Trước khi báo xong UI: `grep -rnE "(bg|border|text|ring|from|via|to|divide|outline)-(primary|accent|border|text-[a-z]+|surface[a-z-]*|ink[a-z-]*)/[0-9]+" src/` phải = 0; hoặc grep class trong `.next*/static/css`. Đã ghi rule vào design-spec Screen 9.
+- 2026-11-09 feature-add-japanese-locale P2-T04 attempt 1: next/font Noto_Sans_JP import trong [locale]/layout.tsx chung → CSS @font-face JP (125 face) bị link render-blocking ở mọi locale dù preload:false + class chỉ gắn ở ja. Bài học: CSS next/font gắn theo module graph của segment, không theo nhánh render.

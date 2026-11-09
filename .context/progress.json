@@ -3,11 +3,11 @@
   "activeWorkItem": {
     "type": "feature",
     "slug": "add-japanese-locale",
-    "phaseTask": "phase-2-task-04",
+    "phaseTask": "phase-3-task-01",
     "step": "ready",
     "status": "awaiting",
-    "journal": ".context/runs/feature-add-japanese-locale-phase-2-task-03.md",
-    "note": "P2-T03 done (commit local, KHÔNG push). /ja chạy 200. next builder P2-T04 (LanguageToggle VI·EN·JA + font Noto Sans JP). Trước deploy: user dán lại tools/contact-mail/Code.gs lên Apps Script."
+    "journal": ".context/runs/feature-add-japanese-locale-phase-2-task-04.md",
+    "note": "Phase 2 done (P2-T04 STRICT PASS r2, spec-validator phase 2 PASS có điều kiện G1 → P3-T02). Commit local, KHÔNG push. next builder P3-T01 (AI news vi/en/ja). Trước deploy: dán lại Code.gs lên Apps Script; thêm OFL.txt font."
   },
   "features": [
     {
@@ -1700,10 +1700,17 @@
             {
               "task": "phase-2-task-04",
               "title": "LanguageToggle VI·EN·JA + font Noto Sans JP chỉ ở ja",
-              "status": "pending",
-              "attempts": 0
+              "status": "done",
+              "attempts": 2,
+              "review": "STRICT PASS round 2 (round 1 FAIL F1)",
+              "reviewReport": ".context/review-reports/feature-add-japanese-locale-phase-2-task-04-round-2-review.md",
+              "note": "Toggle loop routing.locales giữ path + aria-current; Noto Sans JP self-host public/fonts/noto-sans-jp (124 woff2, 5.7MB, tools/fonts/build-noto-jp.mjs), layout chỉ link CSS ở ja; vi/en 0 CSS Noto (smoke HTTP :3927). typecheck/lint/build PASS; test 227/230 (1 fail có sẵn). MINOR N1/N2/N4 + G1 → P3-T02"
             }
-          ]
+          ],
+          "specValidation": {
+            "verdict": "PASS (có điều kiện G1 → P3-T02)",
+            "report": ".context/review-reports/feature-add-japanese-locale-phase-2-spec-validation.md"
+          }
         },
         {
           "phase": 3,

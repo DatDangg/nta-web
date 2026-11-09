@@ -38,7 +38,9 @@
      nhưng `accent` (#21d9ad) đạt 9.8:1 nên dùng `accent-ink` cho link/CTA nổi bật trên nền tối. */
   --color-accent-ink: #21d9ad;
   --bg-gradient-soft: linear-gradient(180deg, #ffffff 0%, #f5f5f7 100%);
-  --font-sans: var(--font-inter, Inter), -apple-system, BlinkMacSystemFont,
+  /* `--font-noto-jp` chỉ định nghĩa ở locale ja (public/fonts/noto-sans-jp/noto-sans-jp.css, layout chỉ link ở ja); vi/en fallback về Inter (trùng, vô hại)
+     để khai báo vẫn hợp lệ và không tham chiếu font JP. Inter đứng trước: chữ Latin dùng Inter, glyph Nhật rơi xuống Noto Sans JP. */
+  --font-sans: var(--font-inter, Inter), var(--font-noto-jp, Inter), -apple-system, BlinkMacSystemFont,
     "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, monospace;
   --text-hero: clamp(3rem, 2.25rem + 3.75vw, 6rem);

@@ -68,6 +68,10 @@ export default async function LocaleLayout({
 // dùng cho hiệu ứng reveal (globals.css: `html.js .reveal:not(.revealed)`), không ảnh hưởng nội dung.
 <html className={inter.variable} lang={locale} suppressHydrationWarning>
       <body>
+        {/* Font Nhật self-host (tools/fonts/build-noto-jp.mjs): CHỈ trang ja link CSS này — next/font sẽ đưa ~95KB @font-face JP
+            vào CSS chung render-blocking của mọi trang vi/en. File định nghĩa --font-noto-jp (globals.css --font-sans). */}
+        {/* eslint-disable-next-line @next/next/no-css-tags -- cố ý: CSS font chỉ cho ja, không đi qua bundle CSS chung */}
+        {locale === 'ja' && <link href="/fonts/noto-sans-jp/noto-sans-jp.css" precedence="default" rel="stylesheet" />}
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([
           createOrganizationJsonLd(contact), createWebSiteJsonLd(locale),
         ]).replace(/</g, '\\u003c') }} />

@@ -24,3 +24,8 @@ Max 3 attempt; fail lần 3 → `architecture_review_needed` (không fix #4). M�
 - Verify commands + result: _pending_ (`npm run typecheck`, `npm run lint`, `npm test`, `npm run build` — lấy từ `.context/project-config.md`)
 - Reviewer verdict: _pending_
 - Doc impact: _pending_
+
+## Bổ sung từ P2-T04 + spec-validator phase 2 (2026-11-09)
+- G1: R-20a.6 (`SPECIFICATIONS.md:556`) ghi "qua `next/font`" nhưng thực tế self-host `public/fonts/noto-sans-jp/` (lý do F1: next/font đưa @font-face JP vào CSS chung vi/en). Sửa câu chữ R-20a.6 + `spec/updates/` + `spec/CHANGELOG.md` (intent → cần user xác nhận 1 dòng).
+- `docs/DESIGN.md`: cơ chế font JP (chỉ ja link CSS), cách tái tạo (`tools/fonts/build-noto-jp.mjs`), giấy phép OFL-1.1.
+- Residual trước deploy prod: thêm `OFL.txt` + copyright gốc (N4); sửa `rmSync(OUT_DIR)` xoá README khi tái tạo (N1); cân nhắc header cache immutable cho `/fonts/*` (N2, hiện `max-age=0`).
