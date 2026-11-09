@@ -9,7 +9,7 @@ Nguồn sự thật: `docs/ERD.md` · `src/db/schema.ts` · `src/db/content-rule
 
 | Bảng | Vai trò | Cột chính |
 |---|---|---|
-| `content_entries` | 1 hàng = 1 bản ghi nội dung hiện tại | `id`, `collection`, `slug`, `locale` (`vi`/`en`), `data` (jsonb), `body` (MDX, chỉ post/about…), `sort_order`, `version`, `deleted_at`, `updated_by` |
+| `content_entries` | 1 hàng = 1 bản ghi nội dung hiện tại | `id`, `collection`, `slug`, `locale` (`vi`/`en`/`ja` — CHECK `content_entries_locale_check`, migration `drizzle/0002_happy_magma.sql`), `data` (jsonb), `body` (MDX, chỉ post/about…), `sort_order`, `version`, `deleted_at`, `updated_by` |
 | `content_versions` | Lịch sử append-only, mỗi lần ghi 1 hàng | `entry_id`, `version`, `op` (`create`/`update`/`delete`/`rollback`), `data`, `body`, `sort_order`, `actor`, `note` |
 
 - **Khoá:** (`collection`, `slug`, `locale`) — duy nhất kể cả bản ghi đã xoá mềm. Khoá **không đổi tại chỗ**.
@@ -37,10 +37,14 @@ Nguồn sự thật: `docs/ERD.md` · `src/db/schema.ts` · `src/db/content-rule
 | `home` | `home` | `solutionCards`, `featuredProducts`, `heroPanels` | `src/content/home.ts` |
 | `solution_overview` | `enterprise` / `ai` | tiêu đề/mô tả nhóm giải pháp | `src/content/solutions/overview.ts` |
 | `ui_messages` | namespace cấp 1 (`nav`, `home`, `footer`, `blog`, `about`, `contact`…) | toàn bộ object namespace đó | `src/i18n/messages/{vi,en}.json` |
-| `company_info` | `contact` | SĐT, email, địa chỉ, bản đồ (giống nhau vi/en) | `src/lib/contact/company-info.ts` |
-| `asset` | sha256 ảnh, `locale` luôn `vi` | `{path, sha256, mime, bytes, width, height, alt:{vi,en}}` | tạo bằng `db:cli upload` |
+| `company_info` | `contact` | SĐT, email, địa chỉ, bản đồ (giống nhau mọi locale) | `src/lib/contact/company-info.ts` |
+| `asset` | sha256 ảnh, `locale` luôn `vi` | `{path, sha256, mime, bytes, width, height, alt:{vi?,en?,ja?}}` | tạo bằng `db:cli upload` (`--alt-vi/--alt-en/--alt-ja`) |
 
-`slug_registry` và `company_info` không theo ngôn ngữ nhưng `locale` bắt buộc → **ghi giống nhau cho cả vi và en**.
+`slug_registry` và `company_info` không theo ngôn ngữ nhưng `locale` bắt buộc → **ghi giống nhau cho mọi locale (vi, en, ja)**.
+
+**Locale `ja` (CR-044):** `CONTENT_LOCALES = vi|en|ja` (DB nhận), `SEED_LOCALES = vi|en` (có file seed + bắt buộc cặp I-1) — `src/db/schema.ts`.
+ja **không có file seed** (cột "Seed cũ" chỉ có vi/en; ngoại lệ bài `ai-weekly-*` do workflow AI news ghi `src/content/blog/ja/`) → bot dịch rồi
+`create` thẳng vào DB; parity bỏ qua hàng ja. Thiếu bản ja → web dùng bản en cùng slug (`01` §Kiến trúc nhanh). Thứ tự seed: `05` §10.
 
 ## 3. Quan hệ (không có FK thật — liên kết bằng chuỗi slug / đường dẫn)
 
@@ -66,9 +70,9 @@ Write-path chặn ảnh thiếu (I-7) và registry sai (I-3/I-4), nhưng **khôn
 | # | Ràng buộc | Thực thi |
 |---|---|---|
 | — | Required fields theo collection (`REQUIRED_FIELDS`): post `slug,title,date,category,excerpt,cover,body` · solution `slug,title,description,features,benefits,category,showcase` · product `slug,title,description,screenshots,showcase` · case_study `slug,title,category,year,challenge,solution,result,gallery,related` · about `mission,milestones,partners` | chặn |
-| I-1 | Mỗi slug có đủ cặp vi + en | **cảnh báo** (tạo vi rồi en ngay sau) |
+| I-1 | Mỗi slug có đủ cặp vi + en (ja tuỳ chọn: ghi ja không cảnh báo, bản ja không thay được vi/en còn thiếu) | **cảnh báo** (tạo vi rồi en ngay sau) |
 | I-2 | slug `a-z0-9-`; `data.slug` = khoá (post/solution/product/case_study) | chặn |
-| I-3/I-4 | solution/product phải có `slug_registry` đúng nhóm (`category` = `group`) | chặn → tạo registry **trước** nội dung |
+| I-3/I-4 | solution/product phải có `slug_registry` **cùng locale**, đúng nhóm (`category` = `group`) — ghi `solution/ja/x` cần `slug_registry/ja/x` | chặn → tạo registry **trước** nội dung |
 | I-5 | Khoá duy nhất kể cả bản đã xoá mềm | chặn → slug từng dùng thì không tạo lại được, dùng `rollback` để khôi phục |
 | I-6 | Enum: category blog/solution/case study, nhóm registry, icon showcase; `company_info`: `phone.href` `tel:`, `email.href` `mailto:`, `map.embedUrl` https Google Maps | chặn |
 | I-7 | Ảnh tham chiếu tồn tại: `/uploads/*` = asset còn sống; `/images/*` = file có trong `public/` | chặn |

@@ -7,16 +7,16 @@ bản ghi dưới đây, nếu không trang sẽ 404, thiếu trên danh sách, 
 
 | Loại | Thêm mới | Xoá | Đổi slug |
 |---|---|---|---|
-| **Blog** (`post`) | `post/{vi,en}/<slug>` (+ upload cover). Không registry | delete `post/{vi,en}/<slug>` | Thêm + xoá + báo dev redirect 301 |
-| **Giải pháp** (`solution`) | `slug_registry/{vi,en}/<slug>` (group `enterprise`/`ai`) → `solution/{vi,en}/<slug>` → `listing_item/{vi,en}/<slug>` | delete nội dung → registry → listing_item + dọn tham chiếu | Thêm + xoá + redirect |
-| **Sản phẩm** (`product`) | registry (group `product`) → `product/{vi,en}/<slug>` → `listing_item` (+ `home.featuredProducts` nếu lên trang chủ) | delete nội dung → registry → listing_item → bỏ khỏi `home.featuredProducts` | Thêm + xoá + redirect |
-| **Case study** (`case_study`) | `case_study/{vi,en}/<slug>` → `listing_item/{vi,en}/<slug>` | delete nội dung → listing_item + dọn `related` ở case study khác | Thêm + xoá + redirect |
+| **Blog** (`post`) | `post/{vi,en,ja}/<slug>` (+ upload cover). Không registry | delete `post/{vi,en,ja}/<slug>` | Thêm + xoá + báo dev redirect 301 |
+| **Giải pháp** (`solution`) | `slug_registry/{vi,en,ja}/<slug>` (group `enterprise`/`ai`) → `solution/{vi,en,ja}/<slug>` → `listing_item/{vi,en,ja}/<slug>` | delete nội dung → registry → listing_item + dọn tham chiếu | Thêm + xoá + redirect |
+| **Sản phẩm** (`product`) | registry (group `product`) → `product/{vi,en,ja}/<slug>` → `listing_item` (+ `home.featuredProducts` nếu lên trang chủ) | delete nội dung → registry → listing_item → bỏ khỏi `home.featuredProducts` | Thêm + xoá + redirect |
+| **Case study** (`case_study`) | `case_study/{vi,en,ja}/<slug>` → `listing_item/{vi,en,ja}/<slug>` | delete nội dung → listing_item + dọn `related` ở case study khác | Thêm + xoá + redirect |
 | **About** | — (1 bản ghi/locale, chỉ sửa) | — | — |
 
 ## Chi tiết
 
 ### `slug_registry` (thay `src/lib/content/slug.ts`)
-- 1 bản ghi / slug / locale, `data = {"group": "enterprise" | "ai" | "product"}`, **ghi giống nhau cho vi và en**.
+- 1 bản ghi / slug / locale, `data = {"group": "enterprise" | "ai" | "product"}`, **ghi giống nhau cho vi, en (và ja)**. Web đọc thứ tự/nhóm từ bản `vi` (`src/lib/content/registry.ts` `getRegistrySlugs`); bản `ja` vẫn bắt buộc để ghi được `solution|product/ja/<slug>` (I-3 kiểm registry **cùng locale**).
 - `sortOrder` = **thứ tự hiển thị** trên trang danh sách và mega menu Header (0, 1, 2…). Chèn giữa → cập nhật `sortOrder` các bản ghi sau.
 - Solution/product không có registry → write-path **từ chối** tạo nội dung (I-3); `category` của solution phải = `group` (I-4).
 - Hiện trạng: `list --collection slug_registry --locale vi`.
@@ -38,7 +38,7 @@ Metadata thẻ theo slug — **bản vi và en riêng**:
 - `chips` chỉ diễn đạt lại tính năng đã có trong nội dung — không thêm tuyên bố mới (BR-004).
 
 `listing_page/<locale>/{products,caseStudies,enterprise,ai}` = hero + danh mục lọc 4 trang danh sách. Thêm danh mục lọc mới =
-thêm phần tử `categories` ở **cả vi và en**. `listing_cta` = CTA cuối trang, `listing_labels/<locale>/labels` = nhãn chung.
+thêm phần tử `categories` ở **cả vi và en** (+ ja nếu đã seed). `listing_cta` = CTA cuối trang, `listing_labels/<locale>/labels` = nhãn chung.
 
 ### `home/<locale>/home`
 - `solutionCards[].bullets` — tên giải pháp theo nhóm (vd "Khách hàng & bán hàng — CRM"). Xoá/đổi tên giải pháp → sửa bullet (vi + en).
@@ -49,7 +49,7 @@ thêm phần tử `categories` ở **cả vi và en**. `listing_cta` = CTA cuố
 Tiêu đề/mô tả 2 nhóm giải pháp. Hiếm khi cần sửa.
 
 ### Redirect 301 — KHÔNG nằm trong DB
-Xoá / đổi slug trang đã public → URL cũ 404 cho tới khi **dev** thêm 3 dòng (không prefix, `/vi`, `/en`) vào
+Xoá / đổi slug trang đã public → URL cũ 404 cho tới khi **dev** thêm 4 dòng (không prefix, `/vi`, `/en`, `/ja`) vào
 `next.config.ts` → `redirects()` rồi deploy. Bot chỉ **báo** trong tin nhắn kết quả (đề xuất đích: trang thay thế
 hoặc trang danh sách, vd `/solutions/ai`).
 

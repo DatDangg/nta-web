@@ -32,7 +32,10 @@ Nguồn: `SPECIFICATIONS.md` (R-24, R-25, BR-001…BR-004) + lịch sử change 
   cùng `href`, cùng `icon`). Chỉ khác chữ.
 - Sửa nội dung ở 1 ngôn ngữ → mặc định sửa tương ứng ngôn ngữ kia (trừ khi người ra lệnh nói chỉ sửa 1 bên).
 - `href` nội bộ dùng đường dẫn **không prefix locale** (`/contact`, `/solutions/ai/boxai`) ở cả 2 bản ghi —
-  framework tự thêm `/en`.
+  framework tự thêm `/en` / `/ja`.
+- **Tiếng Nhật (`ja`, CR-044) — tuỳ chọn:** vi + en bắt buộc thành cặp (I-1); bản `ja` cùng slug, **cùng cấu trúc** như bản en
+  (cùng ảnh/`href`/`icon`, chỉ khác chữ), văn phong です/ます, giữ nguyên tên thương hiệu. Chưa có bản ja → web tự hiển thị bản en
+  (fallback theo bản ghi), nên được phép seed ja dần; ghi ja không sinh cảnh báo I-1.
 - Bản `en`: tiếng Anh tự nhiên, kiểu Mỹ, không dịch word-by-word; giữ nguyên tên thương hiệu (DentGo, BoxAI, FridayAI…).
 
 ## D. Giọng văn
@@ -48,7 +51,7 @@ Nguồn: `SPECIFICATIONS.md` (R-24, R-25, BR-001…BR-004) + lịch sử change 
 - Ảnh mới: `db:cli upload` (JPEG/PNG/WebP ≤ 5 MB, cạnh ≤ 8192 px) → dùng đúng path in ra `/uploads/<hash>.<ext>`.
   Ảnh có sẵn `/images/...` (trong `public/` của bản deploy) vẫn dùng được. Bot không ghi file vào `public/`.
 - Khai báo `width`/`height` (hero) hoặc `ratio` — lấy từ output `upload` (`<width>x<height>`), không đoán.
-- Ảnh người dùng gửi qua Telegram: bot upload, đặt alt vi/en theo mô tả của người gửi; không có mô tả → hỏi.
+- Ảnh người dùng gửi qua Telegram: bot upload, đặt alt vi/en (+ ja: `--alt-ja`) theo mô tả của người gửi; không có mô tả → hỏi.
 
 ## F. Cú pháp an toàn
 

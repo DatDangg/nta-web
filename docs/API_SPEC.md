@@ -48,13 +48,14 @@ Không có auth người dùng. `/api/revalidate` dùng shared secret `REVALIDAT
   "need": "crm|dentgo|lms|hrm|boxai|custom-ai|flycam|custom-software|other (tuỳ chọn) — Nhu cầu",
   "message": "string (bắt buộc, 10–2000 ký tự)",
   "honeypot": "", // trường ẩn chống spam — phải rỗng
-  "locale": "vi|en (tuỳ chọn) — ngôn ngữ trang gửi; thiếu/'' → vi; giá trị khác → 400 errors.locale (CR-037)"
+  "locale": "vi|en|ja (tuỳ chọn) — ngôn ngữ trang gửi; thiếu/'' → vi; giá trị khác → 400 errors.locale (CR-037; ja từ CR-044)"
 }
 ```
 
 `company` / `need` thêm ở spec 3.6.0 (CR-008), được chuyển tiếp nguyên trạng sang `CONTACT_FORM_TARGET`.
-`locale` (CR-037): `src/lib/contact/useContactForm.ts` gửi theo `useLocale()` cho cả `/contact`, `/en/contact` và form CTA;
-validate ở `src/lib/api/contact-schema.ts`.
+`locale` (CR-037): `src/lib/contact/useContactForm.ts` gửi theo `useLocale()` cho cả `/contact`, `/en/contact`, `/ja/contact` và form CTA;
+validate ở `src/lib/api/contact-schema.ts` bằng `isLocale` (`src/lib/content/slug.ts`) = `routing.locales` (`src/i18n/routing.ts`: `vi`, `en`, `ja` — CR-044).
+Apps Script `tools/contact-mail/Code.gs` kiểm cùng tập (`SUPPORTED_LOCALES_ = ['vi','en','ja']`) → đổi tập locale phải dán lại script lên Apps Script.
 Form trang `/contact` bắt buộc thêm `phone` + `need` và giới hạn `message` ≤500 ở client; API giữ tuỳ chọn để form CTA
 rút gọn (name/email/message) ở trang chi tiết giải pháp vẫn hợp lệ. Danh sách key `need`: `src/lib/contact/company-info.ts`.
 

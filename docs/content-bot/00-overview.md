@@ -6,7 +6,7 @@
 Website giới thiệu năng lực công ty NTA (B2B, content-driven, **không có đăng nhập**; nội dung lưu PostgreSQL từ 14/10/2026) — 3 mảng:
 **Giải pháp doanh nghiệp** (CRM, HRM, LMS, DentGo), **Giải pháp AI** (BoxAI, Flycam, Custom AI, FridayAI,
 AI Operations Brain), **Ứng dụng AI** (AI Music Maker, Hair-style AI) + Case study, Tin tức, Giới thiệu, Liên hệ.
-Đối tượng: doanh nghiệp tư nhân và cơ quan nhà nước. Song ngữ vi (mặc định) / en. Nguồn: `BRIEF.md`.
+Đối tượng: doanh nghiệp tư nhân và cơ quan nhà nước. Đa ngữ vi (mặc định) / en / ja (ja từ CR-044 — thiếu bản ja thì web hiển thị bản en). Nguồn: `BRIEF.md`.
 
 ### Content bot (CR-030 — bot do người dùng tự dựng, repo cung cấp CLI + tài liệu)
 Cho người quản trị **thêm / sửa / xoá nội dung qua Telegram** mà không cần dev:
@@ -25,7 +25,7 @@ Cung cấp đủ context để (1) model trong bot sửa đúng bản ghi, đún
 | Tầng | Công nghệ |
 |---|---|
 | Framework | Next.js 15 (App Router, SSG) · React 19 · TypeScript 5.9 |
-| i18n | `next-intl` 4 — `vi` không prefix, `en` prefix `/en` |
+| i18n | `next-intl` 4 — `vi` không prefix, `en` prefix `/en`, `ja` prefix `/ja` (CR-044) |
 | Nội dung | PostgreSQL 16 (`content_entries` + lịch sử `content_versions`, Drizzle) — `data` jsonb = frontmatter MDX / object TS cũ, `body` = MDX (render bằng `next-mdx-remote` 6). File `src/content/**` chỉ là seed |
 | Ghi nội dung | `db:cli` (`tools/db/content-cli.ts`) qua `src/db/content-repo.ts`: validate + version + xoá mềm + rollback; `POST /api/revalidate` làm mới cache |
 | Giao diện | Tailwind CSS 3 · component tự viết (không UI kit) |

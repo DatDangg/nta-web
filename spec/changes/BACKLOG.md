@@ -51,7 +51,7 @@
 | CR-041 | Hero trang chủ: bỏ dải trắng hai bên trên màn rất rộng (nền full-bleed sau stage 1440, fade mép mềm) — follow-up CR-040 | MODIFY | done (1 task, spec 4.9.0 / scope v59; hướng A: nền mờ full-bleed sau stage 1440, mask mềm hai cạnh) | `archive/2026-10-19-hero-wide-screen-backdrop.md` | 2026-10-19 | 2026-10-19 |
 | CR-042 | Hero trang chủ: bỏ nền mờ full-bleed + mask hai cạnh của CR-041, quay lại bố cục CR-040 | REMOVE | done (1 task, spec 4.10.0 / scope v60; hero về bố cục CR-040) | `archive/2026-10-20-hero-remove-blur-backdrop.md` | 2026-10-20 | 2026-10-20 |
 | CR-043 | Hero trang chủ: hiện nền bên trái (thành phố + cây) như bản mẫu mới — ảnh hero mới full-bleed, phủ trắng nhẹ | MODIFY | done (1 task, review round 2 PASS, spec 4.11.0 / scope v61) | `archive/2026-10-20-hero-left-background.md` | 2026-10-20 | 2026-10-20 |
-| CR-044 | Thêm tiếng Nhật (ja): route `/ja/...`, `ja.json`, bộ chuyển VI/EN/JA, hreflang/sitemap, font JP, migration DB cho locale ja + fallback; nội dung ja do bot seed sau | ADDITIVE (i18n/DB) | in_progress (spec 4.12.0 / scope v62; 3 phase 7 task, chờ duyệt plan + duyệt migration 0002) | `2026-11-09-add-japanese-locale.md` | 2026-11-09 | |
+| CR-044 | Thêm tiếng Nhật (ja): route `/ja/...`, `ja.json`, bộ chuyển VI/EN/JA, hreflang/sitemap, font JP, migration DB cho locale ja + fallback; nội dung ja do bot seed sau | ADDITIVE (i18n/DB) | in_progress (spec 4.12.0 / scope v62; 7/7 task done + spec-validator COMPLETE, chưa push; next: user rollout prod theo docs/runbook/db.md §10 trước cron AI news thứ 7 + xác nhận G1 R-20a.6) | `2026-11-09-add-japanese-locale.md` | 2026-11-09 | |
 
 ## Quy tắc tracking
 

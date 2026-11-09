@@ -16,7 +16,7 @@ Ký hiệu (bản ghi DB): `S` = `solution/<locale>/<slug>` · `P` = `product/<l
 | Menu Header: "Giải pháp" → mega menu 2 cột | Tên/mô tả nhóm: `L.listingPages[locale].enterprise|ai` (`title`, `lead`+`accent`, `description`). Mục con: `S.title` + `L.listingItems[slug].subtitle/icon`, thứ tự = `slug.ts` |
 | Nhãn menu (Trang chủ, Sản phẩm, Tin tức…) | 🔒 `M.nav.*` |
 | Footer: nhóm link, giới thiệu ngắn, tagline, mạng xã hội | 🔒 `M.footer.*` |
-| Footer: SĐT / email / địa chỉ | 🔒 `company_info/{vi,en}/contact` (ghi giống nhau 2 locale) |
+| Footer: SĐT / email / địa chỉ | 🔒 `company_info/{vi,en,ja}/contact` (ghi giống nhau mọi locale) |
 
 ## 2. Trang chủ `/`
 

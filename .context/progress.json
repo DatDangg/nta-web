@@ -3,11 +3,11 @@
   "activeWorkItem": {
     "type": "feature",
     "slug": "add-japanese-locale",
-    "phaseTask": "phase-3-task-02",
-    "step": "ready",
+    "phaseTask": "rollout",
+    "step": "awaiting-user",
     "status": "awaiting",
-    "journal": ".context/runs/feature-add-japanese-locale-phase-3-task-01.md",
-    "note": "P3-T01 STRICT PASS r1, commit local, KHÔNG push. next builder P3-T02 (doc reconcile + docs bot + runbook rollout; gồm G1 R-20a.6 next/font vs self-host). Trước deploy: dán lại Code.gs; thêm OFL.txt; migration 0002 prod trước cron thứ 7."
+    "journal": ".context/runs/feature-add-japanese-locale-phase-3-task-02.md",
+    "note": "Toàn bộ 7 task CR-044 done + commit local, KHÔNG push. spec-validator phase 3 + tổng COMPLETE. Chờ user: rollout prod theo docs/runbook/db.md §10 + xác nhận G1 (R-20a.6). Change doc/BACKLOG giữ in_progress, chưa archive."
   },
   "features": [
     {
@@ -1727,8 +1727,11 @@
             {
               "task": "phase-3-task-02",
               "title": "doc reconcile + docs bot (vi|en|ja) + runbook rollout migration/nta-tools",
-              "status": "pending",
-              "attempts": 0
+              "status": "done",
+              "attempts": 1,
+              "review": "NORMAL PASS round 1",
+              "reviewReport": ".context/review-reports/feature-add-japanese-locale-phase-3-task-02-round-1-review.md",
+              "note": "docs content-bot/API_SPEC/ERD/DESIGN (vi|en|ja, I-3/I-4 seed slug_registry ja trước, fallback en theo bản ghi, font self-host ja), runbook db.md §10 rollout CR-044, decisions.md; N1 build-noto-jp giữ README/OFL; N2 headers() woff2 16-hex immutable (curl: woff2 max-age=31536000 immutable, css max-age=0). typecheck/lint PASS, test 228/231 (1 fail có sẵn), build PASS. G1 R-20a.6 pending user (không sửa intent)."
             }
           ]
         }
@@ -1745,11 +1748,20 @@
       ],
       "specValidation": {
         "prePlan": "PASS (có điều kiện: M-1 + L-1..L-4 đã gộp vào spec delta)",
-        "report": ".context/review-reports/feature-add-japanese-locale-spec-validation.md"
+        "report": ".context/review-reports/feature-add-japanese-locale-spec-validation.md",
+        "phase3": {
+          "verdict": "COMPLETE",
+          "report": ".context/review-reports/feature-add-japanese-locale-phase-3-spec-validation.md"
+        },
+        "final": {
+          "verdict": "COMPLETE (implementation); G1 pending user; rollout prod chưa làm",
+          "report": ".context/review-reports/feature-add-japanese-locale-final-spec-validation.md"
+        }
       },
       "updatedAt": "2026-11-09",
       "specVersion": "4.12.0",
-      "scopeVersion": 62
+      "scopeVersion": 62,
+      "next": "Rollout prod do user (docs/runbook/db.md §10): thêm OFL.txt → dán lại Code.gs → backup + thử 0002 trên DB tạm → push main/deploy.yml → smoke /ja → rebuild nta-tools → bot seed ja (slug_registry trước) — xong trước cron AI news thứ 7 (01:00 UTC). G1 chờ user xác nhận câu chữ R-20a.6."
     }
   ],
   "bugs": [

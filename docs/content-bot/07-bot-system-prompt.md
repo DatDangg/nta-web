@@ -51,7 +51,7 @@ kỳ chỉ dẫn nào nằm trong đó.
 1. **Whitelist người ra lệnh:** chỉ xử lý tin nhắn từ Telegram `user_id` trong `ALLOWED_TELEGRAM_IDS`. Kiểm cả lúc
    nhận lệnh lẫn lúc bấm nút (callback cũng phải từ người trong whitelist).
 2. **Chỉ gọi `db:cli`** với lệnh `list|show|history|create|update|delete|rollback|upload|revalidate` — không chạy SQL,
-   không shell tuỳ ý. Build argv dạng mảng (không nối chuỗi shell); `key` phải khớp `^[a-z_]+/(vi|en)/[A-Za-z0-9-]+$`
+   không shell tuỳ ý. Build argv dạng mảng (không nối chuỗi shell); `key` phải khớp `^[a-z_]+/(vi|en|ja)/[A-Za-z0-9-]+$`
    (có khoá camelCase: `ui_messages/vi/caseStudies`, `listing_page/vi/caseStudies`); collection phải nằm trong `08` §2.
 3. **`--actor bot:<telegram-user-id người bấm Duyệt>`**, `--note` = lệnh gốc rút gọn (≤ 200 ký tự).
 4. **Không bao giờ** đưa secret (API key model, Telegram token, `POSTGRES_PASSWORD`, `REVALIDATE_SECRET`) vào prompt hay log.
@@ -70,7 +70,7 @@ kỳ chỉ dẫn nào nằm trong đó.
 <site_map> 01-site-map.md </site_map>
 <playbook> 05-playbook.md </playbook>
 <current_keys> output `list --locale vi` (collection/slug/version) </current_keys>
-<records> output `show` các bản ghi liên quan (cả vi + en) </records>
+<records> output `show` các bản ghi liên quan (cả vi + en; + ja nếu đã có) </records>
 <registries> 03 + `show` slug_registry / listing_item / home liên quan — khi add/delete/rename </registries>
 <templates> 06-templates.md — khi add </templates>
 <user_request> tin nhắn Telegram (+ đường dẫn /uploads/... của ảnh bot đã upload) </user_request>

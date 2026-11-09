@@ -63,3 +63,5 @@ User: "đổi hết tất cả luôn" → làm đủ bộ, ja ngang hàng vi/en 
 ## Tiến độ xử lý
 - 2026-11-09: change-request — ADDITIVE, risk HIGH; spec 4.12.0 (R-20a) / test-scope v62; spec-validator pre-plan PASS (gaps gộp vào spec);
   task `tasks/feature-add-japanese-locale/phase-1-task-01 … phase-3-task-02`. Chờ user duyệt plan + duyệt dòng `HIGH_RISK_MIGRATION` cho migration 0002.
+- 2026-11-09: P1-T01..P3-T02 done (commit local, chưa push). spec-validator phase 3 + tổng CR-044 COMPLETE (`.context/review-reports/feature-add-japanese-locale-final-spec-validation.md`).
+  **Chưa archive — next (user):** rollout prod theo `docs/runbook/db.md` §10: thêm `public/fonts/noto-sans-jp/OFL.txt` gốc → dán lại `tools/contact-mail/Code.gs` lên Apps Script → backup + chạy thử 0002 trên DB tạm → push main / deploy.yml → smoke `/ja` → rebuild `nta-tools` → bot seed ja (slug_registry ja trước) — xong TRƯỚC cron AI news thứ 7. G1: chờ user xác nhận câu chữ R-20a.6 (đề xuất: "Font Noto Sans JP tự host trong `public/fonts/noto-sans-jp/`, chỉ link ở trang ja (không tải trên vi/en)").

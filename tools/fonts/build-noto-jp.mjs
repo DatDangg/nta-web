@@ -32,8 +32,11 @@ const fontFaces = (readFileSync(sourceCss, 'utf8').match(/@font-face\{[^}]*\}/g)
   .filter((rule) => rule.includes(`font-family:${FAMILY};`));
 if (fontFaces.length === 0) throw new Error(`${sourceCss} không có @font-face "${FAMILY}".`);
 
-rmSync(OUT_DIR, { recursive: true, force: true });
+// Chỉ xoá output cũ do script sinh (*.woff2 + CSS) — giữ README.md / OFL.txt (giấy phép) cùng thư mục.
 mkdirSync(OUT_DIR, { recursive: true });
+for (const name of readdirSync(OUT_DIR)) {
+  if (name.endsWith('.woff2') || name === 'noto-sans-jp.css') rmSync(path.join(OUT_DIR, name));
+}
 
 const rewrittenFaces = fontFaces.map((rule) => rule.replace(/url\(\/_next\/static\/media\/([^)]+)\)/g, (_, fileName) => {
   const sourceFile = path.join(NEXT_STATIC, 'media', fileName);

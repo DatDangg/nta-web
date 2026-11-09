@@ -52,6 +52,23 @@
 
 Font stack: `-apple-system, BlinkMacSystemFont, "SF Pro Display", Inter, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif` (SF Pro trước cho vibe Apple, Inter fallback hỗ trợ tiếng Việt).
 
+#### Font tiếng Nhật — Noto Sans JP self-host (current-state, CR-044 P2-T04)
+- `--font-sans` (`src/app/globals.css`) = `var(--font-inter, Inter), var(--font-noto-jp, Inter), …`: Inter qua `next/font` cho mọi locale;
+  glyph Nhật lấy từ `--font-noto-jp`, biến này **chỉ được định nghĩa** trong `public/fonts/noto-sans-jp/noto-sans-jp.css`.
+- **Chỉ trang ja link CSS font:** `src/app/[locale]/layout.tsx` render `<link rel="stylesheet" href="/fonts/noto-sans-jp/noto-sans-jp.css">` khi `locale === 'ja'`.
+  Trang vi/en **không** tải CSS lẫn file `.woff2` JP (`--font-noto-jp` không tồn tại → fallback Inter, vô hại).
+  Không dùng `next/font` cho JP: `@font-face` của next/font luôn vào CSS chung của layout (kể cả import có điều kiện) → mọi trang vi/en phải tải
+  ~95 KB CSS JP render-blocking (`.context/decisions.md` — CR-044 P2-T04).
+- Font: Noto Sans JP variable (wght 100–900), `font-display: swap`, 124 file `.woff2` subset theo `unicode-range` (~5.7 MB tổng trên đĩa, trình duyệt
+  chỉ tải subset chứa ký tự trên trang). Tên file = 16 hex (hash nội dung do next/font sinh).
+- **Tái tạo** (`tools/fonts/build-noto-jp.mjs`, hướng dẫn đầu file): tạm thêm `Noto_Sans_JP({ display: 'swap', variable: '--font-noto-jp', preload: false })`
+  vào 1 module layout import → `npm run build` → `node tools/fonts/build-noto-jp.mjs [CSS chunk]` → gỡ import tạm, build lại. Script chỉ xoá
+  `*.woff2` + `noto-sans-jp.css` cũ rồi ghi mới, **giữ** `README.md` / `OFL.txt` trong thư mục.
+- **Giấy phép:** SIL Open Font License 1.1 (OFL-1.1) — `public/fonts/noto-sans-jp/README.md`. Phân phối phải kèm thông báo bản quyền + văn bản
+  giấy phép: `OFL.txt` **chưa có** trong repo (việc trước deploy — `docs/runbook/db.md` §10).
+- **Cache header** (`next.config.ts` `headers()`): `/fonts/noto-sans-jp/:file([0-9a-f]{16}\.woff2)` → `Cache-Control: public, max-age=31536000, immutable`
+  (tên = hash, đổi nội dung là đổi tên). `noto-sans-jp.css` (tên cố định) và README giữ mặc định Next `public, max-age=0` để lần tái tạo font có hiệu lực ngay.
+
 ### Spacing Scale
 
 | Token | Value |
@@ -243,7 +260,7 @@ Font stack: `-apple-system, BlinkMacSystemFont, "SF Pro Display", Inter, "Segoe 
   Đổi cờ = đổi variable + chạy lại Deploy, không build lại. Bỏ cờ + đường đọc file: `tasks/feature-content-database/phase-5-task-02.md` (chưa làm).
 - `file` = đọc `src/content/*` + hằng TS như trước CR-031 (giữ làm đường lùi); `db` = bảng `content_entries` (bản ghi còn sống).
 - `src/content` là **seed import ban đầu** (`src/content/README.md`), sửa file không đổi website khi cờ = `db`.
-- Ngoại lệ có chủ đích: bản tin AI tuần (CR-019/CR-034) vẫn commit file `src/content/blog/{vi,en}/ai-weekly-*.mdx` **và** chèn vào DB (insert-only, `content-cli publish-post`) — xem § Vận hành.
+- Ngoại lệ có chủ đích: bản tin AI tuần (CR-019/CR-034; ja từ CR-044) vẫn commit file `src/content/blog/{vi,en,ja}/ai-weekly-*.mdx` **và** chèn vào DB (insert-only, `content-cli publish-post`) — xem § Vận hành.
 
 ### Luồng đọc DB
 1. Loader MDX `src/lib/content/load-mdx.ts` (post/solution/product/case_study/about), registry `src/lib/content/registry.ts`
@@ -254,6 +271,18 @@ Font stack: `-apple-system, BlinkMacSystemFont, "SF Pro Display", Inter, "Segoe 
 3. Dữ liệu đi qua **cùng** hàm validate/map/sort như chế độ file (required fields từ `REQUIRED_FIELDS` — `src/db/content-rules.ts`).
 4. DB lỗi → store **ném** `[content-store] Không đọc được nội dung …` (không trả rỗng): data cache không lưu kết quả lỗi → trang đã cache vẫn 200,
    trang chưa cache 500, DB lên lại tự phục hồi (R-16).
+
+### Locale `ja` + fallback en theo bản ghi (CR-044, R-20a.2)
+- Locale lấy từ **một nguồn** `routing.locales = ['vi','en','ja']` (`src/i18n/routing.ts`); guard page/API dùng `isLocale` (`src/lib/content/slug.ts`).
+- Cơ chế fallback **một chỗ** `src/lib/content/locale-fallback.ts`: `needsContentFallback` chỉ đúng với `ja`; vi/en đi thẳng đường cũ (output không đổi).
+  - `readWithFallback` đọc song song ja + en, `mergeByKey` thay **cả bản ghi** (có bản ja → dùng nguyên bản ja, không trộn field en; thiếu → bản en),
+    rồi sắp theo quy tắc nguồn. Cảnh báo `console.warn` 1 lần/process/collection (`warnOncePerProcess`), không log mỗi request.
+  - Chế độ `db`: `getLocalizedEntries` (`src/lib/content/store.ts`) — 2 lần đọc đều qua data cache tag `content:<collection>` → revalidate collection làm mới cả hai.
+    Dùng cho loader MDX (`load-mdx.ts`), registry keyed/singleton (`registry.ts`: listing_*, home, solution_overview), `company_info` (`company-contact.ts`).
+  - Chế độ `file`: MDX gộp theo tên file `<slug>.mdx` (`src/content/<coll>/ja` chưa có = chưa có bản ghi, không lỗi); object TS dùng `pickLocale` (`record.ja ?? record.en`).
+  - **Ngoại lệ:** `slug_registry` web luôn đọc bản `vi` (`getRegistrySlugs`); `ui_messages` ja **không** fallback en — gộp DB đè lên `src/i18n/messages/ja.json`
+    (`src/i18n/request.ts`), chưa có bản ghi ja → dùng nguyên `ja.json`.
+- Trang ja luôn `<html lang="ja">` + chữ giao diện ja kể cả khi nội dung đang là bản en fallback.
 
 ### Cache tag + revalidate
 - Tag (`src/lib/content/cache-tags.ts`): `content` (toàn bộ) · `content:<collection>` (mọi bản ghi + danh sách) · `content:<collection>:<slug>` (1 bản ghi).
@@ -274,7 +303,7 @@ Font stack: `-apple-system, BlinkMacSystemFont, "SF Pro Display", Inter, "Segoe 
 - `db` → messages = gộp các bản ghi `ui_messages/<locale>/<namespace>`; company-info = `company_info/<locale>/contact`.
 - **Gộp sâu DB đè lên file** (`src/lib/content/shape.ts` `mergeOverFile`, `src/lib/content/ui-data.ts`): key file có mà DB thiếu → dùng giá trị file + `console.warn`
   (1 lần/process, ≤ 10 đường dẫn, tiền tố `[content-shape]`); sai kiểu / chuỗi rỗng / mảng rỗng → ném lỗi.
-- `src/i18n/messages/{vi,en}.json` và `COMPANY_CONTACT` (`src/lib/contact/company-info.ts`) **giữ lâu dài** làm dự phòng + chuẩn cấu trúc (không xoá cả khi bỏ cờ).
+- `src/i18n/messages/{vi,en,ja}.json` và `COMPANY_CONTACT` (`src/lib/contact/company-info.ts`) **giữ lâu dài** làm dự phòng + chuẩn cấu trúc (không xoá cả khi bỏ cờ).
 
 ### Ảnh upload (P3-T05, R-16d)
 - Lưu: `saveImage` (`src/lib/uploads/save-image.ts`) — JPEG/PNG/WebP theo magic bytes, ≤ 5 MB, cạnh ≤ 8192 px, tên = sha256 + đuôi, ghi file trước rồi

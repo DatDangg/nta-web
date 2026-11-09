@@ -24,7 +24,7 @@ bot ghi qua `db:cli` (create / update / delete / rollback / upload / revalidate 
 ## Gợi ý nạp context (tiết kiệm token)
 
 1. System prompt = `07` + `04` + `02` + `08` + `09` (cố định → bật prompt caching).
-2. Mỗi lệnh: kèm `01`, `05`, và **output `show` các bản ghi đang bị sửa** (cả vi + en).
+2. Mỗi lệnh: kèm `01`, `05`, và **output `show` các bản ghi đang bị sửa** (cả vi + en; + ja nếu đã có).
 3. Thêm mới / xoá / đổi slug: kèm thêm `03`, `06` và `show` các bản ghi registry liên quan.
 4. Thêm mới: kèm `show` 1 bản ghi **cùng loại** làm mẫu (vd `solution/vi/crm`).
 

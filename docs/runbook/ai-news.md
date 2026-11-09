@@ -63,13 +63,13 @@ Thiếu `OPENCODE_API_KEY` → bước "Generate items (LLM + guard)" đỏ, kh�
 
 Actions → **AI News Weekly** → *Run workflow* (branch `main`). Bài của tuần đã có file → job `digest` xanh
 ở bước "Check this week's post" (`status=skip`), không sinh lại, không commit; job `publish-db` vẫn chạy:
-DB đã có cả 2 locale → dry-run báo `exists`, **không backup, không ghi**, chỉ revalidate + smoke; thiếu locale nào → chèn locale đó.
+DB đã có mọi locale có file (vi/en, + ja từ CR-044) → dry-run báo `exists`, **không backup, không ghi**, chỉ revalidate + smoke; thiếu locale nào → chèn locale đó.
 
 Kiểm kết quả trên VPS: `docker compose run --rm --no-deps nta-tools tools/db/content-cli.ts history post/vi/<slug>`
 (thấy `v1 create workflow:ai-news … — ai-news <slug> run <id>`).
 
 **Đăng lại / thay bài tuần đã đăng — KHÔNG làm bằng file.** Prod đọc DB; file seed `src/content/blog/*` chỉ là lịch sử.
-Xoá hoặc sinh lại file rồi chạy workflow **không đổi bài trên web**: DB đã có `post/{vi,en}/<slug>` → `publish-post` báo `exists`,
+Xoá hoặc sinh lại file rồi chạy workflow **không đổi bài trên web**: DB đã có `post/{vi,en,ja}/<slug>` → `publish-post` báo `exists`,
 không ghi (kể cả bản đã xoá mềm), workflow vẫn xanh. Công cụ hiện có trên DB (chạy trên VPS qua `nta-tools`, runbook `db.md` §9, backup trước):
 - Xem: `… content-cli.ts history post/vi/<slug>` / `show post/vi/<slug>`.
 - Quay về 1 version cũ (kể cả khôi phục bản đã xoá mềm): `… content-cli.ts rollback post/vi/<slug> --to <N> --expected-version <M> --confirm-prod`, rồi `revalidate --collection post`.
@@ -321,5 +321,5 @@ cli revalidate --collection post </dev/null
 **Dọn** (luôn chạy, dừng ở bước nào cũng vậy — kể cả sau rollback): `shred -u "$ENVF" 2>/dev/null; rm -rf "$WORK"; trap - EXIT HUP TERM`.
 Sau khi commit file seed lên `main`: Actions → **Content ops** → `parity` — không còn lệch `post/{vi,en}/ai-weekly-2026-w42`.
 
-Dùng lại cho bài khác: đổi `SLUG`, `COVER` và 2 dòng `merge` (title/excerpt sinh đúng format bằng `format_post_date` / `_frontmatter`
-trong `tools/ai-news/generate.py`); sửa cả file seed `src/content/blog/{vi,en}/<slug>.mdx` qua commit thường.
+Dùng lại cho bài khác: đổi `SLUG`, `COVER` và 2 dòng `merge` (+ dòng `merge` ja nếu bài có bản ja) (title/excerpt sinh đúng format bằng `format_post_date` / `_frontmatter`
+trong `tools/ai-news/generate.py`); sửa cả file seed `src/content/blog/{vi,en}/<slug>.mdx` (+ `ja/` nếu có) qua commit thường.

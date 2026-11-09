@@ -4,15 +4,18 @@
 
 - Next.js 15 (App Router) + `next-intl`. Nội dung đọc từ **PostgreSQL** (`content_entries`) — mô hình ở `08`.
   Bản ghi = (`collection`, `locale`, `slug`) → `data` (JSON) + `body` (MDX).
-- 2 ngôn ngữ: `vi` (mặc định, URL không prefix) và `en` (URL prefix `/en`).
-  Ví dụ: `/blog/first-steps` (vi) ↔ `/en/blog/first-steps` (en) ↔ bản ghi `post/vi/first-steps`, `post/en/first-steps`.
+- 3 ngôn ngữ (CR-044): `vi` (mặc định, URL không prefix), `en` (URL prefix `/en`), `ja` (URL prefix `/ja`).
+  Ví dụ: `/blog/first-steps` (vi) ↔ `/en/blog/first-steps` (en) ↔ `/ja/blog/first-steps` (ja) ↔ bản ghi `post/vi/first-steps`, `post/en/first-steps`, `post/ja/first-steps`.
+- **Fallback ja → en theo từng bản ghi** (`src/lib/content/locale-fallback.ts`, đọc qua `getLocalizedEntries` — `src/lib/content/store.ts`):
+  bản ghi `ja` chưa có → trang `/ja/...` hiển thị bản `en` cùng collection/slug (không 404); có bản `ja` → dùng nguyên bản ja (không trộn field en).
+  Ngoại lệ: `ui_messages` ja thiếu → dùng `src/i18n/messages/ja.json` (không dùng bản en); `slug_registry` luôn đọc bản `vi` (thứ tự/nhóm).
 - Trang được cache; ghi DB xong phải `revalidate` (`05` §0) thì web mới hiện nội dung mới. Không cần build/deploy.
 - Lưới an toàn = write-path (`08` §4): thiếu field / sai enum / ảnh không tồn tại → CLI từ chối, không ghi.
 - Domain canonical: `https://ntavietnam.tech`.
 
 ## Bảng route
 
-| URL (vi; en thêm `/en`) | Bản ghi | Ghi chú |
+| URL (vi; en thêm `/en`, ja thêm `/ja`) | Bản ghi | Ghi chú |
 |---|---|---|
 | `/` | `home/<locale>/home` + case study / giải pháp / sản phẩm + `ui_messages/<locale>/home` | Trang chủ |
 | `/about` | `about/<locale>/about` + `ui_messages/<locale>/about` | `mission`, `milestones`, `partners` |

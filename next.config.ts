@@ -18,6 +18,16 @@ const nextConfig: NextConfig = {
     // Ảnh upload theo hash nên thêm sau build vẫn tối ưu được, không cần build lại.
     localPatterns: [{ pathname: '/images/**' }, { pathname: '/uploads/**' }],
   },
+  // Font Nhật self-host (CR-044): file .woff2 đặt tên = hash nội dung (tools/fonts/build-noto-jp.mjs) → cache vĩnh viễn.
+  // noto-sans-jp.css tên cố định → KHÔNG immutable (giữ header mặc định), để lần tái tạo font sau có hiệu lực ngay.
+  async headers() {
+    return [
+      {
+        source: '/fonts/noto-sans-jp/:file([0-9a-f]{16}\\.woff2)',
+        headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
+      },
+    ];
+  },
   // Slug case study cũ đã được index/chia sẻ → 301 sang slug mới (CR-025).
   // Dùng `statusCode: 301` vì `permanent: true` của Next trả 308. Nguồn `/vi/...` trỏ thẳng về
   // URL không prefix (localePrefix 'as-needed') để tránh redirect 2 bước qua middleware next-intl.

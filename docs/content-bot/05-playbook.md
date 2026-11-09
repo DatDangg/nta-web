@@ -76,10 +76,10 @@ giải pháp / kết quả (hoặc ghi "đề xuất"), tính năng chính, ản
 
 1. `show` 1 bản ghi cùng loại làm mẫu (vd `solution/vi/crm`, `case_study/vi/dental-clinic-operations`, `product/vi/music-app`).
 2. **Thứ tự ghi** (write-path chặn nếu sai thứ tự):
-   1. `slug_registry/{vi,en}/<slug>` — chỉ solution/product: `data {"group": "enterprise"|"ai"|"product"}`, `sortOrder` = vị trí hiển thị.
+   1. `slug_registry/{vi,en,ja}/<slug>` — chỉ solution/product: `data {"group": "enterprise"|"ai"|"product"}`, `sortOrder` = vị trí hiển thị.
    2. `upload` ảnh mới.
-   3. Nội dung `solution|product|case_study/{vi,en}/<slug>`.
-   4. `listing_item/{vi,en}/<slug>` (`06` §5).
+   3. Nội dung `solution|product|case_study/{vi,en,ja}/<slug>`.
+   4. `listing_item/{vi,en,ja}/<slug>` (`06` §5).
    5. (tuỳ chọn) `home` — thêm vào `featuredProducts` / `solutionCards.bullets`.
 3. Revalidate từng collection đã ghi (hoặc `--all`).
 4. Tóm tắt cho người duyệt liệt kê mọi bản ghi sẽ tạo/sửa + vị trí trong danh sách.
@@ -90,7 +90,7 @@ giải pháp / kết quả (hoặc ghi "đề xuất"), tính năng chính, ản
 2. Sửa **tối thiểu** — chỉ field được yêu cầu, giữ nguyên thứ tự key và mọi phần khác. Gửi `data` đầy đủ.
 3. Sửa bản ngôn ngữ còn lại tương ứng (bot tự dịch EN — `04` §C).
 4. Đổi tên hiển thị (`title`/`brandName`) → kiểm `home` (bullets) và nơi khác nhắc tên.
-5. Chữ giao diện → `ui_messages/<locale>/<namespace>`; liên hệ → `company_info/{vi,en}/contact` (ghi giống nhau 2 locale).
+5. Chữ giao diện → `ui_messages/<locale>/<namespace>`; liên hệ → `company_info/{vi,en,ja}/contact` (ghi giống nhau mọi locale).
    Không để chuỗi / mảng rỗng.
 6. Tóm tắt dạng "trước → sau" cho từng field.
 
@@ -140,3 +140,19 @@ URL: https://ntavietnam.tech/solutions/enterprise/crm
 ```
 
 Sau khi ghi: `✅ Đã cập nhật solution/vi/crm v4, solution/en/crm v4 · revalidate OK` (+ cảnh báo nếu có).
+
+## 10. Seed bản tiếng Nhật `ja` (CR-044 — 1 lần sau khi deploy migration `0002`)
+
+Điều kiện: prod đã chạy migration `drizzle/0002_happy_magma.sql` (CHECK `locale IN ('vi','en','ja')`) **và** image `nta-tools` đã build lại (`10`).
+Chưa đủ → `create …/ja/…` bị từ chối (DB CHECK hoặc I-6 "locale không hợp lệ").
+
+- Nguồn dịch: bản `en` (cấu trúc chuẩn) đối chiếu `vi`; `show <collection>/en/<slug>` → dịch chữ → `create <collection>/ja/<slug>` cùng `sortOrder`.
+- Collection cần seed ja: `home`, `about`, `company_info`, `listing_page`, `listing_cta`, `listing_labels`, `listing_item`, `solution_overview`,
+  `slug_registry`, `solution`, `product`, `case_study`, `post`; `ui_messages` **tuỳ chọn** (thiếu → web dùng `src/i18n/messages/ja.json` đã đủ key,
+  không dùng bản en). `asset` không seed theo locale — thêm alt ja bằng `update` `data.alt.ja` nếu cần.
+- **Thứ tự bắt buộc:** `slug_registry/ja/<slug>` **trước** `solution|product/ja/<slug>` (I-3/I-4 kiểm registry cùng locale, đúng nhóm) —
+  rồi mới tới `listing_item/ja/<slug>`; các collection còn lại không phụ thuộc thứ tự.
+- Ghi từng bản ghi (tuần tự, `10` §Chạy tuần tự), backup trước khi seed hàng loạt (`07` Guardrail 6); revalidate từng collection đã ghi
+  (hoặc `--all`) để trang `/ja/...` thay bản en fallback bằng bản ja.
+- Trong lúc chưa seed đủ, `/ja/...` vẫn 200 với nội dung en (fallback theo bản ghi, cảnh báo log 1 lần/process/collection) — không phải lỗi.
+- Bài `ai-weekly-*`: workflow AI news tự đăng bản ja từ tuần đầu sau CR-044; bài các tuần cũ do bot dịch như bài thường.

@@ -104,7 +104,7 @@ showcase:
     href: "/contact"
 ---
 ```
-Kèm: thêm slug vào `enterpriseSlugs`/`aiSlugs` + `listingItems` vi/en (03).
+Kèm: thêm slug vào `enterpriseSlugs`/`aiSlugs` + `listingItems` vi/en (+ ja) (03).
 
 ## 3. Sản phẩm — `product/<locale>/<slug>`
 
@@ -134,7 +134,7 @@ showcase:
   cta: { title: "<...>", description: "<...>", label: "Liên hệ", href: "/contact" }
 ---
 ```
-Kèm: `productSlugs` + `listingItems` vi/en (+ `home.ts` `featuredProducts` nếu cần).
+Kèm: `productSlugs` + `listingItems` vi/en/ja (+ `home.ts` `featuredProducts` nếu cần).
 
 ## 4. Case study — `case_study/<locale>/<slug>`
 
@@ -171,9 +171,9 @@ showcase:
   cta: { title: "<...>", description: "<...>", label: "Liên hệ tư vấn", href: "/contact" }
 ---
 ```
-Kèm: `listingItems` vi/en với `subtitle: ''`, `chips: []`, `categories: ['<category>']`.
+Kèm: `listingItems` vi/en/ja với `subtitle: ''`, `chips: []`, `categories: ['<category>']`.
 
-## 5. `listing_item/{vi,en}/<slug>` (data = 1 entry `listingItems` cũ, ghi CẢ vi và en)
+## 5. `listing_item/{vi,en,ja}/<slug>` (data = 1 entry `listingItems` cũ, ghi CẢ vi và en; ja khi đã dịch)
 
 ```ts
 '<slug>': { icon: '<ListingIconName>', theme: '<ListingTheme>', categories: ['<id danh mục>'], subtitle: '<phụ đề ngắn>', chips: ['<chip 1>', '<chip 2>', '<chip 3>'] },

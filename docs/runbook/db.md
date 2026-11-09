@@ -272,14 +272,14 @@ npm run db:cli -- rollback solution/vi/crm --to 1 --expected-version 2 [--note "
 npm run db:cli -- create post/vi/<slug> --file record.json [--actor bot:<id>] [--note "..."]      # --file - = stdin
 npm run db:cli -- update solution/vi/crm --file record.json --expected-version 3 [--actor] [--note]   # thay TOÀN BỘ data
 npm run db:cli -- delete post/vi/<slug> --expected-version 2 [--confirm-public-url-change] [--actor] [--note]
-# CR-034/035 (workflow ai-news): CHỈ chèn bài src/content/blog/{vi,en}/<slug>.mdx; bản đã có (kể cả xoá mềm) → exists
+# CR-034/035 (workflow ai-news): CHỈ chèn bài src/content/blog/{vi,en,ja}/<slug>.mdx (ja tuỳ chọn — CR-044); bản đã có (kể cả xoá mềm) → exists
 npm run db:cli -- publish-post <slug> [--dry-run] [--images-dir <dir>] [--actor workflow:ai-news] [--note "..."]
 ```
 
 - `publish-post --images-dir <dir>` (CR-035): `<dir>` = output `--images-out` của `tools/ai-news/generate.py` (`<sha256>.<ext>` + `manifest.json`).
   Chỉ nhận ảnh **có trong manifest** (slug manifest phải khớp; không quét thư mục), file thường (không symlink), tên `<sha256>.<jpg|png|webp>`,
   magic bytes ≤ 5 MB (`inspectImage`), sha256 thật == tên file. Ảnh `/uploads/*` mà bài còn thiếu chưa có asset sống → lưu bằng `saveImage`
-  (UPLOAD_DIR + asset version, actor = `--actor`, alt vi/en + `originalName` = host nguồn từ manifest) **trước** khi chèn bài; trùng hash
+  (UPLOAD_DIR + asset version, actor = `--actor`, alt vi/en/ja + `originalName` = host nguồn từ manifest) **trước** khi chèn bài; trùng hash
   asset đã xoá mềm → `restored`. In thêm `publish-post image /uploads/<x> status=missing|exists` (dry-run) / `created|reused|restored` (ghi).
   Bài tham chiếu ảnh chưa có asset mà thiếu `--images-dir` / thiếu file / file sai → exit 1, không ghi ảnh hay locale nào.
   Chèn bài lỗi sau khi đã lưu ảnh → asset mồ côi vô hại (chạy lại → `reused`). Docker: mount `<dir>` read-only, vd `-v <dir>:/in:ro … --images-dir /in`.
@@ -294,3 +294,48 @@ Lệnh ghi không tự revalidate — chạy `revalidate` sau đó. Trên VPS: `
   (vd `http://127.0.0.1:3005/api/revalidate`) + `REVALIDATE_SECRET` (đặt bằng `read -rs`, CLI không in secret). Sửa 1 bản ghi → nên revalidate cả collection (danh sách dùng tag collection).
 - Xoá bản ghi có URL công khai (post, solution, product, case_study) → write-path từ chối nếu thiếu cờ xác nhận (I-8); luôn cần thêm redirect 301
   trong `next.config.ts` + deploy. Đổi slug = tạo bản ghi mới + xoá mềm bản cũ (không đổi khoá tại chỗ).
+
+## 10. Rollout CR-044 (tiếng Nhật `ja`) — migration `0002` + seed ja
+
+Thay đổi DB: `drizzle/0002_happy_magma.sql` chỉ **nới** CHECK `content_entries_locale_check` thành `locale IN ('vi','en','ja')`
+(`DROP CONSTRAINT` + `ADD CONSTRAINT`, bản ghi cũ đều thoả, không đổi/xoá dữ liệu). Gate (`deploy/db/migration-gate.ts`) chặn vì `ALTER TABLE … DROP`
+→ file **đã có** dòng duyệt `-- HIGH_RISK_MIGRATION: approved 2026-11-09 by Bruce` (dòng 1) — không cần thêm; nếu dòng này bị gỡ, deploy sẽ đỏ ở bước gate (§6).
+
+**Checklist trước khi push** (user làm — agent không SSH / không tải file):
+- [ ] Thêm `public/fonts/noto-sans-jp/OFL.txt` = văn bản OFL-1.1 gốc **kèm dòng copyright** của Noto Sans JP, lấy từ repo `notofonts/noto-cjk`
+      (OFL bắt buộc phân phối kèm giấy phép). `tools/fonts/build-noto-jp.mjs` không xoá file này khi tái tạo font.
+- [ ] Dán lại `tools/contact-mail/Code.gs` lên Apps Script (Deploy → Quản lý triển khai → sửa → **Phiên bản mới**, giữ URL `/exec`):
+      script mới nhận `locale` `ja` (`SUPPORTED_LOCALES_`). Script cũ trả lỗi cho form `/ja/contact`. Dán trước deploy vô hại (script nhận tập rộng hơn).
+- [ ] Backup DB: `docker exec nta-db-backup /scripts/backup.sh pre-migrate-manual-cr044-<UTC>` → kiểm dòng `OK` trong `backup.log` (§3).
+- [ ] Chạy thử `0002` trên DB tạm restore từ backup (§5b), checkout **đúng commit sẽ deploy**:
+      `sh deploy/db/migrate-on-restore.sh pre-migrate-manual-cr044-<UTC>.dump nta_restore_cr044` → dòng cuối phải `== KẾT QUẢ: PASS`
+      (log gate có `APPROVED (HIGH_RISK_MIGRATION)`). FAIL → dừng, không push.
+- [ ] Không chạy trong khung 19:50–20:30 UTC (backup hằng ngày, §4b).
+
+**Deploy:**
+1. Push `main` → `deploy.yml` tự chạy: backup pre-migrate → gate (APPROVED) → migrate `0002` → build/up `nta-web` → health (§2).
+2. Kiểm migration: `docker exec nta-db psql -U nta -d nta_web -c 'select id, created_at from drizzle.__drizzle_migrations order by id'` → có 3 dòng (0000–0002);
+   `docker exec nta-db psql -U nta -d nta_web -c "select pg_get_constraintdef(oid) from pg_constraint where conname='content_entries_locale_check'"` → có `'ja'`.
+3. Smoke (fallback en khi chưa seed ja — phải 200, không 404/500):
+   ```sh
+   for p in /ja /ja/blog /ja/contact /ja/about /ja/solutions/enterprise; do
+     curl -s -o /dev/null -w "%{http_code} $p\n" "http://127.0.0.1:3005$p"; done
+   curl -s http://127.0.0.1:3005/ja | grep -c 'noto-sans-jp.css'      # ≥ 1 — trang ja link font JP
+   curl -s http://127.0.0.1:3005/   | grep -c 'noto-sans-jp'          # 0 — vi không tải font JP
+   curl -s http://127.0.0.1:3005/en | grep -c 'noto-sans-jp'          # 0 — en không tải font JP
+   curl -sI http://127.0.0.1:3005/fonts/noto-sans-jp/00d49745793628af.woff2 | grep -i cache-control   # public, max-age=31536000, immutable
+   ```
+   Gửi thử 1 form ở `/ja/contact` → mail tới `ADMIN_EMAIL` (xác nhận script đã dán lại).
+4. Build lại image bot: `docker compose --env-file /etc/nta-content-bot/compose.env --profile tools build nta-tools`
+   (`docs/content-bot/10-server.md`) — image cũ còn `CONTENT_LOCALES = vi|en` → từ chối key `…/ja/…` (I-6).
+5. Báo bot seed bản ja theo `docs/content-bot/05-playbook.md` §10 — **`slug_registry/ja/<slug>` trước `solution|product/ja/<slug>`** (I-3/I-4 kiểm registry
+   cùng locale), rồi `listing_item`; revalidate từng collection. Thiếu bản ja → web vẫn hiển thị bản en (fallback theo bản ghi).
+6. **Hạn chót:** bước 1–2 (migration lên prod) phải xong **trước lượt cron AI news thứ 7** (`.github/workflows/ai-news.yml` `cron: '0 1 * * 6'` = 08:00 thứ 7 giờ VN).
+   Lượt đó sinh + đăng cả bản ja: CHECK cũ → chèn `post/ja/…` lỗi, smoke `/ja/blog/<slug>` đỏ (vi/en vẫn chèn) — xử lý theo `docs/runbook/ai-news.md`
+   (deploy migration rồi chạy tay lại workflow → chỉ thêm ja). Seed ja của bot (bước 5) không chặn cron.
+
+**Rollback:** `0002` chỉ nới CHECK → **không cần down migration**, không restore DB. Rollback = revert **cả dải commit CR-044** (P1-T01 b2caf09 → commit P3-T02; `git revert --no-edit <đầu>^..<cuối>` + push, `deploy-vps.md` §5);
+CHECK rộng hơn vô hại với code cũ (code cũ đọc theo `locale` vi/en nên bỏ qua hàng ja; parity bản cũ sẽ báo hàng ja "thừa trong DB" — chỉ ảnh hưởng
+lệnh `parity` tay). Trang `/ja/...` về 404 như trước CR-044. Không xoá hàng ja đã seed (giữ cho lần deploy lại).
+Sau revert, `src/db/schema.ts` quay về CHECK `('vi','en')` trong khi DB đã chạy `0002` → **KHÔNG chạy `drizzle-kit generate`** trên code đã revert (sẽ sinh migration thu hẹp CHECK, fail khi DB có hàng ja).
+Chỉ restore `pre-migrate-*.dump` (§4) khi có sự cố dữ liệu thật — sẽ mất mọi ghi sau thời điểm dump.

@@ -74,7 +74,7 @@ docker compose --env-file /etc/nta-content-bot/compose.env run --rm --no-deps -T
 
 | Hạng mục | Cách làm |
 |---|---|
-| Image `nta-tools` | Build lần đầu và **build lại sau mỗi deploy có đổi `tools/db` hoặc `src/db`**: `docker compose --env-file … --profile tools build nta-tools`. Cần bản có lệnh `create/update/delete` (CR-030) |
+| Image `nta-tools` | Build lần đầu và **build lại sau mỗi deploy có đổi `tools/db` hoặc `src/db`**: `docker compose --env-file … --profile tools build nta-tools`. Cần bản có lệnh `create/update/delete` (CR-030). **CR-044 (ja):** sau deploy có migration `0002` → build lại `nta-tools` **trước** khi bot seed ja — image cũ còn `CONTENT_LOCALES = vi|en` nên từ chối key `…/ja/…` (I-6). Kiểm: `… run --rm --no-deps -T nta-tools tools/db/content-cli.ts list --locale ja` không báo lỗi locale |
 | Secret compose | `/etc/nta-content-bot/compose.env` quyền 600, owner user chạy bot: `POSTGRES_PASSWORD=…`, `REVALIDATE_SECRET=…` (trùng GitHub secret; thiếu thì compose báo `… is required`). Không đặt trong workspace runner (bị ghi đè) |
 | Secret bot | `TELEGRAM_BOT_TOKEN`, API key model, `ALLOWED_TELEGRAM_IDS` — file env riêng của bot, quyền 600 |
 | Quyền | User chạy bot cần quyền `docker` (≈ root trên VPS) → bot chỉ gọi đúng các lệnh ở `07` §Guardrail 2, argv dạng mảng, không shell tuỳ ý |

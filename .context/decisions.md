@@ -225,3 +225,16 @@
 - **Lý do:** ja không có file seed (bot dịch + seed sau deploy, web fallback en) → nếu dùng chung một tập, parity báo "thiếu ja" cho mọi bản ghi
   và import-seed/publish-post đòi file ja không tồn tại. `SeedRecord.locale` đổi sang `ContentLocale` vì `readDatabaseRecords` có thể trả hàng ja;
   per-record rule (I-2/I-5/I-6) và I-3/I-4 vẫn chạy trên hàng ja.
+
+## 2026-11-09 — CR-044 P2-T04 (ghi ở P3-T02): font Noto Sans JP self-host, chỉ trang ja link — KHÔNG dùng `next/font` (R-20a.6, gap G1)
+- **Context:** R-20a.6 yêu cầu glyph Nhật chỉ áp dụng ở trang ja, vi/en không tải thêm file font JP. Bản đầu (P2-T04 round 1) dùng `next/font/google`
+  `Noto_Sans_JP` → review FAIL F1: `@font-face` của next/font luôn nằm trong CSS chung của layout (kể cả import có điều kiện) → mọi trang vi/en
+  tải ~95 KB CSS JP render-blocking (ảnh hưởng LCP R-22).
+- **Decision:** tự host trong `public/fonts/noto-sans-jp/` (124 `.woff2` subset + `noto-sans-jp.css` định nghĩa `--font-noto-jp`), sinh 1 lần bằng
+  `tools/fonts/build-noto-jp.mjs` từ chính output next/font (không tải nguồn khác); `src/app/[locale]/layout.tsx` chỉ render `<link>` CSS khi `locale === 'ja'`;
+  `--font-sans` có `var(--font-noto-jp, Inter)`. Cache: `.woff2` (tên = hash 16 hex) `immutable` 1 năm qua `next.config.ts` `headers()`, CSS giữ `max-age=0`.
+- **Alternatives:** next/font có `preload: false` (round 1 — vẫn đưa @font-face vào CSS chung, F1 FAIL); Google Fonts CDN chỉ ở ja (phụ thuộc CDN ngoài:
+  privacy, CSP, cross-origin — so sánh ở `.context/review-reports/feature-add-japanese-locale-phase-2-task-04-round-2-review.md`).
+- **Rationale:** vi/en 0 byte font/CSS JP (smoke P2-T04: HTML vi/en không có link Noto); ja vẫn subset theo `unicode-range`, `font-display: swap`.
+- **Consequences:** ~5.7 MB file font trong repo; cập nhật font = chạy lại script (hướng dẫn đầu file, `docs/DESIGN.md` §Typography); phải kèm `OFL.txt` + copyright
+  gốc trước deploy prod (OFL-1.1); intent R-20a.6 còn ghi "qua `next/font`" → gap G1 chờ user xác nhận sửa câu chữ spec.

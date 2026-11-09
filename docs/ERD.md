@@ -32,7 +32,7 @@ trong `data` (jsonb). Không tách bảng con (showcase, gallery, milestones…)
 
 | Bảng | Mục đích | Cột chính | Ràng buộc DB |
 |---|---|---|---|
-| `content_entries` (`src/db/schema.ts` `contentEntries`) | 1 hàng = 1 bản ghi nội dung hiện tại | `collection`, `slug`, `locale`, `data` jsonb, `body` (MDX), `sort_order`, `version`, `deleted_at`, `created_at`, `updated_at`, `updated_by` | UNIQUE(`collection`,`slug`,`locale`) — kể cả hàng xoá mềm; CHECK `locale IN ('vi','en')`; CHECK `version >= 1`; index một phần (`collection`,`locale`) WHERE `deleted_at IS NULL` |
+| `content_entries` (`src/db/schema.ts` `contentEntries`) | 1 hàng = 1 bản ghi nội dung hiện tại | `collection`, `slug`, `locale`, `data` jsonb, `body` (MDX), `sort_order`, `version`, `deleted_at`, `created_at`, `updated_at`, `updated_by` | UNIQUE(`collection`,`slug`,`locale`) — kể cả hàng xoá mềm; CHECK `content_entries_locale_check`: `locale IN ('vi','en','ja')` (từ `drizzle/0002_happy_magma.sql`, CR-044 — trước đó `('vi','en')`); CHECK `version >= 1`; index một phần (`collection`,`locale`) WHERE `deleted_at IS NULL` |
 | `content_versions` (`contentVersions`) | Lịch sử append-only, mỗi lần ghi 1 hàng (cùng transaction với entry) | `entry_id` → `content_entries.id`, `version`, `op`, `data`, `body`, `sort_order` (0001, hàng cũ NULL), `actor` (`seed` / `cli:<user>` / `bot:<telegram-id>`), `note`, `created_at` | FK `entry_id`; UNIQUE(`entry_id`,`version`); CHECK `op IN ('create','update','delete','rollback')` |
 
 Quan hệ: `content_entries` 1 — n `content_versions`.
@@ -56,20 +56,24 @@ Whitelist chỉ kiểm ở tầng app (`isContentCollection`) — **không** CHE
 | `listing_labels` | `labels` | `src/content/listings.ts` |
 | `home` | `home` | `src/content/home.ts` |
 | `solution_overview` | `enterprise` / `ai` | `src/content/solutions/overview.ts` |
-| `slug_registry` | slug; `data = {group: enterprise\|ai\|product}`, `sort_order` = vị trí trong nhóm (ghi giống nhau cho vi + en) | `src/lib/content/slug.ts` |
-| `ui_messages` | namespace cấp 1 của next-intl | `src/i18n/messages/{vi,en}.json` |
+| `slug_registry` | slug; `data = {group: enterprise\|ai\|product}`, `sort_order` = vị trí trong nhóm (ghi giống nhau cho mọi locale; web đọc bản `vi`) | `src/lib/content/slug.ts` |
+| `ui_messages` | namespace cấp 1 của next-intl | `src/i18n/messages/{vi,en}.json` (`ja.json` là dự phòng cho ja, không import seed) |
 | `company_info` | `contact` | `COMPANY_CONTACT` — `src/lib/contact/company-info.ts` |
 | `asset` | sha256 ảnh; `locale` cố định `vi`; `data = {path, sha256, mime, bytes, width, height, alt, originalName?}` | không seed — tạo bằng `saveImage` (`src/lib/uploads/save-image.ts`) |
 
 Số bản ghi seed 14/10/2026: 68 mỗi locale, tổng 136 (chi tiết `docs/runbook/db.md` §8). Prod import 136/136, parity PASS (P4-T01 B4).
 
+**Hai tập locale (CR-044, `src/db/schema.ts`):** `CONTENT_LOCALES = vi|en|ja` = DB nhận (CHECK trên, rule I-6, key `asset.data.alt`);
+`SEED_LOCALES = vi|en` = có file seed + bắt buộc cặp I-1 (file-source, import-seed, parity). Hàng `ja` do bot ghi thẳng DB (không file seed —
+ngoại lệ bài AI news `src/content/blog/ja/` qua `publish-post`); parity bỏ qua hàng ja cả hai chiều. Thiếu bản ja → web fallback bản en theo bản ghi (`docs/DESIGN.md`).
+
 ## Invariant (tầng app — `src/db/content-rules.ts`, `src/db/content-repo.ts`, parity `tools/db/parity-check.ts`)
 
 | # | Ràng buộc | Thực thi |
 |---|---|---|
-| I-1 | Mỗi slug có đủ cặp vi + en | write-path: **cảnh báo**, không chặn (bot tạo vi rồi en); parity: FAIL; bỏ qua cho `asset` |
+| I-1 | Mỗi slug có đủ cặp vi + en (ja tuỳ chọn, không tính vào cặp) | write-path: **cảnh báo**, không chặn (bot tạo vi rồi en; ghi ja không cảnh báo); parity: FAIL; bỏ qua cho `asset` |
 | I-2 | slug `a-z0-9-`; frontmatter `slug` = khoá (post/solution/product/case_study) | chặn |
-| I-3 / I-4 | solution/product phải có trong `slug_registry` đúng nhóm (`category` solution = nhóm registry) và ngược lại | chặn khi nội dung thiếu/sai nhóm registry hoặc xoá registry lúc nội dung còn sống; cảnh báo khi registry chưa có nội dung |
+| I-3 / I-4 | solution/product phải có trong `slug_registry` **cùng locale**, đúng nhóm (`category` solution = nhóm registry) và ngược lại | chặn khi nội dung thiếu/sai nhóm registry hoặc xoá registry lúc nội dung còn sống; cảnh báo khi registry chưa có nội dung |
 | I-5 | Khoá (`collection`,`slug`,`locale`) duy nhất kể cả hàng xoá mềm | UNIQUE DB + báo lỗi rõ ở write-path |
 | I-6 | Enum hợp lệ: collection, locale, category blog/solution/case study, nhóm registry, icon showcase; `company_info` (`tel:`/`mailto:`/Google Maps https) | chặn |
 | I-7 / I-8 | Ảnh tham chiếu tồn tại (`/uploads/*` = asset còn sống; còn lại trong `public/`); xoá bản ghi URL công khai cần cờ xác nhận + redirect 301 | chặn / chặn nếu thiếu cờ |
